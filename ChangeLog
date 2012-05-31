@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-05-31 Matt
+	* Tagging SusyNtuple-00-00-01
+	
 2012-05-30 Matt
 	* Moved directory to Institutes/UCIrvine/SUSYAnalysis
 	* Added avgMu, cluster energy, and jet truth label to SusyNt
