@@ -1,0 +1,339 @@
+// Dear emacs, this is -*- c++ -*-
+// $Id: VarHandle.icc 242132 2012-01-12 13:37:55Z lucian $
+#ifndef D3PDREADER_VARHANDLE_ICC
+#define D3PDREADER_VARHANDLE_ICC
+
+// System include(s):
+#include <string.h>
+#include <cxxabi.h>
+#include <cstdlib>
+
+// ROOT include(s):
+#include <TObject.h>
+#include <TTree.h>
+#include <TBranch.h>
+
+namespace D3PDReader {
+
+   template< typename Type >
+   VarHandle< Type >::VarHandle( ::TObject* parent, const char* name,
+                                 const ::Long64_t* master )
+      : VarHandleBase( parent, name, master ),
+        fVariable() {
+
+   }
+
+   template< typename Type >
+   VarHandle< Type >::~VarHandle() {
+
+   }
+
+   template< typename Type >
+   void VarHandle< Type >::ReadFrom( ::TTree* tree ) {
+
+      fInTree = tree;
+      fFromInput = kTRUE;
+      fVariable = 0;
+      fInBranch = 0;
+      fAvailable = UNKNOWN;
+
+      return;
+   }
+
+   template< typename Type >
+   ::TBranch* VarHandle< Type >::WriteTo( ::TTree* tree ) {
+
+      if( ! IsActive() ) return 0;
+
+      ::TBranch* branch = tree->GetBranch( GetName() );
+      if( branch ) return branch;
+
+      branch = tree->Branch( GetName(), &fVariable,
+                             TString::Format( "%s/%s", GetName(),
+                                              RootType( typeid( Type ).name() ) ) );
+      if( ! branch ) {
+         fParent->Error( "WriteTo",
+                         "Couldn't add variable %s to tree %s",
+                         GetName(), tree->GetName() );
+      }
+      return branch;
+   }
+
+   template< typename Type >
+   ::Bool_t VarHandle< Type >::IsAvailable() const {
+
+      if( ! fFromInput ) return kTRUE;
+      switch( fAvailable ) {
+
+      case AVAILABLE:
+         return kTRUE;
+         break;
+      case UNAVAILABLE:
+         return kFALSE;
+         break;
+      case UNKNOWN:
+         {
+            if( ! fInTree ) return kTRUE;
+            ::Bool_t temp = kFALSE;
+            fAvailable = ( temp = fInTree->GetBranch( GetName() ) ) ? AVAILABLE :
+                         UNAVAILABLE;
+            return temp;
+         }
+         break;
+      default:
+         // This should really never be reached...
+         break;
+      }
+
+      // It's just here to make the compiler happy:
+      return kFALSE;
+   }
+
+   template< typename Type >
+   typename VarHandle< Type >::result_type VarHandle< Type >::operator()() {
+
+      if( ! fFromInput ) return fVariable;
+
+      if( ! fInBranch ) {
+         if( ! fInTree ) {
+            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
+            return fVariable;
+         }
+         if( ! fInTree->GetBranch( GetName() ) ) {
+            fParent->Error( ::TString( GetName() ) + "()",
+                            "The following variable doesn't exist: %s",
+                            GetName() );
+            return fVariable;
+         }
+         fInTree->SetBranchStatus( GetName(), 1 );
+         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
+      }
+      if( *fMaster != fInBranch->GetReadEntry() ) {
+         fInBranch->GetEntry( *fMaster );
+      }
+
+      return fVariable;
+   }
+
+   template< typename Type >
+   typename VarHandle< Type >::const_result_type VarHandle< Type >::operator()() const {
+
+      if( ! fFromInput ) return fVariable;
+
+      if( ! fInBranch ) {
+         if( ! fInTree ) {
+            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
+            return fVariable;
+         }
+         if( ! fInTree->GetBranch( GetName() ) ) {
+            fParent->Error( ::TString( GetName() ) + "()",
+                            "The following variable doesn't exist: %s",
+                            GetName() );
+            return fVariable;
+         }
+         fInTree->SetBranchStatus( GetName(), 1 );
+         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
+      }
+      if( *fMaster != fInBranch->GetReadEntry() ) {
+         fInBranch->GetEntry( *fMaster );
+      }
+
+      return fVariable;
+   }
+
+   template< typename Type >
+   const char* VarHandle< Type >::RootType( const char* typeid_type ) const {
+
+      if( strlen( typeid_type ) != 1 ) {
+         fParent->Error( "RootType", "Received complex object description" );
+         return "";
+      }
+
+      switch( typeid_type[ 0 ] ) {
+
+      case 'c':
+         return "B";
+         break;
+      case 'h':
+         return "b";
+         break;
+      case 's':
+         return "S";
+         break;
+      case 't':
+         return "s";
+         break;
+      case 'i':
+         return "I";
+         break;
+      case 'j':
+         return "i";
+         break;
+      case 'f':
+         return "F";
+         break;
+      case 'd':
+         return "D";
+         break;
+      case 'x':
+         return "L";
+         break;
+      case 'y':
+         return "l";
+         break;
+      case 'b':
+         return "O";
+         break;
+
+      }
+
+      fParent->Error( "RootType",
+                      "Unknown primitive type encountered: %s",
+                      typeid_type );
+      return "";
+   }
+
+   template< typename Type >
+   VarHandle< Type* >::VarHandle( ::TObject* parent, const char* name,
+                                  const ::Long64_t* master )
+      : VarHandleBase( parent, name, master ),
+        fVariable( 0 ) {
+
+   }
+
+   template< typename Type >
+   VarHandle< Type* >::~VarHandle() {
+
+      if( fVariable ) delete fVariable;
+   }
+
+   template< typename Type >
+   void VarHandle< Type* >::ReadFrom( ::TTree* tree ) {
+
+      fInTree = tree;
+      fFromInput = kTRUE;
+      fInBranch = 0;
+      fAvailable = UNKNOWN;
+
+      return;
+   }
+
+   template< typename Type >
+   ::TBranch* VarHandle< Type* >::WriteTo( ::TTree* tree ) {
+
+      if( ! IsActive() ) return 0;
+
+      ::TBranch* branch = tree->GetBranch( GetName() );
+      if( branch ) return branch;
+
+      int status;
+      char* type_name = abi::__cxa_demangle( typeid( Type ).name(), 0, 0, &status );
+      if( status ) {
+         fParent->Error( "WriteTo",
+                         "Couldn't demangle type name: %s",
+                         typeid( Type ).name() );
+         return 0;      }
+      if( ! fVariable ) {
+         fVariable = new Type();
+      }
+      branch = tree->Bronch( GetName(), type_name, &fVariable );
+      if( ! branch ) {
+         fParent->Error( "WriteTo",
+                         "Couldn't add variable %s to tree %s",
+                         GetName(), tree->GetName() );
+      }
+      free( type_name );
+      return branch;
+   }
+
+   template< typename Type >
+   ::Bool_t VarHandle< Type* >::IsAvailable() const {
+
+      if( ! fFromInput ) return kTRUE;
+      switch( fAvailable ) {
+
+      case AVAILABLE:
+         return kTRUE;
+         break;
+      case UNAVAILABLE:
+         return kFALSE;
+         break;
+      case UNKNOWN:
+         {
+            if( ! fInTree ) return kTRUE;
+            ::Bool_t temp = kFALSE;
+            fAvailable = ( temp = fInTree->GetBranch( GetName() ) ) ? AVAILABLE :
+                         UNAVAILABLE;
+            return temp;
+         }
+         break;
+      default:
+         // This should really never be reached...
+         break;
+      }
+
+      // It's just here to make the compiler happy:
+      return kFALSE;
+   }
+
+   template< typename Type >
+   typename VarHandle< Type* >::result_type VarHandle< Type* >::operator()() {
+
+      if( ! fFromInput ) {
+         if( ! fVariable ) fVariable = new Type();
+         return fVariable;
+      }
+
+      if( ! fInBranch ) {
+         if( ! fInTree ) {
+            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
+            return fVariable;
+         }
+         if( ! fInTree->GetBranch( GetName() ) ) {
+            fParent->Error( ::TString( GetName() ) + "()",
+                            "The following variable doesn't exist: %s",
+                            GetName() );
+            return fVariable;
+         }
+         fInTree->SetBranchStatus( ::TString( GetName() ) + "*", 1 );
+         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
+      }
+      if( *fMaster != fInBranch->GetReadEntry() ) {
+         fInBranch->GetEntry( *fMaster );
+      }
+
+      return fVariable;
+   }
+
+   template< typename Type >
+   typename VarHandle< Type* >::const_result_type VarHandle< Type* >::operator()() const {
+
+      if( ! fFromInput ) {
+         if( ! fVariable ) fVariable = new Type();
+         return fVariable;
+      }
+
+      if( ! fInBranch ) {
+         if( ! fInTree ) {
+            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
+            return fVariable;
+         }
+         if( ! fInTree->GetBranch( GetName() ) ) {
+            fParent->Error( ::TString( GetName() ) + "()",
+                            "The following variable doesn't exist: %s",
+                            GetName() );
+            return fVariable;
+         }
+         fInTree->SetBranchStatus( ::TString( GetName() ) + "*", 1 );
+         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
+      }
+      if( *fMaster != fInBranch->GetReadEntry() ) {
+         fInBranch->GetEntry( *fMaster );
+      }
+
+      return fVariable;
+   }
+
+} // namespace D3PDReader
+
+#endif // D3PDREADER_VARHANDLE_ICC
