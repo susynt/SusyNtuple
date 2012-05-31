@@ -1,0 +1,68 @@
+# vim: set noexpandtab:
+
+2012-05-30 Matt
+	* Moved directory to Institutes/UCIrvine/SUSYAnalysis
+	* Added avgMu, cluster energy, and jet truth label to SusyNt
+	* Meff function included in SusyDefs	
+	
+#------------------------------------------------------------------------------------
+# Prior to the Merge 2012-05-30
+#------------------------------------------------------------------------------------
+	
+2012-05-28 Serhan Mete <amete@cern.ch>
+	* Root/Susy3LepCutflow.cxx/h: Switched off event details output
+	* Root/SusyNtTools.cxx: Added RemoveSFOSPair to the baseline selection for 3 lepton
+
+2012-05-25 Serhan Mete <amete@cern.ch>
+	* Root/Susy3LepCutflow.cxx/h: Added handle to control output text file
+
+2012-05-25 Matt
+	* Changed jet cut: 20 GeV for 3Lep and 30 GeV for 2Lep
+	
+2012-05-23 Serhan Mete <amete@cern.ch>
+	* Root/Susy3LepCutflow.cxx: Remove dependency on MultiLep
+
+2012-05-23 Matt
+	* Added top tagger to SusyNtTools.. Maybe could be in the 2 lep code..
+	* Added SR2-5 to Susy2LepCutflow
+	* Added All cuts relevant to SR2-5
+	* Added m_anaType flag for NtTools to determine cuts
+	
+2012-05-22 Serhan Mete <amete@cern.ch>
+	* data/muon_triggermaps_v2.0.root: Temporarily store muon trigger maps here.
+	* Root/Susy3LepCutflow.cxx: Add new class template for 3 lepton cutflow generation.
+	* SusyNtuple/Susy3LepCutflow.h: Add new class template for 3 lepton cutflow generation.
+	* Root/TrilTrigLogic.cxx: Clone of Steve's TriggerLogic for 3 lepton trigger logic. 
+	* SusyNtuple/TrilTrigLogic.h: Clone of Steve's TriggerLogic for 3 lepton trigger logic. 
+	* Root/SusyDefs.cxx: Carry over getDataPeriod and getMcPeriod methods needed by the trigger logic. 
+	* Root/SusyDefs.cxx: Fix Mt to match its decleration.
+	* Root/SusyDefs.h: Carry over DataPeriod and McPeriod enums needed by the trigger logic. 
+
+2012-05-19 Matt
+	* Added phi to printout for e/m/jet
+	* Removed SFOS cuts from leptons in order to compare with cutflow
+	* Removed d0sig cut on electrons to match cutflow
+	* Added Susy2LepCutflow which goes up to SR1 cuts
+	* Changed uint to unsigned in SusyNt do to check sum error during read back.
+	
+2012-05-18 Matt
+	* Added passWhatever(event flag) methods to SusyNtTools to check event flag
+	* Modifed passTrigger to take a vector of leptons. More in line with Steve's motif
+	
+2012-05-17 Matt
+	* Modifed way Met stored, no long inherits from tlv
+	* Added lv() method to get tlv of met
+	* Moved Trigger methods to DilTrigLogic from SusyNtAna
+	* Moved Additional selectrion to SusyNtTools from SusyNtAna
+	
+2012-05-16 Matt
+	* Added DilTrigLogic to check dilepton trigger logic.
+	* Needs to be validated.
+	
+2012-05-11 Matt
+	* Changed evtFlag from vector<int> to int[]
+	
+	
+2012-05-10 Anyes
+	* Initial create of SusyNtuple package from SusyCommon
+	
