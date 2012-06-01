@@ -67,6 +67,7 @@ class Susy2LepCutflow : public SusyNtAna
     bool passdPhi(TLorentzVector v0, TLorentzVector v1, float cut);
     bool passMT2(const LeptonVector& leptons, const Met* met, float cut);
 
+
     // Dump cutflow - if derived class uses different cut ordering,
     // override this method
     virtual void dumpEventCounters();

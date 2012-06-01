@@ -95,11 +95,10 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons)
   if( ne == 1 && nm == 1 ) return ET_em;
   if( ne == 2 && nm == 0 ) return ET_ee;
   if( ne == 0 && nm == 2 ) return ET_mm;
-  cout<<"Error: Unable to classify event with "
-      <<ne<<" electrons and "<<nm<<" muons!"
-      <<"\nReturning range "<<ET_N<<endl;
+  cout<<"Error: Unable to classify dilepton event with "
+      <<ne<<" electrons and "<<nm<<" muons!"<<endl;
 
-  return ET_N;
+  return ET_Unknown;
 }
 
 /*--------------------------------------------------------------------------------*/

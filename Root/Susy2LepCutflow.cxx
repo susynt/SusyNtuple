@@ -13,7 +13,7 @@ Susy2LepCutflow::Susy2LepCutflow() :
         m_nLepMin(2),
         m_nLepMax(2),
         m_cutNBaseLep(true),
-	m_ET(ET_N)
+	m_ET(ET_Unknown)
 {
   n_readin       = 0;
   n_pass_LAr     = 0;
@@ -62,7 +62,7 @@ Susy2LepCutflow::Susy2LepCutflow() :
     n_pass_SR5MT2[i]   = 0;
   }
 
-  out.open("event.dump");
+  //out.open("event.dump");
   
   setAnaType(Ana_2Lep);
 
@@ -86,7 +86,7 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   // Communicate tree entry number to SusyNtObject
   GetEntry(entry);
   clearObjects();
-  m_ET = ET_N;
+  m_ET = ET_Unknown;
   n_readin++;
 
   //if(!debugEvent()) return kTRUE;
@@ -160,15 +160,10 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   // Get Event Type to continue cutflow
   m_ET = getDiLepEvtType(baseLeps);
   
-  //if( !sameFlavor(baseLeps) )       return false;
-  //if( !oppositeFlavor(leptons) )       return false;
-
   if( !passTrigger(baseLeps) )     return false;  
   n_pass_flavor[m_ET]++;
   if( !passNLepCut(leptons) )       return false;
   if( !passMll(leptons) )           return false;
-  if(oppositeSign(leptons))
-    out<<nt.evt()->run<<" "<<nt.evt()->event<<endl;
 
   return true;
 }
@@ -239,7 +234,7 @@ bool Susy2LepCutflow::passSR3(const LeptonVector& leptons, const JetVector& jets
   // MetRel > 50
   if( !passMETRel(met,leptons,jets,50) ) return false;
   n_pass_SR3MET[m_ET]++;
-  //out<<nt.evt()->run<<" "<<nt.evt()->event<<endl;
+
 
   return true;
 }
@@ -353,7 +348,8 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons)
 bool Susy2LepCutflow::sameFlavor(const LeptonVector& leptons)
 {
   if( leptons.size() < 2 ) return false;
-  return (leptons.at(0)->isEle() && leptons.at(1)->isEle());
+  return (leptons.at(0)->isMu() == leptons.at(1)->isMu());
+  //return (leptons.at(0)->isEle() && leptons.at(1)->isEle());
   //return (leptons.at(0)->isMu() && leptons.at(1)->isMu());
 }
 /*--------------------------------------------------------------------------------*/
@@ -478,7 +474,7 @@ void Susy2LepCutflow::dumpEventCounters()
   cout << "pass BadMu:    " << n_pass_BadMuon << endl;
   cout << "pass Cosmic:   " << n_pass_Cosmic  << endl;
 
-  string v_ET[ET_N] = {"ee","mm","em"};
+  string v_ET[ET_N] = {"ee","mm","em","Unknown"};
   for(int i=0; i<ET_N; ++i){
     cout << "************************************" << endl;
     cout << "For dilepton type: " << v_ET[i]       << endl;

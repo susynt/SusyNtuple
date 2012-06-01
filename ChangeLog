@@ -5,6 +5,8 @@
 	* Note: If you want to inherit methods from Susy2LepCutflow, maybe need to
 	modify the way evt counts are stored. Not pressing right now, but maybe update in
 	the future.
+	* The above has been fixed. You can now inherit from CF. If you don't specify event
+	type it will just save everything under unknown and code shouldn't crash.
 	
 2012-05-31 Matt
 	* Tagging SusyNtuple-00-00-01
