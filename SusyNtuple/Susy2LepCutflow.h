@@ -85,49 +85,51 @@ class Susy2LepCutflow : public SusyNtAna
     uint                m_nLepMax;      // max leptons
     bool                m_cutNBaseLep;  // apply nLep cuts to baseline leptons as well as signal
 
+    DiLepEvtType        m_ET;           // Dilepton event type to store cf
+
     // Event counters
     uint                n_readin;
     uint                n_pass_LAr;
     uint                n_pass_BadJet;
     uint                n_pass_BadMuon;
     uint                n_pass_Cosmic;
-    uint                n_pass_nLep;
-    uint                n_pass_flavor;    
-    uint                n_pass_mll;    
-    uint                n_pass_os;
-    uint                n_pass_ss;
-    uint                n_pass_trig;
+    uint                n_pass_flavor[ET_N];
+    uint                n_pass_nLep[ET_N];
+    uint                n_pass_mll[ET_N];    
+    uint                n_pass_os[ET_N];
+    uint                n_pass_ss[ET_N];
+    uint                n_pass_trig[ET_N];
 
     // SR1 counts
-    uint                n_pass_SR1jv;
-    uint                n_pass_SR1Zv;
-    uint                n_pass_SR1MET;
+    uint                n_pass_SR1jv[ET_N];
+    uint                n_pass_SR1Zv[ET_N];
+    uint                n_pass_SR1MET[ET_N];
 
     // SR2 counts
-    uint                n_pass_SR2jv;
-    uint                n_pass_SR2MET;
+    uint                n_pass_SR2jv[ET_N];
+    uint                n_pass_SR2MET[ET_N];
 
     // SR3 counts
-    uint                n_pass_SR3ge2j;
-    uint                n_pass_SR3Zv;
-    uint                n_pass_SR3bjv;
-    uint                n_pass_SR3mct;
-    uint                n_pass_SR3MET;
+    uint                n_pass_SR3ge2j[ET_N];
+    uint                n_pass_SR3Zv[ET_N];
+    uint                n_pass_SR3bjv[ET_N];
+    uint                n_pass_SR3mct[ET_N];
+    uint                n_pass_SR3MET[ET_N];
 
     // SR4 counts
-    uint                n_pass_SR4jv;
-    uint                n_pass_SR4MET;
-    uint                n_pass_SR4Zv;
-    uint                n_pass_SR4L0pt;
-    uint                n_pass_SR4SUMpt;
-    uint                n_pass_SR4dPhiMETLL;
-    uint                n_pass_SR4dPhiMETL1;
+    uint                n_pass_SR4jv[ET_N];
+    uint                n_pass_SR4MET[ET_N];
+    uint                n_pass_SR4Zv[ET_N];
+    uint                n_pass_SR4L0pt[ET_N];
+    uint                n_pass_SR4SUMpt[ET_N];
+    uint                n_pass_SR4dPhiMETLL[ET_N];
+    uint                n_pass_SR4dPhiMETL1[ET_N];
     
     // SR5 counts
-    uint                n_pass_SR5jv;
-    uint                n_pass_SR5Zv;
-    uint                n_pass_SR5MET;
-    uint                n_pass_SR5MT2;
+    uint                n_pass_SR5jv[ET_N];
+    uint                n_pass_SR5Zv[ET_N];
+    uint                n_pass_SR5MET[ET_N];
+    uint                n_pass_SR5MT2[ET_N];
     
 
 

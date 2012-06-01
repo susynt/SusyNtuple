@@ -79,7 +79,7 @@ class DilTrigLogic
   
   // Return the type of event this is
   // Event types defined in SusyDefs.h
-  EventType getEventType(ElectronVector elecs, MuonVector muons);
+  //DiLepEventType getEventType(ElectronVector elecs, MuonVector muons);
 
   // Debug method
   void debugFlag(uint flag);

@@ -114,13 +114,11 @@ enum EventCheck {PASS_LAr      = 1<<0,
 
 // Way to check Event Types
 // Could make it a flag to also store Pt info...
-enum EventType { SSe = 0,
-		 SSm,
-		 SSOF,
-		 OSe,
-		 OSm,
-		 OSOF,
-		 UNKNOWNEVT
+enum DiLepEvtType { 
+  ET_ee = 0,
+  ET_mm,
+  ET_em,
+  ET_N
 };
 
 //-----------------------------------------------------------------------------------
@@ -168,6 +166,8 @@ bool comparePt(const TLorentzVector* p1, const TLorentzVector* p2);
 // find lepton in a collection
 bool findLepton(const Susy::Lepton* lep, const LeptonVector& leptons);
 
+// Dilepton specific
+DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
 
 //-----------------------------------------------------------------------------------
 // Trigger flags

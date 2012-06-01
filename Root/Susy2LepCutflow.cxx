@@ -12,50 +12,55 @@ using namespace Susy;
 Susy2LepCutflow::Susy2LepCutflow() :
         m_nLepMin(2),
         m_nLepMax(2),
-        m_cutNBaseLep(true)
+        m_cutNBaseLep(true),
+	m_ET(ET_N)
 {
   n_readin       = 0;
   n_pass_LAr     = 0;
   n_pass_BadJet  = 0;
   n_pass_BadMuon = 0;
   n_pass_Cosmic  = 0;
-  n_pass_nLep    = 0;
-  n_pass_trig    = 0;
-  n_pass_flavor  = 0;
-  n_pass_mll     = 0;
-  n_pass_ss      = 0;
-  n_pass_os      = 0;
 
-  // SR1
-  n_pass_SR1jv   = 0;
-  n_pass_SR1Zv   = 0;
-  n_pass_SR1MET  = 0;
-
-  // SR2
-  n_pass_SR2jv   = 0;
-  n_pass_SR2MET  = 0;
-
-  // SR3
-  n_pass_SR3ge2j = 0;
-  n_pass_SR3Zv   = 0;
-  n_pass_SR3bjv  = 0;
-  n_pass_SR3mct  = 0;
-  n_pass_SR3MET  = 0;
-
-  // SR4
-  n_pass_SR4jv        = 0;
-  n_pass_SR4MET       = 0;
-  n_pass_SR4Zv        = 0;
-  n_pass_SR4L0pt      = 0;
-  n_pass_SR4SUMpt     = 0;
-  n_pass_SR4dPhiMETLL = 0;
-  n_pass_SR4dPhiMETL1 = 0;
-
-  // SR5
-  n_pass_SR5jv    = 0;
-  n_pass_SR5Zv    = 0;
-  n_pass_SR5MET   = 0;
-  n_pass_SR5MT2   = 0;
+  // The rest are channel specific.
+  for(int i=0; i<ET_N; ++i){
+    n_pass_nLep[i]    = 0;
+    n_pass_trig[i]    = 0;
+    n_pass_flavor[i]  = 0;
+    n_pass_mll[i]     = 0;
+    n_pass_ss[i]      = 0;
+    n_pass_os[i]      = 0;
+    
+    // SR1
+    n_pass_SR1jv[i]   = 0;
+    n_pass_SR1Zv[i]   = 0;
+    n_pass_SR1MET[i]  = 0;
+    
+    // SR2
+    n_pass_SR2jv[i]   = 0;
+    n_pass_SR2MET[i]  = 0;
+    
+    // SR3
+    n_pass_SR3ge2j[i] = 0;
+    n_pass_SR3Zv[i]   = 0;
+    n_pass_SR3bjv[i]  = 0;
+    n_pass_SR3mct[i]  = 0;
+    n_pass_SR3MET[i]  = 0;
+    
+    // SR4
+    n_pass_SR4jv[i]        = 0;
+    n_pass_SR4MET[i]       = 0;
+    n_pass_SR4Zv[i]        = 0;
+    n_pass_SR4L0pt[i]      = 0;
+    n_pass_SR4SUMpt[i]     = 0;
+    n_pass_SR4dPhiMETLL[i] = 0;
+    n_pass_SR4dPhiMETL1[i] = 0;
+    
+    // SR5
+    n_pass_SR5jv[i]    = 0;
+    n_pass_SR5Zv[i]    = 0;
+    n_pass_SR5MET[i]   = 0;
+    n_pass_SR5MT2[i]   = 0;
+  }
 
   out.open("event.dump");
   
@@ -81,6 +86,7 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   // Communicate tree entry number to SusyNtObject
   GetEntry(entry);
   clearObjects();
+  m_ET = ET_N;
   n_readin++;
 
   //if(!debugEvent()) return kTRUE;
@@ -106,9 +112,9 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   if(!selectEvent(m_signalLeptons, m_baseLeptons)) return false;
 
   // Count SS and OS
-  if(sameSign(m_signalLeptons))     n_pass_ss++;
+  if(sameSign(m_signalLeptons))     n_pass_ss[m_ET]++;
   
-  if(oppositeSign(m_signalLeptons)) n_pass_os++;
+  if(oppositeSign(m_signalLeptons)) n_pass_os[m_ET]++;
   
   // Check Signal regions
   passSR1(m_signalLeptons, m_signalJets, m_met);
@@ -150,10 +156,15 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   if( !passCosmic(flag) )           return false;
   n_pass_Cosmic++;
   if(!passNBaseLepCut(baseLeps))    return false;
-  if( !sameFlavor(baseLeps) )       return false;
+  
+  // Get Event Type to continue cutflow
+  m_ET = getDiLepEvtType(baseLeps);
+  
+  //if( !sameFlavor(baseLeps) )       return false;
   //if( !oppositeFlavor(leptons) )       return false;
+
   if( !passTrigger(baseLeps) )     return false;  
-  n_pass_flavor++;
+  n_pass_flavor[m_ET]++;
   if( !passNLepCut(leptons) )       return false;
   if( !passMll(leptons) )           return false;
   if(oppositeSign(leptons))
@@ -171,15 +182,15 @@ bool Susy2LepCutflow::passSR1(const LeptonVector& leptons, const JetVector& jets
 
   // Jet Veto
   if( !passJetVeto(jets) )               return false;
-  n_pass_SR1jv++;
+  n_pass_SR1jv[m_ET]++;
 
   // Reject events with mll in Z window
   if( !passZVeto(leptons))               return false;
-  n_pass_SR1Zv++;
+  n_pass_SR1Zv[m_ET]++;
 
   // Reject if Met_rel < 100
   if( !passMETRel(met,leptons,jets) )    return false;
-  n_pass_SR1MET++;
+  n_pass_SR1MET[m_ET]++;
 
   return true;
 }
@@ -191,11 +202,11 @@ bool Susy2LepCutflow::passSR2(const LeptonVector& leptons, const JetVector& jets
   
   // CHeck Jet Veto
   if( !passJetVeto(jets) )               return false;
-  n_pass_SR2jv++;
+  n_pass_SR2jv[m_ET]++;
 
   // Check MET rel > 100
   if( !passMETRel(met,leptons,jets) )    return false;
-  n_pass_SR2MET++;
+  n_pass_SR2MET[m_ET]++;
 
   return true;
 
@@ -211,23 +222,23 @@ bool Susy2LepCutflow::passSR3(const LeptonVector& leptons, const JetVector& jets
 
   // Require at least 2 jets Pt > 30
   if( !passge2Jet(jets) )                return false;
-  n_pass_SR3ge2j++;
+  n_pass_SR3ge2j[m_ET]++;
 
   // Apply a Zveto
   if( !passZVeto(leptons) )              return false;
-  n_pass_SR3Zv++;
+  n_pass_SR3Zv[m_ET]++;
 
   // Apply b jet veto
   if( !passbJetVeto(jets) )              return false;
-  n_pass_SR3bjv++;
+  n_pass_SR3bjv[m_ET]++;
 
   // Veto top-tag events 
   if( !passTopTag(leptons,jets,met) )    return false;
-  n_pass_SR3mct++;
+  n_pass_SR3mct[m_ET]++;
 
   // MetRel > 50
   if( !passMETRel(met,leptons,jets,50) ) return false;
-  n_pass_SR3MET++;
+  n_pass_SR3MET[m_ET]++;
   //out<<nt.evt()->run<<" "<<nt.evt()->event<<endl;
 
   return true;
@@ -241,36 +252,36 @@ bool Susy2LepCutflow::passSR4(const LeptonVector& leptons, const JetVector& jets
 
   // Jet Veto
   if( !passJetVeto(jets) )               return false;
-  n_pass_SR4jv++;
+  n_pass_SR4jv[m_ET]++;
 
   // MetRel > 40
   if( !passMETRel(met,leptons,jets,40) ) return false;
-  n_pass_SR4MET++;
+  n_pass_SR4MET[m_ET]++;
   
   // Z Veto
   if( !passZVeto(leptons) )              return false;
-  n_pass_SR4Zv++;
+  n_pass_SR4Zv[m_ET]++;
 
   // Leading lepton Pt > 50
   float pt0 = leptons.at(0)->Pt();
   if( pt0 < 50 )                         return false;
-  n_pass_SR4L0pt++;
+  n_pass_SR4L0pt[m_ET]++;
   
   // Sum of Pt > 100
   float pt1 = leptons.at(1)->Pt();
   if( pt0 + pt1 < 100 )                  return false;
-  n_pass_SR4SUMpt++;
+  n_pass_SR4SUMpt[m_ET]++;
   
   // dPhi(met, ll) > 2.5
   TLorentzVector metlv = met->lv();
   TLorentzVector ll = (*leptons.at(0) + *leptons.at(1));
   if( !passdPhi(metlv, ll, 2.5) )    return false;
-  n_pass_SR4dPhiMETLL++;
+  n_pass_SR4dPhiMETLL[m_ET]++;
 
   // dPhi(met, l1) > 0.5
   TLorentzVector l1 = *leptons.at(1);
   if( !passdPhi(metlv, l1, 0.5) )    return false;
-  n_pass_SR4dPhiMETL1++;
+  n_pass_SR4dPhiMETL1[m_ET]++;
 
   return true;
 
@@ -283,19 +294,19 @@ bool Susy2LepCutflow::passSR5(const LeptonVector& leptons, const JetVector& jets
 
   // Check Jet Veto
   if( !passJetVeto(jets) )              return false;
-  n_pass_SR5jv++;
+  n_pass_SR5jv[m_ET]++;
 
   // Check Z Veto
   if( !passZVeto(leptons) )             return false;
-  n_pass_SR5Zv++;
+  n_pass_SR5Zv[m_ET]++;
 
   // Check METRel > 40
   if( !passMETRel(met,leptons,jets,40) ) return false;
-  n_pass_SR5MET++;
+  n_pass_SR5MET[m_ET]++;
 
   // Check MT2 > 90
   if( !passMT2(leptons, met, 90) )      return false;
-  n_pass_SR5MT2++;
+  n_pass_SR5MT2[m_ET]++;
   
   return true;
 
@@ -308,7 +319,7 @@ bool Susy2LepCutflow::passNLepCut(const LeptonVector& leptons)
   uint nLep = leptons.size();
   if(m_nLepMin>=0 && nLep < m_nLepMin) return false;
   if(m_nLepMax>=0 && nLep > m_nLepMax) return false;
-  n_pass_nLep++;
+  n_pass_nLep[m_ET]++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -326,14 +337,14 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons)
 {
   
   if(leptons.size() < 1){
-    n_pass_trig++;
+    n_pass_trig[m_ET]++;
     return true;
   }
 
   int run         = nt.evt()->run;
   DataStream strm = nt.evt()->stream;
   if( m_trigObj->passDilTrig(leptons, run, strm) ){
-    n_pass_trig++;
+    n_pass_trig[m_ET]++;
     return true;
   }
   return false;
@@ -369,7 +380,7 @@ bool Susy2LepCutflow::passMll(const LeptonVector& leptons, float mll)
 {
   if( leptons.size() < 2 ) return false;
   if( (*leptons.at(0) + *leptons.at(1)).M() < mll ) return false;
-  n_pass_mll++;
+  n_pass_mll[m_ET]++;
   return true;
 }
  
@@ -466,38 +477,46 @@ void Susy2LepCutflow::dumpEventCounters()
   cout << "pass BadJet:   " << n_pass_BadJet  << endl;
   cout << "pass BadMu:    " << n_pass_BadMuon << endl;
   cout << "pass Cosmic:   " << n_pass_Cosmic  << endl;
-  cout << "pass trig:     " << n_pass_trig    << endl;
-  cout << "pass SF:       " << n_pass_flavor  << endl;
-  cout << "pass nLep:     " << n_pass_nLep    << endl;
-  cout << "pass mll:      " << n_pass_mll     << endl;
-  cout << "pass OS:       " << n_pass_os      << endl;
-  cout << "pass SS:       " << n_pass_ss      << endl;
-  cout << "---------------------------------" << endl;
-  cout << "pass SR1 JV:   " << n_pass_SR1jv   << endl;
-  cout << "pass SR1 ZV:   " << n_pass_SR1Zv   << endl;
-  cout << "pass SR1 MET:  " << n_pass_SR1MET  << endl;
-  cout << "---------------------------------" << endl;
-  cout << "pass SR2 JV:   " << n_pass_SR2jv   << endl;
-  cout << "pass SR2 MET:  " << n_pass_SR2MET  << endl;
-  cout << "---------------------------------" << endl;
-  cout << "pass SR3 >=2j: " << n_pass_SR3ge2j << endl;
-  cout << "pass SR3 ZV:   " << n_pass_SR3Zv   << endl;
-  cout << "pass SR3 bV:   " << n_pass_SR3bjv  << endl;
-  cout << "pass SR3 mct:  " << n_pass_SR3mct  << endl;
-  cout << "pass SR3 MET:  " << n_pass_SR3MET  << endl;
-  cout << "---------------------------------" << endl;
-  cout << "pass SR4 JV:           " << n_pass_SR4jv        << endl;
-  cout << "pass SR4 MET:          " << n_pass_SR4MET       << endl;
-  cout << "pass SR4 ZV:           " << n_pass_SR4Zv        << endl;
-  cout << "pass SR4 l0 Pt:        " << n_pass_SR4L0pt      << endl;
-  cout << "pass SR4 Sum Pt:       " << n_pass_SR4SUMpt     << endl;
-  cout << "pass SR4 dPhi(Met,ll): " << n_pass_SR4dPhiMETLL << endl;
-  cout << "pass SR4 dPhi(Met,l1): " << n_pass_SR4dPhiMETL1 << endl;
-  cout << "---------------------------------" << endl;
-  cout << "pass SR5 JV:   " << n_pass_SR5jv   << endl;
-  cout << "pass SR5 ZV:   " << n_pass_SR5Zv   << endl;
-  cout << "pass SR5 MET:  " << n_pass_SR5MET  << endl;
-  cout << "pass SR Mt2:   " << n_pass_SR5MT2  << endl;
+
+  string v_ET[ET_N] = {"ee","mm","em"};
+  for(int i=0; i<ET_N; ++i){
+    cout << "************************************" << endl;
+    cout << "For dilepton type: " << v_ET[i]       << endl;
+    
+    cout << "pass trig:     " << n_pass_trig[i]    << endl;
+    cout << "pass SF:       " << n_pass_flavor[i]  << endl;
+    cout << "pass nLep:     " << n_pass_nLep[i]    << endl;
+    cout << "pass mll:      " << n_pass_mll[i]     << endl;
+    cout << "pass OS:       " << n_pass_os[i]      << endl;
+    cout << "pass SS:       " << n_pass_ss[i]      << endl;
+    cout << "---------------------------------"    << endl;
+    cout << "pass SR1 JV:   " << n_pass_SR1jv[i]   << endl;
+    cout << "pass SR1 ZV:   " << n_pass_SR1Zv[i]   << endl;
+    cout << "pass SR1 MET:  " << n_pass_SR1MET[i]  << endl;
+    cout << "---------------------------------"    << endl;
+    cout << "pass SR2 JV:   " << n_pass_SR2jv[i]   << endl;
+    cout << "pass SR2 MET:  " << n_pass_SR2MET[i]  << endl;
+    cout << "---------------------------------"    << endl;
+    cout << "pass SR3 >=2j: " << n_pass_SR3ge2j[i] << endl;
+    cout << "pass SR3 ZV:   " << n_pass_SR3Zv[i]   << endl;
+    cout << "pass SR3 bV:   " << n_pass_SR3bjv[i]  << endl;
+    cout << "pass SR3 mct:  " << n_pass_SR3mct[i]  << endl;
+    cout << "pass SR3 MET:  " << n_pass_SR3MET[i]  << endl;
+    cout << "---------------------------------"    << endl;
+    cout << "pass SR4 JV:           " << n_pass_SR4jv[i]        << endl;
+    cout << "pass SR4 MET:          " << n_pass_SR4MET[i]       << endl;
+    cout << "pass SR4 ZV:           " << n_pass_SR4Zv[i]        << endl;
+    cout << "pass SR4 l0 Pt:        " << n_pass_SR4L0pt[i]      << endl;
+    cout << "pass SR4 Sum Pt:       " << n_pass_SR4SUMpt[i]     << endl;
+    cout << "pass SR4 dPhi(Met,ll): " << n_pass_SR4dPhiMETLL[i] << endl;
+    cout << "pass SR4 dPhi(Met,l1): " << n_pass_SR4dPhiMETL1[i] << endl;
+    cout << "---------------------------------"    << endl;
+    cout << "pass SR5 JV:   " << n_pass_SR5jv[i]   << endl;
+    cout << "pass SR5 ZV:   " << n_pass_SR5Zv[i]   << endl;
+    cout << "pass SR5 MET:  " << n_pass_SR5MET[i]  << endl;
+    cout << "pass SR Mt2:   " << n_pass_SR5MT2[i]  << endl;
+  }
+
 }
 
 /*--------------------------------------------------------------------------------*/

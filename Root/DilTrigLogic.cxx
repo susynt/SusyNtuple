@@ -43,15 +43,15 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
 
   // For convenience
   bool isEgamma = stream == Stream_Egamma;
-  EventType ET = getEventType(elecs,muons);
+  DiLepEvtType ET = getDiLepEvtType(leptons);
   //if(ET==UNKNOWNEVT) cout<<"Nlep: "<<leptons.size()<<endl;
 
   // Check:
-  if( isEgamma && (ET == OSe || ET == SSe) )
+  if( isEgamma && (ET == ET_ee) )
     return passEE();
-  if( !isEgamma && (ET == OSm || ET == SSm) )
+  if( !isEgamma && (ET ==ET_mm) )
     return passMM();
-  if( ET == OSOF || ET == SSOF )
+  if( ET == ET_em )
     return passEM(isEgamma);
 
   // Must not have matched if we get here
@@ -307,38 +307,26 @@ void DilTrigLogic::setLeptons(LeptonVector leps){
 }
 
 /*--------------------------------------------------------------------------------*/
-EventType DilTrigLogic::getEventType(ElectronVector elecs, MuonVector muons){
+/*
+DiLepEventType DilTrigLogic::getEventType(ElectronVector elecs, MuonVector muons){
 
   // Set the basic information first: 
   // 1.) sign
   // 2.) number of objects
 
-  // Assumed dilepton for now:
-  int sign = 1;
-  for(uint ie=0; ie<elecs.size(); ++ie)
-    sign = sign * elecs.at(ie)->q;
-  for(uint im=0; im<muons.size(); ++im)
-    sign = sign * muons.at(im)->q;
-
   int ne = elecs.size();
   int nm = muons.size();
   
-  // Opposite-sign:
-  if( sign == -1 ){
-    if( ne == 1 && nm == 1 ) return OSOF;
-    if( ne == 2 && nm == 0 ) return OSe;
-    if( ne == 0 && nm == 2 ) return OSm;
-  }
-  
-  // Same-sign:
-  if( sign == 1 ){
-    if( ne == 1 && nm == 1 ) return SSOF;
-    if( ne == 2 && nm == 0 ) return SSe;
-    if( ne == 0 && nm == 2 ) return SSm;
-  }
+  if( ne == 1 && nm == 1 ) return ET_em;
+  if( ne == 2 && nm == 0 ) return ET_ee;
+  if( ne == 0 && nm == 2 ) return ET_mm;
+  cout<<"Error: Unable to classify event with "
+      <<ne<<" electrons and "<<nm<<" muons!"
+      <<"\nReturning range "<<ET_N<<endl;
 
-  return UNKNOWNEVT;
+  return ET_N;
 }
+*/
 
 /*--------------------------------------------------------------------------------*/
 // Debug flag

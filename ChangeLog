@@ -1,5 +1,14 @@
 # vim: set noexpandtab:
-
+2012-06-01 Matt
+	* Made cutflow dump all results from three channels
+	* Moved getDiLepEvtType(Leptons) to SusyDefs so can be used outside trigger class
+	* Note: If you want to inherit methods from Susy2LepCutflow, maybe need to
+	modify the way evt counts are stored. Not pressing right now, but maybe update in
+	the future.
+	
+2012-05-31 Matt
+	* Tagging SusyNtuple-00-00-01
+	
 2012-05-30 Matt
 	* Moved directory to Institutes/UCIrvine/SUSYAnalysis
 	* Added avgMu, cluster energy, and jet truth label to SusyNt

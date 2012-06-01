@@ -79,6 +79,30 @@ bool hasSFOS(const LeptonVector& leps){
 }
 
 /*--------------------------------------------------------------------------------*/
+// Event Type functions
+/*--------------------------------------------------------------------------------*/
+DiLepEvtType getDiLepEvtType(const LeptonVector& leptons)
+{
+
+  int ne = 0; 
+  int nm = 0;
+  for(uint i=0; i<leptons.size(); ++i){
+    bool isE = leptons.at(i)->isEle();
+    if(isE)  ne++;
+    if(!isE) nm++;
+  }
+
+  if( ne == 1 && nm == 1 ) return ET_em;
+  if( ne == 2 && nm == 0 ) return ET_ee;
+  if( ne == 0 && nm == 2 ) return ET_mm;
+  cout<<"Error: Unable to classify event with "
+      <<ne<<" electrons and "<<nm<<" muons!"
+      <<"\nReturning range "<<ET_N<<endl;
+
+  return ET_N;
+}
+
+/*--------------------------------------------------------------------------------*/
 // Mass functions
 /*--------------------------------------------------------------------------------*/
 float Mll(const Lepton* l1, const Lepton* l2)
