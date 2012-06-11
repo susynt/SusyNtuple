@@ -27,6 +27,8 @@ namespace Susy
 //-----------------------------------------------------------------------------------
 // Global constants
 //-----------------------------------------------------------------------------------
+
+// This should not be defined in this pkg.  It is very misleading.
 const float GeV = 1000.;
 const float MZ = 91.2;
 
@@ -83,38 +85,43 @@ enum McPeriod
 // 2-lep or 3-lep flag
 enum AnalysisType 
 {
-    Ana_2Lep = 0,
-    Ana_3Lep,
-    Ana_N
+  Ana_2Lep = 0,
+  Ana_3Lep,
+  Ana_N
 };
 
 // Enum for systematic checks
-enum SYSTEMATIC {NOM = 0,
-		 EES_UP,      // Electron Scale + sigma
-		 EES_DN,      // Electron Scale - sigma
-		 EER_UP,      // Electron Resolution + sigma
-		 EER_DN,      // Electron Resolution - sigma
-		 MS_UP,       // Muon MS track + sigma
-		 MS_DN,       // Muon MS track - sigma
-		 ID_UP,       // Muon ID track + sigma
-		 ID_DN,       // Muon ID track - sigma
-		 JES_UP,      // Jet Energy Scale + sigma
-		 JES_DN,      // Jet Energy Scale - sigma
-		 JER,         // Jet Energy Resolution (gaussian)
-		 Syst_N
+enum SusyNtSys 
+{
+  NtSys_NOM = 0,
+  NtSys_EES_UP,      // Electron Scale + sigma
+  NtSys_EES_DN,      // Electron Scale - sigma
+  NtSys_EER_UP,      // Electron Resolution + sigma
+  NtSys_EER_DN,      // Electron Resolution - sigma
+  NtSys_MS_UP,       // Muon MS track + sigma
+  NtSys_MS_DN,       // Muon MS track - sigma
+  NtSys_ID_UP,       // Muon ID track + sigma
+  NtSys_ID_DN,       // Muon ID track - sigma
+  NtSys_JES_UP,      // Jet Energy Scale + sigma
+  NtSys_JES_DN,      // Jet Energy Scale - sigma
+  NtSys_JER,         // Jet Energy Resolution (gaussian)
+  NtSys_N
 };
 
 // Enum for checking event level cuts
-enum EventCheck {PASS_LAr      = 1<<0,
-		 PASS_BadJet   = 1<<1,
-		 PASS_BadMuon  = 1<<2,
-		 PASS_Cosmic   = 1<<3,
-		 PASS_Event    = 1<<4
+enum EventCheck 
+{
+  PASS_LAr      = 1<<0,
+  PASS_BadJet   = 1<<1,
+  PASS_BadMuon  = 1<<2,
+  PASS_Cosmic   = 1<<3,
+  PASS_Event    = 1<<4  // WTF is this?
 };
 
 // Way to check Event Types
 // Could make it a flag to also store Pt info...
-enum DiLepEvtType { 
+enum DiLepEvtType 
+{ 
   ET_ee = 0,
   ET_mm,
   ET_em,
@@ -189,28 +196,6 @@ enum TrigBit
   BIT_e10_medium_mu6,
   N_TRIG
 };
-
-/*enum ElecTrigBit
-{
-  BIT_e10_medium = 0,
-  BIT_e12_medium,
-  BIT_e20_medium,
-  BIT_e22_medium,
-  BIT_e22vh_medium1,
-  BIT_2e12_medium,
-  BIT_2e12T_medium,
-  BIT_2e12Tvh_medium,
-  N_EL_TRIG
-};
-enum MuonTrigBit
-{
-  BIT_mu6 = 0,
-  BIT_mu10_loose,
-  BIT_mu18,
-  BIT_mu18_medium,
-  BIT_2mu10_loose,
-  N_MU_TRIG
-};*/
 
 // Trigger bit masks - can represent multiple chains at once
 // electron

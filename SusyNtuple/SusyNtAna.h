@@ -69,7 +69,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // Object selection
     void clearObjects();
-    void selectObjects(SYSTEMATIC sys = NOM);
+    void selectObjects(SusyNtSys sys = NtSys_NOM);
 
     // Event and object dumps
     void dumpEvent();

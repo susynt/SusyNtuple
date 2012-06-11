@@ -7,7 +7,7 @@ using namespace Susy;
 // 'Overview' functions to make it easy for user to grab all objects
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(SusyNtObject* susy_nt, ElectronVector &elecs,
-				     MuonVector &muons, JetVector &jets, SYSTEMATIC sys){
+				     MuonVector &muons, JetVector &jets, SusyNtSys sys){
 
   // Get all objects
   elecs = getPreElectrons(susy_nt, sys);
@@ -36,7 +36,7 @@ void SusyNtTools::getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, J
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(SusyNtObject* susy_nt, ElectronVector &sigElecs, 
-				   MuonVector &sigMuons, JetVector &sigJets, SYSTEMATIC sys){
+				   MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys){
 
   // Temprorary vectors for baseline objects
   ElectronVector elecs = getPreElectrons(susy_nt, sys);
@@ -75,7 +75,7 @@ void SusyNtTools::performOverlap(ElectronVector &elecs, MuonVector &muons, JetVe
 /*--------------------------------------------------------------------------------*/
 // Methods to grab the Baseline objects
 /*--------------------------------------------------------------------------------*/
-ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susy_nt, SYSTEMATIC sys){
+ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susy_nt, SusyNtSys sys){
 
   // Not sure if I want to pass SusyNt object around or not... but just do it this way
   // for now for lack of a more creative idea.
@@ -98,7 +98,7 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susy_nt, SYSTEMATIC sy
   return elecs;
 }
 /*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getPreMuons(SusyNtObject* susy_nt, SYSTEMATIC sys){
+MuonVector SusyNtTools::getPreMuons(SusyNtObject* susy_nt, SusyNtSys sys){
 
   MuonVector muons;
   for(uint im=0; im<susy_nt->muo()->size(); ++im){
@@ -119,7 +119,7 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susy_nt, SYSTEMATIC sys){
   return muons;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getPreJets(SusyNtObject* susy_nt, SYSTEMATIC sys){
+JetVector SusyNtTools::getPreJets(SusyNtObject* susy_nt, SusyNtSys sys){
 
   JetVector jets;
   for(uint ij=0; ij<susy_nt->jet()->size(); ++ij){
@@ -183,7 +183,7 @@ JetVector SusyNtTools::getSignalJets(JetVector bsJets){
 /*--------------------------------------------------------------------------------*/
 // Get Met
 /*--------------------------------------------------------------------------------*/
-Susy::Met* SusyNtTools::getMet(SusyNtObject* susy_nt, SYSTEMATIC sys){
+Susy::Met* SusyNtTools::getMet(SusyNtObject* susy_nt, SusyNtSys sys){
 
   // Right now now being clever. Could maybe make sys index correspond to 
   // index on the array.

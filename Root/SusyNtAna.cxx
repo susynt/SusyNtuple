@@ -116,7 +116,7 @@ void SusyNtAna::clearObjects()
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::selectObjects(SYSTEMATIC sys)
+void SusyNtAna::selectObjects(SusyNtSys sys)
 {
 
   // Get the Baseline objets

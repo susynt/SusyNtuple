@@ -46,7 +46,7 @@ namespace Susy
 
       void clear() { 
 	TLorentzVector::Clear(); 
-	idx = 999;
+	idx = 999;      // This is not a very good choice...
       }
 
       // print method
@@ -270,7 +270,7 @@ namespace Susy
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
-      int evtFlag[Syst_N];
+      int evtFlag[NtSys_N];
 
       // Combined normalized event weight
       float fullWeight() const { return wPileup*xsec*lumiSF; }

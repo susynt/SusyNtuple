@@ -14,8 +14,9 @@
 
 */
 
-using namespace std;
-using namespace Susy;
+// Don't pollute global namespace!!
+//using namespace std;
+//using namespace Susy;
 
 class SusyNtTools
 {
@@ -36,15 +37,15 @@ class SusyNtTools
   //
 
   // 'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna
-  ElectronVector getPreElectrons(SusyNtObject* susy_nt, SYSTEMATIC sys);
-  MuonVector     getPreMuons(SusyNtObject* susy_nt, SYSTEMATIC sys);
-  JetVector      getPreJets(SusyNtObject* susy_nt, SYSTEMATIC sys);
+  ElectronVector getPreElectrons(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
+  MuonVector     getPreMuons(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
+  JetVector      getPreJets(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
 
   // Get Baseline objects. Pre + overlap removal.
   // Might be able to add options in case of overlap 
   // removal differances in 2-lep vs. 3-lep.
-  void getBaselineObjects(SusyNtObject* susy_nt, ElectronVector &elecs, 
-			  MuonVector &muons, JetVector &jets, SYSTEMATIC sys);
+  void getBaselineObjects(Susy::SusyNtObject* susy_nt, ElectronVector &elecs, 
+			  MuonVector &muons, JetVector &jets, SusyNtSys sys);
 
   // Signal objects
   ElectronVector getSignalElectrons(ElectronVector bsElecs);
@@ -54,13 +55,13 @@ class SusyNtTools
   // Get the signal objects
   void getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,
 			ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets);
-  void getSignalObjects(SusyNtObject* susy_nt, ElectronVector &sigElecs, 
-			MuonVector &sigMuons, JetVector &sigJets, SYSTEMATIC sys);
+  void getSignalObjects(Susy::SusyNtObject* susy_nt, ElectronVector &sigElecs, 
+			MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys);
   
   // Check if Signal
-  bool isSignalElectron(const Electron* ele);
-  bool isSignalMuon(const Muon* mu);
-  bool isSignalJet(const Jet* jet);
+  bool isSignalElectron(const Susy::Electron* ele);
+  bool isSignalMuon(const Susy::Muon* mu);
+  bool isSignalJet(const Susy::Jet* jet);
 
   // Build Lepton vector
   void buildLeptons(LeptonVector &lep, ElectronVector &ele, MuonVector &muo){
@@ -71,7 +72,7 @@ class SusyNtTools
   };
   
   // Get the Met, for the appropriate systematic
-  Met*              getMet(SusyNtObject* susy_nt, SYSTEMATIC sys);
+  Susy::Met* getMet(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
 
   //
   // Methods for performing overlap removal
@@ -122,7 +123,7 @@ class SusyNtTools
   //
   // Top Tagger
   // 
-  bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Met* met,
+  bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
 		  int opt=0, float ptJetCut=30, float mEffCut=100);
   
   bool toptag0j(TLorentzVector v1l, TLorentzVector v2l, TVector2 met);
@@ -136,7 +137,7 @@ class SusyNtTools
   // Methods to get useful quantities
   // 
 
-  float getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets);
+  float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets);
 
   //
   // Methods to handle Trigger checking

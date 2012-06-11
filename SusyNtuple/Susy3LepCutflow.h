@@ -37,16 +37,16 @@ class Susy3LepCutflow : public SusyNtAna
     virtual Bool_t  Process(Long64_t entry);
 
     // Full event selection. Specify which leptons to use.
-    bool selectEvent(const LeptonVector& leptons, const JetVector& jets, const Met* met);
+    bool selectEvent(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met);
 		     
     // Cut methods
     bool passNLepCut(const LeptonVector& leptons);
     bool passTrigger(const LeptonVector& leptons);
     bool passSFOSCut(const LeptonVector& leptons);
-    bool passMetCut (const Met* met             );
+    bool passMetCut (const Susy::Met* met       );
     bool passZCut   (const LeptonVector& leptons);
     bool passBJetCut(                           );
-    bool passMtCut  (const LeptonVector& leptons, const Met* met);
+    bool passMtCut  (const LeptonVector& leptons, const Susy::Met* met);
             
     // Dump cutflow - if derived class uses different cut ordering,
     // override this method
