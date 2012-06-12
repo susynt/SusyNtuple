@@ -24,7 +24,7 @@ class SusyNtTools
  public:
 
   // Constructor and destructor
-  SusyNtTools(){};               // <--- Default for now, might change
+  SusyNtTools();
   virtual ~SusyNtTools(){};
 
   //

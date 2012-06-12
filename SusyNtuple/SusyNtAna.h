@@ -34,7 +34,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     //**************
     // To Be deleted
-    std::ofstream evtlist;
+    //std::ofstream evtlist;
 
 
     //

@@ -24,7 +24,7 @@ void SusyNtAna::Init(TTree* tree)
   if(m_dbg) cout << "SusyNtAna::Init" << endl;
   m_tree = tree;
   nt.ReadFrom(tree);
-  evtlist.open("evtListTest.out");
+  //evtlist.open("evtListTest.out");
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -71,8 +71,8 @@ Bool_t SusyNtAna::Process(Long64_t entry)
 
   if(m_signalLeptons.size() >= 3){
     
-    evtlist<<nt.evt()->run<<" "<<nt.evt()->event<<" "<<m_signalElectrons.size()<<" "
-	   <<m_signalMuons.size()<<" "<<m_signalJets.size()<<endl;
+    //evtlist << nt.evt()->run << " " << nt.evt()->event << " " << m_signalElectrons.size() << " "
+	    //<< m_signalMuons.size() << " " << m_signalJets.size() << endl;
 
   }
 
