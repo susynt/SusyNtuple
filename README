@@ -1,0 +1,34 @@
+#------------------------------------------------------------------------------------
+#  SusyNtuple
+#
+#  A RootCore package for common UCI SUSY analysis
+#------------------------------------------------------------------------------------
+
+
+
+# Link to code in SVN browser
+https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple
+
+# To checkout the package trunk
+svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/trunk SusyNtuple
+
+# Or the current recommended tag (currently changing)
+svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/tags/SusyNtuple-00-00-02 SusyNtuple
+
+# To make a tag, from this directory
+svn cp . svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/tags/SusyNtuple-XX-YY-ZZ -m "some message"
+# Or, even better, copy from trunk to tag
+trunk=svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/trunk
+target=svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/tags/SusyNtuple-XX-YY-ZZ
+svn cp $trunk $target -m "some message"
+
+# To install, check out SusyNtuple, the MultiLep Common code, and run install script 
+svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/trunk SusyNtuple
+svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/Multilepton/trunk/fiveinvfb/MultiLep MultiLep
+source MultiLep/installscripts/install_script.sh
+# Or, for convenience, these commands have been put in this package (kinit first):
+source SusyNtuple/scripts/install.sh
+
+# for examples, here is my analysis code which depends on this package
+https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/sfarrell/SusyAna
+
