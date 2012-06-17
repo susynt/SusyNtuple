@@ -1,6 +1,9 @@
 # vim: set noexpandtab:
 
 2012-06-11 Steve
+	* Added TStopwatch for checking processing time
+
+2012-06-11 Steve
 	* Updating syntax and conventions for code consistency:
 		* SYSTEMATIC -> SusyNtSys
 		* NOM -> NtSys_NOM

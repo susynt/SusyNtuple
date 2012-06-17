@@ -32,3 +32,34 @@ source SusyNtuple/scripts/install.sh
 # for examples, here is my analysis code which depends on this package
 https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/sfarrell/SusyAna
 
+
+#------------------------------------------------------------------------------------
+# Examples on how to run
+#------------------------------------------------------------------------------------
+
+# Currently there are 3 executables.  They all have the same command line options.
+# Specify SusyNt files either by specific file path, a fileList, or an input directory
+
+  Options:
+  -n number of events to process
+     defaults: -1 (all events)
+  -k number of events to skip
+     defaults: 0
+  -d debug printout level
+     defaults: 0 (quiet) 
+  -F name of single input file
+     defaults: ''
+  -f name of input filelist
+     defaults: ''
+  -D name of input file dir
+     defaults: ''
+  -s sample name, for naming files
+     defaults: ntuple sample name
+  -h print this help
+
+# Executable for simple SusyNt testing
+SusyNtTest
+
+# Executables 2L and 3L cutflows
+Susy2LepCF
+Susy3LepCF

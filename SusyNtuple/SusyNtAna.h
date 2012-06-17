@@ -3,7 +3,7 @@
 
 #include "TSelector.h"
 #include "TTree.h"
-#include "THnSparse.h"
+#include "TStopwatch.h"
 
 #include "ReweightUtils/APWeightEntry.h"
 #include "ReweightUtils/APReweightND.h"
@@ -84,6 +84,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
     std::string sampleName() { return m_sample; }
     void setSampleName(std::string s) { m_sample = s; }
 
+    // Dump timer
+    void dumpTimer();
+
     // Access tree
     TTree* getTree() { return m_tree; }
 
@@ -98,6 +101,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     TTree* m_tree;              // Input tree (I think it actually points to a TChain)
 
     Long64_t m_entry;           // Current entry in the current tree (not chain index!)
+    Long64_t m_chainEntry;      // Current entry in the full TChain
 
     int m_dbg;                  // debug level
 
@@ -117,6 +121,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
     JetVector           m_signalJets;           // signal jets
     const Susy::Met*    m_met;                  // Met
 
+
+    // Timer
+    TStopwatch          m_timer;
 
 };
 

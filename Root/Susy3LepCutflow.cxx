@@ -47,6 +47,7 @@ Susy3LepCutflow::Susy3LepCutflow() :
 /*--------------------------------------------------------------------------------*/
 void Susy3LepCutflow::Begin(TTree* /*tree*/)
 {
+  SusyNtAna::Begin(0);
   if(m_dbg) cout << "Susy3LepCutflow::Begin" << endl;
 
   if(m_sel=="sr1") {
@@ -74,11 +75,11 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   n_readin++;
 
   // Chain entry not the same as tree entry
-  static Long64_t chainEntry = -1;
-  chainEntry++;
-  if(m_dbg || chainEntry%50000==0)
+  //static Long64_t chainEntry = -1;
+  m_chainEntry++;
+  if(m_dbg || m_chainEntry%50000==0)
   {
-    cout << "**** Processing entry " << setw(6) << chainEntry
+    cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
          << " event " << setw(7) << nt.evt()->event << " ****" << endl;
   }
@@ -97,6 +98,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
 /*--------------------------------------------------------------------------------*/
 void Susy3LepCutflow::Terminate()
 {
+  SusyNtAna::Terminate();
   if(m_dbg) cout << "Susy3LepCutflow::Terminate" << endl;
 
   dumpEventCounters();

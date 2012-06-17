@@ -35,6 +35,11 @@ void SusyNtAna::Init(TTree* tree)
 void SusyNtAna::Begin(TTree* /*tree*/)
 {
   if(m_dbg) cout << "SusyNtAna::Begin" << endl;
+
+  m_chainEntry = -1;
+
+  // Start the timer
+  m_timer.Start();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -49,11 +54,11 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   //if(nt.evt()->event != 24969) return kTRUE;
 
   // Chain entry not the same as tree entry
-  static Long64_t chainEntry = -1;
-  chainEntry++;
-  if(m_dbg || chainEntry%50000==0)
+  //static Long64_t chainEntry = -1;
+  m_chainEntry++;
+  if(m_dbg || m_chainEntry%50000==0)
   {
-    cout << "**** Processing entry " << setw(6) << chainEntry
+    cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
          << " event " << setw(7) << nt.evt()->event << " ****" << endl;
   }
@@ -87,6 +92,10 @@ Bool_t SusyNtAna::Process(Long64_t entry)
 void SusyNtAna::Terminate()
 {
   if(m_dbg) cout << "SusyNtAna::Terminate" << endl;
+
+  // Stop the timer
+  m_timer.Stop();
+  dumpTimer();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -139,6 +148,30 @@ void SusyNtAna::selectObjects(SusyNtSys sys)
   std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
   std::sort(m_signalLeptons.begin(), m_signalLeptons.end(), comparePt);
 
+}
+
+/*--------------------------------------------------------------------------------*/
+// Dump timer information
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::dumpTimer()
+{
+  cout << endl;
+  cout << "entry: " << m_chainEntry << endl;
+  double realTime = m_timer.RealTime();
+  double cpuTime  = m_timer.CpuTime();
+  int hours = int(realTime / 3600);
+  realTime -= hours * 3600;
+  int min   = int(realTime / 60);
+  realTime -= min * 60;
+  int sec   = int(realTime);
+
+  float speed = m_chainEntry/realTime/1000;
+
+  printf("---------------------------------------------------\n");
+  printf(" Number of events processed: %d \n",(int)m_chainEntry);
+  printf("\t Analysis time: Real %d:%02d:%02d, CPU %.3f      \n", hours, min, sec, cpuTime);
+  printf("\t Analysis speed [kHz]: %2.3f                     \n",speed);
+  printf("---------------------------------------------------\n\n");
 }
 
 /*--------------------------------------------------------------------------------*/

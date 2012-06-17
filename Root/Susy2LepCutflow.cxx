@@ -73,6 +73,7 @@ Susy2LepCutflow::Susy2LepCutflow() :
 /*--------------------------------------------------------------------------------*/
 void Susy2LepCutflow::Begin(TTree* /*tree*/)
 {
+  SusyNtAna::Begin(0);
   if(m_dbg) cout << "Susy2LepCutflow::Begin" << endl;
 
   m_trigObj = new DilTrigLogic(false);
@@ -94,11 +95,11 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   //cout<<"RuN: "<<nt.evt()->run<<" Event "<<nt.evt()->event<<endl;
 
   // Chain entry not the same as tree entry
-  static Long64_t chainEntry = -1;
-  chainEntry++;
-  if(m_dbg || chainEntry%50000==0)
+  //static Long64_t chainEntry = -1;
+  m_chainEntry++;
+  if(m_dbg || m_chainEntry%50000==0)
   {
-    cout << "**** Processing entry " << setw(6) << chainEntry
+    cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
          << " event " << setw(7) << nt.evt()->event << " ****" << endl;
   }
@@ -131,6 +132,7 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
 /*--------------------------------------------------------------------------------*/
 void Susy2LepCutflow::Terminate()
 {
+  SusyNtAna::Terminate();
   if(m_dbg) cout << "Susy2LepCutflow::Terminate" << endl;
 
   dumpEventCounters();
