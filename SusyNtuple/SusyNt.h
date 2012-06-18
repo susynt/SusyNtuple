@@ -219,6 +219,8 @@ namespace Susy
 
       float Et;
       float phi;
+
+      // Build a TLorentzVector on the fly
       const TLorentzVector lv() const {
 	TLorentzVector tlv;
 	tlv.SetPtEtaPhiE(this->Et,0,this->phi,this->Et);
@@ -231,7 +233,7 @@ namespace Susy
       float refJet;             // Ref jet term
       float refCell;            // Cellout term
 
-      int sys;
+      int sys;                  // ???
 
       // print vars
       void print() const;
@@ -268,6 +270,7 @@ namespace Susy
       float wPileup;            // pileup weight
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
+      float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
       int evtFlag[NtSys_N];
@@ -288,7 +291,7 @@ namespace Susy
 	memset(evtFlag,0,sizeof(evtFlag));
       }
 
-      ClassDef(Event, 4);
+      ClassDef(Event, 5);
   };
 
 };

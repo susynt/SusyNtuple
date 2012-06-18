@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-06-18 Steve
+	* Added pdfSF weight to Event class, for reweighting 7TeV -> 8TeV
+	* Tagging SusyNtuple-00-00-03
+
 2012-06-11 Steve
 	* Added TStopwatch for checking processing time
 
@@ -9,6 +13,7 @@
 		* NOM -> NtSys_NOM
 		* etc.
 	* Removed 'using namespace' statements from headers (grr)
+	* Tagging SusyNtuple-00-00-02
 
 2012-06-01 Matt
 	* Made cutflow dump all results from three channels
