@@ -1,6 +1,15 @@
 # vim: set noexpandtab:
 
-2012-06-18 Steve
+2012-06-20 Steve
+	* Updated to twentyinvfb version of MultiLep, and SUSYTools v71
+	* Added preliminary 2012 triggers: 
+		* EF_e24vhi_medium1
+		* EF_2e12Tvh_loose1
+		* EF_mu24i_tight
+		* EF_2mu13
+		* EF_e12Tvh_medium1_mu8
+
+2012-06-19 Steve
 	* Fixed event timer calculation
 	* Added helper script for tagging package: scripts/makeTags.sh
 	* Tagging SusyNtuple-00-00-04
