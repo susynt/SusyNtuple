@@ -34,4 +34,6 @@ fi
 
 echo "OK, tagging now..."
 
+svn cp $trunk $target
+
 echo "Done"
