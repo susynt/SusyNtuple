@@ -1,10 +1,14 @@
 # vim: set noexpandtab:
 
 2012-06-18 Steve
+	* Fixed event timer calculation
+	* Tagging SusyNtuple-00-00-04
+
+2012-06-18 Steve
 	* Added pdfSF weight to Event class, for reweighting 7TeV -> 8TeV
 	* Tagging SusyNtuple-00-00-03
 
-2012-06-11 Steve
+2012-06-17 Steve
 	* Added TStopwatch for checking processing time
 
 2012-06-11 Steve
@@ -31,7 +35,7 @@
 	* Moved directory to Institutes/UCIrvine/SUSYAnalysis
 	* Added avgMu, cluster energy, and jet truth label to SusyNt
 	* Meff function included in SusyDefs	
-	
+
 #------------------------------------------------------------------------------------
 # Prior to the Merge 2012-05-30
 #------------------------------------------------------------------------------------

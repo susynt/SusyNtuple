@@ -165,7 +165,7 @@ void SusyNtAna::dumpTimer()
   realTime -= min * 60;
   int sec   = int(realTime);
 
-  float speed = m_chainEntry/realTime/1000;
+  float speed = m_chainEntry/m_timer.RealTime()/1000;
 
   printf("---------------------------------------------------\n");
   printf(" Number of events processed: %d \n",(int)m_chainEntry);
