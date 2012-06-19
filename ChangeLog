@@ -2,6 +2,7 @@
 
 2012-06-18 Steve
 	* Fixed event timer calculation
+	* Added helper script for tagging package: scripts/makeTags.sh
 	* Tagging SusyNtuple-00-00-04
 
 2012-06-18 Steve
