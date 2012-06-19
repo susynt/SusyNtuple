@@ -8,11 +8,14 @@
 		* EF_mu24i_tight
 		* EF_2mu13
 		* EF_e12Tvh_medium1_mu8
+	* Tagging SusyNtuple-00-00-05
+		* First tag for 2012 data/mc
 
 2012-06-19 Steve
 	* Fixed event timer calculation
 	* Added helper script for tagging package: scripts/makeTags.sh
 	* Tagging SusyNtuple-00-00-04
+		* Last tag for 2011 data/mc
 
 2012-06-18 Steve
 	* Added pdfSF weight to Event class, for reweighting 7TeV -> 8TeV
