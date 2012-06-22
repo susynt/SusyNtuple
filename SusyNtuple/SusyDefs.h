@@ -201,9 +201,14 @@ enum TrigBit
   // 2012 triggers
   BIT_e24vhi_medium1,
   BIT_2e12Tvh_loose1,
+  BIT_e24vh_medium1_e7_medium1,
+
+  BIT_mu18_tight,
   BIT_mu24i_tight,
   BIT_2mu13,
+
   BIT_e12Tvh_medium1_mu8,
+  BIT_mu18_tight_e7_medium1,
 
   N_TRIG
 };
@@ -224,11 +229,15 @@ const uint TRIG_2mu10_loose     = 1<<BIT_2mu10_loose;
 const uint TRIG_e10_medium_mu6  = 1<<BIT_e10_medium_mu6;
 
 // 2012 Trigger bit masks
-const uint TRIG_e24vhi_medium1  = 1<<BIT_e24vhi_medium1;
-const uint TRIG_2e12Tvh_loose1  = 1<<BIT_2e12Tvh_loose1;
-const uint TRIG_e12Tvh_medium1_mu8 = 1<<BIT_e12Tvh_medium1_mu8;
-const uint TRIG_mu24i_tight     = 1<<BIT_mu24i_tight;
-const uint TRIG_2mu13           = 1<<BIT_2mu13;
+const uint TRIG_e24vhi_medium1          = 1<<BIT_e24vhi_medium1;
+const uint TRIG_2e12Tvh_loose1          = 1<<BIT_2e12Tvh_loose1;
+const uint TRIG_e24vh_medium1_e7_medium1= 1<<BIT_e24vh_medium1_e7_medium1;
+
+const uint TRIG_mu18_tight              = 1<<BIT_mu18_tight;
+const uint TRIG_mu24i_tight             = 1<<BIT_mu24i_tight;
+const uint TRIG_2mu13                   = 1<<BIT_2mu13;
+const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
+const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();

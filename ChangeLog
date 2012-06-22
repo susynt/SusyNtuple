@@ -2,6 +2,8 @@
 
 2012-06-22 Steve
 	* Added sv0 and mv1 btaggers
+	* Added more 2012 triggers
+	* Added pileup weight for 2012 A-B5
 
 2012-06-21 Matt
 	* Added Photon class to SusyNt

@@ -303,6 +303,7 @@ namespace Susy
 
       // Reweighting and scaling
       float wPileup;            // pileup weight
+      float wPileup2fb;         // pileup weight for 2012 period A-B5 only
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
       float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
@@ -327,7 +328,7 @@ namespace Susy
 	memset(evtFlag,0,sizeof(evtFlag));
       }
 
-      ClassDef(Event, 5);
+      ClassDef(Event, 6);
   };
 
 };
