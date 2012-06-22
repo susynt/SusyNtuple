@@ -127,7 +127,7 @@ namespace Susy
       float eer_dn;             // Energy Reso. - sigma
 
       // polymorphism, baby!!
-      bool isEle() const { return true; }
+      bool isEle() const { return true;  }
       bool isMu()  const { return false; }
 
       void setState(int sys);
@@ -186,13 +186,17 @@ namespace Susy
       virtual ~Jet(){};
 
       float jvf;                // Jet vertex fraction
-      float combNN;             // JetFitterCombNN b-tag weight
       int truthLabel;           // Flavor truth label
 
+      // btagging
+      float sv0;                // SV0 btag weight
+      float combNN;             // JetFitterCombNN btag weight
+      float mv1;                // MV1 btag weight
+
       // Systematics
-      float jes_up;
-      float jes_dn;
-      float jer;
+      float jes_up;             // jet energy scale up
+      float jes_dn;             // jet energy scale down
+      float jer;                // jet energy resolution
 
       void setState(int sys);
 
@@ -304,6 +308,7 @@ namespace Susy
       float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
+      // This is somewhat poorly named...
       int evtFlag[NtSys_N];
 
       // Combined normalized event weight
