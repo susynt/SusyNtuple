@@ -211,7 +211,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Jet, 1);
+      ClassDef(Jet, 2);
   };
 
   // Photon class
