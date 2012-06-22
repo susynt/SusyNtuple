@@ -22,6 +22,7 @@ namespace Susy
   class Muon;
   class Jet;
   class Met;
+  class Photon;
 }
 
 //-----------------------------------------------------------------------------------
@@ -42,6 +43,7 @@ typedef std::vector<const Susy::Lepton*>   LeptonVector;
 typedef std::vector<const Susy::Electron*> ElectronVector;
 typedef std::vector<const Susy::Muon*>     MuonVector;
 typedef std::vector<const Susy::Jet*>      JetVector;
+typedef std::vector<const Susy::Photon*>   PhotonVector;
 
 //-----------------------------------------------------------------------------------
 // Global enums

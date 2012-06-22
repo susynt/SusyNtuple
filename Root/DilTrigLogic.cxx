@@ -6,28 +6,28 @@
 // Constructor
 /*--------------------------------------------------------------------------------*/
 DilTrigLogic::DilTrigLogic(bool isMC){
-
+  
   if( isMC ) loadTriggerMaps();
-
+  
 }
 /*--------------------------------------------------------------------------------*/
 // Destructor
 /*--------------------------------------------------------------------------------*/
 DilTrigLogic::~DilTrigLogic(){
-
+  
   if( m_trigTool_mu18 ) delete m_trigTool_mu18;
   if( m_trigTool_mu18Med ) delete m_trigTool_mu18Med;
   if( m_trigTool_mu10L_not18 ) delete m_trigTool_mu18;
   if( m_trigTool_mu10L_not18Med ) delete m_trigTool_mu18;
   if( m_trigTool_mu18 ) delete m_trigTool_mu18;
-
+  
 }
 
 /*--------------------------------------------------------------------------------*/
 // Does event pass susy dilepton trigger logic?
 /*--------------------------------------------------------------------------------*/
 bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream stream){
-
+  
   // We ignore trigger logic in Monte Carlo
   if( stream == Stream_MC ) 
     return true;
@@ -35,17 +35,17 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
     cout<<"Error: Stream is unknown! Returning false from passDilTrig."<<endl;
     return false;
   }
-
+  
   // Set Vars for easy access
   clear();
   setPeriod(RunNumber);
   setLeptons(leptons);
-
+  
   // For convenience
   bool isEgamma = stream == Stream_Egamma;
   DiLepEvtType ET = getDiLepEvtType(leptons);
   //if(ET==UNKNOWNEVT) cout<<"Nlep: "<<leptons.size()<<endl;
-
+  
   // Check:
   if( isEgamma && (ET == ET_ee) )
     return passEE();
@@ -53,7 +53,7 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
     return passMM();
   if( ET == ET_em )
     return passEM(isEgamma);
-
+  
   // Must not have matched if we get here
   return false;
   
@@ -346,3 +346,4 @@ void DilTrigLogic::debugFlag(uint flag){
 
 
 }
+

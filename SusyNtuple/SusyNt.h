@@ -210,6 +210,37 @@ namespace Susy
       ClassDef(Jet, 1);
   };
 
+  // Photon class
+  class Photon : public Particle
+  {
+    public:
+      Photon(){ clear(); };
+      virtual ~Photon(){};
+
+      // Conversion Information
+      bool isConv;
+
+      // Systematics
+      //float pes_up;        // Photon Energy Scale up
+      //float pes_dn;        // Photon Energy Scale down
+      //float per_up;        // Photon Energy Resolution up
+      //float per_dn;        // Photon Energy Resolution down
+
+      void setState(int sys){ resetTLV();};
+      
+      // print method
+      void print() const {};
+
+      // clear
+      void clear(){
+	//pes_up = pes_dn = per_up = per_dn = 0;
+	isConv = false;
+	Particle::clear();
+      };
+      
+      ClassDef(Photon, 1);
+  };
+
   // Met class
   class Met : public TObject // public TLorentzVector // No longer inherit from particle
   {

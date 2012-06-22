@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-06-21 Matt
+	* Added Photon class to SusyNt
+	
 2012-06-20 Steve
 	* Updated to twentyinvfb version of MultiLep, and SUSYTools v71
 	* Added preliminary 2012 triggers: 

@@ -49,7 +49,9 @@ namespace Susy
       // Jet variables
       D3PDReader::VarHandle< std::vector<Jet>* >        jet;
       // Met variables
-      D3PDReader::VarHandle< std::vector<Met>* >        met;     
+      D3PDReader::VarHandle< std::vector<Met>* >        met;  
+      // Photon variables
+      D3PDReader::VarHandle< std::vector<Photon>* >     pho;
 
       ClassDef(SusyNtObject,1);
 

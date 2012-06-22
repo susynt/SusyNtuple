@@ -31,6 +31,7 @@
 #pragma link C++ class Susy::Jet+;
 #pragma link C++ class Susy::Met+;
 #pragma link C++ class Susy::Event+;
+#pragma link C++ class Susy::Photon+;
 
 // STL
 #pragma link C++ class std::vector< Susy::Particle >+;
@@ -39,6 +40,7 @@
 #pragma link C++ class std::vector< Susy::Muon >+;
 #pragma link C++ class std::vector< Susy::Jet >+;
 #pragma link C++ class std::vector< Susy::Met >+;
+#pragma link C++ class std::vector< Susy::Photon >+;
 
 //Tools //optional to have this here ?
 #pragma link C++ class SusyNtTools+;

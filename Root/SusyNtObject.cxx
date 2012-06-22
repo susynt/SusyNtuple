@@ -3,6 +3,8 @@
 using namespace std;
 using namespace Susy;
 
+#include <iostream>
+
 
 /*--------------------------------------------------------------------------------*/
 // SusyNtObject constructor for writing only.
@@ -14,7 +16,8 @@ SusyNtObject::SusyNtObject():
         ele(this, "electrons", 0),
         muo(this, "muons", 0),
         jet(this, "jets", 0),
-        met(this, "met", 0)
+        met(this, "met", 0),
+	pho(this, "photons", 0)
 {
 }
 
@@ -26,7 +29,8 @@ SusyNtObject::SusyNtObject(const Long64_t& entry):
         ele(this, "electrons", &entry),
         muo(this, "muons", &entry),
         jet(this, "jets", &entry),
-        met(this, "met", &entry)
+        met(this, "met", &entry),
+	pho(this, "photons", &entry)
 {
 }
 
@@ -40,6 +44,7 @@ void SusyNtObject::SetActive()
   muo.SetActive(true);
   jet.SetActive(true);
   met.SetActive(true);
+  pho.SetActive(true);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -52,6 +57,7 @@ void SusyNtObject::WriteTo(TTree* tree)
   muo.WriteTo(tree);
   jet.WriteTo(tree);
   met.WriteTo(tree);
+  pho.WriteTo(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -64,6 +70,7 @@ void SusyNtObject::ReadFrom(TTree* tree)
   muo.ReadFrom(tree);
   jet.ReadFrom(tree);
   met.ReadFrom(tree);
+  pho.ReadFrom(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -76,4 +83,5 @@ void SusyNtObject::clear()
   muo()->clear();
   jet()->clear();
   met()->clear();
+  pho()->clear();
 }

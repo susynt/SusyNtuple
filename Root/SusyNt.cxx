@@ -86,7 +86,7 @@ void Jet::setState(int sys)
   else if( sys == NtSys_JES_UP ) sf = jes_up;
   else if( sys == NtSys_JES_DN ) sf = jes_dn;
   else return;
-
+  
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
 }
 /*--------------------------------------------------------------------------------*/
