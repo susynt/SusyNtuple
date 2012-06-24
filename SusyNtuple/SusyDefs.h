@@ -186,7 +186,7 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
 // Trigger enums - try to respect backwards compatibility by adding to the end
 enum TrigBit
 {
-  // 2011 triggers
+  // 2011 triggers 
   BIT_e20_medium = 0,
   BIT_e22_medium,
   BIT_e22vh_medium1,
@@ -199,10 +199,14 @@ enum TrigBit
   BIT_e10_medium_mu6,
 
   // 2012 triggers
+  BIT_e7_medium1,
+  BIT_e12Tvh_medium1,
+  BIT_e24vh_medium1,
   BIT_e24vhi_medium1,
   BIT_2e12Tvh_loose1,
   BIT_e24vh_medium1_e7_medium1,
 
+  BIT_mu8,
   BIT_mu18_tight,
   BIT_mu24i_tight,
   BIT_2mu13,
@@ -213,7 +217,11 @@ enum TrigBit
   N_TRIG
 };
 
-// 2011 Trigger bit masks - can represent multiple chains at once
+//
+// Trigger bit masks - could in principle represent multiple chains at once
+//
+
+// 2011 Trigger bit masks 
 // electron
 const uint TRIG_e20_medium      = 1<<BIT_e20_medium;
 const uint TRIG_e22_medium      = 1<<BIT_e22_medium;
@@ -229,13 +237,18 @@ const uint TRIG_2mu10_loose     = 1<<BIT_2mu10_loose;
 const uint TRIG_e10_medium_mu6  = 1<<BIT_e10_medium_mu6;
 
 // 2012 Trigger bit masks
+const uint TRIG_e7_medium1              = 1<<BIT_e7_medium1;
+const uint TRIG_e12Tvh_medium1          = 1<<BIT_e12Tvh_medium1;
+const uint TRIG_e24vh_medium1           = 1<<BIT_e24vh_medium1;
 const uint TRIG_e24vhi_medium1          = 1<<BIT_e24vhi_medium1;
 const uint TRIG_2e12Tvh_loose1          = 1<<BIT_2e12Tvh_loose1;
 const uint TRIG_e24vh_medium1_e7_medium1= 1<<BIT_e24vh_medium1_e7_medium1;
 
+const uint TRIG_mu8                     = 1<<BIT_mu8;
 const uint TRIG_mu18_tight              = 1<<BIT_mu18_tight;
 const uint TRIG_mu24i_tight             = 1<<BIT_mu24i_tight;
 const uint TRIG_2mu13                   = 1<<BIT_2mu13;
+
 const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
 const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
 

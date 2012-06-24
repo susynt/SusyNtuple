@@ -84,8 +84,7 @@ namespace Susy
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
       // trigger matching
-      // provide the trigger chain via bit mask, 
-      // e.g. TRIG_mu18
+      // provide the trigger chain via bit mask, e.g. TRIG_mu18
       bool matchTrig(unsigned int mask) const {
         return (trigFlags & mask) == mask;
       }
@@ -294,12 +293,24 @@ namespace Susy
       unsigned int lb;          // lumi block number
       DataStream stream;        // DataStream enum, defined in SusyDefs.h
 
-      unsigned int nVtx;        // number of good vertices
-      float avgMu;              // average interactions per bunch crossing
-
       bool isMC;                // is MC flag
       unsigned int mcChannel;   // MC channel ID number (mc run number)
       float w;                  // MC generator weight
+
+      unsigned int nVtx;        // number of good vertices
+      float avgMu;              // average interactions per bunch crossing
+
+      unsigned int trigFlags;   // Event level trigger bits
+
+      // Check trigger firing
+      // provide the trigger chain via bit mask, e.g. TRIG_mu18
+      bool passTrig(unsigned int mask) const {
+        return (trigFlags & mask) == mask;
+      }
+
+      // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
+      // This is somewhat poorly named...
+      int evtFlag[NtSys_N];
 
       // Reweighting and scaling
       float wPileup;            // pileup weight
@@ -307,10 +318,6 @@ namespace Susy
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
       float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
-
-      // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
-      // This is somewhat poorly named...
-      int evtFlag[NtSys_N];
 
       // Combined normalized event weight
       float fullWeight() const { return wPileup*xsec*lumiSF; }
@@ -328,7 +335,7 @@ namespace Susy
 	memset(evtFlag,0,sizeof(evtFlag));
       }
 
-      ClassDef(Event, 6);
+      ClassDef(Event, 7);
   };
 
 };

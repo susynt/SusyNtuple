@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2012-06-24 Steve
+	* Added single lepton triggers from our corresponding dilepton triggers.
+	  This way we have more flexibility to implement the best logic later
+	* Added event trigger flags to Event class
+	* Tagging SusyNtuple-00-00-07
+
 2012-06-23 Steve
 	* Tagging SusyNtuple-00-00-06
 
