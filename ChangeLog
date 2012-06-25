@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-06-25 Steve
+	* Added missing trigger: mu18_tight_mu8_EFFS
+	* Tagging SusyNtuple-00-00-08
+
 2012-06-24 Steve
 	* Added single lepton triggers from our corresponding dilepton triggers.
 	  This way we have more flexibility to implement the best logic later

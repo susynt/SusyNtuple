@@ -215,6 +215,7 @@ stringvector getTrigChains()
   triggers[BIT_mu18_tight]              = "EF_mu18_tight";
   triggers[BIT_mu24i_tight]             = "EF_mu24i_tight";
   triggers[BIT_2mu13]                   = "EF_2mu13";
+  triggers[BIT_mu18_tight_mu8_EFFS]     = "EF_mu18_tight_mu8_EFFS";
 
   triggers[BIT_e12Tvh_medium1_mu8]      = "EF_e12Tvh_medium1_mu8";
   triggers[BIT_mu18_tight_e7_medium1]   = "EF_mu18_tight_e7_medium1";

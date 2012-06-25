@@ -210,6 +210,7 @@ enum TrigBit
   BIT_mu18_tight,
   BIT_mu24i_tight,
   BIT_2mu13,
+  BIT_mu18_tight_mu8_EFFS,
 
   BIT_e12Tvh_medium1_mu8,
   BIT_mu18_tight_e7_medium1,
@@ -248,6 +249,7 @@ const uint TRIG_mu8                     = 1<<BIT_mu8;
 const uint TRIG_mu18_tight              = 1<<BIT_mu18_tight;
 const uint TRIG_mu24i_tight             = 1<<BIT_mu24i_tight;
 const uint TRIG_2mu13                   = 1<<BIT_2mu13;
+const uint TRIG_mu18_tight_mu8_EFFS     = 1<<BIT_mu18_tight_mu8_EFFS;
 
 const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
 const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
