@@ -156,7 +156,6 @@ void SusyNtAna::selectObjects(SusyNtSys sys)
 void SusyNtAna::dumpTimer()
 {
   cout << endl;
-  cout << "entry: " << m_chainEntry << endl;
   double realTime = m_timer.RealTime();
   double cpuTime  = m_timer.CpuTime();
   int hours = int(realTime / 3600);

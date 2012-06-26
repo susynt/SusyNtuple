@@ -1,5 +1,13 @@
 # vim: set noexpandtab:
 
+2012-06-26 Steve
+	* I gutted TrilTrigLogic, removing most of what was there for 2011
+	* I added a very preliminary logic for 2012 trigger matching
+		* Take the OR of all plateau-satisfied dilepton triggers
+		* I also have the single isolated lepton triggers, but is 
+		  currently commented out for my preliminary logic proposal
+	* Tagging SusyNtuple-00-00-09
+
 2012-06-25 Steve
 	* Added missing trigger: mu18_tight_mu8_EFFS
 	* Tagging SusyNtuple-00-00-08
