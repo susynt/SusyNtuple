@@ -51,6 +51,7 @@ class SusyNtTools
   ElectronVector getSignalElectrons(ElectronVector bsElecs);
   MuonVector     getSignalMuons(MuonVector bsMuons);
   JetVector      getSignalJets(JetVector bsJets);
+  PhotonVector   getSignalPhotons(Susy::SusyNtObject* susy_nt);
 
   // Get the signal objects
   void getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,

@@ -189,6 +189,17 @@ JetVector SusyNtTools::getSignalJets(JetVector bsJets){
   return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
+PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susy_nt)
+{
+  // Currently only storing signal photons, so just a conv way to get them.
+
+  PhotonVector sigPho;
+  for(uint ip=0; ip<susy_nt->pho()->size(); ++ip)
+    sigPho.push_back( &(susy_nt->pho()->at(ip)) );
+
+  return sigPho;  
+}
+/*--------------------------------------------------------------------------------*/
 // Get Met
 /*--------------------------------------------------------------------------------*/
 Susy::Met* SusyNtTools::getMet(SusyNtObject* susy_nt, SusyNtSys sys){

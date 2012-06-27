@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-06-27 Matt
+	* I added a method to grab photons to SusyNtTools
+	
 2012-06-26 Steve
 	* I gutted TrilTrigLogic, removing most of what was there for 2011
 	* I added a very preliminary logic for 2012 trigger matching
