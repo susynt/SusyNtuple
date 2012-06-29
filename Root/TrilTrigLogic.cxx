@@ -73,20 +73,24 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
 
   // For the asymmetric dilepton triggers, need to make sure to match both legs.
   // Or at least, match the best we can with the information available!
+  uint nAsym2E     = 0; // number of electrons matching e24vh_medium1_e7_medium1
   uint nAsym2E_e24 = 0; // number of electrons matching e24 piece of e24vh_medium1_e7_medium1
-  uint nAsym2E_e7  = 0;  // number of electrons matching e7  piece of e24vh_medium1_e7_medium1
-  uint nAsym2M_m18 = 0;// number of muons matching mu18 piece of mu18_tight_mu8_EFFS
-  uint nAsym2M_m8  = 0; // number of muons matching mu8  piece of mu18_tight_mu8_EFFS
+  uint nAsym2M     = 0; // number of muons matching mu18_tight_mu8_EFFS
+  uint nAsym2M_m18 = 0; // number of muons matching mu18 piece of mu18_tight_mu8_EFFS
 
   // For the e-mu and mu-e triggers, need to make sure to match both legs
   // Or at least, match the best we can with the information available!
   uint nEM_e = 0;       // number of electrons matching e12 piece of e12Tvh_medium1_mu8
-  uint nEM_m = 0;       // number of muons matching e12 piece of e12Tvh_medium1_mu8
+  uint nEM_m = 0;       // number of muons matching mu8 piece of e12Tvh_medium1_mu8
   uint nME_e = 0;       // number of electrons matching e7 piece of mu18_tight_e7_medium1
   uint nME_m = 0;       // number of muons matching mu18 piece of mu18_tight_e7_medium1
 
   // loop over leptons
   for(uint i=0; i < leptons.size(); i++){
+
+    // TESTING only leading 2 leptons
+    //if(i>=2) break;
+
     const Lepton* lep = leptons[i];
     float pt = lep->Pt();
 
@@ -94,15 +98,18 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
     if(lep->isEle()){
 
       // If leading lepton, check isolated trigger
-      if(i==0 && pt>25 && lep->matchTrig(TRIG_e24vhi_medium1)) n1E++;
+      //if(i==0 && pt>25 && lep->matchTrig(TRIG_e24vhi_medium1)) n1E++;
+      // Check isolated trigger
+      //if(pt>25 && lep->matchTrig(TRIG_e24vhi_medium1)) n1E++;
 
       // 2e symmetric trigger
       if(pt>15 && lep->matchTrig(TRIG_2e12Tvh_loose1)) nSym2E++;
 
       // 2e asymmetric trigger
       if(lep->matchTrig(TRIG_e24vh_medium1_e7_medium1)){
-        if     (pt>25 &&  lep->matchTrig(TRIG_e24vh_medium1)) nAsym2E_e24++;
-        else if(pt>10 && !lep->matchTrig(TRIG_e24vh_medium1)) nAsym2E_e7++;
+        nAsym2E++;
+        if(pt>25 && lep->matchTrig(TRIG_e24vh_medium1)) nAsym2E_e24++;
+        //else if(pt>10 && !lep->matchTrig(TRIG_e24vh_medium1)) nAsym2E_e7++;
       }
 
       // e-mu trigger
@@ -116,15 +123,18 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
     else{
 
       // If leading lepton, check isolated trigger
-      if(i==0 && pt>25 && lep->matchTrig(TRIG_mu24i_tight)) n1M++;
+      //if(i==0 && pt>25 && lep->matchTrig(TRIG_mu24i_tight)) n1M++;
+      // Check isolated trigger
+      //if(pt>25 && lep->matchTrig(TRIG_mu24i_tight)) n1M++;
 
       // 2m symmetric trigger
       if(pt>15 && lep->matchTrig(TRIG_2mu13)) nSym2M++;
 
       // 2m asymmetric trigger
       if(lep->matchTrig(TRIG_mu18_tight_mu8_EFFS)){
-        if     (pt>20 &&  lep->matchTrig(TRIG_mu18_tight)) nAsym2M_m18++;
-        else if(pt>10 && !lep->matchTrig(TRIG_mu18_tight)) nAsym2M_m8++;
+        nAsym2M++;
+        if(pt>20 &&  lep->matchTrig(TRIG_mu18_tight)) nAsym2M_m18++;
+        //else if(pt>10 && !lep->matchTrig(TRIG_mu18_tight)) nAsym2M_m8++;
       }
 
       // mu-e trigger
@@ -137,11 +147,11 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
 
   bool pass1E = n1E>0;
   bool passSym2E = nSym2E>1;
-  bool passAsym2E = nAsym2E_e24>0 && nAsym2E_e7>0;
+  bool passAsym2E = nAsym2E>1 && nAsym2E_e24>0;
   bool passEM = nEM_e>0 && nEM_m>0;
   bool pass1M = n1M>0;
   bool passSym2M = nSym2M>1;
-  bool passAsym2M = nAsym2M_m18>0 && nAsym2M_m8>0;
+  bool passAsym2M = nAsym2M>1 && nAsym2M_m18>0;
   bool passME = nME_e>0 && nME_m>0;
 
   bool passEgamma = pass1E || passSym2E || passAsym2E || passEM;
@@ -157,14 +167,14 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
   //cout << "n1E         " << n1E << endl;
   //cout << "nSym2E      " << nSym2E << endl;
   //cout << "nAsym2E_e24 " << nAsym2E_e24 << endl;
-  //cout << "nAsym2E_e7  " << nAsym2E_e7 << endl;
+  //cout << "nAsym2E     " << nAsym2E << endl;
   //cout << "nEM_e       " << nEM_e << endl;
   //cout << "nEM_m       " << nEM_m << endl;
   //cout << endl;
   //cout << "n1M         " << n1M << endl;
   //cout << "nSym2M      " << nSym2M << endl;
   //cout << "nAsym2M_m18 " << nAsym2M_m18 << endl;
-  //cout << "nAsym2M_m8  " << nAsym2M_m8 << endl;
+  //cout << "nAsym2M     " << nAsym2M << endl;
   //cout << "nME_e       " << nME_e << endl;
   //cout << "nME_m       " << nME_m << endl;
   //cout << endl;

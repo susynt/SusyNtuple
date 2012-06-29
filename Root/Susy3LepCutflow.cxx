@@ -152,6 +152,9 @@ bool Susy3LepCutflow::passNLepCut(const LeptonVector& leptons)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons) 
 {
+  //cout << endl << "----------------------------------------------------------------" << endl;
+  //nt.evt()->print();
+  //dumpSignalObjects();
   if(!m_trigObj->passTriggerMatching(leptons)) return false;
   n_pass_trig++;
   return true;
@@ -225,7 +228,7 @@ void Susy3LepCutflow::dumpEventCounters()
   //cout << "pass BadMu  :  " << n_pass_BadMuon  << endl;
   //cout << "pass Cosmic :  " << n_pass_Cosmic   << endl;
   cout << "pass nLep   :  " << n_pass_nLep     << endl;
-  cout << "pass trig   :  " << n_pass_trig     << endl; 
+  cout << "pass trig   :  " << n_pass_trig     << "\t(" << 100.*n_pass_trig/n_pass_nLep << "%)" << endl;
   cout << "pass sfos   :  " << n_pass_sfos     << endl;
   cout << "pass met    :  " << n_pass_met      << endl;
   cout << "pass z      :  " << n_pass_z        << endl;

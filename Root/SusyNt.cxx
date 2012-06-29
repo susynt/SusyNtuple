@@ -31,7 +31,8 @@ void Electron::print() const
   cout << fixed << "El : q " << setw(2) << q << " pt " << setw(6) << Pt() << " eta " << setw(5) << Eta() 
        << " phi " << setw(5) << Phi()
        << " tight " << tightPP 
-       << " type " << mcType << " origin " << mcOrigin << " index " << idx 
+       << " type " << mcType << " origin " << mcOrigin 
+       //<< " index " << idx 
        // No way do we want to see this every time we print
        //<< " ees_up " << ees_up << " ees_dn " << ees_dn << " eer_up " << eer_up << " eer_dn " << eer_dn
        << endl;
