@@ -73,6 +73,7 @@ namespace Susy
       // public member vars
       int q;                    // Charge
       float ptcone20;           // ptcone20 isolation
+      float ptcone30;           // ptcone30 isolation
       float d0;                 // d0 extrapolated to PV 
       float errD0;              // Uncertainty on d0
       unsigned int mcType;      // MCTruthClassifier particle type
@@ -104,7 +105,7 @@ namespace Susy
         Particle::clear();
       }
       
-      ClassDef(Lepton, 4);
+      ClassDef(Lepton, 5);
   };
 
   // Electron class
@@ -118,6 +119,10 @@ namespace Susy
       float clusEta;            // CaloCluster eta
       bool mediumPP;            // isEM medium++
       bool tightPP;             // isEM tight++
+
+      // New isolation variables, put them here for now
+      float etcone30Corr;       // Pt and ED corrected etcone iso
+      float etcone30TopoCorr;   // Corrected topo clus based iso
 
       // Systematic scale factors
       float ees_up;             // Energy Scale + sigma
@@ -141,7 +146,7 @@ namespace Susy
         Lepton::clear();
       }
 
-      ClassDef(Electron, 1);
+      ClassDef(Electron, 2);
   };
 
   // Muon class

@@ -1,14 +1,21 @@
 # vim: set noexpandtab:
+
+2012-07-03 Steve
+	* Adding additional isolation variables
+		* ptcone30
+		* etcone30Corr
+		* etcone30TopoCorr
+
 2012-07-02 Matt
 	* Commented out all MC Weighting from DilTrigLogic since we are matching right now for MC
 	        * Will update this once something is agreed upon
 	* Made DilTrigLogic independent of 2011 triggers, so those bitflags can be removed
 	* Added loose photon triggers
 	* Deleted two methods from SusyNtTools that were unnecessary	
-	
+
 2012-06-27 Matt
 	* I added a method to grab photons to SusyNtTools
-	
+
 2012-06-26 Steve
 	* I gutted TrilTrigLogic, removing most of what was there for 2011
 	* I added a very preliminary logic for 2012 trigger matching
