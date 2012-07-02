@@ -33,7 +33,7 @@ class DilTrigLogic
 
   // Clear any vars stored
   void clear(){
-    period = UNKNOWNPERIOD;
+    //period = UNKNOWNPERIOD;
     elecs.clear();
     muons.clear();
   };
@@ -44,60 +44,47 @@ class DilTrigLogic
   // Event Type methods
   bool passEE();
   bool passMM();
-  bool passEM(bool isEgamma);
+  bool passEM(DataStream stream);
 
-  // Electron specific methods
-  uint getSingleETrig();
-  uint getDoubleETrig();
-  
-  // Muon specific methods
-  uint getSingleMTrig();
-  uint getDoubleMTrig();
-
-  // E-M specific methods
-  uint getEMTrig();
+  // Pass trigger regions
+  bool passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1);
+  bool passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1);
+  bool passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag, DataStream stream);
 
   // MC will need to be reweighted
   float getMCWeight();
 
-  // Trigger reweighting                                                                                                            
-  void loadTriggerMaps();
-  APReweightND* loadTrigWeighter(TFile* f, TString chain);
-  APReweightND* getEleTrigWeighter(uint trigFlag);
-  APReweightND* getMuoTrigWeighter(uint trigFlag);
-
-  // Handle Effectively the periods
-  // Maybe put enum in SusyDefs? Or possible assign to event obj.
-  // Also, how to deal with 2012? A_11 and A_12?
-  enum Period { A = 0, B, C, D, E, F, G, H, I, J, K, L, M, UNKNOWNPERIOD};
-  void setPeriod(int run);
+  // Trigger reweighting
+  //void loadTriggerMaps();
+  //APReweightND* loadTrigWeighter(TFile* f, TString chain);
+  //APReweightND* getEleTrigWeighter(uint trigFlag);
+  //APReweightND* getMuoTrigWeighter(uint trigFlag);
 
   // Add a method to set the electron and muon vector.
   // Will make it easier for methods to access 
   // the specific leptons it needs
   void setLeptons(LeptonVector leps);
+
   
-  // Return the type of event this is
-  // Event types defined in SusyDefs.h
-  //DiLepEventType getEventType(ElectronVector elecs, MuonVector muons);
 
   // Debug method
   void debugFlag(uint flag);
 
  protected:
 
-  //                                                                                                                                
-  // Triger reweighting                                                                                                             
-  //                                                                                                                                
+  //    
+  // Triger reweighting    
+  //                          
 
-  // I first thought I could use a map of chain enum -> reweighter.                                                                 
-  // It's clear now that it won't work because a chain may need                                                                     
-  // more than one map depending on the period.  That's because                                                                     
-  // other chains may change so the conditional efficiencies change.                                                                
+  // I first thought I could use a map of chain enum -> reweighter.
+  // It's clear now that it won't work because a chain may need
+  // more than one map depending on the period.  That's because   
+  // other chains may change so the conditional efficiencies change. 
+
   std::map<int, APReweightND*>        m_elTrigWeightMap;
   std::map<int, APReweightND*>        m_muTrigWeightMap;
 
-  // Instead, have one pointer for each reweighter.                                                                                 
+  // Instead, have one pointer for each reweighter.    
   APReweightND*       m_trigTool_mu18;
   APReweightND*       m_trigTool_mu18Med;
   APReweightND*       m_trigTool_mu10L_not18;
@@ -115,7 +102,7 @@ class DilTrigLogic
 
  private:
    
-  Period              period;             // Period
+  //Period              period;             // Period
   ElectronVector      elecs;              // Electron vector for easy access
   MuonVector          muons;              // Muon vector for easy access
 

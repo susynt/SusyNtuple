@@ -145,14 +145,8 @@ class SusyNtTools
   //
 
   // Will need to be updated if more flags are added
-  bool passTrigger(uint trig, int flag){ return (trig & flag); };
+  //bool passTrigger(uint trig, int flag){ return (trig & flag); };
   
-  // Methods to implement the trigger logic... Brokk has already
-  // informed me analysis differ, and packages exist. Maybe we can
-  // have a simple interface here...
-  // Example if I have to code it up myself
-  void checkElectronTrigger(ElectronVector &elecs, int run, bool ismc);
-
  protected:
   
   AnalysisType m_anaType;                 // Analysis type. currently 2-lep or 3-lep

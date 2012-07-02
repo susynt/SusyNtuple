@@ -215,6 +215,14 @@ enum TrigBit
   BIT_e12Tvh_medium1_mu8,
   BIT_mu18_tight_e7_medium1,
 
+  // Photon Triggers
+  BIT_g20_loose,
+  BIT_g40_loose,
+  BIT_g60_loose,
+  BIT_g80_loose,
+  BIT_g100_loose,
+  BIT_g120_loose,
+
   N_TRIG
 };
 
@@ -224,6 +232,7 @@ enum TrigBit
 
 // 2011 Trigger bit masks 
 // electron
+
 const uint TRIG_e20_medium      = 1<<BIT_e20_medium;
 const uint TRIG_e22_medium      = 1<<BIT_e22_medium;
 const uint TRIG_e22vh_medium1   = 1<<BIT_e22vh_medium1;
@@ -253,6 +262,14 @@ const uint TRIG_mu18_tight_mu8_EFFS     = 1<<BIT_mu18_tight_mu8_EFFS;
 
 const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
 const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
+
+// Photon Trigger big masks
+const uint TRIG_g20_loose               = 1<<BIT_g20_loose;
+const uint TRIG_g40_loose               = 1<<BIT_g40_loose;
+const uint TRIG_g60_loose               = 1<<BIT_g60_loose;
+const uint TRIG_g80_loose               = 1<<BIT_g80_loose;
+const uint TRIG_g100_loose              = 1<<BIT_g100_loose;
+const uint TRIG_g120_loose              = 1<<BIT_g120_loose;
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();

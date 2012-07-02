@@ -1,4 +1,11 @@
 # vim: set noexpandtab:
+2012-07-02 Matt
+	* Commented out all MC Weighting from DilTrigLogic since we are matching right now for MC
+	        * Will update this once something is agreed upon
+	* Made DilTrigLogic independent of 2011 triggers, so those bitflags can be removed
+	* Added loose photon triggers
+	* Deleted two methods from SusyNtTools that were unnecessary	
+	
 2012-06-27 Matt
 	* I added a method to grab photons to SusyNtTools
 	

@@ -553,29 +553,3 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2){
   return mct;
 }
 
-/*--------------------------------------------------------------------------------*/
-// Methods to check the Trigger
-/*--------------------------------------------------------------------------------*/
-// Currently just have this as an example.
-// I need to figure out what the trigger logic
-// that is being applied
-void SusyNtTools::checkElectronTrigger(ElectronVector &elecs, int run, bool isMC){
-
-  // Currently not checking trigger in MC
-  if( isMC ) return;
-  
-  for(uint ie=elecs.size()-1; ie>=0; ie--){
-    const Electron* el = elecs.at(ie);
-    const uint flag = el->trigFlags;
-    const float pt = el->Pt();
-
-    if( pt > 25. /*GeV*/ ){
-      if( run < 186873 && !(passTrigger(TRIG_e20_medium, flag)) ){
-	elecs.erase( elecs.begin() + ie );
-	continue;
-      }
-    };	
-    
-  }// end loop over electrons
-
-}

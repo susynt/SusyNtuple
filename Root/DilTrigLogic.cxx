@@ -5,32 +5,34 @@
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-DilTrigLogic::DilTrigLogic(bool isMC){
+DilTrigLogic::DilTrigLogic(bool isMC)
+{
   
-  if( isMC ) loadTriggerMaps();
+  //if( isMC ) loadTriggerMaps();
   
+
 }
 /*--------------------------------------------------------------------------------*/
 // Destructor
 /*--------------------------------------------------------------------------------*/
-DilTrigLogic::~DilTrigLogic(){
+DilTrigLogic::~DilTrigLogic()
+{
   
-  if( m_trigTool_mu18 ) delete m_trigTool_mu18;
-  if( m_trigTool_mu18Med ) delete m_trigTool_mu18Med;
-  if( m_trigTool_mu10L_not18 ) delete m_trigTool_mu18;
+  if( m_trigTool_mu18 )           delete m_trigTool_mu18;
+  if( m_trigTool_mu18Med )        delete m_trigTool_mu18Med;
+  if( m_trigTool_mu10L_not18 )    delete m_trigTool_mu18;
   if( m_trigTool_mu10L_not18Med ) delete m_trigTool_mu18;
-  if( m_trigTool_mu18 ) delete m_trigTool_mu18;
+  if( m_trigTool_mu18 )           delete m_trigTool_mu18;
   
 }
 
 /*--------------------------------------------------------------------------------*/
 // Does event pass susy dilepton trigger logic?
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream stream){
+bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream stream)
+{
   
-  // We ignore trigger logic in Monte Carlo
-  if( stream == Stream_MC ) 
-    return true;
+  // If unknown stream, then return
   if( stream == Stream_Unknown){
     cout<<"Error: Stream is unknown! Returning false from passDilTrig."<<endl;
     return false;
@@ -38,21 +40,16 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
   
   // Set Vars for easy access
   clear();
-  setPeriod(RunNumber);
   setLeptons(leptons);
   
-  // For convenience
-  bool isEgamma = stream == Stream_Egamma;
-  DiLepEvtType ET = getDiLepEvtType(leptons);
-  //if(ET==UNKNOWNEVT) cout<<"Nlep: "<<leptons.size()<<endl;
-  
   // Check:
-  if( isEgamma && (ET == ET_ee) )
+  DiLepEvtType ET = getDiLepEvtType(leptons);
+  if( stream == Stream_Egamma && (ET == ET_ee) )
     return passEE();
-  if( !isEgamma && (ET ==ET_mm) )
+  if( stream == Stream_Muons && (ET ==ET_mm) )
     return passMM();
   if( ET == ET_em )
-    return passEM(isEgamma);
+    return passEM(stream);
   
   // Must not have matched if we get here
   return false;
@@ -62,160 +59,159 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
 /*--------------------------------------------------------------------------------*/
 // Methods for dilepton event types
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passEE(){
+bool DilTrigLogic::passEE()
+{
 
-  uint ne = elecs.size();
-
-  if(ne == 0) return false;
+  if(elecs.size() != 2) return false;
 
   // Handle two elec trigger effectively
   float ePt0  = elecs.at(0)->Pt();
-  float ePt1  = ne > 1 ? elecs.at(1)->Pt() : 0.0;
-  uint flag0 = elecs.at(0)->trigFlags;
-  uint flag1 = ne > 1 ? elecs.at(1)->trigFlags : 0;
-  cout<<"e0: "<<ePt0<<endl;
-  debugFlag(flag0);
-  cout<<"e1: "<<ePt1<<endl;
-  debugFlag(flag1);
-
-  // Single Electron Trigger
-  if(ePt0 > 25)
-    return (flag0 & getSingleETrig());
-
-  // Di-electron Trigger
-  if(ePt0 <= 25 && ePt1 > 17)
-    return ( (flag0 & getDoubleETrig()) && (flag1 & getDoubleETrig()) );
+  float ePt1  = elecs.at(1)->Pt();
+  uint flag0  = elecs.at(0)->trigFlags;
+  uint flag1  = elecs.at(1)->trigFlags;
   
-  // No match
-  return false;
+
+  return passEETrigRegion(ePt0, ePt1, flag0, flag1);
 
 }
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passMM(){
+bool DilTrigLogic::passMM()
+{
  
-  if(muons.size() == 0) return false;
+  if(muons.size() != 2) return false;
 
-  // This time we count what we have
-  int nSingMu = 0;
-  int nDiMu   = 0;
+  float mPt0 = muons.at(0)->Pt();
+  float mPt1 = muons.at(1)->Pt();
+  uint flag0 = muons.at(0)->trigFlags;
+  uint flag1 = muons.at(1)->trigFlags;
+
+  return passMMTrigRegion(mPt0, mPt1, flag0, flag1);
   
-  for(uint im = 0; im<muons.size(); ++im){
-    float mPt = muons.at(im)->Pt();
-    uint flag = muons.at(im)->trigFlags;
-    
-    if(mPt > 20 && (flag & getSingleMTrig())) nSingMu++;
-    if(mPt > 12 && (flag & getDoubleMTrig())) nDiMu++;
-
-  }// end loop over muons
-  
-  // Match?
-  if( nSingMu >= 1 || nDiMu >=2 ) return true;      
-
-  // No Match
-  return false;
-
 }
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passEM(bool isEgamma){
+bool DilTrigLogic::passEM(DataStream stream)
+{
 
-  uint ne = elecs.size();
-  uint nm = muons.size();
-
-  if(ne == 0 || nm == 0) return false;
-
+  if(elecs.size() != 1 && muons.size() != 1) return false;
+  
   // Gather necessary vars
   float ePt  = elecs.at(0)->Pt();
   float mPt  = muons.at(0)->Pt();
   uint eFlag = elecs.at(0)->trigFlags; 
   uint mFlag = muons.at(0)->trigFlags; 
   
-  // Now for the logic!
-  if(isEgamma){
-    
-    // Case1: Pt(e) > 25 and Pt(m) < 20
-    if(ePt > 25 && mPt < 20)
-      return (eFlag & getSingleETrig());
-    
-    // Case2: 15 < Pt(e) < 25 && Pt(m) > 20
-    if(15 < ePt && ePt < 25 && mPt > 20)
-      return ( (eFlag & getEMTrig()) && (mFlag & getEMTrig()) );
+  return passEMTrigRegion(ePt, mPt, eFlag, mFlag, stream);
 
-    // Case3: Pt(e) < 25 && Pt(m) > 20
-    if(ePt < 25 && mPt > 20)
-      return false;
+}
 
-  }// end if Egamma 
+/*--------------------------------------------------------------------------------*/
+// Pass Lepton trigger based on region
+/*--------------------------------------------------------------------------------*/
+bool DilTrigLogic::passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1)
+{
 
-  else{
-    
-    // Case1: Pt(e) > 25 and trigger match, fail
-    if(ePt > 25)
-      return !( eFlag & getSingleETrig() );	
-
-    // Case2: Pt(m) > 20
-    if(mPt > 20)
-      return (mFlag & getSingleMTrig());
-
-  }// end if !Egamma
-
-  // No match
+  // Region A
+  if( 25 < pt0 && 15 < pt1 ){
+    bool pass0 = (flag0 & TRIG_e24vh_medium1_e7_medium1) || (flag0 & TRIG_2e12Tvh_loose1);
+    bool pass1 = (flag1 & TRIG_e24vh_medium1_e7_medium1) || (flag1 & TRIG_2e12Tvh_loose1);
+    return pass0 && pass1;
+  }
+  
+  // Region B
+  if( 25 < pt0 && 10 < pt1 && pt1 < 15 )
+    return (flag0 & TRIG_e24vh_medium1_e7_medium1) && (flag1 & TRIG_e24vh_medium1_e7_medium1);
+  
+  // Region C
+  if( 15 < pt0 && pt0 < 25 && 15 < pt1 )
+    return (flag0 & TRIG_2e12Tvh_loose1) && (flag1 &  TRIG_2e12Tvh_loose1);
+  
+  // Not in region:
   return false;
 
 }
-
 /*--------------------------------------------------------------------------------*/
-// Electron specific methods
-/*--------------------------------------------------------------------------------*/
-uint DilTrigLogic::getSingleETrig(){
+bool DilTrigLogic::passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1)
+{
 
-  if(A <= period && period <= J) return TRIG_e20_medium;
-  else if(period == K)           return TRIG_e22_medium;
-  else                           return TRIG_e22vh_medium1;
-
-}
-/*--------------------------------------------------------------------------------*/
-uint DilTrigLogic::getDoubleETrig(){
-
-  if(A <= period && period <= J) return TRIG_2e12_medium;
-  else if(period == K)           return TRIG_2e12T_medium;
-  else                           return TRIG_2e12Tvh_medium; // medium1 ?
+  // Region A
+  if( 24 < pt0 && 24 < pt1)
+    return (flag0 & TRIG_mu24i_tight) || (flag0 & TRIG_mu24i_tight);
   
+  // Region B
+  if( 24 < pt0 && 10 < pt1 && pt1 < 24 )
+    return (flag0 & TRIG_mu24i_tight);
+
+  // Region C
+  if( 18 < pt0 && pt0 < 24 && 18 < pt1 )
+    return (flag0 & TRIG_mu18_tight_mu8_EFFS) || (flag1 & TRIG_mu18_tight_mu8_EFFS);
+  
+  // Region D
+  if( 18 < pt0 && pt0 < 24 && 10 < pt1 && pt1 < 18 )
+    return (flag0 & TRIG_mu18_tight_mu8_EFFS) && (flag1 & TRIG_mu18_tight_mu8_EFFS);
+
+  // Region E
+  if( pt0 < 18 && 13 < pt1 )
+    return (flag0 & TRIG_2mu13) && (flag1 & TRIG_2mu13);
+
+  // Not in region:
+  return false;
+
 }
-
 /*--------------------------------------------------------------------------------*/
-// Muon specific methods
-/*--------------------------------------------------------------------------------*/
-uint DilTrigLogic::getSingleMTrig(){
+bool DilTrigLogic::passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag, 
+				    DataStream stream)
+{
 
-  if(A <= period && period <= H) return TRIG_mu18;
-  else                           return TRIG_mu18_medium;
+  // TODO: Fix this trigger logic. I need to see if I need to have both
+  // muon and electron match the trigger or if I need to have at least
+  // one match.  Conflicting things between slides and between twiki...
 
-}
-/*--------------------------------------------------------------------------------*/
-uint DilTrigLogic::getDoubleMTrig(){
+  if(stream == Stream_Egamma || stream == Stream_MC){
 
-  return TRIG_2mu10_loose;
+    // Region A
+    if( 15 < ept && 20 < mpt )
+      return (eflag & TRIG_e12Tvh_medium1_mu8) && (mflag & TRIG_e12Tvh_medium1_mu8);
+    
+    // Region B
+    if( 15 < ept && 10 < mpt && mpt < 20 )
+      return (eflag & TRIG_e12Tvh_medium1_mu8) && (mflag & TRIG_e12Tvh_medium1_mu8);
 
-}
+  }
+  else if( stream == Stream_Muons || stream == Stream_MC){
+    
+    // Region A
+    if( 15 < ept && 20 < mpt )
+      return (eflag & TRIG_mu18_tight_e7_medium1) && (mflag & TRIG_mu18_tight_e7_medium1);
+    
+    // Region C
+    if( ept < 15 && mpt < 20 )
+      return (eflag & TRIG_mu18_tight_e7_medium1) && (mflag & TRIG_mu18_tight_e7_medium1);
 
-/*--------------------------------------------------------------------------------*/
-// E-M specific methods
-/*--------------------------------------------------------------------------------*/
-uint DilTrigLogic::getEMTrig(){
-
-  return TRIG_e10_medium_mu6;
-
+  }
+  
+  // Not in region:
+  return false;
+  
+  
 }
 
 /*--------------------------------------------------------------------------------*/
 // Monte Carlo Weighting
 /*--------------------------------------------------------------------------------*/
+
+//******************************************************//
+// This hasn't been verified or updated. Commented out
+// Until 2012 strategy developed. Will return once 
+// mc-reweighting becomes an issue.
+//******************************************************//
+
+/*
 void DilTrigLogic::loadTriggerMaps()
 {
   TFile* eleTrigFile = new TFile("$ROOTCOREDIR/data/DGTriggerReweight/electron_maps.root");
   TFile* muoTrigFile = new TFile("$ROOTCOREDIR/data/DGTriggerReweight/muon_triggermaps.root");
   
-  // TODO: dilepton triggers                                                                                                                                                   
+  // TODO: dilepton triggers   
   m_elTrigWeightMap[TRIG_e20_medium]     = loadTrigWeighter(eleTrigFile, "e20_medium");
   m_elTrigWeightMap[TRIG_e22_medium]     = loadTrigWeighter(eleTrigFile, "e22_medium");
   m_elTrigWeightMap[TRIG_e22vh_medium1]  = loadTrigWeighter(eleTrigFile, "e22vh_medium1");
@@ -227,8 +223,10 @@ void DilTrigLogic::loadTriggerMaps()
   m_muTrigWeightMap[TRIG_mu18_medium]    = loadTrigWeighter(muoTrigFile, "mu18_medium");
   m_muTrigWeightMap[TRIG_2mu10_loose]    = loadTrigWeighter(muoTrigFile, "mu10_loose");
 }
+*/
 
 /*--------------------------------------------------------------------------------*/
+/*
 APReweightND* DilTrigLogic::loadTrigWeighter(TFile* f, TString chain)
 {
   TString numName = "ths_"+chain+"_num";
@@ -245,7 +243,9 @@ APReweightND* DilTrigLogic::loadTrigWeighter(TFile* f, TString chain)
   }
   return new APReweightND( den, num, true );
 }
+ */
 /*--------------------------------------------------------------------------------*/
+ /*
 APReweightND* DilTrigLogic::getEleTrigWeighter(uint trigFlag)
 {
   map<int, APReweightND*>::iterator itr = m_elTrigWeightMap.find(trigFlag);
@@ -255,7 +255,9 @@ APReweightND* DilTrigLogic::getEleTrigWeighter(uint trigFlag)
   }
   return itr->second;
 }
+ */
 /*--------------------------------------------------------------------------------*/
+/*
 APReweightND* DilTrigLogic::getMuoTrigWeighter(uint trigFlag)
 {
   map<int, APReweightND*>::iterator itr = m_muTrigWeightMap.find(trigFlag);
@@ -265,40 +267,13 @@ APReweightND* DilTrigLogic::getMuoTrigWeighter(uint trigFlag)
   }
   return itr->second;
 }
+*/
 
 
 /*--------------------------------------------------------------------------------*/
-// Generic methods 
-/*--------------------------------------------------------------------------------*/
-void DilTrigLogic::setPeriod(int run){
-
-  // Set the period based on the run which
-  // can then be used to deterimine the trigger
-  if(run < 177986)                        period = A; //DNE
-  else if(177986 <= run && run <= 178109) period = B;
-  else if(179710 <= run && run <= 180481) period = D;
-  else if(180614 <= run && run <= 180776) period = E;
-  else if(182013 <= run && run <= 182519) period = F;
-  else if(182726 <= run && run <= 183462) period = G;
-  else if(183544 <= run && run <= 184169) period = H;
-  else if(185353 <= run && run <= 186493) period = I;
-  else if(186516 <= run && run <= 186755) period = J;
-  else if(186873 <= run && run <= 187815) period = K;
-  else if(188921 <= run && run <= 190343) period = L;
-  else if(190608 <= run && run <= 191933) period = M;
-  else{
-    cout<<"Error: Run not in and period coded in setPeriod()"<<endl;
-    cout<<"Setting period to unknown, trigger logic will fail!"<<endl;
-    period = UNKNOWNPERIOD;
-  }
-
-}
-
-/*--------------------------------------------------------------------------------*/
-
+// Set Leptons for trigger
 /*--------------------------------------------------------------------------------*/
 void DilTrigLogic::setLeptons(LeptonVector leps){
-
   for(uint i=0; i<leps.size(); ++i){
     const Lepton* lep = leps.at(i);
     if(lep->isEle()) elecs.push_back( (Electron*) lep );
@@ -307,43 +282,23 @@ void DilTrigLogic::setLeptons(LeptonVector leps){
 }
 
 /*--------------------------------------------------------------------------------*/
-/*
-DiLepEventType DilTrigLogic::getEventType(ElectronVector elecs, MuonVector muons){
-
-  // Set the basic information first: 
-  // 1.) sign
-  // 2.) number of objects
-
-  int ne = elecs.size();
-  int nm = muons.size();
-  
-  if( ne == 1 && nm == 1 ) return ET_em;
-  if( ne == 2 && nm == 0 ) return ET_ee;
-  if( ne == 0 && nm == 2 ) return ET_mm;
-  cout<<"Error: Unable to classify event with "
-      <<ne<<" electrons and "<<nm<<" muons!"
-      <<"\nReturning range "<<ET_N<<endl;
-
-  return ET_N;
-}
-*/
-
-/*--------------------------------------------------------------------------------*/
 // Debug flag
 /*--------------------------------------------------------------------------------*/
 void DilTrigLogic::debugFlag(uint flag){
 
-  cout<<"\tEF_e20_medium      "<< (flag & TRIG_e20_medium)     <<endl;
-  cout<<"\tEF_e22_medium      "<< (flag & TRIG_e22_medium)     <<endl;
-  cout<<"\tEF_e22vh_medium1   "<< (flag & TRIG_e22vh_medium1)  <<endl;
-  cout<<"\tEF_2e12_medium     "<< (flag & TRIG_2e12_medium)    <<endl;
-  cout<<"\tEF_2e12T_medium    "<< (flag & TRIG_2e12T_medium)   <<endl;
-  cout<<"\tEF_e2e12Tvh_medium "<< (flag & TRIG_2e12Tvh_medium) <<endl;
-  cout<<"\tEF_mu18            "<< (flag & TRIG_mu18)           <<endl;
-  cout<<"\tEF_mu18_medium     "<< (flag & TRIG_mu18_medium)    <<endl;
-  cout<<"\tEF_2mu10_loose     "<< (flag & TRIG_2mu10_loose)    <<endl;
-  cout<<"\tEF_e10_medium_mu6  "<< (flag & TRIG_e10_medium_mu6) <<endl;
-
+  cout << "\tEF_e7_medium1               " << (flag & TRIG_e7_medium1)               << endl;
+  cout << "\tEF_e12Tvh_medium1           " << (flag & TRIG_e12Tvh_medium1)           << endl;
+  cout << "\tEF_e24vh_medium1            " << (flag & TRIG_e24vh_medium1)            << endl;
+  cout << "\tEF_e24vhi_medium1           " << (flag & TRIG_e24vhi_medium1)           << endl;
+  cout << "\tEF_2e12Tvh_loose1           " << (flag & TRIG_2e12Tvh_loose1)           << endl;
+  cout << "\tEF_e24vh_medium1_e7_medium1 " << (flag & TRIG_e24vh_medium1_e7_medium1) << endl;
+  cout << "\tEF_mu8                      " << (flag & TRIG_mu8)                      << endl;
+  cout << "\tEF_mu18_tight               " << (flag & TRIG_mu18_tight)               << endl;
+  cout << "\tEF_mu24i_tight              " << (flag & TRIG_mu24i_tight)              << endl;
+  cout << "\tEF_2mu13                    " << (flag & TRIG_2mu13)                    << endl;
+  cout << "\tEF_mu18_tight_mu8_EFFS      " << (flag & TRIG_mu18_tight_mu8_EFFS)      << endl;
+  cout << "\tEF_e12Tvh_medium1_mu8       " << (flag & TRIG_e12Tvh_medium1_mu8)       << endl;
+  cout << "\tEF_mu18_tight_e7_medium1    " << (flag & TRIG_mu18_tight_e7_medium1)    << endl;
 
 }
 
