@@ -1,10 +1,14 @@
 # vim: set noexpandtab:
 
 2012-07-03 Steve
+	* Variables requested by Anyes
+		* muon thetaPV
+			* Might be redundant
 	* Adding additional isolation variables
 		* ptcone30
+		* etcone30 (for muons)
 		* etcone30Corr
-		* etcone30TopoCorr
+		* topoEtcone30Corr
 
 2012-07-02 Matt
 	* Commented out all MC Weighting from DilTrigLogic since we are matching right now for MC

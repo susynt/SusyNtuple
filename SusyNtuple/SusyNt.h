@@ -47,6 +47,7 @@ namespace Susy
       void clear() { 
 	TLorentzVector::Clear(); 
 	idx = 999;      // This is not a very good choice...
+        pt = eta = phi = m = 0;
       }
 
       // print method
@@ -74,8 +75,13 @@ namespace Susy
       int q;                    // Charge
       float ptcone20;           // ptcone20 isolation
       float ptcone30;           // ptcone30 isolation
+      // TODO: move additional iso variables here??
+
       float d0;                 // d0 extrapolated to PV 
       float errD0;              // Uncertainty on d0
+      float z0;                 // z0 extrapolated to PV 
+      float errZ0;              // Uncertainty on z0
+
       unsigned int mcType;      // MCTruthClassifier particle type
       unsigned int mcOrigin;    // MCTruthClassifier particle origin
 
@@ -101,7 +107,11 @@ namespace Susy
 
       // clear vars
       void clear(){
-        q = ptcone20 = d0 = errD0 = mcType = mcOrigin = trigFlags = 0;
+        q = ptcone20 = ptcone30 = 0;
+        d0 = errD0 = z0 = errZ0 = 0;
+        mcType = mcOrigin = 0;
+        effSF = errEffSF = 0;
+        trigFlags = 0;
         Particle::clear();
       }
       
@@ -122,7 +132,7 @@ namespace Susy
 
       // New isolation variables, put them here for now
       float etcone30Corr;       // Pt and ED corrected etcone iso
-      float etcone30TopoCorr;   // Corrected topo clus based iso
+      float topoEtcone30Corr;   // Corrected topo clus based iso
 
       // Systematic scale factors
       float ees_up;             // Energy Scale + sigma
@@ -142,6 +152,7 @@ namespace Susy
       // clear vars
       void clear(){
         clusE = clusEta = mediumPP = tightPP = 0;
+        etcone30Corr = topoEtcone30Corr = 0;
 	ees_up = ees_dn = eer_up = eer_dn = 0;
         Lepton::clear();
       }
@@ -157,6 +168,10 @@ namespace Susy
       virtual ~Muon(){};
 
       bool isCombined;          // Is combined muon, otherwise segment tagged
+
+      // Really not sure why we need this, or how it is defined.
+      float thetaPV;            // Theta extrapolated to PV, by request.
+      float etcone30;           // etcone iso
 
       // Systematic sf
       float ms_up;              // MS Pt + sigma
@@ -175,11 +190,12 @@ namespace Susy
       // clear vars
       void clear(){
         isCombined = 0;
+        thetaPV = etcone30 = 0;
 	ms_up = ms_dn = id_up = id_dn = 0;
         Lepton::clear();
       }
 
-      ClassDef(Muon, 1);
+      ClassDef(Muon, 2);
   };
 
   // Jet class
@@ -209,9 +225,9 @@ namespace Susy
 
       // clear vars
       void clear(){
-        jvf = combNN = 0;
+        jvf = truthLabel = 0;
+        sv0 = combNN = mv1 = 0;
 	jer = jes_up = jes_dn = 0;
-	truthLabel = 0;
         Particle::clear();
       }
 
@@ -279,6 +295,7 @@ namespace Susy
 
       // clear vars
       void clear(){
+        Et = phi = 0;
         refEle = refMuo = refJet = refCell = sys = 0;
         //Particle::clear();
       }
@@ -332,12 +349,13 @@ namespace Susy
 
       // clear vars
       void clear(){
-        run = event = lb = nVtx = 0;
+        run = event = lb = 0;
         stream = Stream_Unknown;
         isMC = false;
         mcChannel = w = 0;
-        wPileup = xsec = lumiSF = 1;
+        nVtx = avgMu = trigFlags = 0;
 	memset(evtFlag,0,sizeof(evtFlag));
+        wPileup = wPileup2fb = xsec = lumiSF = pdfSF = 0;
       }
 
       ClassDef(Event, 7);
