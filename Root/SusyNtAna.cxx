@@ -136,7 +136,6 @@ void SusyNtAna::selectObjects(SusyNtSys sys)
   getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets,
 		   m_signalElectrons, m_signalMuons, m_signalJets);
 
-
   // Grab met
   m_met = getMet(&nt, sys);
 

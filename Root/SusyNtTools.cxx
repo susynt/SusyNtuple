@@ -334,12 +334,14 @@ void SusyNtTools::m_m_overlap(MuonVector& muons, float minDr)
   // If 2 muons overlap, toss them both!
   for(int iMu=muons.size()-1; iMu>=0; iMu--){
     const Muon* mu1 = muons.at(iMu);
-    for(int jMu=muons.size()-1; jMu>=0; jMu--){
+    for(int jMu=iMu-1; jMu>=0; jMu--){
       const Muon* mu2 = muons.at(jMu);
       if(mu1->DeltaR(*mu2) > minDr) continue;
       
       muons.erase( muons.begin() + iMu );
       muons.erase( muons.begin() + jMu );
+      iMu--;
+
       break;
 
     } 
