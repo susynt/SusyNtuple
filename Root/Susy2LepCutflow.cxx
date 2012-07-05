@@ -338,9 +338,10 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons)
     return true;
   }
 
-  int run         = nt.evt()->run;
-  DataStream strm = nt.evt()->stream;
-  if( m_trigObj->passDilTrig(leptons, run, strm) ){
+  //int run         = nt.evt()->run;
+  //DataStream strm = nt.evt()->stream;
+  //if( m_trigObj->passDilTrig(leptons, run, strm) ){
+  if( m_trigObj->passDilTrig(leptons, nt.evt()) ){
     n_pass_trig[m_ET]++;
     return true;
   }

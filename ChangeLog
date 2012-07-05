@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
-
+2012-07-05 Matt
+	* Updated trigger logic for data to follow slides posted today
+	      * Do MC soon and compare to cutflow
+	* Added two triggers to enum (e12Tvh_loose1 and mu13)
+		 
+	
 2012-07-03 Steve
 	* Variables requested by Anyes
 		* muon thetaPV

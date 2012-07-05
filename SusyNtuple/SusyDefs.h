@@ -223,6 +223,10 @@ enum TrigBit
   BIT_g100_loose,
   BIT_g120_loose,
 
+  BIT_e12Tvh_loose1,             // Should be moved up above and grouped with electrons
+  BIT_mu13,                      // Should be moved up above and grouped with muons
+  
+
   N_TRIG
 };
 
@@ -253,15 +257,18 @@ const uint TRIG_e24vh_medium1           = 1<<BIT_e24vh_medium1;
 const uint TRIG_e24vhi_medium1          = 1<<BIT_e24vhi_medium1;
 const uint TRIG_2e12Tvh_loose1          = 1<<BIT_2e12Tvh_loose1;
 const uint TRIG_e24vh_medium1_e7_medium1= 1<<BIT_e24vh_medium1_e7_medium1;
+const uint TRIG_e12Tvh_loose1           = 1<<BIT_e12Tvh_loose1;
 
 const uint TRIG_mu8                     = 1<<BIT_mu8;
 const uint TRIG_mu18_tight              = 1<<BIT_mu18_tight;
 const uint TRIG_mu24i_tight             = 1<<BIT_mu24i_tight;
 const uint TRIG_2mu13                   = 1<<BIT_2mu13;
 const uint TRIG_mu18_tight_mu8_EFFS     = 1<<BIT_mu18_tight_mu8_EFFS;
+const uint TRIG_mu13                    = 1<<BIT_mu13;
 
 const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
 const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
+
 
 // Photon Trigger big masks
 const uint TRIG_g20_loose               = 1<<BIT_g20_loose;

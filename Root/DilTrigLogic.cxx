@@ -29,9 +29,11 @@ DilTrigLogic::~DilTrigLogic()
 /*--------------------------------------------------------------------------------*/
 // Does event pass susy dilepton trigger logic?
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream stream)
+bool DilTrigLogic::passDilTrig(LeptonVector leptons, Event* evt)
 {
   
+  DataStream stream = evt->stream;
+
   // If unknown stream, then return
   if( stream == Stream_Unknown){
     cout<<"Error: Stream is unknown! Returning false from passDilTrig."<<endl;
@@ -41,15 +43,16 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
   // Set Vars for easy access
   clear();
   setLeptons(leptons);
+  uint evtTrigFlags = evt->trigFlags;
   
   // Check:
   DiLepEvtType ET = getDiLepEvtType(leptons);
   if( stream == Stream_Egamma && (ET == ET_ee) )
-    return passEE();
-  if( stream == Stream_Muons && (ET ==ET_mm) )
-    return passMM();
+    return passEE(m_elecs, evtTrigFlags);
+  if( stream == Stream_Muons  && (ET ==ET_mm) )
+    return passMM(m_muons, evtTrigFlags);
   if( ET == ET_em )
-    return passEM(stream);
+    return passEM(m_elecs, m_muons, evtTrigFlags, stream);
   
   // Must not have matched if we get here
   return false;
@@ -59,7 +62,7 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, int RunNumber, DataStream s
 /*--------------------------------------------------------------------------------*/
 // Methods for dilepton event types
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passEE()
+bool DilTrigLogic::passEE(ElectronVector elecs, uint evtFlag)
 {
 
   if(elecs.size() != 2) return false;
@@ -71,11 +74,11 @@ bool DilTrigLogic::passEE()
   uint flag1  = elecs.at(1)->trigFlags;
   
 
-  return passEETrigRegion(ePt0, ePt1, flag0, flag1);
+  return passEETrigRegion(ePt0, ePt1, flag0, flag1, evtFlag);
 
 }
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passMM()
+bool DilTrigLogic::passMM(MuonVector muons, uint evtFlag)
 {
  
   if(muons.size() != 2) return false;
@@ -85,11 +88,11 @@ bool DilTrigLogic::passMM()
   uint flag0 = muons.at(0)->trigFlags;
   uint flag1 = muons.at(1)->trigFlags;
 
-  return passMMTrigRegion(mPt0, mPt1, flag0, flag1);
+  return passMMTrigRegion(mPt0, mPt1, flag0, flag1, evtFlag);
   
 }
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passEM(DataStream stream)
+bool DilTrigLogic::passEM(ElectronVector elecs, MuonVector muons, uint evtFlag, DataStream stream)
 {
 
   if(elecs.size() != 1 && muons.size() != 1) return false;
@@ -100,58 +103,70 @@ bool DilTrigLogic::passEM(DataStream stream)
   uint eFlag = elecs.at(0)->trigFlags; 
   uint mFlag = muons.at(0)->trigFlags; 
   
-  return passEMTrigRegion(ePt, mPt, eFlag, mFlag, stream);
+  return passEMTrigRegion(ePt, mPt, eFlag, mFlag, evtFlag, stream);
 
 }
 
 /*--------------------------------------------------------------------------------*/
 // Pass Lepton trigger based on region
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1)
+bool DilTrigLogic::passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1, uint evtFlag)
 {
 
   // Region A
-  if( 25 < pt0 && 15 < pt1 ){
-    bool pass0 = (flag0 & TRIG_e24vh_medium1_e7_medium1) || (flag0 & TRIG_2e12Tvh_loose1);
-    bool pass1 = (flag1 & TRIG_e24vh_medium1_e7_medium1) || (flag1 & TRIG_2e12Tvh_loose1);
-    return pass0 && pass1;
+  if( 14 < pt0 && 14 < pt1 ){
+    bool evtPass = (evtFlag & TRIG_2e12Tvh_loose1);
+    bool match   = (flag0 & TRIG_e12Tvh_loose1) || (flag1 & TRIG_e12Tvh_loose1);
+    return evtPass && match;
   }
   
   // Region B
-  if( 25 < pt0 && 10 < pt1 && pt1 < 15 )
-    return (flag0 & TRIG_e24vh_medium1_e7_medium1) && (flag1 & TRIG_e24vh_medium1_e7_medium1);
-  
-  // Region C
-  if( 15 < pt0 && pt0 < 25 && 15 < pt1 )
-    return (flag0 & TRIG_2e12Tvh_loose1) && (flag1 &  TRIG_2e12Tvh_loose1);
+  if( 25 < pt0 && 10 < pt1 && pt1 < 14 ){
+    bool evtPass      = (evtFlag & TRIG_e24vh_medium1_e7_medium1);
+    bool match        = (flag0 & TRIG_e24vh_medium1_e7_medium1) && (flag1 & TRIG_e24vh_medium1_e7_medium1);
+    bool matchLeading = (flag0 & TRIG_e24vh_medium1); 
+    return evtPass && match && matchLeading;
+  }
   
   // Not in region:
   return false;
 
 }
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1)
+bool DilTrigLogic::passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1, uint evtFlag)
 {
 
   // Region A
-  if( 24 < pt0 && 24 < pt1)
-    return (flag0 & TRIG_mu24i_tight) || (flag0 & TRIG_mu24i_tight);
-  
+  if( 18 < pt0 && 18 < pt1 ){
+    bool evtPass   = (evtFlag & TRIG_mu18_tight_mu8_EFFS);
+    bool match2lep = (flag0 & TRIG_mu18_tight_mu8_EFFS) && (flag1 & TRIG_mu18_tight_mu8_EFFS);
+    bool match1lep = (flag0 & TRIG_mu18_tight) || (flag1 & TRIG_mu18_tight);
+    return evtPass && match2lep && match1lep;
+  }
+
   // Region B
-  if( 24 < pt0 && 10 < pt1 && pt1 < 24 )
-    return (flag0 & TRIG_mu24i_tight);
-
-  // Region C
-  if( 18 < pt0 && pt0 < 24 && 18 < pt1 )
-    return (flag0 & TRIG_mu18_tight_mu8_EFFS) || (flag1 & TRIG_mu18_tight_mu8_EFFS);
+  if(18 < pt0 && 14 < pt1 && pt1 < 18){
+    bool evtPass      = (evtFlag & TRIG_mu18_tight_mu8_EFFS) || (evtFlag & TRIG_2mu13);
+    bool match2lep0   = (flag0 & TRIG_mu13) && (flag1 & TRIG_mu13);
+    bool match2lep1   = (flag0 & TRIG_mu18_tight_mu8_EFFS) && (flag1 & TRIG_mu18_tight_mu8_EFFS);
+    bool matchLeading = (flag0 & TRIG_mu18_tight);
+    return evtPass && ( match2lep0 || (match2lep1 && matchLeading) );
+  }
   
-  // Region D
-  if( 18 < pt0 && pt0 < 24 && 10 < pt1 && pt1 < 18 )
-    return (flag0 & TRIG_mu18_tight_mu8_EFFS) && (flag1 & TRIG_mu18_tight_mu8_EFFS);
+  // Region C
+  if( 18 < pt0 && 8 < pt1 && pt1 < 14 ){
+    bool evtPass      = (evtFlag & TRIG_mu18_tight_mu8_EFFS);
+    bool match2lep    = (flag0 & TRIG_mu18_tight_mu8_EFFS) && (flag1 & TRIG_mu18_tight_mu8_EFFS);
+    bool matchLeading = (flag0 & TRIG_mu18_tight);
+    return evtPass && match2lep && matchLeading;
+  }
 
-  // Region E
-  if( pt0 < 18 && 13 < pt1 )
-    return (flag0 & TRIG_2mu13) && (flag1 & TRIG_2mu13);
+  // Region D
+  if( 14 < pt0 && pt0 < 20 && 14 < pt1 ){
+    bool evtPass   = (evtFlag & TRIG_2mu13);
+    bool match2lep = (flag0 & TRIG_mu13) && (flag1 & TRIG_mu13);
+    return evtPass && match2lep;
+  }
 
   // Not in region:
   return false;
@@ -159,34 +174,29 @@ bool DilTrigLogic::passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1
 }
 /*--------------------------------------------------------------------------------*/
 bool DilTrigLogic::passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag, 
-				    DataStream stream)
+				    uint evtFlag, DataStream stream)
 {
 
-  // TODO: Fix this trigger logic. I need to see if I need to have both
-  // muon and electron match the trigger or if I need to have at least
-  // one match.  Conflicting things between slides and between twiki...
+  // From the twiki it appears we order based on lepton pt and require the stream
+  // based from this information. This will need to be cross-checked... Hopefully 
+  //cutflow will illuminate any issues.
 
-  if(stream == Stream_Egamma || stream == Stream_MC){
+  bool isEM = ept > mpt && stream == Stream_Egamma;  
 
-    // Region A
-    if( 15 < ept && 20 < mpt )
-      return (eflag & TRIG_e12Tvh_medium1_mu8) && (mflag & TRIG_e12Tvh_medium1_mu8);
-    
-    // Region B
-    if( 15 < ept && 10 < mpt && mpt < 20 )
-      return (eflag & TRIG_e12Tvh_medium1_mu8) && (mflag & TRIG_e12Tvh_medium1_mu8);
-
+  // Region A
+  if( 14 < ept && 8 < mpt ){
+    bool evtPass = (evtFlag & TRIG_e12Tvh_medium1_mu8) && isEM;
+    bool ePass   = (eflag & TRIG_e12Tvh_medium1);
+    bool mPass   = (mflag & TRIG_mu8);
+    return evtPass && ePass && mPass;
   }
-  else if( stream == Stream_Muons || stream == Stream_MC){
-    
-    // Region A
-    if( 15 < ept && 20 < mpt )
-      return (eflag & TRIG_mu18_tight_e7_medium1) && (mflag & TRIG_mu18_tight_e7_medium1);
-    
-    // Region C
-    if( ept < 15 && mpt < 20 )
-      return (eflag & TRIG_mu18_tight_e7_medium1) && (mflag & TRIG_mu18_tight_e7_medium1);
 
+  // Region B
+  if( 10 < ept && ept < 14 && 18 < mpt ){
+    bool evtPass = (evtFlag & TRIG_mu18_tight_e7_medium1) && !isEM;
+    bool ePass   = (eflag & TRIG_e7_medium1); // **CHECK: e7 vs e7T ???
+    bool mPass   = (mflag & TRIG_mu18_tight);
+    return evtPass && ePass && mPass;
   }
   
   // Not in region:
@@ -276,8 +286,8 @@ APReweightND* DilTrigLogic::getMuoTrigWeighter(uint trigFlag)
 void DilTrigLogic::setLeptons(LeptonVector leps){
   for(uint i=0; i<leps.size(); ++i){
     const Lepton* lep = leps.at(i);
-    if(lep->isEle()) elecs.push_back( (Electron*) lep );
-    else             muons.push_back( (Muon*)     lep );
+    if(lep->isEle()) m_elecs.push_back( (Electron*) lep );
+    else             m_muons.push_back( (Muon*)     lep );
   }
 }
 

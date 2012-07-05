@@ -34,22 +34,24 @@ class DilTrigLogic
   // Clear any vars stored
   void clear(){
     //period = UNKNOWNPERIOD;
-    elecs.clear();
-    muons.clear();
+    m_elecs.clear();
+    m_muons.clear();
   };
 
   // General method to obtain result
-  bool passDilTrig(LeptonVector leptons, int RunNumber, DataStream stream);
+  bool passDilTrig(LeptonVector leptons, Event* evt);
 
   // Event Type methods
-  bool passEE();
-  bool passMM();
-  bool passEM(DataStream stream);
+  bool passEE(ElectronVector elecs, uint evtFlag);
+  bool passMM(MuonVector muons, uint evtFlag);
+  bool passEM(ElectronVector elecs, MuonVector muons, uint evtFlag, DataStream stream);
 
   // Pass trigger regions
-  bool passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1);
-  bool passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1);
-  bool passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag, DataStream stream);
+  // Regions taken from this talk: 
+  // https://indico.cern.ch/getFile.py/access?contribId=1&resId=0&materialId=slides&confId=199022
+  bool passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1, uint evtFlag);
+  bool passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1, uint evtFlag);
+  bool passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag, uint evtFlag, DataStream stream);
 
   // MC will need to be reweighted
   float getMCWeight();
@@ -58,13 +60,12 @@ class DilTrigLogic
   //void loadTriggerMaps();
   //APReweightND* loadTrigWeighter(TFile* f, TString chain);
   //APReweightND* getEleTrigWeighter(uint trigFlag);
-  //APReweightND* getMuoTrigWeighter(uint trigFlag);
-
+  //APReweightND* getMuoTrigWeighter(uint trigFlag);  
+  
   // Add a method to set the electron and muon vector.
   // Will make it easier for methods to access 
   // the specific leptons it needs
   void setLeptons(LeptonVector leps);
-
   
 
   // Debug method
@@ -103,8 +104,8 @@ class DilTrigLogic
  private:
    
   //Period              period;             // Period
-  ElectronVector      elecs;              // Electron vector for easy access
-  MuonVector          muons;              // Muon vector for easy access
+  ElectronVector      m_elecs;              // Electron vector for easy access
+  MuonVector          m_muons;              // Muon vector for easy access
 
 };
 
