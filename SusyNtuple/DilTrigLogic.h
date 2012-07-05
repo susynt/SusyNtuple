@@ -67,9 +67,11 @@ class DilTrigLogic
   // the specific leptons it needs
   void setLeptons(LeptonVector leps);
   
-
   // Debug method
   void debugFlag(uint flag);
+
+  // Set latest logic
+  void setLatestLogic(bool logic){ m_latestLogic = logic; }; // Not used 
 
  protected:
 
@@ -106,6 +108,8 @@ class DilTrigLogic
   //Period              period;             // Period
   ElectronVector      m_elecs;              // Electron vector for easy access
   MuonVector          m_muons;              // Muon vector for easy access
+
+  bool                m_latestLogic;        // Use latest logic or not. Anders not updated yet, so this is for comparison
 
 };
 

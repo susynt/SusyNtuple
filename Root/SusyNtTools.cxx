@@ -217,19 +217,21 @@ bool SusyNtTools::isSignalElectron(const Electron* ele)
 {
   if(!ele->tightPP) return false;
   // New isolation cuts for 2012
-  if(ele->ptcone30/ele->Pt() >= 0.15) return false;
-  if(fabs(ele->d0/ele->errD0) >= 5) return false;
-  if(fabs(ele->z0*sin(ele->Theta())) >= 0.1) return false;
+  if(ele->ptcone30/ele->Pt() >= ELECTRON_ETCONE30_PT_CUT) return false;
+  if(fabs(ele->d0/ele->errD0) >= ELECTRON_D0SIG_CUT) return false;
+  if(fabs(ele->z0*sin(ele->Theta())) >= ELECTRON_Z0_SINTHETA_CUT) return false;
   //if(ele->ptcone20/ele->Pt() > ELECTRON_PTCONE20_ET_CUT ) return false;
   //if(m_anaType == Ana_3Lep && fabs(ele->d0)/ele->errD0 > ELECTRON_D0SIG_CUT) return false;
+
   return true;
+
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalMuon(const Muon* mu)
 {
-  if(mu->ptcone30/mu->Pt() >= 0.15) return false;
-  if(fabs(mu->d0/mu->errD0) >= 3) return false;
-  if(fabs(mu->z0*sin(mu->Theta())) >= 0.1) return false;
+  if(mu->ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+  if(fabs(mu->d0/mu->errD0) >= MUON_D0SIG_CUT) return false;
+  if(fabs(mu->z0*sin(mu->Theta())) >= MUON_Z0_SINTHETA_CUT) return false;
   //if(mu->ptcone20 > MUON_PTCONE20_CUT) return false;
   //if(m_anaType == Ana_3Lep && fabs(mu->d0)/mu->errD0 > MUON_D0SIG_CUT) return false;
   return true;

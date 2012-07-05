@@ -5,7 +5,8 @@
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-DilTrigLogic::DilTrigLogic(bool isMC)
+DilTrigLogic::DilTrigLogic(bool isMC) :
+  m_latestLogic(false)
 {
   
   //if( isMC ) loadTriggerMaps();
@@ -47,10 +48,16 @@ bool DilTrigLogic::passDilTrig(LeptonVector leptons, Event* evt)
   
   // Check:
   DiLepEvtType ET = getDiLepEvtType(leptons);
-  if( stream == Stream_Egamma && (ET == ET_ee) )
+
+  // EE
+  if( (stream == Stream_Egamma || stream == Stream_MC) && (ET == ET_ee) )
     return passEE(m_elecs, evtTrigFlags);
-  if( stream == Stream_Muons  && (ET ==ET_mm) )
+
+  // MM
+  if( (stream == Stream_Muons || stream == Stream_MC)  && (ET ==ET_mm) )
     return passMM(m_muons, evtTrigFlags);
+
+  // EM
   if( ET == ET_em )
     return passEM(m_elecs, m_muons, evtTrigFlags, stream);
   
@@ -66,6 +73,8 @@ bool DilTrigLogic::passEE(ElectronVector elecs, uint evtFlag)
 {
 
   if(elecs.size() != 2) return false;
+  
+  std::sort(elecs.begin(), elecs.end(), comparePt);
 
   // Handle two elec trigger effectively
   float ePt0  = elecs.at(0)->Pt();
@@ -82,6 +91,8 @@ bool DilTrigLogic::passMM(MuonVector muons, uint evtFlag)
 {
  
   if(muons.size() != 2) return false;
+
+  std::sort(muons.begin(), muons.end(), comparePt);
 
   float mPt0 = muons.at(0)->Pt();
   float mPt1 = muons.at(1)->Pt();
@@ -128,6 +139,7 @@ bool DilTrigLogic::passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1
     return evtPass && match && matchLeading;
   }
   
+
   // Not in region:
   return false;
 
@@ -181,19 +193,19 @@ bool DilTrigLogic::passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag
   // based from this information. This will need to be cross-checked... Hopefully 
   //cutflow will illuminate any issues.
 
-  bool isEM = ept > mpt && stream == Stream_Egamma;  
+  bool isEM = ept > mpt && ( stream == Stream_Egamma || stream == Stream_MC );  
 
   // Region A
-  if( 14 < ept && 8 < mpt ){
-    bool evtPass = (evtFlag & TRIG_e12Tvh_medium1_mu8) && isEM;
+  if( 14 < ept && 8 < mpt && isEM){
+    bool evtPass = (evtFlag & TRIG_e12Tvh_medium1_mu8);
     bool ePass   = (eflag & TRIG_e12Tvh_medium1);
     bool mPass   = (mflag & TRIG_mu8);
     return evtPass && ePass && mPass;
   }
 
   // Region B
-  if( 10 < ept && ept < 14 && 18 < mpt ){
-    bool evtPass = (evtFlag & TRIG_mu18_tight_e7_medium1) && !isEM;
+  if( 10 < ept && ept < 14 && 18 < mpt && isEM){
+    bool evtPass = (evtFlag & TRIG_mu18_tight_e7_medium1);
     bool ePass   = (eflag & TRIG_e7_medium1); // **CHECK: e7 vs e7T ???
     bool mPass   = (mflag & TRIG_mu18_tight);
     return evtPass && ePass && mPass;

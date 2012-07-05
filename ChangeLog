@@ -3,7 +3,7 @@
 	* Updated trigger logic for data to follow slides posted today
 	      * Do MC soon and compare to cutflow
 	* Added two triggers to enum (e12Tvh_loose1 and mu13)
-		 
+	* Put 2012 cut values from steve into SusyDefs		 
 	
 2012-07-05 Steve
 	* Added m_m_overlap function

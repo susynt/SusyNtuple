@@ -303,11 +303,14 @@ const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
 const float MUON_ETA_CUT     = 2.4;  // Currently applied in SusyNtMaker
 const float JET_ETA_CUT      = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
 
-// Signal Requiremtns
-const float ELECTRON_PTCONE20_ET_CUT = 0.1; 
-const float ELECTRON_D0SIG_CUT       = 6.0;
-const float MUON_PTCONE20_CUT        = 1.8;
+// Signal Requirements
+const float ELECTRON_ETCONE30_PT_CUT = 0.15; 
+const float ELECTRON_D0SIG_CUT       = 5.0;
+const float ELECTRON_Z0_SINTHETA_CUT = 0.1;
+
+const float MUON_PTCONE30_PT_CUT     = 0.15;
 const float MUON_D0SIG_CUT           = 3.0;
+const float MUON_Z0_SINTHETA_CUT     = 0.1;
 
 // Cuts for overlap
 const float E_E_DR = 0.1;
