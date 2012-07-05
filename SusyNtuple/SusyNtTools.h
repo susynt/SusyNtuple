@@ -83,16 +83,19 @@ class SusyNtTools
   void performOverlap(ElectronVector &elecs, MuonVector &muons, JetVector &jets);
 
   // e-e overlap
-  void e_e_overlap(ElectronVector &elecs, float mindR);
+  void e_e_overlap(ElectronVector &elecs, float minDr);
 
   // e-j overlap
-  void e_j_overlap(ElectronVector &elecs, JetVector &jets, float mindR, bool removeJets = true);
+  void e_j_overlap(ElectronVector &elecs, JetVector &jets, float minDr, bool removeJets = true);
 
   // m-j overlap
-  void m_j_overlap(MuonVector &muons, JetVector jets, float mindR);
+  void m_j_overlap(MuonVector &muons, JetVector jets, float minDr);
 
   // e-m overlap 
-  void e_m_overlap(ElectronVector &elecs, MuonVector &muons, float mindR);
+  void e_m_overlap(ElectronVector &elecs, MuonVector &muons, float minDr);
+
+  // m-m overlap
+  void m_m_overlap(MuonVector& muons, float minDr);
 
   //
   // Event level checks

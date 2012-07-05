@@ -315,6 +315,7 @@ const float J_E_DR = 0.2;
 const float E_J_DR = 0.4;
 const float M_J_DR = 0.4;
 const float E_M_DR = 0.1;
+const float M_M_DR = 0.05;
 
 
 #endif

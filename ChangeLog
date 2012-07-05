@@ -5,6 +5,13 @@
 	* Added two triggers to enum (e12Tvh_loose1 and mu13)
 		 
 	
+2012-07-05 Steve
+	* Added m_m_overlap function
+	* Updated d0 and iso cuts, consistent with this version of the twiki: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYDirectGauginos?rev=18
+		* These are changing rapidly, and will likely change again within the next 24 hours
+	* Changed low Mll cut to 12 Gev
+	* Maybe more... I'll update this later
+
 2012-07-03 Steve
 	* Variables requested by Anyes
 		* muon thetaPV
