@@ -48,20 +48,22 @@ class SusyNtTools
 			  MuonVector &muons, JetVector &jets, SusyNtSys sys);
 
   // Signal objects
-  ElectronVector getSignalElectrons(ElectronVector bsElecs);
-  MuonVector     getSignalMuons(MuonVector bsMuons);
+  ElectronVector getSignalElectrons(ElectronVector bsElecs, uint nVtx, bool isMC);
+  MuonVector     getSignalMuons(MuonVector bsMuons, uint nVtx, bool isMC);
   JetVector      getSignalJets(JetVector bsJets);
   PhotonVector   getSignalPhotons(Susy::SusyNtObject* susy_nt);
 
   // Get the signal objects
   void getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,
-			ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets);
+			ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets,
+                        uint nVtx, bool isMC);
   void getSignalObjects(Susy::SusyNtObject* susy_nt, ElectronVector &sigElecs, 
-			MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys);
+			MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys,
+                        uint nVtx, bool isMC);
   
-  // Check if Signal
-  bool isSignalElectron(const Susy::Electron* ele);
-  bool isSignalMuon(const Susy::Muon* mu);
+  // Check if Signal, now with mc/data dependent iso cuts
+  bool isSignalElectron(const Susy::Electron* ele, uint nVtx, bool isMC);
+  bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
   bool isSignalJet(const Susy::Jet* jet);
 
   // Build Lepton vector

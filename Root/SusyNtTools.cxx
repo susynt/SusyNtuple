@@ -26,23 +26,28 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susy_nt, ElectronVector &elec
   performOverlap(elecs, muons, jets);
 
   // Do SFOS removal for Mll < 20 
-  if(m_anaType == Ana_3Lep) {
+  // Now both analyses are doing this!
+  //if(m_anaType == Ana_3Lep) 
+  if(true)
+  {
     RemoveSFOSPair(elecs, 12);
     RemoveSFOSPair(muons, 12);
   }
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,
-				   ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets)
+				   ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets,
+                                   uint nVtx, bool isMC)
 {
   // Set signal objects
-  sigElecs = getSignalElectrons(bsElecs);
-  sigMuons = getSignalMuons(bsMuons);
+  sigElecs = getSignalElectrons(bsElecs, nVtx, isMC);
+  sigMuons = getSignalMuons(bsMuons, nVtx, isMC);
   sigJets  = getSignalJets(bsJets);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(SusyNtObject* susy_nt, ElectronVector &sigElecs, 
-				   MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys)
+				   MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys,
+                                   uint nVtx, bool isMC)
 {
   // Temprorary vectors for baseline objects
   ElectronVector elecs = getPreElectrons(susy_nt, sys);
@@ -53,8 +58,8 @@ void SusyNtTools::getSignalObjects(SusyNtObject* susy_nt, ElectronVector &sigEle
   performOverlap(elecs, muons, jets);
 
   // Now set the signal objects
-  sigElecs = getSignalElectrons(elecs);
-  sigMuons = getSignalMuons(muons);
+  sigElecs = getSignalElectrons(elecs, nVtx, isMC);
+  sigMuons = getSignalMuons(muons, nVtx, isMC);
   sigJets  = getSignalJets(jets);
 }
 /*--------------------------------------------------------------------------------*/
@@ -137,12 +142,12 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susy_nt, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Get Signal objects
 /*--------------------------------------------------------------------------------*/
-ElectronVector SusyNtTools::getSignalElectrons(ElectronVector bsElecs)
+ElectronVector SusyNtTools::getSignalElectrons(ElectronVector bsElecs, uint nVtx, bool isMC)
 {
   ElectronVector sigElecs;
   for(uint ie=0; ie<bsElecs.size(); ++ie){
     const Electron* e = bsElecs.at(ie);
-    if(isSignalElectron(e)){
+    if(isSignalElectron(e, nVtx, isMC)){
       sigElecs.push_back(e);
     }
   }
@@ -150,12 +155,12 @@ ElectronVector SusyNtTools::getSignalElectrons(ElectronVector bsElecs)
   return sigElecs;
 }
 /*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getSignalMuons(MuonVector bsMuons)
+MuonVector SusyNtTools::getSignalMuons(MuonVector bsMuons, uint nVtx, bool isMC)
 {
   MuonVector sigMuons;
   for(uint im=0; im<bsMuons.size(); ++im){
     const Muon* m = bsMuons.at(im);
-    if(isSignalMuon(m)){
+    if(isSignalMuon(m, nVtx, isMC)){
       sigMuons.push_back(m);
     }
   }
@@ -213,38 +218,45 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susy_nt, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalElectron(const Electron* ele)
+bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
 {
   if(!ele->tightPP) return false;
-  // New isolation cuts for 2012
-  if(ele->ptcone30/ele->Pt() >= ELECTRON_ETCONE30_PT_CUT) return false;
+
+  // Relative ptcone iso
+  if(ele->ptcone30/ele->Pt() >= ELECTRON_PTCONE30_PT_CUT) return false;
+
+  // Sliding topo etcone isolation cut, slope differs between data/mc
+  float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
+  if( (ele->topoEtcone30Corr - slope*nVtx)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
+
+  // Impact parameter
   if(fabs(ele->d0/ele->errD0) >= ELECTRON_D0SIG_CUT) return false;
   if(fabs(ele->z0*sin(ele->Theta())) >= ELECTRON_Z0_SINTHETA_CUT) return false;
-  //if(ele->ptcone20/ele->Pt() > ELECTRON_PTCONE20_ET_CUT ) return false;
-  //if(m_anaType == Ana_3Lep && fabs(ele->d0)/ele->errD0 > ELECTRON_D0SIG_CUT) return false;
-
   return true;
-
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalMuon(const Muon* mu)
+bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
 {
-  if(mu->ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+  // Sliding ptcone isolation cut, slope differs between data/mc
+  float slope = isMC? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
+  if( (mu->ptcone30 - slope*nVtx)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
+  //if(mu->ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+
+  // Impact parameter
   if(fabs(mu->d0/mu->errD0) >= MUON_D0SIG_CUT) return false;
   if(fabs(mu->z0*sin(mu->Theta())) >= MUON_Z0_SINTHETA_CUT) return false;
-  //if(mu->ptcone20 > MUON_PTCONE20_CUT) return false;
-  //if(m_anaType == Ana_3Lep && fabs(mu->d0)/mu->errD0 > MUON_D0SIG_CUT) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalJet(const Jet* jet)
 {
   // Two lep and three lep have different requirements
+  // TODO: These will likely be merged
   float JET_PT_CUT = m_anaType==Ana_2Lep? JET_PT_CUT_2L : JET_PT_CUT_3L;
   
-  if( jet->Pt() < JET_PT_CUT )        return false;
-  if( fabs(jet->Eta()) > JET_ETA_CUT) return false;
-  if( jet->jvf < 0.50)                return false;
+  if(jet->Pt() < JET_PT_CUT)         return false;
+  if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
+  if(jet->jvf < 0.50)                return false;
   return true;
 }
 

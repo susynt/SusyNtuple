@@ -32,6 +32,7 @@ string streamName(DataStream stream)
 
 /*--------------------------------------------------------------------------------*/
 // Data period
+// TODO: update for 2012 periods (not important yet)
 /*--------------------------------------------------------------------------------*/
 DataPeriod getDataPeriod(uint run)
 {
@@ -95,14 +96,15 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons)
   if( ne == 1 && nm == 1 ) return ET_em;
   if( ne == 2 && nm == 0 ) return ET_ee;
   if( ne == 0 && nm == 2 ) return ET_mm;
-  cout<<"Error: Unable to classify dilepton event with "
-      <<ne<<" electrons and "<<nm<<" muons!"<<endl;
+  cout << "Error: Unable to classify dilepton event with "
+       << ne << " electrons and " << nm << " muons!" << endl;
 
   return ET_Unknown;
 }
 
 /*--------------------------------------------------------------------------------*/
 // Mass functions
+// Maybe we should move all helper functions into SusyNtTools
 /*--------------------------------------------------------------------------------*/
 float Mll(const Lepton* l1, const Lepton* l2)
 { return (*l1 + *l2).M(); }
@@ -168,9 +170,17 @@ bool hasBJet(const JetVector& jets, float weight)
 {
   uint nJet = jets.size();
   for(uint i=0; i<nJet; i++){
-    if( jets[i]->combNN > weight ) return true;
+    //if( jets[i]->combNN > weight ) return true;
+    //if( jets[i]->mv1 > weight ) return true;
+    if(isBJet(jets[i])) return true;
   }
   return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool isBJet(const Jet* jet, float weight)
+{ 
+  // Switching to MV1
+  return jet->mv1 > weight; 
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -193,18 +203,19 @@ stringvector getTrigChains()
 {
   stringvector triggers;
   triggers.resize(N_TRIG);
-  triggers[BIT_e20_medium]      = "EF_e20_medium";
-  triggers[BIT_e22_medium]      = "EF_e22_medium";
-  triggers[BIT_e22vh_medium1]   = "EF_e22vh_medium1";
-  triggers[BIT_2e12_medium]     = "EF_2e12_medium";
-  triggers[BIT_2e12T_medium]    = "EF_2e12T_medium";
-  triggers[BIT_2e12Tvh_medium]  = "EF_2e12Tvh_medium";
-  triggers[BIT_mu18]            = "EF_mu18";
-  triggers[BIT_mu18_medium]     = "EF_mu18_medium";
-  triggers[BIT_2mu10_loose]     = "EF_2mu10_loose";
-  triggers[BIT_e10_medium_mu6]  = "EF_e10_medium_mu6";
+  //triggers[BIT_e20_medium]      = "EF_e20_medium";
+  //triggers[BIT_e22_medium]      = "EF_e22_medium";
+  //triggers[BIT_e22vh_medium1]   = "EF_e22vh_medium1";
+  //triggers[BIT_2e12_medium]     = "EF_2e12_medium";
+  //triggers[BIT_2e12T_medium]    = "EF_2e12T_medium";
+  //triggers[BIT_2e12Tvh_medium]  = "EF_2e12Tvh_medium";
+  //triggers[BIT_mu18]            = "EF_mu18";
+  //triggers[BIT_mu18_medium]     = "EF_mu18_medium";
+  //triggers[BIT_2mu10_loose]     = "EF_2mu10_loose";
+  //triggers[BIT_e10_medium_mu6]  = "EF_e10_medium_mu6";
 
   triggers[BIT_e7_medium1]              = "EF_e7_medium1";
+  triggers[BIT_e12Tvh_loose1]           = "EF_e12Tvh_loose1";
   triggers[BIT_e12Tvh_medium1]          = "EF_e12Tvh_medium1";
   triggers[BIT_e24vh_medium1]           = "EF_e24vh_medium1";
   triggers[BIT_e24vhi_medium1]          = "EF_e24vhi_medium1";
@@ -212,6 +223,7 @@ stringvector getTrigChains()
   triggers[BIT_e24vh_medium1_e7_medium1]= "EF_e24vh_medium1_e7_medium1";
 
   triggers[BIT_mu8]                     = "EF_mu8";
+  triggers[BIT_mu13]                    = "EF_mu13";
   triggers[BIT_mu18_tight]              = "EF_mu18_tight";
   triggers[BIT_mu24i_tight]             = "EF_mu24i_tight";
   triggers[BIT_2mu13]                   = "EF_2mu13";
@@ -222,31 +234,4 @@ stringvector getTrigChains()
 
   return triggers;
 }
-/*--------------------------------------------------------------------------------*/
-/*stringvector getEleTrigChains()
-{
-  stringvector elTriggers;
-  elTriggers.resize(N_EL_TRIG);
-  elTriggers[BIT_e10_medium]     = "EF_e10_medium";
-  elTriggers[BIT_e12_medium]     = "EF_e12_medium";
-  elTriggers[BIT_e20_medium]     = "EF_e20_medium";
-  elTriggers[BIT_e22_medium]     = "EF_e22_medium";
-  elTriggers[BIT_e22vh_medium1]  = "EF_e22vh_medium1";
-  elTriggers[BIT_2e12_medium]    = "EF_2e12_medium";
-  elTriggers[BIT_2e12T_medium]   = "EF_2e12T_medium";
-  elTriggers[BIT_2e12Tvh_medium] = "EF_2e12Tvh_medium";
-  return elTriggers;
-}*/
-/*--------------------------------------------------------------------------------*/
-/*stringvector getMuTrigChains()
-{
-  stringvector muTriggers;
-  muTriggers.resize(N_MU_TRIG);
-  muTriggers[BIT_mu6]           = "EF_mu6";
-  muTriggers[BIT_mu10_loose]    = "EF_mu10_loose";
-  muTriggers[BIT_mu18]          = "EF_mu18";
-  muTriggers[BIT_mu18_medium]   = "EF_mu18_medium";
-  muTriggers[BIT_2mu10_loose]   = "EF_2mu10_loose";
-  return muTriggers;
-}*/
 

@@ -1,14 +1,28 @@
 # vim: set noexpandtab:
+
+2012-07-06 Steve
+	* Deleted 2011 trigger bits (we were almost out of space)
+	* Added isBJet function, changed definition to use MV1 > 0.905363
+	* Low mass Mll cut applied now also to 2L
+	* Added new sliding iso cuts for signal electrons and muons
+		* Now need to pass isMC flag and number of vtx with at least 5 tracks
+	* Updated signal lepton impact parameter cuts
+	* Added sumw to Event class.  Might eventually phase out the lumiSF
+		* MC doesn't correspond to only one allowed data range anymore,
+		  and we will be normalizing to more than one lumi
+	* Updated to SUSYTools-00-01-02
+	* Tagging SusyNtuple-00-00-11
+
 2012-07-05 Matt
 	* Updated trigger logic for data to follow slides posted today
 	      * Do MC soon and compare to cutflow
 	* Added two triggers to enum (e12Tvh_loose1 and mu13)
 	* Put 2012 cut values from steve into SusyDefs		 
 	* Fixed m_m_overlap function
-	
+
 2012-07-05 Steve
 	* Added m_m_overlap function
-	* Updated d0 and iso cuts, consistent with this version of the twiki: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYDirectGauginos?rev=18
+	* Updated d0 and iso cuts with this version of the twiki: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYDirectGauginos?rev=18
 		* These are changing rapidly, and will likely change again within the next 24 hours
 	* Changed low Mll cut to 12 Gev
 	* Maybe more... I'll update this later

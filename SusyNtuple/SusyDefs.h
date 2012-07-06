@@ -169,7 +169,9 @@ bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
 bool hasZ(const LeptonVector& leps, float massWindow=10.);
 void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
 
-bool hasBJet(const JetVector& jets, float weight=1.8);
+// New MV1
+bool hasBJet(const JetVector& jets, float weight=0.905363);
+bool isBJet(const Susy::Jet* jet, float weight=0.905363);
 
 // for pointer sorting
 bool comparePt(const TLorentzVector* p1, const TLorentzVector* p2);
@@ -187,19 +189,20 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
 enum TrigBit
 {
   // 2011 triggers 
-  BIT_e20_medium = 0,
-  BIT_e22_medium,
-  BIT_e22vh_medium1,
-  BIT_2e12_medium,
-  BIT_2e12T_medium,
-  BIT_2e12Tvh_medium,
-  BIT_mu18,
-  BIT_mu18_medium,
-  BIT_2mu10_loose,
-  BIT_e10_medium_mu6,
+  //BIT_e20_medium = 0,
+  //BIT_e22_medium,
+  //BIT_e22vh_medium1,
+  //BIT_2e12_medium,
+  //BIT_2e12T_medium,
+  //BIT_2e12Tvh_medium,
+  //BIT_mu18,
+  //BIT_mu18_medium,
+  //BIT_2mu10_loose,
+  //BIT_e10_medium_mu6,
 
   // 2012 triggers
-  BIT_e7_medium1,
+  BIT_e7_medium1 = 0,
+  BIT_e12Tvh_loose1,
   BIT_e12Tvh_medium1,
   BIT_e24vh_medium1,
   BIT_e24vhi_medium1,
@@ -207,6 +210,7 @@ enum TrigBit
   BIT_e24vh_medium1_e7_medium1,
 
   BIT_mu8,
+  BIT_mu13,
   BIT_mu18_tight,
   BIT_mu24i_tight,
   BIT_2mu13,
@@ -223,10 +227,6 @@ enum TrigBit
   BIT_g100_loose,
   BIT_g120_loose,
 
-  BIT_e12Tvh_loose1,             // Should be moved up above and grouped with electrons
-  BIT_mu13,                      // Should be moved up above and grouped with muons
-  
-
   N_TRIG
 };
 
@@ -237,34 +237,34 @@ enum TrigBit
 // 2011 Trigger bit masks 
 // electron
 
-const uint TRIG_e20_medium      = 1<<BIT_e20_medium;
-const uint TRIG_e22_medium      = 1<<BIT_e22_medium;
-const uint TRIG_e22vh_medium1   = 1<<BIT_e22vh_medium1;
-const uint TRIG_2e12_medium     = 1<<BIT_2e12_medium;
-const uint TRIG_2e12T_medium    = 1<<BIT_2e12T_medium;
-const uint TRIG_2e12Tvh_medium  = 1<<BIT_2e12Tvh_medium;
+//const uint TRIG_e20_medium      = 1<<BIT_e20_medium;
+//const uint TRIG_e22_medium      = 1<<BIT_e22_medium;
+//const uint TRIG_e22vh_medium1   = 1<<BIT_e22vh_medium1;
+//const uint TRIG_2e12_medium     = 1<<BIT_2e12_medium;
+//const uint TRIG_2e12T_medium    = 1<<BIT_2e12T_medium;
+//const uint TRIG_2e12Tvh_medium  = 1<<BIT_2e12Tvh_medium;
 // muon
-const uint TRIG_mu18            = 1<<BIT_mu18;
-const uint TRIG_mu18_medium     = 1<<BIT_mu18_medium;
-const uint TRIG_2mu10_loose     = 1<<BIT_2mu10_loose;
+//const uint TRIG_mu18            = 1<<BIT_mu18;
+//const uint TRIG_mu18_medium     = 1<<BIT_mu18_medium;
+//const uint TRIG_2mu10_loose     = 1<<BIT_2mu10_loose;
 // e-mu
-const uint TRIG_e10_medium_mu6  = 1<<BIT_e10_medium_mu6;
+//const uint TRIG_e10_medium_mu6  = 1<<BIT_e10_medium_mu6;
 
 // 2012 Trigger bit masks
 const uint TRIG_e7_medium1              = 1<<BIT_e7_medium1;
+const uint TRIG_2e12Tvh_loose1          = 1<<BIT_2e12Tvh_loose1;
 const uint TRIG_e12Tvh_medium1          = 1<<BIT_e12Tvh_medium1;
 const uint TRIG_e24vh_medium1           = 1<<BIT_e24vh_medium1;
 const uint TRIG_e24vhi_medium1          = 1<<BIT_e24vhi_medium1;
-const uint TRIG_2e12Tvh_loose1          = 1<<BIT_2e12Tvh_loose1;
 const uint TRIG_e24vh_medium1_e7_medium1= 1<<BIT_e24vh_medium1_e7_medium1;
 const uint TRIG_e12Tvh_loose1           = 1<<BIT_e12Tvh_loose1;
 
 const uint TRIG_mu8                     = 1<<BIT_mu8;
+const uint TRIG_mu13                    = 1<<BIT_mu13;
 const uint TRIG_mu18_tight              = 1<<BIT_mu18_tight;
 const uint TRIG_mu24i_tight             = 1<<BIT_mu24i_tight;
 const uint TRIG_2mu13                   = 1<<BIT_2mu13;
 const uint TRIG_mu18_tight_mu8_EFFS     = 1<<BIT_mu18_tight_mu8_EFFS;
-const uint TRIG_mu13                    = 1<<BIT_mu13;
 
 const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
 const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
@@ -280,8 +280,6 @@ const uint TRIG_g120_loose              = 1<<BIT_g120_loose;
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();
-stringvector getEleTrigChains();
-stringvector getMuTrigChains();
 
 
 //-----------------------------------------------------------------------------------
@@ -295,6 +293,7 @@ stringvector getMuTrigChains();
 // Pt
 const float ELECTRON_PT_CUT  = 10; // GeV
 const float MUON_PT_CUT      = 10; // GeV
+// TODO: Do we have a common jet pt cut now?
 const float JET_PT_CUT_3L    = 20; // GeV
 const float JET_PT_CUT_2L    = 30; // GeV
 
@@ -302,15 +301,21 @@ const float JET_PT_CUT_2L    = 30; // GeV
 const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
 const float MUON_ETA_CUT     = 2.4;  // Currently applied in SusyNtMaker
 const float JET_ETA_CUT      = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
+                                     // --> No, 2.5 is SIGNAL JET eta!!
 
 // Signal Requirements
-const float ELECTRON_ETCONE30_PT_CUT = 0.15; 
-const float ELECTRON_D0SIG_CUT       = 5.0;
-const float ELECTRON_Z0_SINTHETA_CUT = 0.1;
+const float ELECTRON_PTCONE30_PT_CUT       = 0.16; 
+const float ELECTRON_TOPOCONE30_SLOPE_DATA = 0.02015;
+const float ELECTRON_TOPOCONE30_SLOPE_MC   = 0.001794;
+const float ELECTRON_TOPOCONE30_PT_CUT     = 0.18;
+const float ELECTRON_D0SIG_CUT             = 5.0;
+const float ELECTRON_Z0_SINTHETA_CUT       = 0.4;
 
-const float MUON_PTCONE30_PT_CUT     = 0.15;
+const float MUON_PTCONE30_SLOPE_DATA = 0.01098;
+const float MUON_PTCONE30_SLOPE_MC   = 0.00627;
+const float MUON_PTCONE30_PT_CUT     = 0.12;
 const float MUON_D0SIG_CUT           = 3.0;
-const float MUON_Z0_SINTHETA_CUT     = 0.1;
+const float MUON_Z0_SINTHETA_CUT     = 1.0;
 
 // Cuts for overlap
 const float E_E_DR = 0.1;

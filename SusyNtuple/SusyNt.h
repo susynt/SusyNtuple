@@ -339,6 +339,7 @@ namespace Susy
       float wPileup2fb;         // pileup weight for 2012 period A-B5 only
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
+      float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
       float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
 
       // Combined normalized event weight
@@ -355,10 +356,10 @@ namespace Susy
         mcChannel = w = 0;
         nVtx = avgMu = trigFlags = 0;
 	memset(evtFlag,0,sizeof(evtFlag));
-        wPileup = wPileup2fb = xsec = lumiSF = pdfSF = 0;
+        wPileup = wPileup2fb = xsec = lumiSF = sumw = pdfSF = 0;
       }
 
-      ClassDef(Event, 7);
+      ClassDef(Event, 8);
   };
 
 };

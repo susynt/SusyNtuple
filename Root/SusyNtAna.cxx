@@ -127,14 +127,14 @@ void SusyNtAna::clearObjects()
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::selectObjects(SusyNtSys sys)
 {
-
   // Get the Baseline objets
   JetVector m_baseJets;
   getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseJets, sys);
 
   // Now grab Signal objects
   getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets,
-		   m_signalElectrons, m_signalMuons, m_signalJets);
+		   m_signalElectrons, m_signalMuons, m_signalJets, 
+                   nt.evt()->nVtx, nt.evt()->isMC);
 
   // Grab met
   m_met = getMet(&nt, sys);
@@ -146,7 +146,6 @@ void SusyNtAna::selectObjects(SusyNtSys sys)
   // sort leptons by pt
   std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
   std::sort(m_signalLeptons.begin(), m_signalLeptons.end(), comparePt);
-
 }
 
 /*--------------------------------------------------------------------------------*/
