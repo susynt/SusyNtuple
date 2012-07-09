@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2012-07-08 Anyes
+	* SusyNtAna: add function to debug event list
+	* SusyNtAna: move declaration of baseJets to header
+	* Add TGuiUtils
+	* Add McTruthClassifier
+s	
 2012-07-06 Steve
 	* Deleted 2011 trigger bits (we were almost out of space)
 	* Added isBJet function, changed definition to use MV1 > 0.905363

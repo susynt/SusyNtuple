@@ -8,6 +8,7 @@
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
+#include "SusyNtuple/TGuiUtils.h"
 
 #ifdef __CINT__
 
@@ -17,6 +18,7 @@
 #pragma link C++ nestedclass;
 #pragma link C++ nestedtypedef;
 
+#pragma link C++ class TGuiUtils+;
 #pragma link C++ class SusyNtAna;
 #pragma link C++ class Susy2LepCutflow;
 #pragma link C++ class Susy3LepCutflow;

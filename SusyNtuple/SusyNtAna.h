@@ -13,6 +13,8 @@
 #include "SusyNtuple/SusyNtTools.h"
 
 #include <fstream>
+#include <map>
+#include <set>
 
 /*
 
@@ -80,6 +82,17 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void setDebug(int dbg) { m_dbg = dbg; }
     int dbg() { return m_dbg; }
 
+    // To debug events in input file 
+    typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
+    RunEventMap _eventList;   //run:event to debug 
+    void setEvtDebug() {m_dbgEvt=true;}
+    void loadEventList();
+    bool processThisEvent(unsigned int run, unsigned int event);
+    bool checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event);
+    bool checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event);
+    void addRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event) 
+    { checkAndAddRunEvent(runEventMap, run, event); }
+
     // Sample name - can be used however you like
     std::string sampleName() { return m_sample; }
     void setSampleName(std::string s) { m_sample = s; }
@@ -103,7 +116,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
     Long64_t m_entry;           // Current entry in the current tree (not chain index!)
     Long64_t m_chainEntry;      // Current entry in the full TChain
 
-    int m_dbg;                  // debug level
+    int   m_dbg;                // debug level
+    bool  m_dbgEvt;             // debug events
 
     std::string m_sample;       // sample name string
 
@@ -118,9 +132,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
     MuonVector          m_signalMuons;          // signal muons
     LeptonVector        m_baseLeptons;          // baseline leptons
     LeptonVector        m_signalLeptons;        // signal leptons
+    JetVector           m_baseJets;             // base jets
     JetVector           m_signalJets;           // signal jets
     const Susy::Met*    m_met;                  // Met
-
 
     // Timer
     TStopwatch          m_timer;

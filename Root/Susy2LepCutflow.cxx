@@ -1,6 +1,5 @@
 #include <iomanip>
 #include "TCanvas.h"
-#include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/Susy2LepCutflow.h"
 
 using namespace std;
@@ -180,7 +179,7 @@ bool Susy2LepCutflow::passSR1(const LeptonVector& leptons, const JetVector& jets
   // Jet Veto
   if( !passJetVeto(jets) )               return false;
   n_pass_SR1jv[m_ET]++;
-
+  
   // Reject events with mll in Z window
   if( !passZVeto(leptons))               return false;
   n_pass_SR1Zv[m_ET]++;

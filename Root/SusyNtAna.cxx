@@ -12,7 +12,8 @@ SusyNtAna::SusyNtAna() :
         SusyNtTools(),
         nt(m_entry),
         m_entry(0),
-        m_dbg(0)
+        m_dbg(0),
+	m_dbgEvt(false)
 {
 }
 
@@ -40,6 +41,9 @@ void SusyNtAna::Begin(TTree* /*tree*/)
 
   // Start the timer
   m_timer.Start();
+
+  //Debug event - load event list
+  if(m_dbgEvt) loadEventList();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -51,17 +55,19 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   GetEntry(entry);
   clearObjects();
 
-  //if(nt.evt()->event != 24969) return kTRUE;
-
   // Chain entry not the same as tree entry
   //static Long64_t chainEntry = -1;
   m_chainEntry++;
+  
   if(m_dbg || m_chainEntry%50000==0)
   {
     cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
          << " event " << setw(7) << nt.evt()->event << " ****" << endl;
   }
+
+  //Debug this event - check if should be processed
+  if(m_dbgEvt && !processThisEvent(nt.evt()->run, nt.evt()->event)) return kFALSE;
 
   // Dump variables from the tree for testing
   if(m_dbg){
@@ -97,6 +103,42 @@ void SusyNtAna::Terminate()
   m_timer.Stop();
   dumpTimer();
 }
+/*--------------------------------------------------------------------------------*/
+// Load Event list of run/event to process. Use to debug events
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::loadEventList()
+{
+  int run, event;
+  FILE* eventsFile=fopen("debugEvents.txt","r");
+  int nEvtDbg=0;
+  while(fscanf(eventsFile,"%i %i \n",&run, &event) != EOF){
+    cout << "Adding run-event " << run << " " << event << endl; 
+    addRunEvent(_eventList, run, event);
+    nEvtDbg++;
+  }
+  std::cout << " >>> Debuging " << nEvtDbg << " events " << std::endl;
+}
+/*--------------------------------------------------------------------------------*/
+// Process selected events only
+/*--------------------------------------------------------------------------------*/
+bool SusyNtAna::processThisEvent(unsigned int run, unsigned int event)
+{
+  if(_eventList.size()==0) return true;
+  return checkRunEvent(_eventList, run, event);
+}
+bool SusyNtAna::checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event)
+{
+  RunEventMap::const_iterator eventSetIter = runEventMap.find(run);
+  return eventSetIter != runEventMap.end() && 
+    eventSetIter->second->find(event) != eventSetIter->second->end();
+}
+bool SusyNtAna::checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event)
+{
+  set<unsigned int> *&eventSet = runEventMap[run];
+  if ( !eventSet )
+    eventSet = new set<unsigned int>();
+  return !eventSet->insert(event).second;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
@@ -119,6 +161,7 @@ void SusyNtAna::clearObjects()
   m_signalMuons.clear();
   m_baseLeptons.clear();
   m_signalLeptons.clear();
+  m_baseJets.clear();
   m_signalJets.clear();
   m_met = NULL;
 }
@@ -128,7 +171,6 @@ void SusyNtAna::clearObjects()
 void SusyNtAna::selectObjects(SusyNtSys sys)
 {
   // Get the Baseline objets
-  JetVector m_baseJets;
   getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseJets, sys);
 
   // Now grab Signal objects
