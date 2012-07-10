@@ -82,6 +82,11 @@ namespace Susy
       float z0;                 // z0 extrapolated to PV 
       float errZ0;              // Uncertainty on z0
 
+      float d0Unbiased;         // Unbiased d0
+      float errD0Unbiased;      // Uncertainty on unbiased d0
+      float z0Unbiased;         // Unbiased z0
+      float errZ0Unbiased;      // Uncertainty on unbiased z0
+
       unsigned int mcType;      // MCTruthClassifier particle type
       unsigned int mcOrigin;    // MCTruthClassifier particle origin
 
@@ -115,7 +120,7 @@ namespace Susy
         Particle::clear();
       }
       
-      ClassDef(Lepton, 5);
+      ClassDef(Lepton, 6);
   };
 
   // Electron class
@@ -336,7 +341,7 @@ namespace Susy
 
       // Reweighting and scaling
       float wPileup;            // pileup weight
-      float wPileup2fb;         // pileup weight for 2012 period A-B5 only
+      float wPileup1fb;         // pileup weight for 2012 period A-B3 only
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
       float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
@@ -356,10 +361,10 @@ namespace Susy
         mcChannel = w = 0;
         nVtx = avgMu = trigFlags = 0;
 	memset(evtFlag,0,sizeof(evtFlag));
-        wPileup = wPileup2fb = xsec = lumiSF = sumw = pdfSF = 0;
+        wPileup = wPileup1fb = xsec = lumiSF = sumw = pdfSF = 0;
       }
 
-      ClassDef(Event, 8);
+      ClassDef(Event, 9);
   };
 
 };

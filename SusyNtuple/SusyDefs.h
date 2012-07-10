@@ -117,7 +117,8 @@ enum EventCheck
   PASS_BadJet   = 1<<1,
   PASS_BadMuon  = 1<<2,
   PASS_Cosmic   = 1<<3,
-  PASS_Event    = 1<<4  // WTF is this?
+  PASS_Event    = 1<<4,  // WTF is this?
+  PASS_HotSpot  = 1<<5
 };
 
 // Way to check Event Types
