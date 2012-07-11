@@ -189,28 +189,37 @@ bool DilTrigLogic::passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag
 				    uint evtFlag, DataStream stream)
 {
 
-  // From the twiki it appears we order based on lepton pt and require the stream
-  // based from this information. This will need to be cross-checked... Hopefully 
-  //cutflow will illuminate any issues.
+  // Classify as follows:
+  // Data -- Region A is from Egamma stream
+  // Data -- Region B is from Muon stream
+  // MC   -- Classify based on which ever is passed
 
-  bool isEM = ept > mpt && ( stream == Stream_Egamma || stream == Stream_MC );  
+  bool isEM = stream == Stream_Egamma;
+  bool isMC = stream == Stream_MC;
+
+  bool passRegA = false;
+  bool passRegB = false;
 
   // Region A
-  if( 14 < ept && 8 < mpt && isEM){
+  if( 14 < ept && 8 < mpt){
     bool evtPass = (evtFlag & TRIG_e12Tvh_medium1_mu8);
     bool ePass   = (eflag & TRIG_e12Tvh_medium1);
     bool mPass   = (mflag & TRIG_mu8);
-    return evtPass && ePass && mPass;
+    passRegA     = evtPass && ePass && mPass;
   }
 
   // Region B
-  if( 10 < ept && ept < 14 && 18 < mpt && isEM){
+  if( 10 < ept && ept < 14 && 18 < mpt){
     bool evtPass = (evtFlag & TRIG_mu18_tight_e7_medium1);
-    bool ePass   = (eflag & TRIG_e7_medium1); // **CHECK: e7 vs e7T ???
+    bool ePass   = (eflag & TRIG_e7_medium1); 
     bool mPass   = (mflag & TRIG_mu18_tight);
-    return evtPass && ePass && mPass;
+    passRegB     = evtPass && ePass && mPass;
   }
-  
+
+  if( isMC  ) return passRegA || passRegB;
+  if( isEM  ) return passRegA;
+  if( !isEM ) return passRegB;
+   
   // Not in region:
   return false;
   
