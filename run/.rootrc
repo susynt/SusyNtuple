@@ -1,0 +1,17 @@
+nix.*.Root.MacroPath:.:~/root_macros:$(ROOTSYS)/tutorials:$(PWD):$(PWD)/macros
+Unix*.Root.DynamicPath:.:~/rootlibs:$(LD_LIBRARY_PATH):$(PWD)
+Unix.*.Root.UseTTFonts:     true
+Unix.*.Root.TTFontPath:     $(ROOTSYS)/fonts
+Root.Html.OutputDir:.
+Root.Html.SourceDir:.:$(ROOTSYS)/src
+
+#
+#  next line tells ROOT to use rootlogon.C macro from the
+#  current directory and not any of the default ones
+#
+Rint.Load:
+Rint.Logon:          rootLogon.C
+Rint.Logoff:
+
+Root.MemStat:  1
+Root.ObjectStat:  1

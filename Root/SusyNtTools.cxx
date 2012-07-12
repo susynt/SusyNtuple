@@ -218,6 +218,11 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susy_nt, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSignalLepton(const Lepton* l, uint nVtx, bool isMC){
+  if( l->isEle() ) return isSignalElectron( (Electron*) l, nVtx, isMC);
+  else             return isSignalMuon( (Muon*) l, nVtx, isMC );
+};
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
 {
   if(!ele->tightPP) return false;
@@ -226,8 +231,9 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   if(ele->ptcone30/ele->Pt() >= ELECTRON_PTCONE30_PT_CUT) return false;
 
   // Sliding topo etcone isolation cut, slope differs between data/mc
-  float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
-  if( (ele->topoEtcone30Corr - slope*nVtx)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
+  //float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
+  //if( (ele->topoEtcone30Corr - slope*nVtx)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
+  if(eEtTopoConeCorr(ele,nVtx,isMC)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
 
   // Impact parameter
   //if(fabs(ele->d0/ele->errD0) >= ELECTRON_D0SIG_CUT) return false;
@@ -236,18 +242,40 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
   return true;
 }
+
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
 {
   // Sliding ptcone isolation cut, slope differs between data/mc
-  float slope = isMC? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
-  if( (mu->ptcone30 - slope*nVtx)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
+  //float slope = isMC? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
+  //if( (mu->ptcone30 - slope*nVtx)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
+  if(muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
 
   // Impact parameter
-  if(fabs(mu->d0/mu->errD0) >= MUON_D0SIG_CUT) return false;
-  if(fabs(mu->z0*sin(mu->Theta())) >= MUON_Z0_SINTHETA_CUT) return false;
+  //  if(fabs(mu->d0/mu->errD0) >= MUON_D0SIG_CUT) return false;
+  //if(fabs(mu->z0*sin(mu->Theta())) >= MUON_Z0_SINTHETA_CUT) return false;
+  if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
+  if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
+
   return true;
 }
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::eEtTopoConeCorr(const Electron* e, uint nVtx, bool isMC){
+  float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
+  return e->topoEtcone30Corr - slope*nVtx;
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::muPtConeCorr(const Muon* m, uint nVtx, bool isMC){
+    float slope = isMC? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
+    return m->ptcone30 - slope*nVtx;
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::muEtConeCorr(const Muon* m, uint nVtx, bool isMC){
+  float k1 = isMC? MUON_ETCONE30_K1_MC : MUON_ETCONE30_K1_DATA;
+  float k2 = isMC? MUON_ETCONE30_K2_MC : MUON_ETCONE30_K2_DATA;
+  return m->etcone30 - k1*nVtx - k2*nVtx*nVtx;
+}
+
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalJet(const Jet* jet)
 {

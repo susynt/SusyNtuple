@@ -62,6 +62,7 @@ class SusyNtTools
                         uint nVtx, bool isMC);
   
   // Check if Signal, now with mc/data dependent iso cuts
+  bool isSignalLepton(const Susy::Lepton* l, uint nVtx, bool isMC);
   bool isSignalElectron(const Susy::Electron* ele, uint nVtx, bool isMC);
   bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
   bool isSignalJet(const Susy::Jet* jet);
@@ -74,6 +75,13 @@ class SusyNtTools
       lep.push_back( muo.at( im ) );
   };
   
+  //
+  //Electron, Muon isolation correction for pileup
+  //
+  float eEtTopoConeCorr(const Susy::Electron* e, uint nVtx, bool isMC);
+  float muPtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
+  float muEtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
+
   // Get the Met, for the appropriate systematic
   Susy::Met* getMet(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
 

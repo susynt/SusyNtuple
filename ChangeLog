@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-07-12 Anyes
+	* Added isSignalLepton and iso nVtx dependency correction functions 
+	* Added to run directory macros to load/browse SusyNt at root prompt
+	  Running ROOT from this dir will load the macros and ATLASStyle automatically
+	
 2012-07-12 Steve
 	* Added functions to Lepton class for computing impact parameter variables:
 		* d0Sig()
