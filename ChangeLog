@@ -1,7 +1,14 @@
 # vim: set noexpandtab:
+
+2012-07-12 Steve
+	* Added functions to Lepton class for computing impact parameter variables:
+		* d0Sig()
+		* zoSinTheta()
+	* isSignal functions updated accordingly
+
 2012-07-11 Matt
 	* Committing change in emu trigger logic for MC
-	
+
 2012-07-10 Steve
 	* Added PASS_HotSpot flag
 	* Added unbiased impact parameters
@@ -12,7 +19,7 @@
 	* SusyNtAna: add function to debug event list
 	* SusyNtAna: move declaration of baseJets to header
 	* Add TGuiUtils
-	* Add McTruthClassifier
+	* Add McTruthClassifierDefs
 
 2012-07-06 Steve
 	* Deleted 2011 trigger bits (we were almost out of space)

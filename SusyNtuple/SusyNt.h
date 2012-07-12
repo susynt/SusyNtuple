@@ -95,6 +95,15 @@ namespace Susy
 
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
+      // functions to return impact parameter variables
+      // Note that these are not absolute valued!
+      float d0Sig() const {
+        return d0/errD0;
+      }
+      float z0SinTheta() const {
+        return z0 * sin(Theta());
+      }
+
       // trigger matching
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
       bool matchTrig(unsigned int mask) const {
@@ -120,7 +129,7 @@ namespace Susy
         Particle::clear();
       }
       
-      ClassDef(Lepton, 6);
+      ClassDef(Lepton, 7);
   };
 
   // Electron class
@@ -174,7 +183,6 @@ namespace Susy
 
       bool isCombined;          // Is combined muon, otherwise segment tagged
 
-      // Really not sure why we need this, or how it is defined.
       float thetaPV;            // Theta extrapolated to PV, by request.
       float etcone30;           // etcone iso
 

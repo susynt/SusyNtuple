@@ -124,6 +124,7 @@ void Met::print() const
 /*--------------------------------------------------------------------------------*/
 void Event::print() const
 {
-  cout << "Run " << run << " Event " << event << " Stream " << streamName(stream) << endl;
+  cout << "Run " << run << " Event " << event << " Stream " << streamName(stream) 
+       << " w " << w << endl;
 }
 
