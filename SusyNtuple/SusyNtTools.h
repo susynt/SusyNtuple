@@ -78,7 +78,7 @@ class SusyNtTools
   //
   //Electron, Muon isolation correction for pileup
   //
-  float eEtTopoConeCorr(const Susy::Electron* e, uint nVtx, bool isMC);
+  float elEtTopoConeCorr(const Susy::Electron* e, uint nVtx, bool isMC);
   float muPtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
   float muEtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
 
@@ -131,8 +131,8 @@ class SusyNtTools
   // Probably should be removed and this should be in people's code.
   //
   
-  void RemoveSFOSPair(ElectronVector &elecs, float Mll);
-  void RemoveSFOSPair(MuonVector &muons, float Mll);
+  void removeSFOSPair(ElectronVector &elecs, float MllCut);
+  void removeSFOSPair(MuonVector &muons, float MllCut);
 
   //
   // Top Tagger

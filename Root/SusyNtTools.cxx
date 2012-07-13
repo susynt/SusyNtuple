@@ -30,8 +30,8 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susy_nt, ElectronVector &elec
   //if(m_anaType == Ana_3Lep) 
   if(true)
   {
-    RemoveSFOSPair(elecs, 12);
-    RemoveSFOSPair(muons, 12);
+    removeSFOSPair(elecs, 12);
+    removeSFOSPair(muons, 12);
   }
 }
 /*--------------------------------------------------------------------------------*/
@@ -231,7 +231,7 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   if(ele->ptcone30/ele->Pt() >= ELECTRON_PTCONE30_PT_CUT) return false;
 
   // Sliding topo etcone isolation cut, slope differs between data/mc
-  if(eEtTopoConeCorr(ele,nVtx,isMC)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
+  if(elEtTopoConeCorr(ele,nVtx,isMC)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
 
   // Impact parameter
   if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
@@ -252,7 +252,7 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
   return true;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::eEtTopoConeCorr(const Electron* e, uint nVtx, bool isMC){
+float SusyNtTools::elEtTopoConeCorr(const Electron* e, uint nVtx, bool isMC){
   float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
   return e->topoEtcone30Corr - slope*nVtx;
 }
@@ -384,24 +384,26 @@ void SusyNtTools::m_m_overlap(MuonVector& muons, float minDr)
 /*--------------------------------------------------------------------------------*/
 // Methods to handle signal region cuts
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::RemoveSFOSPair(ElectronVector &elecs, float Mll)
+void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
 {
-  if( elecs.size() < 2 ) return;
+  if(elecs.size() < 2) return;
 
   for(int ie1=elecs.size()-1; ie1>=0; ie1--){
     const Electron* e1 = elecs.at(ie1);
     for(int ie2=ie1-1; ie2>=0; ie2--){
       const Electron* e2 = elecs.at(ie2);
-      if( !(e1->q * e2->q < 0 && (*e1 + *e2).M() < Mll) ) continue;
-      elecs.erase( elecs.begin() + ie1 );
-      ie1--; // removing another guy
-      elecs.erase( elecs.begin() + ie2 );
-      break;
+      //if( !(e1->q * e2->q < 0 && (*e1 + *e2).M() < MllCut) ) continue;
+      if(isSFOS(e1,e2) && Mll(e1,e2) < MllCut){
+        elecs.erase( elecs.begin() + ie1 );
+        ie1--; // removing another guy
+        elecs.erase( elecs.begin() + ie2 );
+        break;
+      }
     }
   }
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::RemoveSFOSPair(MuonVector &muons, float Mll)
+void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
 {
   if( muons.size() < 2 ) return;
 
@@ -409,11 +411,13 @@ void SusyNtTools::RemoveSFOSPair(MuonVector &muons, float Mll)
     const Muon* m1 = muons.at(im1);
     for(int im2=im1-1; im2>=0; im2--){
       const Muon* m2 = muons.at(im2);
-      if( !(m1->q * m2->q < 0 && (*m1 + *m2).M() < Mll) ) continue;
-      muons.erase( muons.begin() + im1 );
-      im1--; // removing another guy
-      muons.erase( muons.begin() + im2 );
-      break;
+      //if( !(m1->q * m2->q < 0 && (*m1 + *m2).M() < MllCut) ) continue;
+      if(isSFOS(m1,m2) && Mll(m1,m2) < MllCut){
+        muons.erase( muons.begin() + im1 );
+        im1--; // removing another guy
+        muons.erase( muons.begin() + im2 );
+        break;
+      }
     }
   }
 }
