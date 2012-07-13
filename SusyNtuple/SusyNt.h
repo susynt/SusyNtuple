@@ -372,7 +372,7 @@ namespace Susy
         wPileup = wPileup1fb = xsec = lumiSF = sumw = pdfSF = 0;
       }
 
-      ClassDef(Event, 9);
+      ClassDef(Event, 10);
   };
 
 };

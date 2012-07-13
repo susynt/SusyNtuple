@@ -67,7 +67,7 @@ class SusyNtTools
   bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
   bool isSignalJet(const Susy::Jet* jet);
 
-  // Build Lepton vector
+  // Build Lepton vector - we should probably sort them here
   void buildLeptons(LeptonVector &lep, ElectronVector &ele, MuonVector &muo){
     for(uint ie=0; ie<ele.size(); ++ie)
       lep.push_back( ele.at( ie ) );

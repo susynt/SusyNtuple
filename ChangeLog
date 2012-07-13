@@ -1,10 +1,20 @@
 # vim: set noexpandtab:
 
+2012-07-13 Steve
+	* Added global constants LUMI_A_B3 and LUMI_A_B14
+	* Updated getEventWeight functions in SusyNtAna for calculating
+	  the lumi, pileup, xsec combined weight
+		* getEventWeight() gets the default weight for A-B14
+			* This function can also take a lumi argument, 
+			  but the pileup weights will correspond to A-B14
+		* getEventWeight1fb() gets the weight for A-B3
+	* Tagging SusyNtuple-00-00-13
+
 2012-07-12 Anyes
 	* Added isSignalLepton and iso nVtx dependency correction functions 
 	* Added to run directory macros to load/browse SusyNt at root prompt
 	  Running ROOT from this dir will load the macros and ATLASStyle automatically
-	
+
 2012-07-12 Steve
 	* Added functions to Lepton class for computing impact parameter variables:
 		* d0Sig()

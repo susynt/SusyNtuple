@@ -33,6 +33,9 @@ namespace Susy
 //const double GeV = 1000.;
 const float MZ = 91.2;
 
+const float LUMI_A_B3  = 1037.;
+const float LUMI_A_B14 = 5381.;
+
 //-----------------------------------------------------------------------------------
 // Convenience typedefs
 //-----------------------------------------------------------------------------------
@@ -117,7 +120,7 @@ enum EventCheck
   PASS_BadJet   = 1<<1,
   PASS_BadMuon  = 1<<2,
   PASS_Cosmic   = 1<<3,
-  PASS_Event    = 1<<4,  // WTF is this?
+  PASS_Event    = 1<<4,
   PASS_HotSpot  = 1<<5
 };
 
@@ -171,8 +174,10 @@ bool hasZ(const LeptonVector& leps, float massWindow=10.);
 void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
 
 // New MV1
-bool hasBJet(const JetVector& jets, float weight=0.905363);
-bool isBJet(const Susy::Jet* jet, float weight=0.905363);
+const float MV1_60 = 0.905363;
+const float MV1_85 = 0.0714225;
+bool hasBJet(const JetVector& jets, float weight=MV1_60);
+bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
 
 // for pointer sorting
 bool comparePt(const TLorentzVector* p1, const TLorentzVector* p2);
@@ -189,18 +194,6 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
 // Trigger enums - try to respect backwards compatibility by adding to the end
 enum TrigBit
 {
-  // 2011 triggers 
-  //BIT_e20_medium = 0,
-  //BIT_e22_medium,
-  //BIT_e22vh_medium1,
-  //BIT_2e12_medium,
-  //BIT_2e12T_medium,
-  //BIT_2e12Tvh_medium,
-  //BIT_mu18,
-  //BIT_mu18_medium,
-  //BIT_2mu10_loose,
-  //BIT_e10_medium_mu6,
-
   // 2012 triggers
   BIT_e7_medium1 = 0,
   BIT_e12Tvh_loose1,
@@ -234,22 +227,6 @@ enum TrigBit
 //
 // Trigger bit masks - could in principle represent multiple chains at once
 //
-
-// 2011 Trigger bit masks 
-// electron
-
-//const uint TRIG_e20_medium      = 1<<BIT_e20_medium;
-//const uint TRIG_e22_medium      = 1<<BIT_e22_medium;
-//const uint TRIG_e22vh_medium1   = 1<<BIT_e22vh_medium1;
-//const uint TRIG_2e12_medium     = 1<<BIT_2e12_medium;
-//const uint TRIG_2e12T_medium    = 1<<BIT_2e12T_medium;
-//const uint TRIG_2e12Tvh_medium  = 1<<BIT_2e12Tvh_medium;
-// muon
-//const uint TRIG_mu18            = 1<<BIT_mu18;
-//const uint TRIG_mu18_medium     = 1<<BIT_mu18_medium;
-//const uint TRIG_2mu10_loose     = 1<<BIT_2mu10_loose;
-// e-mu
-//const uint TRIG_e10_medium_mu6  = 1<<BIT_e10_medium_mu6;
 
 // 2012 Trigger bit masks
 const uint TRIG_e7_medium1              = 1<<BIT_e7_medium1;
