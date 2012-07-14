@@ -2,6 +2,8 @@
 
 2012-07-14 Steve
 	* Added getEventWeight functions to SusyNtTools
+	* Added passHotSpot function to SusyNtTools
+	* Fixed jets in dumpBaselineObjects
 
 2012-07-13 Steve
 	* Rename SusyNtTools method RemoveSFOSPair -> removeSFOSPair

@@ -127,20 +127,23 @@ class SusyNtTools
     // Event level checks
     //
   
-    // No electron or jet in the LAr hole
-    bool passLAr(int flag)     { return ( flag & PASS_LAr );     };
+    // No electron or jet in the LAr hole - shouldn't be used anymore
+    bool passLAr(int flag)     { return ( flag & PASS_LAr );     }
+
+    // Pass Tile hot spot veto
+    bool passHotSpot(int flag) { return ( flag & PASS_HotSpot ); }
   
     // Pass the Bad Jet requirement
-    bool passBadJet(int flag)  { return ( flag & PASS_BadJet );  };
+    bool passBadJet(int flag)  { return ( flag & PASS_BadJet );  }
     
     // Pass the Bad Muon requirement
-    bool passBadMuon(int flag) { return ( flag & PASS_BadMuon ); };
+    bool passBadMuon(int flag) { return ( flag & PASS_BadMuon ); }
     
     // No cosmic muons
-    bool passCosmic(int flag)  { return ( flag & PASS_Cosmic );  };
+    bool passCosmic(int flag)  { return ( flag & PASS_Cosmic );  }
     
     // Pass All the above, incase you don't care about cut flow
-    bool passAll(int flag)     { return ( flag & PASS_Event );   };
+    bool passAll(int flag)     { return ( flag & PASS_Event );   }
   
     //
     // Top Tagger

@@ -245,12 +245,10 @@ void SusyNtAna::dumpBaselineObjects()
     cout << "  ";
     m_baseMuons[iMu]->print();
   }
-  // baseline jets are already stored in the SusyNt
   cout << "Baseline jets" << endl;
-  uint nJet = nt.jet()->size();
-  for(uint iJ=0; iJ < nJet; iJ++){
+  for(uint iJ=0; iJ < m_baseJets.size(); iJ++){
     cout << "  ";
-    nt.jet()->at(iJ).print();
+    m_baseJets[iJ]->print();
   }
 }
 /*--------------------------------------------------------------------------------*/
