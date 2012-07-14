@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-07-14 Steve
+	* Added getEventWeight functions to SusyNtTools
+
 2012-07-13 Steve
 	* Rename SusyNtTools method RemoveSFOSPair -> removeSFOSPair
 	* Also modified this function to use the isSFOS and Mll functions

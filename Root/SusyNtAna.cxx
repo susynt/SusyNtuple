@@ -147,18 +147,18 @@ bool SusyNtAna::checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, 
 /*--------------------------------------------------------------------------------*/
 float SusyNtAna::getEventWeight(float lumi)
 {
-  // If data, these should all be one
-  const Event* evt = nt.evt();
+  //const Event* evt = nt.evt();
   //return evt->w * evt->wPileup * evt->xsec * evt->lumiSF;
-  return evt->w * evt->wPileup * evt->xsec * lumi / evt->sumw;
+  //return evt->w * evt->wPileup * evt->xsec * lumi / evt->sumw;
+  return SusyNtTools::getEventWeight(nt.evt(), lumi);
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtAna::getEventWeight1fb()
 {
-  // If data, these should all be one
-  const Event* evt = nt.evt();
+  //const Event* evt = nt.evt();
   //return evt->w * evt->wPileup * evt->xsec * evt->lumiSF;
-  return evt->w * evt->wPileup1fb * evt->xsec * LUMI_A_B3 / evt->sumw;
+  //return evt->w * evt->wPileup1fb * evt->xsec * LUMI_A_B3 / evt->sumw;
+  return SusyNtTools::getEventWeight1fb(nt.evt());
 }
 
 /*--------------------------------------------------------------------------------*/
