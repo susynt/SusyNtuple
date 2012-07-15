@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-07-15 Steve
+	* Fixed electron etcone slope definition, it was still at the incorrect value
+	* Tagging SusyNtuple-00-00-14
+
 2012-07-14 Steve
 	* Added getEventWeight functions to SusyNtTools
 	* Added passHotSpot function to SusyNtTools

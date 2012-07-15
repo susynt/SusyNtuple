@@ -253,6 +253,7 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   // Impact parameter
   if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
   if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+
   return true;
 }
 

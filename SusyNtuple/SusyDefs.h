@@ -284,7 +284,7 @@ const float JET_ETA_CUT      = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
 // Signal Requirements
 const float ELECTRON_PTCONE30_PT_CUT       = 0.16; 
 const float ELECTRON_TOPOCONE30_SLOPE_DATA = 0.02015;
-const float ELECTRON_TOPOCONE30_SLOPE_MC   = 0.001794;
+const float ELECTRON_TOPOCONE30_SLOPE_MC   = 0.01794;
 const float ELECTRON_TOPOCONE30_PT_CUT     = 0.18;
 const float ELECTRON_D0SIG_CUT             = 5.0;
 const float ELECTRON_Z0_SINTHETA_CUT       = 0.4;
