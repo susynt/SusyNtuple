@@ -36,25 +36,33 @@ string streamName(DataStream stream)
 /*--------------------------------------------------------------------------------*/
 DataPeriod getDataPeriod(uint run)
 {
-  if(run <= 178109) return Period_B;
-  else if(run <= 180481) return Period_D;
-  else if(run <= 180776) return Period_E;
-  else if(run <= 182519) return Period_F;
-  else if(run <= 183462) return Period_G;
-  else if(run <= 184169) return Period_H;
-  else if(run <= 186493) return Period_I;
-  else if(run <= 186755) return Period_J;
-  else if(run <= 187815) return Period_K;
-  else if(run <= 190343) return Period_L;
-  else return Period_M;
+  if     (run <= 201556) return Period_A;
+  else if(run <= 202798) return Period_B1;
+  else if(run <= 203027) return Period_B2;
+  else if(run <= 203195) return Period_B3;
+  else if(run <= 203524) return Period_B4;
+  else if(run <= 203680) return Period_B5;
+  else if(run <= 203792) return Period_B6;
+  else if(run <= 203876) return Period_B7;
+  else if(run <= 204073) return Period_B8;
+  else if(run <= 204158) return Period_B9;
+  else if(run <= 204442) return Period_B10;
+  else if(run <= 204668) return Period_B11;
+  else if(run <= 205017) return Period_B12;
+  else if(run <= 205071) return Period_B13;
+  else return Period_B14;
 }
 /*--------------------------------------------------------------------------------*/
-McPeriod getMcPeriod(uint run)
+McPeriod getMcPeriod(uint)
 {
-  if(run <= 180481) return McPeriod_BD;
-  else if(run <= 184169) return McPeriod_EH;
-  else if(run <= 187815) return McPeriod_IK;
-  else return McPeriod_LM;
+  return McPeriod_AB;
+}
+/*--------------------------------------------------------------------------------*/
+bool isPeriodAB3(uint run)
+{
+  DataPeriod period = getDataPeriod(run);
+  if(period >= Period_A && period <= Period_B3) return true;
+  else return false;
 }
 
 /*--------------------------------------------------------------------------------*/

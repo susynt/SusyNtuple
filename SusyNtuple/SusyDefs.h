@@ -63,27 +63,28 @@ enum DataStream
 // Enum for Data Periods
 enum DataPeriod
 {
-  Period_B = 0,
-  Period_D,
-  Period_E,
-  Period_F,
-  Period_G,
-  Period_H,
-  Period_I,
-  Period_J,
-  Period_K,
-  Period_L,
-  Period_M,
+  Period_A = 0,
+  Period_B1,
+  Period_B2,
+  Period_B3,
+  Period_B4,
+  Period_B5,
+  Period_B6,
+  Period_B7,
+  Period_B8,
+  Period_B9,
+  Period_B10,
+  Period_B11,
+  Period_B12,
+  Period_B13,
+  Period_B14,
   Period_Num
 };
 
 // MC periods have less granularity than data
 enum McPeriod
 {
-  McPeriod_BD = 0,
-  McPeriod_EH,
-  McPeriod_IK,
-  McPeriod_LM,
+  McPeriod_AB = 0,
   McPeriod_Num
 };
 
@@ -158,6 +159,7 @@ class LepInfo
 std::string streamName(DataStream);
 DataPeriod  getDataPeriod(uint run);
 McPeriod    getMcPeriod(uint run);
+bool        isPeriodAB3(uint run);
 
 bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
 bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);

@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-07-17 Steve
+	* Updated DataPeriod enum to cover A and B1-B14
+
 2012-07-15 Steve
 	* Fixed electron etcone slope definition, it was still at the incorrect value
 	* Tagging SusyNtuple-00-00-14
