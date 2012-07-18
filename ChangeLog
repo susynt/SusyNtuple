@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-07-18 Anyes
+	* Updated TriTrigLogic to remove the dependency on SusyNt pointer. Evt now pass in argument.
+	Susy3LepCutflow.cxx updated accordingly
+	
 2012-07-17 Steve
 	* Updated DataPeriod enum to cover A and B1-B14
 

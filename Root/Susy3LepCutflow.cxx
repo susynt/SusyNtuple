@@ -60,7 +60,7 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
     abort();
   }
 
-  m_trigObj = new TrilTrigLogic(&nt);
+  m_trigObj = new TrilTrigLogic();
   m_trigObj->loadTriggerMaps();
 }
 
@@ -155,7 +155,7 @@ bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons)
   //cout << endl << "----------------------------------------------------------------" << endl;
   //nt.evt()->print();
   //dumpSignalObjects();
-  if(!m_trigObj->passTriggerMatching(leptons)) return false;
+  if(!m_trigObj->passTriggerMatching(leptons, nt.evt())) return false;
   n_pass_trig++;
   return true;
 }

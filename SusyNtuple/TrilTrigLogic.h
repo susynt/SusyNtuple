@@ -7,6 +7,7 @@
 #include "ReweightUtils/APReweightND.h"
 #include "ReweightUtils/APEvtWeight.h"
 
+#include "SusyNt.h"
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtObject.h"
 
@@ -17,12 +18,14 @@
 
 */
 
+using namespace Susy;
+
 class TrilTrigLogic
 {
 
   public:
 
-    TrilTrigLogic(Susy::SusyNtObject* nt);
+    TrilTrigLogic();
     ~TrilTrigLogic();
 
     // Load the reweighters with maps from input files
@@ -30,18 +33,15 @@ class TrilTrigLogic
     APReweightND* loadTrigWeighter(TFile* f, TString chain);
 
     // Trigger matching in data (and MC at the moment)
-    bool passTriggerMatching(const LeptonVector& leptons);
+    bool passTriggerMatching(const LeptonVector& leptons, Event* evt);
 
     // Trigger reweighting in MC
-    float getTriggerWeight(const LeptonVector& leptons);
+    float getTriggerWeight(const LeptonVector& leptons, Event* evt);
 
     // Debug info
     void setDebug(bool doIt=true) { m_dbg = doIt; }
 
   protected:
-
-    Susy::SusyNtObject* m_nt;   // SusyNt interface
-
     int                 m_dbg;
 
 };

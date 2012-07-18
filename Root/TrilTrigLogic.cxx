@@ -10,9 +10,8 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-TrilTrigLogic::TrilTrigLogic(SusyNtObject* nt)
+TrilTrigLogic::TrilTrigLogic()
 {
-  m_nt = nt;
   m_dbg=0;
 }
 
@@ -54,9 +53,9 @@ APReweightND* TrilTrigLogic::loadTrigWeighter(TFile* f, TString name)
 // Trigger matching for data
 // Being updated for 2012
 /*--------------------------------------------------------------------------------*/
-bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
+bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, Event* evt)
 {
-  DataStream stream = m_nt->evt()->stream;
+  DataStream stream = evt->stream;
 
   // Temporary 2012 prescription
   // Take the inclusive OR of all triggers for which the plateau is satisfied
@@ -195,9 +194,9 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons)
 /*--------------------------------------------------------------------------------*/
 // Trigger reweighting for MC
 /*--------------------------------------------------------------------------------*/
-float TrilTrigLogic::getTriggerWeight(const LeptonVector& leptons)
+float TrilTrigLogic::getTriggerWeight(const LeptonVector& leptons, Event* evt)
 {
-  DataStream stream = m_nt->evt()->stream;
+  DataStream stream = evt->stream;
   if(stream!=Stream_MC) return 1;
 
   // for now...
