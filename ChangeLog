@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-07-19 Steve
+	* Tagging SusyNtuple-00-00-15
+
 2012-07-18 Anyes
 	* Updated SusyDefs with new functions to sel Z
 	* Updated SusyNtTools to use cut values in SusyDefs, 
