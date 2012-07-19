@@ -1,5 +1,8 @@
 #include "SusyNtuple/SusyNtTools.h"
 
+// Common Packages
+#include "Mt2/mt2_bisect.h" 
+
 using namespace std;
 using namespace Susy;
 
@@ -8,7 +11,7 @@ using namespace Susy;
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() :
-        m_anaType(Ana_3Lep)
+  m_anaType(Ana_3Lep)
 {}
 
 /*--------------------------------------------------------------------------------*/
@@ -42,14 +45,10 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susy_nt, ElectronVector &elec
   // Now perform the overlap removals
   performOverlap(elecs, muons, jets);
 
-  // Do SFOS removal for Mll < 20 
-  // Now both analyses are doing this!
-  //if(m_anaType == Ana_3Lep) 
-  if(true)
-  {
-    removeSFOSPair(elecs, 12);
-    removeSFOSPair(muons, 12);
-  }
+  // Do SFOS removal for Mll < 12 
+  removeSFOSPair(elecs, MLL_MIN);
+  removeSFOSPair(muons, MLL_MIN);
+
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,
@@ -295,7 +294,7 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
   
   if(jet->Pt() < JET_PT_CUT)         return false;
   if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
-  if(jet->jvf < 0.50)                return false;
+  if(jet->jvf < JET_JVF_CUT)         return false;
   return true;
 }
 
@@ -443,7 +442,7 @@ void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
 /*--------------------------------------------------------------------------------*/
 // Methods to grab useful quantities
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets)
+float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt)
 {
   const TLorentzVector metLV = met->lv();
   float dPhi = TMath::Pi()/2.;
@@ -453,6 +452,7 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
       dPhi = fabs(metLV.DeltaPhi( *leptons.at(il) ));
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* jet = jets.at(ij);
+    if(jet->Pt()<minJetPt) continue;
     if( fabs(metLV.DeltaPhi( *jet )) < dPhi )
       dPhi = fabs(metLV.DeltaPhi( *jet ));    
   }// end loop over jets
@@ -469,7 +469,7 @@ bool SusyNtTools::passTopTag(const LeptonVector& leptons, const JetVector& jets,
   // Defaults opt = 0, ptJetCut = 30 GeV, mEffCut = 100 GeV
   // Tagging is based on number of jets and at least two leptons
   if( leptons.size() < 2 ) return false;
-  
+
   // Define some necessary vars
   uint njets         = jets.size();
   uint njetscan      = njets < 3 ? njets : 3; // Only consider up to 3 jets 
@@ -617,3 +617,24 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
   return mct;
 }
 
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getMT2(const LeptonVector& leptons, const Susy::Met* met)
+{
+  if( leptons.size() < 2 ) return -999;
+
+  // necessary variables
+  TLorentzVector metlv = met->lv();
+  TLorentzVector l0    = *leptons.at(0);
+  TLorentzVector l1    = *leptons.at(1);
+
+  double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
+  double pA[3]     = {0.0, l0.Px(), l0.Py()};
+  double pB[3]     = {0.0, l1.Px(), l1.Py()};
+  
+  // Create Mt2 object
+  mt2_bisect::mt2 mt2_event;
+  mt2_event.set_momenta(pA,pB,pTMiss);
+  mt2_event.set_mn(0); // LSP mass = 0 is Generic
+  
+  return mt2_event.get_mt2();
+}

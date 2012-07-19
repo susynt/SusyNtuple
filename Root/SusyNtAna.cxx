@@ -80,13 +80,6 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   // select signal objects
   selectObjects();
 
-  if(m_signalLeptons.size() >= 3){
-    
-    //evtlist << nt.evt()->run << " " << nt.evt()->event << " " << m_signalElectrons.size() << " "
-	    //<< m_signalMuons.size() << " " << m_signalJets.size() << endl;
-
-  }
-
   return kTRUE;
 }
 

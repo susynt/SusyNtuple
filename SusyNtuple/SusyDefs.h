@@ -172,7 +172,9 @@ float Mt(const Susy::Lepton* lep, const Susy::Met* met);
 float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
 
 bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
+bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, float minMll=MZ-10, float maxMll=MZ+10);
 bool hasZ(const LeptonVector& leps, float massWindow=10.);
+bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
 void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
 
 // New MV1
@@ -273,6 +275,9 @@ stringvector getTrigChains();
 // Pt
 const float ELECTRON_PT_CUT  = 10; // GeV
 const float MUON_PT_CUT      = 10; // GeV
+
+const float MLL_MIN          = 12;
+
 // TODO: Do we have a common jet pt cut now?
 const float JET_PT_CUT_3L    = 20; // GeV
 const float JET_PT_CUT_2L    = 30; // GeV
@@ -282,6 +287,7 @@ const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
 const float MUON_ETA_CUT     = 2.4;  // Currently applied in SusyNtMaker
 const float JET_ETA_CUT      = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
                                      // --> No, 2.5 is SIGNAL JET eta!!
+const float JET_JVF_CUT      = 0.5;  
 
 // Signal Requirements
 const float ELECTRON_PTCONE30_PT_CUT       = 0.16; 

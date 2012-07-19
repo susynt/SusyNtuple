@@ -92,6 +92,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
     RunEventMap _eventList;   //run:event to debug 
     void setEvtDebug() {m_dbgEvt=true;}
+    bool dbgEvt() const {return m_dbgEvt;}
     void loadEventList();
     bool processThisEvent(unsigned int run, unsigned int event);
     bool checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event);

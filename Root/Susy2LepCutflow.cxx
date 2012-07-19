@@ -443,24 +443,8 @@ bool Susy2LepCutflow::passdPhi(TLorentzVector v0, TLorentzVector v1, float cut)
 /*--------------------------------------------------------------------------------*/
 bool Susy2LepCutflow::passMT2(const LeptonVector& leptons, const Met* met, float cut)
 {
-  if( leptons.size() < 2 ) return false;
-
-  // necessary variables
-  TLorentzVector metlv = met->lv();
-  TLorentzVector l0    = *leptons.at(0);
-  TLorentzVector l1    = *leptons.at(1);
-
-  double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
-  double pA[3]     = {0.0, l0.Px(), l0.Py()};
-  double pB[3]     = {0.0, l1.Px(), l1.Py()};
-  
-  // Create Mt2 object
-  mt2_bisect::mt2 mt2_event;
-  mt2_event.set_momenta(pA,pB,pTMiss);
-  mt2_event.set_mn(0); // LSP mass = 0 is Generic
-  
-  return (mt2_event.get_mt2() > cut);
-  
+  float mT2 = getMT2(leptons, met);
+  return (mT2 > cut);
 }
 
 /*--------------------------------------------------------------------------------*/

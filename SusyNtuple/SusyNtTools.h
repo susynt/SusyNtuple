@@ -162,8 +162,11 @@ class SusyNtTools
     // Methods to get useful quantities
     // 
   
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets);
+    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt=-1);
   
+    float getMT2(const LeptonVector& leptons, const Susy::Met* met);
+    
+
     //
     // Methods to handle Trigger checking
     //

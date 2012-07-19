@@ -138,6 +138,12 @@ float Meff(const LeptonVector& leps, const JetVector& jets, const Met* met)
 bool isZ(const Lepton* l1, const Lepton* l2, float massWindow)
 { return isSFOS(l1,l2) && fabs( Mll(l1,l2)-MZ ) < massWindow; }
 
+bool isZWindow(const Lepton* l1, const Lepton* l2, float minMll, float maxMll)
+{ 
+  float mll=Mll(l1,l2);
+  return (isSFOS(l1,l2) && mll>minMll && mll<maxMll); 
+}
+
 bool hasZ(const LeptonVector& leps, float massWindow)
 {
   for(uint i=0; i<leps.size(); i++){
@@ -147,6 +153,16 @@ bool hasZ(const LeptonVector& leps, float massWindow)
   }
   return false;
 }
+bool hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
+{
+  for(uint i=0; i<leps.size(); i++){
+    for(uint j=i+1; j<leps.size(); j++){
+      if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
+    }
+  }
+  return false;
+}
+
 
 void bestZ(uint& l1, uint& l2, const LeptonVector& leps)
 {
