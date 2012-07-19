@@ -299,11 +299,12 @@ const float ELECTRON_Z0_SINTHETA_CUT       = 0.4;
 
 const float MUON_PTCONE30_SLOPE_DATA = 0.01098;
 const float MUON_PTCONE30_SLOPE_MC   = 0.00627;
-const float MUON_ETCONE30_K1_DATA = 0.00648;
-const float MUON_ETCONE30_K2_DATA = 0.00098;
-const float MUON_ETCONE30_K1_MC   = 0.0692;
-const float MUON_ETCONE30_K2_MC   = 0.00076;
 const float MUON_PTCONE30_PT_CUT     = 0.12;
+const float MUON_ETCONE30_K1_DATA    = 0.00648;
+const float MUON_ETCONE30_K2_DATA    = 0.00098;
+const float MUON_ETCONE30_K1_MC      = 0.0692;
+const float MUON_ETCONE30_K2_MC      = 0.00076;
+const float MUON_ETCONE30_PT_CUT     = 0.12;
 const float MUON_D0SIG_CUT           = 3.0;
 const float MUON_Z0_SINTHETA_CUT     = 1.0;
 

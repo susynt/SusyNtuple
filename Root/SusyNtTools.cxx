@@ -10,9 +10,10 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-SusyNtTools::SusyNtTools() :
-  m_anaType(Ana_3Lep)
-{}
+SusyNtTools::SusyNtTools() : 
+        m_anaType(Ana_3Lep)
+{
+}
 
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
@@ -261,6 +262,10 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
 {
   // Sliding ptcone isolation cut, slope differs between data/mc
   if(muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
+
+  // etcone isolation cut
+  // DON'T APPLY THIS FOR NOW - just here for studies
+  //if(muEtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
 
   // Impact parameter
   if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;

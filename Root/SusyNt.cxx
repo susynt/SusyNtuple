@@ -99,7 +99,7 @@ void Jet::print() const
   cout << fixed << "Jet : pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
        << " phi " << setw(5) << Phi()
        << " jvf " << setw(4) << jvf
-       << " btag " << setw(5) << combNN
+       << " mv1 " << setw(5) << mv1
        // No way do we want to see this every time we print
        //<< " jer " << jer << " jes_up " << jes_up << " jes_dn " << jes_dn
        << endl;

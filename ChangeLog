@@ -3,13 +3,13 @@
 2012-07-18 Anyes
 	* Updated SusyDefs with new functions to sel Z
 	* Updated SusyNtTools to use cut values in SusyDefs, 
-	added minJetPt to metRel calc
-	added mT2 computation (moved on Susy2LepCutflow code)
-	
+	* added minJetPt to metRel calc
+	* added mT2 computation (moved on Susy2LepCutflow code)
+
 2012-07-18 Anyes
 	* Updated TriTrigLogic to remove the dependency on SusyNt pointer. Evt now pass in argument.
-	Susy3LepCutflow.cxx updated accordingly
-	
+	* Susy3LepCutflow.cxx updated accordingly
+
 2012-07-17 Steve
 	* Updated DataPeriod enum to cover A and B1-B14
 
