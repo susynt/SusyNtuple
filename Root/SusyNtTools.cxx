@@ -410,6 +410,33 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
 {
   if(elecs.size() < 2) return;
 
+  // This may not be the most clever way but I 
+  // don't see a convenient way to use erase
+  // and keep track of all the leptons to remove...
+
+  vector<uint> removing;
+  ElectronVector temp = elecs;
+  elecs.clear();
+
+  for(uint ie1 = 0; ie1<temp.size()-1; ++ie1){
+    const Electron* e1 = temp.at(ie1);
+    for(uint ie2 = ie1+1; ie2<temp.size(); ++ie2){
+      const Electron* e2 = temp.at(ie2);
+      if(isSFOS(e1,e2) && Mll(e1,e2) < MllCut){
+	removing.push_back(ie1);
+	removing.push_back(ie2);
+      }
+    }
+  }
+
+  for(uint ie=0; ie<temp.size(); ++ie){
+    bool keep = true;
+    for(uint i=0; i<removing.size(); ++i)
+      if( ie == removing.at(i) ) keep = false;
+    if( keep ) elecs.push_back(temp.at(ie));
+  }
+  
+  /*
   for(int ie1=elecs.size()-1; ie1>=0; ie1--){
     const Electron* e1 = elecs.at(ie1);
     for(int ie2=ie1-1; ie2>=0; ie2--){
@@ -423,12 +450,37 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
       }
     }
   }
+  */
+
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
 {
   if( muons.size() < 2 ) return;
+  vector<uint> removing;
+  MuonVector temp = muons;
+  muons.clear();
 
+  for(uint im1 = 0; im1<temp.size()-1; ++im1){
+    const Muon* m1 = temp.at(im1);
+    for(uint im2 = im1+1; im2<temp.size(); ++im2){
+      const Muon* m2 = temp.at(im2);
+      if(isSFOS(m1,m2) && Mll(m1,m2) < MllCut){
+	removing.push_back(im1);
+	removing.push_back(im2);
+      }
+    }
+  }
+
+  for(uint im=0; im<temp.size(); ++im){
+    bool keep = true;
+    for(uint i=0; i<removing.size(); ++i)
+      if( im == removing.at(i) ) keep = false;
+    if( keep ) muons.push_back(temp.at(im));
+  }
+
+
+  /*
   for(int im1=muons.size()-1; im1>=0; im1--){
     const Muon* m1 = muons.at(im1);
     for(int im2=im1-1; im2>=0; im2--){
@@ -442,6 +494,8 @@ void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
       }
     }
   }
+  */
+
 }
 
 /*--------------------------------------------------------------------------------*/

@@ -22,6 +22,21 @@
 using namespace Susy;
 using namespace std;
 
+
+enum DilTriggerRegion
+{
+  DTR_EE_A = 0,
+  DTR_EE_B,
+  DTR_MM_A,
+  DTR_MM_B,
+  DTR_MM_C,
+  DTR_MM_D,
+  DTR_EM_A,
+  DTR_EM_B,
+  DTR_UNKNOWN,
+  DTR_N
+};
+
 class DilTrigLogic
 {
 
@@ -31,27 +46,24 @@ class DilTrigLogic
   DilTrigLogic(bool isMC);
   virtual ~DilTrigLogic();
 
-  // Clear any vars stored
-  void clear(){
-    //period = UNKNOWNPERIOD;
-    m_elecs.clear();
-    m_muons.clear();
-  };
-
-  // General method to obtain result
+  // Three basic methods to interact with the trigger package:
+  // 1.) return true if event and objects match to correct trigger.
+  // 2.) return true if correct event trigger fired
+  // 3.) return true if objects match to correct trigger
   bool passDilTrig(LeptonVector leptons, Event* evt);
+  bool passDilEvtTrig(LeptonVector leptons, Event* evt);
+  bool passDilTrigMatch(LeptonVector leptons, Event* evt);
 
-  // Event Type methods
-  bool passEE(ElectronVector elecs, uint evtFlag);
-  bool passMM(MuonVector muons, uint evtFlag);
-  bool passEM(ElectronVector elecs, MuonVector muons, uint evtFlag, DataStream stream);
-
-  // Pass trigger regions
   // Regions taken from this talk: 
   // https://indico.cern.ch/getFile.py/access?contribId=1&resId=0&materialId=slides&confId=199022
-  bool passEETrigRegion(float pt0, float pt1, uint flag0, uint flag1, uint evtFlag);
-  bool passMMTrigRegion(float pt0, float pt1, uint flag0, uint flag1, uint evtFlag);
-  bool passEMTrigRegion(float ept, float mpt, uint eflag, uint mflag, uint evtFlag, DataStream stream);
+  // pt0 = leading Pt, pt1 = subleading Pt.
+  DilTriggerRegion getEETrigRegion(float pt0, float pt1);
+  DilTriggerRegion getMMTrigRegion(float pt0, float pt1);
+  DilTriggerRegion getEMTrigRegion(float ept, float mpt);
+
+  // Methods to check Evt Trigger and trigger matching
+  bool passEvtTrigger(uint evtflag, DilTriggerRegion dtr);
+  bool passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr);
 
   // MC will need to be reweighted
   float getMCWeight();
@@ -62,16 +74,8 @@ class DilTrigLogic
   //APReweightND* getEleTrigWeighter(uint trigFlag);
   //APReweightND* getMuoTrigWeighter(uint trigFlag);  
   
-  // Add a method to set the electron and muon vector.
-  // Will make it easier for methods to access 
-  // the specific leptons it needs
-  void setLeptons(LeptonVector leps);
-  
   // Debug method
   void debugFlag(uint flag);
-
-  // Set latest logic
-  void setLatestLogic(bool logic){ m_latestLogic = logic; }; // Not used 
 
  protected:
 
@@ -106,10 +110,8 @@ class DilTrigLogic
  private:
    
   //Period              period;             // Period
-  ElectronVector      m_elecs;              // Electron vector for easy access
-  MuonVector          m_muons;              // Muon vector for easy access
-
-  bool                m_latestLogic;        // Use latest logic or not. Anders not updated yet, so this is for comparison
+  //ElectronVector      m_elecs;              // Electron vector for easy access
+  //MuonVector          m_muons;              // Muon vector for easy access
 
 };
 

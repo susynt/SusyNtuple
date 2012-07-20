@@ -101,9 +101,13 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons)
     if(!isE) nm++;
   }
 
-  if( ne == 1 && nm == 1 ) return ET_em;
   if( ne == 2 && nm == 0 ) return ET_ee;
   if( ne == 0 && nm == 2 ) return ET_mm;
+  if( ne == 1 && nm == 1 ){
+    const Lepton* el = leptons[0]->isEle() ? leptons[0] : leptons[1];
+    const Lepton* mu = leptons[0]->isEle() ? leptons[1] : leptons[0];
+    return el->Pt() > mu->Pt() ? ET_em : ET_me;
+  }
   cout << "Error: Unable to classify dilepton event with "
        << ne << " electrons and " << nm << " muons!" << endl;
 
