@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-07-25 Steve
+	* Updated usage of removeSFOSPair function
+	* Adding a Tau class, mostly empty so far
+	* Correcting MUON_ETCONE30_K1_DATA constant
+
 2012-07-20 Matt
 	* Added ET_me to DiLepEvtType
 	* Updated method to retrieve DiLepEvtType
@@ -7,7 +12,7 @@
 	       * Call passDilTrig() to see if event and trigger matching pass
 	       * Call passDilEvtTrig() to see if event trigger pass
 	       * Call passDilTrigMatch() to see if leptons match to the right trigger
-	
+
 2012-07-19 Steve
 	* Tagging SusyNtuple-00-00-15
 

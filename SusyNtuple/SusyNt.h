@@ -278,6 +278,20 @@ namespace Susy
       ClassDef(Photon, 1);
   };
 
+  // Tau class
+  class Tau : public Particle
+  {
+    public:
+      Tau() { clear(); }
+      virtual ~Tau(){};
+
+      void clear(){
+        Particle::clear();
+      }
+
+      ClassDef(Tau, 1);
+  };
+
   // Met class
   class Met : public TObject // public TLorentzVector // No longer inherit from particle
   {

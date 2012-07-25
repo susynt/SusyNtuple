@@ -410,10 +410,33 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
 {
   if(elecs.size() < 2) return;
 
+  // Now removing all combinations of SFOS pairs with mll < cut
+  ElectronVector electronsPass;
+  uint nEle = elecs.size();
+
+  // Use a double loop to check all combinatorics
+  for(uint i=0; i<nEle; i++){
+    const Electron* e1 = elecs[i];
+    bool pass = true;
+    for(uint j=0; j<nEle; j++){
+      if(i==j) continue;
+      const Electron* e2 = elecs[j];
+      if(isSFOS(e1,e2) && Mll(e1,e2) < MllCut){
+        pass = false;
+        break;
+      }
+    }
+    if(pass) electronsPass.push_back(e1);
+  }
+
+  // Now replace the supplied vector with this cleaned vector
+  elecs = electronsPass;
+
   // This may not be the most clever way but I 
   // don't see a convenient way to use erase
   // and keep track of all the leptons to remove...
 
+  /*
   vector<uint> removing;
   ElectronVector temp = elecs;
   elecs.clear();
@@ -435,6 +458,7 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
       if( ie == removing.at(i) ) keep = false;
     if( keep ) elecs.push_back(temp.at(ie));
   }
+  */
   
   /*
   for(int ie1=elecs.size()-1; ie1>=0; ie1--){
@@ -457,6 +481,30 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
 void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
 {
   if( muons.size() < 2 ) return;
+
+  // Now removing all combinations of SFOS pairs with mll < cut
+  MuonVector muonsPass;
+  uint nMu = muons.size();
+
+  // Use a double loop to check all combinatorics
+  for(uint i=0; i<nMu; i++){
+    const Muon* m1 = muons[i];
+    bool pass = true;
+    for(uint j=0; j<nMu; j++){
+      if(i==j) continue;
+      const Muon* m2 = muons[j];
+      if(isSFOS(m1,m2) && Mll(m1,m2) < MllCut){
+        pass = false;
+        break;
+      }
+    }
+    if(pass) muonsPass.push_back(m1);
+  }
+
+  // Now replace the supplied vector with this cleaned vector
+  muons = muonsPass;
+
+  /*
   vector<uint> removing;
   MuonVector temp = muons;
   muons.clear();
@@ -478,7 +526,7 @@ void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
       if( im == removing.at(i) ) keep = false;
     if( keep ) muons.push_back(temp.at(im));
   }
-
+  */
 
   /*
   for(int im1=muons.size()-1; im1>=0; im1--){

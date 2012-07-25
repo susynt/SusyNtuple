@@ -34,6 +34,7 @@
 #pragma link C++ class Susy::Met+;
 #pragma link C++ class Susy::Event+;
 #pragma link C++ class Susy::Photon+;
+#pragma link C++ class Susy::Tau+;
 
 // STL
 #pragma link C++ class std::vector< Susy::Particle >+;
