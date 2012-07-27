@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-07-27 Steve
+	* Moved many of the kinematic functions from SusyDefs into SusyNtTools
+		* Should not affect usage within classes inheriting from SusyNtTools or SusyNtAna
+
 2012-07-25 Steve
 	* Updated usage of removeSFOSPair function
 	* Adding a Tau class, mostly empty so far

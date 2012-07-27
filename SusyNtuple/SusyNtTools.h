@@ -145,9 +145,42 @@ class SusyNtTools
     // Pass All the above, incase you don't care about cut flow
     bool passAll(int flag)     { return ( flag & PASS_Event );   }
   
+
     //
-    // Top Tagger
+    // Methods to get useful quantities for event, leptons, or jets
+    // Moving global functions from SusyDefs here
     // 
+  
+    // Lepton flavor checks
+    bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    bool hasSFOS(const LeptonVector& leps);
+
+    // Mass calculation methods
+    float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
+    float Mt(const Susy::Lepton* lep, const Susy::Met* met);
+    float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
+
+    // Z selection methods
+    bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
+    bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, float minMll=MZ-10, float maxMll=MZ+10);
+    bool hasZ(const LeptonVector& leps, float massWindow=10.);
+    bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
+    void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
+
+    // B jets
+    bool hasBJet(const JetVector& jets, float weight=MV1_60);
+    bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
+
+    // MET Rel
+    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt=-1);
+  
+    // MT2
+    float getMT2(const LeptonVector& leptons, const Susy::Met* met);
+    
+    // Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
 		    int opt=0, float ptJetCut=30, float mEffCut=100);
     
@@ -158,14 +191,6 @@ class SusyNtTools
   
     float calcMCT(TLorentzVector v1, TLorentzVector v2);
   
-    //
-    // Methods to get useful quantities
-    // 
-  
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt=-1);
-  
-    float getMT2(const LeptonVector& leptons, const Susy::Met* met);
-    
 
     //
     // Methods to handle Trigger checking

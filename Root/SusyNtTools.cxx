@@ -431,51 +431,6 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
 
   // Now replace the supplied vector with this cleaned vector
   elecs = electronsPass;
-
-  // This may not be the most clever way but I 
-  // don't see a convenient way to use erase
-  // and keep track of all the leptons to remove...
-
-  /*
-  vector<uint> removing;
-  ElectronVector temp = elecs;
-  elecs.clear();
-
-  for(uint ie1 = 0; ie1<temp.size()-1; ++ie1){
-    const Electron* e1 = temp.at(ie1);
-    for(uint ie2 = ie1+1; ie2<temp.size(); ++ie2){
-      const Electron* e2 = temp.at(ie2);
-      if(isSFOS(e1,e2) && Mll(e1,e2) < MllCut){
-	removing.push_back(ie1);
-	removing.push_back(ie2);
-      }
-    }
-  }
-
-  for(uint ie=0; ie<temp.size(); ++ie){
-    bool keep = true;
-    for(uint i=0; i<removing.size(); ++i)
-      if( ie == removing.at(i) ) keep = false;
-    if( keep ) elecs.push_back(temp.at(ie));
-  }
-  */
-  
-  /*
-  for(int ie1=elecs.size()-1; ie1>=0; ie1--){
-    const Electron* e1 = elecs.at(ie1);
-    for(int ie2=ie1-1; ie2>=0; ie2--){
-      const Electron* e2 = elecs.at(ie2);
-      //if( !(e1->q * e2->q < 0 && (*e1 + *e2).M() < MllCut) ) continue;
-      if(isSFOS(e1,e2) && Mll(e1,e2) < MllCut){
-        elecs.erase( elecs.begin() + ie1 );
-        ie1--; // removing another guy
-        elecs.erase( elecs.begin() + ie2 );
-        break;
-      }
-    }
-  }
-  */
-
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
@@ -503,51 +458,131 @@ void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
 
   // Now replace the supplied vector with this cleaned vector
   muons = muonsPass;
-
-  /*
-  vector<uint> removing;
-  MuonVector temp = muons;
-  muons.clear();
-
-  for(uint im1 = 0; im1<temp.size()-1; ++im1){
-    const Muon* m1 = temp.at(im1);
-    for(uint im2 = im1+1; im2<temp.size(); ++im2){
-      const Muon* m2 = temp.at(im2);
-      if(isSFOS(m1,m2) && Mll(m1,m2) < MllCut){
-	removing.push_back(im1);
-	removing.push_back(im2);
-      }
-    }
-  }
-
-  for(uint im=0; im<temp.size(); ++im){
-    bool keep = true;
-    for(uint i=0; i<removing.size(); ++i)
-      if( im == removing.at(i) ) keep = false;
-    if( keep ) muons.push_back(temp.at(im));
-  }
-  */
-
-  /*
-  for(int im1=muons.size()-1; im1>=0; im1--){
-    const Muon* m1 = muons.at(im1);
-    for(int im2=im1-1; im2>=0; im2--){
-      const Muon* m2 = muons.at(im2);
-      //if( !(m1->q * m2->q < 0 && (*m1 + *m2).M() < MllCut) ) continue;
-      if(isSFOS(m1,m2) && Mll(m1,m2) < MllCut){
-        muons.erase( muons.begin() + im1 );
-        im1--; // removing another guy
-        muons.erase( muons.begin() + im2 );
-        break;
-      }
-    }
-  }
-  */
-
 }
 
 /*--------------------------------------------------------------------------------*/
-// Methods to grab useful quantities
+// Lepton flavor methods (moved from SusyDefs)
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSameFlav(const Lepton* l1, const Lepton* l2)
+{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu(); }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSFOS(const Lepton* l1, const Lepton* l2)
+{ return isSameFlav(l1,l2) && (l1->q*l2->q < 0); }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSFSS(const Lepton* l1, const Lepton* l2)
+{ return isSameFlav(l1,l2) && (l1->q*l2->q > 0); }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasSFOS(const LeptonVector& leps){
+  uint nLep = leps.size();
+  for(uint i=0; i<nLep; i++){
+    for(uint j=i+1; j<nLep; j++){
+      if(isSFOS(leps[i],leps[j])) return true;
+    }
+  }
+  return false;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Mass calculation methods (moved from SusyDefs)
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::Mll(const Lepton* l1, const Lepton* l2)
+{ return (*l1 + *l2).M(); }
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
+{ return (*l1 + *l2 + *l3).M(); }
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::Mt(const Lepton* lep, const Met* met)
+{ return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::Meff(const LeptonVector& leps, const JetVector& jets, const Met* met)
+{
+  float meff = 0;
+  for(uint i=0; i<leps.size(); i++) meff += leps[i]->Pt();
+  for(uint i=0; i<jets.size(); i++){
+    if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
+  }
+  meff += met->Et;
+  return meff;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Z selection methods
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isZ(const Lepton* l1, const Lepton* l2, float massWindow)
+{ return isSFOS(l1,l2) && fabs( Mll(l1,l2)-MZ ) < massWindow; }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isZWindow(const Lepton* l1, const Lepton* l2, float minMll, float maxMll)
+{
+  float mll=Mll(l1,l2);
+  return (isSFOS(l1,l2) && mll>minMll && mll<maxMll);
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow)
+{
+  for(uint i=0; i<leps.size(); i++){
+    for(uint j=i+1; j<leps.size(); j++){
+      if( isZ(leps[i],leps[j],massWindow) ) return true;
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
+{
+  for(uint i=0; i<leps.size(); i++){
+    for(uint j=i+1; j<leps.size(); j++){
+      if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
+    }
+  }
+  return false;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Finds indices for the lepton pair closest to the Z mass
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps)
+{
+  float minDM = -1;
+  uint nLep = leps.size();
+  for(uint i=0; i < nLep; i++){
+    for(uint j=i+1; j < nLep; j++){
+
+      if( !isSFOS(leps[i],leps[j]) ) continue;
+      float dM = fabs( Mll(leps[i],leps[j]) - MZ );
+
+      if(minDM<0 || dM<minDM){
+        minDM = dM;
+        l1 = i;
+        l2 = j;
+      }
+    }
+  }
+  if(minDM<0){
+    cout << "bestZ : WARNING : No SFOS candidates!" << endl;
+    abort();
+  }
+}
+
+/*--------------------------------------------------------------------------------*/
+// B-Jet methods
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasBJet(const JetVector& jets, float weight)
+{
+  uint nJet = jets.size();
+  for(uint i=0; i<nJet; i++){
+    if(isBJet(jets[i])) return true;
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isBJet(const Jet* jet, float weight)
+{
+  // Switching to MV1
+  return jet->mv1 > weight;
+}
+
+/*--------------------------------------------------------------------------------*/
+// MissingET Rel
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt)
 {
@@ -565,6 +600,30 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
   }// end loop over jets
   
   return metLV.Et() * sin(dPhi);
+}
+
+/*--------------------------------------------------------------------------------*/
+// Calculate MT2
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getMT2(const LeptonVector& leptons, const Susy::Met* met)
+{
+  if( leptons.size() < 2 ) return -999;
+
+  // necessary variables
+  TLorentzVector metlv = met->lv();
+  TLorentzVector l0    = *leptons.at(0);
+  TLorentzVector l1    = *leptons.at(1);
+
+  double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
+  double pA[3]     = {0.0, l0.Px(), l0.Py()};
+  double pB[3]     = {0.0, l1.Px(), l1.Py()};
+  
+  // Create Mt2 object
+  mt2_bisect::mt2 mt2_event;
+  mt2_event.set_momenta(pA,pB,pTMiss);
+  mt2_event.set_mn(0); // LSP mass = 0 is Generic
+  
+  return mt2_event.get_mt2();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -724,24 +783,3 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
   return mct;
 }
 
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::getMT2(const LeptonVector& leptons, const Susy::Met* met)
-{
-  if( leptons.size() < 2 ) return -999;
-
-  // necessary variables
-  TLorentzVector metlv = met->lv();
-  TLorentzVector l0    = *leptons.at(0);
-  TLorentzVector l1    = *leptons.at(1);
-
-  double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
-  double pA[3]     = {0.0, l0.Px(), l0.Py()};
-  double pB[3]     = {0.0, l1.Px(), l1.Py()};
-  
-  // Create Mt2 object
-  mt2_bisect::mt2 mt2_event;
-  mt2_event.set_momenta(pA,pB,pTMiss);
-  mt2_event.set_mn(0); // LSP mass = 0 is Generic
-  
-  return mt2_event.get_mt2();
-}

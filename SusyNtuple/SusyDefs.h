@@ -162,27 +162,27 @@ DataPeriod  getDataPeriod(uint run);
 McPeriod    getMcPeriod(uint run);
 bool        isPeriodAB3(uint run);
 
-bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
-bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-bool hasSFOS(const LeptonVector& leps);
+//bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
+//bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+//bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+//bool hasSFOS(const LeptonVector& leps);
 
-float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
-float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
-float Mt(const Susy::Lepton* lep, const Susy::Met* met);
-float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
+//float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
+//float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
+//float Mt(const Susy::Lepton* lep, const Susy::Met* met);
+//float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
 
-bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
-bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, float minMll=MZ-10, float maxMll=MZ+10);
-bool hasZ(const LeptonVector& leps, float massWindow=10.);
-bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
-void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
+//bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
+//bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, float minMll=MZ-10, float maxMll=MZ+10);
+//bool hasZ(const LeptonVector& leps, float massWindow=10.);
+//bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
+//void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
 
 // New MV1
 const float MV1_60 = 0.905363;
 const float MV1_85 = 0.0714225;
-bool hasBJet(const JetVector& jets, float weight=MV1_60);
-bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
+//bool hasBJet(const JetVector& jets, float weight=MV1_60);
+//bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
 
 // for pointer sorting
 bool comparePt(const TLorentzVector* p1, const TLorentzVector* p2);

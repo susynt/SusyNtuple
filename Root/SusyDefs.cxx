@@ -32,7 +32,6 @@ string streamName(DataStream stream)
 
 /*--------------------------------------------------------------------------------*/
 // Data period
-// TODO: update for 2012 periods (not important yet)
 /*--------------------------------------------------------------------------------*/
 DataPeriod getDataPeriod(uint run)
 {
@@ -68,24 +67,24 @@ bool isPeriodAB3(uint run)
 /*--------------------------------------------------------------------------------*/
 // Flavor functions
 /*--------------------------------------------------------------------------------*/
-bool isSameFlav(const Lepton* l1, const Lepton* l2)
-{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu(); }
+//bool isSameFlav(const Lepton* l1, const Lepton* l2)
+//{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu(); }
 
-bool isSFOS(const Lepton* l1, const Lepton* l2)
-{ return isSameFlav(l1,l2) && (l1->q*l2->q < 0); }
+//bool isSFOS(const Lepton* l1, const Lepton* l2)
+//{ return isSameFlav(l1,l2) && (l1->q*l2->q < 0); }
 
-bool isSFSS(const Lepton* l1, const Lepton* l2)
-{ return isSameFlav(l1,l2) && (l1->q*l2->q > 0); }
+//bool isSFSS(const Lepton* l1, const Lepton* l2)
+//{ return isSameFlav(l1,l2) && (l1->q*l2->q > 0); }
 
-bool hasSFOS(const LeptonVector& leps){
-  uint nLep = leps.size();
-  for(uint i=0; i<nLep; i++){
-    for(uint j=i+1; j<nLep; j++){
-      if(isSFOS(leps[i],leps[j])) return true;
-    }
-  }
-  return false;
-}
+//bool hasSFOS(const LeptonVector& leps){
+  //uint nLep = leps.size();
+  //for(uint i=0; i<nLep; i++){
+    //for(uint j=i+1; j<nLep; j++){
+      //if(isSFOS(leps[i],leps[j])) return true;
+    //}
+  //}
+  //return false;
+//}
 
 /*--------------------------------------------------------------------------------*/
 // Event Type functions
@@ -116,100 +115,98 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons)
 
 /*--------------------------------------------------------------------------------*/
 // Mass functions
-// Maybe we should move all helper functions into SusyNtTools
 /*--------------------------------------------------------------------------------*/
-float Mll(const Lepton* l1, const Lepton* l2)
-{ return (*l1 + *l2).M(); }
+//float Mll(const Lepton* l1, const Lepton* l2)
+//{ return (*l1 + *l2).M(); }
 
-float Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
-{ return (*l1 + *l2 + *l3).M(); }
+//float Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
+//{ return (*l1 + *l2 + *l3).M(); }
 
-float Mt(const Lepton* lep, const Met* met)
-{ return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
+//float Mt(const Lepton* lep, const Met* met)
+//{ return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
 
-float Meff(const LeptonVector& leps, const JetVector& jets, const Met* met)
-{
-  float meff = 0;
-  for(uint i=0; i<leps.size(); i++) meff += leps[i]->Pt();
-  for(uint i=0; i<jets.size(); i++){
-    if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
-  }
-  meff += met->Et;
-  return meff;
-}
+//float Meff(const LeptonVector& leps, const JetVector& jets, const Met* met)
+//{
+  //float meff = 0;
+  //for(uint i=0; i<leps.size(); i++) meff += leps[i]->Pt();
+  //for(uint i=0; i<jets.size(); i++){
+    //if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
+  //}
+  //meff += met->Et;
+  //return meff;
+//}
+
+//bool isZ(const Lepton* l1, const Lepton* l2, float massWindow)
+//{ return isSFOS(l1,l2) && fabs( Mll(l1,l2)-MZ ) < massWindow; }
+
+//bool isZWindow(const Lepton* l1, const Lepton* l2, float minMll, float maxMll)
+//{ 
+  //float mll=Mll(l1,l2);
+  //return (isSFOS(l1,l2) && mll>minMll && mll<maxMll); 
+//}
+
+//bool hasZ(const LeptonVector& leps, float massWindow)
+//{
+  //for(uint i=0; i<leps.size(); i++){
+    //for(uint j=i+1; j<leps.size(); j++){
+      //if( isZ(leps[i],leps[j],massWindow) ) return true;
+    //}
+  //}
+  //return false;
+//}
+//bool hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
+//{
+  //for(uint i=0; i<leps.size(); i++){
+    //for(uint j=i+1; j<leps.size(); j++){
+      //if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
+    //}
+  //}
+  //return false;
+//}
 
 
-bool isZ(const Lepton* l1, const Lepton* l2, float massWindow)
-{ return isSFOS(l1,l2) && fabs( Mll(l1,l2)-MZ ) < massWindow; }
+//void bestZ(uint& l1, uint& l2, const LeptonVector& leps)
+//{
+  //float minDM = -1;
+  //uint nLep = leps.size();
+  //for(uint i=0; i < nLep; i++){
+    //for(uint j=i+1; j < nLep; j++){
 
-bool isZWindow(const Lepton* l1, const Lepton* l2, float minMll, float maxMll)
-{ 
-  float mll=Mll(l1,l2);
-  return (isSFOS(l1,l2) && mll>minMll && mll<maxMll); 
-}
+      //if( !isSFOS(leps[i],leps[j]) ) continue;
+      //float dM = fabs( Mll(leps[i],leps[j]) - MZ );
 
-bool hasZ(const LeptonVector& leps, float massWindow)
-{
-  for(uint i=0; i<leps.size(); i++){
-    for(uint j=i+1; j<leps.size(); j++){
-      if( isZ(leps[i],leps[j],massWindow) ) return true;
-    }
-  }
-  return false;
-}
-bool hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
-{
-  for(uint i=0; i<leps.size(); i++){
-    for(uint j=i+1; j<leps.size(); j++){
-      if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
-    }
-  }
-  return false;
-}
-
-
-void bestZ(uint& l1, uint& l2, const LeptonVector& leps)
-{
-  float minDM = -1;
-  uint nLep = leps.size();
-  for(uint i=0; i < nLep; i++){
-    for(uint j=i+1; j < nLep; j++){
-
-      if( !isSFOS(leps[i],leps[j]) ) continue;
-      float dM = fabs( Mll(leps[i],leps[j]) - MZ );
-
-      if(minDM<0 || dM<minDM){
-        minDM = dM;
-        l1 = i;
-        l2 = j;
-      }
-    }
-  }
-  if(minDM<0){
-    cout << "bestZ : WARNING : No SFOS candidates!" << endl;
-    abort();
-  }
-}
+      //if(minDM<0 || dM<minDM){
+        //minDM = dM;
+        //l1 = i;
+        //l2 = j;
+      //}
+    //}
+  //}
+  //if(minDM<0){
+    //cout << "bestZ : WARNING : No SFOS candidates!" << endl;
+    //abort();
+  //}
+//}
 
 /*--------------------------------------------------------------------------------*/
 // Jet functions
 /*--------------------------------------------------------------------------------*/
-bool hasBJet(const JetVector& jets, float weight)
-{
-  uint nJet = jets.size();
-  for(uint i=0; i<nJet; i++){
-    //if( jets[i]->combNN > weight ) return true;
-    //if( jets[i]->mv1 > weight ) return true;
-    if(isBJet(jets[i])) return true;
-  }
-  return false;
-}
+//bool hasBJet(const JetVector& jets, float weight)
+//{
+  //uint nJet = jets.size();
+  //for(uint i=0; i<nJet; i++){
+    ////if( jets[i]->combNN > weight ) return true;
+    ////if( jets[i]->mv1 > weight ) return true;
+    //if(isBJet(jets[i])) return true;
+  //}
+  //return false;
+//}
 /*--------------------------------------------------------------------------------*/
-bool isBJet(const Jet* jet, float weight)
-{ 
-  // Switching to MV1
-  return jet->mv1 > weight; 
-}
+//bool isBJet(const Jet* jet, float weight)
+//{ 
+  //// Switching to MV1
+  //return jet->mv1 > weight; 
+//}
 
 /*--------------------------------------------------------------------------------*/
 // helper function for sorting particle pointers by pt
@@ -231,16 +228,6 @@ stringvector getTrigChains()
 {
   stringvector triggers;
   triggers.resize(N_TRIG);
-  //triggers[BIT_e20_medium]      = "EF_e20_medium";
-  //triggers[BIT_e22_medium]      = "EF_e22_medium";
-  //triggers[BIT_e22vh_medium1]   = "EF_e22vh_medium1";
-  //triggers[BIT_2e12_medium]     = "EF_2e12_medium";
-  //triggers[BIT_2e12T_medium]    = "EF_2e12T_medium";
-  //triggers[BIT_2e12Tvh_medium]  = "EF_2e12Tvh_medium";
-  //triggers[BIT_mu18]            = "EF_mu18";
-  //triggers[BIT_mu18_medium]     = "EF_mu18_medium";
-  //triggers[BIT_2mu10_loose]     = "EF_2mu10_loose";
-  //triggers[BIT_e10_medium_mu6]  = "EF_e10_medium_mu6";
 
   triggers[BIT_e7_medium1]              = "EF_e7_medium1";
   triggers[BIT_e12Tvh_loose1]           = "EF_e12Tvh_loose1";
