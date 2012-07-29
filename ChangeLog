@@ -3,6 +3,7 @@
 2012-07-29 Steve
 	* Added taus to SusyNtObject
 	* Added tau variables, print method, etc.
+	* Tagging SusyNtuple-00-00-16
 
 2012-07-27 Steve
 	* Moved many of the kinematic functions from SusyDefs into SusyNtTools
