@@ -285,7 +285,24 @@ namespace Susy
       Tau() { clear(); }
       virtual ~Tau(){};
 
+      int q;
+
+      int jetBDTSigLoose;
+      int jetBDTSigMedium;
+      int jetBDTSigTight;
+      int eleBDTLoose;
+      int eleBDTMedium;
+      int eleBDTTight;
+      int muonVeto;
+
+      // print method
+      void print() const;
+
       void clear(){
+        q = 0;
+        jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
+        eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
+        muonVeto = 0;
         Particle::clear();
       }
 
