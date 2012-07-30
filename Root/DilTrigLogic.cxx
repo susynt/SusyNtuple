@@ -199,7 +199,7 @@ bool DilTrigLogic::passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr
  
   // EE Regions
   if( dtr == DTR_EE_A ) 
-    return (flag0 & TRIG_e12Tvh_loose1) || (flag1 & TRIG_e12Tvh_loose1);
+    return (flag0 & TRIG_e12Tvh_loose1) && (flag1 & TRIG_e12Tvh_loose1);
   if( dtr == DTR_EE_B ) 
     return (flag0 & TRIG_e24vh_medium1_e7_medium1) && (flag1 & TRIG_e24vh_medium1_e7_medium1);
 

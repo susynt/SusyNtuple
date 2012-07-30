@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-07-29 Matt
+	* Fixed dilepton ee trig logic
+	
 2012-07-29 Steve
 	* Added taus to SusyNtObject
 	* Added tau variables, print method, etc.
