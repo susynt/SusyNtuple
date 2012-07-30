@@ -20,9 +20,10 @@ namespace Susy
   class Lepton;
   class Electron;
   class Muon;
+  class Tau;
   class Jet;
-  class Met;
   class Photon;
+  class Met;
 }
 
 //-----------------------------------------------------------------------------------
@@ -45,8 +46,9 @@ typedef std::vector<std::string> stringvector;
 typedef std::vector<const Susy::Lepton*>   LeptonVector;
 typedef std::vector<const Susy::Electron*> ElectronVector;
 typedef std::vector<const Susy::Muon*>     MuonVector;
-typedef std::vector<const Susy::Jet*>      JetVector;
 typedef std::vector<const Susy::Photon*>   PhotonVector;
+typedef std::vector<const Susy::Tau*>      TauVector;
+typedef std::vector<const Susy::Jet*>      JetVector;
 
 //-----------------------------------------------------------------------------------
 // Global enums
@@ -141,6 +143,7 @@ enum DiLepEvtType
 // LepInfo - a simple, transient class for interacting with leptons in SusyNt
 // Not yet sure if I'm going to use this class
 //-----------------------------------------------------------------------------------
+/*
 class LepInfo
 {
   public:
@@ -153,6 +156,7 @@ class LepInfo
     bool operator > (const LepInfo & other) const;
     bool operator < (const LepInfo & other) const;
 };
+*/
 
 //-----------------------------------------------------------------------------------
 // Global functions
@@ -312,6 +316,9 @@ const float MUON_Z0_SINTHETA_CUT     = 1.0;
 // Cuts for overlap
 const float E_E_DR = 0.1;
 const float J_E_DR = 0.2;
+const float T_E_DR = 0.2;
+const float T_M_DR = 0.2;
+const float J_T_DR = 0.2;
 const float E_J_DR = 0.4;
 const float M_J_DR = 0.4;
 const float E_M_DR = 0.1;

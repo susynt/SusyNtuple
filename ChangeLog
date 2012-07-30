@@ -1,7 +1,16 @@
 # vim: set noexpandtab:
+
+2012-07-30 Steve
+	* Added flag for toggling tau selection
+	* Added functions for selecting taus
+		* baseline objects, overlap removal, signal objects
+	* Tau class now inherits from Lepton
+		* Lepton has variables unnecessary for taus, so we may want to move things around later.
+		* I will keep everything backwards compatible for now 
+
 2012-07-29 Matt
 	* Fixed dilepton ee trig logic
-	
+
 2012-07-29 Steve
 	* Added taus to SusyNtObject
 	* Added tau variables, print method, etc.

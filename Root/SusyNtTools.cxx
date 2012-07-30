@@ -35,58 +35,78 @@ float SusyNtTools::getEventWeight1fb(const Event* evt)
 /*--------------------------------------------------------------------------------*/
 // 'Overview' functions to make it easy for user to grab all objects
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getBaselineObjects(SusyNtObject* susy_nt, ElectronVector &elecs,
-                                     MuonVector &muons, JetVector &jets, SusyNtSys sys)
+void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
+                                     MuonVector& muons, TauVector& taus, JetVector& jets, 
+                                     SusyNtSys sys, bool selectTaus)
 {
   // Get all objects
-  elecs = getPreElectrons(susy_nt, sys);
-  muons = getPreMuons(susy_nt, sys);
-  jets  = getPreJets(susy_nt, sys);
+  elecs = getPreElectrons(susyNt, sys);
+  muons = getPreMuons(susyNt, sys);
+  jets  = getPreJets(susyNt, sys);
+  if(selectTaus) taus  = getPreTaus(susyNt, sys);
+  else taus.clear();
 
   // Now perform the overlap removals
-  performOverlap(elecs, muons, jets);
+  performOverlap(elecs, muons, taus, jets);
 
   // Do SFOS removal for Mll < 12 
   removeSFOSPair(elecs, MLL_MIN);
   removeSFOSPair(muons, MLL_MIN);
-
+  removeSFOSPair(taus, MLL_MIN);
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,
-				   ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets,
+void SusyNtTools::getSignalObjects(ElectronVector baseElecs, MuonVector baseMuons,
+                                   TauVector baseTaus, JetVector baseJets,
+				   ElectronVector& sigElecs, MuonVector& sigMuons, 
+                                   TauVector& sigTaus, JetVector& sigJets,
                                    uint nVtx, bool isMC)
 {
   // Set signal objects
-  sigElecs = getSignalElectrons(bsElecs, nVtx, isMC);
-  sigMuons = getSignalMuons(bsMuons, nVtx, isMC);
-  sigJets  = getSignalJets(bsJets);
+  sigElecs = getSignalElectrons(baseElecs, nVtx, isMC);
+  sigMuons = getSignalMuons(baseMuons, nVtx, isMC);
+  sigTaus  = getSignalTaus(baseTaus);
+  sigJets  = getSignalJets(baseJets);
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getSignalObjects(SusyNtObject* susy_nt, ElectronVector &sigElecs, 
-				   MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys,
-                                   uint nVtx, bool isMC)
+void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs, 
+				   MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
+                                   SusyNtSys sys, uint nVtx, bool isMC, bool selectTaus)
 {
-  // Temprorary vectors for baseline objects
-  ElectronVector elecs = getPreElectrons(susy_nt, sys);
-  MuonVector     muons = getPreMuons(susy_nt, sys);
-  JetVector       jets = getPreJets(susy_nt, sys);
+  // Temporary vectors for baseline objects
+  ElectronVector elecs = getPreElectrons(susyNt, sys);
+  MuonVector     muons = getPreMuons(susyNt, sys);
+  JetVector      jets  = getPreJets(susyNt, sys);
+
+  TauVector      taus;
+  if(selectTaus) taus = getPreTaus(susyNt, sys);
 
   // Perform overlap removal
-  performOverlap(elecs, muons, jets);
+  performOverlap(elecs, muons, taus, jets);
 
   // Now set the signal objects
   sigElecs = getSignalElectrons(elecs, nVtx, isMC);
   sigMuons = getSignalMuons(muons, nVtx, isMC);
+  sigTaus  = getSignalTaus(taus);
   sigJets  = getSignalJets(jets);
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::performOverlap(ElectronVector &elecs, MuonVector &muons, JetVector &jets)
+void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets)
 {
   // Remove electrons from electrons
   e_e_overlap(elecs, E_E_DR);
 
   // Remove jets from electrons
   e_j_overlap(elecs, jets, J_E_DR, true);
+
+  // TODO: Use a switch for tau OR
+  // Remove taus from electrons
+  t_e_overlap(taus, elecs, T_E_DR);
+
+  // Remove taus from muons
+  t_m_overlap(taus, muons, T_M_DR);
+
+  // Remove jets from taus
+  t_j_overlap(taus, jets, J_T_DR, true);
   
   // Remove electrons from jets
   e_j_overlap(elecs, jets, E_J_DR, false);
@@ -104,13 +124,13 @@ void SusyNtTools::performOverlap(ElectronVector &elecs, MuonVector &muons, JetVe
 /*--------------------------------------------------------------------------------*/
 // Methods to grab the Baseline objects
 /*--------------------------------------------------------------------------------*/
-ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susy_nt, SusyNtSys sys)
+ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
 {
   // Not sure if I want to pass SusyNt object around or not... but just do it this way
   // for now for lack of a more creative idea.
   ElectronVector elecs;
-  for(uint ie=0; ie<susy_nt->ele()->size(); ++ie){
-    Electron* e = &(susy_nt->ele()->at(ie));
+  for(uint ie=0; ie<susyNt->ele()->size(); ++ie){
+    Electron* e = & susyNt->ele()->at(ie);
     e->setState(sys);
     
     // Apply any additional Selection
@@ -123,11 +143,11 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susy_nt, SusyNtSys sys
   return elecs;
 }
 /*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getPreMuons(SusyNtObject* susy_nt, SusyNtSys sys)
+MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
 {
   MuonVector muons;
-  for(uint im=0; im<susy_nt->muo()->size(); ++im){
-    Muon* m = &(susy_nt->muo()->at(im));
+  for(uint im=0; im<susyNt->muo()->size(); ++im){
+    Muon* m = & susyNt->muo()->at(im);
     m->setState(sys);
 
     // Apply any additional selection
@@ -140,11 +160,26 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susy_nt, SusyNtSys sys)
   return muons;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getPreJets(SusyNtObject* susy_nt, SusyNtSys sys)
+TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
+{
+  // No tau systematics yet
+  TauVector taus;
+  for(uint iTau=0; iTau < susyNt->tau()->size(); iTau++){
+    Tau* tau = & susyNt->tau()->at(iTau);
+
+    // Apply any additional selection
+    // Don't need anything here until we add tau systematics
+
+    taus.push_back(tau);
+  }
+  return taus;
+}
+/*--------------------------------------------------------------------------------*/
+JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
 {
   JetVector jets;
-  for(uint ij=0; ij<susy_nt->jet()->size(); ++ij){
-    Jet* j = &(susy_nt->jet()->at(ij));
+  for(uint ij=0; ij<susyNt->jet()->size(); ++ij){
+    Jet* j = & susyNt->jet()->at(ij);
     j->setState(sys);
 
     // Apply any additional selection
@@ -159,11 +194,11 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susy_nt, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Get Signal objects
 /*--------------------------------------------------------------------------------*/
-ElectronVector SusyNtTools::getSignalElectrons(ElectronVector bsElecs, uint nVtx, bool isMC)
+ElectronVector SusyNtTools::getSignalElectrons(ElectronVector baseElecs, uint nVtx, bool isMC)
 {
   ElectronVector sigElecs;
-  for(uint ie=0; ie<bsElecs.size(); ++ie){
-    const Electron* e = bsElecs.at(ie);
+  for(uint ie=0; ie<baseElecs.size(); ++ie){
+    const Electron* e = baseElecs.at(ie);
     if(isSignalElectron(e, nVtx, isMC)){
       sigElecs.push_back(e);
     }
@@ -172,11 +207,11 @@ ElectronVector SusyNtTools::getSignalElectrons(ElectronVector bsElecs, uint nVtx
   return sigElecs;
 }
 /*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getSignalMuons(MuonVector bsMuons, uint nVtx, bool isMC)
+MuonVector SusyNtTools::getSignalMuons(MuonVector baseMuons, uint nVtx, bool isMC)
 {
   MuonVector sigMuons;
-  for(uint im=0; im<bsMuons.size(); ++im){
-    const Muon* m = bsMuons.at(im);
+  for(uint im=0; im<baseMuons.size(); ++im){
+    const Muon* m = baseMuons.at(im);
     if(isSignalMuon(m, nVtx, isMC)){
       sigMuons.push_back(m);
     }
@@ -185,26 +220,36 @@ MuonVector SusyNtTools::getSignalMuons(MuonVector bsMuons, uint nVtx, bool isMC)
   return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets(JetVector bsJets)
+TauVector SusyNtTools::getSignalTaus(TauVector baseTaus)
+{
+  TauVector sigTaus;
+  for(uint iTau=0; iTau < baseTaus.size(); iTau++){
+    const Tau* tau = baseTaus[iTau];
+    if(isSignalTau(tau)){
+      sigTaus.push_back(tau);
+    }
+  }
+  return sigTaus;
+}
+/*--------------------------------------------------------------------------------*/
+JetVector SusyNtTools::getSignalJets(JetVector baseJets)
 {
   JetVector sigJets;
-  for(uint ij=0; ij<bsJets.size(); ++ij){
-    const Jet* j = bsJets.at(ij);
+  for(uint ij=0; ij<baseJets.size(); ++ij){
+    const Jet* j = baseJets.at(ij);
     if(isSignalJet(j)){
       sigJets.push_back(j);
     }
   }
-
   return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
-PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susy_nt)
+PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susyNt)
 {
   // Currently only storing signal photons, so just a conv way to get them.
-
   PhotonVector sigPho;
-  for(uint ip=0; ip<susy_nt->pho()->size(); ip++){
-    sigPho.push_back( &(susy_nt->pho()->at(ip)) );
+  for(uint ip=0; ip<susyNt->pho()->size(); ip++){
+    sigPho.push_back( &(susyNt->pho()->at(ip)) );
   }
 
   return sigPho;  
@@ -213,12 +258,12 @@ PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susy_nt)
 /*--------------------------------------------------------------------------------*/
 // Get Met
 /*--------------------------------------------------------------------------------*/
-Susy::Met* SusyNtTools::getMet(SusyNtObject* susy_nt, SusyNtSys sys)
+Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)
 {
   // Right now not being clever. Could maybe make sys index correspond to 
   // index on the array.
   Met* met = NULL;
-  vector<Met>* metTmp = susy_nt->met();
+  vector<Met>* metTmp = susyNt->met();
   for(uint i=0; i<metTmp->size(); i++){
     if(metTmp->at(i).sys == sys){
       met = &(metTmp->at(i));
@@ -274,6 +319,15 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
   return true;
 }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSignalTau(const Tau* tau)
+{
+  // Currently using medium cuts for signal taus
+  if(tau->muonVeto != 0) return false;
+  if(tau->eleBDTMedium != 0) return false;
+  if(tau->jetBDTSigMedium != 1) return false;
+  return true;
+}
+/*--------------------------------------------------------------------------------*/
 float SusyNtTools::elEtTopoConeCorr(const Electron* e, uint nVtx, bool isMC){
   float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
   return e->topoEtcone30Corr - slope*nVtx;
@@ -306,7 +360,7 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Overlap Methods (Commandeered from Anyes)
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::e_e_overlap(ElectronVector &elecs, float minDr)
+void SusyNtTools::e_e_overlap(ElectronVector& elecs, float minDr)
 {
   if(elecs.size() < 2) return;
 
@@ -326,7 +380,7 @@ void SusyNtTools::e_e_overlap(ElectronVector &elecs, float minDr)
   }
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::e_j_overlap(ElectronVector &elecs, JetVector &jets, float minDr, bool removeJets)
+void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minDr, bool removeJets)
 {
   if( elecs.size() == 0 || jets.size() == 0 ) return;
 
@@ -346,7 +400,7 @@ void SusyNtTools::e_j_overlap(ElectronVector &elecs, JetVector &jets, float minD
   }// end loop over electrons	  
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::m_j_overlap(MuonVector &muons, JetVector jets, float minDr)
+void SusyNtTools::m_j_overlap(MuonVector& muons, JetVector jets, float minDr)
 {
   if( muons.size() == 0 || jets.size() == 0 ) return;
 
@@ -363,11 +417,11 @@ void SusyNtTools::m_j_overlap(MuonVector &muons, JetVector jets, float minDr)
   }// end loop over muons
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::e_m_overlap(ElectronVector &elecs, MuonVector &muons, float minDr)
+void SusyNtTools::e_m_overlap(ElectronVector& elecs, MuonVector& muons, float minDr)
 {
   if( elecs.size() == 0 || muons.size() == 0 ) return;
 
-  //In this case we will want to remove both the electron and the muon
+  // In this case we will want to remove both the electron and the muon
   for(int ie=elecs.size()-1; ie>=0; ie--){
     const Electron* e = elecs.at(ie);
     for(int im=muons.size()-1; im>=0; im--){
@@ -396,23 +450,85 @@ void SusyNtTools::m_m_overlap(MuonVector& muons, float minDr)
       muons.erase( muons.begin() + iMu );
       muons.erase( muons.begin() + jMu );
       iMu--;
-
       break;
-
     } 
   } 
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::t_e_overlap(TauVector& taus, ElectronVector& elecs, float minDr)
+{
+  uint nTau = taus.size();
+  uint nEle = elecs.size();
+  if(nTau==0 || nEle==0) return;
+
+  for(int iTau=nTau-1; iTau>=0; iTau--){
+    const Tau* tau = taus[iTau];
+    for(int iEl=nEle-1; iEl>=0; iEl--){
+      const Electron* e = elecs[iEl];
+
+      if(tau->DeltaR(*e) < minDr){
+        taus.erase( taus.begin() + iTau );
+        break;
+      }
+
+    }
+  }
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::t_m_overlap(TauVector& taus, MuonVector& muons, float minDr)
+{
+  uint nTau = taus.size();
+  uint nMuo = muons.size();
+  if(nTau==0 || nMuo==0) return;
+
+  for(int iTau=nTau-1; iTau>=0; iTau--){
+    const Tau* tau = taus[iTau];
+    for(int iMu=nMuo-1; iMu>=0; iMu--){
+      const Muon* mu = muons[iMu];
+
+      if(tau->DeltaR(*mu) < minDr){
+        taus.erase( taus.begin() + iTau );
+        break;
+      }
+
+    }
+  }
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::t_j_overlap(TauVector& taus, JetVector& jets, float minDr, bool removeJets)
+{
+  uint nTau = taus.size();
+  uint nJet = jets.size();
+  if( nTau == 0 || nJet == 0 ) return;
+
+  for(int iTau=nTau-1; iTau>=0; iTau--){
+    const Tau* tau = taus.at(iTau);
+    for(int iJet=jets.size()-1; iJet>=0; iJet--){
+      const Jet* jet = jets.at(iJet);
+
+      if(tau->DeltaR(*jet) < minDr){
+        if(removeJets)
+	  jets.erase( jets.begin() + iJet );
+        else{
+	  taus.erase( taus.begin() + iTau );
+	  break;
+        }
+      }
+
+    } // end loop over jets
+  } // end loop over electrons	  
 }
 
 /*--------------------------------------------------------------------------------*/
 // Methods to handle signal region cuts
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
+void SusyNtTools::removeSFOSPair(ElectronVector& elecs, float MllCut)
 {
-  if(elecs.size() < 2) return;
+  uint nEle = elecs.size();
+  if(nEle < 2) return;
 
   // Now removing all combinations of SFOS pairs with mll < cut
   ElectronVector electronsPass;
-  uint nEle = elecs.size();
 
   // Use a double loop to check all combinatorics
   for(uint i=0; i<nEle; i++){
@@ -433,13 +549,13 @@ void SusyNtTools::removeSFOSPair(ElectronVector &elecs, float MllCut)
   elecs = electronsPass;
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
+void SusyNtTools::removeSFOSPair(MuonVector& muons, float MllCut)
 {
-  if( muons.size() < 2 ) return;
+  uint nMu = muons.size();
+  if(nMu < 2) return;
 
   // Now removing all combinations of SFOS pairs with mll < cut
   MuonVector muonsPass;
-  uint nMu = muons.size();
 
   // Use a double loop to check all combinatorics
   for(uint i=0; i<nMu; i++){
@@ -458,6 +574,33 @@ void SusyNtTools::removeSFOSPair(MuonVector &muons, float MllCut)
 
   // Now replace the supplied vector with this cleaned vector
   muons = muonsPass;
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
+{
+  uint nTau = taus.size();
+  if(nTau < 2) return;
+
+  // Now removing all combinations of SFOS pairs with mll < cut
+  TauVector tausPass;
+
+  // Use a double loop to check all combinatorics
+  for(uint i=0; i<nTau; i++){
+    const Tau* t1 = taus[i];
+    bool pass = true;
+    for(uint j=0; j<nTau; j++){
+      if(i==j) continue;
+      const Tau* t2 = taus[j];
+      if(isSFOS(t1,t2) && Mll(t1,t2) < MllCut){
+        pass = false;
+        break;
+      }
+    }
+    if(pass) tausPass.push_back(t1);
+  }
+
+  // Now replace the supplied vector with this cleaned vector
+  taus = tausPass;
 }
 
 /*--------------------------------------------------------------------------------*/

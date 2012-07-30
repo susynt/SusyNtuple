@@ -114,6 +114,7 @@ namespace Susy
       // polymorphism, baby!!
       virtual bool isEle() const { return false; }
       virtual bool isMu()  const { return false; }
+      virtual bool isTau() const { return false; }
       void setState(int sys){ resetTLV(); }
 
       // print method
@@ -211,6 +212,72 @@ namespace Susy
       ClassDef(Muon, 2);
   };
 
+  // Tau class
+  // Now inheriting from Lepton. Do we need a common base class for just electrons and muons?
+  // There are a lot of variables in Lepton right now that are not relevant for Taus
+  //class Tau : public Particle
+  class Tau : public Lepton
+  {
+    public:
+      Tau() { clear(); }
+      virtual ~Tau(){};
+
+      int jetBDTSigLoose;
+      int jetBDTSigMedium;
+      int jetBDTSigTight;
+      int eleBDTLoose;
+      int eleBDTMedium;
+      int eleBDTTight;
+      int muonVeto;
+
+      bool trueTau;             // trueTauAssocSmall_matched
+
+      // print method
+      void print() const;
+
+      void clear(){
+        q = 0;
+        jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
+        eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
+        muonVeto = 0;
+        trueTau = false;
+        Lepton::clear();
+      }
+
+      ClassDef(Tau, 2);
+  };
+
+  // Photon class
+  class Photon : public Particle
+  {
+    public:
+      Photon(){ clear(); };
+      virtual ~Photon(){};
+
+      // Conversion Information
+      bool isConv;
+
+      // Systematics
+      //float pes_up;        // Photon Energy Scale up
+      //float pes_dn;        // Photon Energy Scale down
+      //float per_up;        // Photon Energy Resolution up
+      //float per_dn;        // Photon Energy Resolution down
+
+      void setState(int sys){ resetTLV();};
+      
+      // print method
+      void print() const {};
+
+      // clear
+      void clear(){
+	//pes_up = pes_dn = per_up = per_dn = 0;
+	isConv = false;
+	Particle::clear();
+      };
+      
+      ClassDef(Photon, 1);
+  };
+
   // Jet class
   class Jet : public Particle
   {
@@ -245,68 +312,6 @@ namespace Susy
       }
 
       ClassDef(Jet, 2);
-  };
-
-  // Photon class
-  class Photon : public Particle
-  {
-    public:
-      Photon(){ clear(); };
-      virtual ~Photon(){};
-
-      // Conversion Information
-      bool isConv;
-
-      // Systematics
-      //float pes_up;        // Photon Energy Scale up
-      //float pes_dn;        // Photon Energy Scale down
-      //float per_up;        // Photon Energy Resolution up
-      //float per_dn;        // Photon Energy Resolution down
-
-      void setState(int sys){ resetTLV();};
-      
-      // print method
-      void print() const {};
-
-      // clear
-      void clear(){
-	//pes_up = pes_dn = per_up = per_dn = 0;
-	isConv = false;
-	Particle::clear();
-      };
-      
-      ClassDef(Photon, 1);
-  };
-
-  // Tau class
-  class Tau : public Particle
-  {
-    public:
-      Tau() { clear(); }
-      virtual ~Tau(){};
-
-      int q;
-
-      int jetBDTSigLoose;
-      int jetBDTSigMedium;
-      int jetBDTSigTight;
-      int eleBDTLoose;
-      int eleBDTMedium;
-      int eleBDTTight;
-      int muonVeto;
-
-      // print method
-      void print() const;
-
-      void clear(){
-        q = 0;
-        jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
-        eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
-        muonVeto = 0;
-        Particle::clear();
-      }
-
-      ClassDef(Tau, 1);
   };
 
   // Met class

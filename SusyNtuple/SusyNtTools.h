@@ -49,79 +49,100 @@ class SusyNtTools
     //
 
     // 'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna
-    ElectronVector getPreElectrons(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
-    MuonVector     getPreMuons(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
-    JetVector      getPreJets(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
+    ElectronVector getPreElectrons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    TauVector      getPreTaus(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
   
     // Get Baseline objects. Pre + overlap removal.
     // Might be able to add options in case of overlap 
     // removal differances in 2-lep vs. 3-lep.
-    void getBaselineObjects(Susy::SusyNtObject* susy_nt, ElectronVector &elecs, 
-			    MuonVector &muons, JetVector &jets, SusyNtSys sys);
+    void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
+			    MuonVector& muons, TauVector& taus, JetVector& jets, 
+                            SusyNtSys sys, bool selectTaus=false);
   
     // Signal objects
-    ElectronVector getSignalElectrons(ElectronVector bsElecs, uint nVtx, bool isMC);
-    MuonVector     getSignalMuons(MuonVector bsMuons, uint nVtx, bool isMC);
-    JetVector      getSignalJets(JetVector bsJets);
-    PhotonVector   getSignalPhotons(Susy::SusyNtObject* susy_nt);
+    ElectronVector getSignalElectrons(ElectronVector baseElecs, uint nVtx, bool isMC);
+    MuonVector     getSignalMuons(MuonVector baseMuons, uint nVtx, bool isMC);
+    PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
+    TauVector      getSignalTaus(TauVector baseTaus);
+    JetVector      getSignalJets(JetVector baseJets);
   
     // Get the signal objects
-    void getSignalObjects(ElectronVector bsElecs, MuonVector bsMuons, JetVector bsJets,
-			  ElectronVector &sigElecs, MuonVector &sigMuons, JetVector &sigJets,
+    void getSignalObjects(ElectronVector baseElecs, MuonVector baseMuons, 
+                          TauVector baseTaus, JetVector baseJets, 
+			  ElectronVector& sigElecs, MuonVector& sigMuons, 
+                          TauVector& sigTaus, JetVector& sigJets,
                           uint nVtx, bool isMC);
-    void getSignalObjects(Susy::SusyNtObject* susy_nt, ElectronVector &sigElecs, 
-			  MuonVector &sigMuons, JetVector &sigJets, SusyNtSys sys,
-                          uint nVtx, bool isMC);
+    void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
+			  MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
+                          SusyNtSys sys, uint nVtx, bool isMC, bool selectTaus=false);
     
     // Check if Signal, now with mc/data dependent iso cuts
     bool isSignalLepton(const Susy::Lepton* l, uint nVtx, bool isMC);
     bool isSignalElectron(const Susy::Electron* ele, uint nVtx, bool isMC);
     bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
+    bool isSignalTau(const Susy::Tau* tau);
     bool isSignalJet(const Susy::Jet* jet);
   
     // Build Lepton vector - we should probably sort them here
-    void buildLeptons(LeptonVector &lep, ElectronVector &ele, MuonVector &muo){
-      for(uint ie=0; ie<ele.size(); ++ie)
-        lep.push_back( ele.at( ie ) );
-      for(uint im=0; im<muo.size(); ++im)
-        lep.push_back( muo.at( im ) );
+    // TODO: include taus here
+    void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo, TauVector& tau){
+      for(uint ie=0; ie<ele.size(); ie++)
+        lep.push_back( ele[ie] );
+      for(uint im=0; im<muo.size(); im++)
+        lep.push_back( muo[im] );
+      for(uint it=0; it<tau.size(); it++)
+        lep.push_back( tau[it] );
     };
     
     //
-    //Electron, Muon isolation correction for pileup
+    // Electron, Muon isolation correction for pileup
     //
     float elEtTopoConeCorr(const Susy::Electron* e, uint nVtx, bool isMC);
     float muPtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
     float muEtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
   
     // Get the Met, for the appropriate systematic
-    Susy::Met* getMet(Susy::SusyNtObject* susy_nt, SusyNtSys sys);
+    Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);
 
     //
     // Methods for performing overlap removal
     //
   
     // Perform all overlap on pre objects  
-    void performOverlap(ElectronVector &elecs, MuonVector &muons, JetVector &jets);
+    void performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets);
 
     // e-e overlap
-    void e_e_overlap(ElectronVector &elecs, float minDr);
+    void e_e_overlap(ElectronVector& elecs, float minDr);
   
     // e-j overlap
-    void e_j_overlap(ElectronVector &elecs, JetVector &jets, float minDr, bool removeJets = true);
+    void e_j_overlap(ElectronVector& elecs, JetVector& jets, float minDr, 
+                     bool removeJets = true);
   
     // m-j overlap
-    void m_j_overlap(MuonVector &muons, JetVector jets, float minDr);
+    void m_j_overlap(MuonVector& muons, JetVector jets, float minDr);
 
     // e-m overlap 
-    void e_m_overlap(ElectronVector &elecs, MuonVector &muons, float minDr);
+    void e_m_overlap(ElectronVector& elecs, MuonVector& muons, float minDr);
   
     // m-m overlap
     void m_m_overlap(MuonVector& muons, float minDr);
+
+    // t-e overlap
+    void t_e_overlap(TauVector& taus, ElectronVector& elecs, float minDr);
+
+    // t-m overlap
+    void t_m_overlap(TauVector& taus, MuonVector& muons, float minDr);
+
+    // t-j overlap
+    void t_j_overlap(TauVector& taus, JetVector& jets, float minDr, 
+                     bool removeJets = true);
   
     // Msfos cuts now applied along with overlap removal
-    void removeSFOSPair(ElectronVector &elecs, float MllCut);
-    void removeSFOSPair(MuonVector &muons, float MllCut);
+    void removeSFOSPair(ElectronVector& elecs, float MllCut);
+    void removeSFOSPair(MuonVector& muons, float MllCut);
+    void removeSFOSPair(TauVector& taus, float MllCut);
   
     //
     // Event level checks
@@ -165,7 +186,8 @@ class SusyNtTools
 
     // Z selection methods
     bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
-    bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, float minMll=MZ-10, float maxMll=MZ+10);
+    bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, 
+                   float minMll=MZ-10, float maxMll=MZ+10);
     bool hasZ(const LeptonVector& leps, float massWindow=10.);
     bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
     void bestZ(uint& l1, uint& l2, const LeptonVector& leps);

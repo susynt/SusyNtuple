@@ -84,6 +84,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void dumpBaselineObjects();
     void dumpSignalObjects();
 
+    // Toggle tau selection and overlap removal
+    void setSelectTaus(bool doIt) { m_selectTaus = doIt; }
+
     // Debug level
     void setDebug(int dbg) { m_dbg = dbg; }
     int dbg() { return m_dbg; }
@@ -123,10 +126,13 @@ class SusyNtAna : public TSelector, public SusyNtTools
     Long64_t m_entry;           // Current entry in the current tree (not chain index!)
     Long64_t m_chainEntry;      // Current entry in the full TChain
 
+    bool m_selectTaus;          // switch to toggle tau selection and OR
+
     int   m_dbg;                // debug level
     bool  m_dbgEvt;             // debug events
 
     std::string m_sample;       // sample name string
+
 
 
     //
@@ -134,12 +140,15 @@ class SusyNtAna : public TSelector, public SusyNtTools
     //
 
     ElectronVector      m_baseElectrons;        // baseline electrons
-    ElectronVector      m_signalElectrons;      // signal electrons
     MuonVector          m_baseMuons;            // baseline muons
-    MuonVector          m_signalMuons;          // signal muons
+    TauVector           m_baseTaus;             // baseline taus
     LeptonVector        m_baseLeptons;          // baseline leptons
+    JetVector           m_baseJets;             // baseline jets
+
+    ElectronVector      m_signalElectrons;      // signal electrons
+    MuonVector          m_signalMuons;          // signal muons
+    TauVector           m_signalTaus;           // signal taus
     LeptonVector        m_signalLeptons;        // signal leptons
-    JetVector           m_baseJets;             // base jets
     JetVector           m_signalJets;           // signal jets
     const Susy::Met*    m_met;                  // Met
 

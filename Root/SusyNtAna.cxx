@@ -12,6 +12,7 @@ SusyNtAna::SusyNtAna() :
         SusyNtTools(),
         nt(m_entry),
         m_entry(0),
+        m_selectTaus(false),
         m_dbg(0),
 	m_dbgEvt(false)
 {
@@ -71,9 +72,10 @@ Bool_t SusyNtAna::Process(Long64_t entry)
 
   // Dump variables from the tree for testing
   if(m_dbg){
-    cout << "num base ele: " << nt.ele()->size() << endl;
-    cout << "num base muo: " << nt.muo()->size() << endl;
-    cout << "num base jet: " << nt.jet()->size() << endl;
+    cout << "num ntuple ele: " << nt.ele()->size() << endl;
+    cout << "num ntuple muo: " << nt.muo()->size() << endl;
+    cout << "num ntuple tau: " << nt.tau()->size() << endl;
+    cout << "num ntuple jet: " << nt.jet()->size() << endl;
     //cout << "Met:          " << nt.met()->Pt()   << endl;
   }
 
@@ -160,12 +162,14 @@ float SusyNtAna::getEventWeight1fb()
 void SusyNtAna::clearObjects()
 {
   m_baseElectrons.clear();
-  m_signalElectrons.clear();
   m_baseMuons.clear();
-  m_signalMuons.clear();
+  m_baseTaus.clear();
   m_baseLeptons.clear();
-  m_signalLeptons.clear();
   m_baseJets.clear();
+  m_signalElectrons.clear();
+  m_signalMuons.clear();
+  m_signalTaus.clear();
+  m_signalLeptons.clear();
   m_signalJets.clear();
   m_met = NULL;
 }
@@ -175,19 +179,19 @@ void SusyNtAna::clearObjects()
 void SusyNtAna::selectObjects(SusyNtSys sys)
 {
   // Get the Baseline objets
-  getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseJets, sys);
+  getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, sys, m_selectTaus);
 
   // Now grab Signal objects
-  getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets,
-		   m_signalElectrons, m_signalMuons, m_signalJets, 
+  getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
+		   m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, 
                    nt.evt()->nVtx, nt.evt()->isMC);
 
   // Grab met
   m_met = getMet(&nt, sys);
 
   // Build Lepton vectors
-  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
-  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
+  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons, m_baseTaus);
+  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons, m_signalTaus);
 
   // sort leptons by pt
   std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
@@ -228,38 +232,72 @@ void SusyNtAna::dumpEvent()
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::dumpBaselineObjects()
 {
-  cout << "Baseline electrons" << endl;
-  for(uint iEl=0; iEl < m_baseElectrons.size(); iEl++){
-    cout << "  ";
-    m_baseElectrons[iEl]->print();
+  uint nEle = m_baseElectrons.size();
+  if(nEle>0){
+    cout << "Baseline electrons" << endl;
+    for(uint iEl=0; iEl<nEle; iEl++){
+      cout << "  ";
+      m_baseElectrons[iEl]->print();
+    }
   }
-  cout << "Baseline muons" << endl;
-  for(uint iMu=0; iMu < m_baseMuons.size(); iMu++){
-    cout << "  ";
-    m_baseMuons[iMu]->print();
+  uint nMu = m_baseMuons.size();
+  if(nMu>0){
+    cout << "Baseline muons" << endl;
+    for(uint iMu=0; iMu<nMu; iMu++){
+      cout << "  ";
+      m_baseMuons[iMu]->print();
+    }
   }
-  cout << "Baseline jets" << endl;
-  for(uint iJ=0; iJ < m_baseJets.size(); iJ++){
-    cout << "  ";
-    m_baseJets[iJ]->print();
+  uint nTau = m_baseTaus.size();
+  if(nTau>0){
+    cout << "Baseline taus" << endl;
+    for(uint iTau=0; iTau<nTau; iTau++){
+      cout << "  ";
+      m_baseTaus[iTau]->print();
+    }
+  }
+  uint nJet = m_baseJets.size();
+  if(nJet>0){
+    cout << "Baseline jets" << endl;
+    for(uint iJ=0; iJ<nJet; iJ++){
+      cout << "  ";
+      m_baseJets[iJ]->print();
+    }
   }
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::dumpSignalObjects()
 {
-  cout << "Signal electrons" << endl;
-  for(uint iEl=0; iEl < m_signalElectrons.size(); iEl++){
-    cout << "  ";
-    m_signalElectrons[iEl]->print();
+  uint nEle = m_signalElectrons.size();
+  if(nEle>0){
+    cout << "Signal electrons" << endl;
+    for(uint iEl=0; iEl < m_signalElectrons.size(); iEl++){
+      cout << "  ";
+      m_signalElectrons[iEl]->print();
+    }
   }
-  cout << "Signal muons" << endl;
-  for(uint iMu=0; iMu < m_signalMuons.size(); iMu++){
-    cout << "  ";
-    m_signalMuons[iMu]->print();
+  uint nMu = m_signalMuons.size();
+  if(nMu>0){
+    cout << "Signal muons" << endl;
+    for(uint iMu=0; iMu < m_signalMuons.size(); iMu++){
+      cout << "  ";
+      m_signalMuons[iMu]->print();
+    }
   }
-  cout << "Signal jets" << endl;
-  for(uint iJ=0; iJ < m_signalJets.size(); iJ++){
-    cout << "  ";
-    m_signalJets[iJ]->print();
+  uint nTau = m_signalTaus.size();
+  if(nTau>0){
+    cout << "Signal taus" << endl;
+    for(uint iTau=0; iTau<nTau; iTau++){
+      cout << "  ";
+      m_signalTaus[iTau]->print();
+    }
+  }
+  uint nJet = m_signalJets.size();
+  if(nJet>0){
+    cout << "Signal jets" << endl;
+    for(uint iJ=0; iJ < m_signalJets.size(); iJ++){
+      cout << "  ";
+      m_signalJets[iJ]->print();
+    }
   }
 }

@@ -10,14 +10,12 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // LepInfo comparison operators
 /*--------------------------------------------------------------------------------*/
+/*
 inline bool LepInfo::operator > (const LepInfo & other) const
-{
-  return l->Pt() > other.l->Pt();
-}
+{ return l->Pt() > other.l->Pt(); }
 inline bool LepInfo::operator < (const LepInfo & other) const
-{
-  return l->Pt() < other.l->Pt();
-}
+{ return l->Pt() < other.l->Pt(); }
+*/
 
 /*--------------------------------------------------------------------------------*/
 // Data stream
