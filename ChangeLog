@@ -5,8 +5,14 @@
 	* Added functions for selecting taus
 		* baseline objects, overlap removal, signal objects
 	* Tau class now inherits from Lepton
+		* I'm not totally sure of this... Need to consider all of the use cases.
+		  For example, we don't want to blindly use hasZ(leptons) when leptons contains taus, 
+		  because the Mll is not really expected to reproduce the Z peak...
+			* I added switches to hasZ, etc.  They will ignore taus by default
 		* Lepton has variables unnecessary for taus, so we may want to move things around later.
-		* I will keep everything backwards compatible for now 
+		* I will keep everything backwards compatible for now and not change the Lepton class
+	* Adding softJet and refGamma terms to the Met class
+	* Tagging SusyNtuple-00-00-17
 
 2012-07-29 Matt
 	* Fixed dilepton ee trig logic

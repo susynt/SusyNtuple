@@ -188,9 +188,11 @@ class SusyNtTools
     bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
     bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, 
                    float minMll=MZ-10, float maxMll=MZ+10);
-    bool hasZ(const LeptonVector& leps, float massWindow=10.);
-    bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
-    void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
+    bool hasZ(const LeptonVector& leps, float massWindow=10., bool ignoreTau=true);
+    bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10, bool ignoreTau=true);
+    void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
+    // Safer function, to replace the one above, which returns false if no SFOS pair found
+    bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
 
     // B jets
     bool hasBJet(const JetVector& jets, float weight=MV1_60);

@@ -214,7 +214,8 @@ namespace Susy
 
   // Tau class
   // Now inheriting from Lepton. Do we need a common base class for just electrons and muons?
-  // There are a lot of variables in Lepton right now that are not relevant for Taus
+  // There are a lot of variables in Lepton right now that are not relevant for Taus.
+  // With compression, they should not take much space in the SusyNt
   //class Tau : public Particle
   class Tau : public Lepton
   {
@@ -335,6 +336,8 @@ namespace Susy
       float refEle;             // Ref electron term
       float refMuo;             // Ref muon term
       float refJet;             // Ref jet term
+      float softJet;            // Soft jet term
+      float refGamma;           // Ref gamma term
       float refCell;            // Cellout term
 
       int sys;                  // ???

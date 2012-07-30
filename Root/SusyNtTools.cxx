@@ -52,6 +52,7 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   // Do SFOS removal for Mll < 12 
   removeSFOSPair(elecs, MLL_MIN);
   removeSFOSPair(muons, MLL_MIN);
+  // TODO: revisit this??
   removeSFOSPair(taus, MLL_MIN);
 }
 /*--------------------------------------------------------------------------------*/
@@ -607,7 +608,7 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 // Lepton flavor methods (moved from SusyDefs)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSameFlav(const Lepton* l1, const Lepton* l2)
-{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu(); }
+{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu() && l1->isTau()==l2->isTau(); }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSFOS(const Lepton* l1, const Lepton* l2)
 { return isSameFlav(l1,l2) && (l1->q*l2->q < 0); }
@@ -660,9 +661,10 @@ bool SusyNtTools::isZWindow(const Lepton* l1, const Lepton* l2, float minMll, fl
   return (isSFOS(l1,l2) && mll>minMll && mll<maxMll);
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow)
+bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool ignoreTau)
 {
   for(uint i=0; i<leps.size(); i++){
+    if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j<leps.size(); j++){
       if( isZ(leps[i],leps[j],massWindow) ) return true;
     }
@@ -670,9 +672,10 @@ bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow)
   return false;
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
+bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll, bool ignoreTau)
 {
   for(uint i=0; i<leps.size(); i++){
+    if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j<leps.size(); j++){
       if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
     }
@@ -683,11 +686,12 @@ bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMl
 /*--------------------------------------------------------------------------------*/
 // Finds indices for the lepton pair closest to the Z mass
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps)
+void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau)
 {
   float minDM = -1;
   uint nLep = leps.size();
   for(uint i=0; i < nLep; i++){
+    if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j < nLep; j++){
 
       if( !isSFOS(leps[i],leps[j]) ) continue;
@@ -704,6 +708,33 @@ void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps)
     cout << "bestZ : WARNING : No SFOS candidates!" << endl;
     abort();
   }
+}
+
+/*--------------------------------------------------------------------------------*/
+// Finds indices for the lepton pair closest to the Z mass
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau)
+{
+  float minDM = -1;
+  uint nLep = leps.size();
+  for(uint i=0; i < nLep; i++){
+
+    if(ignoreTau && leps[i]->isTau()) continue;
+
+    for(uint j=i+1; j < nLep; j++){
+
+      if( !isSFOS(leps[i],leps[j]) ) continue;
+      float dM = fabs( Mll(leps[i],leps[j]) - MZ );
+
+      if(minDM<0 || dM<minDM){
+        minDM = dM;
+        l1 = i;
+        l2 = j;
+      }
+    }
+  }
+  if(minDM<0) return false;
+  return true;
 }
 
 /*--------------------------------------------------------------------------------*/
