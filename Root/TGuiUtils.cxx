@@ -777,24 +777,30 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   _pTop->Draw();
   _pTop->cd();
 
-  
+  float min = _stackH->GetMinimum();
+  if(min<=0 && logy) min=1;
   _hStack->Draw("hist");
   _hStack->SetMaximum(max*scale);
+  _hStack->SetMinimum(min);
   _hStack->GetYaxis()->SetTitleSize(0.06);
   _hStack->GetYaxis()->SetTitleOffset(1.2);
   _hStack->GetYaxis()->SetLabelSize(0.06);
   _hStack->GetXaxis()->SetTitle(_stackH->GetXaxis()->GetTitle());
   _hStack->GetYaxis()->SetTitle(_stackH->GetYaxis()->GetTitle());
   _hStack->Draw("hist");
-  if(_h) myDraw1d(_h,_pTop,kBlack,"psame",logy, -1, false,20);
+
+  if(_h){
+    myDraw1d(_h,_pTop,kBlack,"psame",logy, -1, false,20);
+  }
   else{
     if(logy) _pTop->SetLogy();
   }
-  
   if(_l){
     _l->SetTextSize(0.05);
     _l->Draw();
   }
+
+  std::cout << "min " << min << " max " << max << std::endl;
   _pTop->RedrawAxis();
   _pTop->Update();
   
@@ -814,17 +820,17 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
 			     _ratioH->GetBinCenter(_ratioH->GetNbinsX())+
 			     _ratioH->GetBinWidth(_ratioH->GetNbinsX())/2,1);
 
-    float min = _ratioH->GetMinimum();
-    float max = _ratioH->GetMaximum();
+    float min = _ratioH->GetMinimum()*1.2;
+    float max = _ratioH->GetMaximum()*1.2;
 
     _line->SetLineStyle(7);
     _line->SetLineWidth(1);
     _line->SetLineColor(kRed);
     _line->Draw();
     _pBot->RedrawAxis();
+    if(min<0) min=-1;
+    if(max>1) max=2;
     _ratioH->GetYaxis()->SetRangeUser(min,max);
-    if(min < 0) _ratioH->GetYaxis()->SetRangeUser(-1,max);
-    if(max > 1) _ratioH->GetYaxis()->SetRangeUser(min,2);
     _pBot->Update();
   }
 
@@ -879,7 +885,7 @@ void TGuiUtils::legendSetting(TLegend* leg){
   leg->SetFillStyle(0);
   leg->SetBorderSize(0);
   leg->SetTextFont(42);
-  leg->SetTextSize(0.04);
+  leg->SetTextSize(0.03);
 }
 
 //_____________________________________________________________________________

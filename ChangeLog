@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-07-31 Anyes
+	* Updates to TGuiUtils
+
 2012-07-31 Steve
 	* Added heavy flavor overlap removal decision to Event as hfor
 	* Tagging SusyNtuple-00-00-18
