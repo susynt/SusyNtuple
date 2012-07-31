@@ -352,7 +352,7 @@ namespace Susy
         //Particle::clear();
       }
 
-      ClassDef(Met, 1);
+      ClassDef(Met, 2);
   };
 
   // Event class

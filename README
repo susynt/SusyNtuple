@@ -24,7 +24,7 @@ svn cp $trunk $target -m "some message"
 
 # To install, check out SusyNtuple, the MultiLep Common code, and run install script 
 svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/trunk SusyNtuple
-svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/Multilepton/trunk/fiveinvfb/MultiLep MultiLep
+svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/Multilepton/trunk/twentyinvfb/MultiLep MultiLep
 source MultiLep/installscripts/install_script.sh
 # Or, for convenience, these commands have been put in this package (kinit first):
 source SusyNtuple/scripts/install.sh
