@@ -6,7 +6,7 @@
 asetup AtlasProduction,17.3.1.1,setup,here
 
 # For now, we will need SUSYTools
-svn co svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-01-02 SUSYTools
+svn co svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-01-03 SUSYTools
 python SUSYTools/python/install.py
 
 # Configure RootCore
