@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-07-31 Steve
+	* Updated README and install script
+	* Incremented ClassDef number for Met class (oops)
+	* Tagging SusyNtuple-00-00-19
+
 2012-07-31 Anyes
 	* Updates to TGuiUtils
 
