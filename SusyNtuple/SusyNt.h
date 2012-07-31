@@ -373,6 +373,8 @@ namespace Susy
 
       unsigned int nVtx;        // number of good vertices
       float avgMu;              // average interactions per bunch crossing
+      
+      int hfor;                 // heavy flavor overlap removal decision
 
       unsigned int trigFlags;   // Event level trigger bits
 
@@ -407,11 +409,12 @@ namespace Susy
         isMC = false;
         mcChannel = w = 0;
         nVtx = avgMu = trigFlags = 0;
+        hfor = -1;
 	memset(evtFlag,0,sizeof(evtFlag));
         wPileup = wPileup1fb = xsec = lumiSF = sumw = pdfSF = 0;
       }
 
-      ClassDef(Event, 10);
+      ClassDef(Event, 11);
   };
 
 };
