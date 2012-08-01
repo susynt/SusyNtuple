@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-08-01 Steve
+	* Added streamer for vector<Tau>
+		* Somehow it was able to write out the taus fine without this???  WTF??
+
 2012-07-31 Steve
 	* Updated README and install script
 	* Incremented ClassDef number for Met class (oops)
