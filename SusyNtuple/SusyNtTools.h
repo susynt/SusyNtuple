@@ -86,14 +86,16 @@ class SusyNtTools
     bool isSignalJet(const Susy::Jet* jet);
   
     // Build Lepton vector - we should probably sort them here
-    // TODO: include taus here
-    void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo, TauVector& tau){
+    // Not currently including taus here
+    //void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo, TauVector& tau)
+    void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo)
+    {
       for(uint ie=0; ie<ele.size(); ie++)
         lep.push_back( ele[ie] );
       for(uint im=0; im<muo.size(); im++)
         lep.push_back( muo[im] );
-      for(uint it=0; it<tau.size(); it++)
-        lep.push_back( tau[it] );
+      //for(uint it=0; it<tau.size(); it++)
+        //lep.push_back( tau[it] );
     };
     
     //

@@ -190,8 +190,11 @@ void SusyNtAna::selectObjects(SusyNtSys sys)
   m_met = getMet(&nt, sys);
 
   // Build Lepton vectors
-  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons, m_baseTaus);
-  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons, m_signalTaus);
+  // For now, not putting taus on the light lepton vectors
+  //buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons, m_baseTaus);
+  //buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons, m_signalTaus);
+  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
+  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
 
   // sort leptons by pt
   std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);

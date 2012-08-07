@@ -2,6 +2,8 @@
 
 2012-08-07 Steve
 	* Changed default btag WP to MV1 @ 85%
+	* Keeping taus separate from the lepton vector.
+		* Still indecisive about how to organize it exactly
 
 2012-08-01 Steve
 	* Added streamer for vector<Tau>
