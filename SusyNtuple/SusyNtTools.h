@@ -195,8 +195,8 @@ class SusyNtTools
     bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
 
     // B jets
-    bool hasBJet(const JetVector& jets, float weight=MV1_60);
-    bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
+    bool hasBJet(const JetVector& jets, float weight=MV1_85);
+    bool isBJet(const Susy::Jet* jet, float weight=MV1_85);
 
     // MET Rel
     float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt=-1);
