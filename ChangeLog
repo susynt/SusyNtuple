@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-08-08 Steve
+	* Updated e-mu overlap removal to remove all possible pairings with each lepton
+	* Also updated mu-mu overlap removal in the same way
+	* Tagging SusyNtuple-00-00-21
+
 2012-08-07 Steve
 	* Changed default btag WP to MV1 @ 85%
 	* Keeping taus separate from the lepton vector.

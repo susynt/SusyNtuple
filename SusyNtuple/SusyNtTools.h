@@ -140,7 +140,7 @@ class SusyNtTools
     // t-j overlap
     void t_j_overlap(TauVector& taus, JetVector& jets, float minDr, 
                      bool removeJets = true);
-  
+
     // Msfos cuts now applied along with overlap removal
     void removeSFOSPair(ElectronVector& elecs, float MllCut);
     void removeSFOSPair(MuonVector& muons, float MllCut);
