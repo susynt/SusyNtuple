@@ -365,8 +365,36 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::e_e_overlap(ElectronVector& elecs, float minDr)
 {
-  if(elecs.size() < 2) return;
+  uint nEl = elecs.size();
+  if(nEl < 2) return;
 
+  // Find all possible pairings
+  static std::set<const Electron*> removeElecs;
+  removeElecs.clear();
+  for(uint iEl=0; iEl<nEl; iEl++){
+    const Electron* e1 = elecs[iEl];
+    for(uint jEl=iEl+1; jEl<nEl; jEl++){
+      const Electron* e2 = elecs[jEl];
+      if(e1->DeltaR(*e2) < minDr){
+        if(e1->Pt() < e2->Pt()){
+          removeElecs.insert(e1);
+          break;
+        }
+        else{
+          removeElecs.insert(e2);
+        }
+      } // dR
+    } // e2 loop
+  } // e1 loop
+
+  // Remove electrons that overlap
+  for(int iEl=nEl-1; iEl>=0; iEl--){
+    if(removeElecs.find(elecs[iEl]) != removeElecs.end()){
+      elecs.erase( elecs.begin() + iEl );
+    }
+  }
+
+  /*
   for(int ie1=elecs.size()-1; ie1>=0; ie1--){
     const Electron* e1 = elecs.at(ie1);
     for(int ie2=ie1-1; ie2>=0; ie2--){
@@ -381,6 +409,7 @@ void SusyNtTools::e_e_overlap(ElectronVector& elecs, float minDr)
 	elecs.erase( elecs.begin() + ie2 );
     }
   }
+  */
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minDr, bool removeJets)
@@ -396,7 +425,7 @@ void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minD
       if(removeJets)
 	jets.erase( jets.begin() + ij );
       else{
-	elecs.erase( elecs.begin() + ie);
+	elecs.erase( elecs.begin() + ie );
 	break;
       }
     }// end loop over jets
