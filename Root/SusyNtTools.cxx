@@ -4,6 +4,7 @@
 
 // Common Packages
 #include "Mt2/mt2_bisect.h" 
+#include "SusyNtuple/BTagCalib.h"
 
 using namespace std;
 using namespace Susy;
@@ -848,6 +849,50 @@ bool SusyNtTools::isBJet(const Jet* jet, float weight)
 {
   // Switching to MV1
   return jet->mv1 > weight;
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, 
+			  std::string taggerName, std::string OP, float opval,
+			  BTagSys sys)
+{
+  if(!evt->isMC) return 1;
+  static const float MEV = 1000;
+  vector<float>  pt_btag;
+  vector<float> eta_btag;
+  vector<float> val_btag;
+  vector<int> pdgid_btag;
+
+  uint nJet = jets.size();
+  for(uint i=0; i<nJet; i++){
+    pt_btag.push_back(  jets[i]->Pt()*MEV ); 
+    eta_btag.push_back( jets[i]->Eta()    ); 
+    val_btag.push_back( jets[i]->mv1      ); //Assume MV1 as input always
+    pdgid_btag.push_back(jets[i]->truthLabel);
+  }
+
+  string rootcoredir = getenv("ROOTCOREDIR"); 
+  string envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration.env";
+  string datFile = rootcoredir + "/data/SusyNtuple/";
+  pair<vector<float>,vector<float> > wgtbtag;
+  wgtbtag = BTagCalib::BTagCalibrationFunction(pt_btag,
+					       eta_btag,
+					       val_btag,
+					       pdgid_btag,
+					       taggerName,
+					       OP,
+					       opval, 
+					       envFile, 
+					       datFile); 
+  
+  if( sys == BTag_BJet_DN ) return wgtbtag.first.at(1);  
+  if( sys == BTag_CJet_DN ) return wgtbtag.first.at(2);  
+  if( sys == BTag_LJet_DN ) return wgtbtag.first.at(3);  
+  if( sys == BTag_BJet_UP ) return wgtbtag.first.at(4); 
+  if( sys == BTag_CJet_UP ) return wgtbtag.first.at(5); 
+  if( sys == BTag_LJet_UP ) return wgtbtag.first.at(6); 
+
+  return wgtbtag.first.at(0); 
+
 }
 
 /*--------------------------------------------------------------------------------*/

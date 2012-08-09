@@ -126,7 +126,8 @@ class TGuiUtils : public TObject
 
   double getMax(TH1* h1, TH1* h2);
   double getMin(TH1* h1, TH1* h2);
-  void legendSetting(TLegend* leg);
+  double getMinBin(TH1* h);
+  void legendSetting(TLegend* leg, float fontSize=0.02);
 
 
   double getHistMean(TH1* h);//under-over flow excluded

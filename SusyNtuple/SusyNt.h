@@ -98,10 +98,12 @@ namespace Susy
       // functions to return impact parameter variables
       // Note that these are not absolute valued!
       float d0Sig() const {
-        return d0/errD0;
+	return d0/errD0;
+        //return d0Unbiased/errD0Unbiased;
       }
       float z0SinTheta() const {
-        return z0 * sin(Theta());
+	return z0 * sin(Theta());
+        //return z0Unbiased * sin(Theta());
       }
 
       // trigger matching

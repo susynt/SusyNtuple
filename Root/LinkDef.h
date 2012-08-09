@@ -9,6 +9,7 @@
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
+#include "SUSYTools/BTagCalib.h"
 
 #ifdef __CINT__
 
@@ -24,6 +25,8 @@
 #pragma link C++ class Susy3LepCutflow;
 
 #pragma link C++ namespace Susy+;
+#pragma link C++ namespace BTagCalib;
+
 
 #pragma link C++ class Susy::SusyNtObject;
 #pragma link C++ class Susy::Particle+;

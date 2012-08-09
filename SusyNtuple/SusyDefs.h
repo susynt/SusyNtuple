@@ -116,6 +116,19 @@ enum SusyNtSys
   NtSys_N
 };
 
+//Enum for BTag SF & systematics
+enum BTagSys
+{
+  BTag_NOM=0,
+  BTag_BJet_DN,
+  BTag_CJet_DN,
+  BTag_LJet_DN,
+  BTag_BJet_UP,
+  BTag_CJet_UP,
+  BTag_LJet_UP,
+  BTag_N
+};
+
 // Enum for checking event level cuts
 enum EventCheck 
 {
@@ -311,7 +324,7 @@ const float MUON_ETCONE30_K1_MC      = 0.0692;
 const float MUON_ETCONE30_K2_MC      = 0.00076;
 const float MUON_ETCONE30_PT_CUT     = 0.12;
 const float MUON_D0SIG_CUT           = 3.0;
-const float MUON_Z0_SINTHETA_CUT     = 1.0;
+const float MUON_Z0_SINTHETA_CUT     = 1.0;//0.2;
 
 // Cuts for overlap
 const float E_E_DR = 0.1;

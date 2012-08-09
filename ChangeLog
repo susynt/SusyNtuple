@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-08-09 Anyes
+	* Add BTagCalib code & function in SusyNtTools to get the weight.
+	* Some update to TGuiUtils
+	
 2012-08-08 Steve
 	* Updated e-mu overlap removal to remove all possible pairings with each lepton
 	* Also updated mu-mu overlap removal in the same way

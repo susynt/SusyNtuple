@@ -777,8 +777,11 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   _pTop->Draw();
   _pTop->cd();
 
-  float min = _stackH->GetMinimum();
-  if(min<=0 && logy) min=1;
+  float min = getMinBin(_stackH);
+  if(min<0) min=fabs(min); //protection
+  if(min<0.1) min= 0.1;
+  if(max==0)  max=1;
+  //  if(min<=0 && logy) min=1;
   _hStack->Draw("hist");
   _hStack->SetMaximum(max*scale);
   _hStack->SetMinimum(min);
@@ -848,6 +851,7 @@ void TGuiUtils::moveUnderOverFlow(TH1* h, int opt){
     h->AddBinContent(1,cunder);
     h->SetBinError(1,efirstnew); 
     h->SetBinContent(0,0);
+    h->SetBinError(0,0);
   }
   if(opt==0 || opt==2){//overflow
     int nbins=  h->GetNbinsX();
@@ -858,6 +862,7 @@ void TGuiUtils::moveUnderOverFlow(TH1* h, int opt){
     h->AddBinContent(nbins,cover);
     h->SetBinError(nbins,elastnew); 
     h->SetBinContent(nbins+1,0); 
+    h->SetBinError(nbins+1,0); 
   }
 }
 
@@ -877,15 +882,21 @@ double TGuiUtils::getMin(TH1* h1, TH1* h2){
   if(min2<min1) min=min2;
   return min;
 }
-
-
 //_____________________________________________________________________________
-void TGuiUtils::legendSetting(TLegend* leg){
+double TGuiUtils::getMinBin(TH1* h){
+  double minBin=h->GetMaximum();
+  for(int ibin=1; ibin<=h->GetNbinsX(); ibin++){
+    if(h->GetBinContent(ibin)<minBin && h->GetBinContent(ibin)!=0) minBin = h->GetBinContent(ibin);
+  }
+  return minBin;
+}
+//_____________________________________________________________________________
+void TGuiUtils::legendSetting(TLegend* leg,float fontSize){
   leg->SetFillColor(10);
   leg->SetFillStyle(0);
   leg->SetBorderSize(0);
   leg->SetTextFont(42);
-  leg->SetTextSize(0.03);
+  leg->SetTextSize(fontSize);
 }
 
 //_____________________________________________________________________________

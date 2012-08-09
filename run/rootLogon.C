@@ -27,7 +27,7 @@
   cout<<"\t libXmlParser = "<<gSystem->Load("libXMLParser")<<endl;
 
   //Load all the libs 
-  gSystem->Exec("more $ROOTCOREDIR/packages |cut -d\"/\" -f7-8 >libs.list");
+  gSystem->Exec("more $ROOTCOREDIR/packages |cut -d\"/\" -f6-7 >libs.list");
   FILE* fInput;
   if ((fInput = fopen("libs.list","r")) == NULL) {
     printf("File libs.list could not be opened. Exit\n");
