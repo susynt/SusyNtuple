@@ -196,8 +196,8 @@ bool        isPeriodAB3(uint run);
 //void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
 
 // New MV1
-const float MV1_60 = 0.905363;
-const float MV1_85 = 0.0714225;
+const float MV1_60 = 0.980;
+const float MV1_85 = 0.122;
 //bool hasBJet(const JetVector& jets, float weight=MV1_60);
 //bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
 

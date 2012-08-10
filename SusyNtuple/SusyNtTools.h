@@ -201,7 +201,7 @@ class SusyNtTools
     bool isBJet(const Susy::Jet* jet, float weight=MV1_85);
 
     float bTagSF(const Susy::Event*, const JetVector& jets, 
-		 std::string taggerName = "MV1", std::string OP="0_772", float opval=MV1_85,
+		 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_85,
 		 BTagSys sys=BTag_NOM);
 
     // MET Rel
