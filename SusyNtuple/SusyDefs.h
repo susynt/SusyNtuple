@@ -153,51 +153,13 @@ enum DiLepEvtType
 };
 
 //-----------------------------------------------------------------------------------
-// LepInfo - a simple, transient class for interacting with leptons in SusyNt
-// Not yet sure if I'm going to use this class
-//-----------------------------------------------------------------------------------
-/*
-class LepInfo
-{
-  public:
-    bool isEle;         // is electron
-    uint idx;           // idx in SusyNt collection (either nt.ele or nt.muo)
-    bool isSignal;      // lepton passes signal cuts
-    Susy::Lepton* l;    // pointer to the Lepton in SusyNt
-
-    // Comparison operators for sorting leptons by pt
-    bool operator > (const LepInfo & other) const;
-    bool operator < (const LepInfo & other) const;
-};
-*/
-
-//-----------------------------------------------------------------------------------
-// Global functions
+// Global functions - most of them moved to SusyNtTools
 //-----------------------------------------------------------------------------------
 std::string streamName(DataStream);
 DataPeriod  getDataPeriod(uint run);
 McPeriod    getMcPeriod(uint run);
 bool        isPeriodAB3(uint run);
 
-//bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
-//bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-//bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-//bool hasSFOS(const LeptonVector& leps);
-
-//float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
-//float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
-//float Mt(const Susy::Lepton* lep, const Susy::Met* met);
-//float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
-
-//bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
-//bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, float minMll=MZ-10, float maxMll=MZ+10);
-//bool hasZ(const LeptonVector& leps, float massWindow=10.);
-//bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
-//void bestZ(uint& l1, uint& l2, const LeptonVector& leps);
-
-// New MV1
-const float MV1_60 = 0.980;
-const float MV1_85 = 0.122;
 //bool hasBJet(const JetVector& jets, float weight=MV1_60);
 //bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
 
@@ -336,6 +298,12 @@ const float E_J_DR = 0.4;
 const float M_J_DR = 0.4;
 const float E_M_DR = 0.1;
 const float M_M_DR = 0.05;
+
+// B-tagging working points
+// Recently updated following this twiki:
+// https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BtagAnalysis172#LC_Jets
+const float MV1_60 = 0.980;
+const float MV1_85 = 0.122;
 
 
 #endif
