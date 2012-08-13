@@ -79,8 +79,12 @@ Bool_t SusyNtAna::Process(Long64_t entry)
     //cout << "Met:          " << nt.met()->Pt()   << endl;
   }
 
-  // select signal objects
+  // select baseline and signal objects
   selectObjects();
+
+  nt.evt()->print();
+  dumpBaselineObjects();
+  dumpSignalObjects();
 
   return kTRUE;
 }

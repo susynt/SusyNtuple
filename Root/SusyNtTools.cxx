@@ -10,11 +10,16 @@ using namespace std;
 using namespace Susy;
 
 
+
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() : 
-        m_anaType(Ana_3Lep)
+        m_anaType(Ana_3Lep),
+        m_doPtconeCut(true),
+        m_doElEtconeCut(true),
+        m_doMuEtconeCut(false),
+        m_doIPCut(true)
 {
 }
 
@@ -294,14 +299,16 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   if(!ele->tightPP) return false;
 
   // Relative ptcone iso
-  if(ele->ptcone30/ele->Pt() >= ELECTRON_PTCONE30_PT_CUT) return false;
+  if(m_doPtconeCut && ele->ptcone30/ele->Pt() >= ELECTRON_PTCONE30_PT_CUT) return false;
 
   // Sliding topo etcone isolation cut, slope differs between data/mc
-  if(elEtTopoConeCorr(ele,nVtx,isMC)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT ) return false;
+  if(m_doElEtconeCut && elEtTopoConeCorr(ele,nVtx,isMC)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT) return false;
 
   // Impact parameter
-  if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
-  if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+  if(m_doIPCut){
+    if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
+    if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+  }
 
   return true;
 }
@@ -310,15 +317,17 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
 bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
 {
   // Sliding ptcone isolation cut, slope differs between data/mc
-  if(muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
+  if(m_doPtconeCut && muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
 
   // etcone isolation cut
   // DON'T APPLY THIS FOR NOW - just here for studies
-  //if(muEtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
+  if(m_doMuEtconeCut && muEtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
 
   // Impact parameter
-  if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
-  if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
+  if(m_doIPCut){
+    if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
+  }
 
   return true;
 }
@@ -423,8 +432,9 @@ void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minD
       const Jet* j = jets.at(ij);
       if(e->DeltaR(*j) > minDr) continue;
       
-      if(removeJets)
+      if(removeJets){
 	jets.erase( jets.begin() + ij );
+      }
       else{
 	elecs.erase( elecs.begin() + ie );
 	break;

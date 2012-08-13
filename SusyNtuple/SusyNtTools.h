@@ -170,6 +170,16 @@ class SusyNtTools
   
 
     //
+    // Object selection control toggles
+    // Currently all are on by default except muon etcone
+    //
+    void setDoPtcone(bool doPtcone=true) { m_doPtconeCut = doPtcone; }
+    void setDoElEtcone(bool doElEtcone=true) { m_doElEtconeCut = doElEtcone; }
+    void setDoMuEtcone(bool doMuEtcone=false) { m_doMuEtconeCut = doMuEtcone; }
+    void setDoIP(bool doIP=true) { m_doIPCut = doIP; }
+
+
+    //
     // Methods to get useful quantities for event, leptons, or jets
     // Moving global functions from SusyDefs here
     // 
@@ -231,7 +241,15 @@ class SusyNtTools
     
   protected:
     
-    AnalysisType m_anaType;                 // Analysis type. currently 2-lep or 3-lep
+    AnalysisType m_anaType;             // Analysis type. currently 2-lep or 3-lep
+
+    // For analyzing different signal lepton cut scenarios, adding some toggles
+    // This might only be temporary
+
+    bool m_doPtconeCut;                 // ptcone isolation cuts
+    bool m_doElEtconeCut;               // etcone isolation cuts for electrons
+    bool m_doMuEtconeCut;               // etcone isolation cuts for muons
+    bool m_doIPCut;                     // impact parameter cuts
 
 };
 
