@@ -867,10 +867,14 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets,
 {
   if(!evt->isMC) return 1;
   static const float MEV = 1000;
-  vector<float>  pt_btag;
-  vector<float> eta_btag;
-  vector<float> val_btag;
-  vector<int> pdgid_btag;
+  static vector<float>  pt_btag;
+  static vector<float> eta_btag;
+  static vector<float> val_btag;
+  static vector<int> pdgid_btag;
+  pt_btag.clear();
+  eta_btag.clear();
+  val_btag.clear();
+  pdgid_btag.clear();
 
   uint nJet = jets.size();
   for(uint i=0; i<nJet; i++){
@@ -902,7 +906,6 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets,
   if( sys == BTag_LJet_UP ) return wgtbtag.first.at(6); 
 
   return wgtbtag.first.at(0); 
-
 }
 
 /*--------------------------------------------------------------------------------*/

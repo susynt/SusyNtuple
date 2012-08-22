@@ -35,7 +35,7 @@ namespace Susy
 const float MZ = 91.2;
 
 const float LUMI_A_B3  = 1037.;
-const float LUMI_A_B14 = 5381.;
+const float LUMI_A_B14 = 5835.;
 
 //-----------------------------------------------------------------------------------
 // Convenience typedefs
