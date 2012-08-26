@@ -39,6 +39,19 @@ float SusyNtTools::getEventWeight1fb(const Event* evt)
   if(!evt->isMC) return 1;
   else return evt->w * evt->wPileup1fb * evt->xsec * LUMI_A_B3 / evt->sumw;
 }
+/*--------------------------------------------------------------------------------*/
+// This will replace the above function in the next round
+float SusyNtTools::getEventWeightAB3(const Event* evt)
+{
+  if(!evt->isMC) return 1;
+  else return evt->w * evt->wPileupAB3 * evt->xsec * LUMI_A_B3 / evt->sumw;
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getEventWeightAB(const Event* evt)
+{
+  if(!evt->isMC) return 1;
+  else return evt->w * evt->wPileupAB * evt->xsec * LUMI_A_B14 / evt->sumw;
+}
 
 /*--------------------------------------------------------------------------------*/
 // 'Overview' functions to make it easy for user to grab all objects

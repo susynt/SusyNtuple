@@ -67,13 +67,17 @@ class SusyNtAna : public TSelector, public SusyNtTools
     }
 
     // Get event weight - contains generator, pileup, xsec, and lumi weights
-    // Default weight uses ICHEP dataset, A-B14 lumi
-    // You can supply a different luminosity, but the pileup weights will still
-    // correspond to A-B14
-    virtual float getEventWeight(float lumi = LUMI_A_B14);
+    // Default weight uses A-D7 lumi and pileup weights
+    // You can supply a different luminosity, but the pileup weights will store correspond to the default dataset
+    //virtual float getEventWeight(float lumi = LUMI_A_B14);
+    virtual float getEventWeight(float lumi = LUMI_A_D7);
     // Use this function to scale MC to the A-B3 unblinded dataset
     // This will use the correct pileup weights for A-B3
     virtual float getEventWeight1fb();
+    // This function will soon replace the one above
+    virtual float getEventWeightAB3();
+    // Scale MC to A-B (5.83/fb)
+    virtual float getEventWeightAB();
 
     // Object selection
     void clearObjects();

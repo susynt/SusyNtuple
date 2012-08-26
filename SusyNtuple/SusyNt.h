@@ -391,8 +391,10 @@ namespace Susy
       int evtFlag[NtSys_N];
 
       // Reweighting and scaling
-      float wPileup;            // pileup weight
+      float wPileup;            // pileup weight for full dataset
       float wPileup1fb;         // pileup weight for 2012 period A-B3 only
+      float wPileupAB3;         // pileup weight for 2012 period A-B3 only
+      float wPileupAB;          // pileup weight for 2012 period A-B only
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
       float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
@@ -413,10 +415,11 @@ namespace Susy
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
 	memset(evtFlag,0,sizeof(evtFlag));
-        wPileup = wPileup1fb = xsec = lumiSF = sumw = pdfSF = 0;
+        wPileup = wPileup1fb = wPileupAB3 = wPileupAB = 0;
+        xsec = lumiSF = sumw = pdfSF = 0;
       }
 
-      ClassDef(Event, 11);
+      ClassDef(Event, 12);
   };
 
 };
