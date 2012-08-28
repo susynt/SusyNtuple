@@ -5,6 +5,7 @@
 	* Add boolean arguments to lepton IP methods to toggle usage of unbiased variables
 		* Current biased values are still the default
 	* Add variables to Tau: nTrack, author, eleBDT, jetBDT
+	* Tagging SusyNtuple-00-00-23
 
 2012-08-26 Steve
 	* Added event weight functions for A-B3, A-B
