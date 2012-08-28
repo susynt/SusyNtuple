@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2012-08-28 Steve
+	* Add matchTruth flag to jets
+	* Add boolean arguments to lepton IP methods to toggle usage of unbiased variables
+		* Current biased values are still the default
+	* Add variables to Tau: nTrack, author, eleBDT, jetBDT
+
 2012-08-26 Steve
 	* Added event weight functions for A-B3, A-B
 	* Default event weight now uses A-D7 lumi and pileup weights

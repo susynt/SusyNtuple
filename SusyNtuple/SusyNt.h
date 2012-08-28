@@ -97,13 +97,13 @@ namespace Susy
 
       // functions to return impact parameter variables
       // Note that these are not absolute valued!
-      float d0Sig() const {
-	return d0/errD0;
-        //return d0Unbiased/errD0Unbiased;
+      float d0Sig(bool unbiased=false) const {
+        if(unbiased) return d0Unbiased/errD0Unbiased;
+	else return d0/errD0;
       }
-      float z0SinTheta() const {
-	return z0 * sin(Theta());
-        //return z0Unbiased * sin(Theta());
+      float z0SinTheta(bool unbiased=false) const {
+        if(unbiased) return z0Unbiased * sin(Theta());
+	else return z0 * sin(Theta());
       }
 
       // trigger matching
@@ -225,13 +225,17 @@ namespace Susy
       Tau() { clear(); }
       virtual ~Tau(){};
 
-      int jetBDTSigLoose;
-      int jetBDTSigMedium;
-      int jetBDTSigTight;
-      int eleBDTLoose;
-      int eleBDTMedium;
-      int eleBDTTight;
-      int muonVeto;
+      int author;               // reconstruction author
+      int nTrack;               // number of tracks
+      float eleBDT;             // electron BDT score
+      float jetBDT;             // jet BDT score
+      int jetBDTSigLoose;       // jet BDT working point
+      int jetBDTSigMedium;      // jet BDT working point
+      int jetBDTSigTight;       // jet BDT working point
+      int eleBDTLoose;          // ele BDT working point
+      int eleBDTMedium;         // ele BDT working point
+      int eleBDTTight;          // ele BDT working point
+      int muonVeto;             // muon veto flag
 
       bool trueTau;             // trueTauAssocSmall_matched
 
@@ -239,7 +243,8 @@ namespace Susy
       void print() const;
 
       void clear(){
-        q = 0;
+        author = nTrack = 0;
+        eleBDT = jetBDT = 0;
         jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
         eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
         muonVeto = 0;
@@ -247,7 +252,7 @@ namespace Susy
         Lepton::clear();
       }
 
-      ClassDef(Tau, 2);
+      ClassDef(Tau, 3);
   };
 
   // Photon class
@@ -290,11 +295,14 @@ namespace Susy
 
       float jvf;                // Jet vertex fraction
       int truthLabel;           // Flavor truth label
+      bool matchTruth;          // Matches truth jet
 
       // btagging
       float sv0;                // SV0 btag weight
       float combNN;             // JetFitterCombNN btag weight
       float mv1;                // MV1 btag weight
+
+      // Add an isBad flag here??
 
       // Systematics
       float jes_up;             // jet energy scale up
@@ -309,12 +317,13 @@ namespace Susy
       // clear vars
       void clear(){
         jvf = truthLabel = 0;
+        matchTruth = false;
         sv0 = combNN = mv1 = 0;
 	jer = jes_up = jes_dn = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 2);
+      ClassDef(Jet, 3);
   };
 
   // Met class

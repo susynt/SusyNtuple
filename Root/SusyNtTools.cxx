@@ -311,16 +311,29 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
 {
   if(!ele->tightPP) return false;
 
-  // Relative ptcone iso
-  if(m_doPtconeCut && ele->ptcone30/ele->Pt() >= ELECTRON_PTCONE30_PT_CUT) return false;
+  float pt = ele->Pt();
 
-  // Sliding topo etcone isolation cut, slope differs between data/mc
-  if(m_doElEtconeCut && elEtTopoConeCorr(ele,nVtx,isMC)/ele->Pt() >= ELECTRON_TOPOCONE30_PT_CUT) return false;
+  // Relative ptcone iso
+  if(m_doPtconeCut && ele->ptcone30/pt >= ELECTRON_PTCONE30_PT_CUT) return false;
+
+  // Topo etcone isolation cut
+  float etcone = elEtTopoConeCorr(ele, nVtx, isMC);
+  if(m_doElEtconeCut && etcone/pt >= ELECTRON_TOPOCONE30_PT_CUT) return false;
+
+  // Trying new sliding etcone iso
+  //float a = 0.0067;
+  //float b = 0.133;
+  //float a = 0.005; // looser cuts
+  //float b = 0.15;  // looser cuts
+  //float c = 0.3;
+  //if(m_doElEtconeCut && etcone >= min(a*pt+b,c)) return false;
 
   // Impact parameter
   if(m_doIPCut){
     if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
     if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    //if(fabs(ele->d0Sig(true)) >= 5) return false;
+    //if(fabs(ele->z0SinTheta(true)) >= 0.4) return false;
   }
 
   return true;
@@ -329,8 +342,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
 {
-  // Sliding ptcone isolation cut, slope differs between data/mc
-  if(m_doPtconeCut && muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT ) return false;
+  // ptcone isolation cut with pileup correction
+  if(m_doPtconeCut && muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
 
   // etcone isolation cut
   // DON'T APPLY THIS FOR NOW - just here for studies
@@ -340,6 +353,8 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
   if(m_doIPCut){
     if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
     if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
+    //if(fabs(mu->d0Sig(true)) >= 3.5) return false;
+    //if(fabs(mu->z0SinTheta(true)) >= 0.4) return false;
   }
 
   return true;
