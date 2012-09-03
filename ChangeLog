@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
-
+2012-08-30 Matt
+	* Removed previous electron scale sys and replaced with 4 new shifts.	
+	* Modified Sys enums in SusyDefs
+	
 2012-08-28 Steve
 	* Add matchTruth flag to jets
 	* Add boolean arguments to lepton IP methods to toggle usage of unbiased variables

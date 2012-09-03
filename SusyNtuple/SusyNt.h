@@ -152,8 +152,16 @@ namespace Susy
       float topoEtcone30Corr;   // Corrected topo clus based iso
 
       // Systematic scale factors
-      float ees_up;             // Energy Scale + sigma
-      float ees_dn;             // Energy Scale - sigma
+      //float ees_up;             // Energy Scale + sigma
+      //float ees_dn;             // Energy Scale - sigma
+      float ees_z_up;           // Energy Scale Z + sigma
+      float ees_z_dn;           // Energy Scale Z - sigma
+      float ees_mat_up;         // Energy Scale Material + sigma
+      float ees_mat_dn;         // Energy Scale Material - sigma
+      float ees_ps_up;          // Energy Scale Presampler + sigma
+      float ees_ps_dn;          // Energy Scale Presampler - sigma
+      float ees_low_up;         // Energy Scale Low Pt + sigma
+      float ees_low_dn;         // Energy Scale Low Pt - sigma
       float eer_up;             // Energy Reso. + sigma
       float eer_dn;             // Energy Reso. - sigma
 
@@ -170,11 +178,14 @@ namespace Susy
       void clear(){
         clusE = clusEta = mediumPP = tightPP = 0;
         etcone30Corr = topoEtcone30Corr = 0;
-	ees_up = ees_dn = eer_up = eer_dn = 0;
+	//ees_up = ees_dn = eer_up = eer_dn = 0;
+	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
+	ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
+	eer_up = eer_dn = 0;
         Lepton::clear();
       }
 
-      ClassDef(Electron, 2);
+      ClassDef(Electron, 3);
   };
 
   // Muon class

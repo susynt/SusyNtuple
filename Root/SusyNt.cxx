@@ -14,10 +14,18 @@ void Electron::setState(int sys)
   if(sys == NtSys_NOM) return;
   
   float sf = 0;
-  if     ( sys == NtSys_EES_UP ) sf = ees_up;
-  else if( sys == NtSys_EES_DN ) sf = ees_dn;
-  else if( sys == NtSys_EER_UP ) sf = eer_up;
-  else if( sys == NtSys_EER_DN ) sf = eer_dn;
+  //if     ( sys == NtSys_EES_UP ) sf = ees_up;
+  //else if( sys == NtSys_EES_DN ) sf = ees_dn;
+  if     ( sys == NtSys_EES_Z_UP   ) sf = ees_z_up;
+  else if( sys == NtSys_EES_Z_DN   ) sf = ees_z_dn;
+  else if( sys == NtSys_EES_MAT_UP ) sf = ees_mat_up;
+  else if( sys == NtSys_EES_MAT_DN ) sf = ees_mat_dn;
+  else if( sys == NtSys_EES_PS_UP  ) sf = ees_ps_up;
+  else if( sys == NtSys_EES_PS_DN  ) sf = ees_ps_dn;
+  else if( sys == NtSys_EES_LOW_UP ) sf = ees_low_up;
+  else if( sys == NtSys_EES_LOW_DN ) sf = ees_low_dn;
+  else if( sys == NtSys_EER_UP     ) sf = eer_up;
+  else if( sys == NtSys_EER_DN     ) sf = eer_dn;
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());

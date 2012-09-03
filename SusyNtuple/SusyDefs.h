@@ -103,8 +103,16 @@ enum AnalysisType
 enum SusyNtSys 
 {
   NtSys_NOM = 0,
-  NtSys_EES_UP,      // Electron Scale + sigma
-  NtSys_EES_DN,      // Electron Scale - sigma
+  //NtSys_EES_UP,      // Electron Scale + sigma
+  //NtSys_EES_DN,      // Electron Scale - sigma
+  NtSys_EES_Z_UP,    // Electron Scale Zsys + sigma
+  NtSys_EES_Z_DN,    // Electron Scale Zsys - sigma
+  NtSys_EES_MAT_UP,  // Electron Scale Material + sigma
+  NtSys_EES_MAT_DN,  // Electron Scale Material - sigma
+  NtSys_EES_PS_UP,   // Electron Scale Presampler + sigma
+  NtSys_EES_PS_DN,   // Electron Scale Presampler - sigma
+  NtSys_EES_LOW_UP,  // Electron Scale Low Pt + sigma
+  NtSys_EES_LOW_DN,  // Electron Scale Low Pt - sigma
   NtSys_EER_UP,      // Electron Resolution + sigma
   NtSys_EER_DN,      // Electron Resolution - sigma
   NtSys_MS_UP,       // Muon MS track + sigma
