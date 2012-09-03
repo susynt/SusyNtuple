@@ -122,6 +122,10 @@ enum SusyNtSys
   NtSys_JES_UP,      // Jet Energy Scale + sigma
   NtSys_JES_DN,      // Jet Energy Scale - sigma
   NtSys_JER,         // Jet Energy Resolution (gaussian)
+  NtSys_SCALEST_UP,  // Met scale soft term + sigma
+  NtSys_SCALEST_DN,  // Met scale soft term - sigma
+  NtSys_RESOST_UP,    // Met resolution soft term + sigma
+  NtSys_RESOST_DN,    // Met resolution soft term - sigma
   NtSys_N
 };
 

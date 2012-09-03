@@ -362,7 +362,7 @@ namespace Susy
       float refGamma;           // Ref gamma term
       float refCell;            // Cellout term
 
-      int sys;                  // ???
+      int sys;                  // ??? <-- Met stored in vector for each sys shift, this identifies met for specific shift.
 
       // print vars
       void print() const;

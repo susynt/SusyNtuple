@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-09-03 Matt
+	* Added 4 Met Sys to SusyDefs
+	
 2012-09-03 Steve
 	* Update trigger thresholds to match those of the 2-lep group
 
