@@ -439,7 +439,7 @@ namespace Susy
         xsec = lumiSF = sumw = pdfSF = 0;
       }
 
-      ClassDef(Event, 12);
+      ClassDef(Event, 13);
   };
 
 };

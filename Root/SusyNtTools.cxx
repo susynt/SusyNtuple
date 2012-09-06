@@ -10,7 +10,6 @@ using namespace std;
 using namespace Susy;
 
 
-
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
@@ -34,11 +33,11 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi)
   else return evt->w * evt->wPileup * evt->xsec * lumi / evt->sumw;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getEventWeight1fb(const Event* evt)
+/*float SusyNtTools::getEventWeight1fb(const Event* evt)
 {
   if(!evt->isMC) return 1;
   else return evt->w * evt->wPileup1fb * evt->xsec * LUMI_A_B3 / evt->sumw;
-}
+}*/
 /*--------------------------------------------------------------------------------*/
 // This will replace the above function in the next round
 float SusyNtTools::getEventWeightAB3(const Event* evt)
@@ -206,7 +205,7 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
 
     // Apply any additional selection
     // At least jets of 20 GeV
-    if(j->Pt() < JET_PT_CUT_3L) continue;
+    if(j->Pt() < JET_PT_CUT) continue;
     jets.push_back(j);
   }
   
@@ -326,15 +325,20 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   //float a = 0.005; // looser cuts
   //float b = 0.15;  // looser cuts
   //float c = 0.3;
-  //if(m_doElEtconeCut && etcone >= min(a*pt+b,c)) return false;
+  //if(m_doElEtconeCut && etcone/pt >= min(a*pt+b,c)) return false;
 
   // Impact parameter
   if(m_doIPCut){
     if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
     if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    // unbiased IP
     //if(fabs(ele->d0Sig(true)) >= 5) return false;
     //if(fabs(ele->z0SinTheta(true)) >= 0.4) return false;
   }
+
+  // 2011 cuts, for testing
+  //if(ele->ptcone20/pt > 0.1) return false;
+  //if(fabs(ele->d0Sig()) >= 6) return false;
 
   return true;
 }
@@ -345,17 +349,22 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
   // ptcone isolation cut with pileup correction
   if(m_doPtconeCut && muPtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
 
-  // etcone isolation cut
-  // DON'T APPLY THIS FOR NOW - just here for studies
+  // etcone isolation cut - not applied by default, but here for studies
   if(m_doMuEtconeCut && muEtConeCorr(mu,nVtx,isMC)/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
 
   // Impact parameter
   if(m_doIPCut){
     if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
     if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
+    // unbiased IP
+    //if(fabs(mu->d0Sig(true)) >= 3) return false;
     //if(fabs(mu->d0Sig(true)) >= 3.5) return false;
     //if(fabs(mu->z0SinTheta(true)) >= 0.4) return false;
   }
+
+  // 2011 cuts, for testing
+  //if(mu->ptcone20 >= 1.8) return false;
+  //if(fabs(mu->d0Sig()) >= 3) return false;
 
   return true;
 }
@@ -390,9 +399,9 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
 {
   // Two lep and three lep have different requirements
   // TODO: These will likely be merged
-  float JET_PT_CUT = m_anaType==Ana_2Lep? JET_PT_CUT_2L : JET_PT_CUT_3L;
+  float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
   
-  if(jet->Pt() < JET_PT_CUT)         return false;
+  if(jet->Pt() < ptCut)         return false;
   if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
   if(jet->jvf < JET_JVF_CUT)         return false;
   return true;
@@ -769,6 +778,9 @@ float SusyNtTools::Mll(const Lepton* l1, const Lepton* l2)
 float SusyNtTools::Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
 { return (*l1 + *l2 + *l3).M(); }
 /*--------------------------------------------------------------------------------*/
+float SusyNtTools::Mjj(const Jet* j1, const Jet* j2)
+{ return (*j1 + *j2).M(); }
+/*--------------------------------------------------------------------------------*/
 float SusyNtTools::Mt(const Lepton* lep, const Met* met)
 { return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
 /*--------------------------------------------------------------------------------*/
@@ -852,18 +864,35 @@ bool SusyNtTools::findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool i
   float minDM = -1;
   uint nLep = leps.size();
   for(uint i=0; i < nLep; i++){
-
     if(ignoreTau && leps[i]->isTau()) continue;
-
     for(uint j=i+1; j < nLep; j++){
-
       if( !isSFOS(leps[i],leps[j]) ) continue;
       float dM = fabs( Mll(leps[i],leps[j]) - MZ );
-
       if(minDM<0 || dM<minDM){
         minDM = dM;
         l1 = i;
         l2 = j;
+      }
+    }
+  }
+  if(minDM<0) return false;
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Finds indices for the jet pair closest to the W mass
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::findBestW(uint& j1, uint& j2, const JetVector& jets)
+{
+  float minDM = -1;
+  uint nJet = jets.size();
+  for(uint i=0; i < nJet; i++){
+    for(uint j=i+1; j < nJet; j++){
+      float dM = fabs( Mjj(jets[i],jets[j]) - MZ );
+      if(minDM<0 || dM<minDM){
+        minDM = dM;
+        j1 = i;
+        j2 = j;
       }
     }
   }

@@ -149,10 +149,10 @@ float SusyNtAna::getEventWeight(float lumi)
   return SusyNtTools::getEventWeight(nt.evt(), lumi);
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtAna::getEventWeight1fb()
+/*float SusyNtAna::getEventWeight1fb()
 {
   return SusyNtTools::getEventWeight1fb(nt.evt());
-}
+}*/
 /*--------------------------------------------------------------------------------*/
 // This will soon replace the function above
 float SusyNtAna::getEventWeightAB3()

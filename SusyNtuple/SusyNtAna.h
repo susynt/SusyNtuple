@@ -73,8 +73,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     virtual float getEventWeight(float lumi = LUMI_A_D7);
     // Use this function to scale MC to the A-B3 unblinded dataset
     // This will use the correct pileup weights for A-B3
-    virtual float getEventWeight1fb();
-    // This function will soon replace the one above
+    //virtual float getEventWeight1fb();
     virtual float getEventWeightAB3();
     // Scale MC to A-B (5.83/fb)
     virtual float getEventWeightAB();

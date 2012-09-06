@@ -1,8 +1,13 @@
 # vim: set noexpandtab:
 
+2012-09-06 Steve
+	* Added jj methods findBestW, Mjj
+	* Added separate pt cut for baseline jets, modified names of the signal cut constants
+	* Added some additional lepton signal cut scenarios, commented out
+
 2012-09-03 Matt
 	* Added 4 Met Sys to SusyDefs
-	
+
 2012-09-03 Steve
 	* Update trigger thresholds to match those of the 2-lep group
 

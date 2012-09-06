@@ -43,8 +43,7 @@ class SusyNtTools
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
     // This will use the correct pileup weights for A-B3
-    virtual float getEventWeight1fb(const Susy::Event* evt);
-    // This will replace the function above
+    //virtual float getEventWeight1fb(const Susy::Event* evt);
     virtual float getEventWeightAB3(const Susy::Event* evt);
 
     // Scale MC to A-B dataset (5.83/fb)
@@ -199,6 +198,7 @@ class SusyNtTools
     // Mass calculation methods
     float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
     float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
+    float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
     float Mt(const Susy::Lepton* lep, const Susy::Met* met);
     float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
 
@@ -211,6 +211,7 @@ class SusyNtTools
     void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
     // Safer function, to replace the one above, which returns false if no SFOS pair found
     bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
+    bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets
     bool hasBJet(const JetVector& jets, float weight=MV1_85);

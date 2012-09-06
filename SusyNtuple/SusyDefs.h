@@ -37,6 +37,7 @@ const float MZ = 91.2;
 const float LUMI_A_B3  = 1037.;
 const float LUMI_A_B14 = 5835.;
 const float LUMI_A_D7  = 9632.86;
+const float LUMI_A_D   = 10454.;
 
 //-----------------------------------------------------------------------------------
 // Convenience typedefs
@@ -272,8 +273,9 @@ const float MUON_PT_CUT      = 10; // GeV
 const float MLL_MIN          = 12;
 
 // TODO: Do we have a common jet pt cut now?
-const float JET_PT_CUT_3L    = 20; // GeV
-const float JET_PT_CUT_2L    = 30; // GeV
+const float JET_PT_CUT           = 20; // GeV
+const float JET_SIGNAL_PT_CUT_3L = 20; // GeV
+const float JET_SIGNAL_PT_CUT_2L = 30; // GeV
 
 // Eta
 const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
