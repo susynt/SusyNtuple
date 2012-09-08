@@ -125,8 +125,10 @@ enum SusyNtSys
   NtSys_JER,         // Jet Energy Resolution (gaussian)
   NtSys_SCALEST_UP,  // Met scale soft term + sigma
   NtSys_SCALEST_DN,  // Met scale soft term - sigma
-  NtSys_RESOST_UP,    // Met resolution soft term + sigma
-  NtSys_RESOST_DN,    // Met resolution soft term - sigma
+  // Only one of these now???
+  //NtSys_RESOST_UP,    // Met resolution soft term + sigma
+  //NtSys_RESOST_DN,    // Met resolution soft term - sigma
+  NtSys_RESOST,      // Met resolution soft term + sigma
   NtSys_N
 };
 

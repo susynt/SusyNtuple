@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-09-08 Steve
+	* Replace RESOST up/down terms with single term, to reflect change in SUSYTools
+
 2012-09-06 Steve
 	* Added jj methods findBestW, Mjj
 	* Added separate pt cut for baseline jets, modified names of the signal cut constants
