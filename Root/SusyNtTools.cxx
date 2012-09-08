@@ -322,8 +322,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, uint nVtx, bool isMC)
   // Trying new sliding etcone iso
   //float a = 0.0067;
   //float b = 0.133;
-  //float a = 0.005; // looser cuts
-  //float b = 0.15;  // looser cuts
+  //float a = 0.005; // 'looser' cuts
+  //float b = 0.15;  // 'looser' cuts
   //float c = 0.3;
   //if(m_doElEtconeCut && etcone/pt >= min(a*pt+b,c)) return false;
 
@@ -357,7 +357,7 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
     if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
     if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
     // unbiased IP
-    //if(fabs(mu->d0Sig(true)) >= 3) return false;
+    //if(fabs(mu->d0Sig(true)) >= 3) return false;      // tighter, more standard
     //if(fabs(mu->d0Sig(true)) >= 3.5) return false;
     //if(fabs(mu->z0SinTheta(true)) >= 0.4) return false;
   }
