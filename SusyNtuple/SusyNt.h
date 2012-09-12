@@ -420,6 +420,13 @@ namespace Susy
       float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
       float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
 
+      // PDF Systematic information
+      int pdf_id1;
+      int pdf_id2;
+      double pdf_x1;     
+      double pdf_x2;
+      double pdf_scale;
+
       // Combined normalized event weight
       float fullWeight() const { return wPileup*xsec*lumiSF; }
 
@@ -437,6 +444,7 @@ namespace Susy
 	memset(evtFlag,0,sizeof(evtFlag));
         wPileup = wPileup1fb = wPileupAB3 = wPileupAB = 0;
         xsec = lumiSF = sumw = pdfSF = 0;
+	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
       ClassDef(Event, 14);
