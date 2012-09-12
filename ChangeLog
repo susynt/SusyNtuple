@@ -1,6 +1,7 @@
 # vim: set noexpandtab:
 2012-09-12 Matt
 	* Adding variables to do pdf rewighting. Event Class incremented.
+	* tagging SusyNtuples-00-00-26
 	
 2012-09-08 Steve
 	* Replace RESOST up/down terms with single term, to reflect change in SUSYTools
