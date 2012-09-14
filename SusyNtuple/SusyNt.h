@@ -427,6 +427,9 @@ namespace Susy
       double pdf_x2;
       double pdf_scale;
 
+      // Susy Process
+      int susyFinalState;
+
       // Combined normalized event weight
       float fullWeight() const { return wPileup*xsec*lumiSF; }
 
@@ -445,9 +448,10 @@ namespace Susy
         wPileup = wPileup1fb = wPileupAB3 = wPileupAB = 0;
         xsec = lumiSF = sumw = pdfSF = 0;
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
+	susyFinalState = -1;
       }
 
-      ClassDef(Event, 14);
+      ClassDef(Event, 15);
   };
 
 };

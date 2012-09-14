@@ -1,4 +1,7 @@
 # vim: set noexpandtab:
+2012-09-14 Matt
+	* Added susyFinalState to the ntuple
+
 2012-09-12 Matt
 	* Adding variables to do pdf rewighting. Event Class incremented.
 	* tagging SusyNtuples-00-00-26
