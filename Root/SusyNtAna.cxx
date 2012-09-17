@@ -141,20 +141,14 @@ bool SusyNtAna::checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, 
 
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
-// Default weight uses ICHEP dataset, A-B14 lumi
-// You can supply a different luminosity, but the pileup weights will still correspond to A-B14
+// Default weight uses A-D lumi
+// You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float SusyNtAna::getEventWeight(float lumi)
 {
   return SusyNtTools::getEventWeight(nt.evt(), lumi);
 }
 /*--------------------------------------------------------------------------------*/
-/*float SusyNtAna::getEventWeight1fb()
-{
-  return SusyNtTools::getEventWeight1fb(nt.evt());
-}*/
-/*--------------------------------------------------------------------------------*/
-// This will soon replace the function above
 float SusyNtAna::getEventWeightAB3()
 {
   return SusyNtTools::getEventWeightAB3(nt.evt());

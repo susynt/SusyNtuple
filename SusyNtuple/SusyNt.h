@@ -412,7 +412,6 @@ namespace Susy
 
       // Reweighting and scaling
       float wPileup;            // pileup weight for full dataset
-      float wPileup1fb;         // pileup weight for 2012 period A-B3 only
       float wPileupAB3;         // pileup weight for 2012 period A-B3 only
       float wPileupAB;          // pileup weight for 2012 period A-B only
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
@@ -445,7 +444,7 @@ namespace Susy
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
 	memset(evtFlag,0,sizeof(evtFlag));
-        wPileup = wPileup1fb = wPileupAB3 = wPileupAB = 0;
+        wPileup = wPileupAB3 = wPileupAB = 0;
         xsec = lumiSF = sumw = pdfSF = 0;
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
 	susyFinalState = -1;

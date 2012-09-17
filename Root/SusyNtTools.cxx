@@ -24,8 +24,8 @@ SusyNtTools::SusyNtTools() :
 
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
-// Default weight uses ICHEP dataset, A-B14 lumi
-// You can supply a different luminosity, but the pileup weights will still correspond to A-B14
+// Default weight uses A-D lumi
+// You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeight(const Event* evt, float lumi)
 {
@@ -33,13 +33,6 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi)
   else return evt->w * evt->wPileup * evt->xsec * lumi / evt->sumw;
 }
 /*--------------------------------------------------------------------------------*/
-/*float SusyNtTools::getEventWeight1fb(const Event* evt)
-{
-  if(!evt->isMC) return 1;
-  else return evt->w * evt->wPileup1fb * evt->xsec * LUMI_A_B3 / evt->sumw;
-}*/
-/*--------------------------------------------------------------------------------*/
-// This will replace the above function in the next round
 float SusyNtTools::getEventWeightAB3(const Event* evt)
 {
   if(!evt->isMC) return 1;
