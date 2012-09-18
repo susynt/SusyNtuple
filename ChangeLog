@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-09-18 Serhan Mete <amete@cern.ch>
+	* scripts/install.sh: Switch SUSYTools to 00-01-07
+	* SusyNtuple/SusyDefs.h: Added SusyNtSystNames and BTagSysNames
+				 Human-readable definitions for systematics 
+
 2012-09-17 Steve
 	* Update event weight functions for A-D
 	* Remove wPileup1fb from Event class

@@ -132,6 +132,31 @@ enum SusyNtSys
   NtSys_N
 };
 
+// Human-readable names for enum SusyNtSys 
+const std::string SusyNtSystNames[NtSys_N] = {
+  "NOM",
+  "EES_Z_UP ",    
+  "EES_Z_DN",    
+  "EES_MAT_UP",  
+  "EES_MAT_DN",  
+  "EES_PS_UP",   
+  "EES_PS_DN",   
+  "EES_LOW_UP",  
+  "EES_LOW_DN",  
+  "EER_UP",      
+  "EER_DN",      
+  "MS_UP",       
+  "MS_DN",       
+  "ID_UP",       
+  "ID_DN",       
+  "JES_UP",      
+  "JES_DN",      
+  "JER",         
+  "SCALEST_UP",  
+  "SCALEST_DN",  
+  "RESOST",
+};
+
 //Enum for BTag SF & systematics
 enum BTagSys
 {
@@ -143,6 +168,17 @@ enum BTagSys
   BTag_CJet_UP,
   BTag_LJet_UP,
   BTag_N
+};
+
+// Human-readable names for enum BTagSys 
+const std::string BTagSysNames[BTag_N] = {
+  "BTag_NOM",
+  "BTag_BJet_DN",
+  "BTag_CJet_DN",
+  "BTag_LJet_DN",
+  "BTag_BJet_UP",
+  "BTag_CJet_UP",
+  "BTag_LJet_UP"
 };
 
 // Enum for checking event level cuts
