@@ -12,9 +12,7 @@
 #include "TFile.h"
 #include "THnSparse.h"
 
-#include "ReweightUtils/APWeightEntry.h"
-#include "ReweightUtils/APReweightND.h"
-#include "ReweightUtils/APEvtWeight.h"
+#include "DGTriggerReweight/triggerReweight2Lep.h"
 
 #include "SusyNt.h"
 #include "SusyDefs.h"
@@ -43,7 +41,7 @@ class DilTrigLogic
  public:
 
   // Default constructor and destructor for now
-  DilTrigLogic(bool isMC);
+  DilTrigLogic(bool isMC, string period = "A-X");
   virtual ~DilTrigLogic();
 
   // Three basic methods to interact with the trigger package:
@@ -69,10 +67,11 @@ class DilTrigLogic
   float getMCWeight();
 
   // Trigger reweighting
-  //void loadTriggerMaps();
-  //APReweightND* loadTrigWeighter(TFile* f, TString chain);
-  //APReweightND* getEleTrigWeighter(uint trigFlag);
-  //APReweightND* getMuoTrigWeighter(uint trigFlag);  
+  // TODO: Add SusyNtSys for trigger?
+  double getTriggerWeight(LeptonVector leptons, bool isMC, SusyNtSys sys = NtSys_NOM);
+  double getTriggerWeightEE(LeptonVector leptons, SusyNtSys sys);
+  double getTriggerWeightEM(LeptonVector leptons, SusyNtSys sys);
+  double getTriggerWeightMM(LeptonVector leptons, SusyNtSys sys);
   
   // Debug method
   void debugFlag(uint flag);
@@ -83,29 +82,7 @@ class DilTrigLogic
   // Triger reweighting    
   //                          
 
-  // I first thought I could use a map of chain enum -> reweighter.
-  // It's clear now that it won't work because a chain may need
-  // more than one map depending on the period.  That's because   
-  // other chains may change so the conditional efficiencies change. 
-
-  std::map<int, APReweightND*>        m_elTrigWeightMap;
-  std::map<int, APReweightND*>        m_muTrigWeightMap;
-
-  // Instead, have one pointer for each reweighter.    
-  APReweightND*       m_trigTool_mu18;
-  APReweightND*       m_trigTool_mu18Med;
-  APReweightND*       m_trigTool_mu10L_not18;
-  APReweightND*       m_trigTool_mu10L_not18Med;
-  APReweightND*       m_trigTool_mu6_not18;
-  APReweightND*       m_trigTool_mu6_not18Med;
-
-  APReweightND*       m_trigTool_e20;
-  APReweightND*       m_trigTool_e22;
-  APReweightND*       m_trigTool_e22vh;
-  APReweightND*       m_trigTool_e12;
-  APReweightND*       m_trigTool_e12T;
-  APReweightND*       m_trigTool_e12Tvh;
-  APReweightND*       m_trigTool_e10;
+  triggerReweight2Lep* m_triggerWeight;     // Trigger reweighting object
 
  private:
    

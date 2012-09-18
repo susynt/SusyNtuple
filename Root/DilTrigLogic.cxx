@@ -5,11 +5,25 @@
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-DilTrigLogic::DilTrigLogic(bool isMC)
+DilTrigLogic::DilTrigLogic(bool isMC, string period) :
+  m_triggerWeight(NULL)
 {
-  
-  //if( isMC ) loadTriggerMaps();
-  
+
+  cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="<<endl;
+  cout<<"Initializing DilTrigLogic:"<<endl;
+  cout<<"\tisMC:               "<<isMC<<endl;
+  cout<<"\tperiod for Weights: "<<period<<endl;
+  cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="<<endl;
+
+  if( isMC ){
+
+    // Create trigger reweight object
+    m_triggerWeight = new triggerReweight2Lep();
+    string directory = "$ROOTCOREDIR/../DGTriggerReweight/data";
+    m_triggerWeight->setDbg(1);
+    m_triggerWeight->initialize(directory, period);
+    m_triggerWeight->setDbg(0);
+  }
 
 }
 /*--------------------------------------------------------------------------------*/
@@ -18,11 +32,7 @@ DilTrigLogic::DilTrigLogic(bool isMC)
 DilTrigLogic::~DilTrigLogic()
 {
   
-  if( m_trigTool_mu18 )           delete m_trigTool_mu18;
-  if( m_trigTool_mu18Med )        delete m_trigTool_mu18Med;
-  if( m_trigTool_mu10L_not18 )    delete m_trigTool_mu18;
-  if( m_trigTool_mu10L_not18Med ) delete m_trigTool_mu18;
-  if( m_trigTool_mu18 )           delete m_trigTool_mu18;
+  if(m_triggerWeight) delete m_triggerWeight;
   
 }
 
@@ -240,6 +250,114 @@ bool DilTrigLogic::passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr
 
 }
 
+/*--------------------------------------------------------------------------------*/
+// Methods to get the trigger weight for MC
+/*--------------------------------------------------------------------------------*/
+double DilTrigLogic::getTriggerWeight(LeptonVector leptons, bool isMC, SusyNtSys sys)
+{
+
+  // If it is data, return, as tool not initialized
+  if( !isMC ) return 1.0;
+
+  // Only valid for 2 leptons
+  if(leptons.size() != 2) return 0.;
+
+  // Need to get the weight based on dilepton type
+  DiLepEvtType ET = getDiLepEvtType(leptons);
+  
+  if(ET == ET_ee) 
+    return getTriggerWeightEE(leptons, sys);
+  if(ET == ET_mm) 
+    return getTriggerWeightMM(leptons, sys);
+  if(ET == ET_em || ET == ET_me)
+    return getTriggerWeightEM(leptons, sys);
+
+  // If here unable to classify the event: Print error message
+  // and return 0
+  cout<<"***********************************************************"<<endl;
+  cout<<"Error: Unable to classify dilepton type in getTriggerWeight"<<endl;
+  cout<<"\tReturning a weight of 0"<<endl;
+  cout<<"***********************************************************"<<endl;
+  return 0.;
+  
+}
+/*--------------------------------------------------------------------------------*/
+double DilTrigLogic::getTriggerWeightEE(LeptonVector leptons, SusyNtSys sys)
+{
+
+  if( !m_triggerWeight ){
+    cout<<"Error: m_triggerWeight not initialized!"<<endl;
+    cout<<"Returning a weight of 0"<<endl;
+    return 0.;
+  }
+
+  int trigSys = 0; 
+  if(sys == NtSys_TRIGSF_UP)      trigSys = 1;
+  else if(sys == NtSys_TRIGSF_DN) trigSys = -1;
+
+  double pt0  = leptons[0]->Pt() * 1000.;
+  double eta0 = leptons[0]->Eta();
+  double pt1  = leptons[1]->Pt() * 1000.;
+  double eta1 = leptons[1]->Eta();
+  
+  return m_triggerWeight->triggerReweightEE(pt0, eta0, pt1, eta1, trigSys);
+
+}
+/*--------------------------------------------------------------------------------*/
+double DilTrigLogic::getTriggerWeightMM(LeptonVector leptons, SusyNtSys sys)
+{
+
+  if( !m_triggerWeight ){
+    cout<<"Error: m_triggerWeight not initialized!"<<endl;
+    cout<<"Returning a weight of 0"<<endl;
+    return 0.;
+  }
+
+  int trigSys = 0;
+  if(sys == NtSys_TRIGSF_UP)      trigSys = 1;
+  else if(sys == NtSys_TRIGSF_DN) trigSys = -1; 
+
+  double pt0  = leptons[0]->Pt() * 1000.;
+  double eta0 = leptons[0]->Eta();
+  double phi0 = leptons[0]->Phi();
+  int isComb0 = ((Muon*) leptons[0])->isCombined;
+  double pt1  = leptons[1]->Pt() * 1000.;
+  double eta1 = leptons[1]->Eta();
+  double phi1 = leptons[1]->Phi();
+  int isComb1 = ((Muon*) leptons[1])->isCombined;
+  
+  return m_triggerWeight->triggerReweightMM(pt0, eta0, phi0, isComb0, pt1, eta1, phi1, isComb1,trigSys);
+
+}
+/*--------------------------------------------------------------------------------*/
+double DilTrigLogic::getTriggerWeightEM(LeptonVector leptons, SusyNtSys sys)
+{
+
+  if( !m_triggerWeight ){
+    cout<<"Error: m_triggerWeight not initialized!"<<endl;
+    cout<<"Returning a weight of 0"<<endl;
+    return 0.;
+  }
+
+  int trigSys = 0;
+  if(sys == NtSys_TRIGSF_UP)      trigSys = 1;
+  else if(sys == NtSys_TRIGSF_DN) trigSys = -1;
+
+  bool isElec0 = leptons[0]->isEle();
+
+  double elpt  = (isElec0 ? leptons[0]->Pt()  : leptons[1]->Pt()) * 1000.;
+  double eleta = isElec0 ? leptons[0]->Eta() : leptons[1]->Eta();
+  double mupt  = (isElec0 ? leptons[1]->Pt()  : leptons[0]->Pt()) * 1000.;
+  double mueta = isElec0 ? leptons[1]->Eta() : leptons[0]->Eta();
+  double muphi = isElec0 ? leptons[1]->Phi() : leptons[0]->Phi();
+  int isComb   = isElec0 ? 
+    ((Muon*) leptons[1])->isCombined : 
+    ((Muon*) leptons[0])->isCombined;
+  
+    
+    return m_triggerWeight->triggerReweightEMU(elpt, eleta, mupt, mueta, muphi, isComb, trigSys);
+
+}
 
 /*--------------------------------------------------------------------------------*/
 // Debug flag

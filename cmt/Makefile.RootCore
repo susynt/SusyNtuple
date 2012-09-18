@@ -7,7 +7,7 @@ PACKAGE_PRELOAD  = Tree
 PACKAGE_CXXFLAGS = 
 PACKAGE_LDFLAGS  = $(shell root-config --libs)
 PACKAGE_BINFLAGS = -lCintex -lReflex -lPyROOT -lXMLParser -lEG 
-PACKAGE_DEP      = ReweightUtils Mt2 CalibrationDataInterface
+PACKAGE_DEP      = ReweightUtils Mt2 CalibrationDataInterface DGTriggerReweight
 PACKAGE_NOOPT    = 0
 
 include $(ROOTCOREDIR)/Makefile-common

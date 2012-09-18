@@ -1,5 +1,13 @@
 # vim: set noexpandtab:
+2012-09-18 Matt 
+	* Added NtSys_TRIGSF_UP(_DN) to SusyDefs so accomodate new trigger package 
+	* Increased event ClassDef number to reflect changes above.
+	* Updated DilTrigLogic:
+	      * getTriggerWeight -- Use this to get overall event weight.
+	      * Updated constructor which takes a string for which maps to use. Default is A-X (ie. all!)
+	* DilTrigLogic now dependent on DGTriggerReweight. Added to install script	
 
+	
 2012-09-18 Serhan Mete <amete@cern.ch>
 	* scripts/install.sh: Switch SUSYTools to 00-01-07
 	* SusyNtuple/SusyDefs.h: Added SusyNtSystNames and BTagSysNames

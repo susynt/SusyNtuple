@@ -450,7 +450,7 @@ namespace Susy
 	susyFinalState = -1;
       }
 
-      ClassDef(Event, 15);
+      ClassDef(Event, 16);
   };
 
 };
