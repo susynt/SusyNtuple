@@ -1093,7 +1093,7 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets,
 /*--------------------------------------------------------------------------------*/
 // MissingET Rel
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt)
+float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets)
 {
   const TLorentzVector metLV = met->lv();
   float dPhi = TMath::Pi()/2.;
@@ -1103,7 +1103,7 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
       dPhi = fabs(metLV.DeltaPhi( *leptons.at(il) ));
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* jet = jets.at(ij);
-    if(jet->Pt()<minJetPt) continue;
+    if( isForwardJet(jet) ) continue; // Use only central jets
     if( fabs(metLV.DeltaPhi( *jet )) < dPhi )
       dPhi = fabs(metLV.DeltaPhi( *jet ));    
   }// end loop over jets
@@ -1141,7 +1141,7 @@ float SusyNtTools::getMT2(const LeptonVector& leptons, const Susy::Met* met)
 bool SusyNtTools::passTopTag(const LeptonVector& leptons, const JetVector& jets, const Met* met,
                              int opt, float ptJetCut, float mEffCut)
 {
-  // Defaults opt = 0, ptJetCut = 30 GeV, mEffCut = 100 GeV
+  // Defaults opt = 0, ptJetCut = 0 GeV, mEffCut = 100 GeV
   // Tagging is based on number of jets and at least two leptons
   if( leptons.size() < 2 ) return false;
 

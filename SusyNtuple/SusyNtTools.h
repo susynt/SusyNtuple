@@ -233,14 +233,14 @@ class SusyNtTools
     void getNumberOf2LepJets    (const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
 
     // MET Rel
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt=-1);
+    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets);
   
     // MT2
     float getMT2(const LeptonVector& leptons, const Susy::Met* met);
     
     // Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
-		    int opt=0, float ptJetCut=30, float mEffCut=100);
+		    int opt=0, float ptJetCut=0, float mEffCut=100);
     
     bool toptag0j(TLorentzVector v1l, TLorentzVector v2l, TVector2 met);
   
