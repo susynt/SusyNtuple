@@ -90,6 +90,8 @@ namespace Susy
       unsigned int mcType;      // MCTruthClassifier particle type
       unsigned int mcOrigin;    // MCTruthClassifier particle origin
 
+      int truthMatchType;       // RecoTruthMatch::type
+
       float effSF;              // Efficiency scale factor
       float errEffSF;           // Uncertainty on the efficiency scale factor
 
@@ -112,7 +114,6 @@ namespace Susy
         return (trigFlags & mask) == mask;
       }
 
-
       // polymorphism, baby!!
       virtual bool isEle() const { return false; }
       virtual bool isMu()  const { return false; }
@@ -127,12 +128,13 @@ namespace Susy
         q = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
         mcType = mcOrigin = 0;
+        truthMatchType = -1;
         effSF = errEffSF = 0;
         trigFlags = 0;
         Particle::clear();
       }
       
-      ClassDef(Lepton, 7);
+      ClassDef(Lepton, 8);
   };
 
   // Electron class
@@ -151,6 +153,12 @@ namespace Susy
       float etcone30Corr;       // Pt and ED corrected etcone iso
       float topoEtcone30Corr;   // Corrected topo clus based iso
 
+      bool isChargeFlip;        // Charge flip flag from RecoTruthMatch
+
+      // polymorphism, baby!!
+      bool isEle() const { return true;  }
+      bool isMu()  const { return false; }
+
       // Systematic scale factors
       //float ees_up;             // Energy Scale + sigma
       //float ees_dn;             // Energy Scale - sigma
@@ -165,10 +173,6 @@ namespace Susy
       float eer_up;             // Energy Reso. + sigma
       float eer_dn;             // Energy Reso. - sigma
 
-      // polymorphism, baby!!
-      bool isEle() const { return true;  }
-      bool isMu()  const { return false; }
-
       void setState(int sys);
 
       // print method
@@ -178,6 +182,7 @@ namespace Susy
       void clear(){
         clusE = clusEta = mediumPP = tightPP = 0;
         etcone30Corr = topoEtcone30Corr = 0;
+        isChargeFlip = false;
 	//ees_up = ees_dn = eer_up = eer_dn = 0;
 	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
 	ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
@@ -185,7 +190,7 @@ namespace Susy
         Lepton::clear();
       }
 
-      ClassDef(Electron, 3);
+      ClassDef(Electron, 4);
   };
 
   // Muon class
