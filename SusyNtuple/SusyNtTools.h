@@ -70,16 +70,18 @@ class SusyNtTools
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
     TauVector      getSignalTaus(TauVector baseTaus);
     JetVector      getSignalJets(JetVector baseJets);
+    JetVector      getSignalJets2Lep(JetVector baseJets);
   
     // Get the signal objects
     void getSignalObjects(ElectronVector baseElecs, MuonVector baseMuons, 
                           TauVector baseTaus, JetVector baseJets, 
 			  ElectronVector& sigElecs, MuonVector& sigMuons, 
-                          TauVector& sigTaus, JetVector& sigJets,
+                          TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC);
     void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
 			  MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
-                          SusyNtSys sys, uint nVtx, bool isMC, bool selectTaus=false);
+                          JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
+                          bool selectTaus=false);
     
     // Check if Signal, now with mc/data dependent iso cuts
     bool isSignalLepton(const Susy::Lepton* l, uint nVtx, bool isMC);
@@ -87,7 +89,8 @@ class SusyNtTools
     bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
     bool isSignalTau(const Susy::Tau* tau);
     bool isSignalJet(const Susy::Jet* jet);
-  
+    bool isSignalJet2Lep(const Susy::Jet* jet);
+ 
     // Build Lepton vector - we should probably sort them here
     // Not currently including taus here
     //void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo, TauVector& tau)
@@ -218,6 +221,16 @@ class SusyNtTools
     float bTagSF(const Susy::Event*, const JetVector& jets, 
 		 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_85,
 		 BTagSys sys=BTag_NOM);
+
+    // 2 Lepton jet methods and counters
+    bool isCentralLightJet(const Susy::Jet* jet);
+    bool isCentralBJet    (const Susy::Jet* jet);
+    bool isForwardJet     (const Susy::Jet* jet);
+
+    int numberOfCLJets    (const JetVector& jets);
+    int numberOfCBJets    (const JetVector& jets);
+    int numberOfFJets     (const JetVector& jets);
+    void getNumberOf2LepJets    (const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
 
     // MET Rel
     float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, float minJetPt=-1);

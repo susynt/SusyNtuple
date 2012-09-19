@@ -151,6 +151,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     TauVector           m_signalTaus;           // signal taus
     LeptonVector        m_signalLeptons;        // signal leptons
     JetVector           m_signalJets;           // signal jets
+    JetVector           m_signalJets2Lep;       // signal jets for 2 Lep
     const Susy::Met*    m_met;                  // Met
 
     // Timer

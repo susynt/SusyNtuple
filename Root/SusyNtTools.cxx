@@ -72,19 +72,21 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
 void SusyNtTools::getSignalObjects(ElectronVector baseElecs, MuonVector baseMuons,
                                    TauVector baseTaus, JetVector baseJets,
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
-                                   TauVector& sigTaus, JetVector& sigJets,
-                                   uint nVtx, bool isMC)
+                                   TauVector& sigTaus, JetVector& sigJets, 
+                                   JetVector& sigJets2Lep, uint nVtx, bool isMC)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, nVtx, isMC);
   sigMuons = getSignalMuons(baseMuons, nVtx, isMC);
   sigTaus  = getSignalTaus(baseTaus);
   sigJets  = getSignalJets(baseJets);
+  sigJets2Lep = getSignalJets2Lep(baseJets);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs, 
 				   MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
-                                   SusyNtSys sys, uint nVtx, bool isMC, bool selectTaus)
+                                   JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
+                                   bool selectTaus)
 {
   // Temporary vectors for baseline objects
   ElectronVector elecs = getPreElectrons(susyNt, sys);
@@ -102,6 +104,7 @@ void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElec
   sigMuons = getSignalMuons(muons, nVtx, isMC);
   sigTaus  = getSignalTaus(taus);
   sigJets  = getSignalJets(jets);
+  sigJets2Lep = getSignalJets2Lep(jets);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets)
@@ -258,6 +261,18 @@ JetVector SusyNtTools::getSignalJets(JetVector baseJets)
   return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
+JetVector SusyNtTools::getSignalJets2Lep(JetVector baseJets)
+{
+  JetVector sigJets;
+  for(uint ij=0; ij<baseJets.size(); ++ij){
+    const Jet* j = baseJets.at(ij);
+    if(isSignalJet2Lep(j)){
+      sigJets.push_back(j);
+    }
+  }
+  return sigJets;
+}
+/*--------------------------------------------------------------------------------*/
 PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susyNt)
 {
   // Currently only storing signal photons, so just a conv way to get them.
@@ -398,6 +413,123 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
   if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
   if(jet->jvf < JET_JVF_CUT)         return false;
   return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Check if given Jet is 2 Lepton Signal Jet
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
+{
+  if(
+     !isCentralLightJet(jet) &&
+     !isCentralBJet(jet)     &&
+     !isForwardJet(jet)
+    ) return false;
+
+  return true; 
+}
+
+/*--------------------------------------------------------------------------------*/
+// Check if given Jet is 2 Lepton Central Light Jet
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
+{
+  // To-do cuts should NOT be hard-coded!!!
+  if(jet->Pt() < 25.        )  return false;
+  if(fabs(jet->Eta()) > 2.5 )  return false;
+  if(jet->jvf < 0.2         )  return false;
+  if(jet->mv1 > 0.122       )  return false;
+
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Check if given Jet is 2 Lepton B Jet
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
+{
+  // To-do cuts should NOT be hard-coded!!!
+  if(jet->Pt() < 20.        )  return false;
+  if(fabs(jet->Eta()) > 2.5 )  return false;
+  if(jet->mv1 < 0.122       )  return false;
+
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Check if given Jet is 2 Lepton Forward Jet
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
+{
+  // To-do cuts should NOT be hard-coded!!!
+  if(jet->Pt() < 30.        ) return false;
+  if(fabs(jet->Eta()) < 2.5 ) return false; 
+  if(fabs(jet->Eta()) > 4.5 ) return false;
+
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Count Number of 2 Lepton Central Light Jets
+/*--------------------------------------------------------------------------------*/
+int SusyNtTools::numberOfCLJets(const JetVector& jets)
+{
+  int ans = 0;
+
+  for(uint ij=0; ij<jets.size(); ++ij){
+    const Jet* j = jets.at(ij);
+    if(isCentralLightJet(j)){
+      ans++;
+    }
+  }
+
+  return ans;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Count Number of 2 Lepton B Jets
+/*--------------------------------------------------------------------------------*/
+int SusyNtTools::numberOfCBJets(const JetVector& jets)
+{
+  int ans = 0;
+
+  for(uint ij=0; ij<jets.size(); ++ij){
+    const Jet* j = jets.at(ij);
+    if(isCentralBJet(j)){
+      ans++;
+    }
+  }
+
+  return ans;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Count Number of 2 Lepton Forward Jets
+/*--------------------------------------------------------------------------------*/
+int SusyNtTools::numberOfFJets(const JetVector& jets)
+{
+  int ans = 0;
+
+  for(uint ij=0; ij<jets.size(); ++ij){
+    const Jet* j = jets.at(ij);
+    if(isForwardJet(j)){
+      ans++;
+    }
+  }
+
+  return ans;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Pass 2 Lepton Jet Counts by Reference
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf)
+{
+   Ncl = numberOfCLJets(jets);
+   Ncb = numberOfCBJets(jets);
+   Nf  = numberOfFJets (jets);
+
+  return;
 }
 
 /*--------------------------------------------------------------------------------*/

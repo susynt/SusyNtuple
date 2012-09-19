@@ -186,7 +186,7 @@ void SusyNtAna::selectObjects(SusyNtSys sys)
 
   // Now grab Signal objects
   getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-		   m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, 
+		   m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, m_signalJets2Lep, 
                    nt.evt()->nVtx, nt.evt()->isMC);
 
   // Grab met

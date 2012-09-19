@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2012-09-19 Serhan Mete <amete@cern.ch>
+	* Root/SusyNtAna.cxx: Added extra JetVector (m_signalJets2Lep) to getSignalObjects(...)
+	* SusyNtuple/SusyNtAna.h: Define the above JetVector
+	* Root/SusyNtTools.cxx: Added multiple functions to select/count signal jets for 2 Leptons analysis 
+	* SusyNtuple/SusyNtTools.h: Added multiple functions to select/count signal jets for 2 Leptons analysis
+
 2012-09-18 Steve
 	* Added truthMatchType flag to Lepton class
 	* Added isChargeFlip flag to Electron class
