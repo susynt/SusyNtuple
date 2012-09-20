@@ -204,6 +204,7 @@ namespace Susy
 
       float thetaPV;            // Theta extrapolated to PV, by request.
       float etcone30;           // etcone iso
+      float ptcone30ElStyle;    // ptcone with electron style tracks
 
       // Systematic sf
       float ms_up;              // MS Pt + sigma
@@ -222,12 +223,12 @@ namespace Susy
       // clear vars
       void clear(){
         isCombined = 0;
-        thetaPV = etcone30 = 0;
+        thetaPV = etcone30 = ptcone30ElStyle = 0;
 	ms_up = ms_dn = id_up = id_dn = 0;
         Lepton::clear();
       }
 
-      ClassDef(Muon, 2);
+      ClassDef(Muon, 3);
   };
 
   // Tau class
@@ -403,6 +404,10 @@ namespace Susy
       
       int hfor;                 // heavy flavor overlap removal decision
 
+      int susyFinalState;       // Susy process
+
+      bool passMllForAlpgen;    // flag for vetoing overlap between Sherpa Z and Alpgen Z Mll10to60
+
       unsigned int trigFlags;   // Event level trigger bits
 
       // Check trigger firing
@@ -431,9 +436,6 @@ namespace Susy
       double pdf_x2;
       double pdf_scale;
 
-      // Susy Process
-      int susyFinalState;
-
       // Combined normalized event weight
       float fullWeight() const { return wPileup*xsec*lumiSF; }
 
@@ -448,14 +450,15 @@ namespace Susy
         mcChannel = w = 0;
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
+	susyFinalState = -1;
+        passMllForAlpgen = true;
 	memset(evtFlag,0,sizeof(evtFlag));
         wPileup = wPileupAB3 = wPileupAB = 0;
         xsec = lumiSF = sumw = pdfSF = 0;
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
-	susyFinalState = -1;
       }
 
-      ClassDef(Event, 16);
+      ClassDef(Event, 17);
   };
 
 };

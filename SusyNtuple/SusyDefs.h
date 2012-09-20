@@ -100,6 +100,14 @@ enum AnalysisType
   Ana_N
 };
 
+// SUSY D3PD tag, for controlling which branch names to grab
+enum D3PDTag
+{
+  D3PD_p1032 = 0,
+  D3PD_p1181,
+  D3PD_N
+};
+
 // Enum for systematic checks
 enum SusyNtSys 
 {
@@ -186,6 +194,7 @@ const std::string BTagSysNames[BTag_N] = {
 };
 
 // Enum for checking event level cuts
+// Poorly named...
 enum EventCheck 
 {
   PASS_LAr      = 1<<0,

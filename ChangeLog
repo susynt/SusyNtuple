@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-09-19 Steve
+	* Added ptcone30ElStyle to Muon class
+	* Added passMllForAlpgen flag for adding low mass Alpgen to Sherpa Z
+	* Added D3PDTag enum for controlling d3pd branch changes
+
 2012-09-19 Serhan Mete <amete@cern.ch>
 	* Root/SusyNtTools.cxx: Update getMetRel and passTopTag for the latest recommendations
 	* Root/SusyNtAna.cxx: Added extra JetVector (m_signalJets2Lep) to getSignalObjects(...)
