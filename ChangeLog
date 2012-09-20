@@ -4,6 +4,7 @@
 	* Added ptcone30ElStyle to Muon class
 	* Added passMllForAlpgen flag for adding low mass Alpgen to Sherpa Z
 	* Added D3PDTag enum for controlling d3pd branch changes
+	* Tagging SusyNtuple-00-00-28
 
 2012-09-19 Serhan Mete <amete@cern.ch>
 	* Root/SusyNtTools.cxx: Update getMetRel and passTopTag for the latest recommendations
