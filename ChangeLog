@@ -1,4 +1,9 @@
 # vim: set noexpandtab:
+
+2012-09-21
+	* Update grabbing the .env file for the Btag SF. Default is w/ JVF. 
+	Use function arg to get the noJVF file/
+
 2012-09-19 Matt
 	* Fixed DilTrigLogic to not check trigger for MC, just checks the region.
 	* Changed constructor DilTrigLogic to not require isMC bool, always initialize the reweight tool now

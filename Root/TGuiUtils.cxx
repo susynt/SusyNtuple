@@ -831,8 +831,11 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     _line->SetLineColor(kRed);
     _line->Draw();
     _pBot->RedrawAxis();
+    
     if(min<0) min=-1;
     if(max>1) max=2;
+    min=0;
+    max=2;
     _ratioH->GetYaxis()->SetRangeUser(min,max);
     _pBot->Update();
   }
