@@ -5,25 +5,25 @@
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-DilTrigLogic::DilTrigLogic(bool isMC, string period) :
+DilTrigLogic::DilTrigLogic(string period) :
   m_triggerWeight(NULL)
 {
 
   cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="<<endl;
   cout<<"Initializing DilTrigLogic:"<<endl;
-  cout<<"\tisMC:               "<<isMC<<endl;
+  //cout<<"\tisMC:               "<<isMC<<endl;
   cout<<"\tperiod for Weights: "<<period<<endl;
   cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="<<endl;
 
-  if( isMC ){
+  //if( isMC ){
 
-    // Create trigger reweight object
-    m_triggerWeight = new triggerReweight2Lep();
-    string directory = "$ROOTCOREDIR/../DGTriggerReweight/data";
-    m_triggerWeight->setDbg(1);
-    m_triggerWeight->initialize(directory, period);
-    m_triggerWeight->setDbg(0);
-  }
+  // Create trigger reweight object
+  m_triggerWeight = new triggerReweight2Lep();
+  string directory = "$ROOTCOREDIR/../DGTriggerReweight/data";
+  m_triggerWeight->setDbg(1);
+  m_triggerWeight->initialize(directory, period);
+  m_triggerWeight->setDbg(0);
+    //}
 
 }
 /*--------------------------------------------------------------------------------*/
