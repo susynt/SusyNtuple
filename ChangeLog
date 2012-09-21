@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-09-19 Matt
+	* Fixed DilTrigLogic to not check trigger for MC, just checks the region.
+	
 2012-09-19 Steve
 	* Added ptcone30ElStyle to Muon class
 	* Added passMllForAlpgen flag for adding low mass Alpgen to Sherpa Z

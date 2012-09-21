@@ -72,18 +72,21 @@ bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, Event* evt)
 
   if( (isEg || isMC) && ET == ET_ee ){
     DilTriggerRegion dtr = getEETrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
+    if( isMC ) return dtr != DTR_UNKNOWN;
     return passEvtTrigger(evtTrigFlags, dtr);
   }
   if( (!isEg || isMC) && ET == ET_mm ){
     DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
+    if( isMC ) return dtr != DTR_UNKNOWN;
     return passEvtTrigger(evtTrigFlags, dtr);
   }
   if( ET == ET_em || ET == ET_me ){
     const Lepton* elec = leptons[0]->isEle() ? leptons[0] : leptons[1];
     const Lepton* muon = leptons[0]->isEle() ? leptons[1] : leptons[0];
     DilTriggerRegion dtr = getEMTrigRegion(elec->Pt(), muon->Pt());
-    bool pass = passEvtTrigger(evtTrigFlags, dtr);
+    if( isMC ) return dtr != DTR_UNKNOWN;
 
+    bool pass = passEvtTrigger(evtTrigFlags, dtr);
     if( !isMC &&  isEg && dtr != DTR_EM_A ) return false; // Egamma stream from Region A
     if( !isMC && !isEg && dtr != DTR_EM_B ) return false; // Muon stream from Region B
     return pass;
@@ -117,18 +120,21 @@ bool DilTrigLogic::passDilTrigMatch(LeptonVector leptons, Event* evt)
 
   if( (isEg || isMC) && ET == ET_ee ){
     DilTriggerRegion dtr = getEETrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
+    if( isMC ) return dtr != DTR_UNKNOWN;
     return passTriggerMatch(leptons[0]->trigFlags, leptons[1]->trigFlags, dtr);
   }
   if( (!isEg || isMC) && ET == ET_mm ){
     DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
+    if( isMC ) return dtr != DTR_UNKNOWN;
     return passTriggerMatch(leptons[0]->trigFlags, leptons[1]->trigFlags, dtr);
   }
   if( ET == ET_em || ET == ET_me ){
     const Lepton* elec = leptons[0]->isEle() ? leptons[0] : leptons[1];
     const Lepton* muon = leptons[0]->isEle() ? leptons[1] : leptons[0];
     DilTriggerRegion dtr = getEMTrigRegion(elec->Pt(), muon->Pt());
-    bool pass = passTriggerMatch(elec->trigFlags, muon->trigFlags, dtr);
+    if( isMC ) return dtr != DTR_UNKNOWN;
 
+    bool pass = passTriggerMatch(elec->trigFlags, muon->trigFlags, dtr);
     if( !isMC &&  isEg && dtr != DTR_EM_A ) return false; // Egamma stream from Region A
     if( !isMC && !isEg && dtr != DTR_EM_B ) return false; // Muon stream from Region B
     return pass;
@@ -184,14 +190,15 @@ DilTriggerRegion DilTrigLogic::getEMTrigRegion(float ept, float mpt)
 /*--------------------------------------------------------------------------------*/
 bool DilTrigLogic::passEvtTrigger(uint evtflag, DilTriggerRegion dtr)
 {
-  if( dtr == DTR_EE_A )  return (evtflag & TRIG_2e12Tvh_loose1);
-  if( dtr == DTR_EE_B )  return (evtflag & TRIG_e24vh_medium1_e7_medium1);
-  if( dtr == DTR_MM_A )  return (evtflag & TRIG_mu18_tight_mu8_EFFS);
-  if( dtr == DTR_MM_B )  return (evtflag & TRIG_mu18_tight_mu8_EFFS) || (evtflag & TRIG_2mu13);
-  if( dtr == DTR_MM_C )  return (evtflag & TRIG_mu18_tight_mu8_EFFS);
-  if( dtr == DTR_MM_D )  return (evtflag & TRIG_2mu13);
-  if( dtr == DTR_EM_A )  return (evtflag & TRIG_e12Tvh_medium1_mu8);
-  if( dtr == DTR_EM_B )  return (evtflag & TRIG_mu18_tight_e7_medium1);
+  if( dtr == DTR_UNKNOWN) return false;
+  if( dtr == DTR_EE_A )   return (evtflag & TRIG_2e12Tvh_loose1);
+  if( dtr == DTR_EE_B )   return (evtflag & TRIG_e24vh_medium1_e7_medium1);
+  if( dtr == DTR_MM_A )   return (evtflag & TRIG_mu18_tight_mu8_EFFS);
+  if( dtr == DTR_MM_B )   return (evtflag & TRIG_mu18_tight_mu8_EFFS) || (evtflag & TRIG_2mu13);
+  if( dtr == DTR_MM_C )   return (evtflag & TRIG_mu18_tight_mu8_EFFS);
+  if( dtr == DTR_MM_D )   return (evtflag & TRIG_2mu13);
+  if( dtr == DTR_EM_A )   return (evtflag & TRIG_e12Tvh_medium1_mu8);
+  if( dtr == DTR_EM_B )   return (evtflag & TRIG_mu18_tight_e7_medium1);
 
   return false;
 }
@@ -206,6 +213,9 @@ bool DilTrigLogic::passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr
   // If you use this method outside of DilTrigger package you must be careful to
   // adhere to this convention in order to get em trigger logic correct.
 
+  // If Unknown return false
+  if(dtr == DTR_UNKNOWN) 
+    return false;
  
   // EE Regions
   if( dtr == DTR_EE_A ) 
