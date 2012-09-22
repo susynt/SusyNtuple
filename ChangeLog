@@ -1,6 +1,10 @@
 # vim: set noexpandtab:
 
-2012-09-21
+2012-09-22 Anyes
+	* Remove hard coded cut for 2L jet selection
+	* Add switch to metRel to use F30. Default: False 
+	
+2012-09-21 Anyes
 	* Update grabbing the .env file for the Btag SF. Default is w/ JVF. 
 	Use function arg to get the noJVF file/
 

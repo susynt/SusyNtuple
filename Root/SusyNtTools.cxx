@@ -434,11 +434,10 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 {
-  // To-do cuts should NOT be hard-coded!!!
-  if(jet->Pt() < 25.        )  return false;
-  if(fabs(jet->Eta()) > 2.5 )  return false;
-  if(jet->jvf < 0.2         )  return false;
-  if(jet->mv1 > 0.122       )  return false;
+  if(jet->Pt() < JET_PT_L25_CUT     )  return false;
+  if(fabs(jet->Eta()) > JET_ETA_CUT )  return false;
+  if(jet->jvf < JET_JVF_CUT_2L      )  return false;
+  if(jet->mv1 > MV1_85              )  return false;
 
   return true;
 }
@@ -448,10 +447,9 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 {
-  // To-do cuts should NOT be hard-coded!!!
-  if(jet->Pt() < 20.        )  return false;
-  if(fabs(jet->Eta()) > 2.5 )  return false;
-  if(jet->mv1 < 0.122       )  return false;
+  if(jet->Pt() < JET_PT_B20_CUT        )  return false;
+  if(fabs(jet->Eta()) > JET_ETA_CUT )  return false;
+  if(jet->mv1 < MV1_85              )  return false;
 
   return true;
 }
@@ -461,10 +459,9 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
 {
-  // To-do cuts should NOT be hard-coded!!!
-  if(jet->Pt() < 30.        ) return false;
-  if(fabs(jet->Eta()) < 2.5 ) return false; 
-  if(fabs(jet->Eta()) > 4.5 ) return false;
+  if(jet->Pt() < JET_PT_F30_CUT         ) return false;
+  if(fabs(jet->Eta()) < JET_ETA_CUT     ) return false; 
+  if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
 
   return true;
 }
@@ -1096,7 +1093,7 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
 /*--------------------------------------------------------------------------------*/
 // MissingET Rel
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets)
+float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const JetVector& jets, bool useForward)
 {
   const TLorentzVector metLV = met->lv();
   float dPhi = TMath::Pi()/2.;
@@ -1106,7 +1103,7 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
       dPhi = fabs(metLV.DeltaPhi( *leptons.at(il) ));
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* jet = jets.at(ij);
-    if( isForwardJet(jet) ) continue; // Use only central jets
+    if( !useForward && isForwardJet(jet) ) continue; // Use only central jets
     if( fabs(metLV.DeltaPhi( *jet )) < dPhi )
       dPhi = fabs(metLV.DeltaPhi( *jet ));    
   }// end loop over jets

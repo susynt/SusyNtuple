@@ -333,7 +333,13 @@ const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
 const float MUON_ETA_CUT     = 2.4;  // Currently applied in SusyNtMaker
 const float JET_ETA_CUT      = 2.5;  // Cut in SusyNtMaker is 4.9 Maybe change?
                                      // --> No, 2.5 is SIGNAL JET eta!!
-const float JET_JVF_CUT      = 0.5;  
+const float JET_JVF_CUT      = 0.5; 
+ 
+const float JET_JVF_CUT_2L   = 0.2;  
+const float JET_PT_L25_CUT   = 25;
+const float JET_PT_B20_CUT   = 20;
+const float JET_PT_F30_CUT   = 30;
+const float JET_ETA_MAX_CUT  = 4.5;  
 
 // Signal Requirements
 const float ELECTRON_PTCONE30_PT_CUT       = 0.16; 

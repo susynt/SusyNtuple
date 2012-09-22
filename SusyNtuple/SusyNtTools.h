@@ -233,7 +233,7 @@ class SusyNtTools
     void getNumberOf2LepJets    (const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
 
     // MET Rel
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets);
+    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, bool useForward=false);
   
     // MT2
     float getMT2(const LeptonVector& leptons, const Susy::Met* met);
