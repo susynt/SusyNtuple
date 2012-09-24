@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-09-24 Serhan Mete <amete@cern.ch>
+	* SusyNtuple/SusyDefs.h: Fix space in "EES_Z_UP[ ]" in SusyNtSystNames
+
 2012-09-22 Anyes
 	* Remove hard coded cut for 2L jet selection
 	* Add switch to metRel to use F30. Default: False 

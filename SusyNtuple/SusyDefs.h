@@ -145,7 +145,7 @@ enum SusyNtSys
 // Human-readable names for enum SusyNtSys 
 const std::string SusyNtSystNames[NtSys_N] = {
   "NOM",
-  "EES_Z_UP ",    
+  "EES_Z_UP",    
   "EES_Z_DN",    
   "EES_MAT_UP",  
   "EES_MAT_DN",  
