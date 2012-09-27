@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-09-26 Steve
+	* Added lumi constant for A-E (13/fb)
+	* Tagging SusyNtuple-00-00-29
+
 2012-09-24 Serhan Mete <amete@cern.ch>
 	* SusyNtuple/SusyDefs.h: Fix space in "EES_Z_UP[ ]" in SusyNtSystNames
 
@@ -14,7 +18,7 @@
 2012-09-19 Matt
 	* Fixed DilTrigLogic to not check trigger for MC, just checks the region.
 	* Changed constructor DilTrigLogic to not require isMC bool, always initialize the reweight tool now
-	
+
 2012-09-19 Steve
 	* Added ptcone30ElStyle to Muon class
 	* Added passMllForAlpgen flag for adding low mass Alpgen to Sherpa Z

@@ -38,6 +38,7 @@ const float LUMI_A_B3  = 1037.;
 const float LUMI_A_B14 = 5835.;
 const float LUMI_A_D7  = 9632.86;
 const float LUMI_A_D   = 10454.;
+const float LUMI_A_E   = 13021.8;
 
 //-----------------------------------------------------------------------------------
 // Convenience typedefs
