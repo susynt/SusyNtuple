@@ -378,6 +378,16 @@ const float M_M_DR = 0.05;
 const float MV1_60 = 0.980;
 const float MV1_85 = 0.122;
 
+// BAD FCAL
+const float BAD_FCAL_LUMI=1.18034;
+const int   BAD_FCAL_RUN1=206348;
+const int   BAD_FCAL_RUN2=207332;
+
+const float BAD_FCAL_PT=20;
+const float BAD_FCAL_ETA=3.2;
+const float BAD_FCAL_PHILOW=1.6;
+const float BAD_FCAL_PHIHIGH=3.1;
+
 
 
 #endif

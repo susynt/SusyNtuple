@@ -90,7 +90,13 @@ class SusyNtTools
     bool isSignalTau(const Susy::Tau* tau);
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
- 
+
+    //To determine if there is baseline jets within bad FCAL region 
+    bool hasJetInBadFCAL(JetVector baseJets);
+    bool isBadFCALJet(const Susy::Jet* jet);
+
+
+
     // Build Lepton vector - we should probably sort them here
     // Not currently including taus here
     //void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo, TauVector& tau)
@@ -174,7 +180,6 @@ class SusyNtTools
     // Pass All the above, incase you don't care about cut flow
     bool passAll(int flag)     { return ( flag & PASS_Event );   }
   
-
     //
     // Object selection control toggles
     // Currently all are on by default except muon etcone

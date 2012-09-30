@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-09-30 Anyes
+	* Add functions for finding jet in bad FCAL regions
+	
 2012-09-26 Steve
 	* Added lumi constant for A-E (13/fb)
 	* Tagging SusyNtuple-00-00-29
