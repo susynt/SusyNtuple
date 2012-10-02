@@ -196,6 +196,7 @@ const std::string BTagSysNames[BTag_N] = {
 
 // Enum for checking event level cuts
 // Poorly named...
+// This will be phased out
 enum EventCheck 
 {
   PASS_LAr      = 1<<0,
@@ -204,6 +205,20 @@ enum EventCheck
   PASS_Cosmic   = 1<<3,
   PASS_Event    = 1<<4,
   PASS_HotSpot  = 1<<5
+};
+
+// Enum for event cleaning cuts
+enum EventCleaningCuts
+{
+  ECut_GRL = 0,
+  ECut_TTC,
+  ECut_LarErr,
+  ECut_GoodVtx,
+  ECut_HotSpot,
+  ECut_BadJet,
+  ECut_BadMuon,
+  ECut_Cosmic,
+  ECut_N
 };
 
 // Way to check Event Types

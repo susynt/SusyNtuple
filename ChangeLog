@@ -1,8 +1,14 @@
 # vim: set noexpandtab:
 
+2012-08-02 Steve
+	* Added new EventCleaningCuts enum and flags to Event class
+		* Will replace the evtFlag bit word currently stored
+		* Contains flags for all cuts in SusyNtMaker so that we can turn off
+		  all filtering and still save the flags to apply the cuts later
+
 2012-09-30 Anyes
 	* Add functions for finding jet in bad FCAL regions
-	
+
 2012-09-26 Steve
 	* Added lumi constant for A-E (13/fb)
 	* Tagging SusyNtuple-00-00-29
