@@ -5,7 +5,8 @@
 		* Will replace the evtFlag bit word currently stored
 		* Contains flags for all cuts in SusyNtMaker so that we can turn off
 		  all filtering and still save the flags to apply the cuts later
-	* Updated evtFlag usage to cuFlags
+	* Updated evtFlag usage to cutFlags
+	* Tagging SusyNtuple-00-00-30
 
 2012-09-30 Anyes
 	* Add functions for finding jet in bad FCAL regions
