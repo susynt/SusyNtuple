@@ -2,6 +2,7 @@
 
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
+#include "SusyNtuple/SusyDefs.h"
 
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/SusyNtTools.h"
@@ -52,5 +53,8 @@
 //Tools //optional to have this here ?
 #pragma link C++ class SusyNtTools+;
 #pragma link C++ class ChainHelper+;
+
+#pragma link C++ enum SusyNtSys+;
+#pragma link C++ enum BTagSys+;
 
 #endif
