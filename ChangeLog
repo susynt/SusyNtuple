@@ -1,8 +1,12 @@
 # vim: set noexpandtab:
 
+2012-10-03 Steve
+	* Added larError flag to Event class
+	* Added ECut_TileErr to enum
+
 2012-10-03 Anyes
 	* fix getEventWeight constructor to use LUMI_A_E such as to get correct evt weight for 13/fb
-	
+
 2012-10-02 Steve
 	* Added new EventCleaningCuts enum and flags to Event class
 		* Will replace the evtFlag bit word currently stored

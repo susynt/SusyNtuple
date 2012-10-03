@@ -399,6 +399,8 @@ namespace Susy
       unsigned int mcChannel;   // MC channel ID number (mc run number)
       float w;                  // MC generator weight
 
+      unsigned int larError;    // LAr error flag
+
       unsigned int nVtx;        // number of good vertices
       float avgMu;              // average interactions per bunch crossing
       
@@ -417,7 +419,7 @@ namespace Susy
       }
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
-      // This will be phased out
+      // This will be replaced
       //int evtFlag[NtSys_N];
 
       // Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
@@ -451,6 +453,7 @@ namespace Susy
         stream = Stream_Unknown;
         isMC = false;
         mcChannel = w = 0;
+        larError = 0;
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
 	susyFinalState = -1;
@@ -462,7 +465,7 @@ namespace Susy
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 18);
+      ClassDef(Event, 19);
   };
 
 };
