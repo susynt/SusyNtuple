@@ -418,7 +418,7 @@ namespace Susy
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
       // This will be phased out
-      int evtFlag[NtSys_N];
+      //int evtFlag[NtSys_N];
 
       // Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
       unsigned int cutFlags[NtSys_N];
@@ -455,7 +455,7 @@ namespace Susy
         hfor = -1;
 	susyFinalState = -1;
         passMllForAlpgen = true;
-	memset(evtFlag,0,sizeof(evtFlag));
+	//memset(evtFlag,0,sizeof(evtFlag));
 	memset(cutFlags,0,sizeof(cutFlags));
         wPileup = wPileupAB3 = wPileupAB = 0;
         xsec = lumiSF = sumw = pdfSF = 0;

@@ -114,7 +114,8 @@ void Susy3LepCutflow::Terminate()
 bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& jets, const Met* met)
 {
   // In this method place all event selection cuts.
-  int flag = nt.evt()->evtFlag[NtSys_NOM];
+  //int flag = nt.evt()->evtFlag[NtSys_NOM];
+  int flag = nt.evt()->cutFlags[NtSys_NOM];
 
   if( !passLAr(flag            ))  return false;
   n_pass_LAr++;

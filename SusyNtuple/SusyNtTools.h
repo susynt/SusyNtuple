@@ -163,22 +163,28 @@ class SusyNtTools
     //
   
     // No electron or jet in the LAr hole - shouldn't be used anymore
-    bool passLAr(int flag)     { return ( flag & PASS_LAr );     }
+    //bool passLAr(int flag)     { return ( flag & PASS_LAr );     }
+    bool passLAr(int flag)     { return true; }
 
     // Pass Tile hot spot veto
-    bool passHotSpot(int flag) { return ( flag & PASS_HotSpot ); }
+    //bool passHotSpot(int flag) { return ( flag & PASS_HotSpot ); }
+    bool passHotSpot(int flag) { return ( flag & ECut_HotSpot ); }
   
     // Pass the Bad Jet requirement
-    bool passBadJet(int flag)  { return ( flag & PASS_BadJet );  }
+    bool passBadJet(int flag)  { return ( flag & ECut_BadJet );  }
     
     // Pass the Bad Muon requirement
-    bool passBadMuon(int flag) { return ( flag & PASS_BadMuon ); }
+    bool passBadMuon(int flag) { return ( flag & ECut_BadMuon ); }
     
     // No cosmic muons
-    bool passCosmic(int flag)  { return ( flag & PASS_Cosmic );  }
+    bool passCosmic(int flag)  { return ( flag & ECut_Cosmic );  }
     
     // Pass All the above, incase you don't care about cut flow
-    bool passAll(int flag)     { return ( flag & PASS_Event );   }
+    bool passAll(int flag)
+    { 
+      int mask = ECut_HotSpot || ECut_BadJet || ECut_BadMuon || ECut_Cosmic;
+      return (flag & mask) == mask;
+    }
   
     //
     // Object selection control toggles
