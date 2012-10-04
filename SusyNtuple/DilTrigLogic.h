@@ -41,7 +41,7 @@ class DilTrigLogic
  public:
 
   // Default constructor and destructor for now
-  DilTrigLogic(string period = "A-X");
+  DilTrigLogic(string period = "HCP");
   virtual ~DilTrigLogic();
 
   // Three basic methods to interact with the trigger package:
