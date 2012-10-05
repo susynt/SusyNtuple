@@ -38,11 +38,17 @@ class TrilTrigLogic
     // Trigger reweighting in MC
     float getTriggerWeight(const LeptonVector& leptons, Event* evt);
 
+    // Only apply pt threshold cuts for trigger acceptance
+    void setAccOnly(bool doIt=true) { m_accOnly = doIt; }
+
     // Debug info
     void setDebug(bool doIt=true) { m_dbg = doIt; }
 
   protected:
-    int                 m_dbg;
+
+    bool                m_accOnly;      // Only check trigger kinematic acceptance
+
+    int                 m_dbg;          // Debug flag
 
 };
 
