@@ -1,8 +1,14 @@
 # vim: set noexpandtab:
 
+2012-10-05 Steve
+	* Added isSherpaSample(mcID)
+	* Put evtFlag back into SusyEvent to recover some backwards compatibility
+		* I _think_ this will work
+		* Bits won't be set in latest ntuples
+
 2012-10-04 Matt
 	* Changed default trigger initializtion to HCP
-	
+
 2012-10-03 Steve
 	* Added larError flag to Event class
 	* Added ECut_TileErr to enum

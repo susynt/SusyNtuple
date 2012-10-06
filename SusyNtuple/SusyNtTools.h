@@ -267,6 +267,14 @@ class SusyNtTools
   
     // Will need to be updated if more flags are added
     //bool passTrigger(uint trig, int flag){ return (trig & flag); };
+
+
+    //
+    // Misc methods
+    //
+
+    // Sherpa sample check
+    bool isSherpaSample(unsigned int mcID);
     
   protected:
     

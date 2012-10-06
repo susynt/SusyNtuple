@@ -1315,3 +1315,23 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
   return mct;
 }
 
+/*--------------------------------------------------------------------------------*/
+// Check if mcID is a known sherpa sample
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSherpaSample(unsigned int mcID)
+{
+  // Sherpa ttbar dilep and semilep
+  if(mcID >= 117800 && mcID <= 117809) return true;
+  // Sherpa W/Z gamma
+  if(mcID == 126739 || mcID == 126742 || mcID == 126854 || mcID == 126856 || mcID == 145161 || mcID == 145162) return true;
+  // Sherpa diboson
+  if(mcID >= 126892 && mcID <= 126895) return true;
+  if(mcID == 126989) return true;
+  // Z + LF/HF
+  if(mcID >= 128975 && mcID <= 128977) return true;
+  if(mcID >= 146820 && mcID <= 146822) return true;
+  // W/Z inclusive
+  if(mcID >= 147770 && mcID <= 147776) return true;
+
+  return false;
+}
