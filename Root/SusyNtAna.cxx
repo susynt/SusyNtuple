@@ -149,6 +149,11 @@ float SusyNtAna::getEventWeight(float lumi)
   return SusyNtTools::getEventWeight(nt.evt(), lumi);
 }
 /*--------------------------------------------------------------------------------*/
+float SusyNtAna::getEventWeightFixed(unsigned int mcChannel, float lumi)
+{
+  return SusyNtTools::getEventWeightFixed(mcChannel, nt.evt(), lumi);
+}
+/*--------------------------------------------------------------------------------*/
 float SusyNtAna::getEventWeightAB3()
 {
   return SusyNtTools::getEventWeightAB3(nt.evt());

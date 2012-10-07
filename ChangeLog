@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-10-07 Steve
+	* Added getEventWeightFixed, for fixing the sumw in Sherpa_Zmumu inclusive
+		* In the next ntuple tag we can go back to using the standard function
+
 2012-10-05 Steve
 	* Added isSherpaSample(mcID)
 	* Put evtFlag back into SusyEvent to recover some backwards compatibility
