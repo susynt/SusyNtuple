@@ -29,6 +29,11 @@ namespace Susy
     public:
       Particle(){ clear(); }
       virtual ~Particle(){};
+      /** Copy constructor */
+      Particle(const Particle &);
+      /** Assignment operator */
+      Particle& operator=(const Particle &);
+
 
       unsigned int idx;   // d3pd index
       
@@ -70,6 +75,10 @@ namespace Susy
     public:
       Lepton(){ clear(); }
       virtual ~Lepton(){};
+      /** Copy constructor */
+      Lepton(const Lepton &);
+      /** Assignment operator */
+      Lepton& operator=(const Lepton &);
 
       // public member vars
       int q;                    // Charge
@@ -127,6 +136,7 @@ namespace Susy
       void clear(){
         q = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
+	d0Unbiased= errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
         truthMatchType = -1;
         effSF = errEffSF = 0;
@@ -143,6 +153,9 @@ namespace Susy
     public:
       Electron(){ clear(); }
       virtual ~Electron(){};
+      Electron(const Electron &);
+      /** Assignment operator */
+      Electron& operator=(const Electron &);
 
       float clusE;              // CaloCluster energy
       float clusEta;            // CaloCluster eta
@@ -199,6 +212,9 @@ namespace Susy
     public:
       Muon(){ clear(); }
       virtual ~Muon(){};
+      Muon(const Muon &);
+      /** Assignment operator */
+      Muon& operator=(const Muon &);
 
       bool isCombined;          // Is combined muon, otherwise segment tagged
 
@@ -241,6 +257,10 @@ namespace Susy
     public:
       Tau() { clear(); }
       virtual ~Tau(){};
+      Tau(const Tau &);
+      /** Assignment operator */
+      Tau& operator=(const Tau &);
+
 
       int author;               // reconstruction author
       int nTrack;               // number of tracks
@@ -278,6 +298,9 @@ namespace Susy
     public:
       Photon(){ clear(); };
       virtual ~Photon(){};
+      Photon(const Photon &);
+      /** Assignment operator */
+      Photon& operator=(const Photon &);
 
       // Conversion Information
       bool isConv;
@@ -309,6 +332,10 @@ namespace Susy
     public:
       Jet(){ clear(); }
       virtual ~Jet(){};
+      Jet(const Jet &);
+      /** Assignment operator */
+      Jet& operator=(const Jet &);
+
 
       float jvf;                // Jet vertex fraction
       int truthLabel;           // Flavor truth label
@@ -349,7 +376,11 @@ namespace Susy
     public:
       Met(){ clear(); }
       virtual ~Met(){};
-
+      /** Copy constructor */
+      Met(const Met &);
+      /** Assignment operator */
+      Met& operator=(const Met &);
+      
       float Et;
       float phi;
 
@@ -376,7 +407,7 @@ namespace Susy
       // clear vars
       void clear(){
         Et = phi = 0;
-        refEle = refMuo = refJet = refCell = sys = 0;
+        refEle = refMuo = refJet = softJet = refGamma = refCell = sys = 0;
         //Particle::clear();
       }
 

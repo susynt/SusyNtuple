@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-10-10 Anyes
+	* Added copy & = constructor to all classes beside the Event class.
+	
 2012-10-07 Steve
 	* Added getEventWeightFixed, for fixing the sumw in Sherpa_Zmumu inclusive
 		* In the next ntuple tag we can go back to using the standard function
