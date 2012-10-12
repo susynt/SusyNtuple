@@ -715,7 +715,7 @@ void TGuiUtils::myDrawTHStack(TCanvas* _c, THStack* _hStack,
 TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot, 
 				    THStack* _hStack, TH1F* _stackH,  TH1F* _h, TLegend* _l, bool logy){
   const float maxScaleLin=1.4;
-  const float maxScaleLog=11;
+  const float maxScaleLog=10;
   float scale=maxScaleLin;
   if(logy)  scale=maxScaleLog;
 
@@ -747,13 +747,13 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     _ratioH->GetXaxis()->SetTitleSize(0.05);
     _ratioH->SetLabelSize(0.12,"X");
     _ratioH->SetLabelSize(0.12,"Y");
-    //    _ratioH->GetYaxis()->SetTitle("(Pred-Data)/Data");
+    //_ratioH->GetYaxis()->SetTitle("(Pred-Data)/Data");
     _ratioH->GetYaxis()->SetTitle("Data/SM");
     _ratioH->GetYaxis()->SetTitleSize(0.05);
     _ratioH->GetYaxis()->SetNdivisions(205);
     //_ratioH->SetAxisRange(-0.3,0.3,"Y");
     
-    //    _ratioH->Divide(_hDiff,_h,1,1);
+    //_ratioH->Divide(_hDiff,_h,1,1);
     _ratioH->Divide(_h,_hMC,1,1);
     avg = _h->Integral(0,-1) / _hMC->Integral(0,-1);
   }
@@ -780,9 +780,19 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   float min = getMinBin(_stackH);
   if(min<0) min=fabs(min); //protection
   if(min<0.1) min= 0.1;
+  else if(min<1) min=1;
   if(max==0)  max=1;
   //  if(min<=0 && logy) min=1;
-  _hStack->Draw("hist");
+
+  if(_h){
+    _h->SetMaximum(max*scale);
+    _h->SetMinimum(min);
+    _h->GetYaxis()->SetRangeUser(min,max*scale);
+    myDraw1d(_h,_pTop,kBlack,"p",logy, -1, false,20);
+  }
+
+
+  _hStack->Draw("histsame");
   _hStack->SetMaximum(max*scale);
   _hStack->SetMinimum(min);
   _hStack->GetYaxis()->SetTitleSize(0.06);
@@ -790,7 +800,8 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   _hStack->GetYaxis()->SetLabelSize(0.06);
   _hStack->GetXaxis()->SetTitle(_stackH->GetXaxis()->GetTitle());
   _hStack->GetYaxis()->SetTitle(_stackH->GetYaxis()->GetTitle());
-  _hStack->Draw("hist");
+  _hStack->GetYaxis()->SetRangeUser(min,max*scale);
+  //  _hStack->Draw("hist");
 
   if(_h){
     myDraw1d(_h,_pTop,kBlack,"psame",logy, -1, false,20);
@@ -804,6 +815,7 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   }
 
   std::cout << "min " << min << " max " << max << std::endl;
+
   _pTop->RedrawAxis();
   _pTop->Update();
   

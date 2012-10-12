@@ -16,7 +16,7 @@ Updated:
 #include <string>
 //
 #define PARTICLETYPES   23
-#define PARTICLEORIGIN  43
+#define PARTICLEORIGIN  45
 #define PARTICLEOUTCOME 12
 
 namespace MCTruthPartClassifier {
@@ -69,7 +69,7 @@ namespace MCTruthPartClassifier {
     ZBoson        = 13,
     Higgs         = 14,
     HiggsMSSM     = 15,
-    WZMSSM        = 16,
+    HeavyBoson    = 16,
     WBosonLRSM    = 17,
     NuREle        = 18,
     NuRMu         = 19,
@@ -96,7 +96,9 @@ namespace MCTruthPartClassifier {
     ISRPhot       = 39,
     FSRPhot       = 40, 
     NucReact      = 41,
-    PiZero        = 42
+    PiZero        = 42,
+    DiBoson       = 43,
+    ZorHeavyBoson = 44
   };
 
   enum ParticleOutCome {
@@ -198,6 +200,8 @@ namespace MCTruthPartClassifier {
    sParticleOrigin.push_back("FSRPhot");
    sParticleOrigin.push_back("NucReact");
    sParticleOrigin.push_back("PiZero");
+   sParticleOrigin.push_back("DiBoson");
+   sParticleOrigin.push_back("ZorHeavyBoson");
 
    sParticleOutCome.reserve(PARTICLEOUTCOME);
    sParticleOutCome.push_back("NonDefinedOutCome");

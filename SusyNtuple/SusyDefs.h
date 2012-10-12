@@ -46,12 +46,20 @@ const float LUMI_A_E   = 13021.8;
 typedef unsigned int uint;
 typedef std::vector<std::string> stringvector;
 
+/*
 typedef std::vector<const Susy::Lepton*>   LeptonVector;
 typedef std::vector<const Susy::Electron*> ElectronVector;
 typedef std::vector<const Susy::Muon*>     MuonVector;
 typedef std::vector<const Susy::Photon*>   PhotonVector;
 typedef std::vector<const Susy::Tau*>      TauVector;
 typedef std::vector<const Susy::Jet*>      JetVector;
+*/
+typedef std::vector<Susy::Lepton*>   LeptonVector;
+typedef std::vector<Susy::Electron*> ElectronVector;
+typedef std::vector<Susy::Muon*>     MuonVector;
+typedef std::vector<Susy::Photon*>   PhotonVector;
+typedef std::vector<Susy::Tau*>      TauVector;
+typedef std::vector<Susy::Jet*>      JetVector;
 
 //-----------------------------------------------------------------------------------
 // Global enums

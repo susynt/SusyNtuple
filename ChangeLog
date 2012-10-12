@@ -1,7 +1,13 @@
 # vim: set noexpandtab:
 
+2012-10-12 Anyes	
+	* Remove the const in the typedef LeptonVector etc... 
+	* Fix TGuiUtile - draw stack - y-axis range behaviour
+	* Update MCTruthClassifier file to 00-00-23 tag. Should have no effect beside the enum matching what we have in SusyNt.
+	
 2012-10-10 Anyes
 	* Added copy & = constructor to all classes beside the Event class.
+
 	
 2012-10-07 Steve
 	* Added getEventWeightFixed, for fixing the sumw in Sherpa_Zmumu inclusive
