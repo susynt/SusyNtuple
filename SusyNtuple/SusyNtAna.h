@@ -67,7 +67,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     }
 
     // Get event weight - contains generator, pileup, xsec, and lumi weights
-    // Default weight uses A-D lumi and pileup weights
+    // Default weight uses A-E lumi and pileup weights
     // You can supply a different luminosity, but the pileup weights will store correspond to the default dataset
     virtual float getEventWeight(float lumi = LUMI_A_E);
     // Temporary fixed version for n0105
