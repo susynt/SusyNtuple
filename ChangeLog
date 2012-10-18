@@ -1,4 +1,8 @@
 # vim: set noexpandtab:
+
+2012-10-18 Anyes
+        * Fix BadFCAL - forgot the fabs for eta and upper phi cut effectively not applied.
+	
 2012-10-18 Matt
 	* Updated SusyDefs.h to contain enum for electron and muon trigger systematics
 	* Updated DilTriggerLogic to handle the new systematics

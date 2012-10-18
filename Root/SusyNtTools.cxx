@@ -552,9 +552,9 @@ bool SusyNtTools::hasJetInBadFCAL(JetVector baseJets)
 bool SusyNtTools::isBadFCALJet(const Susy::Jet* jet)
 {
   if(jet->Pt()>BAD_FCAL_PT  && 
-     jet->Eta()>BAD_FCAL_ETA &&
-     jet->Phi()>BAD_FCAL_PHILOW && 
-     jet->Phi()>BAD_FCAL_PHIHIGH)
+     fabs(jet->Eta()) > BAD_FCAL_ETA &&
+     jet->Phi() > BAD_FCAL_PHILOW && 
+     jet->Phi() < BAD_FCAL_PHIHIGH)
     return true;
   return false;
 }
