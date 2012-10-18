@@ -14,7 +14,8 @@ SusyNtAna::SusyNtAna() :
         m_entry(0),
         m_selectTaus(false),
         m_dbg(0),
-	m_dbgEvt(false)
+	m_dbgEvt(false),
+	m_duplicate(false)
 {
 }
 
@@ -78,6 +79,11 @@ Bool_t SusyNtAna::Process(Long64_t entry)
     cout << "num ntuple jet: " << nt.jet()->size() << endl;
     //cout << "Met:          " << nt.met()->Pt()   << endl;
   }
+  
+  //Check Duplicate run:event
+  if(!nt.evt()->isMC && checkDuplicate()){
+    if(isDuplicate(nt.evt()->run, nt.evt()->event))  return kFALSE;
+  }
 
   // select baseline and signal objects
   selectObjects();
@@ -137,6 +143,24 @@ bool SusyNtAna::checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, 
   if ( !eventSet )
     eventSet = new set<unsigned int>();
   return !eventSet->insert(event).second;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Check for duplicate run/event pair
+// Designed for data
+// For MC, need to add a check on a event var, since duplice run/event may occur
+/*--------------------------------------------------------------------------------*/
+bool SusyNtAna::isDuplicate(unsigned int run, unsigned int event){
+
+  if(_eventListDuplicate.size()==0) addRunEvent(_eventListDuplicate, run, event);
+  else{
+    if(checkRunEvent(_eventListDuplicate, run, event)){
+      cout << "WARNING Duplicate event - SKIPING IT !!!" << run << " " << event << endl;
+      return true;
+    }
+    else addRunEvent(_eventListDuplicate, run, event);
+  }
+  return false;
 }
 
 /*--------------------------------------------------------------------------------*/

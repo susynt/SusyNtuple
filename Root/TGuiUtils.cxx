@@ -784,15 +784,16 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   if(max==0)  max=1;
   //  if(min<=0 && logy) min=1;
 
-  if(_h){
+  if(_h->Integral(0,-1)>0){
     _h->SetMaximum(max*scale);
     _h->SetMinimum(min);
     _h->GetYaxis()->SetRangeUser(min,max*scale);
     myDraw1d(_h,_pTop,kBlack,"p",logy, -1, false,20);
+    _hStack->Draw("histsame");
   }
+  else   _hStack->Draw("hist");
 
 
-  _hStack->Draw("histsame");
   _hStack->SetMaximum(max*scale);
   _hStack->SetMinimum(min);
   _hStack->GetYaxis()->SetTitleSize(0.06);
@@ -803,7 +804,7 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   _hStack->GetYaxis()->SetRangeUser(min,max*scale);
   //  _hStack->Draw("hist");
 
-  if(_h){
+  if(_h->Integral(0,-1)>0){
     myDraw1d(_h,_pTop,kBlack,"psame",logy, -1, false,20);
   }
   else{

@@ -94,9 +94,14 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void setDebug(int dbg) { m_dbg = dbg; }
     int dbg() { return m_dbg; }
 
+    void toggleCheckDuplicates(bool b=true){m_duplicate = b;}
+    bool checkDuplicate() {return m_duplicate;}
+    
     // To debug events in input file 
     typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
-    RunEventMap _eventList;   //run:event to debug 
+    RunEventMap _eventList;          //run:event to debug 
+    RunEventMap _eventListDuplicate; //Checks for duplicate run/event
+
     void setEvtDebug() {m_dbgEvt=true;}
     bool dbgEvt() const {return m_dbgEvt;}
     void loadEventList();
@@ -105,6 +110,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
     bool checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event);
     void addRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event) 
     { checkAndAddRunEvent(runEventMap, run, event); }
+
+    bool isDuplicate(unsigned int run, unsigned int event);
 
     // Sample name - can be used however you like
     std::string sampleName() { return m_sample; }
@@ -133,7 +140,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     int   m_dbg;                // debug level
     bool  m_dbgEvt;             // debug events
-
+    bool  m_duplicate;          // duplicate event
+    
     std::string m_sample;       // sample name string
 
 
