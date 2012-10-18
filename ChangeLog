@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
-
+2012-10-18 Matt
+	* Updated SusyDefs.h to contain enum for electron and muon trigger systematics
+	* Updated DilTriggerLogic to handle the new systematics
+	
 2012-10-18 Anyes
 	* Add feature to check for duplicate events in data
 	

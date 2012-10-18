@@ -146,8 +146,12 @@ enum SusyNtSys
   //NtSys_RESOST_UP,    // Met resolution soft term + sigma
   //NtSys_RESOST_DN,    // Met resolution soft term - sigma
   NtSys_RESOST,      // Met resolution soft term + sigma
-  NtSys_TRIGSF_UP,    // Trigger Scale factor + error
-  NtSys_TRIGSF_DN,    // Trigger Scale factor - error
+  //NtSys_TRIGSF_UP,    // Trigger Scale factor + error
+  //NtSys_TRIGSF_DN,    // Trigger Scale factor - error
+  NtSys_TRIGSF_EL_UP,    // Trigger Scale factor + error for el
+  NtSys_TRIGSF_EL_DN,    // Trigger Scale factor - error for el
+  NtSys_TRIGSF_MU_UP,    // Trigger Scale factor + error for mu
+  NtSys_TRIGSF_MU_DN,    // Trigger Scale factor - error for mu
   NtSys_N
 };
 
@@ -174,8 +178,10 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "SCALEST_UP",  
   "SCALEST_DN",  
   "RESOST",
-  "TRIGSF_UP",
-  "TRIGSF_DN"
+  "TRIGSF_EL_UP",
+  "TRIGSF_EL_DN",
+  "TRIGSF_MU_UP",
+  "TRIGSF_MU_DN"
 };
 
 //Enum for BTag SF & systematics
