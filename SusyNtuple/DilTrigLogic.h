@@ -76,6 +76,12 @@ class DilTrigLogic
   // Debug method
   void debugFlag(uint flag);
 
+  // Currently we check that the mc events fall within
+  // a given region, not actually checking the trigger.
+  // If the user wants to use the MC
+  // trigger as is, simply set this flag.
+  void useMCTrigger(){ m_useMCTrig = true; };
+
  protected:
 
   //    
@@ -85,7 +91,9 @@ class DilTrigLogic
   triggerReweight2Lep* m_triggerWeight;     // Trigger reweighting object
 
  private:
-   
+  
+  bool m_useMCTrig;                         // flag to actually check MC trig
+ 
   //Period              period;             // Period
   //ElectronVector      m_elecs;              // Electron vector for easy access
   //MuonVector          m_muons;              // Muon vector for easy access

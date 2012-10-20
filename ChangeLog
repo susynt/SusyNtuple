@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-10-19 Matt
+	* Added useMCTrigger() to dilepton trigger package to allow toggling on and off checking mc trigger chains.
+	
 2012-10-18 Anyes
         * Fix BadFCAL - forgot the fabs for eta and upper phi cut effectively not applied.
 	

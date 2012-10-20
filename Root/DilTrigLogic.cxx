@@ -6,7 +6,8 @@
 // Constructor
 /*--------------------------------------------------------------------------------*/
 DilTrigLogic::DilTrigLogic(string period) :
-  m_triggerWeight(NULL)
+  m_triggerWeight(NULL),
+  m_useMCTrig(false)
 {
 
   cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="<<endl;
@@ -72,19 +73,19 @@ bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, Event* evt)
 
   if( (isEg || isMC) && ET == ET_ee ){
     DilTriggerRegion dtr = getEETrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
-    if( isMC ) return dtr != DTR_UNKNOWN;
+    if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
     return passEvtTrigger(evtTrigFlags, dtr);
   }
   if( (!isEg || isMC) && ET == ET_mm ){
     DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
-    if( isMC ) return dtr != DTR_UNKNOWN;
+    if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
     return passEvtTrigger(evtTrigFlags, dtr);
   }
   if( ET == ET_em || ET == ET_me ){
     const Lepton* elec = leptons[0]->isEle() ? leptons[0] : leptons[1];
     const Lepton* muon = leptons[0]->isEle() ? leptons[1] : leptons[0];
     DilTriggerRegion dtr = getEMTrigRegion(elec->Pt(), muon->Pt());
-    if( isMC ) return dtr != DTR_UNKNOWN;
+    if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
 
     bool pass = passEvtTrigger(evtTrigFlags, dtr);
     if( !isMC &&  isEg && dtr != DTR_EM_A ) return false; // Egamma stream from Region A
@@ -120,19 +121,19 @@ bool DilTrigLogic::passDilTrigMatch(LeptonVector leptons, Event* evt)
 
   if( (isEg || isMC) && ET == ET_ee ){
     DilTriggerRegion dtr = getEETrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
-    if( isMC ) return dtr != DTR_UNKNOWN;
+    if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
     return passTriggerMatch(leptons[0]->trigFlags, leptons[1]->trigFlags, dtr);
   }
   if( (!isEg || isMC) && ET == ET_mm ){
     DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
-    if( isMC ) return dtr != DTR_UNKNOWN;
+    if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
     return passTriggerMatch(leptons[0]->trigFlags, leptons[1]->trigFlags, dtr);
   }
   if( ET == ET_em || ET == ET_me ){
     const Lepton* elec = leptons[0]->isEle() ? leptons[0] : leptons[1];
     const Lepton* muon = leptons[0]->isEle() ? leptons[1] : leptons[0];
     DilTriggerRegion dtr = getEMTrigRegion(elec->Pt(), muon->Pt());
-    if( isMC ) return dtr != DTR_UNKNOWN;
+    if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
 
     bool pass = passTriggerMatch(elec->trigFlags, muon->trigFlags, dtr);
     if( !isMC &&  isEg && dtr != DTR_EM_A ) return false; // Egamma stream from Region A
