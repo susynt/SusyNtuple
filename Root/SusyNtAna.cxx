@@ -118,7 +118,7 @@ void SusyNtAna::loadEventList()
   int nEvtDbg=0;
   while(fscanf(eventsFile,"%i %i \n",&run, &event) != EOF){
     cout << "Adding run-event " << run << " " << event << endl; 
-    addRunEvent(_eventList, run, event);
+    addRunEvent(m_eventList, run, event);
     nEvtDbg++;
   }
   std::cout << " >>> Debuging " << nEvtDbg << " events " << std::endl;
@@ -128,8 +128,8 @@ void SusyNtAna::loadEventList()
 /*--------------------------------------------------------------------------------*/
 bool SusyNtAna::processThisEvent(unsigned int run, unsigned int event)
 {
-  if(_eventList.size()==0) return true;
-  return checkRunEvent(_eventList, run, event);
+  if(m_eventList.size()==0) return true;
+  return checkRunEvent(m_eventList, run, event);
 }
 bool SusyNtAna::checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event)
 {
@@ -152,13 +152,13 @@ bool SusyNtAna::checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, 
 /*--------------------------------------------------------------------------------*/
 bool SusyNtAna::isDuplicate(unsigned int run, unsigned int event){
 
-  if(_eventListDuplicate.size()==0) addRunEvent(_eventListDuplicate, run, event);
+  if(m_eventListDuplicate.size()==0) addRunEvent(m_eventListDuplicate, run, event);
   else{
-    if(checkRunEvent(_eventListDuplicate, run, event)){
+    if(checkRunEvent(m_eventListDuplicate, run, event)){
       cout << "WARNING Duplicate event - SKIPING IT !!!" << run << " " << event << endl;
       return true;
     }
-    else addRunEvent(_eventListDuplicate, run, event);
+    else addRunEvent(m_eventListDuplicate, run, event);
   }
   return false;
 }

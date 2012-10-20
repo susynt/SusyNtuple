@@ -16,6 +16,11 @@
 #include <map>
 #include <set>
 
+
+// To debug events in input file 
+typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
+
+
 /*
 
     SusyNtAna - base class for analyzing SusyNt
@@ -33,10 +38,6 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // SusyNt object, access to the SusyNt variables
     Susy::SusyNtObject nt;
-
-    //**************
-    // To Be deleted
-    //std::ofstream evtlist;
 
 
     //
@@ -94,16 +95,11 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void setDebug(int dbg) { m_dbg = dbg; }
     int dbg() { return m_dbg; }
 
-    void toggleCheckDuplicates(bool b=true){m_duplicate = b;}
-    bool checkDuplicate() {return m_duplicate;}
+    void toggleCheckDuplicates(bool b=true) { m_duplicate = b; }
+    bool checkDuplicate() { return m_duplicate; }
     
-    // To debug events in input file 
-    typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
-    RunEventMap _eventList;          //run:event to debug 
-    RunEventMap _eventListDuplicate; //Checks for duplicate run/event
-
-    void setEvtDebug() {m_dbgEvt=true;}
-    bool dbgEvt() const {return m_dbgEvt;}
+    void setEvtDebug() { m_dbgEvt = true; }
+    bool dbgEvt() const { return m_dbgEvt; }
     void loadEventList();
     bool processThisEvent(unsigned int run, unsigned int event);
     bool checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event);
@@ -144,6 +140,10 @@ class SusyNtAna : public TSelector, public SusyNtTools
     
     std::string m_sample;       // sample name string
 
+
+    // To debug events in input file 
+    RunEventMap m_eventList;          //run:event to debug 
+    RunEventMap m_eventListDuplicate; //Checks for duplicate run/event
 
 
     //

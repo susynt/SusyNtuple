@@ -1,17 +1,21 @@
 # vim: set noexpandtab:
+
+2012-10-20 Steve
+	* Fixed formatting and variable naming conventions
+
 2012-10-19 Matt
 	* Added useMCTrigger() to dilepton trigger package to allow toggling on and off checking mc trigger chains.
-	
+
 2012-10-18 Anyes
-        * Fix BadFCAL - forgot the fabs for eta and upper phi cut effectively not applied.
-	
+	* Fix BadFCAL - forgot the fabs for eta and upper phi cut effectively not applied.
+
 2012-10-18 Matt
 	* Updated SusyDefs.h to contain enum for electron and muon trigger systematics
 	* Updated DilTriggerLogic to handle the new systematics
-	
+
 2012-10-18 Anyes
 	* Add feature to check for duplicate events in data
-	
+
 2012-10-14 Steve
 	* Tagging SusyNtuple-00-00-32
 
