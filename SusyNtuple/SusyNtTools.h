@@ -93,10 +93,9 @@ class SusyNtTools
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
 
-    //To determine if there is baseline jets within bad FCAL region 
-    bool hasJetInBadFCAL(JetVector baseJets);
+    // To determine if there is baseline jets within bad FCAL region 
+    bool hasJetInBadFCAL(JetVector& baseJets);
     bool isBadFCALJet(const Susy::Jet* jet);
-
 
 
     // Build Lepton vector - we should probably sort them here

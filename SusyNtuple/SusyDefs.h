@@ -77,24 +77,15 @@ enum DataStream
 enum DataPeriod
 {
   Period_A = 0,
-  Period_B1,
-  Period_B2,
-  Period_B3,
-  Period_B4,
-  Period_B5,
-  Period_B6,
-  Period_B7,
-  Period_B8,
-  Period_B9,
-  Period_B10,
-  Period_B11,
-  Period_B12,
-  Period_B13,
-  Period_B14,
+  Period_B,
+  Period_C,
+  Period_D,
+  Period_E,
   Period_Num
 };
 
 // MC periods have less granularity than data
+// Not currently relevant!
 enum McPeriod
 {
   McPeriod_AB = 0,

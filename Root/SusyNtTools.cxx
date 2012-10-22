@@ -535,23 +535,23 @@ void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb,
   return;
 }
 /*--------------------------------------------------------------------------------*/
-// 
+// Check for jet in bad FCAL region
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasJetInBadFCAL(JetVector baseJets)
+bool SusyNtTools::hasJetInBadFCAL(JetVector& baseJets)
 {
-  for(uint ij=0; ij<baseJets.size(); ++ij){
-    const Jet* j = baseJets.at(ij);
+  for(uint iJ=0; iJ<baseJets.size(); ++iJ){
+    const Jet* j = baseJets.at(iJ);
     if(isBadFCALJet(j)) return true;
   }
   return false;
 }
 
 /*--------------------------------------------------------------------------------*/
-//  Jet in bad FCAL
+// Jet in bad FCAL
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isBadFCALJet(const Susy::Jet* jet)
 {
-  if(jet->Pt()>BAD_FCAL_PT  && 
+  if(jet->Pt() > BAD_FCAL_PT  && 
      fabs(jet->Eta()) > BAD_FCAL_ETA &&
      jet->Phi() > BAD_FCAL_PHILOW && 
      jet->Phi() < BAD_FCAL_PHIHIGH)
@@ -560,7 +560,7 @@ bool SusyNtTools::isBadFCALJet(const Susy::Jet* jet)
 }
 
 /*--------------------------------------------------------------------------------*/
-// Overlap Methods (Commandeered from Anyes)
+// Overlap Methods
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::e_e_overlap(ElectronVector& elecs, float minDr)
 {
@@ -613,7 +613,7 @@ void SusyNtTools::e_e_overlap(ElectronVector& elecs, float minDr)
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minDr, bool removeJets)
 {
-  if( elecs.size() == 0 || jets.size() == 0 ) return;
+  if(elecs.size()==0 || jets.size()==0) return;
 
   for(int ie=elecs.size()-1; ie>=0; ie--){
     const Electron* e = elecs.at(ie);
@@ -634,7 +634,7 @@ void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minD
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::m_j_overlap(MuonVector& muons, JetVector jets, float minDr)
 {
-  if( muons.size() == 0 || jets.size() == 0 ) return;
+  if(muons.size()==0 || jets.size()==0) return;
 
   for(int im=muons.size()-1; im>=0; im--){
     const Muon* m = muons.at(im);
@@ -653,7 +653,7 @@ void SusyNtTools::e_m_overlap(ElectronVector& elecs, MuonVector& muons, float mi
 {
   uint nEl = elecs.size();
   uint nMu = muons.size();
-  if(nEl == 0 || nMu == 0) return;
+  if(nEl==0 || nMu==0) return;
 
   // Electron muon overlap should be pretty rare,
   // so we can take advantage of that and optimize
@@ -795,7 +795,7 @@ void SusyNtTools::t_j_overlap(TauVector& taus, JetVector& jets, float minDr, boo
 {
   uint nTau = taus.size();
   uint nJet = jets.size();
-  if( nTau == 0 || nJet == 0 ) return;
+  if(nTau==0 || nJet==0) return;
 
   for(int iTau=nTau-1; iTau>=0; iTau--){
     const Tau* tau = taus.at(iTau);
