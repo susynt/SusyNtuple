@@ -3,6 +3,8 @@
 2012-10-22 Steve
 	* Updated period enum and function in SusyDefs
 	* Cleaned up some white space and removed obsolete code
+	* Added optional run number and isMC check to hasJetInBadFCAL
+	* Added FCAL veto to Susy3LCutFlow
 
 2012-10-20 Steve
 	* Fixed formatting and variable naming conventions

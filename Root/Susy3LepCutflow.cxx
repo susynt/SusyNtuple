@@ -117,21 +117,22 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
   //int flag = nt.evt()->evtFlag[NtSys_NOM];
   int flag = nt.evt()->cutFlags[NtSys_NOM];
 
-  if( !passLAr(flag            ))  return false;
+  if( !passLAr(flag) ) return false;
   n_pass_LAr++;
-  if( !passBadJet(flag         ))  return false;
+  if( !passBadJet(flag) ) return false;
   n_pass_BadJet++;
-  if( !passBadMuon(flag        ))  return false;
+  if( !passBadMuon(flag) ) return false;
   n_pass_BadMuon++;
-  if( !passCosmic (flag        ))  return false;
+  if( !passCosmic(flag) ) return false;
   n_pass_Cosmic++;
-  if( !passNLepCut(leptons     ))  return false;
-  if( !passTrigger(leptons     ))  return false;
-  if( !passSFOSCut(leptons     ))  return false;
-  if( !passMetCut (met         ))  return false;
-  if( !passZCut   (leptons     ))  return false;
-  if( !passBJetCut(            ))  return false;
-  if( !passMtCut  (leptons,met ))  return false;
+  if( hasJetInBadFCAL(m_baseJets, nt.evt()->run, nt.evt()->isMC) ) return false;
+  if( !passNLepCut(leptons) ) return false;
+  if( !passTrigger(leptons) ) return false;
+  if( !passSFOSCut(leptons) ) return false;
+  if( !passMetCut(met) ) return false;
+  if( !passZCut(leptons) ) return false;
+  if( !passBJetCut() ) return false;
+  if( !passMtCut(leptons, met)) return false;
 
   if( m_writeOut ) {
     out << nt.evt()->run << " " << nt.evt()->event << endl;

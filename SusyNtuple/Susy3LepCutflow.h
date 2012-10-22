@@ -43,10 +43,10 @@ class Susy3LepCutflow : public SusyNtAna
     bool passNLepCut(const LeptonVector& leptons);
     bool passTrigger(const LeptonVector& leptons);
     bool passSFOSCut(const LeptonVector& leptons);
-    bool passMetCut (const Susy::Met* met       );
-    bool passZCut   (const LeptonVector& leptons);
-    bool passBJetCut(                           );
-    bool passMtCut  (const LeptonVector& leptons, const Susy::Met* met);
+    bool passMetCut(const Susy::Met* met);
+    bool passZCut(const LeptonVector& leptons);
+    bool passBJetCut();
+    bool passMtCut(const LeptonVector& leptons, const Susy::Met* met);
             
     // Dump cutflow - if derived class uses different cut ordering,
     // override this method
