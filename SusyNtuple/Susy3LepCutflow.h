@@ -40,6 +40,7 @@ class Susy3LepCutflow : public SusyNtAna
     bool selectEvent(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met);
 		     
     // Cut methods
+    bool passFCal();
     bool passNLepCut(const LeptonVector& leptons);
     bool passTrigger(const LeptonVector& leptons);
     bool passSFOSCut(const LeptonVector& leptons);

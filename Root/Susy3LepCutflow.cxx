@@ -125,7 +125,8 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
   n_pass_BadMuon++;
   if( !passCosmic(flag) ) return false;
   n_pass_Cosmic++;
-  if( hasJetInBadFCAL(m_baseJets, nt.evt()->run, nt.evt()->isMC) ) return false;
+  //if( hasJetInBadFCAL(m_baseJets, nt.evt()->run, nt.evt()->isMC) ) return false;
+  if( !passFCal() ) return false;
   if( !passNLepCut(leptons) ) return false;
   if( !passTrigger(leptons) ) return false;
   if( !passSFOSCut(leptons) ) return false;
@@ -142,6 +143,13 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
 }
 /*--------------------------------------------------------------------------------*/
 // Analysis cuts
+/*--------------------------------------------------------------------------------*/
+bool Susy3LepCutflow::passFCal()
+{
+  const Event* evt = nt.evt();
+  if(hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
+  return true;
+}
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passNLepCut(const LeptonVector& leptons)
 {
