@@ -38,7 +38,8 @@ float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt,
   if(!evt->isMC) return 1;
   float sumw = evt->sumw;
   if(mcChannel==147771) sumw = 2.35447863214e+13;
-  if(mcChannel==147772) sumw = 1.23966712709e+13;
+  //if(mcChannel==147772) sumw = 1.23966712709e+13;
+  if(mcChannel==147772) sumw = 1.05702941e+13;
   return evt->w * evt->wPileup * evt->xsec * lumi / sumw;
 }
 /*--------------------------------------------------------------------------------*/
