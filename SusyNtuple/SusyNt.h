@@ -496,7 +496,7 @@ namespace Susy
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 20);
+      ClassDef(Event, 21);
   };
 
 };
