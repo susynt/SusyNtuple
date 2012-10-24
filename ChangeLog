@@ -2,6 +2,7 @@
 
 2012-10-24 Steve
 	* Added a fix for sumw of 147772 Sherpa Ztautau in getEventWeightFixed
+	* Tagging SusyNtuple-00-00-33
 
 2012-10-22 Steve
 	* Updated period enum and function in SusyDefs
