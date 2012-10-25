@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-10-25 Steve
+	* Added protection against file open errors in ChainHelper
+	* Tagging SusyNtuple-00-00-34
+
 2012-10-24 Steve
 	* Added a fix for sumw of 147772 Sherpa Ztautau in getEventWeightFixed
 	* Tagging SusyNtuple-00-00-33
