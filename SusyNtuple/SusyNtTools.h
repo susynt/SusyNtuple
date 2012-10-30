@@ -119,7 +119,7 @@ class SusyNtTools
     float muEtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
   
     // Get the Met, for the appropriate systematic
-    Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool useNomPhiForMetSys = false);
+    Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool useNomPhiForMetSys = true);
 
     //
     // Methods for performing overlap removal
