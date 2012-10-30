@@ -46,6 +46,7 @@ void SusyNtAna::Begin(TTree* /*tree*/)
 
   //Debug event - load event list
   if(m_dbgEvt) loadEventList();
+
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -108,6 +109,7 @@ void SusyNtAna::Terminate()
   m_timer.Stop();
   dumpTimer();
 }
+
 /*--------------------------------------------------------------------------------*/
 // Load Event list of run/event to process. Use to debug events
 /*--------------------------------------------------------------------------------*/

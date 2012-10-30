@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-10-30 Anyes
+	* Added const to hasJetInBadFCAL
+	* Added feature to TGuiUtils
+	
 2012-10-25 Steve
 	* Added protection against file open errors in ChainHelper
 	* Tagging SusyNtuple-00-00-34

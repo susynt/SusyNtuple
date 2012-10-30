@@ -45,13 +45,17 @@ class TGuiUtils : public TObject
 
   TGraphErrors* myTGraphErrorsDivide(TGraphErrors* g1,TGraphErrors* g2);
   TGraphAsymmErrors* myTGraphErrorsDivide(TGraphAsymmErrors* g1,TGraphAsymmErrors* g2);
-  TGraphAsymmErrors* myMakeBand(TGraphErrors* g0, TGraphErrors* g1,TGraphErrors* g2);
+  TGraphAsymmErrors* myMakeBand(TGraphAsymmErrors* g0, TGraphAsymmErrors* g1,TGraphAsymmErrors* g2);
   
   TGraphErrors* TH1ToTGraph(TH1 *h1);
+
+  TGraphAsymmErrors* TH1TOTGraphAsymErrors(TH1 *h1);
   
+  TGraphAsymmErrors*  myRatioBand(TGraphAsymmErrors* _asymErrors);
+
+  void myAddtoBand(TGraphAsymmErrors* g1, TGraphAsymmErrors* g2);
   
-  void myAddtoBand(TGraphErrors* g1, TGraphAsymmErrors* g2);
-  
+
   
   void myText(Double_t x,Double_t y,Color_t color,const char *text, Double_t tsize=0.05);
   void myBoxText(Double_t x, Double_t y,Double_t boxsize,Int_t mcolor,const char *text);

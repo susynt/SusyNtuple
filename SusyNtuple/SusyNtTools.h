@@ -94,7 +94,7 @@ class SusyNtTools
     bool isSignalJet2Lep(const Susy::Jet* jet);
 
     // To determine if there is baseline jets within bad FCAL region 
-    bool hasJetInBadFCAL(JetVector& baseJets, uint run=206248, bool isMC=false);
+    bool hasJetInBadFCAL(const JetVector& baseJets, uint run=206248, bool isMC=false);
     bool isBadFCALJet(const Susy::Jet* jet);
 
 

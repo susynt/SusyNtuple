@@ -310,7 +310,7 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)
     }
   }
   if(!met){
-    cout << "Error: Unable to find met for given systematic!  Returning NULL!!" << endl;
+    cout << "Error: Unable to find met for given systematic!  Returning NULL!!" << sys << endl;
   }
   
   return met;
@@ -540,7 +540,7 @@ void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb,
 /*--------------------------------------------------------------------------------*/
 // Check for jet in bad FCAL region
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasJetInBadFCAL(JetVector& baseJets, uint run, bool isMC)
+bool SusyNtTools::hasJetInBadFCAL(const JetVector& baseJets, uint run, bool isMC)
 {
   // Only applied to data in periods C1 to C8
   if(isMC || run<206248 || run>207332) return false;

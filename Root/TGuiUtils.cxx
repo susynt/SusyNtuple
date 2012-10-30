@@ -286,7 +286,7 @@ TGraphAsymmErrors* TGuiUtils::myTGraphErrorsDivide(TGraphAsymmErrors* g1,TGraphA
 
 
 //__________________________________________________________________________________________________
-TGraphAsymmErrors*  TGuiUtils::myMakeBand(TGraphErrors* g0, TGraphErrors* g1,TGraphErrors* g2)
+TGraphAsymmErrors*  TGuiUtils::myMakeBand(TGraphAsymmErrors* g0, TGraphAsymmErrors* g1,TGraphAsymmErrors* g2)
 {
   TGraphAsymmErrors* g3= new TGraphAsymmErrors();
   
@@ -321,12 +321,12 @@ TGraphAsymmErrors*  TGuiUtils::myMakeBand(TGraphErrors* g0, TGraphErrors* g1,TGr
 
 
 //__________________________________________________________________________________________________
-void TGuiUtils::myAddtoBand(TGraphErrors* g1, TGraphAsymmErrors* g2)
+void TGuiUtils::myAddtoBand(TGraphAsymmErrors* g1, TGraphAsymmErrors* g2)
 {
   Double_t  x1=0., y1=0.,  y2=0., y0=0;
 
   if (g1->GetN()!=g2->GetN())
-   cout << " graphs have not the same # of elements " << endl;
+    std::cout << " graphs have not the same # of elements " << std::endl;
 
   Double_t* EYhigh = g2-> GetEYhigh();
   Double_t* EYlow  = g2-> GetEYlow();
@@ -339,18 +339,18 @@ void TGuiUtils::myAddtoBand(TGraphErrors* g1, TGraphAsymmErrors* g2)
     if (y2==0) y2=1;
 
     Double_t eyh=0., eyl=0.;
-
+   
     y0=y1-y2;
     if (y0!=0) {
-      if (y0>0) {
-	eyh=EYhigh[i];
-	eyh=sqrt(eyh*eyh+y0*y0);
-	g2->SetPointEYhigh(i,eyh);
-      } else {
-	eyl=EYlow[i];
-	eyl=sqrt(eyl*eyl+y0*y0);
-	g2->SetPointEYlow (i,eyl);
-      }
+     if (y0>0){
+      eyh=EYhigh[i];
+      eyh=sqrt(eyh*eyh+y0*y0);
+      g2->SetPointEYhigh(i,eyh);
+     } else {
+      eyl=EYlow[i];
+      eyl=sqrt(eyl*eyl+y0*y0);
+      g2->SetPointEYlow (i,eyl);
+     }
     }
   }
   return;
@@ -379,6 +379,54 @@ TGraphErrors* TGuiUtils::TH1ToTGraph(TH1 *h1)
  return g1;
 }
 
+//__________________________________________________________________________________________________
+TGraphAsymmErrors* TGuiUtils::TH1TOTGraphAsymErrors(TH1 *h1){
+
+  if (!h1) std::cout << "TH1TOTGraph: histogram not found !" << std::endl;
+  
+  TGraphAsymmErrors* g1= new TGraphAsymmErrors();
+  
+  Double_t x, y, ex, ey;
+  for (Int_t i=1; i<=h1->GetNbinsX()+1; i++) {
+    y=h1->GetBinContent(i-1);
+    ey=h1->GetBinError(i-1);
+    x=h1->GetBinCenter(i-1);
+    ex=h1->GetBinWidth(i-1)/2.;
+    g1->SetPoint(i,x,y);
+    g1->SetPointError(i,ex,ex,ey,ey);
+  }
+
+  g1->SetMarkerSize(0);
+  g1->SetFillStyle(3004);
+  g1->SetFillColor(kBlack);
+  
+  return g1;
+}
+
+
+//__________________________________________________________________________________________________
+TGraphAsymmErrors* TGuiUtils::myRatioBand(TGraphAsymmErrors* _asymErrors)
+{
+  TGraphAsymmErrors* ratioBand  = new TGraphAsymmErrors( *_asymErrors ); 
+  ratioBand->SetMarkerSize(0);
+  for(int bin=0; bin < ratioBand->GetN(); bin++){ 
+    ratioBand->GetY()[bin] = 1.; 
+    if( _asymErrors->GetY()[bin] > 0.0001 ) 
+      ratioBand->GetEYhigh()[bin]=_asymErrors->GetEYhigh()[bin]/_asymErrors->GetY()[bin]; 
+    else 
+      ratioBand->GetEYhigh()[bin]= 0.; 
+    if( _asymErrors->GetY()[bin] > 0.0001 ) 
+      ratioBand->GetEYlow()[bin]=_asymErrors->GetEYlow()[bin]/_asymErrors->GetY()[bin]; 
+    else 
+      ratioBand->GetEYlow()[bin]= 0.; 
+    if( ratioBand->GetEYlow()[bin] > 1. ) 
+      ratioBand->GetEYlow()[bin] = 1.; 
+    if( ratioBand->GetEYhigh()[bin] > 1. ) 
+      ratioBand->GetEYhigh()[bin] = 1.; 
+  }
+  
+  return ratioBand;
+}
 
 //__________________________________________________________________________________________________
 void TGuiUtils::myText(Double_t x,Double_t y,Color_t color,const char *text, Double_t tsize)
@@ -754,7 +802,7 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     //_ratioH->SetAxisRange(-0.3,0.3,"Y");
     
     //_ratioH->Divide(_hDiff,_h,1,1);
-    _ratioH->Divide(_h,_hMC,1,1);
+    _ratioH->Divide(_h,_hMC,1,1,"B");
     avg = _h->Integral(0,-1) / _hMC->Integral(0,-1);
   }
 
