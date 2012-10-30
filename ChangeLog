@@ -2,6 +2,7 @@
 
 2012-10-30 Matt
 	* Added flag for using nominal phi in the retrieval of met with NtSys_SCALEST_UP/DOWN
+	* Also added nominal phi for met with NtSys_RESOST
 
 2012-10-30 Anyes
 	* Added const to hasJetInBadFCAL

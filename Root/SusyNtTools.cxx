@@ -309,7 +309,9 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys, bool useNomP
       met = &(metTmp->at(i));
     
       // NEW: For NtSys_SCALEST_UP/NtSys_SCALEST_DOWN use nominal phi
-      if(useNomPhiForMetSys && (sys == NtSys_SCALEST_UP || sys == NtSys_SCALEST_DN)){
+      if(useNomPhiForMetSys && (sys == NtSys_SCALEST_UP || 
+				sys == NtSys_SCALEST_DN ||
+				sys == NtSys_RESOST)){
 	for(uint j=0; j<metTmp->size(); ++j){
 	  if(metTmp->at(j).sys == NtSys_NOM){
 	    met->phi = metTmp->at(j).phi;
