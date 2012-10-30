@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2012-10-30 Matt
+	* Added flag for using nominal phi in the retrieval of met with NtSys_SCALEST_UP/DOWN
+	
 2012-10-30 Anyes
 	* Added const to hasJetInBadFCAL
 	* Added feature to TGuiUtils

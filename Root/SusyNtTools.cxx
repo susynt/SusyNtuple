@@ -297,15 +297,24 @@ PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susyNt)
 /*--------------------------------------------------------------------------------*/
 // Get Met
 /*--------------------------------------------------------------------------------*/
-Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)
+Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys, bool useNomPhiForMetSys)
 {
   // Right now not being clever. Could maybe make sys index correspond to 
   // index on the array.
+  
   Met* met = NULL;
   vector<Met>* metTmp = susyNt->met();
-  for(uint i=0; i<metTmp->size(); i++){
+  for(uint i=0; i<metTmp->size(); i++){    
     if(metTmp->at(i).sys == sys){
       met = &(metTmp->at(i));
+    
+      // NEW: For NtSys_SCALEST_UP/NtSys_SCALEST_DOWN use nominal phi
+      if(useNomPhiForMetSys && (sys == NtSys_SCALEST_UP || sys == NtSys_SCALEST_DN))
+	for(uint j=0; j<metTmp->size(); ++j) 
+	  if(metTmp->at(j).sys == NtSys_NOM){
+	    met->phi = metTmp->at(j).phi;
+	    break;
+	  }
       return met;
     }
   }
