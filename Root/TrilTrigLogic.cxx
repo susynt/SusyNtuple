@@ -157,6 +157,33 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, Event* evt)
   bool passEgamma = pass1E || passSym2E || passAsym2E || passEM;
   bool passMuons  = pass1M || passSym2M || passAsym2M || passME;
 
+  /*
+  cout << "n1E         " << n1E << endl;
+  cout << "nSym2E      " << nSym2E << endl;
+  cout << "nAsym2E_e24 " << nAsym2E_e24 << endl;
+  cout << "nAsym2E     " << nAsym2E << endl;
+  cout << "nEM_e       " << nEM_e << endl;
+  cout << "nEM_m       " << nEM_m << endl;
+  cout << endl;
+  cout << "n1M         " << n1M << endl;
+  cout << "nSym2M      " << nSym2M << endl;
+  cout << "nAsym2M_m18 " << nAsym2M_m18 << endl;
+  cout << "nAsym2M     " << nAsym2M << endl;
+  cout << "nME_e       " << nME_e << endl;
+  cout << "nME_m       " << nME_m << endl;
+  cout << endl;
+  cout << "pass1E      " << pass1E << endl;
+  cout << "passSym2E   " << passSym2E << endl;
+  cout << "passAsym2E  " << passAsym2E << endl;
+  cout << "passEM      " << passEM << endl;
+  cout << endl;
+  cout << "pass1M      " << pass1M << endl;
+  cout << "passSym2M   " << passSym2M << endl;
+  cout << "passAsym2M  " << passAsym2M << endl;
+  cout << "passME      " << passME << endl;
+  cout << endl;
+  */
+
   // Stream dependence to avoid double counting
   if(stream==Stream_Egamma && !passEgamma) return false;
   if(stream==Stream_Muons && (!passMuons || passEgamma)) return false;
@@ -164,30 +191,6 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, Event* evt)
 
   // Event passes trigger!
   //cout << endl << "EVENT PASSES TRIGGER" << endl;
-  //cout << "n1E         " << n1E << endl;
-  //cout << "nSym2E      " << nSym2E << endl;
-  //cout << "nAsym2E_e24 " << nAsym2E_e24 << endl;
-  //cout << "nAsym2E     " << nAsym2E << endl;
-  //cout << "nEM_e       " << nEM_e << endl;
-  //cout << "nEM_m       " << nEM_m << endl;
-  //cout << endl;
-  //cout << "n1M         " << n1M << endl;
-  //cout << "nSym2M      " << nSym2M << endl;
-  //cout << "nAsym2M_m18 " << nAsym2M_m18 << endl;
-  //cout << "nAsym2M     " << nAsym2M << endl;
-  //cout << "nME_e       " << nME_e << endl;
-  //cout << "nME_m       " << nME_m << endl;
-  //cout << endl;
-  //cout << "pass1E      " << pass1E << endl;
-  //cout << "passSym2E   " << passSym2E << endl;
-  //cout << "passAsym2E  " << passAsym2E << endl;
-  //cout << "passEM      " << passEM << endl;
-  //cout << endl;
-  //cout << "pass1M      " << pass1M << endl;
-  //cout << "passSym2M   " << passSym2M << endl;
-  //cout << "passAsym2M  " << passAsym2M << endl;
-  //cout << "passME      " << passME << endl;
-  //cout << endl;
 
   return true;
 }
