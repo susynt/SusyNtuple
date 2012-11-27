@@ -111,6 +111,20 @@ stringvector getTrigChains()
   triggers[BIT_e12Tvh_medium1_mu8]      = "EF_e12Tvh_medium1_mu8";
   triggers[BIT_mu18_tight_e7_medium1]   = "EF_mu18_tight_e7_medium1";
 
+  triggers[BIT_g20_loose]               = "EF_g20_loose";
+  triggers[BIT_g40_loose]               = "EF_g40_loose";
+  triggers[BIT_g60_loose]               = "EF_g60_loose";
+  triggers[BIT_g80_loose]               = "EF_g80_loose";
+  triggers[BIT_g100_loose]              = "EF_g100_loose";
+  triggers[BIT_g120_loose]              = "EF_g120_loose";
+
+  triggers[BIT_tau20_medium1]           = "EF_tau20_medium1";
+  triggers[BIT_tau20Ti_medium1]         = "EF_tau20Ti_medium1";
+  triggers[BIT_tau29Ti_medium1]         = "EF_tau29Ti_medium1";
+  triggers[BIT_tau29Ti_medium1_tau20Ti_medium1] = "EF_tau29Ti_medium1_tau20Ti_medium1";
+  triggers[BIT_tau20Ti_medium1_e18vh_medium1]   = "EF_tau20Ti_medium1_e18vh_medium1";
+  triggers[BIT_tau20_medium1_mu15]      = "EF_tau20_medium1_mu15";
+
   return triggers;
 }
 

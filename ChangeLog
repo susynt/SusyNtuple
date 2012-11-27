@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-11-27 Steve
+	* Added tau trigger chains
+
 2012-11-19 Steve
 	* Added fixed xsec for Sherpa VV semi-leptonic samples in getEventWeightFixed
 		* Should be used when reading n0105 or n0111

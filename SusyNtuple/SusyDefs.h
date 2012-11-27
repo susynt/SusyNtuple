@@ -291,6 +291,14 @@ enum TrigBit
   BIT_g100_loose,
   BIT_g120_loose,
 
+  // Tau triggers
+  BIT_tau20_medium1,
+  BIT_tau20Ti_medium1,
+  BIT_tau29Ti_medium1,
+  BIT_tau29Ti_medium1_tau20Ti_medium1,
+  BIT_tau20Ti_medium1_e18vh_medium1,
+  BIT_tau20_medium1_mu15,
+
   N_TRIG
 };
 
@@ -317,14 +325,22 @@ const uint TRIG_mu18_tight_mu8_EFFS     = 1<<BIT_mu18_tight_mu8_EFFS;
 const uint TRIG_e12Tvh_medium1_mu8      = 1<<BIT_e12Tvh_medium1_mu8;
 const uint TRIG_mu18_tight_e7_medium1   = 1<<BIT_mu18_tight_e7_medium1;
 
-
-// Photon Trigger big masks
+// Photon Trigger bit masks
 const uint TRIG_g20_loose               = 1<<BIT_g20_loose;
 const uint TRIG_g40_loose               = 1<<BIT_g40_loose;
 const uint TRIG_g60_loose               = 1<<BIT_g60_loose;
 const uint TRIG_g80_loose               = 1<<BIT_g80_loose;
 const uint TRIG_g100_loose              = 1<<BIT_g100_loose;
 const uint TRIG_g120_loose              = 1<<BIT_g120_loose;
+
+// Tau trigger bit masks
+const uint TRIG_tau20_medium1                   = 1<<BIT_tau20_medium1;
+const uint TRIG_tau20Ti_medium1                 = 1<<BIT_tau20Ti_medium1;
+const uint TRIG_tau29Ti_medium1                 = 1<<BIT_tau29Ti_medium1;
+const uint TRIG_tau29Ti_medium1_tau20Ti_medium1 = 1<<BIT_tau29Ti_medium1_tau20Ti_medium1;
+const uint TRIG_tau20Ti_medium1_e18vh_medium1   = 1<<BIT_tau20Ti_medium1_e18vh_medium1;
+const uint TRIG_tau20_medium1_mu15              = 1<<BIT_tau20_medium1_mu15;
+
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();
