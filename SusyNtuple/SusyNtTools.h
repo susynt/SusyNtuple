@@ -212,6 +212,7 @@ class SusyNtTools
     float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
     float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
     float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
+    float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Jet* j1, const Susy::Jet* j2);
     float Mt(const Susy::Lepton* lep, const Susy::Met* met);
     float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
 
@@ -223,7 +224,8 @@ class SusyNtTools
     bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10, bool ignoreTau=true);
     void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
     // Safer function, to replace the one above, which returns false if no SFOS pair found
-    bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
+    bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps);
+    bool findBestZ(uint& j1, uint& j2, const JetVector& jets);
     bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets

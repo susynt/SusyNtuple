@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2012-11-28 Steve
+	* Added findBestZ method for jets
+	* Added Mlljj method
+
 2012-11-27 Steve
 	* Added tau trigger chains
 

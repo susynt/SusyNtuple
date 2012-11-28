@@ -958,6 +958,9 @@ float SusyNtTools::Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
 float SusyNtTools::Mjj(const Jet* j1, const Jet* j2)
 { return (*j1 + *j2).M(); }
 /*--------------------------------------------------------------------------------*/
+float SusyNtTools::Mlljj(const Lepton* l1, const Lepton* l2, const Jet* j1, const Jet* j2)
+{ return (*l1 + *l2 + *j1 + *j2).M(); }
+/*--------------------------------------------------------------------------------*/
 float SusyNtTools::Mt(const Lepton* lep, const Met* met)
 { return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
 /*--------------------------------------------------------------------------------*/
@@ -1034,14 +1037,13 @@ void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignor
 }
 
 /*--------------------------------------------------------------------------------*/
-// Finds indices for the lepton pair closest to the Z mass
+// Finds indices for the pair closest to the Z mass
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau)
+bool SusyNtTools::findBestZ(uint& l1, uint& l2, const LeptonVector& leps)
 {
   float minDM = -1;
   uint nLep = leps.size();
   for(uint i=0; i < nLep; i++){
-    if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j < nLep; j++){
       if( !isSFOS(leps[i],leps[j]) ) continue;
       float dM = fabs( Mll(leps[i],leps[j]) - MZ );
@@ -1049,6 +1051,24 @@ bool SusyNtTools::findBestZ(uint& l1, uint& l2, const LeptonVector& leps, bool i
         minDM = dM;
         l1 = i;
         l2 = j;
+      }
+    }
+  }
+  if(minDM<0) return false;
+  return true;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::findBestZ(uint& j1, uint& j2, const JetVector& jets)
+{
+  float minDM = -1;
+  uint nJet = jets.size();
+  for(uint i=0; i < nJet; i++){
+    for(uint j=i+1; j < nJet; j++){
+      float dM = fabs( Mjj(jets[i],jets[j]) - MZ );
+      if(minDM<0 || dM<minDM){
+        minDM = dM;
+        j1 = i;
+        j2 = j;
       }
     }
   }
