@@ -5,6 +5,9 @@
 		* Added the flag to isSignalTau
 		* Not sure yet if I should propagate to other tau selection functions
 	* Added nTrack requirement for the tau eleBDT veto
+	* Added clusPhi and trackPt to Electron class
+	* Added idTrackPt, idTrackEta, idTrackPhi to Muon class
+	* Added truthType and detailedTruthType to Tau class
 
 2012-11-28 Steve
 	* Added findBestZ method for jets
@@ -16,7 +19,10 @@
 2012-11-19 Steve
 	* Added fixed xsec for Sherpa VV semi-leptonic samples in getEventWeightFixed
 		* Should be used when reading n0105 or n0111
-	* Tagging SusyNtuple-00-00-35
+	* Tagging SusyNtuple-00-00-36
+
+????-??-?? Anyes
+	* Tag SusyNtuple-00-00-35
 
 2012-10-30 Matt
 	* Added flag for using nominal phi in the retrieval of met with NtSys_SCALEST_UP/DOWN

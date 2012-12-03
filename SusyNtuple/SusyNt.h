@@ -159,6 +159,8 @@ namespace Susy
 
       float clusE;              // CaloCluster energy
       float clusEta;            // CaloCluster eta
+      float clusPhi;            // CaloCluster phi
+      float trackPt;            // ID track pt
       bool mediumPP;            // isEM medium++
       bool tightPP;             // isEM tight++
 
@@ -193,7 +195,8 @@ namespace Susy
 
       // clear vars
       void clear(){
-        clusE = clusEta = mediumPP = tightPP = 0;
+        clusE = clusEta = clusPhi = trackPt = 0;
+        mediumPP = tightPP = false;
         etcone30Corr = topoEtcone30Corr = 0;
         isChargeFlip = false;
 	//ees_up = ees_dn = eer_up = eer_dn = 0;
@@ -203,7 +206,7 @@ namespace Susy
         Lepton::clear();
       }
 
-      ClassDef(Electron, 4);
+      ClassDef(Electron, 5);
   };
 
   // Muon class
@@ -217,6 +220,10 @@ namespace Susy
       Muon& operator=(const Muon &);
 
       bool isCombined;          // Is combined muon, otherwise segment tagged
+
+      float idTrackPt;          // ID track pt
+      float idTrackEta;         // ID track eta
+      float idTrackPhi;         // ID track phi
 
       float thetaPV;            // Theta extrapolated to PV, by request.
       float etcone30;           // etcone iso
@@ -239,18 +246,17 @@ namespace Susy
       // clear vars
       void clear(){
         isCombined = 0;
+        idTrackPt = idTrackEta = idTrackPhi = 0;
         thetaPV = etcone30 = ptcone30ElStyle = 0;
 	ms_up = ms_dn = id_up = id_dn = 0;
         Lepton::clear();
       }
 
-      ClassDef(Muon, 3);
+      ClassDef(Muon, 4);
   };
 
   // Tau class
-  // Now inheriting from Lepton. Do we need a common base class for just electrons and muons?
-  // There are a lot of variables in Lepton right now that are not relevant for Taus.
-  // With compression, they should not take much space in the SusyNt
+  // INHERITANCE FROM Lepton CLASS WILL SOON BE REMOVED
   //class Tau : public Particle
   class Tau : public Lepton
   {
@@ -275,6 +281,9 @@ namespace Susy
 
       bool trueTau;             // trueTauAssocSmall_matched d3pd variable
 
+      int truthType;            // RecoTauMatch::TauFakeType
+      int detailedTruthType;    // RecoTauMatch::TauDetailedFakeType
+
       // print method
       void print() const;
 
@@ -285,10 +294,11 @@ namespace Susy
         eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
         muonVeto = 0;
         trueTau = false;
+        truthType = detailedTruthType = -1;
         Lepton::clear();
       }
 
-      ClassDef(Tau, 3);
+      ClassDef(Tau, 4);
   };
 
   // Photon class
