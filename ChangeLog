@@ -4,6 +4,7 @@
 	* Added TauID enum for controlling tau selection
 		* Added the flag to isSignalTau
 		* Not sure yet if I should propagate to other tau selection functions
+	* Added nTrack requirement for the tau eleBDT veto
 
 2012-11-28 Steve
 	* Added findBestZ method for jets

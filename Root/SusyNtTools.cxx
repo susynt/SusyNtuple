@@ -411,17 +411,17 @@ bool SusyNtTools::isSignalTau(const Tau* tau, TauID id)
 {
   // Loose cuts - probably shouldn't be used for signal taus
   if(id == TauID_loose){
-    if(tau->eleBDTLoose != 0) return false;
+    if(tau->nTrack == 1 && tau->eleBDTLoose != 0) return false;
     if(tau->jetBDTSigLoose != 1) return false;
   }
   else if(id == TauID_medium){
     if(tau->muonVeto != 0) return false;
-    if(tau->eleBDTMedium != 0) return false;
+    if(tau->nTrack == 1 && tau->eleBDTMedium != 0) return false;
     if(tau->jetBDTSigMedium != 1) return false;
   }
   else if(id == TauID_tight){
     if(tau->muonVeto != 0) return false;
-    if(tau->eleBDTTight != 0) return false;
+    if(tau->nTrack == 1 && tau->eleBDTTight != 0) return false;
     if(tau->jetBDTSigTight != 1) return false;
   }
   else{
