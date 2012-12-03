@@ -136,7 +136,7 @@ namespace Susy
       void clear(){
         q = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
-	d0Unbiased= errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
+	d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
         truthMatchType = -1;
         effSF = errEffSF = 0;
@@ -261,7 +261,6 @@ namespace Susy
       /** Assignment operator */
       Tau& operator=(const Tau &);
 
-
       int author;               // reconstruction author
       int nTrack;               // number of tracks
       float eleBDT;             // electron BDT score
@@ -274,7 +273,7 @@ namespace Susy
       int eleBDTTight;          // ele BDT working point
       int muonVeto;             // muon veto flag
 
-      bool trueTau;             // trueTauAssocSmall_matched
+      bool trueTau;             // trueTauAssocSmall_matched d3pd variable
 
       // print method
       void print() const;
