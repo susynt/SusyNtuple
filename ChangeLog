@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2012-12-03 Steve
+	* Added TauID enum for controlling tau selection
+		* Added the flag to isSignalTau
+		* Not sure yet if I should propagate to other tau selection functions
+
 2012-11-28 Steve
 	* Added findBestZ method for jets
 	* Added Mlljj method

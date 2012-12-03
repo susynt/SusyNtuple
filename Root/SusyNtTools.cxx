@@ -407,12 +407,27 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, uint nVtx, bool isMC)
   return true;
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalTau(const Tau* tau)
+bool SusyNtTools::isSignalTau(const Tau* tau, TauID id)
 {
-  // Currently using medium cuts for signal taus
-  if(tau->muonVeto != 0) return false;
-  if(tau->eleBDTMedium != 0) return false;
-  if(tau->jetBDTSigMedium != 1) return false;
+  // Loose cuts - probably shouldn't be used for signal taus
+  if(id == TauID_loose){
+    if(tau->eleBDTLoose != 0) return false;
+    if(tau->jetBDTSigLoose != 1) return false;
+  }
+  else if(id == TauID_medium){
+    if(tau->muonVeto != 0) return false;
+    if(tau->eleBDTMedium != 0) return false;
+    if(tau->jetBDTSigMedium != 1) return false;
+  }
+  else if(id == TauID_tight){
+    if(tau->muonVeto != 0) return false;
+    if(tau->eleBDTTight != 0) return false;
+    if(tau->jetBDTSigTight != 1) return false;
+  }
+  else{
+    cout << "SusyNtTools::WARNING - tau ID " << id << " not supported!" << endl;
+    return false;
+  }
   return true;
 }
 /*--------------------------------------------------------------------------------*/

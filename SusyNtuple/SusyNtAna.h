@@ -1,5 +1,5 @@
-#ifndef SusyCommon_SusyNtAna_h
-#define SusyCommon_SusyNtAna_h
+#ifndef SusyNtuple_SusyNtAna_h
+#define SusyNtuple_SusyNtAna_h
 
 #include "TSelector.h"
 #include "TTree.h"

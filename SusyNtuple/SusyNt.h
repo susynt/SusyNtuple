@@ -1,5 +1,5 @@
-#ifndef SusyCommon_SusyNt_h
-#define SusyCommon_SusyNt_h
+#ifndef SusyNtuple_SusyNt_h
+#define SusyNtuple_SusyNt_h
 
 
 //-----------------------------------------------------------------------------------

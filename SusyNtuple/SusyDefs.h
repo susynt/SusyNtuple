@@ -1,5 +1,5 @@
-#ifndef SusyCommon_SusyDefs_h
-#define SusyCommon_SusyDefs_h
+#ifndef SusyNtuple_SusyDefs_h
+#define SusyNtuple_SusyDefs_h
 
 #include <iostream>
 #include <fstream>
@@ -108,6 +108,15 @@ enum D3PDTag
   D3PD_N
 };
 
+// Tau ID enum
+enum TauID
+{
+  TauID_loose = 0,
+  TauID_medium,
+  TauID_tight,
+  TauID_N
+};
+
 // Enum for systematic checks
 enum SusyNtSys 
 {
@@ -200,8 +209,8 @@ const std::string BTagSysNames[BTag_N] = {
 };
 
 // Enum for checking event level cuts
-// Poorly named...
 // This will be phased out
+/*
 enum EventCheck 
 {
   PASS_LAr      = 1<<0,
@@ -211,6 +220,7 @@ enum EventCheck
   PASS_Event    = 1<<4,
   PASS_HotSpot  = 1<<5
 };
+*/
 
 // Enum for event cleaning cuts
 enum EventCleaningCuts

@@ -1,5 +1,5 @@
-#ifndef SusyCommon_SusyNtTools_h
-#define SusyCommon_SusyNtTools_h
+#ifndef SusyNtuple_SusyNtTools_h
+#define SusyNtuple_SusyNtTools_h
 
 
 #include <iostream>
@@ -10,13 +10,9 @@
 
 /*
 
-    SusyNtTools - a class of useful tools for reading in SusyNt (ie. D4PDs :P)
+    SusyNtTools - a class of useful tools for working with SusyNt
 
 */
-
-// Don't pollute global namespace!!
-//using namespace std;
-//using namespace Susy;
 
 class SusyNtTools
 {
@@ -89,7 +85,7 @@ class SusyNtTools
     bool isSignalLepton(const Susy::Lepton* l, uint nVtx, bool isMC);
     bool isSignalElectron(const Susy::Electron* ele, uint nVtx, bool isMC);
     bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
-    bool isSignalTau(const Susy::Tau* tau);
+    bool isSignalTau(const Susy::Tau* tau, TauID id=TauID_medium);
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
 

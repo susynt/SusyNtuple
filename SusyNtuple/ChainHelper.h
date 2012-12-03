@@ -1,5 +1,5 @@
-#ifndef SusyCommon_ChainHelper_h
-#define SusyCommon_ChainHelper_h
+#ifndef SusyNtuple_ChainHelper_h
+#define SusyNtuple_ChainHelper_h
 
 #include <fstream>
 
