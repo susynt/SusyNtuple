@@ -927,7 +927,7 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
     for(uint j=0; j<nTau; j++){
       if(i==j) continue;
       Tau* t2 = taus[j];
-      if(isSFOS(t1,t2) && Mll(t1,t2) < MllCut){
+      if(isOppSign(t1,t2) && Mll(t1,t2) < MllCut){
         pass = false;
         break;
       }
@@ -943,7 +943,7 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 // Lepton flavor methods (moved from SusyDefs)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSameFlav(const Lepton* l1, const Lepton* l2)
-{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu() && l1->isTau()==l2->isTau(); }
+{ return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu(); }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSFOS(const Lepton* l1, const Lepton* l2)
 { return isSameFlav(l1,l2) && (l1->q*l2->q < 0); }
@@ -960,11 +960,14 @@ bool SusyNtTools::hasSFOS(const LeptonVector& leps){
   }
   return false;
 }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isOppSign(const Tau* tau1, const Tau* tau2)
+{ return tau1->q*tau2->q < 0; }
 
 /*--------------------------------------------------------------------------------*/
 // Mass calculation methods (moved from SusyDefs)
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::Mll(const Lepton* l1, const Lepton* l2)
+float SusyNtTools::Mll(const Particle* l1, const Particle* l2)
 { return (*l1 + *l2).M(); }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
@@ -989,6 +992,18 @@ float SusyNtTools::Meff(const LeptonVector& leps, const JetVector& jets, const M
   meff += met->Et;
   return meff;
 }
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets, const Met* met)
+{
+  float meff = 0;
+  for(uint i=0; i<leps.size(); i++) meff += leps[i]->Pt();
+  for(uint i=0; i<taus.size(); i++) meff += taus[i]->Pt();
+  for(uint i=0; i<jets.size(); i++){
+    if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
+  }
+  meff += met->Et;
+  return meff;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Z selection methods
@@ -1005,7 +1020,7 @@ bool SusyNtTools::isZWindow(const Lepton* l1, const Lepton* l2, float minMll, fl
 bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool ignoreTau)
 {
   for(uint i=0; i<leps.size(); i++){
-    if(ignoreTau && leps[i]->isTau()) continue;
+    //if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j<leps.size(); j++){
       if( isZ(leps[i],leps[j],massWindow) ) return true;
     }
@@ -1016,7 +1031,7 @@ bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool ignoreTa
 bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll, bool ignoreTau)
 {
   for(uint i=0; i<leps.size(); i++){
-    if(ignoreTau && leps[i]->isTau()) continue;
+    //if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j<leps.size(); j++){
       if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
     }
@@ -1027,7 +1042,7 @@ bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMl
 /*--------------------------------------------------------------------------------*/
 // Finds indices for the lepton pair closest to the Z mass
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau)
+/*void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau)
 {
   float minDM = -1;
   uint nLep = leps.size();
@@ -1049,7 +1064,7 @@ void SusyNtTools::bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignor
     cout << "bestZ : WARNING : No SFOS candidates!" << endl;
     abort();
   }
-}
+}*/
 
 /*--------------------------------------------------------------------------------*/
 // Finds indices for the pair closest to the Z mass

@@ -6,8 +6,19 @@ using namespace std;
 using namespace Susy;
 
 
+
 /*--------------------------------------------------------------------------------*/
-//Copy constructor
+// Event print
+/*--------------------------------------------------------------------------------*/
+void Event::print() const
+{
+  cout << "Run " << run << " Event " << event << " Stream " << streamName(stream) 
+       << " w " << w << endl;
+}
+
+
+/*--------------------------------------------------------------------------------*/
+// Copy constructor
 /*--------------------------------------------------------------------------------*/
 Particle::Particle(const Particle &rhs):
   TLorentzVector(rhs),
@@ -19,7 +30,7 @@ Particle::Particle(const Particle &rhs):
 {
 }
 /*--------------------------------------------------------------------------------*/
-//Assignment operator
+// Assignment operator
 /*--------------------------------------------------------------------------------*/
 Particle& Particle::operator=(const Particle &rhs)
 {
@@ -34,8 +45,9 @@ Particle& Particle::operator=(const Particle &rhs)
   return *this;
 }
 
+
 /*--------------------------------------------------------------------------------*/
-//Copy constructor
+// Copy constructor
 /*--------------------------------------------------------------------------------*/
 Lepton::Lepton(const Lepton &rhs):
   Particle(rhs),
@@ -52,14 +64,16 @@ Lepton::Lepton(const Lepton &rhs):
   errZ0Unbiased(rhs.errZ0Unbiased),
   mcType(rhs.mcType),
   mcOrigin(rhs.mcOrigin),
-  truthMatchType(rhs.truthMatchType),
+  matched2TruthLepton(rhs.matched2TruthLepton),
+  //truthMatchType(rhs.truthMatchType),
+  truthType(rhs.truthType),
   effSF(rhs.effSF),
   errEffSF(rhs.errEffSF),
   trigFlags(rhs.trigFlags)
 {
 }
 /*--------------------------------------------------------------------------------*/
-//Assignment operator
+// Assignment operator
 /*--------------------------------------------------------------------------------*/
 Lepton& Lepton::operator=(const Lepton &rhs)
 {
@@ -78,7 +92,9 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     errZ0Unbiased = rhs.errZ0Unbiased;
     mcType = rhs.mcType;
     mcOrigin = rhs.mcOrigin;
-    truthMatchType = rhs.truthMatchType;
+    matched2TruthLepton = rhs.matched2TruthLepton;
+    //truthMatchType = rhs.truthMatchType;
+    truthType = rhs.truthType;
     effSF = rhs.effSF;
     errEffSF = rhs.errEffSF;
     trigFlags = rhs.trigFlags;
@@ -86,13 +102,16 @@ Lepton& Lepton::operator=(const Lepton &rhs)
   return *this;
 }
 
+
 /*--------------------------------------------------------------------------------*/
-//Copy constructor
+// Copy constructor
 /*--------------------------------------------------------------------------------*/
 Electron::Electron(const Electron &rhs):
   Lepton(rhs),
   clusE(rhs.clusE),
   clusEta(rhs.clusEta),
+  clusPhi(rhs.clusPhi),
+  trackPt(rhs.trackPt),
   mediumPP(rhs.mediumPP),
   tightPP(rhs.tightPP),
   etcone30Corr(rhs.etcone30Corr),
@@ -111,7 +130,7 @@ Electron::Electron(const Electron &rhs):
 {
 }
 /*--------------------------------------------------------------------------------*/
-//Assignment operator
+// Assignment operator
 /*--------------------------------------------------------------------------------*/
 Electron& Electron::operator=(const Electron &rhs)
 {
@@ -119,6 +138,8 @@ Electron& Electron::operator=(const Electron &rhs)
     Lepton::operator=(rhs);
     clusE = rhs.clusE;
     clusEta = rhs.clusEta;
+    clusPhi = rhs.clusPhi;
+    trackPt = rhs.trackPt;
     mediumPP = rhs.mediumPP;
     tightPP = rhs.tightPP;
     etcone30Corr = rhs.etcone30Corr;
@@ -137,8 +158,6 @@ Electron& Electron::operator=(const Electron &rhs)
   }
   return *this;
 }
-
-
 /*--------------------------------------------------------------------------------*/
 // Electron Set State
 /*--------------------------------------------------------------------------------*/
@@ -182,12 +201,16 @@ void Electron::print() const
   cout.unsetf(ios_base::fixed);
 }
 
+
 /*--------------------------------------------------------------------------------*/
-//Copy constructor
+// Copy constructor
 /*--------------------------------------------------------------------------------*/
 Muon::Muon(const Muon &rhs):
   Lepton(rhs),
   isCombined(rhs.isCombined),
+  idTrackPt(rhs.idTrackPt),
+  idTrackEta(rhs.idTrackEta),
+  idTrackPhi(rhs.idTrackPhi),
   thetaPV(rhs.thetaPV),
   etcone30(rhs.etcone30),
   ptcone30ElStyle(rhs.ptcone30ElStyle),
@@ -198,13 +221,16 @@ Muon::Muon(const Muon &rhs):
 {
 }
 /*--------------------------------------------------------------------------------*/
-//Assignment operator
+// Assignment operator
 /*--------------------------------------------------------------------------------*/
 Muon& Muon::operator=(const Muon &rhs)
 {
   if (this != &rhs) {
     Lepton::operator=(rhs);
     isCombined = rhs.isCombined;
+    idTrackPt = rhs.idTrackPt;
+    idTrackEta = rhs.idTrackEta;
+    idTrackPhi = rhs.idTrackPhi;
     thetaPV = rhs.thetaPV;
     etcone30 = rhs.etcone30;
     ptcone30ElStyle = rhs.ptcone30ElStyle;
@@ -215,8 +241,6 @@ Muon& Muon::operator=(const Muon &rhs)
   }
   return *this;
 }
-
-
 /*--------------------------------------------------------------------------------*/
 // Muon Set State
 /*--------------------------------------------------------------------------------*/
@@ -251,8 +275,101 @@ void Muon::print() const
   cout.unsetf(ios_base::fixed);
 }
 
+
 /*--------------------------------------------------------------------------------*/
-//Copy constructor
+// Copy constructor
+/*--------------------------------------------------------------------------------*/
+Tau::Tau(const Tau &rhs):
+  //Lepton(rhs),
+  Particle(rhs),
+  q(rhs.author),
+  author(rhs.author),
+  nTrack(rhs.nTrack),
+  eleBDT(rhs.eleBDT),
+  jetBDT(rhs.jetBDT),
+  jetBDTSigLoose(rhs.jetBDTSigLoose),
+  jetBDTSigMedium(rhs.jetBDTSigMedium),
+  jetBDTSigTight(rhs.jetBDTSigTight),
+  eleBDTLoose(rhs.eleBDTLoose),
+  eleBDTMedium(rhs.eleBDTMedium),
+  eleBDTTight(rhs.eleBDTTight),
+  muonVeto(rhs.muonVeto),
+  trueTau(rhs.trueTau),
+  matched2TruthLepton(rhs.matched2TruthLepton),
+  truthType(rhs.truthType),
+  detailedTruthType(rhs.detailedTruthType),
+  trigFlags(rhs.trigFlags)
+{
+}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+Tau& Tau::operator=(const Tau &rhs)
+{
+  if (this != &rhs) {
+    //Lepton::operator=(rhs);
+    Particle::operator=(rhs);
+    q = rhs.q;
+    author = rhs.author; 
+    nTrack = rhs.nTrack;
+    eleBDT = rhs.eleBDT;
+    jetBDT = rhs.jetBDT;
+    jetBDTSigLoose = rhs.jetBDTSigLoose;
+    jetBDTSigMedium = rhs.jetBDTSigMedium;
+    jetBDTSigTight = rhs.jetBDTSigTight;
+    eleBDTLoose = rhs.eleBDTLoose;
+    eleBDTMedium = rhs.eleBDTMedium;
+    eleBDTTight = rhs.eleBDTTight;
+    muonVeto = rhs.muonVeto;
+    trueTau = rhs.trueTau;
+    matched2TruthLepton = rhs.matched2TruthLepton;
+    truthType = rhs.truthType;
+    detailedTruthType = rhs.detailedTruthType;
+    trigFlags = rhs.trigFlags;
+  }
+  return *this;
+}
+/*--------------------------------------------------------------------------------*/
+// Tau print
+/*--------------------------------------------------------------------------------*/
+void Tau::print() const
+{
+  cout.precision(2);
+  cout << fixed << "Tau : q " << setw(2) << q << " Et " << setw(6) << Et() << " eta " << setw(5) << Eta()
+       << " phi " << setw(5) << Phi()
+       << " jetBDT " << jetBDTSigLoose << jetBDTSigMedium << jetBDTSigTight
+       << " eleBDT " << eleBDTLoose << eleBDTMedium << eleBDTTight
+       << " muVeto " << muonVeto
+       << " true " << trueTau
+       << endl;
+  cout.precision(6);
+  cout.unsetf(ios_base::fixed);
+}
+
+
+/*--------------------------------------------------------------------------------*/
+// Copy constructor
+/*--------------------------------------------------------------------------------*/
+Photon::Photon(const Photon &rhs):
+  Particle(rhs),
+  isConv(rhs.isConv)
+{
+}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+Photon& Photon::operator=(const Photon &rhs)
+{
+  if (this != &rhs) {
+    Particle::operator=(rhs);
+    isConv  = rhs.isConv; 
+  }
+  return *this;
+}
+
+
+/*--------------------------------------------------------------------------------*/
+// Copy constructor
 /*--------------------------------------------------------------------------------*/
 Jet::Jet(const Jet &rhs):
   Particle(rhs),
@@ -262,13 +379,14 @@ Jet::Jet(const Jet &rhs):
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
+  isBadLoose(rhs.isBadLoose),
   jes_up(rhs.jes_up),
   jes_dn(rhs.jes_dn),
   jer(rhs.jer)
 {
 }
 /*--------------------------------------------------------------------------------*/
-//Assignment operator
+// Assignment operator
 /*--------------------------------------------------------------------------------*/
 Jet& Jet::operator=(const Jet &rhs)
 {
@@ -280,13 +398,13 @@ Jet& Jet::operator=(const Jet &rhs)
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
     mv1 = rhs.mv1;
+    isBadLoose = rhs.isBadLoose;
     jes_up = rhs.jes_up;
     jes_dn = rhs.jes_dn;
     jer = rhs.jer;
   }
   return *this;
 }
-
 /*--------------------------------------------------------------------------------*/
 // Jet Set State
 /*--------------------------------------------------------------------------------*/
@@ -321,102 +439,8 @@ void Jet::print() const
 }
 
 
-
 /*--------------------------------------------------------------------------------*/
-//Copy constructor
-/*--------------------------------------------------------------------------------*/
-Tau::Tau(const Tau &rhs):
-  Lepton(rhs),
-  author(rhs.author),
-  nTrack(rhs.nTrack),
-  eleBDT(rhs.eleBDT),
-  jetBDT(rhs.jetBDT),
-  jetBDTSigLoose(rhs.jetBDTSigLoose),
-  jetBDTSigMedium(rhs.jetBDTSigMedium),
-  jetBDTSigTight(rhs.jetBDTSigTight),
-  eleBDTLoose(rhs.eleBDTLoose),
-  eleBDTMedium(rhs.eleBDTMedium),
-  eleBDTTight(rhs.eleBDTTight),
-  muonVeto(rhs.muonVeto),
-  trueTau(rhs.trueTau)
-{
-}
-/*--------------------------------------------------------------------------------*/
-//Assignment operator
-/*--------------------------------------------------------------------------------*/
-Tau& Tau::operator=(const Tau &rhs)
-{
-  if (this != &rhs) {
-    Lepton::operator=(rhs);
-     author  = rhs.author; 
-     nTrack = rhs.nTrack;
-     eleBDT = rhs.eleBDT;
-     jetBDT = rhs.jetBDT;
-     jetBDTSigLoose = rhs.jetBDTSigLoose;
-     jetBDTSigMedium = rhs.jetBDTSigMedium;
-     jetBDTSigTight = rhs.jetBDTSigTight;
-     eleBDTLoose = rhs.eleBDTLoose;
-     eleBDTMedium = rhs.eleBDTMedium;
-     eleBDTTight = rhs.eleBDTTight;
-     muonVeto = rhs.muonVeto;
-     trueTau = rhs.trueTau;
-  }
-  return *this;
-}
-
-
-/*--------------------------------------------------------------------------------*/
-// Tau print
-/*--------------------------------------------------------------------------------*/
-void Tau::print() const
-{
-  cout.precision(2);
-  cout << fixed << "Tau : q " << setw(2) << q << " Et " << setw(6) << Et() << " eta " << setw(5) << Eta()
-       << " phi " << setw(5) << Phi()
-       << " jetBDT " << jetBDTSigLoose << jetBDTSigMedium << jetBDTSigTight
-       << " eleBDT " << eleBDTLoose << eleBDTMedium << eleBDTTight
-       << " muVeto " << muonVeto
-       << endl;
-  cout.precision(6);
-  cout.unsetf(ios_base::fixed);
-}
-
-/*--------------------------------------------------------------------------------*/
-//Copy constructor
-/*--------------------------------------------------------------------------------*/
-Photon::Photon(const Photon &rhs):
-  Particle(rhs),
-  isConv(rhs.isConv)
-{
-}
-/*--------------------------------------------------------------------------------*/
-//Assignment operator
-/*--------------------------------------------------------------------------------*/
-Photon& Photon::operator=(const Photon &rhs)
-{
-  if (this != &rhs) {
-    Particle::operator=(rhs);
-    isConv  = rhs.isConv; 
-  }
-  return *this;
-}
-
-
-/*--------------------------------------------------------------------------------*/
-// Met print
-/*--------------------------------------------------------------------------------*/
-void Met::print() const
-{
-  cout.precision(2);
-  cout << fixed << "Met : pt " << setw(6) << Et << " phi " << setw(4) << phi
-       << endl;
-  cout.precision(6);
-  cout.unsetf(ios_base::fixed);
-}
-
-
-/*--------------------------------------------------------------------------------*/
-//Copy constructor
+// Copy constructor
 /*--------------------------------------------------------------------------------*/
 Met::Met(const Met &rhs):
   TObject(rhs),
@@ -432,31 +456,33 @@ Met::Met(const Met &rhs):
 {
 }
 /*--------------------------------------------------------------------------------*/
-//Assignment operator
+// Assignment operator
 /*--------------------------------------------------------------------------------*/
 Met& Met::operator=(const Met &rhs)
 {
   if (this != &rhs) {
     TObject::operator=(rhs);
-     Et  = rhs.Et; 
-     phi  = rhs.phi; 
-     refEle= rhs.refEle; 
-     refMuo= rhs.refMuo; 
-     refJet= rhs.refJet; 
-     softJet= rhs.softJet; 
-     refGamma= rhs.refGamma; 
-     refCell= rhs.refCell; 
-     sys= rhs.sys; 
-
+    Et  = rhs.Et; 
+    phi  = rhs.phi; 
+    refEle= rhs.refEle; 
+    refMuo= rhs.refMuo; 
+    refJet= rhs.refJet; 
+    softJet= rhs.softJet; 
+    refGamma= rhs.refGamma; 
+    refCell= rhs.refCell; 
+    sys= rhs.sys; 
   }
   return *this;
 }
 /*--------------------------------------------------------------------------------*/
-// Event print
+// Met print
 /*--------------------------------------------------------------------------------*/
-void Event::print() const
+void Met::print() const
 {
-  cout << "Run " << run << " Event " << event << " Stream " << streamName(stream) 
-       << " w " << w << endl;
+  cout.precision(2);
+  cout << fixed << "Met : pt " << setw(6) << Et << " phi " << setw(4) << phi
+       << endl;
+  cout.precision(6);
+  cout.unsetf(ios_base::fixed);
 }
 

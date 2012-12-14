@@ -203,14 +203,16 @@ class SusyNtTools
     bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool hasSFOS(const LeptonVector& leps);
+    bool isOppSign(const Susy::Tau* tau1, const Susy::Tau* tau2);
 
     // Mass calculation methods
-    float Mll(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
     float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
     float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
     float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Jet* j1, const Susy::Jet* j2);
     float Mt(const Susy::Lepton* lep, const Susy::Met* met);
     float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
+    float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets, const Susy::Met* met);
 
     // Z selection methods
     bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
@@ -218,8 +220,9 @@ class SusyNtTools
                    float minMll=MZ-10, float maxMll=MZ+10);
     bool hasZ(const LeptonVector& leps, float massWindow=10., bool ignoreTau=true);
     bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10, bool ignoreTau=true);
-    void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
-    // Safer function, to replace the one above, which returns false if no SFOS pair found
+    //void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
+
+    // Safer functions, to replace the one above, which return false if no candidates found
     bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps);
     bool findBestZ(uint& j1, uint& j2, const JetVector& jets);
     bool findBestW(uint& j1, uint& j2, const JetVector& jets);
@@ -259,14 +262,6 @@ class SusyNtTools
   
     float calcMCT(TLorentzVector v1, TLorentzVector v2);
   
-
-    //
-    // Methods to handle Trigger checking
-    //
-  
-    // Will need to be updated if more flags are added
-    //bool passTrigger(uint trig, int flag){ return (trig & flag); };
-
 
     //
     // Misc methods

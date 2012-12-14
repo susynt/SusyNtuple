@@ -211,13 +211,11 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
   if(m_minMt > 0)
   {
     uint zl1, zl2;
-    bestZ(zl1, zl2, leptons);
-
-    for(uint iL=0; iL<leptons.size(); iL++)
-    {
-      if(iL!=zl1 && iL!=zl2)
-      {
-        if( Mt(leptons[iL],met) < m_minMt ) return false;
+    if(findBestZ(zl1, zl2, leptons)){
+      for(uint iL=0; iL<leptons.size(); iL++) {
+        if(iL!=zl1 && iL!=zl2) {
+          if( Mt(leptons[iL],met) < m_minMt ) return false;
+        }
       }
     }
   }

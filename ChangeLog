@@ -1,5 +1,17 @@
 # vim: set noexpandtab:
 
+2012-12-14 Steve
+	* Removed Event.lumiSF
+	* Renamed Lepton.truthMatchType to truthType
+	* Added missing variables to copy constructors and assignment operators
+	* Removed Lepton inheritance from Tau class. Now inherits from Particle.
+	* Added matched2TruthLepton to Tau class
+	* Added isOppSign(tau, tau) method to SusyNtTools
+	* Changed SusyNtTools Mll function to take Particle pointers, for taus
+	* Added alternative Meff method which also includes taus
+	* Commented out bestZ method to force update to findBestZ method
+	* Tagging SusyNtuple-00-00-38
+
 2012-12-06 Steve
 	* Tagging SusyNtuple-00-00-37
 

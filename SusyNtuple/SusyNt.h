@@ -23,6 +23,92 @@
 namespace Susy
 {
 
+  // Event class
+  class Event: public TObject
+  {
+    public:
+      Event(){ clear(); }
+      virtual ~Event(){};
+
+      unsigned int run;         // run number 
+      unsigned int event;       // event number
+      unsigned int lb;          // lumi block number
+      DataStream stream;        // DataStream enum, defined in SusyDefs.h
+
+      bool isMC;                // is MC flag
+      unsigned int mcChannel;   // MC channel ID number (mc run number)
+      float w;                  // MC generator weight
+
+      unsigned int larError;    // LAr error flag
+
+      unsigned int nVtx;        // number of good vertices
+      float avgMu;              // average interactions per bunch crossing
+      
+      int hfor;                 // heavy flavor overlap removal decision
+
+      int susyFinalState;       // Susy process
+
+      bool passMllForAlpgen;    // flag for vetoing overlap between Sherpa Z and Alpgen Z Mll10to60
+
+      unsigned int trigFlags;   // Event level trigger bits
+
+      // Check trigger firing
+      // provide the trigger chain via bit mask, e.g. TRIG_mu18
+      bool passTrig(unsigned int mask) const {
+        return (trigFlags & mask) == mask;
+      }
+
+      // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
+      // This will be replaced
+      int evtFlag[NtSys_N];
+
+      // Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
+      unsigned int cutFlags[NtSys_N];
+
+      // Reweighting and scaling
+      float wPileup;            // pileup weight for full dataset
+      float wPileupAB3;         // pileup weight for 2012 period A-B3 only
+      float wPileupAB;          // pileup weight for 2012 period A-B only
+      float xsec;               // cross section * kfactor * efficiency, from SUSY db
+      //float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
+      float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
+      float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
+
+      // PDF Systematic information
+      int pdf_id1;
+      int pdf_id2;
+      double pdf_x1;     
+      double pdf_x2;
+      double pdf_scale;
+
+      // Combined normalized event weight
+      // Should use SusyNtAna::getEventWeight instead
+      //float fullWeight() const { return wPileup*xsec*lumiSF; }
+
+      // print event
+      void print() const;
+
+      // clear vars
+      void clear(){
+        run = event = lb = 0;
+        stream = Stream_Unknown;
+        isMC = false;
+        mcChannel = w = 0;
+        larError = 0;
+        nVtx = avgMu = trigFlags = 0;
+        hfor = -1;
+	susyFinalState = -1;
+        passMllForAlpgen = true;
+	memset(evtFlag,0,sizeof(evtFlag));
+	memset(cutFlags,0,sizeof(cutFlags));
+        wPileup = wPileupAB3 = wPileupAB = 0;
+        xsec = sumw = pdfSF = 0;
+	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
+      }
+
+      ClassDef(Event, 22);
+  };
+
   // Particle class, base class for other object types
   class Particle : public TLorentzVector
   {
@@ -33,7 +119,6 @@ namespace Susy
       Particle(const Particle &);
       /** Assignment operator */
       Particle& operator=(const Particle &);
-
 
       unsigned int idx;   // d3pd index
       
@@ -99,7 +184,9 @@ namespace Susy
       unsigned int mcType;      // MCTruthClassifier particle type
       unsigned int mcOrigin;    // MCTruthClassifier particle origin
 
-      int truthMatchType;       // RecoTruthMatch::type
+      bool matched2TruthLepton; // flag from RecoTruthMatch::Matched2TruthLepton
+      //int truthMatchType;     // RecoTruthMatch::type
+      int truthType;            // RecoTruthMatch::type
 
       float effSF;              // Efficiency scale factor
       float errEffSF;           // Uncertainty on the efficiency scale factor
@@ -126,7 +213,7 @@ namespace Susy
       // polymorphism, baby!!
       virtual bool isEle() const { return false; }
       virtual bool isMu()  const { return false; }
-      virtual bool isTau() const { return false; }
+      //virtual bool isTau() const { return false; }
       void setState(int sys){ resetTLV(); }
 
       // print method
@@ -138,13 +225,15 @@ namespace Susy
         d0 = errD0 = z0 = errZ0 = 0;
 	d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
-        truthMatchType = -1;
+        //truthMatchType = -1;
+        matched2TruthLepton = false;
+        truthType = -1;
         effSF = errEffSF = 0;
         trigFlags = 0;
         Particle::clear();
       }
       
-      ClassDef(Lepton, 8);
+      ClassDef(Lepton, 10);
   };
 
   // Electron class
@@ -257,8 +346,8 @@ namespace Susy
 
   // Tau class
   // INHERITANCE FROM Lepton CLASS WILL SOON BE REMOVED
-  //class Tau : public Particle
-  class Tau : public Lepton
+  //class Tau : public Lepton
+  class Tau : public Particle
   {
     public:
       Tau() { clear(); }
@@ -267,6 +356,7 @@ namespace Susy
       /** Assignment operator */
       Tau& operator=(const Tau &);
 
+      int q;                    // Charge
       int author;               // reconstruction author
       int nTrack;               // number of tracks
       float eleBDT;             // electron BDT score
@@ -281,8 +371,18 @@ namespace Susy
 
       bool trueTau;             // trueTauAssocSmall_matched d3pd variable
 
+      // Something like this:
+      bool matched2TruthLepton; // flag from RecoTruthMatch::Matched2TruthLepton
       int truthType;            // RecoTauMatch::TauFakeType
       int detailedTruthType;    // RecoTauMatch::TauDetailedFakeType
+
+      unsigned int trigFlags;   // Bit word representing matched trigger chains
+
+      // trigger matching
+      // provide the trigger chain via bit mask, e.g. TRIG_mu18
+      bool matchTrig(unsigned int mask) const {
+        return (trigFlags & mask) == mask;
+      }
 
       // print method
       void print() const;
@@ -294,8 +394,10 @@ namespace Susy
         eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
         muonVeto = 0;
         trueTau = false;
+        matched2TruthLepton = false;
         truthType = detailedTruthType = -1;
-        Lepton::clear();
+        trigFlags = 0;
+        Particle::clear();
       }
 
       ClassDef(Tau, 4);
@@ -345,7 +447,6 @@ namespace Susy
       /** Assignment operator */
       Jet& operator=(const Jet &);
 
-
       float jvf;                // Jet vertex fraction
       int truthLabel;           // Flavor truth label
       bool matchTruth;          // Matches truth jet
@@ -356,6 +457,7 @@ namespace Susy
       float mv1;                // MV1 btag weight
 
       // Add an isBad flag here??
+      bool isBadLoose;          // bad jet flag compted with SUSYTools
 
       // Systematics
       float jes_up;             // jet energy scale up
@@ -380,7 +482,8 @@ namespace Susy
   };
 
   // Met class
-  class Met : public TObject // public TLorentzVector // No longer inherit from particle
+  // No longer inherits from Particle or TLorentzVector
+  class Met : public TObject
   {
     public:
       Met(){ clear(); }
@@ -408,7 +511,8 @@ namespace Susy
       float refGamma;           // Ref gamma term
       float refCell;            // Cellout term
 
-      int sys;                  // ??? <-- Met stored in vector for each sys shift, this identifies met for specific shift.
+      // I'm not a big fan of the way this is setup, would like to improve it someday
+      int sys;                  // Met stored in vector for each sys shift, this identifies met for specific shift
 
       // print vars
       void print() const;
@@ -417,95 +521,9 @@ namespace Susy
       void clear(){
         Et = phi = 0;
         refEle = refMuo = refJet = softJet = refGamma = refCell = sys = 0;
-        //Particle::clear();
       }
 
       ClassDef(Met, 2);
-  };
-
-  // Event class
-  class Event: public TObject
-  {
-    public:
-      Event(){ clear(); }
-      virtual ~Event(){};
-
-      unsigned int run;         // run number 
-      unsigned int event;       // event number
-      unsigned int lb;          // lumi block number
-      DataStream stream;        // DataStream enum, defined in SusyDefs.h
-
-      bool isMC;                // is MC flag
-      unsigned int mcChannel;   // MC channel ID number (mc run number)
-      float w;                  // MC generator weight
-
-      unsigned int larError;    // LAr error flag
-
-      unsigned int nVtx;        // number of good vertices
-      float avgMu;              // average interactions per bunch crossing
-      
-      int hfor;                 // heavy flavor overlap removal decision
-
-      int susyFinalState;       // Susy process
-
-      bool passMllForAlpgen;    // flag for vetoing overlap between Sherpa Z and Alpgen Z Mll10to60
-
-      unsigned int trigFlags;   // Event level trigger bits
-
-      // Check trigger firing
-      // provide the trigger chain via bit mask, e.g. TRIG_mu18
-      bool passTrig(unsigned int mask) const {
-        return (trigFlags & mask) == mask;
-      }
-
-      // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
-      // This will be replaced
-      int evtFlag[NtSys_N];
-
-      // Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
-      unsigned int cutFlags[NtSys_N];
-
-      // Reweighting and scaling
-      float wPileup;            // pileup weight for full dataset
-      float wPileupAB3;         // pileup weight for 2012 period A-B3 only
-      float wPileupAB;          // pileup weight for 2012 period A-B only
-      float xsec;               // cross section * kfactor * efficiency, from SUSY db
-      float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
-      float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
-      float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
-
-      // PDF Systematic information
-      int pdf_id1;
-      int pdf_id2;
-      double pdf_x1;     
-      double pdf_x2;
-      double pdf_scale;
-
-      // Combined normalized event weight
-      float fullWeight() const { return wPileup*xsec*lumiSF; }
-
-      // print event
-      void print() const;
-
-      // clear vars
-      void clear(){
-        run = event = lb = 0;
-        stream = Stream_Unknown;
-        isMC = false;
-        mcChannel = w = 0;
-        larError = 0;
-        nVtx = avgMu = trigFlags = 0;
-        hfor = -1;
-	susyFinalState = -1;
-        passMllForAlpgen = true;
-	memset(evtFlag,0,sizeof(evtFlag));
-	memset(cutFlags,0,sizeof(cutFlags));
-        wPileup = wPileupAB3 = wPileupAB = 0;
-        xsec = lumiSF = sumw = pdfSF = 0;
-	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
-      }
-
-      ClassDef(Event, 21);
   };
 
 };
