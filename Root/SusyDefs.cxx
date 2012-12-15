@@ -15,6 +15,7 @@ string streamName(DataStream stream)
   if     (stream==Stream_MC) return "MC";
   else if(stream==Stream_Muons) return "Muons";
   else if(stream==Stream_Egamma) return "Egamma";
+  else if(stream==Stream_JetTauEtmiss) return "JetTauEtmiss";
   else return "Unknown";
 }
 

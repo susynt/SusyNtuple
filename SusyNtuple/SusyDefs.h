@@ -70,6 +70,7 @@ enum DataStream
   Stream_MC,
   Stream_Muons,
   Stream_Egamma,
+  Stream_JetTauEtmiss,
   Stream_N
 };
 

@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-12-15 Steve
+	* Added JetTauEtmiss stream to DataStream enum
+
 2012-12-14 Steve
 	* Removed Event.lumiSF
 	* Renamed Lepton.truthMatchType to truthType
