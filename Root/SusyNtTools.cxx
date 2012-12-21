@@ -961,6 +961,16 @@ bool SusyNtTools::hasSFOS(const LeptonVector& leps){
   return false;
 }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasSFSS(const LeptonVector& leps){
+  uint nLep = leps.size();
+  for(uint i=0; i<nLep; i++){
+    for(uint j=i+1; j<nLep; j++){
+      if(isSFSS(leps[i],leps[j])) return true;
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isOppSign(const Tau* tau1, const Tau* tau2)
 { return tau1->q*tau2->q < 0; }
 

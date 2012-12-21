@@ -165,7 +165,7 @@ bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons)
   //cout << endl << "----------------------------------------------------------------" << endl;
   //nt.evt()->print();
   //dumpSignalObjects();
-  if(!m_trigObj->passTriggerMatching(leptons, nt.evt())) return false;
+  if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
   n_pass_trig++;
   return true;
 }

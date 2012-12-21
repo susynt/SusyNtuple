@@ -1,5 +1,12 @@
 # vim: set noexpandtab:
 
+2012-12-21 Steve
+	* Updated TrilTrigLogic
+		* Added tau arguments to passTriggerMatching, tau triggers not fully implemented yet
+		* Turned on single isolated trigger
+		* Added matchLepTrigger helper method
+	* Added hasSFSS method to SusyNtTools
+
 2012-12-15 Steve
 	* Added JetTauEtmiss stream to DataStream enum
 	* Tagging SusyNtuple-00-00-39

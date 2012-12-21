@@ -33,9 +33,16 @@ class TrilTrigLogic
     APReweightND* loadTrigWeighter(TFile* f, TString chain);
 
     // Trigger matching in data (and MC at the moment)
-    bool passTriggerMatching(const LeptonVector& leptons, Event* evt);
+    //bool passTriggerMatching(const LeptonVector& leptons, Event* evt);
+    bool passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt);
+    bool matchLepTrigger(const Susy::Lepton* lep, int trigMask, float ptThreshold=0, bool accOnly=false) { 
+      return lep->Pt() > ptThreshold && (accOnly || lep->matchTrig(trigMask)); 
+    }
+    bool matchTauTrigger(const Susy::Tau* tau, int trigMask, float ptThreshold=0, bool accOnly=false) { 
+      return tau->Pt() > ptThreshold && (accOnly || tau->matchTrig(trigMask)); 
+    }
 
-    // Trigger reweighting in MC
+    // Trigger reweighting in MC - not currently setup
     float getTriggerWeight(const LeptonVector& leptons, Event* evt);
 
     // Only apply pt threshold cuts for trigger acceptance

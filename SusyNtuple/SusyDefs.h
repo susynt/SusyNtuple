@@ -30,8 +30,6 @@ namespace Susy
 // Global constants
 //-----------------------------------------------------------------------------------
 
-// This should not be defined in this pkg.  It is very misleading.
-//const double GeV = 1000.;
 const float MZ = 91.2;
 
 const float LUMI_A_B3  = 1037.;
@@ -46,6 +44,7 @@ const float LUMI_A_E   = 13021.8;
 typedef unsigned int uint;
 typedef std::vector<std::string> stringvector;
 
+// By request, but I don't like this
 /*
 typedef std::vector<const Susy::Lepton*>   LeptonVector;
 typedef std::vector<const Susy::Electron*> ElectronVector;
