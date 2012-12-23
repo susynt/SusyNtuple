@@ -945,11 +945,20 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 bool SusyNtTools::isSameFlav(const Lepton* l1, const Lepton* l2)
 { return l1->isEle()==l2->isEle() && l1->isMu()==l2->isMu(); }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isOppSign(const Lepton* l1, const Lepton* l2)
+{ return l1->q*l2->q < 0; }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isOppSign(const Tau* tau1, const Tau* tau2)
+{ return tau1->q*tau2->q < 0; }
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSFOS(const Lepton* l1, const Lepton* l2)
-{ return isSameFlav(l1,l2) && (l1->q*l2->q < 0); }
+{ return isSameFlav(l1,l2) && isOppSign(l1,l2); }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSFSS(const Lepton* l1, const Lepton* l2)
-{ return isSameFlav(l1,l2) && (l1->q*l2->q > 0); }
+{ return isSameFlav(l1,l2) && !isOppSign(l1,l2); }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isOFOS(const Lepton* l1, const Lepton* l2)
+{ return !isSameFlav(l1,l2) && isOppSign(l1,l2); }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasSFOS(const LeptonVector& leps){
   uint nLep = leps.size();
@@ -971,8 +980,35 @@ bool SusyNtTools::hasSFSS(const LeptonVector& leps){
   return false;
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isOppSign(const Tau* tau1, const Tau* tau2)
-{ return tau1->q*tau2->q < 0; }
+bool SusyNtTools::hasOFOS(const LeptonVector& leps){
+  uint nLep = leps.size();
+  for(uint i=0; i<nLep; i++){
+    for(uint j=i+1; j<nLep; j++){
+      if(isOFOS(leps[i],leps[j])) return true;
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasOS(const LeptonVector& leps){
+  uint nLep = leps.size();
+  for(uint i=0; i<nLep; i++){
+    for(uint j=i+1; j<nLep; j++){
+      if(isOppSign(leps[i],leps[j])) return true;
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasSS(const LeptonVector& leps){
+  uint nLep = leps.size();
+  for(uint i=0; i<nLep; i++){
+    for(uint j=i+1; j<nLep; j++){
+      if(!isOppSign(leps[i],leps[j])) return true;
+    }
+  }
+  return false;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Mass calculation methods (moved from SusyDefs)

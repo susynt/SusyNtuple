@@ -200,11 +200,16 @@ class SusyNtTools
   
     // Lepton flavor checks
     bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    bool isOppSign(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    bool isOppSign(const Susy::Tau* tau1, const Susy::Tau* tau2);
     bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    bool isOFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool hasSFOS(const LeptonVector& leps);
     bool hasSFSS(const LeptonVector& leps);
-    bool isOppSign(const Susy::Tau* tau1, const Susy::Tau* tau2);
+    bool hasOFOS(const LeptonVector& leps);
+    bool hasOS(const LeptonVector& leps);
+    bool hasSS(const LeptonVector& leps);
 
     // Mass calculation methods
     float Mll(const Susy::Particle* l1, const Susy::Particle* l2);

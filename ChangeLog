@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2012-12-23 Steve
+	* Added charge and flavor methods isOppSign, isOFOS, hasOFOS, hasOS, hasSS
+
 2012-12-21 Steve
 	* Updated TrilTrigLogic
 		* Added tau arguments to passTriggerMatching, tau triggers not fully implemented yet
