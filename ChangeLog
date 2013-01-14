@@ -9,7 +9,7 @@
 		  overwrite iso, just returns the new iso: elPtConeCorr, elEtTopoConeCorr, muPtConeCorr, muEtConeCorr
 		* Signal selection methods now require baseline lepton vectors as arguments
 	* Minor cleanup
-	* Tagging SusyNtuple-0-00-40
+	* Tagging SusyNtuple-00-00-40
 
 2012-12-23 Steve
 	* Added charge and flavor methods isOppSign, isOFOS, hasOFOS, hasOS, hasSS
