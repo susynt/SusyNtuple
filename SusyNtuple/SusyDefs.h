@@ -105,6 +105,7 @@ enum D3PDTag
 {
   D3PD_p1032 = 0,
   D3PD_p1181,
+  D3PD_p1328,
   D3PD_N
 };
 
