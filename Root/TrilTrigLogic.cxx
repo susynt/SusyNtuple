@@ -127,7 +127,6 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
     // Muons
     else{
 
-      // TODO: finish migrating to matchLepTrigger
       // If leading lepton, check isolated trigger
       //if(i==0 && pt>25 && (m_accOnly || lep->matchTrig(TRIG_mu24i_tight))) n1M++;
       if(i==0 && matchLepTrigger(lep, TRIG_mu24i_tight, 25, m_accOnly)) n1M++;

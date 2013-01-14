@@ -58,33 +58,40 @@ class SusyNtTools
     // Get Baseline objects. Pre + overlap removal.
     // Might be able to add options in case of overlap 
     // removal differances in 2-lep vs. 3-lep.
+    // TODO: make baseline object references const
     void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
 			    MuonVector& muons, TauVector& taus, JetVector& jets, 
                             SusyNtSys sys, bool selectTaus=false);
   
     // Signal objects
-    ElectronVector getSignalElectrons(ElectronVector baseElecs, uint nVtx, bool isMC);
-    MuonVector     getSignalMuons(MuonVector baseMuons, uint nVtx, bool isMC);
+    ElectronVector getSignalElectrons(ElectronVector& baseElecs, MuonVector& baseMuons, 
+                                      uint nVtx, bool isMC, bool removeLepsFromIso=false);
+    MuonVector     getSignalMuons(MuonVector& baseMuons, ElectronVector& baseElecs, 
+                                  uint nVtx, bool isMC, bool removeLepsFromIso=false);
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
-    TauVector      getSignalTaus(TauVector baseTaus);
-    JetVector      getSignalJets(JetVector baseJets);
-    JetVector      getSignalJets2Lep(JetVector baseJets);
+    TauVector      getSignalTaus(TauVector& baseTaus);
+    JetVector      getSignalJets(JetVector& baseJets);
+    JetVector      getSignalJets2Lep(JetVector& baseJets);
   
     // Get the signal objects
-    void getSignalObjects(ElectronVector baseElecs, MuonVector baseMuons, 
-                          TauVector baseTaus, JetVector baseJets, 
+    void getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons, 
+                          TauVector& baseTaus, JetVector& baseJets, 
 			  ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
-                          uint nVtx, bool isMC);
+                          uint nVtx, bool isMC, bool removeLepsFromIso=false);
     void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
 			  MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
                           JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
-                          bool selectTaus=false);
+                          bool selectTaus=false, bool removeLepsFromIso=false);
     
-    // Check if Signal, now with mc/data dependent iso cuts
-    bool isSignalLepton(const Susy::Lepton* l, uint nVtx, bool isMC);
-    bool isSignalElectron(const Susy::Electron* ele, uint nVtx, bool isMC);
-    bool isSignalMuon(const Susy::Muon* mu, uint nVtx, bool isMC);
+    // Check if Signal.
+    // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
+    bool isSignalLepton(const Susy::Lepton* l, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                        uint nVtx, bool isMC, bool removeLepsFromIso=false);
+    bool isSignalElectron(const Susy::Electron* ele, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                          uint nVtx, bool isMC, bool removeLepsFromIso=false);
+    bool isSignalMuon(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                      uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalTau(const Susy::Tau* tau, TauID id=TauID_medium);
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
@@ -110,9 +117,14 @@ class SusyNtTools
     //
     // Electron, Muon isolation correction for pileup
     //
-    float elEtTopoConeCorr(const Susy::Electron* e, uint nVtx, bool isMC);
-    float muPtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
-    float muEtConeCorr(const Susy::Muon* m, uint nVtx, bool isMC);
+    float elPtConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                       uint nVtx, bool isMC, bool removeLeps=false);
+    float elEtTopoConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                           uint nVtx, bool isMC, bool removeLeps=false);
+    float muPtConeCorr(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                       uint nVtx, bool isMC, bool removeLeps=false);
+    float muEtConeCorr(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+                       uint nVtx, bool isMC, bool removeLeps=false);
   
     // Get the Met, for the appropriate systematic
     Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool useNomPhiForMetSys = true);
