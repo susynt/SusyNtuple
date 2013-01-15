@@ -224,7 +224,7 @@ ElectronVector SusyNtTools::getSignalElectrons(ElectronVector& baseElecs, MuonVe
 {
   ElectronVector sigElecs;
   for(uint ie=0; ie<baseElecs.size(); ++ie){
-    const Electron* e = baseElecs.at(ie);
+    Electron* e = baseElecs.at(ie);
     if(isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){
       sigElecs.push_back(e);
     }
@@ -238,7 +238,7 @@ MuonVector SusyNtTools::getSignalMuons(MuonVector& baseMuons, ElectronVector& ba
 {
   MuonVector sigMuons;
   for(uint im=0; im<baseMuons.size(); ++im){
-    const Muon* mu = baseMuons.at(im);
+    Muon* mu = baseMuons.at(im);
     if(isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){
       sigMuons.push_back(mu);
     }
@@ -251,7 +251,7 @@ TauVector SusyNtTools::getSignalTaus(TauVector& baseTaus)
 {
   TauVector sigTaus;
   for(uint iTau=0; iTau < baseTaus.size(); iTau++){
-    const Tau* tau = baseTaus[iTau];
+    Tau* tau = baseTaus[iTau];
     if(isSignalTau(tau)){
       sigTaus.push_back(tau);
     }
@@ -263,7 +263,7 @@ JetVector SusyNtTools::getSignalJets(JetVector& baseJets)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
-    const Jet* j = baseJets.at(ij);
+    Jet* j = baseJets.at(ij);
     if(isSignalJet(j)){
       sigJets.push_back(j);
     }
@@ -275,7 +275,7 @@ JetVector SusyNtTools::getSignalJets2Lep(JetVector& baseJets)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
-    const Jet* j = baseJets.at(ij);
+    Jet* j = baseJets.at(ij);
     if(isSignalJet2Lep(j)){
       sigJets.push_back(j);
     }
@@ -879,11 +879,11 @@ void SusyNtTools::removeSFOSPair(ElectronVector& elecs, float MllCut)
 
   // Use a double loop to check all combinatorics
   for(uint i=0; i<nEle; i++){
-    const Electron* e1 = elecs[i];
+    Electron* e1 = elecs[i];
     bool pass = true;
     for(uint j=0; j<nEle; j++){
       if(i==j) continue;
-      const Electron* e2 = elecs[j];
+      Electron* e2 = elecs[j];
       if(isSFOS(e1,e2) && Mll(e1,e2) < MllCut){
         pass = false;
         break;
@@ -906,11 +906,11 @@ void SusyNtTools::removeSFOSPair(MuonVector& muons, float MllCut)
 
   // Use a double loop to check all combinatorics
   for(uint i=0; i<nMu; i++){
-    const Muon* m1 = muons[i];
+    Muon* m1 = muons[i];
     bool pass = true;
     for(uint j=0; j<nMu; j++){
       if(i==j) continue;
-      const Muon* m2 = muons[j];
+      Muon* m2 = muons[j];
       if(isSFOS(m1,m2) && Mll(m1,m2) < MllCut){
         pass = false;
         break;
@@ -933,11 +933,11 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 
   // Use a double loop to check all combinatorics
   for(uint i=0; i<nTau; i++){
-    const Tau* t1 = taus[i];
+    Tau* t1 = taus[i];
     bool pass = true;
     for(uint j=0; j<nTau; j++){
       if(i==j) continue;
-      const Tau* t2 = taus[j];
+      Tau* t2 = taus[j];
       if(isOppSign(t1,t2) && Mll(t1,t2) < MllCut){
         pass = false;
         break;
