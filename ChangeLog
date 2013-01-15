@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-01-15 Serhan Mete <amete@cern.ch>
+	* scripts/install.sh: Minor update to SUSYTools and DGTriggerReweight tags 
+
 2013-01-14 Steve
 	* Added D3PDTag enum value: D3PD_p1328
 		* Missed the tag below, but this doesn't actually affect anything in the code
