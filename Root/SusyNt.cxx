@@ -211,6 +211,11 @@ Muon::Muon(const Muon &rhs):
   idTrackPt(rhs.idTrackPt),
   idTrackEta(rhs.idTrackEta),
   idTrackPhi(rhs.idTrackPhi),
+  idTrackQ(rhs.idTrackQ),
+  msTrackPt(rhs.msTrackPt),
+  msTrackEta(rhs.msTrackEta),
+  msTrackPhi(rhs.msTrackPhi),
+  msTrackQ(rhs.msTrackQ),
   thetaPV(rhs.thetaPV),
   etcone30(rhs.etcone30),
   ptcone30ElStyle(rhs.ptcone30ElStyle),
@@ -231,6 +236,11 @@ Muon& Muon::operator=(const Muon &rhs)
     idTrackPt = rhs.idTrackPt;
     idTrackEta = rhs.idTrackEta;
     idTrackPhi = rhs.idTrackPhi;
+    idTrackQ = rhs.idTrackQ;
+    msTrackPt = rhs.msTrackPt;
+    msTrackEta = rhs.msTrackEta;
+    msTrackPhi = rhs.msTrackPhi;
+    msTrackQ = rhs.msTrackQ;
     thetaPV = rhs.thetaPV;
     etcone30 = rhs.etcone30;
     ptcone30ElStyle = rhs.ptcone30ElStyle;

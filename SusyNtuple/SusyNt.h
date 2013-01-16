@@ -313,6 +313,12 @@ namespace Susy
       float idTrackPt;          // ID track pt
       float idTrackEta;         // ID track eta
       float idTrackPhi;         // ID track phi
+      int idTrackQ;             // ID track charge
+
+      float msTrackPt;          // MS track pt
+      float msTrackEta;         // MS track pt
+      float msTrackPhi;         // MS track pt
+      int msTrackQ;             // ID track charge
 
       float thetaPV;            // Theta extrapolated to PV, by request.
       float etcone30;           // etcone iso
@@ -345,10 +351,11 @@ namespace Susy
       void clear(){
         isCombined = 0;
         idTrackPt = idTrackEta = idTrackPhi = 0;
+        msTrackPt = msTrackEta = msTrackPhi = 0;
+	idTrackQ  = msTrackQ = 0;
         thetaPV = etcone30 = ptcone30ElStyle = 0;
 	ms_up = ms_dn = id_up = id_dn = 0;
-	id_theta = id_phi = id_qoverp = 0;
-	ms_theta = ms_phi = ms_qoverp = 0;
+
         Lepton::clear();
       }
 
