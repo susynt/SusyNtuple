@@ -193,9 +193,6 @@ namespace Susy
 
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
-      float id_qoverp_exPV;     // Inner Detector q/p
-      float me_qoverp_exPV;     // Muon Extrapolated q/p
-
       // functions to return impact parameter variables
       // Note that these are not absolute valued!
       float d0Sig(bool unbiased=false) const {
@@ -327,6 +324,9 @@ namespace Susy
       float id_up;              // ID Pt + sigma
       float id_dn;              // ID Pt - sigma
 
+      float id_qoverp_exPV;     // Inner Detector q/p
+      float me_qoverp_exPV;     // Muon Extrapolated q/p
+
       // polymorphism, baby!!
       bool isEle() const { return false; }
       bool isMu()  const { return true; }
@@ -341,10 +341,11 @@ namespace Susy
         idTrackPt = idTrackEta = idTrackPhi = 0;
         thetaPV = etcone30 = ptcone30ElStyle = 0;
 	ms_up = ms_dn = id_up = id_dn = 0;
+	id_qoverp_exPV = me_qoverp_exPV = 0;
         Lepton::clear();
       }
 
-      ClassDef(Muon, 4);
+      ClassDef(Muon, 5);
   };
 
   // Tau class

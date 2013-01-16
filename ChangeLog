@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2013-01-16 Matt
+	* moving qoverp to muon class. Mistakenly added to Lepton class.
+	
 2013-01-15 Matt
 	* Added two variables to muon class to handle qoverp.
 	
