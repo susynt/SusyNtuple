@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-01-15 Matt
+	* Added two variables to muon class to handle qoverp.
+	
 2013-01-15 Serhan Mete <amete@cern.ch>
 	* scripts/install.sh: Minor update to SUSYTools and DGTriggerReweight tags 
 

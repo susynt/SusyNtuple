@@ -193,6 +193,9 @@ namespace Susy
 
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
+      float id_qoverp_exPV;     // Inner Detector q/p
+      float me_qoverp_exPV;     // Muon Extrapolated q/p
+
       // functions to return impact parameter variables
       // Note that these are not absolute valued!
       float d0Sig(bool unbiased=false) const {
