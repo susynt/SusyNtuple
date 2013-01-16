@@ -226,15 +226,16 @@ enum EventCheck
 // Enum for event cleaning cuts
 enum EventCleaningCuts
 {
-  ECut_GRL      = 1 << 0,
-  ECut_TTC      = 1 << 1,
-  ECut_LarErr   = 1 << 2,
-  ECut_TileErr  = 1 << 3,
-  ECut_GoodVtx  = 1 << 4,
-  ECut_HotSpot  = 1 << 5,
-  ECut_BadJet   = 1 << 6,
-  ECut_BadMuon  = 1 << 7,
-  ECut_Cosmic   = 1 << 8
+  ECut_GRL       = 1 << 0,
+  ECut_TTC       = 1 << 1,
+  ECut_LarErr    = 1 << 2,
+  ECut_TileErr   = 1 << 3,
+  ECut_GoodVtx   = 1 << 4,
+  ECut_HotSpot   = 1 << 5,
+  ECut_BadJet    = 1 << 6,
+  ECut_BadMuon   = 1 << 7,
+  ECut_Cosmic    = 1 << 8,
+  ECut_SmartVeto = 1 << 9 
 };
 
 // Way to check Event Types

@@ -324,8 +324,14 @@ namespace Susy
       float id_up;              // ID Pt + sigma
       float id_dn;              // ID Pt - sigma
 
-      float id_qoverp_exPV;     // Inner Detector q/p
-      float me_qoverp_exPV;     // Muon Extrapolated q/p
+      // Variables for charge misid
+      float id_theta;
+      float id_phi;
+      float id_qoverp;
+      float ms_theta;
+      float ms_phi;
+      float ms_qoverp;
+      
 
       // polymorphism, baby!!
       bool isEle() const { return false; }
@@ -341,7 +347,8 @@ namespace Susy
         idTrackPt = idTrackEta = idTrackPhi = 0;
         thetaPV = etcone30 = ptcone30ElStyle = 0;
 	ms_up = ms_dn = id_up = id_dn = 0;
-	id_qoverp_exPV = me_qoverp_exPV = 0;
+	id_theta = id_phi = id_qoverp = 0;
+	ms_theta = ms_phi = ms_qoverp = 0;
         Lepton::clear();
       }
 
@@ -468,6 +475,8 @@ namespace Susy
       float jes_dn;             // jet energy scale down
       float jer;                // jet energy resolution
 
+      float bch_corr_jet;       // Needed for dead region veto
+
       void setState(int sys);
 
       // print method
@@ -479,10 +488,11 @@ namespace Susy
         matchTruth = false;
         sv0 = combNN = mv1 = 0;
 	jer = jes_up = jes_dn = 0;
+	bch_corr_jet = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 3);
+      ClassDef(Jet, 4);
   };
 
   // Met class

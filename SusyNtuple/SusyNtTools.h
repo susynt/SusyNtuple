@@ -188,12 +188,18 @@ class SusyNtTools
     // No cosmic muons
     bool passCosmic(int flag)  { return ( flag & ECut_Cosmic );  }
     
+    // Pass Smart Veto
+    bool passSmartVeto(int flag) { return (flag & ECut_SmartVeto); }
+
     // Pass All the above, incase you don't care about cut flow
     bool passAll(int flag)
     { 
-      int mask = ECut_HotSpot || ECut_BadJet || ECut_BadMuon || ECut_Cosmic;
+      int mask = ECut_HotSpot || ECut_BadJet || ECut_BadMuon || ECut_Cosmic || ECut_SmartVeto;
       return (flag & mask) == mask;
     }
+
+    // Pass FEB dead region check
+    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber);
   
     //
     // Object selection control toggles

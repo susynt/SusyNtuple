@@ -951,6 +951,32 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 }
 
 /*--------------------------------------------------------------------------------*/
+// Pass Dead Region based on met, jets and run number
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int RunNumber)
+{
+
+  // Info taken from here:
+  // https://indico.cern.ch/getFile.py/access?contribId=9&resId=0&materialId=slides&confId=223778
+  // Loop over all selected jets with Pt > 30 GeV and BCH_Corr_JET > 0.05
+  // If dPhi(met, jet) < 0.3, reject event
+  // This is only done run number > 213863, when FEB turned off in HEC
+
+  if( !(RunNumber > 213863) ) return true;
+  
+  for(uint ij = 0; ij<baseJets.size(); ++ij){
+    const Jet* jet = baseJets.at(ij);
+    if( !(jet->Pt() > 30.) )          continue;
+    if( !(jet->bch_corr_jet > 0.05) ) continue;
+  
+    if( jet->DeltaPhi( met->lv() ) < 0.3 ) return false;
+  }
+
+  return true;
+
+}
+
+/*--------------------------------------------------------------------------------*/
 // Lepton flavor methods (moved from SusyDefs)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSameFlav(const Lepton* l1, const Lepton* l2)
