@@ -311,6 +311,10 @@ enum TrigBit
   BIT_tau20Ti_medium1_e18vh_medium1,
   BIT_tau20_medium1_mu15,
 
+  // Missing trigger flags for lep-tau matching
+  BIT_e18vh_medium1,
+  BIT_mu15,
+
   N_TRIG
 };
 
@@ -353,6 +357,9 @@ const uint TRIG_tau29Ti_medium1_tau20Ti_medium1 = 1<<BIT_tau29Ti_medium1_tau20Ti
 const uint TRIG_tau20Ti_medium1_e18vh_medium1   = 1<<BIT_tau20Ti_medium1_e18vh_medium1;
 const uint TRIG_tau20_medium1_mu15              = 1<<BIT_tau20_medium1_mu15;
 
+// Missing trigger flags for lep-tau matching
+const uint TRIG_e18vh_medium1           = 1<<BIT_e18vh_medium1;
+const uint TRIG_mu15                    = 1<<BIT_mu15;
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();

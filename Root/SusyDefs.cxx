@@ -126,6 +126,9 @@ stringvector getTrigChains()
   triggers[BIT_tau20Ti_medium1_e18vh_medium1]   = "EF_tau20Ti_medium1_e18vh_medium1";
   triggers[BIT_tau20_medium1_mu15]      = "EF_tau20_medium1_mu15";
 
+  triggers[BIT_e18vh_medium1]           = "EF_e18vh_medium1";
+  triggers[BIT_mu15]                    = "EF_mu15";
+
   return triggers;
 }
 
