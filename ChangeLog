@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-01-17 Steve
+	* Tagging SusyNtuple-00-00-41
+
 2013-01-16 Matt
 	* Moving qoverp to muon class. Mistakenly added to Lepton class.
 	* Update muon vars. ID q added, all MS variables added.
@@ -8,10 +11,10 @@
 	* Add passDeadRegions to SusyNtTools implementing FEB turn off in HEC
 	         * taken from: https://indico.cern.ch/getFile.py/access?contribId=9&resId=0&materialId=slides&confId=223778
 	         * This is current recommendation but slides imply study independently 
-	
+
 2013-01-15 Matt
 	* Added two variables to muon class to handle qoverp.
-	
+
 2013-01-15 Serhan Mete <amete@cern.ch>
 	* scripts/install.sh: Minor update to SUSYTools and DGTriggerReweight tags 
 
