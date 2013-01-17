@@ -69,6 +69,7 @@ namespace Susy
       float wPileup;            // pileup weight for full dataset
       float wPileupAB3;         // pileup weight for 2012 period A-B3 only
       float wPileupAB;          // pileup weight for 2012 period A-B only
+      float wPileupIL;          // pileup weight for 2012 period I,L only (TEMPORARY)
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
       //float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
       float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
@@ -101,7 +102,7 @@ namespace Susy
         passMllForAlpgen = true;
 	memset(evtFlag,0,sizeof(evtFlag));
 	memset(cutFlags,0,sizeof(cutFlags));
-        wPileup = wPileupAB3 = wPileupAB = 0;
+        wPileup = wPileupAB3 = wPileupAB = wPileupIL = 0;
         xsec = sumw = pdfSF = 0;
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
