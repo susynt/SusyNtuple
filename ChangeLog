@@ -1,4 +1,6 @@
 # vim: set noexpandtab:
+2013-01-21 Serhan Mete <amete@cern.ch>
+	* SusyNtuple/SusyDefs.h: Added missing comma on L319
 
 2013-01-20 Steve
 	* Added EF_2mu8_EFxe40wMu_tclcw trigger

@@ -316,7 +316,7 @@ enum TrigBit
   BIT_mu15,
 
   // MissingEt trigger
-  BIT_2mu8_EFxe40wMu_tclcw
+  BIT_2mu8_EFxe40wMu_tclcw,
 
   N_TRIG
 };
