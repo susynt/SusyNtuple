@@ -2,6 +2,7 @@
 
 2013-01-21 Steve
 	* Updated DataPeriod enum
+	* Tagging SusyNtuple-00-00-43
 
 2013-01-21 Serhan Mete <amete@cern.ch>
 	* SusyNtuple/SusyDefs.h: Added missing comma on L319
