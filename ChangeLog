@@ -1,5 +1,15 @@
 # vim: set noexpandtab:
 
+2013-01-21 Serhan Mete <amete@cern.ch>
+	* Added the structure for the new truth classes, namely TruthParticle, TruthJet and TrutMet
+	* Currently not being written out in SusyNt since not filled yet. The affected files are listed below
+	* M       Root/LinkDef.h
+	* M       Root/SusyNt.cxx
+	* M       Root/SusyNtObject.cxx
+	* M       SusyNtuple/SusyNtObject.h
+	* M       SusyNtuple/SusyNt.h
+	* M       SusyNtuple/SusyDefs.h
+
 2013-01-21 Steve
 	* Updated DataPeriod enum
 	* Tagging SusyNtuple-00-00-43

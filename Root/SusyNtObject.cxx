@@ -18,7 +18,10 @@ SusyNtObject::SusyNtObject():
         jet(this, "jets", 0),
 	pho(this, "photons", 0),
 	tau(this, "taus", 0),
-        met(this, "met", 0)
+        met(this, "met", 0),
+        tpr(this, "truthParticles", 0),
+        tjt(this, "truthJets", 0),
+        tmt(this, "truthMet", 0)
 {
 }
 
@@ -32,7 +35,10 @@ SusyNtObject::SusyNtObject(const Long64_t& entry):
         jet(this, "jets", &entry),
 	pho(this, "photons", &entry),
 	tau(this, "taus", &entry),
-        met(this, "met", &entry)
+        met(this, "met", &entry),
+        tpr(this, "truthParticles", &entry),
+        tjt(this, "truthJets", &entry),
+        tmt(this, "truthMet", &entry)
 {
 }
 
@@ -48,6 +54,9 @@ void SusyNtObject::SetActive()
   pho.SetActive(true);
   tau.SetActive(true);
   met.SetActive(true);
+  tpr.SetActive(false); //
+  tjt.SetActive(false); // Currently Off - SM 21/1/13
+  tmt.SetActive(false); //
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -62,6 +71,9 @@ void SusyNtObject::WriteTo(TTree* tree)
   pho.WriteTo(tree);
   tau.WriteTo(tree);
   met.WriteTo(tree);
+  tpr.WriteTo(tree);
+  tjt.WriteTo(tree);
+  tmt.WriteTo(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -76,6 +88,9 @@ void SusyNtObject::ReadFrom(TTree* tree)
   pho.ReadFrom(tree);
   tau.ReadFrom(tree);
   met.ReadFrom(tree);
+  tpr.ReadFrom(tree);
+  tjt.ReadFrom(tree);
+  tmt.ReadFrom(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -90,4 +105,7 @@ void SusyNtObject::clear()
   pho()->clear();
   tau()->clear();
   met()->clear();
+  tpr()->clear();
+  tjt()->clear();
+  tmt()->clear();
 }

@@ -548,6 +548,91 @@ namespace Susy
       ClassDef(Met, 2);
   };
 
+  // TruthParticle
+  class TruthParticle : public Particle
+  {
+    public:
+      TruthParticle(){ clear(); }
+      virtual ~TruthParticle(){};
+      TruthParticle(const TruthParticle &);
+      /** Assignment operator */
+      TruthParticle& operator=(const TruthParticle &);
+
+      int pdgId;
+      int charge;
+      int status;
+      int motherPdgId;
+
+      // print method
+      void print() const;
+
+      void clear(){
+        pdgId  = 0;
+        charge = 0;
+        status = 0;
+        motherPdgId = 0;
+        Particle::clear();
+      }
+
+      ClassDef(TruthParticle,1);
+  };
+
+  // TruthJet
+  class TruthJet : public Particle
+  {
+    public:
+      TruthJet(){ clear(); }
+      virtual ~TruthJet(){};
+      TruthJet(const TruthJet &);
+      /** Assignment operator */
+      TruthJet& operator=(const TruthJet &);
+
+      int flavor;
+
+      // print method
+      void print() const;
+
+      void clear(){
+        flavor = 0;
+        Particle::clear();
+      }
+
+      ClassDef(TruthJet,1);
+  };
+
+  // TruthMet class
+  class TruthMet : public TObject
+  {
+    public:
+      TruthMet(){ clear(); }
+      virtual ~TruthMet(){};
+      /** Copy constructor */
+      TruthMet(const TruthMet &);
+      /** Assignment operator */
+      TruthMet& operator=(const TruthMet &);
+      
+      float Et;
+      float phi;
+
+      // Build a TLorentzVector on the fly
+      const TLorentzVector lv() const {
+	TLorentzVector tlv;
+	tlv.SetPtEtaPhiE(this->Et,0,this->phi,this->Et);
+	return tlv;
+      }
+
+      // print vars
+      void print() const;
+
+      // clear vars
+      void clear(){
+        Et  = 0;
+        phi = 0;
+      }
+
+      ClassDef(TruthMet, 1);
+  };
+
 };
 
 

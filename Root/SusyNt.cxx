@@ -495,4 +495,108 @@ void Met::print() const
   cout.precision(6);
   cout.unsetf(ios_base::fixed);
 }
-
+/*--------------------------------------------------------------------------------*/
+// Copy constructor
+/*--------------------------------------------------------------------------------*/
+TruthParticle::TruthParticle(const TruthParticle &rhs):
+  Particle(rhs),
+  pdgId(rhs.pdgId),
+  charge(rhs.charge),
+  status(rhs.status),
+  motherPdgId(rhs.motherPdgId)
+{
+}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+TruthParticle& TruthParticle::operator=(const TruthParticle &rhs)
+{
+  if (this != &rhs) {
+    Particle::operator=(rhs);
+    pdgId       = rhs.pdgId;
+    charge      = rhs.charge;
+    status      = rhs.status;
+    motherPdgId = rhs.motherPdgId;    
+  }
+  return *this;
+}
+/*--------------------------------------------------------------------------------*/
+// TruthParticle print
+/*--------------------------------------------------------------------------------*/
+void TruthParticle::print() const
+{
+  cout.precision(2);
+  cout << fixed << "TruthParticle : pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
+       << " phi "         << setw(5)  << Phi()
+       << " pdgId "       << setw(10) << pdgId
+       << " charge "      << setw(4)  << charge
+       << " status "      << setw(4)  << status
+       << " motherPdgId " << setw(10) << motherPdgId 
+       << endl;
+  cout.precision(6);
+  cout.unsetf(ios_base::fixed);
+}
+/*--------------------------------------------------------------------------------*/
+// Copy constructor
+/*--------------------------------------------------------------------------------*/
+TruthJet::TruthJet(const TruthJet &rhs):
+  Particle(rhs),
+  flavor(rhs.flavor)
+{
+}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+TruthJet& TruthJet::operator=(const TruthJet &rhs)
+{
+  if (this != &rhs) {
+    Particle::operator=(rhs);
+    flavor = rhs.flavor;    
+  }
+  return *this;
+}
+/*--------------------------------------------------------------------------------*/
+// TruthJet print
+/*--------------------------------------------------------------------------------*/
+void TruthJet::print() const
+{
+  cout.precision(2);
+  cout << fixed << "TruthJet : pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
+       << " phi "    << setw(5)  << Phi()
+       << " flavor " << setw(5) << flavor 
+       << endl;
+  cout.precision(6);
+  cout.unsetf(ios_base::fixed);
+}
+/*--------------------------------------------------------------------------------*/
+// Copy constructor
+/*--------------------------------------------------------------------------------*/
+TruthMet::TruthMet(const TruthMet &rhs):
+  TObject(rhs),
+  Et(rhs.Et),
+  phi(rhs.phi)
+{
+}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+TruthMet& TruthMet::operator=(const TruthMet &rhs)
+{
+  if (this != &rhs) {
+    TObject::operator=(rhs);
+    Et  = rhs.Et; 
+    phi = rhs.phi; 
+  }
+  return *this;
+}
+/*--------------------------------------------------------------------------------*/
+// TruthMet print
+/*--------------------------------------------------------------------------------*/
+void TruthMet::print() const
+{
+  cout.precision(2);
+  cout << fixed << "TruthMet : pt " << setw(6) << Et << " phi " << setw(4) << phi
+       << endl;
+  cout.precision(6);
+  cout.unsetf(ios_base::fixed);
+}

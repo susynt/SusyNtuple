@@ -54,8 +54,14 @@ namespace Susy
       D3PDReader::VarHandle< std::vector<Tau>* >        tau;
       // Met variables
       D3PDReader::VarHandle< std::vector<Met>* >        met;  
+      // TruthParticle variables
+      D3PDReader::VarHandle< std::vector<TruthParticle>* > tpr;
+      // TruthJet variables
+      D3PDReader::VarHandle< std::vector<TruthJet>* >   tjt;
+      // TruthMet variables
+      D3PDReader::VarHandle< std::vector<TruthMet>* >   tmt;
 
-      ClassDef(SusyNtObject,1);
+      ClassDef(SusyNtObject,2);
 
     protected:
 
