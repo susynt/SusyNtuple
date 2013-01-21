@@ -29,6 +29,11 @@ DataPeriod getDataPeriod(uint run)
   else if(run>=206248 && run<=207397) return Period_C;
   else if(run>=207447 && run<=209025) return Period_D;
   else if(run>=209074 && run<=210308) return Period_E;
+  else if(run>=211522 && run<=212272) return Period_G;
+  else if(run>=212619 && run<=213359) return Period_H;
+  else if(run>=213431 && run<=213819) return Period_I;
+  else if(run>=213900 && run<=215091) return Period_J;
+  else if(run>=215414 && run<=215643) return Period_L;
   else return Period_Num;
 }
 /*--------------------------------------------------------------------------------*/

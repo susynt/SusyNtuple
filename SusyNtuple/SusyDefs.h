@@ -81,6 +81,11 @@ enum DataPeriod
   Period_C,
   Period_D,
   Period_E,
+  Period_G,
+  Period_H,
+  Period_I,
+  Period_J,
+  Period_L,
   Period_Num
 };
 
