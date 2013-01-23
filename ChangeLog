@@ -1,7 +1,8 @@
 # vim: set noexpandtab:
 
 2013-01-23 Steve
-	* Added pileup weight for period A-H (HCP).  Default pileup weight will now use full 2012 data
+	* Added pileup weight for period A-E (HCP). 
+	  Default pileup weight will now use full 2012 data.
 
 2013-01-23 Serhan Mete <amete@cern.ch>
 	* Set the truth branches active
