@@ -54,9 +54,9 @@ void SusyNtObject::SetActive()
   pho.SetActive(true);
   tau.SetActive(true);
   met.SetActive(true);
-  tpr.SetActive(false); //
-  tjt.SetActive(false); // Currently Off - SM 21/1/13
-  tmt.SetActive(false); //
+  tpr.SetActive(true); 
+  tjt.SetActive(true); 
+  tmt.SetActive(true);
 }
 
 /*--------------------------------------------------------------------------------*/

@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-01-23 Serhan Mete <amete@cern.ch>
+	* Set the truth branches active
+
 2013-01-21 Serhan Mete <amete@cern.ch>
 	* Added the structure for the new truth classes, namely TruthParticle, TruthJet and TrutMet
 	* Currently not being written out in SusyNt since not filled yet. The affected files are listed below
