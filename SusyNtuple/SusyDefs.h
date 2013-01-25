@@ -26,6 +26,7 @@ namespace Susy
   class Met;
   class TruthParticle;
   class TruthJet;
+  class TruthMet;
 }
 
 //-----------------------------------------------------------------------------------
@@ -461,6 +462,16 @@ const float BAD_FCAL_ETA=3.2;
 const float BAD_FCAL_PHILOW=1.6;
 const float BAD_FCAL_PHIHIGH=3.1;
 
+// Truth level cuts
+const float TRUTH_ELECTRON_PT_CUT     = 10.;
+const float TRUTH_MUON_PT_CUT         = 10.;
+const float TRUTH_TAU_PT_CUT          = 20.; // Correct??
+const float TRUTH_JET_CENTRAL_PT_CUT  = 20.;
+const float TRUTH_JET_FORWARD_PT_CUT  = 30.;
 
+const float TRUTH_ELECTRON_ETA_CUT    = 2.47; 
+const float TRUTH_MUON_ETA_CUT        = 2.4;  
+const float TRUTH_TAU_ETA_CUT         = 2.5;  
+const float TRUTH_JET_ETA_MAX_CUT     = 4.5;
 
 #endif

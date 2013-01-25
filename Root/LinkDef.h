@@ -7,6 +7,7 @@
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/SusyNtAna.h"
+#include "SusyNtuple/SusyNtTruthAna.h"
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
@@ -22,6 +23,7 @@
 
 #pragma link C++ class TGuiUtils+;
 #pragma link C++ class SusyNtAna;
+#pragma link C++ class SusyNtTruthAna;
 #pragma link C++ class Susy2LepCutflow;
 #pragma link C++ class Susy3LepCutflow;
 
