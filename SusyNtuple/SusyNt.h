@@ -72,8 +72,8 @@ namespace Susy
       float wPileupIL;          // pileup weight for 2012 period I,L only (TEMPORARY)
       float wPileupAE;          // pileup weight for HCP dataset A-E
       float xsec;               // cross section * kfactor * efficiency, from SUSY db
-      //float lumiSF;             // luminosity scale factor = integrated lumi / sum of mc weights
-      float sumw;               // Sum of generator weights (I may drop the lumiSF above...)
+      float errXsec;            // cross section uncertainty
+      float sumw;               // Sum of generator weights 
       float pdfSF;              // PDF weight, for scaling 7TeV MC to 8TeV
 
       // PDF Systematic information
@@ -82,10 +82,6 @@ namespace Susy
       double pdf_x1;     
       double pdf_x2;
       double pdf_scale;
-
-      // Combined normalized event weight
-      // Should use SusyNtAna::getEventWeight instead
-      //float fullWeight() const { return wPileup*xsec*lumiSF; }
 
       // print event
       void print() const;
@@ -104,7 +100,7 @@ namespace Susy
 	memset(evtFlag,0,sizeof(evtFlag));
 	memset(cutFlags,0,sizeof(cutFlags));
         wPileup = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
-        xsec = sumw = pdfSF = 0;
+        xsec = errXsec = sumw = pdfSF = 0;
 	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 

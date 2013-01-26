@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-01-27 Steve
+	* Added errXsec to Event class
+	* Tagging SusyNtuple-00-00-45
+
 2013-01-26 Steve
 	* Tagging SusyNtuple-00-00-44
 
