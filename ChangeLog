@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-01-26 Steve
+	* Tagging SusyNtuple-00-00-44
+
 2013-01-25 Serhan Mete <amete@cern.ch>
 	* Added some helper functions for the truth analysis.
 	* Need to think through what should be moved under SusyNtTools.[cxx/h]
