@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-01-29 Serhan Mete <amete@cern.ch>
+	* Update SusyNtuple/scripts/install.sh
+
 2013-01-27 Steve
 	* Added errXsec to Event class
 	* Tagging SusyNtuple-00-00-45
