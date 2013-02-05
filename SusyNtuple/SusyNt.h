@@ -361,8 +361,6 @@ namespace Susy
   };
 
   // Tau class
-  // INHERITANCE FROM Lepton CLASS WILL SOON BE REMOVED
-  //class Tau : public Lepton
   class Tau : public Particle
   {
     public:
@@ -387,7 +385,6 @@ namespace Susy
 
       bool trueTau;             // trueTauAssocSmall_matched d3pd variable
 
-      // Something like this:
       bool matched2TruthLepton; // flag from RecoTruthMatch::Matched2TruthLepton
       int truthType;            // RecoTauMatch::TauFakeType
       int detailedTruthType;    // RecoTauMatch::TauDetailedFakeType

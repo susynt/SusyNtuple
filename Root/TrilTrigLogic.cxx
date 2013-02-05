@@ -98,28 +98,20 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
     if(lep->isEle()){
 
       // If leading lepton, check isolated trigger
-      //if(i==0 && pt>25 && (m_accOnly || lep->matchTrig(TRIG_e24vhi_medium1))) n1E++;
       if(i==0 && matchLepTrigger(lep, TRIG_e24vhi_medium1, 25, m_accOnly)) n1E++;
-      //if(pt>25 && (m_accOnly || lep->matchTrig(TRIG_e24vhi_medium1))) n1E++;
 
       // 2e symmetric trigger
-      //if(pt>14 && (m_accOnly || lep->matchTrig(TRIG_2e12Tvh_loose1))) nSym2E++;
       if(matchLepTrigger(lep, TRIG_2e12Tvh_loose1, 14, m_accOnly)) nSym2E++;
 
       // 2e asymmetric trigger
-      //if((m_accOnly || lep->matchTrig(TRIG_e24vh_medium1_e7_medium1)))
       if(matchLepTrigger(lep, TRIG_e24vh_medium1_e7_medium1, 10, m_accOnly)){
         nAsym2E++;
-        //if(pt>25 && (m_accOnly || lep->matchTrig(TRIG_e24vh_medium1))) nAsym2E_e24++;
         if(matchLepTrigger(lep, TRIG_e24vh_medium1, 25, m_accOnly)) nAsym2E_e24++;
-        //else if(pt>10 && !(m_accOnly || lep->matchTrig(TRIG_e24vh_medium1))) nAsym2E_e7++;
       }
 
       // e-mu trigger
-      //if(pt>14 && (m_accOnly || lep->matchTrig(TRIG_e12Tvh_medium1_mu8))) nEM_e++;
       if(matchLepTrigger(lep, TRIG_e12Tvh_medium1_mu8, 14, m_accOnly)) nEM_e++;
       // mu-e trigger (this is the funny one)
-      //if(pt>10 && (m_accOnly || lep->matchTrig(TRIG_e7_medium1))) nME_e++;
       if(matchLepTrigger(lep, TRIG_e7_medium1, 10, m_accOnly)) nME_e++;
 
     }
@@ -128,29 +120,20 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
     else{
 
       // If leading lepton, check isolated trigger
-      //if(i==0 && pt>25 && (m_accOnly || lep->matchTrig(TRIG_mu24i_tight))) n1M++;
       if(i==0 && matchLepTrigger(lep, TRIG_mu24i_tight, 25, m_accOnly)) n1M++;
-      // Check isolated trigger
-      //if(pt>25 && (m_accOnly || lep->matchTrig(TRIG_mu24i_tight))) n1M++;
 
       // 2m symmetric trigger
-      //if(pt>14 && (m_accOnly || lep->matchTrig(TRIG_2mu13))) nSym2M++;
       if(matchLepTrigger(lep, TRIG_2mu13, 14, m_accOnly)) nSym2M++;
 
       // 2m asymmetric trigger
-      //if((m_accOnly || lep->matchTrig(TRIG_mu18_tight_mu8_EFFS)))
       if(matchLepTrigger(lep, TRIG_mu18_tight_mu8_EFFS, 8, m_accOnly)){
         nAsym2M++;
-        //if(pt>18 &&  (m_accOnly || lep->matchTrig(TRIG_mu18_tight))) nAsym2M_m18++;
         if(matchLepTrigger(lep, TRIG_mu18_tight, 18, m_accOnly)) nAsym2M_m18++;
-        //else if(pt>10 && !(m_accOnly || lep->matchTrig(TRIG_mu18_tight))) nAsym2M_m8++;
       }
 
       // mu-e trigger
-      //if(pt>18 && (m_accOnly || lep->matchTrig(TRIG_mu18_tight_e7_medium1))) nME_m++;
       if(matchLepTrigger(lep, TRIG_mu18_tight_e7_medium1, 18, m_accOnly)) nME_m++;
       // e-mu trigger
-      //if(pt>8  && (m_accOnly || lep->matchTrig(TRIG_mu8))) nEM_m++;
       if(matchLepTrigger(lep, TRIG_mu8, 8, m_accOnly)) nEM_m++;
 
     }

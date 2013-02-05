@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2013-02-05 Steve
+	* Cleaned up TrilTrigLogic
+	* Added printFreq flag to SusyNtAna, so event printing frequency can be controlled
+	  independently from the debug level
+	* Cleaned up getEventWeightFixed
+
 2013-01-29 Serhan Mete <amete@cern.ch>
 	* Update SusyNtuple/scripts/install.sh
 

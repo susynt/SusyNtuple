@@ -13,6 +13,7 @@ SusyNtAna::SusyNtAna() :
         nt(m_entry),
         m_entry(0),
         m_selectTaus(false),
+        m_printFreq(50000),
         m_dbg(0),
 	m_dbgEvt(false),
 	m_duplicate(false)
@@ -46,7 +47,6 @@ void SusyNtAna::Begin(TTree* /*tree*/)
 
   //Debug event - load event list
   if(m_dbgEvt) loadEventList();
-
 }
 
 /*--------------------------------------------------------------------------------*/

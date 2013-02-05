@@ -35,19 +35,21 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt, float lumi)
 {
-  if(!evt->isMC) return 1;
-  float sumw = evt->sumw;
-  float xsec = evt->xsec;
-  if(mcChannel==147770) sumw = 2.47983337636e+13;
+  // No corrections needed at the moment
+  //if(!evt->isMC) return 1;
+  //float sumw = evt->sumw;
+  //float xsec = evt->xsec;
+  //if(mcChannel==147770) sumw = 2.47983337636e+13;
   //if(mcChannel==147771) sumw = 2.35447863214e+13;
   //if(mcChannel==147772) sumw = 1.05702941e+13;
-  if(mcChannel==157814) xsec = 1.702;
-  else if(mcChannel==157815) xsec = 1.687;
-  else if(mcChannel==157816) xsec = 1.702;
-  else if(mcChannel==157817) xsec = 9.557000;
-  else if(mcChannel==157818) xsec = 9.554000;
-  else if(mcChannel==157819) xsec = 9.557000;
-  return evt->w * evt->wPileup * xsec * lumi / sumw;
+  //if(mcChannel==157814) xsec = 1.702;
+  //else if(mcChannel==157815) xsec = 1.687;
+  //else if(mcChannel==157816) xsec = 1.702;
+  //else if(mcChannel==157817) xsec = 9.557000;
+  //else if(mcChannel==157818) xsec = 9.554000;
+  //else if(mcChannel==157819) xsec = 9.557000;
+  //return evt->w * evt->wPileup * xsec * lumi / sumw;
+  return getEventWeight(evt, lumi);
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeightAB3(const Event* evt)

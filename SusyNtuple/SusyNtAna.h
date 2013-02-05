@@ -91,6 +91,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
     // Toggle tau selection and overlap removal
     void setSelectTaus(bool doIt) { m_selectTaus = doIt; }
 
+    // Print frequency
+    void setPrintFreq(int freq) { m_printFreq = freq; }
+
     // Debug level
     void setDebug(int dbg) { m_dbg = dbg; }
     int dbg() { return m_dbg; }
@@ -134,6 +137,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     bool m_selectTaus;          // switch to toggle tau selection and OR
 
+    int   m_printFreq;          // Number of events between printouts
     int   m_dbg;                // debug level
     bool  m_dbgEvt;             // debug events
     bool  m_duplicate;          // duplicate event

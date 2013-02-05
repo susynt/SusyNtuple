@@ -99,42 +99,42 @@ stringvector getTrigChains()
   stringvector triggers;
   triggers.resize(N_TRIG);
 
-  triggers[BIT_e7_medium1]              = "EF_e7_medium1";
-  triggers[BIT_e12Tvh_loose1]           = "EF_e12Tvh_loose1";
-  triggers[BIT_e12Tvh_medium1]          = "EF_e12Tvh_medium1";
-  triggers[BIT_e24vh_medium1]           = "EF_e24vh_medium1";
-  triggers[BIT_e24vhi_medium1]          = "EF_e24vhi_medium1";
-  triggers[BIT_2e12Tvh_loose1]          = "EF_2e12Tvh_loose1";
-  triggers[BIT_e24vh_medium1_e7_medium1]= "EF_e24vh_medium1_e7_medium1";
+  triggers[BIT_e7_medium1]                      = "EF_e7_medium1";
+  triggers[BIT_e12Tvh_loose1]                   = "EF_e12Tvh_loose1";
+  triggers[BIT_e12Tvh_medium1]                  = "EF_e12Tvh_medium1";
+  triggers[BIT_e24vh_medium1]                   = "EF_e24vh_medium1";
+  triggers[BIT_e24vhi_medium1]                  = "EF_e24vhi_medium1";
+  triggers[BIT_2e12Tvh_loose1]                  = "EF_2e12Tvh_loose1";
+  triggers[BIT_e24vh_medium1_e7_medium1]        = "EF_e24vh_medium1_e7_medium1";
 
-  triggers[BIT_mu8]                     = "EF_mu8";
-  triggers[BIT_mu13]                    = "EF_mu13";
-  triggers[BIT_mu18_tight]              = "EF_mu18_tight";
-  triggers[BIT_mu24i_tight]             = "EF_mu24i_tight";
-  triggers[BIT_2mu13]                   = "EF_2mu13";
-  triggers[BIT_mu18_tight_mu8_EFFS]     = "EF_mu18_tight_mu8_EFFS";
+  triggers[BIT_mu8]                             = "EF_mu8";
+  triggers[BIT_mu13]                            = "EF_mu13";
+  triggers[BIT_mu18_tight]                      = "EF_mu18_tight";
+  triggers[BIT_mu24i_tight]                     = "EF_mu24i_tight";
+  triggers[BIT_2mu13]                           = "EF_2mu13";
+  triggers[BIT_mu18_tight_mu8_EFFS]             = "EF_mu18_tight_mu8_EFFS";
 
-  triggers[BIT_e12Tvh_medium1_mu8]      = "EF_e12Tvh_medium1_mu8";
-  triggers[BIT_mu18_tight_e7_medium1]   = "EF_mu18_tight_e7_medium1";
+  triggers[BIT_e12Tvh_medium1_mu8]              = "EF_e12Tvh_medium1_mu8";
+  triggers[BIT_mu18_tight_e7_medium1]           = "EF_mu18_tight_e7_medium1";
 
-  triggers[BIT_g20_loose]               = "EF_g20_loose";
-  triggers[BIT_g40_loose]               = "EF_g40_loose";
-  triggers[BIT_g60_loose]               = "EF_g60_loose";
-  triggers[BIT_g80_loose]               = "EF_g80_loose";
-  triggers[BIT_g100_loose]              = "EF_g100_loose";
-  triggers[BIT_g120_loose]              = "EF_g120_loose";
+  triggers[BIT_g20_loose]                       = "EF_g20_loose";
+  triggers[BIT_g40_loose]                       = "EF_g40_loose";
+  triggers[BIT_g60_loose]                       = "EF_g60_loose";
+  triggers[BIT_g80_loose]                       = "EF_g80_loose";
+  triggers[BIT_g100_loose]                      = "EF_g100_loose";
+  triggers[BIT_g120_loose]                      = "EF_g120_loose";
 
-  triggers[BIT_tau20_medium1]           = "EF_tau20_medium1";
-  triggers[BIT_tau20Ti_medium1]         = "EF_tau20Ti_medium1";
-  triggers[BIT_tau29Ti_medium1]         = "EF_tau29Ti_medium1";
+  triggers[BIT_tau20_medium1]                   = "EF_tau20_medium1";
+  triggers[BIT_tau20Ti_medium1]                 = "EF_tau20Ti_medium1";
+  triggers[BIT_tau29Ti_medium1]                 = "EF_tau29Ti_medium1";
   triggers[BIT_tau29Ti_medium1_tau20Ti_medium1] = "EF_tau29Ti_medium1_tau20Ti_medium1";
   triggers[BIT_tau20Ti_medium1_e18vh_medium1]   = "EF_tau20Ti_medium1_e18vh_medium1";
-  triggers[BIT_tau20_medium1_mu15]      = "EF_tau20_medium1_mu15";
+  triggers[BIT_tau20_medium1_mu15]              = "EF_tau20_medium1_mu15";
 
-  triggers[BIT_e18vh_medium1]           = "EF_e18vh_medium1";
-  triggers[BIT_mu15]                    = "EF_mu15";
+  triggers[BIT_e18vh_medium1]                   = "EF_e18vh_medium1";
+  triggers[BIT_mu15]                            = "EF_mu15";
 
-  triggers[BIT_2mu8_EFxe40wMu_tclcw]    = "EF_2mu8_EFxe40wMu_tclcw";
+  triggers[BIT_2mu8_EFxe40wMu_tclcw]            = "EF_2mu8_EFxe40wMu_tclcw";
 
   return triggers;
 }
