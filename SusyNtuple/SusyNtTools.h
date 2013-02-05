@@ -32,11 +32,11 @@ class SusyNtTools
     // Get event weight - contains generator, pileup, xsec, and lumi weights
     //
 
-    // Default weight uses full dataset, currently A-E
+    // Default weight uses full dataset, currently A-L
     // Pileup weights correspond to same dataset.
-    virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_E);
+    virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L);
     // Temporary fixed version of getEventWeight for n0105
-    virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, float lumi = LUMI_A_E);
+    virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, float lumi = LUMI_A_L);
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
     // This will use the correct pileup weights for A-B3

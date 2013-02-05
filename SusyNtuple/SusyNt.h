@@ -389,6 +389,9 @@ namespace Susy
       int truthType;            // RecoTauMatch::TauFakeType
       int detailedTruthType;    // RecoTauMatch::TauDetailedFakeType
 
+      float effSF;              // Efficiency scale factor
+      float errEffSF;           // Uncertainty on the efficiency scale factor
+
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
       // trigger matching
@@ -409,11 +412,12 @@ namespace Susy
         trueTau = false;
         matched2TruthLepton = false;
         truthType = detailedTruthType = -1;
+        effSF = errEffSF = 0;
         trigFlags = 0;
         Particle::clear();
       }
 
-      ClassDef(Tau, 4);
+      ClassDef(Tau, 5);
   };
 
   // Photon class

@@ -308,6 +308,8 @@ Tau::Tau(const Tau &rhs):
   matched2TruthLepton(rhs.matched2TruthLepton),
   truthType(rhs.truthType),
   detailedTruthType(rhs.detailedTruthType),
+  effSF(rhs.effSF),
+  errEffSF(rhs.errEffSF),
   trigFlags(rhs.trigFlags)
 {
 }
@@ -335,6 +337,8 @@ Tau& Tau::operator=(const Tau &rhs)
     matched2TruthLepton = rhs.matched2TruthLepton;
     truthType = rhs.truthType;
     detailedTruthType = rhs.detailedTruthType;
+    effSF = rhs.effSF;
+    errEffSF = rhs.errEffSF;
     trigFlags = rhs.trigFlags;
   }
   return *this;
