@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2013-02-08 Steve
+	* Added Mllll method and corresponding isZ for 3lep and 4lep
+	* Added option to hasZ to check for mlll and mllll in Z window
+		* off by default, of course
+
 2013-02-05 Steve
 	* Cleaned up TrilTrigLogic
 	* Added printFreq flag to SusyNtAna, so event printing frequency can be controlled

@@ -1058,6 +1058,9 @@ float SusyNtTools::Mll(const Particle* l1, const Particle* l2)
 float SusyNtTools::Mlll(const Lepton* l1, const Lepton* l2, const Lepton* l3)
 { return (*l1 + *l2 + *l3).M(); }
 /*--------------------------------------------------------------------------------*/
+float SusyNtTools::Mllll(const Lepton* l1, const Lepton* l2, const Lepton* l3, const Lepton* l4)
+{ return (*l1 + *l2 + *l3 + *l4).M(); }
+/*--------------------------------------------------------------------------------*/
 float SusyNtTools::Mjj(const Jet* j1, const Jet* j2)
 { return (*j1 + *j2).M(); }
 /*--------------------------------------------------------------------------------*/
@@ -1096,29 +1099,53 @@ float SusyNtTools::Meff(const LeptonVector& leps, const TauVector& taus, const J
 bool SusyNtTools::isZ(const Lepton* l1, const Lepton* l2, float massWindow)
 { return isSFOS(l1,l2) && fabs( Mll(l1,l2)-MZ ) < massWindow; }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isZ(const Lepton* l1, const Lepton* l2, const Lepton* l3, float massWindow)
+{ return (isSFOS(l1,l2) || isSFOS(l1,l3) || isSFOS(l2,l3)) && fabs( Mlll(l1,l2,l3)-MZ ) < massWindow; }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isZ(const Lepton* l1, const Lepton* l2, const Lepton* l3, const Lepton* l4, float massWindow)
+{ 
+  // Require 2 SFOS pairs
+  if(((isSFOS(l1,l2) && isSFOS(l3,l4)) || 
+      (isSFOS(l1,l3) && isSFOS(l2,l4)) || 
+      (isSFOS(l1,l4) && isSFOS(l2,l3))  ) &&
+     fabs(Mllll(l1,l2,l3,l4)-MZ) < massWindow) return true;
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isZWindow(const Lepton* l1, const Lepton* l2, float minMll, float maxMll)
 {
   float mll=Mll(l1,l2);
   return (isSFOS(l1,l2) && mll>minMll && mll<maxMll);
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool ignoreTau)
+bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool useMultiLep)
 {
-  for(uint i=0; i<leps.size(); i++){
-    //if(ignoreTau && leps[i]->isTau()) continue;
-    for(uint j=i+1; j<leps.size(); j++){
-      if( isZ(leps[i],leps[j],massWindow) ) return true;
+  uint nLep = leps.size();
+  for(uint i=0; i<nLep; i++){
+    for(uint j=i+1; j<nLep; j++){
+      // check for Z->ll
+      if( isZ(leps[i], leps[j], massWindow) ) return true;
+      if(useMultiLep){
+        for(uint k=j+1; k<nLep; k++){
+          // check for Z->lll(l)
+          if( isZ(leps[i], leps[j], leps[k], massWindow) ) return true;
+          for(uint l=k+1; l<nLep; l++){
+            // check for Z->llll
+            if( isZ(leps[i], leps[j], leps[k], leps[l], massWindow) ) return true;
+          }
+        }
+      }
     }
   }
   return false;
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll, bool ignoreTau)
+bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
 {
   for(uint i=0; i<leps.size(); i++){
     //if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j<leps.size(); j++){
-      if( isZWindow(leps[i],leps[j],minMll, maxMll) ) return true;
+      if( isZWindow(leps[i],leps[j],minMll,maxMll) ) return true;
     }
   }
   return false;

@@ -232,6 +232,7 @@ class SusyNtTools
     // Mass calculation methods
     float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
     float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
+    float Mllll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, const Susy::Lepton* l4);
     float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
     float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Jet* j1, const Susy::Jet* j2);
     float Mt(const Susy::Lepton* lep, const Susy::Met* met);
@@ -240,10 +241,15 @@ class SusyNtTools
 
     // Z selection methods
     bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
+    bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, 
+             float massWindow=10.);
+    bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, 
+             const Susy::Lepton* l4, float massWindow=10.);
     bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, 
                    float minMll=MZ-10, float maxMll=MZ+10);
-    bool hasZ(const LeptonVector& leps, float massWindow=10., bool ignoreTau=true);
-    bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10, bool ignoreTau=true);
+    // NEW Argument useMultiLep will check for mlll and mllll in Z peak
+    bool hasZ(const LeptonVector& leps, float massWindow=10., bool useMultiLep=false);
+    bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
     //void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
 
     // Safer functions, to replace the one above, which return false if no candidates found
