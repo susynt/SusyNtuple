@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-02-09 Steve
+	* Added detEta (detector eta) to jet class, which might be needed later for jvf cut
+	* Tagging SusyNtuple-00-00-47
+
 2013-02-08 Steve
 	* Added Mllll method and corresponding isZ for 3lep and 4lep
 	* Added option to hasZ to check for mlll and mllll in Z window

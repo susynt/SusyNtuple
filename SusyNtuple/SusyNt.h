@@ -467,6 +467,7 @@ namespace Susy
       float jvf;                // Jet vertex fraction
       int truthLabel;           // Flavor truth label
       bool matchTruth;          // Matches truth jet
+      float detEta;             // Detector eta
 
       // btagging
       float sv0;                // SV0 btag weight
@@ -492,13 +493,14 @@ namespace Susy
       void clear(){
         jvf = truthLabel = 0;
         matchTruth = false;
+        detEta = 0;
         sv0 = combNN = mv1 = 0;
 	jer = jes_up = jes_dn = 0;
 	bch_corr_jet = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 4);
+      ClassDef(Jet, 5);
   };
 
   // Met class

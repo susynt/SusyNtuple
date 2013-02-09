@@ -390,6 +390,7 @@ Jet::Jet(const Jet &rhs):
   jvf(rhs.jvf),
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
+  detEta(rhs.detEta),
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
@@ -409,6 +410,7 @@ Jet& Jet::operator=(const Jet &rhs)
     jvf  = rhs.jvf; 
     truthLabel = rhs.truthLabel;
     matchTruth = rhs.matchTruth;
+    detEta = rhs.detEta;
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
     mv1 = rhs.mv1;
