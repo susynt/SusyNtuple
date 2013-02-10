@@ -7,7 +7,8 @@
 /*--------------------------------------------------------------------------------*/
 DilTrigLogic::DilTrigLogic(string period) :
   m_triggerWeight(NULL),
-  m_useMCTrig(false)
+  m_useMCTrig(false),
+  m_useDimuonMetTrigger(false)
 {
 
   cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="<<endl;
@@ -44,14 +45,14 @@ DilTrigLogic::~DilTrigLogic()
 // 2.) passDilEvtTrig -- will return result of the event level trigger
 // 3.) passDilTrigMatch -- will return the result of the trigger matching of leptons
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passDilTrig(LeptonVector leptons, Event* evt)
+bool DilTrigLogic::passDilTrig(LeptonVector leptons, float met, Event* evt)
 {    
-  return passDilEvtTrig(leptons, evt) && passDilTrigMatch(leptons, evt);
+  return passDilEvtTrig(leptons, met, evt) && passDilTrigMatch(leptons, met, evt);
 }
 /*--------------------------------------------------------------------------------*/
 // Pass the event level trigger
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, Event* evt)
+bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, float met, Event* evt)
 {
 
   // Make sure there is only two leptons.
@@ -78,7 +79,7 @@ bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, Event* evt)
     return passEvtTrigger(evtTrigFlags, dtr);
   }
   if( (!isEg || isMC) && ET == ET_mm ){
-    DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
+    DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt(), met);
     if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
     return passEvtTrigger(evtTrigFlags, dtr);
   }
@@ -100,7 +101,7 @@ bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, Event* evt)
 /*--------------------------------------------------------------------------------*/
 // Pass the event level trigger
 /*--------------------------------------------------------------------------------*/
-bool DilTrigLogic::passDilTrigMatch(LeptonVector leptons, Event* evt)
+bool DilTrigLogic::passDilTrigMatch(LeptonVector leptons, float met, Event* evt)
 {
 
   // Make sure there is only two leptons.
@@ -126,7 +127,7 @@ bool DilTrigLogic::passDilTrigMatch(LeptonVector leptons, Event* evt)
     return passTriggerMatch(leptons[0]->trigFlags, leptons[1]->trigFlags, dtr);
   }
   if( (!isEg || isMC) && ET == ET_mm ){
-    DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt());
+    DilTriggerRegion dtr = getMMTrigRegion(leptons[0]->Pt(), leptons[1]->Pt(), met);
     if( isMC && !m_useMCTrig ) return dtr != DTR_UNKNOWN;
     return passTriggerMatch(leptons[0]->trigFlags, leptons[1]->trigFlags, dtr);
   }
@@ -160,7 +161,7 @@ DilTriggerRegion DilTrigLogic::getEETrigRegion(float pt0, float pt1)
 
 }
 /*--------------------------------------------------------------------------------*/
-DilTriggerRegion DilTrigLogic::getMMTrigRegion(float pt0, float pt1)
+DilTriggerRegion DilTrigLogic::getMMTrigRegion(float pt0, float pt1, float met)
 {
 
   // Region A
@@ -171,6 +172,9 @@ DilTriggerRegion DilTrigLogic::getMMTrigRegion(float pt0, float pt1)
   if( 18 < pt0 && 8 < pt1 && pt1 < 14 )  return DTR_MM_C;
   // Region D
   if( 14 < pt0 && pt0 < 20 && 14 < pt1 ) return DTR_MM_D;
+  // Region E
+  if( m_useDimuonMetTrigger && 8 < pt0 && pt0 <= 18 && 
+      8 < pt1 && pt1 <= 14 && met > 70 ) return DTR_MM_E;
   // Unknown region
   return DTR_UNKNOWN;
 
@@ -199,6 +203,7 @@ bool DilTrigLogic::passEvtTrigger(uint evtflag, DilTriggerRegion dtr)
   if( dtr == DTR_MM_B )   return (evtflag & TRIG_mu18_tight_mu8_EFFS) || (evtflag & TRIG_2mu13);
   if( dtr == DTR_MM_C )   return (evtflag & TRIG_mu18_tight_mu8_EFFS);
   if( dtr == DTR_MM_D )   return (evtflag & TRIG_2mu13);
+  if( dtr == DTR_MM_E )   return m_useDimuonMetTrigger && (evtflag & TRIG_2mu8_EFxe40wMu_tclcw);
   if( dtr == DTR_EM_A )   return (evtflag & TRIG_e12Tvh_medium1_mu8);
   if( dtr == DTR_EM_B )   return (evtflag & TRIG_mu18_tight_e7_medium1);
 
@@ -244,6 +249,11 @@ bool DilTrigLogic::passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr
   }
   if( dtr == DTR_MM_D )
     return (flag0 & TRIG_mu13) && (flag1 & TRIG_mu13);
+
+  if( dtr == DTR_MM_E )
+    return m_useDimuonMetTrigger && 
+      (flag0 & TRIG_2mu8_EFxe40wMu_tclcw) && 
+      (flag1 & TRIG_2mu8_EFxe40wMu_tclcw);
   
   // EM Regions
   if( dtr == DTR_EM_A ){
@@ -265,7 +275,9 @@ bool DilTrigLogic::passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr
 /*--------------------------------------------------------------------------------*/
 // Methods to get the trigger weight for MC
 /*--------------------------------------------------------------------------------*/
-double DilTrigLogic::getTriggerWeight(LeptonVector leptons, bool isMC, SusyNtSys sys)
+double DilTrigLogic::getTriggerWeight(LeptonVector leptons, bool isMC, 
+				      float met, int njets, int NPV, 
+				      SusyNtSys sys)
 {
 
   // If it is data, return, as tool not initialized
@@ -280,9 +292,9 @@ double DilTrigLogic::getTriggerWeight(LeptonVector leptons, bool isMC, SusyNtSys
   if(ET == ET_ee) 
     return getTriggerWeightEE(leptons, sys);
   if(ET == ET_mm) 
-    return getTriggerWeightMM(leptons, sys);
+    return getTriggerWeightMM(leptons, met, njets, NPV, sys);
   if(ET == ET_em || ET == ET_me)
-    return getTriggerWeightEM(leptons, sys);
+    return getTriggerWeightEM(leptons, NPV, sys);
 
   // If here unable to classify the event: Print error message
   // and return 0
@@ -316,7 +328,8 @@ double DilTrigLogic::getTriggerWeightEE(LeptonVector leptons, SusyNtSys sys)
 
 }
 /*--------------------------------------------------------------------------------*/
-double DilTrigLogic::getTriggerWeightMM(LeptonVector leptons, SusyNtSys sys)
+double DilTrigLogic::getTriggerWeightMM(LeptonVector leptons, float met, 
+					int njets, int NPV, SusyNtSys sys)
 {
 
   if( !m_triggerWeight ){
@@ -338,11 +351,12 @@ double DilTrigLogic::getTriggerWeightMM(LeptonVector leptons, SusyNtSys sys)
   double phi1 = leptons[1]->Phi();
   int isComb1 = ((Muon*) leptons[1])->isCombined;
   
-  return m_triggerWeight->triggerReweightMM(pt0, eta0, phi0, isComb0, pt1, eta1, phi1, isComb1,trigSys);
+  return m_triggerWeight->triggerReweightMM(pt0, eta0, phi0, isComb0, pt1, eta1, phi1, isComb1, 
+					    trigSys, NPV, met, njets, m_useDimuonMetTrigger);
 
 }
 /*--------------------------------------------------------------------------------*/
-double DilTrigLogic::getTriggerWeightEM(LeptonVector leptons, SusyNtSys sys)
+double DilTrigLogic::getTriggerWeightEM(LeptonVector leptons, int NPV, SusyNtSys sys)
 {
 
   if( !m_triggerWeight ){
@@ -369,8 +383,9 @@ double DilTrigLogic::getTriggerWeightEM(LeptonVector leptons, SusyNtSys sys)
     ((Muon*) leptons[0])->isCombined;
   
     
-    return m_triggerWeight->triggerReweightEMU(elpt, eleta, mupt, mueta, muphi, isComb, trigSys);
-
+  return m_triggerWeight->triggerReweightEMU(elpt, eleta, mupt, mueta, muphi, isComb, 
+					     trigSys, NPV);
+  
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -391,6 +406,6 @@ void DilTrigLogic::debugFlag(uint flag){
   cout << "\tEF_mu18_tight_mu8_EFFS      " << (flag & TRIG_mu18_tight_mu8_EFFS)      << endl;
   cout << "\tEF_e12Tvh_medium1_mu8       " << (flag & TRIG_e12Tvh_medium1_mu8)       << endl;
   cout << "\tEF_mu18_tight_e7_medium1    " << (flag & TRIG_mu18_tight_e7_medium1)    << endl;
-
+  cout << "\tEF_2mu8_EFxe40wMu_tclcw     " << (flag & TRIG_2mu8_EFxe40wMu_tclcw)     << endl;
 }
 

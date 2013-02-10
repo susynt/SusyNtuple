@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
-
+2013-02-09 Matt
+	* Updated DilTrigLogic to accomodate new mu-Met trigger
+	* Updated Susy2LepCutflow so it would compile -- TODO: Tidy up 2Lep cutflow so that it can be used.
+	
 2013-02-09 Steve
 	* Added detEta (detector eta) to jet class, which might be needed later for jvf cut
 	* Tagging SusyNtuple-00-00-47

@@ -29,6 +29,7 @@ enum DilTriggerRegion
   DTR_MM_B,
   DTR_MM_C,
   DTR_MM_D,
+  DTR_MM_E,
   DTR_EM_A,
   DTR_EM_B,
   DTR_UNKNOWN,
@@ -48,15 +49,15 @@ class DilTrigLogic
   // 1.) return true if event and objects match to correct trigger.
   // 2.) return true if correct event trigger fired
   // 3.) return true if objects match to correct trigger
-  bool passDilTrig(LeptonVector leptons, Event* evt);
-  bool passDilEvtTrig(LeptonVector leptons, Event* evt);
-  bool passDilTrigMatch(LeptonVector leptons, Event* evt);
+  bool passDilTrig(LeptonVector leptons, float met, Event* evt);
+  bool passDilEvtTrig(LeptonVector leptons, float met, Event* evt);
+  bool passDilTrigMatch(LeptonVector leptons, float met, Event* evt);
 
   // Regions taken from this talk: 
   // https://indico.cern.ch/getFile.py/access?contribId=1&resId=0&materialId=slides&confId=199022
   // pt0 = leading Pt, pt1 = subleading Pt.
   DilTriggerRegion getEETrigRegion(float pt0, float pt1);
-  DilTriggerRegion getMMTrigRegion(float pt0, float pt1);
+  DilTriggerRegion getMMTrigRegion(float pt0, float pt1, float met);
   DilTriggerRegion getEMTrigRegion(float ept, float mpt);
 
   // Methods to check Evt Trigger and trigger matching
@@ -68,10 +69,13 @@ class DilTrigLogic
 
   // Trigger reweighting
   // TODO: Add SusyNtSys for trigger?
-  double getTriggerWeight(LeptonVector leptons, bool isMC, SusyNtSys sys = NtSys_NOM);
+  double getTriggerWeight(LeptonVector leptons, bool isMC, 
+			  float met, int njets, int NPV,
+			  SusyNtSys sys = NtSys_NOM);
   double getTriggerWeightEE(LeptonVector leptons, SusyNtSys sys);
-  double getTriggerWeightEM(LeptonVector leptons, SusyNtSys sys);
-  double getTriggerWeightMM(LeptonVector leptons, SusyNtSys sys);
+  double getTriggerWeightEM(LeptonVector leptons, int NPV, SusyNtSys sys);
+  double getTriggerWeightMM(LeptonVector leptons, float met, 
+			    int njets, int NPV, SusyNtSys sys);
   
   // Debug method
   void debugFlag(uint flag);
@@ -81,6 +85,12 @@ class DilTrigLogic
   // If the user wants to use the MC
   // trigger as is, simply set this flag.
   void useMCTrigger(){ m_useMCTrig = true; };
+
+  // New trigger has been added but is not ready for
+  // official use.  This flag is to be set if we want
+  // to use the trigger for data and also for MC 
+  // reweighting.
+  void useDiumuonMetTrigger(){ m_useDimuonMetTrigger = true; };
 
  protected:
 
@@ -97,6 +107,8 @@ class DilTrigLogic
   //Period              period;             // Period
   //ElectronVector      m_elecs;              // Electron vector for easy access
   //MuonVector          m_muons;              // Muon vector for easy access
+  
+  bool m_useDimuonMetTrigger;               // True to use Met Trigger
 
 };
 

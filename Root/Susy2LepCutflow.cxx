@@ -162,7 +162,7 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   // Get Event Type to continue cutflow
   m_ET = getDiLepEvtType(baseLeps);
   
-  if( !passTrigger(baseLeps) )     return false;  
+  if( !passTrigger(baseLeps, m_met) )     return false;  
   n_pass_flavor[m_ET]++;
   if( !passNLepCut(leptons) )       return false;
   if( !passMll(leptons) )           return false;
@@ -330,7 +330,7 @@ bool Susy2LepCutflow::passNBaseLepCut(const LeptonVector& baseLeptons)
   return true;
 }
 /*--------------------------------------------------------------------------------*/
-bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons)
+bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons, const Met* met)
 {
   
   if(leptons.size() < 1){
@@ -341,7 +341,7 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons)
   //int run         = nt.evt()->run;
   //DataStream strm = nt.evt()->stream;
   //if( m_trigObj->passDilTrig(leptons, run, strm) ){
-  if( m_trigObj->passDilTrig(leptons, nt.evt()) ){
+  if( m_trigObj->passDilTrig(leptons, met->Et, nt.evt()) ){
     n_pass_trig[m_ET]++;
     return true;
   }

@@ -50,7 +50,7 @@ class Susy2LepCutflow : public SusyNtAna
     // Cut methods
     bool passNLepCut(const LeptonVector& leptons);
     bool passNBaseLepCut(const LeptonVector& baseLeptons);
-    bool passTrigger(const LeptonVector& leptons);
+    bool passTrigger(const LeptonVector& leptons, const Met* met);
     bool sameFlavor(const LeptonVector& leptons);
     bool oppositeFlavor(const LeptonVector& leptons);
     bool sameSign(const LeptonVector& leptons);
