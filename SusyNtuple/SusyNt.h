@@ -211,7 +211,6 @@ namespace Susy
       // polymorphism, baby!!
       virtual bool isEle() const { return false; }
       virtual bool isMu()  const { return false; }
-      //virtual bool isTau() const { return false; }
       void setState(int sys){ resetTLV(); }
 
       // print method
@@ -226,7 +225,8 @@ namespace Susy
         //truthMatchType = -1;
         matched2TruthLepton = false;
         truthType = -1;
-        effSF = errEffSF = 0;
+        effSF = 1; 
+        errEffSF = 0;
         trigFlags = 0;
         Particle::clear();
       }
@@ -389,8 +389,26 @@ namespace Susy
       int truthType;            // RecoTauMatch::TauFakeType
       int detailedTruthType;    // RecoTauMatch::TauDetailedFakeType
 
-      float effSF;              // Efficiency scale factor
-      float errEffSF;           // Uncertainty on the efficiency scale factor
+      // Taus have a lot of SFs
+      float looseEffSF;         // Loose efficiency scale factor
+      float errLooseEffSF;      // Loose efficiency scale factor uncertaintiy
+      float mediumEffSF;        // Medium efficiency scale factor
+      float errMediumEffSF;     // Medium efficiency scale factor uncertainty
+      float tightEffSF;         // Tight efficiency scale factor
+      float errTightEffSF;      // Tight efficiency scale factor uncertainty
+      float looseEVetoSF;       // Loose efficiency scale factor
+      float errLooseEVetoSF;    // Loose efficiency scale factor uncertaintiy
+      float mediumEVetoSF;      // Medium efficiency scale factor
+      float errMediumEVetoSF;   // Medium efficiency scale factor uncertainty
+      float tightEVetoSF;       // Tight efficiency scale factor
+      float errTightEVetoSF;    // Tight efficiency scale factor uncertainty
+      //float looseEleSF
+      //float effSF;            // Efficiency scale factor
+      //float errEffSF;         // Uncertainty on the efficiency scale factor
+
+      // systematic factors
+      float tes_up;             // tau energy scale + sigma
+      float tes_dn;             // tau energy scale - sigma
 
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
@@ -412,7 +430,12 @@ namespace Susy
         trueTau = false;
         matched2TruthLepton = false;
         truthType = detailedTruthType = -1;
-        effSF = errEffSF = 0;
+        //effSF = errEffSF = 0;
+        looseEffSF = mediumEffSF = tightEffSF = 1;
+        errLooseEffSF = errMediumEffSF = errTightEffSF = 0;
+        looseEVetoSF = mediumEVetoSF = tightEVetoSF = 1;
+        errLooseEVetoSF = errMediumEVetoSF = errTightEVetoSF = 0;
+        tes_up = tes_dn = 0;
         trigFlags = 0;
         Particle::clear();
       }

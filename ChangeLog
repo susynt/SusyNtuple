@@ -1,12 +1,18 @@
 # vim: set noexpandtab:
+
+2013-02-10 Steve
+	* Added tau eff and electron veto SFs and uncerts
+	* Added tau systematic enums: TES_UP, TES_DN
+	* Added tau systematic shifts to Tau class: tes_up, tes_dn
+	* Tagging SusyNtuple-00-00-47
+
 2013-02-09 Matt
 	* Updated DilTrigLogic to accomodate new mu-Met trigger
 	* Updated Susy2LepCutflow so it would compile -- TODO: Tidy up 2Lep cutflow so that it can be used.
 	* Updated SusyNtTools with latest jet definitions following Anyes Summary email
-	
+
 2013-02-09 Steve
 	* Added detEta (detector eta) to jet class, which might be needed later for jvf cut
-	* Tagging SusyNtuple-00-00-47
 
 2013-02-08 Steve
 	* Added Mllll method and corresponding isZ for 3lep and 4lep

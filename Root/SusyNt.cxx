@@ -308,8 +308,22 @@ Tau::Tau(const Tau &rhs):
   matched2TruthLepton(rhs.matched2TruthLepton),
   truthType(rhs.truthType),
   detailedTruthType(rhs.detailedTruthType),
-  effSF(rhs.effSF),
-  errEffSF(rhs.errEffSF),
+  //effSF(rhs.effSF),
+  //errEffSF(rhs.errEffSF),
+  looseEffSF(rhs.looseEffSF),
+  errLooseEffSF(rhs.errLooseEffSF),
+  mediumEffSF(rhs.mediumEffSF),
+  errMediumEffSF(rhs.errMediumEffSF),
+  tightEffSF(rhs.tightEffSF),
+  errTightEffSF(rhs.errTightEffSF),
+  looseEVetoSF(rhs.looseEVetoSF),
+  errLooseEVetoSF(rhs.errLooseEVetoSF),
+  mediumEVetoSF(rhs.mediumEVetoSF),
+  errMediumEVetoSF(rhs.errMediumEVetoSF),
+  tightEVetoSF(rhs.tightEVetoSF),
+  errTightEVetoSF(rhs.errTightEVetoSF),
+  tes_up(rhs.tes_up),
+  tes_dn(rhs.tes_dn),
   trigFlags(rhs.trigFlags)
 {
 }
@@ -337,8 +351,22 @@ Tau& Tau::operator=(const Tau &rhs)
     matched2TruthLepton = rhs.matched2TruthLepton;
     truthType = rhs.truthType;
     detailedTruthType = rhs.detailedTruthType;
-    effSF = rhs.effSF;
-    errEffSF = rhs.errEffSF;
+    //effSF = rhs.effSF;
+    //errEffSF = rhs.errEffSF;
+    looseEffSF = rhs.looseEffSF;
+    errLooseEffSF = rhs.errLooseEffSF;
+    mediumEffSF = rhs.mediumEffSF;
+    errMediumEffSF = rhs.errMediumEffSF;
+    tightEffSF = rhs.tightEffSF;
+    errTightEffSF = rhs.errTightEffSF;
+    looseEVetoSF = rhs.looseEVetoSF;
+    errLooseEVetoSF = rhs.errLooseEVetoSF;
+    mediumEVetoSF = rhs.mediumEVetoSF;
+    errMediumEVetoSF = rhs.errMediumEVetoSF;
+    tightEVetoSF = rhs.tightEVetoSF;
+    errTightEVetoSF = rhs.errTightEVetoSF;
+    tes_up = rhs.tes_up;
+    tes_dn = rhs.tes_dn;
     trigFlags = rhs.trigFlags;
   }
   return *this;

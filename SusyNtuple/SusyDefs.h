@@ -166,6 +166,11 @@ enum SusyNtSys
   NtSys_TRIGSF_EL_DN,    // Trigger Scale factor - error for el
   NtSys_TRIGSF_MU_UP,    // Trigger Scale factor + error for mu
   NtSys_TRIGSF_MU_DN,    // Trigger Scale factor - error for mu
+
+  // Tau systematics added to the end
+  NtSys_TES_UP,      // Tau energy scale + sigma
+  NtSys_TES_DN,      // Tau energy scale - sigma
+
   NtSys_N
 };
 
@@ -195,7 +200,9 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "TRIGSF_EL_UP",
   "TRIGSF_EL_DN",
   "TRIGSF_MU_UP",
-  "TRIGSF_MU_DN"
+  "TRIGSF_MU_DN",
+  "TES_UP",
+  "TES_DN",
 };
 
 //Enum for BTag SF & systematics
