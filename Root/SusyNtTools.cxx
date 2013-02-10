@@ -542,10 +542,12 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 {
-  if(jet->Pt() < JET_PT_L25_CUT     )  return false;
-  if(fabs(jet->Eta()) > JET_ETA_CUT )  return false;
-  if(jet->jvf < JET_JVF_CUT_2L      )  return false;
-  if(jet->mv1 > MV1_85              )  return false;
+  //if(jet->Pt() < JET_PT_L25_CUT     )  return false;
+  if( jet->Pt() < JET_PT_L20_CUT      )  return false;
+  if( fabs(jet->Eta()) > JET_ETA_CUT  )  return false;
+  if( jet->Pt() < JET_JVF_PT && 
+      fabs(jet->jvf) < JET_JVF_CUT_2L )  return false;
+  if( jet->mv1 > MV1_85               )  return false;
 
   return true;
 }
