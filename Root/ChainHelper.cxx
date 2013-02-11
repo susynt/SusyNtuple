@@ -28,7 +28,7 @@ ChainHelper::Status ChainHelper::addFileList(TChain* chain, string fileListName)
       // Add protection against file read errors
       if(chain->Add(fileName.c_str(), -1)==0){
         cerr << "ChainHelper ERROR adding file " << fileName << endl;
-        return BAD;
+        //return BAD;
       }
     }
     fileList.close();

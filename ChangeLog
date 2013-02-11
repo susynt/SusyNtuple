@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2013-02-11 Matt
+	* Updated central jet eta cut from 2.5 to 2.4
+	
 2013-02-10 Steve
 	* Added tau eff and electron veto SFs and uncerts
 	* Added tau systematic enums: TES_UP, TES_DN

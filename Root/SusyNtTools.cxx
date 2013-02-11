@@ -78,6 +78,8 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   if(selectTaus) taus  = getPreTaus(susyNt, sys);
   else taus.clear();
 
+  //cout<<"Select Taus: "<<selectTaus<<" size: "<<taus.size()<<endl;
+
   // Now perform the overlap removals
   performOverlap(elecs, muons, taus, jets);
 
@@ -85,7 +87,7 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   removeSFOSPair(elecs, MLL_MIN);
   removeSFOSPair(muons, MLL_MIN);
   // TODO: revisit this??
-  removeSFOSPair(taus, MLL_MIN);
+  //removeSFOSPair(taus, MLL_MIN);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons,
@@ -542,12 +544,12 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 {
-  //if(jet->Pt() < JET_PT_L25_CUT     )  return false;
-  if( jet->Pt() < JET_PT_L20_CUT      )  return false;
-  if( fabs(jet->Eta()) > JET_ETA_CUT  )  return false;
+
+  if( jet->Pt() < JET_PT_L20_CUT        )  return false;
+  if( fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
   if( jet->Pt() < JET_JVF_PT && 
-      fabs(jet->jvf) < JET_JVF_CUT_2L )  return false;
-  if( jet->mv1 > MV1_85               )  return false;
+      fabs(jet->jvf) < JET_JVF_CUT_2L   )  return false;
+  if( jet->mv1 > MV1_85                 )  return false;
 
   return true;
 }
@@ -557,9 +559,10 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 {
-  if(jet->Pt() < JET_PT_B20_CUT     )  return false;
-  if(fabs(jet->Eta()) > JET_ETA_CUT )  return false;
-  if(jet->mv1 < MV1_85              )  return false;
+
+  if(jet->Pt() < JET_PT_B20_CUT        )  return false;
+  if(fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
+  if(jet->mv1 < MV1_85                 )  return false;
 
   return true;
 }
@@ -570,7 +573,7 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
-  if(fabs(jet->Eta()) < JET_ETA_CUT     ) return false; 
+  if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
   if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
 
   return true;
