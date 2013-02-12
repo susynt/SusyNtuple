@@ -1,12 +1,37 @@
 #include "CalibrationDataInterface/CalibrationDataInterfaceROOT.h"
 #include "SusyNtuple/BTagCalib.h"
 
-std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(const vector<float>& pt, const vector<float>& eta,
-									    const vector<float>& bWeight, const vector<int>& pdgid, 
+
+std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(const vector<float>& pt,
+									    const vector<float>& eta,
+									    const vector<float>& bWeight,
+									    const vector<int>& pdgid,
 									    std::string taggerName,
-									    std::string OP, float opval, 
-									    std::string calibration, std::string calibfolder)
-{
+									    std::string OP,
+									    float opval,
+									    bool isJVF,
+									    std::string calibration,
+									    std::string calibfolder) {
+
+  return BTagCalibrationFunction(pt, eta, bWeight, bWeight, pdgid, taggerName, OP, opval, opval, isJVF, calibration, calibfolder);
+  
+}
+
+
+
+
+std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(const vector<float>& pt, 
+									    const vector<float>& eta,
+									    const vector<float>& bWeight1, 
+									    const vector<float>& bWeight2,
+									    const vector<int>& pdgid,
+									    std::string taggerName,
+									    std::string OP,
+									    float opval1,
+									    float opval2,
+									    bool isJVF,
+									    std::string calibration,
+									    std::string calibfolder) {			  
   
   // ***************************************************************************************************************
   // ****                 Function for applying Scale Factors and associated Errors to Analyses                 ****
@@ -64,16 +89,18 @@ std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(cons
     else if (pdgid[jitr] == 15) label = "T";	 	 
     else label = "Light"; // previously it was "N/A";
 
-    //! Set necessary b-tag variables for retrieving SF + errors
-    Analysis::CalibrationDataVariables BTagVars;
-    BTagVars.jetAuthor = "AntiKt4TopoLC";
+        //! Set necessary b-tag variables for retrieving SF + errors
+       Analysis::CalibrationDataVariables BTagVars;
+    BTagVars.jetAuthor = "AntiKt4TopoLCnoJVF";
+    if(isJVF) BTagVars.jetAuthor = "AntiKt4TopoLCJVF";
     BTagVars.jetPt  = pt[jitr];
     BTagVars.jetEta = eta[jitr];
     
     Analysis::Uncertainty BTagUnc = Analysis::Total; //Systematic; //! None, Total, Statistical, Systematic
     
     Analysis::CalibResult BTagCalibResult;
-    if(bWeight[jitr]>opval)BTagCalibResult = BTagCalib->getScaleFactor(BTagVars, label, OP, BTagUnc); //b-tagged jet
+    if(bWeight1[jitr]>opval1 && bWeight2[jitr]>opval2)
+			BTagCalibResult = BTagCalib->getScaleFactor(BTagVars, label, OP, BTagUnc); //b-tagged jet
     else BTagCalibResult = BTagCalib->getInefficiencyScaleFactor(BTagVars, label, OP, BTagUnc); //not b-tagged jet
 
     float jetWeight = (float)BTagCalibResult.first;
@@ -90,7 +117,7 @@ std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(cons
     //Treat efficiency and the inefficiency scale factor uncertainties as anti-correlated
     if(pdgid[jitr]==5) 
     {
-      if(bWeight[jitr]>opval)
+      if(bWeight1[jitr]>opval1 && bWeight2[jitr]>opval2)
       {
 	jetWeight_B_down -= (float)BTagCalibResult.second;
 	jetWeight_B_up += (float)BTagCalibResult.second;	
@@ -103,7 +130,7 @@ std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(cons
     }
     else if(pdgid[jitr]==4 || pdgid[jitr]==15) 
     {
-      if(bWeight[jitr]>opval)
+      if(bWeight1[jitr]>opval1 && bWeight2[jitr]>opval2)
       {
 	jetWeight_C_down -= (float)BTagCalibResult.second;
 	jetWeight_C_up += (float)BTagCalibResult.second;	
@@ -114,7 +141,7 @@ std::pair<vector<float>, vector<float> > BTagCalib::BTagCalibrationFunction(cons
 	jetWeight_C_up -= (float)BTagCalibResult.second;		    	    
       }
     }	
-    else if(bWeight[jitr]>opval) 
+    else if(bWeight1[jitr]>opval1 && bWeight2[jitr]>opval2) 
     {
       jetWeight_L_down -= (float)BTagCalibResult.second;
       jetWeight_L_up += (float)BTagCalibResult.second;	

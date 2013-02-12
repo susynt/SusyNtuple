@@ -1,4 +1,7 @@
 # vim: set noexpandtab:
+2013-02-12 Matt
+	* Updated BTagSF code (Copied and modified from SUSYTools) and modified corresponding SusyNtTools function
+
 2013-02-11 Matt
 	* Updated central jet eta cut from 2.5 to 2.4
 	* Fixed bug in initialization of DilTriggerLogic.  Fixes printouts.

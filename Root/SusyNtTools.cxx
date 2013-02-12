@@ -1237,7 +1237,7 @@ bool SusyNtTools::isBJet(const Jet* jet, float weight)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
 			  std::string taggerName, std::string OP, float opval,
-			  BTagSys sys)
+			  BTagSys sys, bool isJVF)
 {
   if(!evt->isMC) return 1;
   static const float MEV = 1000;
@@ -1271,7 +1271,8 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
 					       pdgid_btag,
 					       taggerName,
 					       OP,
-					       opval, 
+					       opval,
+					       isJVF,
 					       envFile, 
 					       datFile); 
   
