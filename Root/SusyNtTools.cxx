@@ -368,8 +368,9 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, ElectronVector& baseElec
 
   // Impact parameter
   if(m_doIPCut){
-    if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
-    if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    // 2 lep needs unbiased IP
+    if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
+    if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
     // unbiased IP
     //if(fabs(ele->d0Sig(true)) >= 5) return false;
     //if(fabs(ele->z0SinTheta(true)) >= 0.4) return false;
@@ -396,8 +397,9 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, ElectronVector& baseElectrons, Mu
 
   // Impact parameter
   if(m_doIPCut){
-    if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
-    if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
+    // 2 lep needs unbiased IP
+    if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
     // unbiased IP
     //if(fabs(mu->d0Sig(true)) >= 3) return false;      // tighter, more standard
     //if(fabs(mu->d0Sig(true)) >= 3.5) return false;
