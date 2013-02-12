@@ -2,6 +2,8 @@
 2013-02-12 Matt
 	* Updated BTagSF code (Copied and modified from SUSYTools) and modified corresponding SusyNtTools function
 	* If 2lep flag is set, you will get the unbiased IP
+	* Btag eff maps added (root file) along with .env file to load them properly
+	* Added MV1_80 (which will be the new operating point). Now the default in get bTagSF.
 	
 2013-02-11 Matt
 	* Updated central jet eta cut from 2.5 to 2.4

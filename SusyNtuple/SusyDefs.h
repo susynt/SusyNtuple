@@ -462,6 +462,7 @@ const float M_M_DR = 0.05;
 // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BtagAnalysis172#LC_Jets
 const float MV1_60 = 0.980;
 const float MV1_85 = 0.122;
+const float MV1_80 = 0.3511;
 
 // BAD FCAL
 const float BAD_FCAL_LUMI=1.18034;

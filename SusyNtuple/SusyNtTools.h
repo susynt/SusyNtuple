@@ -262,8 +262,8 @@ class SusyNtTools
     bool isBJet(const Susy::Jet* jet, float weight=MV1_85);
 
     float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-		 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_85,
-		 BTagSys sys=BTag_NOM, bool isJVF=false);
+		 std::string taggerName = "MV1", std::string OP="0_3511", float opval=MV1_80,
+		 BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
     bool isCentralLightJet(const Susy::Jet* jet);

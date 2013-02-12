@@ -1239,7 +1239,7 @@ bool SusyNtTools::isBJet(const Jet* jet, float weight)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
 			  std::string taggerName, std::string OP, float opval,
-			  BTagSys sys, bool isJVF)
+			  BTagSys sys)
 {
   if(!evt->isMC) return 1;
   static const float MEV = 1000;
@@ -1263,8 +1263,11 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
   string rootcoredir = getenv("ROOTCOREDIR"); 
   string envFile;
 
-  if(useNoJVF) envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_noJVF.env";
-  else         envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_wJVF.env";
+  //if(useNoJVF) envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_noJVF.env";
+  //else         envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_wJVF.env";
+
+  // JVF and non-JVF values in same file
+  envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string datFile = rootcoredir + "/data/SusyNtuple/";
   pair<vector<float>,vector<float> > wgtbtag;
   wgtbtag = BTagCalib::BTagCalibrationFunction(pt_btag,
@@ -1274,7 +1277,7 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
 					       taggerName,
 					       OP,
 					       opval,
-					       isJVF,
+					       !useNoJVF,
 					       envFile, 
 					       datFile); 
   
