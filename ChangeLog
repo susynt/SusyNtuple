@@ -1,9 +1,12 @@
 # vim: set noexpandtab:
 
+2013-02-13 Steve
+	* Tagging SusyNtuple-00-00-49
+
 2013-02-13 Matt
 	* Updated 2lep jet definitions btag value to MV1_80
 	* Restored 3lep ability to get p1181 sf for MV1_85 (required addition of BTagCalibp1181)
-	
+
 2013-02-13 Steve
 	* Added isOppSign method for lep, tau
 	* Added support for applying tau systematics
