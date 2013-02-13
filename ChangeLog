@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-02-13 Matt
+	* Updated 2lep jet definitions btag value to MV1_80
+	
 2013-02-13 Steve
 	* Added isOppSign method for lep, tau
 	* Added support for applying tau systematics

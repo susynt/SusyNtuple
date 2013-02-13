@@ -551,7 +551,7 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
   if( fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
   if( jet->Pt() < JET_JVF_PT && 
       fabs(jet->jvf) < JET_JVF_CUT_2L   )  return false;
-  if( jet->mv1 > MV1_85                 )  return false;
+  if( jet->mv1 > MV1_80                 )  return false;
 
   return true;
 }
@@ -564,7 +564,7 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 
   if(jet->Pt() < JET_PT_B20_CUT        )  return false;
   if(fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
-  if(jet->mv1 < MV1_85                 )  return false;
+  if(jet->mv1 < MV1_80                 )  return false;
 
   return true;
 }
