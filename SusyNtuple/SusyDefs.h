@@ -402,6 +402,7 @@ stringvector getTrigChains();
 // Pt
 const float ELECTRON_PT_CUT  = 10; // GeV
 const float MUON_PT_CUT      = 10; // GeV
+const float TAU_PT_CUT       = 20; // GeV
 
 const float MLL_MIN          = 12;
 

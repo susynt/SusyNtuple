@@ -75,7 +75,7 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   elecs = getPreElectrons(susyNt, sys);
   muons = getPreMuons(susyNt, sys);
   jets  = getPreJets(susyNt, sys);
-  if(selectTaus) taus  = getPreTaus(susyNt, sys);
+  if(selectTaus) taus = getPreTaus(susyNt, sys);
   else taus.clear();
 
   //cout<<"Select Taus: "<<selectTaus<<" size: "<<taus.size()<<endl;
@@ -182,7 +182,6 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
     // Apply any additional selection
     if(mu->Pt() < MUON_PT_CUT) continue;
     
-    // Save
     muons.push_back(mu);
   }
 
@@ -195,9 +194,10 @@ TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
   TauVector taus;
   for(uint iTau=0; iTau < susyNt->tau()->size(); iTau++){
     Tau* tau = & susyNt->tau()->at(iTau);
+    tau->setState(sys);
 
     // Apply any additional selection
-    // Don't need anything here until we add tau systematics
+    if(tau->Pt() < TAU_PT_CUT) continue;
 
     taus.push_back(tau);
   }
@@ -996,6 +996,9 @@ bool SusyNtTools::isOppSign(const Lepton* l1, const Lepton* l2)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isOppSign(const Tau* tau1, const Tau* tau2)
 { return tau1->q*tau2->q < 0; }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isOppSign(const Lepton* lep, const Tau* tau)
+{ return lep->q*tau->q < 0; }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSFOS(const Lepton* l1, const Lepton* l2)
 { return isSameFlav(l1,l2) && isOppSign(l1,l2); }

@@ -220,6 +220,7 @@ class SusyNtTools
     bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool isOppSign(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool isOppSign(const Susy::Tau* tau1, const Susy::Tau* tau2);
+    bool isOppSign(const Susy::Lepton* lep, const Susy::Tau* tau);
     bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
     bool isOFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);

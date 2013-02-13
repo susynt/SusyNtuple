@@ -372,6 +372,21 @@ Tau& Tau::operator=(const Tau &rhs)
   return *this;
 }
 /*--------------------------------------------------------------------------------*/
+// Tau Set State
+/*--------------------------------------------------------------------------------*/
+void Tau::setState(int sys)
+{
+  resetTLV();
+  if(sys == NtSys_NOM) return;
+  
+  float sf = 0;
+  if     ( sys == NtSys_TES_UP ) sf = tes_up;
+  else if( sys == NtSys_TES_DN ) sf = tes_dn;
+  else return;
+
+  this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
+}
+/*--------------------------------------------------------------------------------*/
 // Tau print
 /*--------------------------------------------------------------------------------*/
 void Tau::print() const

@@ -418,6 +418,9 @@ namespace Susy
         return (trigFlags & mask) == mask;
       }
 
+      // set systematic state
+      void setState(int sys);
+
       // print method
       void print() const;
 
