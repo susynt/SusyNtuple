@@ -5,6 +5,7 @@
 	* Added support for applying tau systematics
 		* Added setState method to Tau class
 		* Added support for tes_up and tes_dn in getBaselineObjects
+	* Tagging SusyNtuple-00-00-48
 
 2013-02-12 Matt
 	* Updated BTagSF code (Copied and modified from SUSYTools) and modified corresponding SusyNtTools function
