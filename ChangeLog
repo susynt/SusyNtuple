@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-02-13 Matt
+	* Fix for p1181 btag sf method -- typo in header and .env file
+
 2013-02-13 Steve
 	* Tagging SusyNtuple-00-00-49
 
