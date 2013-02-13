@@ -547,11 +547,11 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 {
-
   if( jet->Pt() < JET_PT_L20_CUT        )  return false;
   if( fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
+  //if( fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
   if( jet->Pt() < JET_JVF_PT && 
-      fabs(jet->jvf) < JET_JVF_CUT_2L   )  return false;
+      (fabs(jet->jvf) - 1e-3) < JET_JVF_CUT_2L   )  return false;
   if( jet->mv1 > MV1_80                 )  return false;
 
   return true;
@@ -565,6 +565,7 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 
   if(jet->Pt() < JET_PT_B20_CUT        )  return false;
   if(fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
+  //if(fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
   if(jet->mv1 < MV1_80                 )  return false;
 
   return true;
@@ -578,7 +579,10 @@ bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
   if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
   if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
-
+  /*
+  if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false; 
+  if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
+  */
   return true;
 }
 
@@ -1267,8 +1271,9 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
   string rootcoredir = getenv("ROOTCOREDIR"); 
   string envFile;
 
-  if(m_anaType == Ana_2Lep)
+  if(m_anaType == Ana_2Lep){
     envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
+  }
   else{
     if(useNoJVF) envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_noJVF.env";
     else         envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_wJVF.env";
