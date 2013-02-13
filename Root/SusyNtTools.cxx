@@ -5,6 +5,7 @@
 // Common Packages
 #include "Mt2/mt2_bisect.h" 
 #include "SusyNtuple/BTagCalib.h"
+#include "SusyNtuple/BTagCalibp1181.h"
 
 using namespace std;
 using namespace Susy;
@@ -1266,23 +1267,39 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
   string rootcoredir = getenv("ROOTCOREDIR"); 
   string envFile;
 
-  //if(useNoJVF) envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_noJVF.env";
-  //else         envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_wJVF.env";
+  if(m_anaType == Ana_2Lep)
+    envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
+  else{
+    if(useNoJVF) envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_noJVF.env";
+    else         envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_wJVF.env";
+  }
 
-  // JVF and non-JVF values in same file
-  envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
+
   string datFile = rootcoredir + "/data/SusyNtuple/";
   pair<vector<float>,vector<float> > wgtbtag;
-  wgtbtag = BTagCalib::BTagCalibrationFunction(pt_btag,
-					       eta_btag,
-					       val_btag,
-					       pdgid_btag,
-					       taggerName,
-					       OP,
-					       opval,
-					       !useNoJVF,
-					       envFile, 
-					       datFile); 
+
+  if(m_anaType == Ana_2Lep)
+    wgtbtag = BTagCalib::BTagCalibrationFunction(pt_btag,
+						 eta_btag,
+						 val_btag,
+						 pdgid_btag,
+						 taggerName,
+						 OP,
+						 opval,
+						 !useNoJVF,
+						 envFile, 
+						 datFile);
+  
+  else
+    wgtbtag = BTagCalibp1181::BTagCalibrationFunction(pt_btag,
+						      eta_btag,
+						      val_btag,
+						      pdgid_btag,
+						      taggerName,
+						      OP,
+						      opval,
+						      envFile, 
+						      datFile);
   
   if( sys == BTag_BJet_DN ) return wgtbtag.first.at(1);  
   if( sys == BTag_CJet_DN ) return wgtbtag.first.at(2);  

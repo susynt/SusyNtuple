@@ -261,10 +261,15 @@ class SusyNtTools
     // B jets
     bool hasBJet(const JetVector& jets, float weight=MV1_85);
     bool isBJet(const Susy::Jet* jet, float weight=MV1_85);
-
+    
     float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-		 std::string taggerName = "MV1", std::string OP="0_3511", float opval=MV1_80,
-		 BTagSys sys=BTag_NOM);
+		 std::string taggerName = "MV1", std::string OP="0_0122", float opval=MV1_85,
+		 BTagSys sys=BTag_NOM);    
+
+    // Move to this once 3-lep moves to MV1_80
+    //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
+    //std::string taggerName = "MV1", std::string OP="0_3511", float opval=MV1_80,
+    //BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
     bool isCentralLightJet(const Susy::Jet* jet);
