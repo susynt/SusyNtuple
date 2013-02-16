@@ -5,7 +5,7 @@
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-DilTrigLogic::DilTrigLogic(string period) :
+DilTrigLogic::DilTrigLogic(string period, bool useReweightUtils) :
   m_triggerWeight(NULL),
   m_useMCTrig(false),
   m_useDimuonMetTrigger(false)
@@ -23,7 +23,10 @@ DilTrigLogic::DilTrigLogic(string period) :
   m_triggerWeight = new triggerReweight2Lep();
   string directory = "$ROOTCOREDIR/../DGTriggerReweight/data";
   m_triggerWeight->setDbg(1);
-  m_triggerWeight->initialize(directory, period, true, true);//To turn on ReweightUtils 
+  if(useReweightUtils)
+    m_triggerWeight->initialize(directory, period, true, true);//To turn on ReweightUtils 
+  else
+    m_triggerWeight->initialize(directory, period);//To turn off ReweightUtils 
   m_triggerWeight->setDbg(0);
   
 

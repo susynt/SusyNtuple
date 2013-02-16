@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2013-02-16 Anyes
+	* update to the later btag weight file 
+	* Added a param to DilTri to turn off ReweightUtils. Default is on.
+	* DetEta for 2L jets is now default
+	
 2013-02-13 Anyes
 	* Fix |JVF|>0 to deal with flaoting point 
 

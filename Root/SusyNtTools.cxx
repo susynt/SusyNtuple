@@ -548,8 +548,8 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 {
   if( jet->Pt() < JET_PT_L20_CUT        )  return false;
-  if( fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
-  //if( fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
+  //if( fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
+  if( fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
   if( jet->Pt() < JET_JVF_PT && 
       (fabs(jet->jvf) - 1e-3) < JET_JVF_CUT_2L   )  return false;
   if( jet->mv1 > MV1_80                 )  return false;
@@ -564,8 +564,8 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 {
 
   if(jet->Pt() < JET_PT_B20_CUT        )  return false;
-  if(fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
-  //if(fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
+  //if(fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
+  if(fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
   if(jet->mv1 < MV1_80                 )  return false;
 
   return true;
@@ -577,12 +577,12 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
+  /*
   if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
   if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
-  /*
+  */
   if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false; 
   if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
-  */
   return true;
 }
 
