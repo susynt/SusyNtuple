@@ -389,8 +389,10 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, ElectronVector& baseElectrons, Mu
                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
   // ptcone isolation cut with pileup correction
-  float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-  if(m_doPtconeCut && ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+  //float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+  //if(m_doPtconeCut && ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+  float ptcone30 = mu->ptcone30ElStyle;
+  if(m_doPtconeCut && ptcone30/mu->Pt() >= 0.16) return false;
 
   // etcone isolation cut - not applied by default, but here for studies
   float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
@@ -967,16 +969,16 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 /*--------------------------------------------------------------------------------*/
 // Pass Dead Region based on met, jets and run number
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int RunNumber)
+bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int RunNumber, bool isMC)
 {
 
   // Info taken from here:
   // https://indico.cern.ch/getFile.py/access?contribId=9&resId=0&materialId=slides&confId=223778
   // Loop over all selected jets with Pt > 30 GeV and BCH_Corr_JET > 0.05
   // If dPhi(met, jet) < 0.3, reject event
-  // This is only done run number > 213863, when FEB turned off in HEC
+  // This is only done run number > 213863, when FEB turned off in HEC, and for all MC
 
-  if( !(RunNumber > 213863) ) return true;
+  if( !(RunNumber > 213863 || isMC) ) return true;
   
   for(uint ij = 0; ij<baseJets.size(); ++ij){
     const Jet* jet = baseJets.at(ij);

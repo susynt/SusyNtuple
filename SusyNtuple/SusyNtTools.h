@@ -199,7 +199,7 @@ class SusyNtTools
     }
 
     // Pass FEB dead region check
-    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber);
+    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber, bool isMC);
   
     //
     // Object selection control toggles
