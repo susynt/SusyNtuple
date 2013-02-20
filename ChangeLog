@@ -1,13 +1,17 @@
 # vim: set noexpandtab:
 
+2013-02-20 Steve
+	* Added etx and ety pieces for each MET ref term
+	* Tagging SusyNtuple-00-00-51
+
 2013-02-19 Matt
 	* Updated SusyNtTools passDeadRegions to check all MC
-	
+
 2013-02-16 Anyes
 	* update to the later btag weight file 
 	* Added a param to DilTri to turn off ReweightUtils. Default is on.
 	* DetEta for 2L jets is now default
-	
+
 2013-02-13 Anyes
 	* Fix |JVF|>0 to deal with flaoting point 
 

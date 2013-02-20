@@ -506,11 +506,23 @@ Met::Met(const Met &rhs):
   Et(rhs.Et),
   phi(rhs.phi),
   refEle(rhs.refEle),
+  refEle_etx(rhs.refEle_etx),
+  refEle_ety(rhs.refEle_ety),
   refMuo(rhs.refMuo),
+  refMuo_etx(rhs.refMuo_etx),
+  refMuo_ety(rhs.refMuo_ety),
   refJet(rhs.refJet),
+  refJet_etx(rhs.refJet_etx),
+  refJet_ety(rhs.refJet_ety),
   softJet(rhs.softJet),
+  softJet_etx(rhs.softJet_etx),
+  softJet_ety(rhs.softJet_ety),
   refGamma(rhs.refGamma),
+  refGamma_etx(rhs.refGamma_etx),
+  refGamma_ety(rhs.refGamma_ety),
   refCell(rhs.refCell),
+  refCell_etx(rhs.refCell_etx),
+  refCell_ety(rhs.refCell_ety),
   sys(rhs.sys)
 {
 }
@@ -521,15 +533,27 @@ Met& Met::operator=(const Met &rhs)
 {
   if (this != &rhs) {
     TObject::operator=(rhs);
-    Et  = rhs.Et; 
-    phi  = rhs.phi; 
-    refEle= rhs.refEle; 
-    refMuo= rhs.refMuo; 
-    refJet= rhs.refJet; 
-    softJet= rhs.softJet; 
-    refGamma= rhs.refGamma; 
-    refCell= rhs.refCell; 
-    sys= rhs.sys; 
+    Et = rhs.Et; 
+    phi = rhs.phi; 
+    refEle = rhs.refEle; 
+    refEle_etx = rhs.refEle_etx; 
+    refEle_ety = rhs.refEle_ety; 
+    refMuo = rhs.refMuo; 
+    refMuo_etx = rhs.refMuo_etx; 
+    refMuo_ety = rhs.refMuo_ety; 
+    refJet = rhs.refJet; 
+    refJet_etx = rhs.refJet_etx; 
+    refJet_ety = rhs.refJet_ety; 
+    softJet = rhs.softJet; 
+    softJet_etx = rhs.softJet_etx; 
+    softJet_ety = rhs.softJet_ety; 
+    refGamma = rhs.refGamma; 
+    refGamma_etx = rhs.refGamma_etx; 
+    refGamma_ety = rhs.refGamma_ety; 
+    refCell = rhs.refCell; 
+    refCell_etx = rhs.refCell_etx; 
+    refCell_ety = rhs.refCell_ety; 
+    sys = rhs.sys; 
   }
   return *this;
 }
