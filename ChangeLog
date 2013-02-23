@@ -1,6 +1,7 @@
 # vim: set noexpandtab:
 
 2013-02-23 Serhan Mete <amete@cern.ch>
+	* Added: data/DLiSlep_SignalUncertainties_All.root
 	* MERGE SusyNtuple SusyNtuple-00-00-00-branch [315917]-[316945] into trunk
 	* Cross section reader from Davide for Slepton grids
 
