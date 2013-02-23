@@ -83,17 +83,24 @@ int main(int argc, char **argv)
 
   cout<<endl<<" --- test value from dsid ---"<<endl;
   // test value from dsid
-  float xs166567 = reader.getCrossSection(166567, SleptonPoint::kUnknown);
-  float expXs166567 = 0.; // because not R/L defined
-  float xsErr166567 = reader.getCrossSectionError(166567, SleptonPoint::kUnknown);
+  float xs166567       = reader.getCrossSection(166567, SleptonPoint::kUnknown);
+  float expXs166567    = 0.; // because not R/L defined
+  float xsErr166567    = reader.getCrossSectionError(166567, SleptonPoint::kUnknown);
   float expXsErr166567 = 0.;
-  float xs175507 = reader.getCrossSection(175507, SleptonPoint::kLeftHanded);
-  float expXs175507 = 0.00331967;
-  float xsErr175507 = reader.getCrossSectionError(175507, SleptonPoint::kLeftHanded);
+  float xs175507       = reader.getCrossSection(175507, SleptonPoint::kLeftHanded);
+  float expXs175507    = 0.00331967;
+  float xsErr175507    = reader.getCrossSectionError(175507, SleptonPoint::kLeftHanded);
   float expXsErr175507 = 0.0711965;
-  cout<<"xsec for 166567 : "<<xs166567<<" \t "<<(isFloatEqual(xs166567, expXs166567) ? "PASS":"FAIL")<<endl;
-  cout<<"xsec for 175507 : "<<xs175507<<" \t "<<(isFloatEqual(xs175507, expXs175507) ? "PASS":"FAIL")<<endl;
-  cout<<"xsecErr for 166567 : "<<xsErr166567<<" \t "<<(isFloatEqual(xsErr166567, expXsErr166567) ? "PASS":"FAIL")<<endl;
-  cout<<"xsecErr for 175507 : "<<xsErr175507<<" \t "<<(isFloatEqual(xsErr175507, expXsErr175507) ? "PASS":"FAIL")<<endl;
+  cout << "xsec for 166567    : " << xs166567    <<" \t " << (isFloatEqual(xs166567   , expXs166567   ) ? "PASS":"FAIL") << endl;
+  cout << "xsec for 175507    : " << xs175507    <<" \t " << (isFloatEqual(xs175507   , expXs175507   ) ? "PASS":"FAIL") << endl;
+  cout << "xsecErr for 166567 : " << xsErr166567 <<" \t " << (isFloatEqual(xsErr166567, expXsErr166567) ? "PASS":"FAIL") << endl;
+  cout << "xsecErr for 175507 : " << xsErr175507 <<" \t " << (isFloatEqual(xsErr175507, expXsErr175507) ? "PASS":"FAIL") << endl;
+  cout << endl;
+  cout << "xsec for 175507 LH  : " << reader.getCrossSection(175507, SleptonPoint::kLeftHanded  ) << " +/- " << 
+                                      reader.getCrossSectionError(175507, SleptonPoint::kLeftHanded   ) << endl;
+  cout << "xsec for 175507 RH  : " << reader.getCrossSection(175507, SleptonPoint::kRightHanded ) << " +/- " << 
+                                      reader.getCrossSectionError(175507, SleptonPoint::kRightHanded  ) << endl;
+  cout << "xsec for 175507 Tot : " << reader.getCrossSection(175507, SleptonPoint::kLHRHCombined) << " +/- " <<
+                                      reader.getCrossSectionError(175507, SleptonPoint::kLHRHCombined ) << endl;
   return 0;
 }

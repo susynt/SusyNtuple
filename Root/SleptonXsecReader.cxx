@@ -62,8 +62,9 @@ string str ( const SleptonPoint& d )
      << " finalState: "
      << (d.finalState()==SleptonPoint::kLeftHanded ? "kLeftHanded" 
 	 : (d.finalState()==SleptonPoint::kRightHanded ? "kRightHanded"
-	    : (d.finalState()==SleptonPoint::kUnknown ? "kUnknown"
-	       : "???")));
+	    : (d.finalState()==SleptonPoint::kLHRHCombined ? "kLHRHCombined"
+	       : (d.finalState()==SleptonPoint::kUnknown ? "kUnknown"
+	          : "???"))));
   return ss.str();
 }
 //--------------------------------------
@@ -173,15 +174,28 @@ float SleptonXsecReader::getCrossSection(const int &datasetId, const int &finalS
   Vpd::const_iterator ds = find_if(knownDsids_.begin(), knownDsids_.end(),
 				   CriterionSameId(datasetId));
   if(ds==knownDsids_.end()) return 0.;
-  else return getCrossSection(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), finalState));
+  else if(finalState==SleptonPoint::kLeftHanded || finalState==SleptonPoint::kRightHanded) 
+    return getCrossSection(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), finalState));
+  else 
+    return ( 
+             getCrossSection(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), SleptonPoint::kLeftHanded )) +
+             getCrossSection(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), SleptonPoint::kRightHanded)) 
+           );
 }
 //--------------------------------------
 float SleptonXsecReader::getCrossSectionError(const int &datasetId, const int &finalState) const
 {
+  // Error for kLHRHCombined assumes full correlation between SleptonPoint::kLeftHanded && SleptonPoint::kRightHanded
   Vpd::const_iterator ds = find_if(knownDsids_.begin(), knownDsids_.end(),
 				   CriterionSameId(datasetId));
   if(ds==knownDsids_.end()) return 0.;
-  else return getCrossSectionError(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), finalState));
+  else if(finalState==SleptonPoint::kLeftHanded || finalState==SleptonPoint::kRightHanded) 
+    return getCrossSectionError(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), finalState));
+  else 
+    return ( 
+             getCrossSectionError(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), SleptonPoint::kLeftHanded )) +
+             getCrossSectionError(SleptonPoint(ds->point_.mSl(), ds->point_.m1(), SleptonPoint::kRightHanded)) 
+           );
 }
 //--------------------------------------
 void SleptonXsecReader::printKnownPoints() const

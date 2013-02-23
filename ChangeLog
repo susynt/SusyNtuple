@@ -1,6 +1,9 @@
 # vim: set noexpandtab:
 
 2013-02-23 Serhan Mete <amete@cern.ch>
+	* Root/SleptonXsecReader.cxx: Added the option kLHRHCombined
+	  Use w/ caution, only implemented for getCrossSection[Error](mcid,finalState)
+	  For Error, LH and RH cross section errors are asumed to be 100% positively correlatd
 	* Added: data/DLiSlep_SignalUncertainties_All.root
 	* MERGE SusyNtuple SusyNtuple-00-00-00-branch [315917]-[316945] into trunk
 	* Cross section reader from Davide for Slepton grids

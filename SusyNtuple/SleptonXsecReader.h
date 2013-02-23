@@ -23,6 +23,7 @@ class SleptonPoint {
   enum FinalStates {  //!< see https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalUncertainties#Details_on_the_content_of_the_Si
     kLeftHanded = 201,  //!< left-handed selectron pair
     kRightHanded = 202, //!< right-handed selectron pair
+    kLHRHCombined,
     kUnknown,
     kMaxFinalState,
   };
