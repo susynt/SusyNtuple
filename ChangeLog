@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-02-23 Serhan Mete <amete@cern.ch>
+	* MERGE SusyNtuple SusyNtuple-00-00-00-branch [315917]-[316945] into trunk
+	* Cross section reader from Davide for Slepton grids
+
 2013-02-20 Steve
 	* Added etx and ety pieces for each MET ref term
 	* Tagging SusyNtuple-00-00-51

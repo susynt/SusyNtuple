@@ -12,6 +12,7 @@
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
 #include "SusyNtuple/BTagCalib.h"
+#include "SusyNtuple/SleptonXsecReader.h"
 
 #ifdef __CINT__
 
@@ -61,6 +62,9 @@
 //Tools //optional to have this here ?
 #pragma link C++ class SusyNtTools+;
 #pragma link C++ class ChainHelper+;
+#pragma link C++ class SleptonPoint+;
+#pragma link C++ class SleptonXsecReader+;
+
 
 #pragma link C++ enum SusyNtSys+;
 #pragma link C++ enum BTagSys+;
