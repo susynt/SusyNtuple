@@ -1,7 +1,15 @@
 # vim: set noexpandtab:
+
+2013-03-04 Steve
+	* Added hasOS method for taus
+	* Added getMT2 with lep1, lep2, met arguments
+	* Updated SUSYTools in install script
+	* Rearranged the signal lepton cuts for speed
+		* Isolation corrections now come last
+
 2013-03-01 Matt 
 	* Changed getMet function to never override the phi of the met for systematics.
-	
+
 2013-02-23 Serhan Mete <amete@cern.ch>
 	* Root/SleptonXsecReader.cxx: Added the option kLHRHCombined
 	  Use w/ caution, only implemented for getCrossSection[Error](mcid,finalState)
@@ -23,7 +31,7 @@
 	* DetEta for 2L jets is now default
 
 2013-02-13 Anyes
-	* Fix |JVF|>0 to deal with flaoting point 
+	* Fix |JVF|>0 to deal with floating point 
 
 2013-02-13 Steve
 	* Tagging SusyNtuple-00-00-50

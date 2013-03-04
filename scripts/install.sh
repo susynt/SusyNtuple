@@ -6,7 +6,7 @@
 asetup AtlasProduction,17.3.4.6,setup,here
 
 # For now, we will need SUSYTools and Mt2 and DGTriggerReweighting
-svn co svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-02-05 SUSYTools
+svn co svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-02-06-02 SUSYTools
 svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01 Mt2
 svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-25 DGTriggerReweight
 python SUSYTools/python/install.py

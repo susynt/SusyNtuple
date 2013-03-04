@@ -330,7 +330,7 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useN
     }
   }
   if(!met){
-    cout << "Error: Unable to find met for given systematic!  Returning NULL!!" << sys << endl;
+    cout << "Error: Unable to find met for given systematic!  Returning NULL!! " << sys << endl;
   }
   
   return met;
@@ -351,6 +351,13 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, ElectronVector& baseElec
 {
   if(!ele->tightPP) return false;
 
+  // Impact parameter
+  if(m_doIPCut){
+    // 2 lep needs unbiased IP
+    if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
+    if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+  }
+
   float pt = ele->Pt();
 
   // Relative ptcone iso
@@ -369,16 +376,6 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, ElectronVector& baseElec
   //float c = 0.3;
   //if(m_doElEtconeCut && etcone/pt >= min(a*pt+b,c)) return false;
 
-  // Impact parameter
-  if(m_doIPCut){
-    // 2 lep needs unbiased IP
-    if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
-    if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
-    // unbiased IP
-    //if(fabs(ele->d0Sig(true)) >= 5) return false;
-    //if(fabs(ele->z0SinTheta(true)) >= 0.4) return false;
-  }
-
   // 2011 cuts, for testing
   //if(ele->ptcone20/pt > 0.1) return false;
   //if(fabs(ele->d0Sig()) >= 6) return false;
@@ -390,6 +387,13 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, ElectronVector& baseElec
 bool SusyNtTools::isSignalMuon(const Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
+  // Impact parameter
+  if(m_doIPCut){
+    // 2 lep needs unbiased IP
+    if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
+  }
+
   // ptcone isolation cut with pileup correction
   float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
   if(m_doPtconeCut && ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
@@ -399,17 +403,6 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, ElectronVector& baseElectrons, Mu
   // etcone isolation cut - not applied by default, but here for studies
   float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
   if(m_doMuEtconeCut && etcone30/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
-
-  // Impact parameter
-  if(m_doIPCut){
-    // 2 lep needs unbiased IP
-    if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
-    if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
-    // unbiased IP
-    //if(fabs(mu->d0Sig(true)) >= 3) return false;      // tighter, more standard
-    //if(fabs(mu->d0Sig(true)) >= 3.5) return false;
-    //if(fabs(mu->z0SinTheta(true)) >= 0.4) return false;
-  }
 
   // 2011 cuts, for testing
   //if(mu->ptcone20 >= 1.8) return false;
@@ -1067,6 +1060,16 @@ bool SusyNtTools::hasSS(const LeptonVector& leps){
   }
   return false;
 }
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasOS(const TauVector& taus){
+  uint nTau = taus.size();
+  for(uint i=0; i<nTau; i++){
+    for(uint j=i+1; j<nTau; j++){
+      if(isOppSign(taus[i], taus[j])) return true;
+    }
+  }
+  return false;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Mass calculation methods (moved from SusyDefs)
@@ -1356,6 +1359,23 @@ float SusyNtTools::getMT2(const LeptonVector& leptons, const Susy::Met* met)
   double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
   double pA[3]     = {0.0, l0.Px(), l0.Py()};
   double pB[3]     = {0.0, l1.Px(), l1.Py()};
+  
+  // Create Mt2 object
+  mt2_bisect::mt2 mt2_event;
+  mt2_event.set_momenta(pA,pB,pTMiss);
+  mt2_event.set_mn(0); // LSP mass = 0 is Generic
+  
+  return mt2_event.get_mt2();
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Met* met)
+{
+  // necessary variables
+  TLorentzVector metLV = met->lv();
+
+  double pTMiss[3] = {0.0, metLV.Px(), metLV.Py()};
+  double pA[3]     = {0.0, lep1->Px(), lep1->Py()};
+  double pB[3]     = {0.0, lep2->Px(), lep2->Py()};
   
   // Create Mt2 object
   mt2_bisect::mt2 mt2_event;

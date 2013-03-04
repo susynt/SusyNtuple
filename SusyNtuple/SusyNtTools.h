@@ -229,6 +229,7 @@ class SusyNtTools
     bool hasOFOS(const LeptonVector& leps);
     bool hasOS(const LeptonVector& leps);
     bool hasSS(const LeptonVector& leps);
+    bool hasOS(const TauVector& taus);
 
     // Mass calculation methods
     float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
@@ -286,6 +287,7 @@ class SusyNtTools
   
     // MT2
     float getMT2(const LeptonVector& leptons, const Susy::Met* met);
+    float getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Susy::Met* met);
 
     // Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
