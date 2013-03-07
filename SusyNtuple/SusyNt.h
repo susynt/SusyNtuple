@@ -47,6 +47,7 @@ namespace Susy
       int hfor;                 // heavy flavor overlap removal decision
 
       int susyFinalState;       // Susy process
+      int hDecay;               // Higgs decay (see WhTruthExtractor)
 
       bool passMllForAlpgen;    // flag for vetoing overlap between Sherpa Z and Alpgen Z Mll10to60
 
@@ -96,6 +97,7 @@ namespace Susy
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
 	susyFinalState = -1;
+	hDecay = -1;
         passMllForAlpgen = true;
 	memset(evtFlag,0,sizeof(evtFlag));
 	memset(cutFlags,0,sizeof(cutFlags));
