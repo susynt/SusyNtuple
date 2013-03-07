@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-03-06 Davide
+	* Add truth Higgs decay for WH
+	* Add WhTruthExtractor
+
 2013-03-04 Steve
 	* Added hasOS method for taus
 	* Added getMT2 with lep1, lep2, met arguments
