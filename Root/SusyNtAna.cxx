@@ -233,6 +233,8 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso)
   // sort leptons by pt
   std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
   std::sort(m_signalLeptons.begin(), m_signalLeptons.end(), comparePt);
+  std::sort(m_signalJets.begin(), m_signalJets.end(), comparePt);
+  std::sort(m_signalJets2Lep.begin(), m_signalJets2Lep.end(), comparePt);
 }
 
 /*--------------------------------------------------------------------------------*/

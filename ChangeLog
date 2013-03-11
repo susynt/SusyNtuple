@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
-
+2013-03-11 Matt
+	* Fixed but in passDeadRegion: forgot fabs() around DeltaPhi
+	* Added in sorting for signal jets
+	
 2013-03-06 Davide
 	* Add truth Higgs decay for WH (diff SusyNtuple-00-00-50 SusyNtuple-00-00-50-branch)
 	* Add WhTruthExtractor
