@@ -1,10 +1,17 @@
 # vim: set noexpandtab:
+
+2013-03-12 Steve
+	* Fixed indentation in SusyNt.h
+	* Fixed comment syntax in SusyNt.h, which apparently screws up ROOT dictionary/streamer generation
+		* Replaced //!< with just //
+
 2013-03-11 davide
 	* add Event::mllMcTruth
+
 2013-03-11 Matt
 	* Fixed but in passDeadRegion: forgot fabs() around DeltaPhi
 	* Added in sorting for signal jets
-	
+
 2013-03-06 Davide
 	* Add truth Higgs decay for WH (diff SusyNtuple-00-00-50 SusyNtuple-00-00-50-branch)
 	* Add WhTruthExtractor

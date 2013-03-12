@@ -49,8 +49,8 @@ namespace Susy
       int susyFinalState;       // Susy process
       int hDecay;               // Higgs decay (see WhTruthExtractor)
 
-	  float mllMcTruth;         //!< mll from mcTruth (needed to avoid samples' overlap, filled for Z->ll samples)
-      bool passMllForAlpgen;    //!< computed from value above; see MultiLep/TruthTools for details
+      float mllMcTruth;         // mll from mcTruth (needed to avoid samples' overlap, filled for Z->ll samples)
+      bool passMllForAlpgen;    // computed from value above; see MultiLep/TruthTools for details
 
       unsigned int trigFlags;   // Event level trigger bits
 
@@ -97,18 +97,18 @@ namespace Susy
         larError = 0;
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
-		susyFinalState = -1;
-		mllMcTruth = -1.0;
-		hDecay = -1;
-		passMllForAlpgen = true;
-		memset(evtFlag,0,sizeof(evtFlag));
-		memset(cutFlags,0,sizeof(cutFlags));
+        susyFinalState = -1;
+        mllMcTruth = -1.0;
+        hDecay = -1;
+        passMllForAlpgen = true;
+        memset(evtFlag,0,sizeof(evtFlag));
+        memset(cutFlags,0,sizeof(cutFlags));
         wPileup = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
         xsec = errXsec = sumw = pdfSF = 0;
-	pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
+        pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 22);
+      ClassDef(Event, 23);
   };
 
   // Particle class, base class for other object types
