@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-03-13 Steve
+	* Tagging SusyNtuple-00-00-52
+
 2013-03-12 Steve
 	* Fixed indentation in SusyNt.h
 	* Fixed comment syntax in SusyNt.h, which apparently screws up ROOT dictionary/streamer generation
