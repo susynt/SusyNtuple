@@ -34,7 +34,7 @@ class TrilTrigLogic
 
     // Trigger matching in data (and MC at the moment)
     //bool passTriggerMatching(const LeptonVector& leptons, Event* evt);
-    bool passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt);
+    bool passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt, bool useDilepTrigs=true);
     bool matchLepTrigger(const Susy::Lepton* lep, int trigMask, float ptThreshold=0, bool accOnly=false) { 
       return lep->Pt() > ptThreshold && (accOnly || lep->matchTrig(trigMask)); 
     }

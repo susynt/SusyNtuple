@@ -54,7 +54,8 @@ APReweightND* TrilTrigLogic::loadTrigWeighter(TFile* f, TString name)
 // Trigger matching for data
 // Being updated for 2012
 /*--------------------------------------------------------------------------------*/
-bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt)
+bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt,
+                                        bool useDilepTrigs)
 {
   DataStream stream = evt->stream;
 
@@ -88,54 +89,44 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
   // loop over leptons
   for(uint i=0; i < leptons.size(); i++){
 
-    // TESTING only leading 2 leptons
-    //if(i>=2) break;
-
     const Lepton* lep = leptons[i];
-    //float pt = lep->Pt();
 
     // Electrons
     if(lep->isEle()){
-
       // If leading lepton, check isolated trigger
       if(i==0 && matchLepTrigger(lep, TRIG_e24vhi_medium1, 25, m_accOnly)) n1E++;
-
-      // 2e symmetric trigger
-      if(matchLepTrigger(lep, TRIG_2e12Tvh_loose1, 14, m_accOnly)) nSym2E++;
-
-      // 2e asymmetric trigger
-      if(matchLepTrigger(lep, TRIG_e24vh_medium1_e7_medium1, 10, m_accOnly)){
-        nAsym2E++;
-        if(matchLepTrigger(lep, TRIG_e24vh_medium1, 25, m_accOnly)) nAsym2E_e24++;
+      if(useDilepTrigs){
+        // 2e symmetric trigger
+        if(matchLepTrigger(lep, TRIG_2e12Tvh_loose1, 14, m_accOnly)) nSym2E++;
+        // 2e asymmetric trigger
+        if(matchLepTrigger(lep, TRIG_e24vh_medium1_e7_medium1, 10, m_accOnly)){
+          nAsym2E++;
+          if(matchLepTrigger(lep, TRIG_e24vh_medium1, 25, m_accOnly)) nAsym2E_e24++;
+        }
+        // e-mu trigger
+        if(matchLepTrigger(lep, TRIG_e12Tvh_medium1_mu8, 14, m_accOnly)) nEM_e++;
+        // mu-e trigger (this is the funny one)
+        if(matchLepTrigger(lep, TRIG_e7_medium1, 10, m_accOnly)) nME_e++;
       }
-
-      // e-mu trigger
-      if(matchLepTrigger(lep, TRIG_e12Tvh_medium1_mu8, 14, m_accOnly)) nEM_e++;
-      // mu-e trigger (this is the funny one)
-      if(matchLepTrigger(lep, TRIG_e7_medium1, 10, m_accOnly)) nME_e++;
-
     }
 
     // Muons
     else{
-
       // If leading lepton, check isolated trigger
       if(i==0 && matchLepTrigger(lep, TRIG_mu24i_tight, 25, m_accOnly)) n1M++;
-
-      // 2m symmetric trigger
-      if(matchLepTrigger(lep, TRIG_2mu13, 14, m_accOnly)) nSym2M++;
-
-      // 2m asymmetric trigger
-      if(matchLepTrigger(lep, TRIG_mu18_tight_mu8_EFFS, 8, m_accOnly)){
-        nAsym2M++;
-        if(matchLepTrigger(lep, TRIG_mu18_tight, 18, m_accOnly)) nAsym2M_m18++;
+      if(useDilepTrigs){
+        // 2m symmetric trigger
+        if(matchLepTrigger(lep, TRIG_2mu13, 14, m_accOnly)) nSym2M++;
+        // 2m asymmetric trigger
+        if(matchLepTrigger(lep, TRIG_mu18_tight_mu8_EFFS, 8, m_accOnly)){
+          nAsym2M++;
+          if(matchLepTrigger(lep, TRIG_mu18_tight, 18, m_accOnly)) nAsym2M_m18++;
+        }
+        // mu-e trigger
+        if(matchLepTrigger(lep, TRIG_mu18_tight_e7_medium1, 18, m_accOnly)) nME_m++;
+        // e-mu trigger
+        if(matchLepTrigger(lep, TRIG_mu8, 8, m_accOnly)) nEM_m++;
       }
-
-      // mu-e trigger
-      if(matchLepTrigger(lep, TRIG_mu18_tight_e7_medium1, 18, m_accOnly)) nME_m++;
-      // e-mu trigger
-      if(matchLepTrigger(lep, TRIG_mu8, 8, m_accOnly)) nEM_m++;
-
     }
   } // lepton loop
 
