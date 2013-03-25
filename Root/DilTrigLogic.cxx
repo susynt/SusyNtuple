@@ -157,7 +157,7 @@ DilTriggerRegion DilTrigLogic::getEETrigRegion(float pt0, float pt1)
   // Region A
   if( 14 < pt0 && 14 < pt1 ) return DTR_EE_A;
   // Region B
-  if( 25 < pt0 && 10 < pt1 && pt1 < 14 ) return DTR_EE_B;
+  if( 25 < pt0 && 10 < pt1 && pt1 <= 14 ) return DTR_EE_B;
   // Unknown region
   return DTR_UNKNOWN;
 
@@ -167,16 +167,16 @@ DilTriggerRegion DilTrigLogic::getMMTrigRegion(float pt0, float pt1, float met)
 {
 
   // Region A
-  if( 18 < pt0 && 18 < pt1 )             return DTR_MM_A;
+  if( 18 < pt0 && 18 < pt1 )              return DTR_MM_A;
   // Region B
-  if(18 < pt0 && 14 < pt1 && pt1 < 18)   return DTR_MM_B;
+  if(18 < pt0 && 14 < pt1 && pt1 <= 18)   return DTR_MM_B;
   // Region C
-  if( 18 < pt0 && 8 < pt1 && pt1 < 14 )  return DTR_MM_C;
+  if( 18 < pt0 && 8 < pt1 && pt1 <= 14 )  return DTR_MM_C;
   // Region D
-  if( 14 < pt0 && pt0 < 20 && 14 < pt1 ) return DTR_MM_D;
+  if( 14 < pt0 && pt0 <= 18 && 14 < pt1 ) return DTR_MM_D;
   // Region E
   if( m_useDimuonMetTrigger && 8 < pt0 && pt0 <= 18 && 
-      8 < pt1 && pt1 <= 14 && met > 70 ) return DTR_MM_E;
+      8 < pt1 && pt1 <= 14 && met > 70 )  return DTR_MM_E;
   // Unknown region
   return DTR_UNKNOWN;
 
@@ -186,9 +186,9 @@ DilTriggerRegion DilTrigLogic::getEMTrigRegion(float ept, float mpt)
 {
 
   // Region A
-  if( 14 < ept && 8 < mpt)               return DTR_EM_A;
+  if( 14 < ept && 8 < mpt)                return DTR_EM_A;
   // Region B
-  if( 10 < ept && ept < 14 && 18 < mpt)  return DTR_EM_B;
+  if( 10 < ept && ept <= 14 && 18 < mpt)  return DTR_EM_B;
   // Unknown region
   return DTR_UNKNOWN;
 }
