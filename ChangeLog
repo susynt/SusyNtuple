@@ -1,8 +1,13 @@
 # vim: set noexpandtab:
 
+2013-03-29 Steve
+	* Updated SUSYTools in install script to SUSYTools-00-02-08
+	* Added ECut_TileTrip enum for tile trip cleaning cut
+		* Added to the end for backwards compatibility
+
 2013-03-25 Matt
 	* Changing Region D in DilTrigLogic threshold from 20 --> 18
-	
+
 2013-03-13 Steve
 	* Tagging SusyNtuple-00-00-52
 

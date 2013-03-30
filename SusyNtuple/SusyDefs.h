@@ -255,7 +255,8 @@ enum EventCleaningCuts
   ECut_BadJet    = 1 << 6,
   ECut_BadMuon   = 1 << 7,
   ECut_Cosmic    = 1 << 8,
-  ECut_SmartVeto = 1 << 9 
+  ECut_SmartVeto = 1 << 9,
+  ECut_TileTrip  = 1 << 10
 };
 
 // Way to check Event Types
