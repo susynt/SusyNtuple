@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-03-30 Steve
+	* Update lumi for A-L dataset: 20690.4 -> 20339.8
+	* Tagging SusyNtuple-00-00-53
+
 2013-03-29 Steve
 	* Updated SUSYTools in install script to SUSYTools-00-02-08
 	* Added ECut_TileTrip enum for tile trip cleaning cut
