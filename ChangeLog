@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-04-05 Steve
+	* Updated getEventWeightFixed to fix incorrect sumw for various samples in n0138
+
 2013-03-30 Steve
 	* Update lumi for A-L dataset: 20690.4 -> 20339.8
 	* Tagging SusyNtuple-00-00-53

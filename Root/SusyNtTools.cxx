@@ -36,10 +36,42 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt, float lumi)
 {
-  // No corrections needed at the moment
-  //if(!evt->isMC) return 1;
-  //float sumw = evt->sumw;
-  //float xsec = evt->xsec;
+  if(!evt->isMC) return 1;
+  float sumw = evt->sumw;
+  float xsec = evt->xsec;
+  if(mcChannel==107650) sumw = 6548782.0;
+  else if(mcChannel==107651) sumw = 1335000.0;
+  else if(mcChannel==107652) sumw = 404499.0;
+  else if(mcChannel==107653) sumw = 110000.0;
+  else if(mcChannel==107654) sumw = 30000.0;
+  else if(mcChannel==107654) sumw = 30000.0;
+  else if(mcChannel==107660) sumw = 6619489.0;
+  else if(mcChannel==107661) sumw = 1334706.0;
+  else if(mcChannel==107662) sumw = 404997.0;
+  else if(mcChannel==107663) sumw = 110000.0;
+  else if(mcChannel==107664) sumw = 30000.0;
+  else if(mcChannel==107665) sumw = 10000.0;
+  else if(mcChannel==107670) sumw = 6619683.0;
+  else if(mcChannel==107671) sumw = 1334996.0;
+  else if(mcChannel==107672) sumw = 404997.0;
+  else if(mcChannel==107673) sumw = 110000.0;
+  else if(mcChannel==107674) sumw = 30000.0;
+  else if(mcChannel==107675) sumw = 10000.0;
+  else if(mcChannel==108346) sumw = 1687598.0;
+  else if(mcChannel==117210) sumw = 14988492.0;
+  else if(mcChannel==126937) sumw = 1099997.0;
+  else if(mcChannel==126938) sumw = 1599696.0;
+  else if(mcChannel==126940) sumw = 1099798.0;
+  else if(mcChannel==126951) sumw = 299999.0;
+  else if(mcChannel==160255) sumw = 150000.0;
+  else if(mcChannel==164450) sumw = 3279080.0;
+  else if(mcChannel==173044) sumw = 15290487.0;
+  else if(mcChannel==173046) sumw = 14992666.0;
+  else if(mcChannel==174830) sumw = 389896.0;
+  else if(mcChannel==147770) sumw = 2.45339943895e+13;
+  else if(mcChannel==147771) sumw = 2.35467290378e+13;
+  else if(mcChannel==146854) sumw = 168400.0;
+  else if(mcChannel==146855) sumw = 120139.0;
   //if(mcChannel==147770) sumw = 2.47983337636e+13;
   //if(mcChannel==147771) sumw = 2.35447863214e+13;
   //if(mcChannel==147772) sumw = 1.05702941e+13;
@@ -49,8 +81,8 @@ float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt,
   //else if(mcChannel==157817) xsec = 9.557000;
   //else if(mcChannel==157818) xsec = 9.554000;
   //else if(mcChannel==157819) xsec = 9.557000;
-  //return evt->w * evt->wPileup * xsec * lumi / sumw;
-  return getEventWeight(evt, lumi);
+  return evt->w * evt->wPileup * xsec * lumi / sumw;
+  //return getEventWeight(evt, lumi);
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeightAB3(const Event* evt)
