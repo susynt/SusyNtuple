@@ -34,8 +34,9 @@ class SusyNtTools
 
     // Default weight uses full dataset, currently A-L
     // Pileup weights correspond to same dataset.
-    virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L);
-    // Temporary fixed version of getEventWeight for n0105
+    virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
+                                 bool useSumwMap = false, std::map<unsigned int, float>* sumwMap = 0);
+    // Temporary fixed version of getEventWeight for n0138
     virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, float lumi = LUMI_A_L);
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
@@ -102,16 +103,12 @@ class SusyNtTools
 
 
     // Build Lepton vector - we should probably sort them here
-    // Not currently including taus here
-    //void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo, TauVector& tau)
     void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo)
     {
       for(uint ie=0; ie<ele.size(); ie++)
         lep.push_back( ele[ie] );
       for(uint im=0; im<muo.size(); im++)
         lep.push_back( muo[im] );
-      //for(uint it=0; it<tau.size(); it++)
-        //lep.push_back( tau[it] );
     };
     
     //
@@ -280,7 +277,7 @@ class SusyNtTools
     int numberOfCLJets    (const JetVector& jets);
     int numberOfCBJets    (const JetVector& jets);
     int numberOfFJets     (const JetVector& jets);
-    void getNumberOf2LepJets    (const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
+    void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
 
     // MET Rel
     float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, bool useForward=false);
@@ -304,6 +301,15 @@ class SusyNtTools
     //
     // Misc methods
     //
+
+    // Build a map of MCID -> sumw.
+    // This method will loop over the input files associated with the TChain.
+    // The MCID in the first entry of the tree will be used, so one CANNOT use this
+    // if multiple datasets are combined into one SusyNt tree file!
+    // The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID.
+    // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
+    // However, one can have more than one (complete) dataset in the chain which is why we use the map.
+    std::map<unsigned int, float> buildSumwMap(TChain* chain);
 
     // Sherpa sample check
     bool isSherpaSample(unsigned int mcID);

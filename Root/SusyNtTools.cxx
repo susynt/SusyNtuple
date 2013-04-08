@@ -1,9 +1,12 @@
 #include <set>
 
-#include "SusyNtuple/SusyNtTools.h"
+#include "TFile.h"
+#include "TChainElement.h"
+#include "TH1F.h"
 
-// Common Packages
 #include "Mt2/mt2_bisect.h" 
+
+#include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/BTagCalib.h"
 #include "SusyNtuple/BTagCalibp1181.h"
 
@@ -28,10 +31,30 @@ SusyNtTools::SusyNtTools() :
 // Default weight uses A-D lumi
 // You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getEventWeight(const Event* evt, float lumi)
+float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
+                                  bool useSumwMap, map<unsigned int, float>* sumwMap)
 {
   if(!evt->isMC) return 1;
-  else return evt->w * evt->wPileup * evt->xsec * lumi / evt->sumw;
+  else{
+    float sumw = evt->sumw;
+    if(useSumwMap){
+      if(sumwMap != NULL){
+        unsigned int mcid = evt->mcChannel;
+        map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
+        if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
+        else{
+          cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
+               << "mcid " << mcid << " not found!" << endl;
+          abort();
+        }
+      }
+      else{
+        cout << "SusyNtTools::getEventWeight - ERROR - sumw map is NULL!" << endl;
+        abort();
+      }
+    }
+    return evt->w * evt->wPileup * evt->xsec * lumi / sumw;
+  }
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt, float lumi)
@@ -1572,6 +1595,60 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
   float mct = (v1.Mt() + v2.Mt())*(v1.Mt() + v2.Mt()) - (v1-v2).Perp2();
   mct = (mct >= 0.) ? sqrt(mct) : sqrt(-mct);
   return mct;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Build a map of MCID -> sumw.
+// This method will loop over the input files associated with the TChain.
+// The MCID in the first entry of the tree will be used, so one CANNOT use this
+// if multiple datasets are combined into one SusyNt tree file!
+// The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID.
+// Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
+// However, one can have more than one (complete) dataset in the chain which is why we use the map.
+/*--------------------------------------------------------------------------------*/
+map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain)
+{
+  // The sumw map
+  map<unsigned int, float> sumwMap;
+
+  // Loop over files in the chain
+  TObjArray* fileElements = chain->GetListOfFiles();
+  TIter next(fileElements);
+  TChainElement* chainElement = 0;
+  while((chainElement = (TChainElement*)next())){
+    TFile f(chainElement->GetTitle());
+    //f.ls();
+
+    // Get the tree, for extracting mcid
+    TTree* tree = (TTree*) f.Get("susyNt");
+
+    // Setup branch for accessing the MCID in the tree
+    Event* evt = 0;
+    tree->SetBranchStatus("*", 0);
+    tree->SetBranchStatus("mcChannel", 1);
+    tree->SetBranchAddress("event", &evt);
+    tree->GetEntry(0);
+    //cout << "mcid: " << evt->mcChannel << endl;
+
+    // Get the generator weighted histogram
+    TH1F* hGenCF = (TH1F*) f.Get("genCutFlow");
+    //cout << "sumw: " << hGenCF->GetBinContent(1) << endl;
+    sumwMap[evt->mcChannel] += hGenCF->GetBinContent(1);
+
+    // Is it ok to close the file like this?  Will it screw up the TChain later on?
+    f.Close();
+  }
+
+  // Dump out the MCIDs and calculated sumw
+  map<unsigned int, float>::iterator sumwMapIter;
+  cout << endl << "On-the-fly sumw computation:" << endl;
+  cout.precision(8);
+  for(sumwMapIter = sumwMap.begin(); sumwMapIter != sumwMap.end(); sumwMapIter++){
+    cout << "mcid: " << sumwMapIter->first << " sumw: " << sumwMapIter->second << endl;
+  }
+  cout.precision(6);
+
+  return sumwMap;
 }
 
 /*--------------------------------------------------------------------------------*/

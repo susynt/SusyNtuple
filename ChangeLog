@@ -1,5 +1,14 @@
 # vim: set noexpandtab:
 
+2013-04-08 Steve
+	* Added functionality to compute sumw per mcid on the fly
+		* Must call buildSumwMap(chain) before processing the chain
+		* getEventWeight now takes extra arguments to control the usage of the sumwMap:
+			SusyNtAna::getEventWeight(float lumi, bool useSumwMap)
+			SusyNtTools::getEventWeight(const Event* evt, float lumi, 
+				       		    bool useSumwMap, map<unsigned int, float>* sumwMap)
+		* Hasn't been fully tested in all uses yet. Let me know if there are problems.
+
 2013-04-05 Steve
 	* Updated getEventWeightFixed to fix incorrect sumw for various samples in n0138
 
