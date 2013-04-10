@@ -197,6 +197,29 @@ class SusyNtTools
 
     // Pass FEB dead region check
     bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber, bool isMC);
+
+    // Additional event level checks added
+    // in the event filtering has been turned off
+    // NOTE: Filtering on by default!
+    
+    // pass GRL
+    bool passGRL(int flag)         { return (flag & ECut_GRL);      }
+
+    // pass LArErr
+    bool passLarErr(int flag)      { return (flag & ECut_LarErr);   }
+    
+    // pass Tile Err
+    bool passTileErr(int flag)     { return (flag & ECut_TileErr);  }
+
+    // Pass TTC veto
+    bool passTTCVeto(int flag)     { return (flag & ECut_TTC);      }
+
+    // pass primary vertex
+    bool passGoodVtx(int flag)     { return (flag & ECut_GoodVtx);  }
+
+    // pass tile trip cut
+    bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
+
   
     //
     // Object selection control toggles

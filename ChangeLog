@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-04-10 Matt
+	* Added functions to check upstream cuts in the event filtering is turned off.
+	
 2013-04-08 Steve
 	* Added functionality to compute sumw per mcid on the fly
 		* Must call buildSumwMap(chain) before processing the chain
