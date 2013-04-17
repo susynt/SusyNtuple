@@ -210,7 +210,7 @@ void SusyNtAna::clearObjects()
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso)
+void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, TauID signalTauID)
 {
   // Get the Baseline objets
   getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, sys, m_selectTaus);
@@ -218,7 +218,8 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso)
   // Now grab Signal objects
   getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
 		   m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, m_signalJets2Lep, 
-                   nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso);
+                   nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso,
+                   signalTauID);
 
   // Grab met
   m_met = getMet(&nt, sys);

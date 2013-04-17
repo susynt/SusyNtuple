@@ -149,13 +149,13 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
 void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons,
                                    TauVector& baseTaus, JetVector& baseJets,
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
-                                   TauVector& sigTaus, JetVector& sigJets, 
-                                   JetVector& sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso)
+                                   TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep, 
+                                   uint nVtx, bool isMC, bool removeLepsFromIso, TauID tauID)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
-  sigTaus  = getSignalTaus(baseTaus);
+  sigTaus  = getSignalTaus(baseTaus, tauID);
   sigJets  = getSignalJets(baseJets);
   sigJets2Lep = getSignalJets2Lep(baseJets);
 }
@@ -163,7 +163,7 @@ void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMu
 void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs, 
 				   MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
                                    JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
-                                   bool selectTaus, bool removeLepsFromIso)
+                                   bool selectTaus, bool removeLepsFromIso, TauID tauID)
 {
   // Temporary vectors for baseline objects
   ElectronVector elecs = getPreElectrons(susyNt, sys);
@@ -179,7 +179,7 @@ void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElec
   // Now set the signal objects
   sigElecs = getSignalElectrons(elecs, muons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(muons, elecs, nVtx, isMC, removeLepsFromIso);
-  sigTaus  = getSignalTaus(taus);
+  sigTaus  = getSignalTaus(taus, tauID);
   sigJets  = getSignalJets(jets);
   sigJets2Lep = getSignalJets2Lep(jets);
 }
@@ -307,12 +307,12 @@ MuonVector SusyNtTools::getSignalMuons(MuonVector& baseMuons, ElectronVector& ba
   return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
-TauVector SusyNtTools::getSignalTaus(TauVector& baseTaus)
+TauVector SusyNtTools::getSignalTaus(TauVector& baseTaus, TauID id)
 {
   TauVector sigTaus;
   for(uint iTau=0; iTau < baseTaus.size(); iTau++){
     Tau* tau = baseTaus[iTau];
-    if(isSignalTau(tau)){
+    if(isSignalTau(tau, id)){
       sigTaus.push_back(tau);
     }
   }
@@ -574,9 +574,9 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
   // TODO: These will likely be merged
   float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
   
-  if(jet->Pt() < ptCut)         return false;
+  if(jet->Pt() < ptCut) return false;
   if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
-  if(jet->jvf < JET_JVF_CUT)         return false;
+  if(jet->jvf < JET_JVF_CUT) return false;
   return true;
 }
 
@@ -599,12 +599,12 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 {
-  if( jet->Pt() < JET_PT_L20_CUT        )  return false;
-  //if( fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
-  if( fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
-  if( jet->Pt() < JET_JVF_PT && 
-      (fabs(jet->jvf) - 1e-3) < JET_JVF_CUT_2L   )  return false;
-  if( jet->mv1 > MV1_80                 )  return false;
+  if(jet->Pt() < JET_PT_L20_CUT) return false;
+  //if(fabs(jet->Eta()) > JET_ETA_CUT_2L) return false;
+  if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
+  if(jet->Pt() < JET_JVF_PT && 
+     fabs(jet->jvf) - 1e-3 < JET_JVF_CUT_2L) return false;
+  if(jet->mv1 > MV1_80) return false;
 
   return true;
 }

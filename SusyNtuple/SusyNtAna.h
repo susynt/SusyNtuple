@@ -81,7 +81,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // Object selection
     void clearObjects();
-    void selectObjects(SusyNtSys sys = NtSys_NOM, bool removeLepsFromIso=false);
+    void selectObjects(SusyNtSys sys = NtSys_NOM, bool removeLepsFromIso=false, TauID signalTauID=TauID_medium);
 
     // Event and object dumps
     void dumpEvent();

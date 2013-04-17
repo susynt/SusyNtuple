@@ -1,8 +1,18 @@
 # vim: set noexpandtab:
 
+2013-04-17 Steve
+	* Adding options to object selection methods to control the tau ID at signal tau level.
+	  Default is still TauID_medium, but this allows to easily use TauID_tight.
+	  Loose ID is still used at baseline level and overlap removal.
+	  Affected methods:
+	  	* SusyNtAna selectObjects
+		* SusyNtTools getSignalObjects
+		* SusyNtTools getSignalTaus
+	* Minor code cleanup, reducing some unnecessary (IMO) white space.
+
 2013-04-10 Matt
 	* Added functions to check upstream cuts in the event filtering is turned off.
-	
+
 2013-04-08 Steve
 	* Added functionality to compute sumw per mcid on the fly
 		* Must call buildSumwMap(chain) before processing the chain
