@@ -85,6 +85,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // Event and object dumps
     void dumpEvent();
+    void dumpNtupleObjects();
     void dumpBaselineObjects();
     void dumpSignalObjects();
 

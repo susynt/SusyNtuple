@@ -9,6 +9,10 @@
 		* SusyNtTools getSignalObjects
 		* SusyNtTools getSignalTaus
 	* Minor code cleanup, reducing some unnecessary (IMO) white space.
+	* Fixed file read error return statement in ChainHelper
+	* Fixed "Number of events processed" in SusyNtAna dumpTimer
+	* Added dumpNtupleObjects method to SusyNtAna for dumping all electrons, muons,
+	  taus, and jets directly from the SusyNt
 
 2013-04-10 Matt
 	* Added functions to check upstream cuts in the event filtering is turned off.

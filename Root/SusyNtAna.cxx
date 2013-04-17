@@ -252,10 +252,10 @@ void SusyNtAna::dumpTimer()
   realTime -= min * 60;
   int sec   = int(realTime);
 
-  float speed = m_chainEntry/m_timer.RealTime()/1000;
+  float speed = (m_chainEntry+1)/m_timer.RealTime()/1000;
 
   printf("---------------------------------------------------\n");
-  printf(" Number of events processed: %d \n",(int)m_chainEntry);
+  printf(" Number of events processed: %d \n",(int)m_chainEntry+1);
   printf("\t Analysis time: Real %d:%02d:%02d, CPU %.3f      \n", hours, min, sec, cpuTime);
   printf("\t Analysis speed [kHz]: %2.3f                     \n",speed);
   printf("---------------------------------------------------\n\n");
@@ -268,6 +268,42 @@ void SusyNtAna::dumpEvent()
 {
   nt.evt()->print();
   //nt.met()->print();
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::dumpNtupleObjects()
+{
+  uint nEle = nt.ele()->size();
+  if(nEle>0){
+    cout << "Ntuple electrons" << endl;
+    for(uint iEl=0; iEl<nEle; iEl++){
+      cout << "  ";
+      nt.ele()->at(iEl).print();
+    }
+  }
+  uint nMu = nt.muo()->size();
+  if(nMu>0){
+    cout << "Ntuple muons" << endl;
+    for(uint iMu=0; iMu<nMu; iMu++){
+      cout << "  ";
+      nt.muo()->at(iMu).print();
+    }
+  }
+  uint nTau = nt.tau()->size();
+  if(nTau>0){
+    cout << "Ntuple taus" << endl;
+    for(uint iTau=0; iTau<nTau; iTau++){
+      cout << "  ";
+      nt.tau()->at(iTau).print();
+    }
+  }
+  uint nJet = nt.jet()->size();
+  if(nJet>0){
+    cout << "Ntuple jets" << endl;
+    for(uint iJ=0; iJ<nJet; iJ++){
+      cout << "  ";
+      nt.jet()->at(iJ).print();
+    }
+  }
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::dumpBaselineObjects()
