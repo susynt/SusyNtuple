@@ -32,7 +32,7 @@ SusyNtTools::SusyNtTools() :
 // You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
-                                  bool useSumwMap, map<unsigned int, float>* sumwMap)
+                                  bool useSumwMap, const map<unsigned int, float>* sumwMap)
 {
   if(!evt->isMC) return 1;
   else{

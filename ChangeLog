@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-04-18 Steve
+	* Added const map getSumwMap method to SusyNtAna
+	* Changed sumw map pointer to const in SusyNtTools getEventWeight
+
 2013-04-17 Steve
 	* Adding options to object selection methods to control the tau ID at signal tau level.
 	  Default is still TauID_medium, but this allows to easily use TauID_tight.

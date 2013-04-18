@@ -35,7 +35,7 @@ class SusyNtTools
     // Default weight uses full dataset, currently A-L
     // Pileup weights correspond to same dataset.
     virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
-                                 bool useSumwMap = false, std::map<unsigned int, float>* sumwMap = 0);
+                                 bool useSumwMap = false, const std::map<unsigned int, float>* sumwMap = 0);
     // Temporary fixed version of getEventWeight for n0138
     virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, float lumi = LUMI_A_L);
 

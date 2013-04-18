@@ -125,6 +125,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
     // However, one can have more than one (complete) dataset in the chain which is why we use the map.
     void buildSumwMap(TChain* chain);
+    const std::map<unsigned int, float>* getSumwMap() { return &m_sumwMap; }
 
     // Dump timer
     void dumpTimer();
