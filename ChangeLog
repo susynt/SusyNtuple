@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2013-04-21 Anyes
+	* Tweaks to TGuiUtils 
+	
 2013-04-18 Steve
 	* Added const map getSumwMap method to SusyNtAna
 	* Changed sumw map pointer to const in SusyNtTools getEventWeight
