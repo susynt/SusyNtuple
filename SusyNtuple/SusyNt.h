@@ -574,6 +574,9 @@ namespace Susy
       float refCell;            // Cellout term
       float refCell_etx;        // Cellout term
       float refCell_ety;        // Cellout term
+      float softTerm;           // Soft term
+      float softTerm_etx;       // Soft term
+      float softTerm_ety;       // Soft term
 
       // I'm not a big fan of the way this is setup, would like to improve it someday
       int sys;                  // Met stored in vector for each sys shift, this identifies met for specific shift
@@ -584,9 +587,9 @@ namespace Susy
       // clear vars
       void clear(){
         Et = phi = 0;
-        refEle = refMuo = refJet = softJet = refGamma = refCell = 0;
-        refEle_etx = refMuo_etx = refJet_etx = softJet_etx = refGamma_etx = refCell_etx = 0;
-        refEle_ety = refMuo_ety = refJet_ety = softJet_ety = refGamma_ety = refCell_ety = 0;
+        refEle = refMuo = refJet = softJet = refGamma = refCell = softTerm = 0;
+        refEle_etx = refMuo_etx = refJet_etx = softJet_etx = refGamma_etx = refCell_etx = softTerm_etx = 0;
+        refEle_ety = refMuo_ety = refJet_ety = softJet_ety = refGamma_ety = refCell_ety = softTerm_ety = 0;
         sys = 0;
       }
 

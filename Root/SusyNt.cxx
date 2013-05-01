@@ -523,6 +523,9 @@ Met::Met(const Met &rhs):
   refCell(rhs.refCell),
   refCell_etx(rhs.refCell_etx),
   refCell_ety(rhs.refCell_ety),
+  softTerm(rhs.softTerm),
+  softTerm_etx(rhs.softTerm_etx),
+  softTerm_ety(rhs.softTerm_ety),
   sys(rhs.sys)
 {
 }

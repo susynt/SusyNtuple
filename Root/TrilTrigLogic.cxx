@@ -54,8 +54,8 @@ APReweightND* TrilTrigLogic::loadTrigWeighter(TFile* f, TString name)
 // Trigger matching for data
 // Being updated for 2012
 /*--------------------------------------------------------------------------------*/
-bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt,
-                                        bool useDilepTrigs)
+bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, 
+                                        const Event* evt, bool useDilepTrigs)
 {
   DataStream stream = evt->stream;
 
@@ -91,43 +91,54 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
 
     const Lepton* lep = leptons[i];
 
+    // Preprocessor shorthand for feature matching with eta cuts folded in
+    #define matchEle(mask, ptMin) matchLepTrigger(lep, mask, ptMin, 2.47, m_accOnly)
+    #define matchMu(mask, ptMin) matchLepTrigger(lep, mask, ptMin, 2.4, m_accOnly)
+
     // Electrons
     if(lep->isEle()){
       // If leading lepton, check isolated trigger
-      if(i==0 && matchLepTrigger(lep, TRIG_e24vhi_medium1, 25, m_accOnly)) n1E++;
+      //if(i==0 && matchLepTrigger(lep, TRIG_e24vhi_medium1, 25, 2.47, m_accOnly)) n1E++;
+      if(i==0 && matchEle(TRIG_e24vhi_medium1, 25)) n1E++;
       if(useDilepTrigs){
         // 2e symmetric trigger
-        if(matchLepTrigger(lep, TRIG_2e12Tvh_loose1, 14, m_accOnly)) nSym2E++;
+        if(matchEle(TRIG_2e12Tvh_loose1, 14)) nSym2E++;
         // 2e asymmetric trigger
-        if(matchLepTrigger(lep, TRIG_e24vh_medium1_e7_medium1, 10, m_accOnly)){
+        if(matchEle(TRIG_e24vh_medium1_e7_medium1, 10)){
           nAsym2E++;
-          if(matchLepTrigger(lep, TRIG_e24vh_medium1, 25, m_accOnly)) nAsym2E_e24++;
+          if(matchEle(TRIG_e24vh_medium1, 25)) nAsym2E_e24++;
         }
         // e-mu trigger
-        if(matchLepTrigger(lep, TRIG_e12Tvh_medium1_mu8, 14, m_accOnly)) nEM_e++;
+        if(matchEle(TRIG_e12Tvh_medium1_mu8, 14)) nEM_e++;
         // mu-e trigger (this is the funny one)
-        if(matchLepTrigger(lep, TRIG_e7_medium1, 10, m_accOnly)) nME_e++;
+        if(matchEle(TRIG_e7_medium1, 10)) nME_e++;
       }
     }
 
     // Muons
     else{
       // If leading lepton, check isolated trigger
-      if(i==0 && matchLepTrigger(lep, TRIG_mu24i_tight, 25, m_accOnly)) n1M++;
+      //if(i==0 && matchLepTrigger(lep, TRIG_mu24i_tight, 25, m_accOnly)) n1M++;
+      if(i==0 && matchMu(TRIG_mu24i_tight, 25)) n1M++;
       if(useDilepTrigs){
         // 2m symmetric trigger
-        if(matchLepTrigger(lep, TRIG_2mu13, 14, m_accOnly)) nSym2M++;
+        if(matchMu(TRIG_2mu13, 14)) nSym2M++;
         // 2m asymmetric trigger
-        if(matchLepTrigger(lep, TRIG_mu18_tight_mu8_EFFS, 8, m_accOnly)){
+        if(matchMu(TRIG_mu18_tight_mu8_EFFS, 8)){
           nAsym2M++;
-          if(matchLepTrigger(lep, TRIG_mu18_tight, 18, m_accOnly)) nAsym2M_m18++;
+          if(matchMu(TRIG_mu18_tight, 18)) nAsym2M_m18++;
         }
         // mu-e trigger
-        if(matchLepTrigger(lep, TRIG_mu18_tight_e7_medium1, 18, m_accOnly)) nME_m++;
+        if(matchMu(TRIG_mu18_tight_e7_medium1, 18)) nME_m++;
         // e-mu trigger
-        if(matchLepTrigger(lep, TRIG_mu8, 8, m_accOnly)) nEM_m++;
+        if(matchMu(TRIG_mu8, 8)) nEM_m++;
       }
     }
+
+    // Cleanup preprocessor shorthand
+    #undef matchEle
+    #undef matchMu
+
   } // lepton loop
 
   bool pass1E = n1E>0;
@@ -179,9 +190,23 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
 
   return true;
 }
+/*--------------------------------------------------------------------------------*/
+bool TrilTrigLogic::matchLepTrigger(const Lepton* lep, int trigMask,
+                                    float ptMin, float etaMax, bool accOnly)
+{
+  if(lep->Pt() < ptMin) return false;
+  if(etaMax > 0 && fabs(lep->Eta()) > etaMax) return false;
+  return accOnly || lep->matchTrig(trigMask);
+}
+/*--------------------------------------------------------------------------------*/
+bool TrilTrigLogic::matchTauTrigger(const Tau* tau, int trigMask, float ptMin, bool accOnly)
+{
+  if(tau->Pt() < ptMin) return false;
+  return accOnly || tau->matchTrig(trigMask);
+}
 
 /*--------------------------------------------------------------------------------*/
-// Trigger reweighting for MC
+// Trigger reweighting for MC - not currently used
 /*--------------------------------------------------------------------------------*/
 float TrilTrigLogic::getTriggerWeight(const LeptonVector& leptons, Event* evt)
 {

@@ -1,7 +1,16 @@
 # vim: set noexpandtab:
+
+2013-05-01 Steve
+	* Updated TrilTrigLogic for handling extended muon eta cut
+		* Using some preprocessor definitions to make code more compact
+		* Matching code will require muons to be |eta| < 2.4 so that we can
+		  use muons up to 2.5 in the analysis
+	* Added softTerm, softTerm_etx, softTerm_ety to Susy Met class
+		* These will replace the cellOut and softJet terms
+
 2013-04-21 Anyes
 	* Tweaks to TGuiUtils 
-	
+
 2013-04-18 Steve
 	* Added const map getSumwMap method to SusyNtAna
 	* Changed sumw map pointer to const in SusyNtTools getEventWeight
@@ -29,7 +38,7 @@
 		* getEventWeight now takes extra arguments to control the usage of the sumwMap:
 			SusyNtAna::getEventWeight(float lumi, bool useSumwMap)
 			SusyNtTools::getEventWeight(const Event* evt, float lumi, 
-				       		    bool useSumwMap, map<unsigned int, float>* sumwMap)
+				       		    bool useSumwMap, map<uint, float>* sumwMap)
 		* Hasn't been fully tested in all uses yet. Let me know if there are problems.
 
 2013-04-05 Steve
