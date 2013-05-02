@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-05-02 Steve
+	* Tagging SusyNtuple-00-00-54
+
 2013-05-01 Steve
 	* Updated TrilTrigLogic for handling extended muon eta cut
 		* Using some preprocessor definitions to make code more compact
