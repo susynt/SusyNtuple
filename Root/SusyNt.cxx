@@ -393,6 +393,7 @@ void Tau::print() const
 {
   cout.precision(2);
   cout << fixed << "Tau : q " << setw(2) << q << " Et " << setw(6) << Et() << " eta " << setw(5) << Eta()
+       << " nTrk " << nTrack
        << " phi " << setw(5) << Phi()
        << " jetBDT " << jetBDTSigLoose << jetBDTSigMedium << jetBDTSigTight
        << " eleBDT " << eleBDTLoose << eleBDTMedium << eleBDTTight

@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-05-07 Steve
+	* Switch to usage of TFile.Open in buildSumwMap to properly handle xrootd file paths
+	* Add nTrk to tau.print()
+
 2013-05-02 Steve
 	* Tagging SusyNtuple-00-00-54
 

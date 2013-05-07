@@ -1616,11 +1616,11 @@ map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain)
   TIter next(fileElements);
   TChainElement* chainElement = 0;
   while((chainElement = (TChainElement*)next())){
-    TFile f(chainElement->GetTitle());
-    //f.ls();
+    TString fileTitle = chainElement->GetTitle();
+    TFile* f = TFile::Open(fileTitle.Data());
 
     // Get the tree, for extracting mcid
-    TTree* tree = (TTree*) f.Get("susyNt");
+    TTree* tree = (TTree*) f->Get("susyNt");
 
     // Setup branch for accessing the MCID in the tree
     Event* evt = 0;
@@ -1631,12 +1631,13 @@ map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain)
     //cout << "mcid: " << evt->mcChannel << endl;
 
     // Get the generator weighted histogram
-    TH1F* hGenCF = (TH1F*) f.Get("genCutFlow");
+    TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
     //cout << "sumw: " << hGenCF->GetBinContent(1) << endl;
     sumwMap[evt->mcChannel] += hGenCF->GetBinContent(1);
 
     // Is it ok to close the file like this?  Will it screw up the TChain later on?
-    f.Close();
+    f->Close();
+    delete f;
   }
 
   // Dump out the MCIDs and calculated sumw
