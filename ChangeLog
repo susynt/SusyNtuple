@@ -7,6 +7,7 @@
 		* e-e overlap dR changed from 0.1 to 0.05
 		* e-mu overlap dR changed from 0.1 to 0.01
 	* Minor code cleanup
+	* Tagging SusyNtuple-00-00-55
 
 2013-05-07 Steve
 	* Switch to usage of TFile.Open in buildSumwMap to properly handle xrootd file paths
