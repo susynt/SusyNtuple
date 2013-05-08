@@ -450,14 +450,14 @@ const float MUON_D0SIG_CUT           = 3.0;
 const float MUON_Z0_SINTHETA_CUT     = 1.0;//0.2;
 
 // Cuts for overlap
-const float E_E_DR = 0.1;
+const float E_E_DR = 0.05;
 const float J_E_DR = 0.2;
 const float T_E_DR = 0.2;
 const float T_M_DR = 0.2;
 const float J_T_DR = 0.2;
 const float E_J_DR = 0.4;
 const float M_J_DR = 0.4;
-const float E_M_DR = 0.1;
+const float E_M_DR = 0.01;
 const float M_M_DR = 0.05;
 
 // B-tagging working points

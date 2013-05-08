@@ -3,6 +3,9 @@
 2013-05-08 Steve
 	* Updated default btag cut to MV1_80
 	* Updated default btag SF to MV1_80
+	* Updated lepton overlap dR as recommended by SUSY conveners
+		* e-e overlap dR changed from 0.1 to 0.05
+		* e-mu overlap dR changed from 0.1 to 0.01
 	* Minor code cleanup
 
 2013-05-07 Steve
