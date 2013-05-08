@@ -614,11 +614,10 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 {
-
-  if(jet->Pt() < JET_PT_B20_CUT        )  return false;
-  //if(fabs(jet->Eta()) > JET_ETA_CUT_2L )  return false;
-  if(fabs(jet->detEta) > JET_ETA_CUT_2L )  return false;
-  if(jet->mv1 < MV1_80                 )  return false;
+  if(jet->Pt() < JET_PT_B20_CUT) return false;
+  //if(fabs(jet->Eta()) > JET_ETA_CUT_2L) return false;
+  if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
+  if(jet->mv1 < MV1_80) return false;
 
   return true;
 }
@@ -629,10 +628,8 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
-  /*
-  if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
-  if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
-  */
+  //if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
+  //if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
   if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false; 
   if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
   return true;
@@ -694,9 +691,9 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf)
 {
-   Ncl = numberOfCLJets(jets);
-   Ncb = numberOfCBJets(jets);
-   Nf  = numberOfFJets (jets);
+  Ncl = numberOfCLJets(jets);
+  Ncb = numberOfCBJets(jets);
+  Nf  = numberOfFJets (jets);
   return;
 }
 /*--------------------------------------------------------------------------------*/

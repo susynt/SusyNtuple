@@ -35,9 +35,11 @@ class SusyNtTools
     // Default weight uses full dataset, currently A-L
     // Pileup weights correspond to same dataset.
     virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
-                                 bool useSumwMap = false, const std::map<unsigned int, float>* sumwMap = 0);
+                                 bool useSumwMap = false, 
+                                 const std::map<unsigned int, float>* sumwMap = 0);
     // Temporary fixed version of getEventWeight for n0138
-    virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, float lumi = LUMI_A_L);
+    virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, 
+                                      float lumi = LUMI_A_L);
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
     // This will use the correct pileup weights for A-B3
@@ -91,8 +93,8 @@ class SusyNtTools
     // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
     bool isSignalLepton(const Susy::Lepton* l, ElectronVector& baseElectrons, MuonVector& baseMuons, 
                         uint nVtx, bool isMC, bool removeLepsFromIso=false);
-    bool isSignalElectron(const Susy::Electron* ele, ElectronVector& baseElectrons, MuonVector& baseMuons, 
-                          uint nVtx, bool isMC, bool removeLepsFromIso=false);
+    bool isSignalElectron(const Susy::Electron* ele, ElectronVector& baseElectrons, 
+                          MuonVector& baseMuons, uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalMuon(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
                       uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalTau(const Susy::Tau* tau, TauID id=TauID_medium);
@@ -116,10 +118,10 @@ class SusyNtTools
     //
     // Electron, Muon isolation correction for pileup
     //
-    float elPtConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, MuonVector& baseMuons, 
-                       uint nVtx, bool isMC, bool removeLeps=false);
-    float elEtTopoConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, MuonVector& baseMuons, 
-                           uint nVtx, bool isMC, bool removeLeps=false);
+    float elPtConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, 
+                       MuonVector& baseMuons, uint nVtx, bool isMC, bool removeLeps=false);
+    float elEtTopoConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, 
+                           MuonVector& baseMuons, uint nVtx, bool isMC, bool removeLeps=false);
     float muPtConeCorr(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
                        uint nVtx, bool isMC, bool removeLeps=false);
     float muEtConeCorr(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
@@ -256,12 +258,15 @@ class SusyNtTools
     // Mass calculation methods
     float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
     float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
-    float Mllll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, const Susy::Lepton* l4);
+    float Mllll(const Susy::Lepton* l1, const Susy::Lepton* l2,
+                const Susy::Lepton* l3, const Susy::Lepton* l4);
     float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
-    float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Jet* j1, const Susy::Jet* j2);
+    float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2,
+                const Susy::Jet* j1, const Susy::Jet* j2);
     float Mt(const Susy::Lepton* lep, const Susy::Met* met);
     float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
-    float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets, const Susy::Met* met);
+    float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets,
+               const Susy::Met* met);
 
     // Z selection methods
     bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
@@ -282,17 +287,12 @@ class SusyNtTools
     bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets
-    bool hasBJet(const JetVector& jets, float weight=MV1_85);
-    bool isBJet(const Susy::Jet* jet, float weight=MV1_85);
+    bool hasBJet(const JetVector& jets, float weight=MV1_80);
+    bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
     
     float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-		 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_85,
+		 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
 		 BTagSys sys=BTag_NOM);    
-
-    // Move to this once 3-lep moves to MV1_80
-    //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-    //std::string taggerName = "MV1", std::string OP="0_3511", float opval=MV1_80,
-    //BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
     bool isCentralLightJet(const Susy::Jet* jet);
@@ -305,7 +305,8 @@ class SusyNtTools
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
 
     // MET Rel
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, bool useForward=false);
+    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, 
+                    bool useForward=false);
   
     // MT2
     float getMT2(const LeptonVector& leptons, const Susy::Met* met);
@@ -331,9 +332,10 @@ class SusyNtTools
     // This method will loop over the input files associated with the TChain.
     // The MCID in the first entry of the tree will be used, so one CANNOT use this
     // if multiple datasets are combined into one SusyNt tree file!
-    // The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID.
+    // The generator weighted cutflow histograms will then be 
+    // used to calculate the total sumw for each MCID.
     // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
-    // However, one can have more than one (complete) dataset in the chain which is why we use the map.
+    // However, one can have more than one (complete) dataset in the chain.
     std::map<unsigned int, float> buildSumwMap(TChain* chain);
 
     // Sherpa sample check
