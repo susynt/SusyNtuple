@@ -75,7 +75,7 @@ class SusyNtTools
     TauVector      getSignalTaus(TauVector& baseTaus, TauID id=TauID_medium);
     JetVector      getSignalJets(JetVector& baseJets);
     JetVector      getSignalJets2Lep(JetVector& baseJets);
-  
+
     // Get the signal objects
     void getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons, 
                           TauVector& baseTaus, JetVector& baseJets, 
@@ -88,6 +88,16 @@ class SusyNtTools
                           JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
                           bool selectTaus=false, bool removeLepsFromIso=false,
                           TauID tauID=TauID_medium);
+
+    // New signal tau prescription, fill both ID levels at once
+    // These will replace the methods above
+    void getSignalTaus(TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus);
+    void getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons, 
+                          TauVector& baseTaus, JetVector& baseJets, 
+			  ElectronVector& sigElecs, MuonVector& sigMuons, 
+                          TauVector& mediumTaus, TauVector& tightTaus, 
+                          JetVector& sigJets, JetVector& sigJets2Lep,
+                          uint nVtx, bool isMC, bool removeLepsFromIso=false);
     
     // Check if Signal.
     // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts

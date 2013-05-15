@@ -1,5 +1,13 @@
 # vim: set noexpandtab:
 
+2013-05-14 Steve
+	* Added dumpBaselineLeptons, dumpSignalLeptons, dumpBaselineJets, dumpSignalJets to SusyNtAna
+	* Updated code for selecting both medium and tight taus
+		* SusyNtAna now has m_mediumTaus and m_tightTaus
+			* m_signalTaus will correspond to whichever tauID is specified to selectObjects
+		* New SusyNtTools getSignalObjects and getSignalTaus methods which fill 
+		  mediumTaus as well as tightTaus
+
 2013-05-08 Steve
 	* Updated default btag cut to MV1_80
 	* Updated default btag SF to MV1_80

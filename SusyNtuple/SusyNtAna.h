@@ -87,7 +87,11 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void dumpEvent();
     void dumpNtupleObjects();
     void dumpBaselineObjects();
+    void dumpBaselineLeptons();
+    void dumpBaselineJets();
     void dumpSignalObjects();
+    void dumpSignalLeptons();
+    void dumpSignalJets();
 
     // Toggle tau selection and overlap removal
     void setSelectTaus(bool doIt) { m_selectTaus = doIt; }
@@ -169,16 +173,21 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     ElectronVector      m_baseElectrons;        // baseline electrons
     MuonVector          m_baseMuons;            // baseline muons
-    TauVector           m_baseTaus;             // baseline taus
     LeptonVector        m_baseLeptons;          // baseline leptons
+    TauVector           m_baseTaus;             // baseline taus
     JetVector           m_baseJets;             // baseline jets
 
     ElectronVector      m_signalElectrons;      // signal electrons
     MuonVector          m_signalMuons;          // signal muons
-    TauVector           m_signalTaus;           // signal taus
     LeptonVector        m_signalLeptons;        // signal leptons
+    TauVector           m_signalTaus;           // signal taus
     JetVector           m_signalJets;           // signal jets
     JetVector           m_signalJets2Lep;       // signal jets for 2 Lep
+
+    // New organization of tau selections
+    TauVector           m_mediumTaus;           // taus with medium ID
+    TauVector           m_tightTaus;            // taus with tight ID
+
     const Susy::Met*    m_met;                  // Met
 
     // Timer

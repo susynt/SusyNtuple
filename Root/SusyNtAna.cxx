@@ -202,9 +202,12 @@ void SusyNtAna::clearObjects()
   m_baseJets.clear();
   m_signalElectrons.clear();
   m_signalMuons.clear();
-  m_signalTaus.clear();
   m_signalLeptons.clear();
+  m_signalTaus.clear();
   m_signalJets.clear();
+  m_signalJets2Lep.clear();
+  m_mediumTaus.clear();
+  m_tightTaus.clear();
   m_met = NULL;
 }
 /*--------------------------------------------------------------------------------*/
@@ -216,18 +219,23 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, TauID signa
   getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, sys, m_selectTaus);
 
   // Now grab Signal objects
+  // New signal tau prescription, fill both ID levels at once
   getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-		   m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, m_signalJets2Lep, 
-                   nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso,
-                   signalTauID);
+		   m_signalElectrons, m_signalMuons, 
+                   m_mediumTaus, m_tightTaus, 
+                   m_signalJets, m_signalJets2Lep, 
+                   nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso);
+  m_signalTaus = signalTauID==TauID_tight? m_tightTaus : m_mediumTaus;
+
+  //getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
+  //                 m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, m_signalJets2Lep, 
+  //                 nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso,
+  //                 signalTauID);
 
   // Grab met
   m_met = getMet(&nt, sys);
 
   // Build Lepton vectors
-  // For now, not putting taus on the light lepton vectors
-  //buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons, m_baseTaus);
-  //buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons, m_signalTaus);
   buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
   buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
 
@@ -308,6 +316,12 @@ void SusyNtAna::dumpNtupleObjects()
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::dumpBaselineObjects()
 {
+  dumpBaselineLeptons();
+  dumpBaselineJets();
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::dumpBaselineLeptons()
+{
   uint nEle = m_baseElectrons.size();
   if(nEle>0){
     cout << "Baseline electrons" << endl;
@@ -332,6 +346,10 @@ void SusyNtAna::dumpBaselineObjects()
       m_baseTaus[iTau]->print();
     }
   }
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::dumpBaselineJets()
+{
   uint nJet = m_baseJets.size();
   if(nJet>0){
     cout << "Baseline jets" << endl;
@@ -343,6 +361,12 @@ void SusyNtAna::dumpBaselineObjects()
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::dumpSignalObjects()
+{
+  dumpSignalLeptons();
+  dumpSignalJets();
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::dumpSignalLeptons()
 {
   uint nEle = m_signalElectrons.size();
   if(nEle>0){
@@ -368,6 +392,10 @@ void SusyNtAna::dumpSignalObjects()
       m_signalTaus[iTau]->print();
     }
   }
+}
+/*--------------------------------------------------------------------------------*/
+void SusyNtAna::dumpSignalJets()
+{
   uint nJet = m_signalJets.size();
   if(nJet>0){
     cout << "Signal jets" << endl;

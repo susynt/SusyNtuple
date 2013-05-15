@@ -160,6 +160,23 @@ void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMu
   sigJets2Lep = getSignalJets2Lep(baseJets);
 }
 /*--------------------------------------------------------------------------------*/
+// New signal tau prescription, fill both ID levels at once!
+void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons,
+                                   TauVector& baseTaus, JetVector& baseJets,
+				   ElectronVector& sigElecs, MuonVector& sigMuons, 
+                                   TauVector& mediumTaus, TauVector& tightTaus,
+                                   JetVector& sigJets, JetVector& sigJets2Lep, 
+                                   uint nVtx, bool isMC, bool removeLepsFromIso)
+{
+  // Set signal objects
+  sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
+  sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
+  sigJets  = getSignalJets(baseJets);
+  sigJets2Lep = getSignalJets2Lep(baseJets);
+
+  getSignalTaus(baseTaus, mediumTaus, tightTaus);
+}
+/*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs, 
 				   MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
                                    JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
@@ -317,6 +334,19 @@ TauVector SusyNtTools::getSignalTaus(TauVector& baseTaus, TauID id)
     }
   }
   return sigTaus;
+}
+/*--------------------------------------------------------------------------------*/
+// New signal tau prescription, fill both ID levels at once!
+void SusyNtTools::getSignalTaus(TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus)
+{
+  for(uint iTau=0; iTau < baseTaus.size(); iTau++){
+    Tau* tau = baseTaus[iTau];
+    if(isSignalTau(tau, TauID_tight)){
+      tightTaus.push_back(tau);
+      mediumTaus.push_back(tau);
+    }
+    else if(isSignalTau(tau, TauID_medium)) mediumTaus.push_back(tau);
+  }
 }
 /*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getSignalJets(JetVector& baseJets)
