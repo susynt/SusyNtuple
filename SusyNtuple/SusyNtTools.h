@@ -99,7 +99,13 @@ class SusyNtTools
                           JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false);
     
-    // Check if Signal.
+    // Check if selected object
+    bool isTauBDT(const Susy::Tau* tau, TauID id=TauID_loose);
+    // TODO: add new selection methods for light leptons and jets
+    //bool isSelectLepton()
+    bool isSelectTau(const Susy::Tau* tau, TauID id=TauID_loose);
+
+    // Check if signal object
     // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
     bool isSignalLepton(const Susy::Lepton* l, ElectronVector& baseElectrons, MuonVector& baseMuons, 
                         uint nVtx, bool isMC, bool removeLepsFromIso=false);

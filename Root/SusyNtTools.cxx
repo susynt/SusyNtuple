@@ -270,9 +270,9 @@ TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
     tau->setState(sys);
 
     // Apply any additional selection
-    if(tau->Pt() < TAU_PT_CUT) continue;
-
-    taus.push_back(tau);
+    if(isSelectTau(tau)) taus.push_back(tau);
+    //if(tau->Pt() < TAU_PT_CUT) continue;
+    //taus.push_back(tau);
   }
   return taus;
 }
@@ -422,6 +422,46 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useN
 }
 
 /*--------------------------------------------------------------------------------*/
+// Method for applying tau BDT selection only
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isTauBDT(const Tau* tau, TauID id)
+{
+  if(id == TauID_loose){
+    if(tau->nTrack == 1 && tau->eleBDTLoose != 0) return false;
+    if(tau->jetBDTSigLoose != 1) return false;
+  }
+  else if(id == TauID_medium){
+    if(tau->muonVeto != 0) return false;
+    if(tau->nTrack == 1 && tau->eleBDTMedium != 0) return false;
+    if(tau->jetBDTSigMedium != 1) return false;
+  }
+  else if(id == TauID_tight){
+    if(tau->muonVeto != 0) return false;
+    if(tau->nTrack == 1 && tau->eleBDTTight != 0) return false;
+    if(tau->jetBDTSigTight != 1) return false;
+  }
+  // none selection can be used for container taus
+  else if(id == TauID_none){
+  }
+  else{
+    cout << "SusyNtTools::WARNING - tau ID " << id << " not supported!" << endl;
+    return false;
+  }
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Check if lepton is selected
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSelectTau(const Tau* tau, TauID id)
+{
+  // At the moment, we only apply pt and BDT here.
+  // TODO: Make the pt cut configurable
+  if(tau->Pt() < TAU_PT_CUT) return false;
+  return isTauBDT(tau, id);
+}
+
+/*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalLepton(const Lepton* l, ElectronVector& baseElectrons, MuonVector& baseMuons, 
@@ -498,26 +538,8 @@ bool SusyNtTools::isSignalMuon(const Muon* mu, ElectronVector& baseElectrons, Mu
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalTau(const Tau* tau, TauID id)
 {
-  // Loose cuts - probably shouldn't be used for signal taus
-  if(id == TauID_loose){
-    if(tau->nTrack == 1 && tau->eleBDTLoose != 0) return false;
-    if(tau->jetBDTSigLoose != 1) return false;
-  }
-  else if(id == TauID_medium){
-    if(tau->muonVeto != 0) return false;
-    if(tau->nTrack == 1 && tau->eleBDTMedium != 0) return false;
-    if(tau->jetBDTSigMedium != 1) return false;
-  }
-  else if(id == TauID_tight){
-    if(tau->muonVeto != 0) return false;
-    if(tau->nTrack == 1 && tau->eleBDTTight != 0) return false;
-    if(tau->jetBDTSigTight != 1) return false;
-  }
-  else{
-    cout << "SusyNtTools::WARNING - tau ID " << id << " not supported!" << endl;
-    return false;
-  }
-  return true;
+  // At the moment, signal taus only use additional BDT selection
+  return isTauBDT(tau, id);
 }
 /*--------------------------------------------------------------------------------*/
 // Isolation corrections

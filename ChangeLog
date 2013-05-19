@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2013-05-19 Steve
+	* Added isSelectTau method for applying baseline tau selection
+	* Added isTauBDT method for applying tau BDT cuts for each ID level
+		* Used by isSelectTau and isSignalTau
+	* Added TauID_none for applying no BDT selection (like container taus)
+
 2013-05-14 Steve
 	* Added dumpBaselineLeptons, dumpSignalLeptons, dumpBaselineJets, dumpSignalJets to SusyNtAna
 	* Updated code for selecting both medium and tight taus

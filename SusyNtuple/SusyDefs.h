@@ -126,7 +126,8 @@ enum D3PDTag
 // Tau ID enum
 enum TauID
 {
-  TauID_loose = 0,
+  TauID_none = 0,
+  TauID_loose,
   TauID_medium,
   TauID_tight,
   TauID_N
