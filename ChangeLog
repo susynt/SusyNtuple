@@ -1,6 +1,9 @@
 # vim: set noexpandtab:
 
 2013-05-19 Steve
+	* Tagging SusyNtuple-00-00-56
+
+2013-05-19 Steve
 	* Added isSelectTau method for applying baseline tau selection
 	* Added isTauBDT method for applying tau BDT cuts for each ID level
 		* Used by isSelectTau and isSignalTau
