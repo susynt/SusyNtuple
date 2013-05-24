@@ -110,6 +110,11 @@ bool DilTrigLogic::passDilTrigMatch(LeptonVector leptons, float met, Event* evt)
   // Code needs to classify dilepton type, and getDiLepEvtType require just 2 leptons.
   if( leptons.size() != 2 ) return false;
 
+  // Add Check on muon eta due to the extention of muons
+  // needed for the recalculation of missing energy
+  if( leptons[0]->isMu() && fabs(leptons[0]->Eta()) > 2.4 ) return false;
+  if( leptons[1]->isMu() && fabs(leptons[1]->Eta()) > 2.4 ) return false;
+
   DataStream stream = evt->stream;
 
   // If unknown stream, then return

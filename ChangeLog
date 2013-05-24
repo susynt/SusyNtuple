@@ -1,4 +1,7 @@
 # vim: set noexpandtab:
+2013-05-24 Matt
+	* Adding muon eta check for muons making sure trigger match only for 2.4 muons
+
 2013-05-24 Anyes
 	* Committing changes to TGuiUtils for PR plots
 	
