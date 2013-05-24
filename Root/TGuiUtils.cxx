@@ -74,7 +74,7 @@ void TGuiUtils::createAtlasStyle(){
   atlasStyle->SetLabelFont(font,"x");
   atlasStyle->SetLabelFont(font,"y");
   atlasStyle->SetLabelFont(font,"z");
-  //  atlasStyle->SetLabelOffset( 0.01, "x");
+  //atlasStyle->SetLabelOffset( 0.05, "x");
   //  atlasStyle->SetLabelOffset( 0.02, "y");
   //  atlasStyle->SetLabelOffset( 0.01, "z");
   atlasStyle->SetLabelSize(tlabelsize,"x");
@@ -195,16 +195,18 @@ TGraphErrors* TGuiUtils::myTGraphErrorsDivide(TGraphErrors* g1,TGraphErrors* g2)
      
      g1->GetPoint(i1,x1,y1);
      g2->GetPoint(i2,x2,y2);
-     if(x1==x2){
-       dx1  = g1->GetErrorX(i1);
-       if (y1!=0) dy1  = g1->GetErrorY(i1)/y1;
-       if (y2!=0) dy2  = g2->GetErrorY(i2)/y2;
-       
-       if (y2!=0.) g3->SetPoint(iv, x1,y1/y2);
-       else        g3->SetPoint(iv, x1,y2);
-       
-       if (y1!=0 && y2!=0) e=sqrt(dy1*dy1+dy2*dy2)*(y1/y2); 
-       g3->SetPointError(iv,dx1,e);
+     if(x1==x2 ){
+       if( !(y1==0 || y2==0)){
+	 dx1  = g1->GetErrorX(i1);
+	 if (y1!=0) dy1  = g1->GetErrorY(i1)/y1;
+	 if (y2!=0) dy2  = g2->GetErrorY(i2)/y2;
+	 
+	 if (y2!=0.) g3->SetPoint(iv, x1,y1/y2);
+	 else        g3->SetPoint(iv, x1,y2);
+	 
+	 if (y1!=0 && y2!=0) e=sqrt(dy1*dy1+dy2*dy2)*(y1/y2); 
+	 g3->SetPointError(iv,dx1,e);
+       }
 
        iv++;
      }
@@ -251,35 +253,41 @@ TGraphAsymmErrors* TGuiUtils::myTGraphErrorsDivide(TGraphAsymmErrors* g1,TGraphA
   //Double_t* EXlow2 =  g2->GetEXlow();
   Double_t* EYhigh2 = g2->GetEYhigh();
   Double_t* EYlow2 =  g2->GetEYlow();
+  if(debug)
+    printf("N points %i\n",g1->GetN());
 
   for (Int_t i=0; i<g1->GetN(); i++) {
     g1->GetPoint(i,x1,y1);
     g2->GetPoint(i,x2,y2);
-    dx1h  = EXhigh1[i];
-    dx1l  = EXlow1[i];
-    if (y1!=0.) dy1h  = EYhigh1[i]/y1;
-    else        dy1h  = 0.;
-    if (y2!=0.) dy2h  = EYhigh2[i]/y2;
-    else        dy2h  = 0.;
-    if (y1!=0.) dy1l  = EYlow1 [i]/y1;
-    else        dy1l  = 0.;
-    if (y2!=0.) dy2l  = EYlow2 [i]/y2;
-    else        dy2l  = 0.;
-   
-    if (debug)
-      printf("%d dy1=%f %f dy2=%f %f sqrt= %f %f \n",i,dy1l,dy1h,dy2l,dy2h,
-              sqrt(dy1l*dy1l+dy2l*dy2l),sqrt(dy1h*dy1h+dy2h*dy2h));
-
-    if (y2!=0.) g3->SetPoint(i, x1,y1/y2);
-    else       g3->SetPoint(i, x1,y2);
-    Double_t el=0.; Double_t eh=0.;
-    
-    if (y1!=0. && y2!=0.) el=sqrt(dy1l*dy1l+dy2l*dy2l)*(y1/y2);
-    if (y1!=0. && y2!=0.) eh=sqrt(dy1h*dy1h+dy2h*dy2h)*(y1/y2);
-    
-    if (debug) printf("dx1h=%f  dx1l=%f  el=%f  eh=%f \n",dx1h,dx1l,el,eh);
-    g3->SetPointError(i,dx1h,dx1l,el,eh);
-    
+    if( !(fabs(y1)<1e-5 || fabs(y2)<1e-5)){//don't put 0
+      dx1h  = EXhigh1[i];
+      dx1l  = EXlow1[i];
+      if (y1!=0.) dy1h  = EYhigh1[i]/y1;
+      else        dy1h  = 0.;
+      if (y2!=0.) dy2h  = EYhigh2[i]/y2;
+      else        dy2h  = 0.;
+      if (y1!=0.) dy1l  = EYlow1 [i]/y1;
+      else        dy1l  = 0.;
+      if (y2!=0.) dy2l  = EYlow2 [i]/y2;
+      else        dy2l  = 0.;
+      
+      /*
+      if (debug)
+	printf("%d dy1=%f %f dy2=%f %f sqrt= %f %f \n",i,dy1l,dy1h,dy2l,dy2h,
+	       sqrt(dy1l*dy1l+dy2l*dy2l),sqrt(dy1h*dy1h+dy2h*dy2h));
+      */
+      if (y2!=0.) g3->SetPoint(i, x1,y1/y2);
+      else       g3->SetPoint(i, x1,y2);
+      Double_t el=0.; Double_t eh=0.;
+      
+      if (y1!=0. && y2!=0.) el=sqrt(dy1l*dy1l+dy2l*dy2l)*(y1/y2);
+      if (y1!=0. && y2!=0.) eh=sqrt(dy1h*dy1h+dy2h*dy2h)*(y1/y2);
+      
+      if (debug) printf("\t x %2.3f y %2.3f dx1h=%2.3f  dx1l=%2.3f  el=%2.3f  eh=%2.3f \n",
+			x1,y1/y2, dx1h,dx1l,el,eh);
+      g3->SetPointError(i,dx1h,dx1l,el,eh);
+    }
+    else g3->SetPoint(i, x1,-9999); //So don't get dot at 0
   }  
   return g3;
 }
@@ -387,13 +395,13 @@ TGraphAsymmErrors* TGuiUtils::TH1TOTGraphAsymErrors(TH1 *h1){
   TGraphAsymmErrors* g1= new TGraphAsymmErrors();
   
   Double_t x, y, ex, ey;
-  for (Int_t i=1; i<=h1->GetNbinsX()+1; i++) {
-    y=h1->GetBinContent(i-1);
-    ey=h1->GetBinError(i-1);
-    x=h1->GetBinCenter(i-1);
-    ex=h1->GetBinWidth(i-1)/2.;
-    g1->SetPoint(i,x,y);
-    g1->SetPointError(i,ex,ex,ey,ey);
+  for (Int_t i=1; i<=h1->GetNbinsX(); i++) {
+    y=h1->GetBinContent(i);
+    ey=h1->GetBinError(i);
+    x=h1->GetBinCenter(i);
+    ex=h1->GetBinWidth(i)/2.;
+    g1->SetPoint(i-1,x,y);
+    g1->SetPointError(i-1,ex,ex,ey,ey);
   }
 
   g1->SetMarkerSize(0);
@@ -773,29 +781,35 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     std::cout << "histSTack empty" <<std::endl;
     return _tv;
   }
+  
+  TGraphAsymmErrors* _dataTG = updateDataError(_h,true);
+  TGraphAsymmErrors* _bkgTG = TH1TOTGraphAsymErrors(_stackH);
 
   Double_t max=(_stackH->GetMaximum()+_stackH->GetBinError(_stackH->GetMaximumBin()))*(1+0.1);
   if(_h) max = getMax(_h,_stackH);
 
   //==>> Data/SM ratio
-  TH1F*  _ratioH=NULL;
+  TH1F*  _ratioH=NULL; //Used for axis stuff
   float avg =0;
   if(_h){
     TH1F* _hMC = (TH1F*) _stackH->Clone();
-
     _ratioH= (TH1F*) _h->Clone();
     _ratioH->Reset();
     _ratioH->GetXaxis()->SetTitle(_h->GetXaxis()->GetTitle());
     _ratioH->GetXaxis()->SetTitleSize(0.05);
-    _ratioH->SetLabelSize(0.12,"X");
-    _ratioH->SetLabelSize(0.12,"Y");
-    _ratioH->GetYaxis()->SetTitle("Data/SM");
-    _ratioH->GetYaxis()->SetTitleSize(0.05);
+    _ratioH->SetLabelSize(0.10,"X");
+    _ratioH->SetLabelSize(0.10,"Y");
+    _ratioH->GetXaxis()->SetLabelOffset(0.02);
+    _ratioH->GetYaxis()->SetTitle("Data / SM");
+    _ratioH->GetYaxis()->SetTitleSize(0.1);
     _ratioH->GetYaxis()->SetNdivisions(205);
-    
-    _ratioH->Divide(_h,_hMC,1,1,"B");
+    //_ratioH->Divide(_h,_hMC,1,1,"B");
     avg = _h->Integral(0,-1) / _hMC->Integral(0,-1);
   }
+  //Data MC ratio plotted
+  TGraphAsymmErrors* _ratioTG = myTGraphErrorsDivide(_dataTG, _bkgTG);
+  _ratioTG->SetLineWidth(2);
+
 
   _pTop->SetTopMargin(0.07);
   _pTop->SetBottomMargin(0.4);
@@ -803,7 +817,7 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   _pTop->SetLeftMargin(0.15);
   _pTop->SetNumber(1);
   if(_h){ //with data histo
-    _pTop->SetBottomMargin(0.05);
+    _pTop->SetBottomMargin(0.01);
     _pBot->SetTopMargin(0.07);
     _pBot->SetBottomMargin(0.4);
     _pBot->SetRightMargin(0.05);
@@ -812,36 +826,61 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   }
   _tv->cd();
 
-  //Top plot
+  //Draw the pads
+  _pBot->Draw();
   _pTop->Draw();
-  _pTop->cd();
+
 
   float min = 0.1;
   if(min<0)   min = fabs(min); //protection
   if(min<0.1) min = 0.1;
   if(max==0)  max = 1;
 
+  //Draw the data hist before the TG... to control canvas scale !!! yuck !
+  //Assumes TG has always large err bar 
+  _pTop->cd();
+  /*
   if(_h->Integral(0,-1)>0){
     _h->SetMaximum(max*scale);
     _h->SetMinimum(min);
+    _h->SetLabelSize(0.0,"X");
+    _h->SetLabelSize(0.05,"Y");
+    _h->GetXaxis()->SetTitle("");//remove to not overlap pTop
     _h->GetYaxis()->SetRangeUser(min,max*scale);
-    myDraw1d(_h,_pTop,kBlack,"p",logy, -1, false,20);
+    //myDraw1d(_h,_pTop,kBlack,"axis",logy, -1, false,20);
+    //_dataTG->Draw("SAME & P");
+    _dataTG->Draw("P");
+    _dataTG->SetMinimum(min);
+    _dataTG->SetMaximum(max*scale);
     _hStack->Draw("histsame");
   }
   else   _hStack->Draw("hist");
+  */
 
-
+  _hStack->Draw("hist");
   _hStack->SetMaximum(max*scale);
   _hStack->SetMinimum(min);
-  _hStack->GetYaxis()->SetTitleSize(0.06);
-  _hStack->GetYaxis()->SetTitleOffset(1.2);
-  _hStack->GetYaxis()->SetLabelSize(0.06);
-  _hStack->GetXaxis()->SetTitle(_stackH->GetXaxis()->GetTitle());
-  _hStack->GetYaxis()->SetTitle(_stackH->GetYaxis()->GetTitle());
   _hStack->GetYaxis()->SetRangeUser(min,max*scale);
+  _hStack->GetYaxis()->SetTitle(_stackH->GetYaxis()->GetTitle());
+  _hStack->GetYaxis()->SetTitleSize(0.05);
+  _hStack->GetYaxis()->SetTitleOffset(1.2);
+  _hStack->GetYaxis()->SetLabelSize(0.05);
+  if(_ratioH){
+    _hStack->GetXaxis()->SetTitleSize(0.0);
+    _hStack->GetXaxis()->SetLabelSize(0.0);
+    _hStack->GetXaxis()->SetTitle("");//_stackH->GetXaxis()->GetTitle());
+  }
+  else{
+    _hStack->GetXaxis()->SetTitleSize(0.05);
+    _hStack->GetXaxis()->SetLabelSize(0.05);
+    _hStack->GetXaxis()->SetTitle(_stackH->GetXaxis()->GetTitle());
+  }
+
+
 
   if(_h->Integral(0,-1)>0){
-    myDraw1d(_h,_pTop,kBlack,"psame",logy, -1, false,20);
+    _dataTG->Draw("SAME && P");
+    _pTop->Update();
   }
   else{
     if(logy) _pTop->SetLogy();
@@ -857,15 +896,18 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
   //Bottom Ratio
   _tv->cd();
   if(_ratioH){
-    _pBot->Draw();
     _pBot->cd();
+    
     _ratioH->GetXaxis()->SetTitleSize(0.15);
     _ratioH->GetXaxis()->SetTitleOffset(1.2);
-    _ratioH->GetYaxis()->SetTitleSize(0.08);
-    _ratioH->GetYaxis()->SetTitleOffset(0.8);
-    myDraw1d(_ratioH,_pBot,1,"p",false, kBlack, false,20);
-    _ratioH->SetMarkerSize(0.3);
-
+    _ratioH->GetXaxis()->SetLabelSize(0.12);
+    _ratioH->GetYaxis()->SetTitleSize(0.12);
+    _ratioH->GetYaxis()->SetTitleOffset(0.55);
+    _ratioH->GetYaxis()->SetLabelSize(0.12);
+    myDraw1d(_ratioH,_pBot,1,"X0 && e",false, kBlack, false,20);
+    _ratioH->SetMarkerSize(1.2);
+    _ratioTG->Draw("SAME && P");
+    
     TLine* _line = new TLine(_ratioH->GetBinCenter(1)-_ratioH->GetBinWidth(1)/2,1,
 			     _ratioH->GetBinCenter(_ratioH->GetNbinsX())+
 			     _ratioH->GetBinWidth(_ratioH->GetNbinsX())/2,1);
@@ -877,13 +919,16 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     _line->SetLineWidth(1);
     _line->SetLineColor(kRed);
     _line->Draw();
-    _pBot->RedrawAxis();
     
     if(min<0) min=-1;
     if(max>1) max=2;
     min=0;
     max=2;
     _ratioH->GetYaxis()->SetRangeUser(min,max);
+    
+    //_pBot->SetGridx();
+    _pBot->SetGridy();
+    _pBot->Modified();
     _pBot->Update();
   }
 
@@ -977,8 +1022,9 @@ void TGuiUtils::yAxis(TH1* h1, const char* _unit){
   
   if(int(range)%int(nbins)==0) sprintf(_width,"%d",int(R));
   else sprintf(_width,"%3.2f",R);
-  _label = "Events/";
+  _label = "Events / ";
   _label.append(_width);
+  _label.append(" ");
   _label.append(_unit);
 
   h1->GetYaxis()->SetTitle(_label.c_str());
@@ -1009,4 +1055,37 @@ void TGuiUtils::templateHisto(){
   _h->GetXaxis()->SetNdivisions(205);
   myDraw1d(_h, _c, 1, "e", false, kBlack, false);
     
+}
+//_____________________________________________________________________________                                                                                                                            
+TGraphAsymmErrors* TGuiUtils::updateDataError(TH1* h, bool fillZero){
+  const double alpha = 0.158655; // 68%
+  
+  TGraphAsymmErrors* _TG = new TGraphAsymmErrors();
+  _TG->SetLineWidth(2);
+  
+  for(int i=1; i<=h->GetNbinsX(); i++){
+    double value = h->GetBinContent(i);
+    if(value!=0) {
+      double y1 = value + 1.0;
+      double d1 = 1.0 - 1.0/(9.0*y1) + 1.0/(3*TMath::Sqrt(y1));
+      double error_poisson_up = y1*d1*d1*d1 - value;
+      double y2 = value;
+      double d2 = 1.0 - 1.0/(9.0*y2) - 1.0/(3.0*TMath::Sqrt(y2));
+      double error_poisson_down = value - y2*d2*d2*d2;
+      /*
+	double nulo = 0.5*TMath::ChisquareQuantile(alpha,2*valY);
+	double nuup = 0.5*TMath::ChisquareQuantile(1-alpha,2*(valY+1));    
+      */
+      _TG->SetPoint(i-1, h->GetBinCenter(i), value);
+      _TG->SetPointError(i-1, 0, 0, error_poisson_down, error_poisson_up);
+      //cout<< "bin " << i << " " 
+      //<< value<<": "<<error_poisson_down<<" "<<error_poisson_up<<endl;
+    }
+    else if(fillZero){
+      _TG->SetPoint(i-1, h->GetBinCenter(i), 0);
+      _TG->SetPointError(i-1, 0, 0, 0, 0);
+    }
+  }
+
+  return _TG;
 }

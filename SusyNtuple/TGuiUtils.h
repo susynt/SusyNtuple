@@ -145,6 +145,14 @@ class TGuiUtils : public TObject
   void templateHisto();
 
   
+  /**  Calculate poisson error on data using Neyman Procedure
+       http://www.pp.rhul.ac.uk/~cowan/atlas/ErrorBars.pdf
+       http://pdg.web.cern.ch/pdg/2011/reviews/rpp2011-rev-statistics.pdf     
+   **/
+  TGraphAsymmErrors* updateDataError(TH1* h, bool fillZero=false);
+
+
+
   ClassDef(TGuiUtils,1);
 
 
