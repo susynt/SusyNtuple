@@ -1058,7 +1058,7 @@ void TGuiUtils::templateHisto(){
 }
 //_____________________________________________________________________________                                                                                                                            
 TGraphAsymmErrors* TGuiUtils::updateDataError(TH1* h, bool fillZero){
-  const double alpha = 0.158655; // 68%
+  //const double alpha = 0.158655; // 68%
   
   TGraphAsymmErrors* _TG = new TGraphAsymmErrors();
   _TG->SetLineWidth(2);
