@@ -1,10 +1,17 @@
 # vim: set noexpandtab:
+
+2013-06-05 Steve
+	* Added missing variable statements in Jet copy/assignment constructors
+	* Added flags for applying object level cleaning cuts on the fly from SusyNt
+		* isBadMuon and isCosmicMuon to Muon class
+		* isBadVeryLoose and isHotTile to Jet class
+
 2013-05-24 Matt
 	* Adding muon eta check for muons making sure trigger match only for 2.4 muons
 
 2013-05-24 Anyes
 	* Committing changes to TGuiUtils for PR plots
-	
+
 2013-05-19 Steve
 	* Tagging SusyNtuple-00-00-56
 

@@ -187,7 +187,6 @@ namespace Susy
       unsigned int mcOrigin;    // MCTruthClassifier particle origin
 
       bool matched2TruthLepton; // flag from RecoTruthMatch::Matched2TruthLepton
-      //int truthMatchType;     // RecoTruthMatch::type
       int truthType;            // RecoTruthMatch::type
 
       float effSF;              // Efficiency scale factor
@@ -226,7 +225,6 @@ namespace Susy
         d0 = errD0 = z0 = errZ0 = 0;
 	d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
-        //truthMatchType = -1;
         matched2TruthLepton = false;
         truthType = -1;
         effSF = 1; 
@@ -326,20 +324,23 @@ namespace Susy
       float etcone30;           // etcone iso
       float ptcone30ElStyle;    // ptcone with electron style tracks
 
-      // Systematic sf
-      float ms_up;              // MS Pt + sigma
-      float ms_dn;              // MS Pt - sigma
-      float id_up;              // ID Pt + sigma
-      float id_dn;              // ID Pt - sigma
-
       // Variables for charge misid
+      // TODO: these variables are not currently used???
       float id_theta;
       float id_phi;
       float id_qoverp;
       float ms_theta;
       float ms_phi;
       float ms_qoverp;
+
+      bool isBadMuon;           // Bad muon flag from SUSYTools
+      bool isCosmicMuon;        // Cosmic muon flag from SUSYTools
       
+      // Systematic sf
+      float ms_up;              // MS Pt + sigma
+      float ms_dn;              // MS Pt - sigma
+      float id_up;              // ID Pt + sigma
+      float id_dn;              // ID Pt - sigma
 
       // polymorphism, baby!!
       bool isEle() const { return false; }
@@ -356,12 +357,15 @@ namespace Susy
         msTrackPt = msTrackEta = msTrackPhi = 0;
 	idTrackQ  = msTrackQ = 0;
         thetaPV = etcone30 = ptcone30ElStyle = 0;
+        id_theta = id_phi = id_qoverp = 0;
+        ms_theta = ms_phi = ms_qoverp = 0;
+        isBadMuon = isCosmicMuon = false;
 	ms_up = ms_dn = id_up = id_dn = 0;
 
         Lepton::clear();
       }
 
-      ClassDef(Muon, 5);
+      ClassDef(Muon, 6);
   };
 
   // Tau class
@@ -495,24 +499,24 @@ namespace Susy
       Jet& operator=(const Jet &);
 
       float jvf;                // Jet vertex fraction
+      float detEta;             // Detector eta
       int truthLabel;           // Flavor truth label
       bool matchTruth;          // Matches truth jet
-      float detEta;             // Detector eta
 
       // btagging
       float sv0;                // SV0 btag weight
       float combNN;             // JetFitterCombNN btag weight
       float mv1;                // MV1 btag weight
 
-      // Add an isBad flag here??
-      bool isBadLoose;          // bad jet flag compted with SUSYTools
+      // Flags/variables for cleaning
+      bool isBadVeryLoose;      // bad jet flag computed with SUSYTools
+      bool isHotTile;           // tile hot spot flag computed with SUSYTools
+      float bch_corr_jet;       // Needed for dead region veto
 
       // Systematics
       float jes_up;             // jet energy scale up
       float jes_dn;             // jet energy scale down
       float jer;                // jet energy resolution
-
-      float bch_corr_jet;       // Needed for dead region veto
 
       void setState(int sys);
 
@@ -525,12 +529,13 @@ namespace Susy
         matchTruth = false;
         detEta = 0;
         sv0 = combNN = mv1 = 0;
-	jer = jes_up = jes_dn = 0;
+        isBadVeryLoose = isHotTile = false;
 	bch_corr_jet = 0;
+	jer = jes_up = jes_dn = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 5);
+      ClassDef(Jet, 6);
   };
 
   // Met class

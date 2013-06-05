@@ -219,6 +219,14 @@ Muon::Muon(const Muon &rhs):
   thetaPV(rhs.thetaPV),
   etcone30(rhs.etcone30),
   ptcone30ElStyle(rhs.ptcone30ElStyle),
+  id_theta(rhs.id_theta),
+  id_phi(rhs.id_phi),
+  id_qoverp(rhs.id_qoverp),
+  ms_theta(rhs.ms_theta),
+  ms_phi(rhs.ms_phi),
+  ms_qoverp(rhs.ms_qoverp),
+  isBadMuon(rhs.isBadMuon),
+  isCosmicMuon(rhs.isCosmicMuon),
   ms_up(rhs.ms_up),
   ms_dn(rhs.ms_dn),
   id_up(rhs.id_up),
@@ -244,6 +252,14 @@ Muon& Muon::operator=(const Muon &rhs)
     thetaPV = rhs.thetaPV;
     etcone30 = rhs.etcone30;
     ptcone30ElStyle = rhs.ptcone30ElStyle;
+    id_theta = rhs.id_theta;
+    id_phi = rhs.id_phi;
+    id_qoverp = rhs.id_qoverp;
+    ms_theta = rhs.ms_theta;
+    ms_phi = rhs.ms_phi;
+    ms_qoverp = rhs.ms_qoverp;
+    isBadMuon = rhs.isBadMuon;
+    isCosmicMuon = rhs.isCosmicMuon;
     ms_up = rhs.ms_up;
     ms_dn = rhs.ms_dn;
     id_up = rhs.id_up;
@@ -432,13 +448,15 @@ Photon& Photon::operator=(const Photon &rhs)
 Jet::Jet(const Jet &rhs):
   Particle(rhs),
   jvf(rhs.jvf),
+  detEta(rhs.detEta),
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
-  detEta(rhs.detEta),
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
-  isBadLoose(rhs.isBadLoose),
+  isBadVeryLoose(rhs.isBadVeryLoose),
+  isHotTile(rhs.isHotTile),
+  bch_corr_jet(rhs.bch_corr_jet),
   jes_up(rhs.jes_up),
   jes_dn(rhs.jes_dn),
   jer(rhs.jer)
@@ -452,13 +470,15 @@ Jet& Jet::operator=(const Jet &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     jvf  = rhs.jvf; 
+    detEta = rhs.detEta;
     truthLabel = rhs.truthLabel;
     matchTruth = rhs.matchTruth;
-    detEta = rhs.detEta;
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
     mv1 = rhs.mv1;
-    isBadLoose = rhs.isBadLoose;
+    isBadVeryLoose = rhs.isBadVeryLoose;
+    isHotTile = rhs.isHotTile;
+    bch_corr_jet = rhs.bch_corr_jet;
     jes_up = rhs.jes_up;
     jes_dn = rhs.jes_dn;
     jer = rhs.jer;
