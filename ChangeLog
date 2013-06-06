@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-06-06 Steve
+	* Tagging SusyNtuple-00-00-57
+
 2013-06-05 Steve
 	* Added missing variable statements in Jet copy/assignment constructors
 	* Added flags for applying object level cleaning cuts on the fly from SusyNt
