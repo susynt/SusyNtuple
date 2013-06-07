@@ -12,6 +12,7 @@
 		* hasBadMuon checks for bad muon
 	* Made object vectors in object selection methods const reference
 	* Updated Susy3LepCutflow to use new cleaning cuts
+	* Tagging SusyNtuple-00-00-58
 
 2013-06-06 Steve
 	* Tagging SusyNtuple-00-00-57
