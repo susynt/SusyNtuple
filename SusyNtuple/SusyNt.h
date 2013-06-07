@@ -334,7 +334,7 @@ namespace Susy
       float ms_qoverp;
 
       bool isBadMuon;           // Bad muon flag from SUSYTools
-      bool isCosmicMuon;        // Cosmic muon flag from SUSYTools
+      bool isCosmic;            // Cosmic muon flag from SUSYTools
       
       // Systematic sf
       float ms_up;              // MS Pt + sigma
@@ -359,7 +359,7 @@ namespace Susy
         thetaPV = etcone30 = ptcone30ElStyle = 0;
         id_theta = id_phi = id_qoverp = 0;
         ms_theta = ms_phi = ms_qoverp = 0;
-        isBadMuon = isCosmicMuon = false;
+        isBadMuon = isCosmic = false;
 	ms_up = ms_dn = id_up = id_dn = 0;
 
         Lepton::clear();

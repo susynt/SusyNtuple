@@ -216,7 +216,10 @@ void SusyNtAna::clearObjects()
 void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, TauID signalTauID)
 {
   // Get the Baseline objets
-  getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, sys, m_selectTaus);
+  //getBaselineObjects(&nt, m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, sys, m_selectTaus);
+  getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
+                     m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
+                     sys, m_selectTaus);
 
   // Now grab Signal objects
   // New signal tau prescription, fill both ID levels at once

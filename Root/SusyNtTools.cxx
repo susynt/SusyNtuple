@@ -121,7 +121,32 @@ float SusyNtTools::getEventWeightAB(const Event* evt)
 }
 
 /*--------------------------------------------------------------------------------*/
-// 'Overview' functions to make it easy for user to grab all objects
+// Full object selection methods
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, 
+                                     ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
+                                     ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
+                                     SusyNtSys sys, bool selectTaus)
+{
+  // Preselection
+  preElecs = getPreElectrons(susyNt, sys);
+  preMuons = getPreMuons(susyNt, sys);
+  preJets  = getPreJets(susyNt, sys);
+  if(selectTaus) taus = getPreTaus(susyNt, sys);
+  else taus.clear();
+
+  // Baseline objects
+  elecs = preElecs;
+  muons = preMuons;
+  jets  = preJets;
+
+  // Overlap removal
+  performOverlap(elecs, muons, taus, jets);
+
+  // Remove MSFOS < 12 GeV
+  removeSFOSPair(elecs, MLL_MIN);
+  removeSFOSPair(muons, MLL_MIN);
+}
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
                                      MuonVector& muons, TauVector& taus, JetVector& jets, 
@@ -146,8 +171,8 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
   //removeSFOSPair(taus, MLL_MIN);
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons,
-                                   TauVector& baseTaus, JetVector& baseJets,
+void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
+                                   const TauVector& baseTaus, const JetVector& baseJets,
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep, 
                                    uint nVtx, bool isMC, bool removeLepsFromIso, TauID tauID)
@@ -161,8 +186,8 @@ void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMu
 }
 /*--------------------------------------------------------------------------------*/
 // New signal tau prescription, fill both ID levels at once!
-void SusyNtTools::getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons,
-                                   TauVector& baseTaus, JetVector& baseJets,
+void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
+                                   const TauVector& baseTaus, const JetVector& baseJets,
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& mediumTaus, TauVector& tightTaus,
                                    JetVector& sigJets, JetVector& sigJets2Lep, 
@@ -296,7 +321,7 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Get Signal objects
 /*--------------------------------------------------------------------------------*/
-ElectronVector SusyNtTools::getSignalElectrons(ElectronVector& baseElecs, MuonVector& baseMuons, 
+ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
   ElectronVector sigElecs;
@@ -310,7 +335,7 @@ ElectronVector SusyNtTools::getSignalElectrons(ElectronVector& baseElecs, MuonVe
   return sigElecs;
 }
 /*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getSignalMuons(MuonVector& baseMuons, ElectronVector& baseElecs, 
+MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const ElectronVector& baseElecs, 
                                        uint nVtx, bool isMC, bool removeLepsFromIso)
 {
   MuonVector sigMuons;
@@ -324,7 +349,7 @@ MuonVector SusyNtTools::getSignalMuons(MuonVector& baseMuons, ElectronVector& ba
   return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
-TauVector SusyNtTools::getSignalTaus(TauVector& baseTaus, TauID id)
+TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauID id)
 {
   TauVector sigTaus;
   for(uint iTau=0; iTau < baseTaus.size(); iTau++){
@@ -337,7 +362,7 @@ TauVector SusyNtTools::getSignalTaus(TauVector& baseTaus, TauID id)
 }
 /*--------------------------------------------------------------------------------*/
 // New signal tau prescription, fill both ID levels at once!
-void SusyNtTools::getSignalTaus(TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus)
+void SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus)
 {
   for(uint iTau=0; iTau < baseTaus.size(); iTau++){
     Tau* tau = baseTaus[iTau];
@@ -349,7 +374,7 @@ void SusyNtTools::getSignalTaus(TauVector& baseTaus, TauVector& mediumTaus, TauV
   }
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets(JetVector& baseJets)
+JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
@@ -361,7 +386,7 @@ JetVector SusyNtTools::getSignalJets(JetVector& baseJets)
   return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets2Lep(JetVector& baseJets)
+JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
@@ -464,14 +489,16 @@ bool SusyNtTools::isSelectTau(const Tau* tau, TauID id)
 /*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalLepton(const Lepton* l, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+bool SusyNtTools::isSignalLepton(const Lepton* l, 
+                                 const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                  uint nVtx, bool isMC, bool removeLepsFromIso)
 {
   if(l->isEle()) return isSignalElectron( (Electron*) l, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
   else           return isSignalMuon( (Muon*) l, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso );
 };
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalElectron(const Electron* ele, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+bool SusyNtTools::isSignalElectron(const Electron* ele, 
+                                   const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                    uint nVtx, bool isMC, bool removeLepsFromIso)
 {
   if(!ele->tightPP) return false;
@@ -509,7 +536,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele, ElectronVector& baseElec
 }
 
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalMuon(const Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+bool SusyNtTools::isSignalMuon(const Muon* mu, 
+                               const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
   // Impact parameter
@@ -544,7 +572,8 @@ bool SusyNtTools::isSignalTau(const Tau* tau, TauID id)
 /*--------------------------------------------------------------------------------*/
 // Isolation corrections
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::elPtConeCorr(const Electron* e, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+float SusyNtTools::elPtConeCorr(const Electron* e, 
+                                const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                 uint /*nVtx*/, bool /*isMC*/, bool removeLeps)
 {
   float ptcone = e->ptcone30;
@@ -564,7 +593,8 @@ float SusyNtTools::elPtConeCorr(const Electron* e, ElectronVector& baseElectrons
   return ptcone;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::elEtTopoConeCorr(const Electron* e, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+float SusyNtTools::elEtTopoConeCorr(const Electron* e, 
+                                    const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                     uint nVtx, bool isMC, bool removeLeps)
 {
   float slope = isMC? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
@@ -580,7 +610,8 @@ float SusyNtTools::elEtTopoConeCorr(const Electron* e, ElectronVector& baseElect
   return etcone;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::muPtConeCorr(const Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+float SusyNtTools::muPtConeCorr(const Muon* mu, 
+                                const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                 uint nVtx, bool isMC, bool removeLeps)
 {
   float slope = isMC? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
@@ -601,7 +632,8 @@ float SusyNtTools::muPtConeCorr(const Muon* mu, ElectronVector& baseElectrons, M
   return ptcone;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::muEtConeCorr(const Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+float SusyNtTools::muEtConeCorr(const Muon* mu, 
+                                const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                                 uint nVtx, bool isMC, bool removeLeps)
 {
   float k1 = isMC? MUON_ETCONE30_K1_MC : MUON_ETCONE30_K1_DATA;
@@ -1066,11 +1098,63 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 }
 
 /*--------------------------------------------------------------------------------*/
+// Event cleaning cut flags
+/*--------------------------------------------------------------------------------*/
+int SusyNtTools::getCleaningCuts(int ntCutFlag,
+                                 const MuonVector& preMuons, const MuonVector& baseMuons,
+                                 const JetVector& preJets, const JetVector& baseJets)
+{
+  int cutMask = ECut_GRL | ECut_LarErr | ECut_TTC | ECut_GoodVtx | ECut_TileTrip;
+  int cutFlags = ntCutFlag & cutMask;
+  if(hasBadMuon(preMuons)) cutFlags |= ECut_BadMuon;
+  if(hasCosmicMuon(baseMuons)) cutFlags |= ECut_Cosmic;
+  if(hasHotSpotJet(preJets)) cutFlags |= ECut_HotSpot;
+  if(hasBadJet(baseJets)) cutFlags |= ECut_BadJet;
+  return cutFlags;
+}
+/*--------------------------------------------------------------------------------*/
+// Object level cleaning cut flag methods
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasBadMuon(const MuonVector& preMuons)
+{
+  uint nMu = preMuons.size();
+  for(uint i=0; i<nMu; i++){
+    if(preMuons[i]->isBadMuon) return true;
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasCosmicMuon(const MuonVector& baseMuons)
+{
+  uint nMu = baseMuons.size();
+  for(uint i=0; i<nMu; i++){
+    if(baseMuons[i]->isCosmic) return true;
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasHotSpotJet(const JetVector& preJets)
+{
+  uint nJet = preJets.size();
+  for(uint i=0; i<nJet; i++){
+    if(preJets[i]->isHotTile) return true;
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasBadJet(const JetVector& baseJets)
+{
+  uint nJet = baseJets.size();
+  for(uint i=0; i<nJet; i++){
+    if(baseJets[i]->isBadVeryLoose) return true;
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
 // Pass Dead Region based on met, jets and run number
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int RunNumber, bool isMC)
 {
-
   // Info taken from here:
   // https://indico.cern.ch/getFile.py/access?contribId=9&resId=0&materialId=slides&confId=223778
   // Loop over all selected jets with Pt > 30 GeV and BCH_Corr_JET > 0.05
@@ -1088,7 +1172,6 @@ bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int
   }
 
   return true;
-
 }
 
 /*--------------------------------------------------------------------------------*/

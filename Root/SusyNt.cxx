@@ -226,7 +226,7 @@ Muon::Muon(const Muon &rhs):
   ms_phi(rhs.ms_phi),
   ms_qoverp(rhs.ms_qoverp),
   isBadMuon(rhs.isBadMuon),
-  isCosmicMuon(rhs.isCosmicMuon),
+  isCosmic(rhs.isCosmic),
   ms_up(rhs.ms_up),
   ms_dn(rhs.ms_dn),
   id_up(rhs.id_up),
@@ -259,7 +259,7 @@ Muon& Muon::operator=(const Muon &rhs)
     ms_phi = rhs.ms_phi;
     ms_qoverp = rhs.ms_qoverp;
     isBadMuon = rhs.isBadMuon;
-    isCosmicMuon = rhs.isCosmicMuon;
+    isCosmic = rhs.isCosmic;
     ms_up = rhs.ms_up;
     ms_dn = rhs.ms_dn;
     id_up = rhs.id_up;

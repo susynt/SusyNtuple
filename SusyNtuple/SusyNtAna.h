@@ -171,6 +171,10 @@ class SusyNtAna : public TSelector, public SusyNtTools
     // Object collections
     //
 
+    ElectronVector      m_preElectrons;         // selected electrons before OR
+    MuonVector          m_preMuons;             // selected muons before OR
+    JetVector           m_preJets;              // selected jets before OR
+
     ElectronVector      m_baseElectrons;        // baseline electrons
     MuonVector          m_baseMuons;            // baseline muons
     LeptonVector        m_baseLeptons;          // baseline leptons

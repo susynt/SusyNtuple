@@ -1,12 +1,24 @@
 # vim: set noexpandtab:
 
+2013-06-07 Steve
+	* Added preElectrons, preMuons, preJets vectors to SusyNtAna
+	* New getBaselineObjects methods now fill the pre-object vectors above
+		* Needed for the on-the-fly cleaning cuts
+	* Added new methods for computing object cleaning cuts on-the-fly
+		* getCleaningCuts returns a recomputing cutFlag bitword
+		* hasHotSpotJet checks for hot tile jets
+		* hasBadJet checks for very loose bad jets
+		* hasCosmicMuon checks for cosmic flagged muon
+		* hasBadMuon checks for bad muon
+	* Made object vectors in object selection methods const reference
+
 2013-06-06 Steve
 	* Tagging SusyNtuple-00-00-57
 
 2013-06-05 Steve
 	* Added missing variable statements in Jet copy/assignment constructors
 	* Added flags for applying object level cleaning cuts on the fly from SusyNt
-		* isBadMuon and isCosmicMuon to Muon class
+		* isBadMuon and isCosmic to Muon class
 		* isBadVeryLoose and isHotTile to Jet class
 
 2013-05-24 Matt

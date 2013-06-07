@@ -59,26 +59,29 @@ class SusyNtTools
     JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
   
     // Get Baseline objects. Pre + overlap removal.
-    // Might be able to add options in case of overlap 
-    // removal differances in 2-lep vs. 3-lep.
-    // TODO: make baseline object references const
+    // First method provides the pre-selected objects before OR and baseline objects after OR.
+    void getBaselineObjects(Susy::SusyNtObject* susyNt, 
+                            ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
+                            ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
+                            SusyNtSys sys, bool selectTaus=false);
+    // Second method only provides the baseline objects after OR.
     void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
 			    MuonVector& muons, TauVector& taus, JetVector& jets, 
                             SusyNtSys sys, bool selectTaus=false);
   
     // Signal objects
-    ElectronVector getSignalElectrons(ElectronVector& baseElecs, MuonVector& baseMuons, 
+    ElectronVector getSignalElectrons(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                                       uint nVtx, bool isMC, bool removeLepsFromIso=false);
-    MuonVector     getSignalMuons(MuonVector& baseMuons, ElectronVector& baseElecs, 
+    MuonVector     getSignalMuons(const MuonVector& baseMuons, const ElectronVector& baseElecs, 
                                   uint nVtx, bool isMC, bool removeLepsFromIso=false);
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
-    TauVector      getSignalTaus(TauVector& baseTaus, TauID id=TauID_medium);
-    JetVector      getSignalJets(JetVector& baseJets);
-    JetVector      getSignalJets2Lep(JetVector& baseJets);
+    TauVector      getSignalTaus(const TauVector& baseTaus, TauID id=TauID_medium);
+    JetVector      getSignalJets(const JetVector& baseJets);
+    JetVector      getSignalJets2Lep(const JetVector& baseJets);
 
     // Get the signal objects
-    void getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons, 
-                          TauVector& baseTaus, JetVector& baseJets, 
+    void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
+                          const TauVector& baseTaus, const JetVector& baseJets, 
 			  ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false,
@@ -91,9 +94,9 @@ class SusyNtTools
 
     // New signal tau prescription, fill both ID levels at once
     // These will replace the methods above
-    void getSignalTaus(TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus);
-    void getSignalObjects(ElectronVector& baseElecs, MuonVector& baseMuons, 
-                          TauVector& baseTaus, JetVector& baseJets, 
+    void getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus);
+    void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
+                          const TauVector& baseTaus, const JetVector& baseJets, 
 			  ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& mediumTaus, TauVector& tightTaus, 
                           JetVector& sigJets, JetVector& sigJets2Lep,
@@ -107,19 +110,15 @@ class SusyNtTools
 
     // Check if signal object
     // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
-    bool isSignalLepton(const Susy::Lepton* l, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+    bool isSignalLepton(const Susy::Lepton* l, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                         uint nVtx, bool isMC, bool removeLepsFromIso=false);
-    bool isSignalElectron(const Susy::Electron* ele, ElectronVector& baseElectrons, 
-                          MuonVector& baseMuons, uint nVtx, bool isMC, bool removeLepsFromIso=false);
-    bool isSignalMuon(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+    bool isSignalElectron(const Susy::Electron* ele, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
+                          uint nVtx, bool isMC, bool removeLepsFromIso=false);
+    bool isSignalMuon(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                       uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalTau(const Susy::Tau* tau, TauID id=TauID_medium);
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
-
-    // To determine if there is baseline jets within bad FCAL region 
-    bool hasJetInBadFCAL(const JetVector& baseJets, uint run=206248, bool isMC=false);
-    bool isBadFCALJet(const Susy::Jet* jet);
 
 
     // Build Lepton vector - we should probably sort them here
@@ -134,13 +133,13 @@ class SusyNtTools
     //
     // Electron, Muon isolation correction for pileup
     //
-    float elPtConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, 
-                       MuonVector& baseMuons, uint nVtx, bool isMC, bool removeLeps=false);
-    float elEtTopoConeCorr(const Susy::Electron* e, ElectronVector& baseElectrons, 
-                           MuonVector& baseMuons, uint nVtx, bool isMC, bool removeLeps=false);
-    float muPtConeCorr(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+    float elPtConeCorr(const Susy::Electron* e, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                        uint nVtx, bool isMC, bool removeLeps=false);
-    float muEtConeCorr(const Susy::Muon* mu, ElectronVector& baseElectrons, MuonVector& baseMuons, 
+    float elEtTopoConeCorr(const Susy::Electron* e, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
+                           uint nVtx, bool isMC, bool removeLeps=false);
+    float muPtConeCorr(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
+                       uint nVtx, bool isMC, bool removeLeps=false);
+    float muEtConeCorr(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                        uint nVtx, bool isMC, bool removeLeps=false);
   
     // Get the Met, for the appropriate systematic
@@ -215,8 +214,6 @@ class SusyNtTools
       return (flag & mask) == mask;
     }
 
-    // Pass FEB dead region check
-    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber, bool isMC);
 
     // Additional event level checks added
     // in the event filtering has been turned off
@@ -239,6 +236,32 @@ class SusyNtTools
 
     // pass tile trip cut
     bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
+
+
+    //
+    // Object level cleaning cut methods
+    //
+
+    int getCleaningCuts(int ntCutFlag, 
+                        const MuonVector& preMuons, const MuonVector& baseMuons, 
+                        const JetVector& preJets, const JetVector& baseJets);
+
+    // TODO: finish these!
+    // Bad muon
+    bool hasBadMuon(const MuonVector& preMuons);
+    // Cosmic muons
+    bool hasCosmicMuon(const MuonVector& baseMuons);
+    // Tile hot spot
+    bool hasHotSpotJet(const JetVector& preJets);
+    // Bad jet
+    bool hasBadJet(const JetVector& baseJets);
+
+    // Pass FEB dead region check
+    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber, bool isMC);
+
+    // To determine if there is baseline jets within bad FCAL region 
+    bool hasJetInBadFCAL(const JetVector& baseJets, uint run=206248, bool isMC=false);
+    bool isBadFCALJet(const Susy::Jet* jet);
 
   
     //
