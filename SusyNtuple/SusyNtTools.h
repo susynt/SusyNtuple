@@ -242,9 +242,9 @@ class SusyNtTools
     // Object level cleaning cut methods
     //
 
-    int getCleaningCuts(int ntCutFlag, 
-                        const MuonVector& preMuons, const MuonVector& baseMuons, 
-                        const JetVector& preJets, const JetVector& baseJets);
+    int cleaningCutFlags(int ntCutFlag, 
+                         const MuonVector& preMuons, const MuonVector& baseMuons, 
+                         const JetVector& preJets, const JetVector& baseJets);
 
     // TODO: finish these!
     // Bad muon

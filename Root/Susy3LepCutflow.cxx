@@ -24,6 +24,7 @@ Susy3LepCutflow::Susy3LepCutflow() :
 {
   n_readin        = 0;
   n_pass_LAr      = 0;
+  n_pass_HotSpot  = 0;
   n_pass_BadJet   = 0;
   n_pass_BadMuon  = 0;
   n_pass_Cosmic   = 0;
@@ -114,11 +115,13 @@ void Susy3LepCutflow::Terminate()
 bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& jets, const Met* met)
 {
   // In this method place all event selection cuts.
-  //int flag = nt.evt()->evtFlag[NtSys_NOM];
-  int flag = nt.evt()->cutFlags[NtSys_NOM];
+  //int flag = nt.evt()->cutFlags[NtSys_NOM];
+  int flag = cleaningCutFlags();
 
   if( !passLAr(flag) ) return false;
   n_pass_LAr++;
+  if( !passHotSpot(flag) ) return false;
+  n_pass_HotSpot++;
   if( !passBadJet(flag) ) return false;
   n_pass_BadJet++;
   if( !passBadMuon(flag) ) return false;
@@ -126,14 +129,21 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
   if( !passCosmic(flag) ) return false;
   n_pass_Cosmic++;
   //if( hasJetInBadFCAL(m_baseJets, nt.evt()->run, nt.evt()->isMC) ) return false;
-  if( !passFCal() ) return false;
+  //if( !passFCal() ) return false;
   if( !passNLepCut(leptons) ) return false;
+  n_pass_nLep++;
   if( !passTrigger(leptons) ) return false;
+  n_pass_trig++;
   if( !passSFOSCut(leptons) ) return false;
+  n_pass_sfos++;
   if( !passMetCut(met) ) return false;
+  n_pass_met++;
   if( !passZCut(leptons) ) return false;
+  n_pass_z++;
   if( !passBJetCut() ) return false;
+  n_pass_bjet++;
   if( !passMtCut(leptons, met)) return false;
+  n_pass_mt++;
 
   if( m_writeOut ) {
     out << nt.evt()->run << " " << nt.evt()->event << endl;
@@ -156,7 +166,6 @@ bool Susy3LepCutflow::passNLepCut(const LeptonVector& leptons)
   uint nLep = leptons.size();
   if(m_nLepMin>=0 && nLep < m_nLepMin) return false;
   if(m_nLepMax>=0 && nLep > m_nLepMax) return false;
-  n_pass_nLep++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -166,7 +175,6 @@ bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons)
   //nt.evt()->print();
   //dumpSignalObjects();
   if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
-  n_pass_trig++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -175,7 +183,6 @@ bool Susy3LepCutflow::passSFOSCut(const LeptonVector& leptons)
   bool sfos = hasSFOS(leptons);
   if(m_vetoSFOS   &&  sfos) return false;
   if(m_selectSFOS && !sfos) return false;
-  n_pass_sfos++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -183,7 +190,6 @@ bool Susy3LepCutflow::passMetCut(const Met* met)
 {
   double missEt = met->lv().Et();
   if( m_metMin >= 0 && missEt < m_metMin ) return false;
-  n_pass_met++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -192,7 +198,6 @@ bool Susy3LepCutflow::passZCut(const LeptonVector& leptons)
   bool hasz = hasZ(leptons);
   if( m_vetoZ   &&  hasz ) return false;
   if( m_selectZ && !hasz ) return false;
-  n_pass_z++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -201,7 +206,6 @@ bool Susy3LepCutflow::passBJetCut( )
   bool hasB = hasBJet(m_signalJets);
   if( m_vetoB   &&  hasB ) return false;
   if( m_selectB && !hasB ) return false;
-  n_pass_bjet++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -219,8 +223,6 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
       }
     }
   }
-
-  n_pass_mt++;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -231,10 +233,11 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << endl;
   cout << "Susy3LepCutflow event counters"    << endl;
   cout << "read in     :  " << n_readin        << endl;
-  //cout << "pass LAr    :  " << n_pass_LAr      << endl;
-  //cout << "pass BadJet :  " << n_pass_BadJet   << endl;
-  //cout << "pass BadMu  :  " << n_pass_BadMuon  << endl;
-  //cout << "pass Cosmic :  " << n_pass_Cosmic   << endl;
+  cout << "pass LAr    :  " << n_pass_LAr      << endl;
+  cout << "pass HotSpot:  " << n_pass_HotSpot  << endl;
+  cout << "pass BadJet :  " << n_pass_BadJet   << endl;
+  cout << "pass BadMu  :  " << n_pass_BadMuon  << endl;
+  cout << "pass Cosmic :  " << n_pass_Cosmic   << endl;
   cout << "pass nLep   :  " << n_pass_nLep     << endl;
   cout << "pass trig   :  " << n_pass_trig     << "\t(" << 100.*n_pass_trig/n_pass_nLep << "%)" << endl;
   cout << "pass sfos   :  " << n_pass_sfos     << endl;

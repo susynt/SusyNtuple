@@ -1100,16 +1100,17 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
 /*--------------------------------------------------------------------------------*/
 // Event cleaning cut flags
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::getCleaningCuts(int ntCutFlag,
-                                 const MuonVector& preMuons, const MuonVector& baseMuons,
-                                 const JetVector& preJets, const JetVector& baseJets)
+int SusyNtTools::cleaningCutFlags(int ntCutFlag,
+                                  const MuonVector& preMuons, const MuonVector& baseMuons,
+                                  const JetVector& preJets, const JetVector& baseJets)
 {
   int cutMask = ECut_GRL | ECut_LarErr | ECut_TTC | ECut_GoodVtx | ECut_TileTrip;
   int cutFlags = ntCutFlag & cutMask;
-  if(hasBadMuon(preMuons)) cutFlags |= ECut_BadMuon;
-  if(hasCosmicMuon(baseMuons)) cutFlags |= ECut_Cosmic;
-  if(hasHotSpotJet(preJets)) cutFlags |= ECut_HotSpot;
-  if(hasBadJet(baseJets)) cutFlags |= ECut_BadJet;
+  if(!hasBadMuon(preMuons))     cutFlags |= ECut_BadMuon;
+  if(!hasCosmicMuon(baseMuons)) cutFlags |= ECut_Cosmic;
+  if(!hasHotSpotJet(preJets))   cutFlags |= ECut_HotSpot;
+  if(!hasBadJet(baseJets))      cutFlags |= ECut_BadJet;
+  //cout << "cutFlags " << cutFlags << endl;
   return cutFlags;
 }
 /*--------------------------------------------------------------------------------*/

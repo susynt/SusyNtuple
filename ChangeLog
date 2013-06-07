@@ -5,12 +5,13 @@
 	* New getBaselineObjects methods now fill the pre-object vectors above
 		* Needed for the on-the-fly cleaning cuts
 	* Added new methods for computing object cleaning cuts on-the-fly
-		* getCleaningCuts returns a recomputing cutFlag bitword
+		* cleaningCutFlags returns a recomputed cutFlag bitword
 		* hasHotSpotJet checks for hot tile jets
 		* hasBadJet checks for very loose bad jets
 		* hasCosmicMuon checks for cosmic flagged muon
 		* hasBadMuon checks for bad muon
 	* Made object vectors in object selection methods const reference
+	* Updated Susy3LepCutflow to use new cleaning cuts
 
 2013-06-06 Steve
 	* Tagging SusyNtuple-00-00-57

@@ -248,6 +248,16 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, TauID signa
   std::sort(m_signalJets.begin(), m_signalJets.end(), comparePt);
   std::sort(m_signalJets2Lep.begin(), m_signalJets2Lep.end(), comparePt);
 }
+/*--------------------------------------------------------------------------------*/
+// Get on-the-fly cleaning cut flags. Select objects first!
+/*--------------------------------------------------------------------------------*/
+int SusyNtAna::cleaningCutFlags()
+{
+  return SusyNtTools::cleaningCutFlags(nt.evt()->cutFlags[NtSys_NOM],
+                                       m_preMuons, m_baseMuons,
+                                       m_preJets, m_baseJets);
+}
+
 
 /*--------------------------------------------------------------------------------*/
 // Dump timer information
