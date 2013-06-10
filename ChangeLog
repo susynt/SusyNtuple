@@ -1,6 +1,11 @@
 # vim: set noexpandtab:
 
 2013-06-10 Steve
+	* Corrected overlap removal with taus (thanks Estel)
+		* Removal of taus from leptons done before lep-jet OR
+		* Removal of jets from taus is still kept at the end
+
+2013-06-10 Steve
 	* Added control for ID level of all three tau selection cuts: jetBDT, eleBDT, muVeto
 	* Commented out getSignalObjects method which doesn't save baseline objects
 		* Baseline objects are needed for cleaning cuts
