@@ -1,5 +1,17 @@
 # vim: set noexpandtab:
 
+2013-06-10 Steve
+	* Added control for ID level of all three tau selection cuts: jetBDT, eleBDT, muVeto
+	* Commented out getSignalObjects method which doesn't save baseline objects
+		* Baseline objects are needed for cleaning cuts
+	* Modified default tau selection
+		* Baseline and signal taus are the same: medium ID with loose ele BDT
+			* These taus are used for the overlap removal!
+		* Tight taus have all tight ID
+	* Modified overlap removal prescription
+		* Tau overlap done last to de-couple taus and leptons for consistent bkg estimations
+	* Tagging SusyNtuple-00-00-59
+
 2013-06-07 Steve
 	* Added preElectrons, preMuons, preJets vectors to SusyNtAna
 	* New getBaselineObjects methods now fill the pre-object vectors above

@@ -175,12 +175,13 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
                                    const TauVector& baseTaus, const JetVector& baseJets,
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep, 
-                                   uint nVtx, bool isMC, bool removeLepsFromIso, TauID tauID)
+                                   uint nVtx, bool isMC, bool removeLepsFromIso, 
+                                   TauID tauJetID, TauID tauEleID, TauID tauMuoID)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
-  sigTaus  = getSignalTaus(baseTaus, tauID);
+  sigTaus  = getSignalTaus(baseTaus, tauJetID, tauEleID, tauMuoID);
   sigJets  = getSignalJets(baseJets);
   sigJets2Lep = getSignalJets2Lep(baseJets);
 }
@@ -202,7 +203,10 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
   getSignalTaus(baseTaus, mediumTaus, tightTaus);
 }
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs, 
+// This method cannot be used anymore. 
+// Analyzers must store the baseline objects for cleaning cuts!
+/*--------------------------------------------------------------------------------*/
+/*void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs, 
 				   MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
                                    JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
                                    bool selectTaus, bool removeLepsFromIso, TauID tauID)
@@ -224,7 +228,8 @@ void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElec
   sigTaus  = getSignalTaus(taus, tauID);
   sigJets  = getSignalJets(jets);
   sigJets2Lep = getSignalJets2Lep(jets);
-}
+}*/
+
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets)
 {
@@ -232,12 +237,6 @@ void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVe
   e_e_overlap(elecs, E_E_DR);
   // Remove jets from electrons
   e_j_overlap(elecs, jets, J_E_DR, true);
-  // Remove taus from electrons
-  t_e_overlap(taus, elecs, T_E_DR);
-  // Remove taus from muons
-  t_m_overlap(taus, muons, T_M_DR);
-  // Remove jets from taus
-  t_j_overlap(taus, jets, J_T_DR, true);
   // Remove electrons from jets
   e_j_overlap(elecs, jets, E_J_DR, false);
   // Remove muons from jets
@@ -246,6 +245,12 @@ void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVe
   e_m_overlap(elecs, muons, E_M_DR);
   // Remove muons from muons
   m_m_overlap(muons, M_M_DR);
+  // Remove taus from electrons
+  t_e_overlap(taus, elecs, T_E_DR);
+  // Remove taus from muons
+  t_m_overlap(taus, muons, T_M_DR);
+  // Remove jets from taus
+  t_j_overlap(taus, jets, J_T_DR, true);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -349,12 +354,12 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const Electr
   return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
-TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauID id)
+TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauID tauJetID, TauID tauEleID, TauID tauMuoID)
 {
   TauVector sigTaus;
   for(uint iTau=0; iTau < baseTaus.size(); iTau++){
     Tau* tau = baseTaus[iTau];
-    if(isSignalTau(tau, id)){
+    if(isSignalTau(tau, tauJetID, tauEleID, tauMuoID)){
       sigTaus.push_back(tau);
     }
   }
@@ -366,11 +371,13 @@ void SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus
 {
   for(uint iTau=0; iTau < baseTaus.size(); iTau++){
     Tau* tau = baseTaus[iTau];
-    if(isSignalTau(tau, TauID_tight)){
+    // For now, tight taus are defined as all tight criteria
+    if(isSignalTau(tau, TauID_tight, TauID_tight, TauID_tight)){
       tightTaus.push_back(tau);
       mediumTaus.push_back(tau);
     }
-    else if(isSignalTau(tau, TauID_medium)) mediumTaus.push_back(tau);
+    // For now, medium taus use loose ele BDT
+    else if(isSignalTau(tau, TauID_medium, TauID_loose, TauID_medium)) mediumTaus.push_back(tau);
   }
 }
 /*--------------------------------------------------------------------------------*/
@@ -449,41 +456,51 @@ Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useN
 /*--------------------------------------------------------------------------------*/
 // Method for applying tau BDT selection only
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isTauBDT(const Tau* tau, TauID id)
+bool SusyNtTools::isTauBDT(const Tau* tau, TauID tauJetID, TauID tauEleID, TauID tauMuoID)
 {
-  if(id == TauID_loose){
-    if(tau->nTrack == 1 && tau->eleBDTLoose != 0) return false;
+  // Jet BDT cut
+  if(tauJetID == TauID_loose){
     if(tau->jetBDTSigLoose != 1) return false;
-  }
-  else if(id == TauID_medium){
-    if(tau->muonVeto != 0) return false;
-    if(tau->nTrack == 1 && tau->eleBDTMedium != 0) return false;
+  } else if(tauJetID == TauID_medium){
     if(tau->jetBDTSigMedium != 1) return false;
-  }
-  else if(id == TauID_tight){
-    if(tau->muonVeto != 0) return false;
-    if(tau->nTrack == 1 && tau->eleBDTTight != 0) return false;
+  } else if(tauJetID == TauID_tight){
     if(tau->jetBDTSigTight != 1) return false;
   }
+
+  // Ele BDT cut
+  if(tauEleID == TauID_loose){
+    if(tau->nTrack == 1 && tau->eleBDTLoose != 0) return false;
+  } else if(tauEleID == TauID_medium){
+    if(tau->nTrack == 1 && tau->eleBDTMedium != 0) return false;
+  } else if(tauEleID == TauID_tight){
+    if(tau->nTrack == 1 && tau->eleBDTTight != 0) return false;
+  }
+
+  // Muon veto
+  if(tauMuoID >= TauID_medium){
+    if(tau->muonVeto != 0) return false;
+  }
+
   // none selection can be used for container taus
-  else if(id == TauID_none){
-  }
-  else{
-    cout << "SusyNtTools::WARNING - tau ID " << id << " not supported!" << endl;
-    return false;
-  }
+  //else if(id == TauID_none){
+  //}
+  //else{
+  //  cout << "SusyNtTools::WARNING - tau ID " << id << " not supported!" << endl;
+  //  return false;
+  //}
+
   return true;
 }
 
 /*--------------------------------------------------------------------------------*/
 // Check if lepton is selected
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSelectTau(const Tau* tau, TauID id)
+bool SusyNtTools::isSelectTau(const Tau* tau, TauID tauJetID, TauID tauEleID, TauID tauMuoID)
 {
   // At the moment, we only apply pt and BDT here.
   // TODO: Make the pt cut configurable
   if(tau->Pt() < TAU_PT_CUT) return false;
-  return isTauBDT(tau, id);
+  return isTauBDT(tau, tauJetID, tauEleID, tauMuoID);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -564,10 +581,10 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
   return true;
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalTau(const Tau* tau, TauID id)
+bool SusyNtTools::isSignalTau(const Tau* tau, TauID tauJetID, TauID tauEleID, TauID tauMuoID)
 {
   // At the moment, signal taus only use additional BDT selection
-  return isTauBDT(tau, id);
+  return isTauBDT(tau, tauJetID, tauEleID, tauMuoID);
 }
 /*--------------------------------------------------------------------------------*/
 // Isolation corrections

@@ -66,7 +66,7 @@ class SusyNtTools
                             SusyNtSys sys, bool selectTaus=false);
     // Second method only provides the baseline objects after OR.
     void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
-			    MuonVector& muons, TauVector& taus, JetVector& jets, 
+                            MuonVector& muons, TauVector& taus, JetVector& jets, 
                             SusyNtSys sys, bool selectTaus=false);
   
     // Signal objects
@@ -75,38 +75,44 @@ class SusyNtTools
     MuonVector     getSignalMuons(const MuonVector& baseMuons, const ElectronVector& baseElecs, 
                                   uint nVtx, bool isMC, bool removeLepsFromIso=false);
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
-    TauVector      getSignalTaus(const TauVector& baseTaus, TauID id=TauID_medium);
+    TauVector      getSignalTaus(const TauVector& baseTaus, TauID tauJetID=TauID_medium, 
+                                 TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     JetVector      getSignalJets(const JetVector& baseJets);
     JetVector      getSignalJets2Lep(const JetVector& baseJets);
 
     // Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                           const TauVector& baseTaus, const JetVector& baseJets, 
-			  ElectronVector& sigElecs, MuonVector& sigMuons, 
+                          ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false,
-                          TauID tauID=TauID_medium);
-    void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
-			  MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
-                          JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
-                          bool selectTaus=false, bool removeLepsFromIso=false,
-                          TauID tauID=TauID_medium);
+                          TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
+    // This method cannot be used anymore because it doesn't provide the baseline objects after OR.
+    // Analyzers need these baseline objects for cleaning cuts.
+    //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
+    //                      MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
+    //                      JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
+    //                      bool selectTaus=false, bool removeLepsFromIso=false,
+    //                      TauID tauID=TauID_medium);
 
     // New signal tau prescription, fill both ID levels at once
     // These will replace the methods above
     void getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus);
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                           const TauVector& baseTaus, const JetVector& baseJets, 
-			  ElectronVector& sigElecs, MuonVector& sigMuons, 
+                          ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& mediumTaus, TauVector& tightTaus, 
                           JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false);
     
     // Check if selected object
-    bool isTauBDT(const Susy::Tau* tau, TauID id=TauID_loose);
+    bool isTauBDT(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
+                  TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     // TODO: add new selection methods for light leptons and jets
     //bool isSelectLepton()
-    bool isSelectTau(const Susy::Tau* tau, TauID id=TauID_loose);
+    //bool isSelectTau(const Susy::Tau* tau, TauID id=TauID_medium);
+    bool isSelectTau(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
+                     TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
 
     // Check if signal object
     // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
@@ -116,7 +122,8 @@ class SusyNtTools
                           uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalMuon(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                       uint nVtx, bool isMC, bool removeLepsFromIso=false);
-    bool isSignalTau(const Susy::Tau* tau, TauID id=TauID_medium);
+    bool isSignalTau(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
+                     TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
 
@@ -246,7 +253,6 @@ class SusyNtTools
                          const MuonVector& preMuons, const MuonVector& baseMuons, 
                          const JetVector& preJets, const JetVector& baseJets);
 
-    // TODO: finish these!
     // Bad muon
     bool hasBadMuon(const MuonVector& preMuons);
     // Cosmic muons
@@ -330,8 +336,8 @@ class SusyNtTools
     bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
     
     float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-		 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
-		 BTagSys sys=BTag_NOM);    
+                 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
+                 BTagSys sys=BTag_NOM);    
 
     // 2 Lepton jet methods and counters
     bool isCentralLightJet(const Susy::Jet* jet);
@@ -353,12 +359,12 @@ class SusyNtTools
 
     // Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
-		    int opt=0, float ptJetCut=0, float mEffCut=100);
+                    int opt=0, float ptJetCut=0, float mEffCut=100);
     
     bool toptag0j(TLorentzVector v1l, TLorentzVector v2l, TVector2 met);
   
     bool toptag2j(double ptjcut, double meffcut, TLorentzVector v1l, TLorentzVector v2l,
-		  TLorentzVector v1j, TLorentzVector v2j, TVector2 met, int iopt1);
+                  TLorentzVector v1j, TLorentzVector v2j, TVector2 met, int iopt1);
   
     float calcMCT(TLorentzVector v1, TLorentzVector v2);
   
