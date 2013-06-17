@@ -1,5 +1,13 @@
 # vim: set noexpandtab:
 
+2013-06-17 Steve
+	* Object selection updates for 3L
+		* Both 2L/3L now using unbiased IP
+		* Signal jets now require jvf>0.5 only for jets with pt<50 and |detEta|<2.4
+			* Still keeping pt>20 and |eta|<2.5 otherwise
+	* Cleaned up isSignal ele and mu methods
+	* Added new D3PDTag enum value D3PD_p1512
+
 2013-06-10 Steve
 	* Corrected overlap removal with taus (thanks Estel)
 		* Removal of taus from leptons done before lep-jet OR

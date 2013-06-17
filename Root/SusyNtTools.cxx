@@ -522,32 +522,26 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
 
   // Impact parameter
   if(m_doIPCut){
-    // 2 lep needs unbiased IP
-    if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
-    if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    // All ana using unbiased IP cuts
+    //if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
+    //if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    if(fabs(ele->d0Sig(true)) >= ELECTRON_D0SIG_CUT) return false;
+    if(fabs(ele->z0SinTheta(true)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
   }
 
   float pt = ele->Pt();
 
   // Relative ptcone iso
-  float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-  if(m_doPtconeCut && ptcone30/pt >= ELECTRON_PTCONE30_PT_CUT) return false;
+  if(m_doPtconeCut){ // true by default
+    float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(ptcone30/pt >= ELECTRON_PTCONE30_PT_CUT) return false;
+  }
 
   // Topo etcone isolation cut
-  float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-  if(m_doElEtconeCut && etcone/pt >= ELECTRON_TOPOCONE30_PT_CUT) return false;
-
-  // Trying new sliding etcone iso
-  //float a = 0.0067;
-  //float b = 0.133;
-  //float a = 0.005; // 'looser' cuts
-  //float b = 0.15;  // 'looser' cuts
-  //float c = 0.3;
-  //if(m_doElEtconeCut && etcone/pt >= min(a*pt+b,c)) return false;
-
-  // 2011 cuts, for testing
-  //if(ele->ptcone20/pt > 0.1) return false;
-  //if(fabs(ele->d0Sig()) >= 6) return false;
+  if(m_doElEtconeCut){ // true by default
+    float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(etcone/pt >= ELECTRON_TOPOCONE30_PT_CUT) return false;
+  }
 
   return true;
 }
@@ -559,24 +553,26 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
 {
   // Impact parameter
   if(m_doIPCut){
-    // 2 lep needs unbiased IP
-    if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
-    if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
+    // All ana using unbiased IP
+    //if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
+    //if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
+    if(fabs(mu->d0Sig(true)) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta(true)) >= MUON_Z0_SINTHETA_CUT) return false;
   }
 
   // ptcone isolation cut with pileup correction
-  float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-  if(m_doPtconeCut && ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
-  //float ptcone30 = mu->ptcone30ElStyle;
-  //if(m_doPtconeCut && ptcone30/mu->Pt() >= 0.16) return false;
+  if(m_doPtconeCut){ // true by default
+    float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+    //float ptcone30 = mu->ptcone30ElStyle;
+    //if(ptcone30/mu->Pt() >= 0.16) return false;
+  }
 
   // etcone isolation cut - not applied by default, but here for studies
-  float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-  if(m_doMuEtconeCut && etcone30/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
-
-  // 2011 cuts, for testing
-  //if(mu->ptcone20 >= 1.8) return false;
-  //if(fabs(mu->d0Sig()) >= 3) return false;
+  if(m_doMuEtconeCut){ // FALSE by default
+    float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    if(m_doMuEtconeCut && etcone30/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
+  }
 
   return true;
 }
@@ -671,13 +667,17 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalJet(const Jet* jet)
 {
-  // Two lep and three lep have different requirements
-  // TODO: These will likely be merged
-  float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
+  // For now, 2lep analysis is not using this jet definition
+  //float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
+  float ptCut = JET_SIGNAL_PT_CUT_3L;
   
   if(jet->Pt() < ptCut) return false;
   if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
-  if(jet->jvf < JET_JVF_CUT) return false;
+
+  // JVF cut is now only to be applied to jets with pt < 50 GeV and |detEta| < 2.4
+  // Note that I'm just hardcoding the 50 and 2.4 requirements. I don't expect those to change
+  //if(jet->jvf < JET_JVF_CUT) return false;
+  if(jet->Pt() < 50 && fabs(jet->detEta) < 2.4 && jet->jvf < JET_JVF_CUT) return false; 
   return true;
 }
 
