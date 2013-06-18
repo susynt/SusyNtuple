@@ -7,6 +7,7 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
+#include "SusyNtuple/BTagCalib2013.h"
 
 /*
 
@@ -21,7 +22,9 @@ class SusyNtTools
 
     // Constructor and destructor
     SusyNtTools();
-    virtual ~SusyNtTools(){};
+    virtual ~SusyNtTools(){
+      if(m_btagTool) delete m_btagTool;
+    };
 
     //
     // Set Analysis type to determine selection
@@ -335,9 +338,10 @@ class SusyNtTools
     bool hasBJet(const JetVector& jets, float weight=MV1_80);
     bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
     
-    float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-                 std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
-                 BTagSys sys=BTag_NOM);    
+    //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
+    //std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
+    //BTagSys sys=BTag_NOM);    
+    float bTagSF(const Susy::Event*, const JetVector& jets, bool isSherpa, BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
     bool isCentralLightJet(const Susy::Jet* jet);
@@ -397,6 +401,8 @@ class SusyNtTools
     bool m_doElEtconeCut;               // etcone isolation cuts for electrons
     bool m_doMuEtconeCut;               // etcone isolation cuts for muons
     bool m_doIPCut;                     // impact parameter cuts
+
+    BTagCalib2013* m_btagTool;          // BTag tool
 
 };
 

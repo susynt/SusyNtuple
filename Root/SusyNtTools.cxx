@@ -7,8 +7,8 @@
 #include "Mt2/mt2_bisect.h" 
 
 #include "SusyNtuple/SusyNtTools.h"
-#include "SusyNtuple/BTagCalib.h"
-#include "SusyNtuple/BTagCalibp1181.h"
+//#include "SusyNtuple/BTagCalib.h"
+//#include "SusyNtuple/BTagCalibp1181.h"
 
 using namespace std;
 using namespace Susy;
@@ -22,8 +22,17 @@ SusyNtTools::SusyNtTools() :
         m_doPtconeCut(true),
         m_doElEtconeCut(true),
         m_doMuEtconeCut(false),
-        m_doIPCut(true)
+        m_doIPCut(true),
+	m_btagTool(NULL)
 {
+
+  // Initialize b-tag tool
+  string rootcoredir = getenv("ROOTCOREDIR");
+  string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
+  string calibFolder = rootcoredir + "/data/SusyNtuple/";
+  bool isJVF = true;
+  m_btagTool = new BTagCalib2013("MV1", calibration, calibFolder, "0_3511", isJVF, MV1_80);
+
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -1461,9 +1470,10 @@ bool SusyNtTools::isBJet(const Jet* jet, float weight)
   return jet->mv1 > weight;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
-			  std::string taggerName, std::string OP, float opval,
-			  BTagSys sys)
+//float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
+//			  std::string taggerName, std::string OP, float opval,
+//			  BTagSys sys)
+float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool isSherpa, BTagSys sys)
 {
   if(!evt->isMC) return 1;
   static const float MEV = 1000;
@@ -1484,52 +1494,21 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF
     pdgid_btag.push_back(jets[i]->truthLabel);
   }
 
-  string rootcoredir = getenv("ROOTCOREDIR"); 
-  string envFile;
-
-  if(m_anaType == Ana_2Lep){
-    envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  }
-  else{
-    if(useNoJVF) envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_noJVF.env";
-    else         envFile = rootcoredir + "/data/SusyNtuple/BTagCalibration_wJVF.env";
-  }
-
-
-  string datFile = rootcoredir + "/data/SusyNtuple/";
-  pair<vector<float>,vector<float> > wgtbtag;
-
-  if(m_anaType == Ana_2Lep)
-    wgtbtag = BTagCalib::BTagCalibrationFunction(pt_btag,
-						 eta_btag,
-						 val_btag,
-						 pdgid_btag,
-						 taggerName,
-						 OP,
-						 opval,
-						 !useNoJVF,
-						 envFile, 
-						 datFile);
+  pair< vector<float>, vector<float> >* wgtbtag = m_btagTool->BTagCalibrationFunction(pt_btag,
+						eta_btag,
+						val_btag,
+						pdgid_btag,
+						isSherpa);
   
-  else
-    wgtbtag = BTagCalibp1181::BTagCalibrationFunction(pt_btag,
-						      eta_btag,
-						      val_btag,
-						      pdgid_btag,
-						      taggerName,
-						      OP,
-						      opval,
-						      envFile, 
-						      datFile);
   
-  if( sys == BTag_BJet_DN ) return wgtbtag.first.at(1);  
-  if( sys == BTag_CJet_DN ) return wgtbtag.first.at(2);  
-  if( sys == BTag_LJet_DN ) return wgtbtag.first.at(3);  
-  if( sys == BTag_BJet_UP ) return wgtbtag.first.at(4); 
-  if( sys == BTag_CJet_UP ) return wgtbtag.first.at(5); 
-  if( sys == BTag_LJet_UP ) return wgtbtag.first.at(6); 
+  if( sys == BTag_BJet_DN ) return wgtbtag->first.at(1);  
+  if( sys == BTag_CJet_DN ) return wgtbtag->first.at(2);  
+  if( sys == BTag_LJet_DN ) return wgtbtag->first.at(3);  
+  if( sys == BTag_BJet_UP ) return wgtbtag->first.at(4); 
+  if( sys == BTag_CJet_UP ) return wgtbtag->first.at(5); 
+  if( sys == BTag_LJet_UP ) return wgtbtag->first.at(6); 
 
-  return wgtbtag.first.at(0); 
+  return wgtbtag->first.at(0); 
 }
 
 /*--------------------------------------------------------------------------------*/

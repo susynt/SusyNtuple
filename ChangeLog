@@ -1,6 +1,7 @@
 # vim: set noexpandtab:
 2013-06-18 Matt
 	* Moved to cutting on ptcone30ElStyle for muons for 2 lep analysis.
+	* Updated btag sf and the bTagSF method
 	
 2013-06-17 Steve
 	* Object selection updates for 3L
