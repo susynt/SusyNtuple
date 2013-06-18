@@ -562,10 +562,14 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
 
   // ptcone isolation cut with pileup correction
   if(m_doPtconeCut){ // true by default
-    float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-    if(ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
-    //float ptcone30 = mu->ptcone30ElStyle;
-    //if(ptcone30/mu->Pt() >= 0.16) return false;
+    if(m_anaType == Ana_3Lep){
+      float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+      if(ptcone30/mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
+    }
+    else{
+      float ptcone30 = mu->ptcone30ElStyle; // no corrections at the moment
+      if(ptcone30/mu->Pt() >= MUON_PTCONE30ELSTYLE_PT_CUT) return false;
+    }
   }
 
   // etcone isolation cut - not applied by default, but here for studies
