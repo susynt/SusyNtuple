@@ -61,7 +61,7 @@ namespace Susy
       // TruthMet variables
       D3PDReader::VarHandle< std::vector<TruthMet>* >   tmt;
 
-      ClassDef(SusyNtObject,2);
+      ClassDef(SusyNtObject, 3);
 
     protected:
 

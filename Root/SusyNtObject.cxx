@@ -8,8 +8,6 @@ using namespace Susy;
 
 /*--------------------------------------------------------------------------------*/
 // SusyNtObject constructor for writing only.
-// This is going to get ugly when I add all the systematics. I may need a better plan
-// Maybe I can use a preprocessor command to generate this code for me
 /*--------------------------------------------------------------------------------*/
 SusyNtObject::SusyNtObject():
         evt(this, "event", 0),

@@ -1,5 +1,5 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: VarHandle.icc 242132 2012-01-12 13:37:55Z lucian $
+// $Id: CodeGenerator_v2_constants.h 510583 2012-07-18 09:12:16Z krasznaa $
 #ifndef D3PDREADER_VARHANDLE_ICC
 #define D3PDREADER_VARHANDLE_ICC
 
@@ -10,6 +10,7 @@
 
 // ROOT include(s):
 #include <TObject.h>
+#include <TClass.h>
 #include <TTree.h>
 #include <TBranch.h>
 
@@ -21,6 +22,7 @@ namespace D3PDReader {
       : VarHandleBase( parent, name, master ),
         fVariable() {
 
+      SetType( RootCppType( typeid( Type ).name() ) );
    }
 
    template< typename Type >
@@ -49,44 +51,19 @@ namespace D3PDReader {
       if( branch ) return branch;
 
       branch = tree->Branch( GetName(), &fVariable,
-                             TString::Format( "%s/%s", GetName(),
-                                              RootType( typeid( Type ).name() ) ) );
+                             ::TString::Format( "%s/%s", GetName(),
+                                                RootType( typeid( Type ).name() ) ) );
       if( ! branch ) {
          fParent->Error( "WriteTo",
                          "Couldn't add variable %s to tree %s",
                          GetName(), tree->GetName() );
-      }
-      return branch;
-   }
-
-   template< typename Type >
-   ::Bool_t VarHandle< Type >::IsAvailable() const {
-
-      if( ! fFromInput ) return kTRUE;
-      switch( fAvailable ) {
-
-      case AVAILABLE:
-         return kTRUE;
-         break;
-      case UNAVAILABLE:
-         return kFALSE;
-         break;
-      case UNKNOWN:
-         {
-            if( ! fInTree ) return kTRUE;
-            ::Bool_t temp = kFALSE;
-            fAvailable = ( temp = fInTree->GetBranch( GetName() ) ) ? AVAILABLE :
-                         UNAVAILABLE;
-            return temp;
+      } else {
+         for( ::Long64_t i = 0; i < tree->GetEntries(); ++i ) {
+            branch->Fill();
          }
-         break;
-      default:
-         // This should really never be reached...
-         break;
       }
 
-      // It's just here to make the compiler happy:
-      return kFALSE;
+      return branch;
    }
 
    template< typename Type >
@@ -95,22 +72,13 @@ namespace D3PDReader {
       if( ! fFromInput ) return fVariable;
 
       if( ! fInBranch ) {
-         if( ! fInTree ) {
-            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
+         if( ! ConnectVariable( &fVariable, TClass::GetClass( typeid( Type ) ),
+                                TDataType::GetType( typeid( Type ) ), kFALSE ) ) {
+            fParent->Error( ::TString( GetName() ) + "()", "Failed connecting to D3PD" );
             return fVariable;
          }
-         if( ! fInTree->GetBranch( GetName() ) ) {
-            fParent->Error( ::TString( GetName() ) + "()",
-                            "The following variable doesn't exist: %s",
-                            GetName() );
-            return fVariable;
-         }
-         fInTree->SetBranchStatus( GetName(), 1 );
-         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
       }
-      if( *fMaster != fInBranch->GetReadEntry() ) {
-         fInBranch->GetEntry( *fMaster );
-      }
+      UpdateBranch();
 
       return fVariable;
    }
@@ -121,76 +89,32 @@ namespace D3PDReader {
       if( ! fFromInput ) return fVariable;
 
       if( ! fInBranch ) {
-         if( ! fInTree ) {
-            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
+         if( ! ConnectVariable( &fVariable, TClass::GetClass( typeid( Type ) ),
+                                TDataType::GetType( typeid( Type ) ), kFALSE ) ) {
+            fParent->Error( ::TString( GetName() ) + "()", "Failed connecting to D3PD" );
             return fVariable;
          }
-         if( ! fInTree->GetBranch( GetName() ) ) {
-            fParent->Error( ::TString( GetName() ) + "()",
-                            "The following variable doesn't exist: %s",
-                            GetName() );
-            return fVariable;
-         }
-         fInTree->SetBranchStatus( GetName(), 1 );
-         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
       }
-      if( *fMaster != fInBranch->GetReadEntry() ) {
-         fInBranch->GetEntry( *fMaster );
-      }
+      UpdateBranch();
 
       return fVariable;
    }
 
    template< typename Type >
-   const char* VarHandle< Type >::RootType( const char* typeid_type ) const {
+   void VarHandle< Type >::ReadCurrentEntry() const {
 
-      if( strlen( typeid_type ) != 1 ) {
-         fParent->Error( "RootType", "Received complex object description" );
-         return "";
-      }
+      if( IsAvailable() ) {
+         this->operator()();
+      } else {
+         fVariable = 0;      }
+      return;
+   }
 
-      switch( typeid_type[ 0 ] ) {
+   template< typename Type >
+   void VarHandle< Type >::Clear() {
 
-      case 'c':
-         return "B";
-         break;
-      case 'h':
-         return "b";
-         break;
-      case 's':
-         return "S";
-         break;
-      case 't':
-         return "s";
-         break;
-      case 'i':
-         return "I";
-         break;
-      case 'j':
-         return "i";
-         break;
-      case 'f':
-         return "F";
-         break;
-      case 'd':
-         return "D";
-         break;
-      case 'x':
-         return "L";
-         break;
-      case 'y':
-         return "l";
-         break;
-      case 'b':
-         return "O";
-         break;
-
-      }
-
-      fParent->Error( "RootType",
-                      "Unknown primitive type encountered: %s",
-                      typeid_type );
-      return "";
+      this->operator()() = 0;
+      return;
    }
 
    template< typename Type >
@@ -199,6 +123,12 @@ namespace D3PDReader {
       : VarHandleBase( parent, name, master ),
         fVariable( 0 ) {
 
+      int status;
+      char* type_name = abi::__cxa_demangle( typeid( Type ).name(), 0, 0, &status );
+      if( ! status ) {
+         SetType( type_name );
+         ::free( type_name );
+      }
    }
 
    template< typename Type >
@@ -212,6 +142,7 @@ namespace D3PDReader {
 
       fInTree = tree;
       fFromInput = kTRUE;
+      if( fVariable ) fVariable->clear();
       fInBranch = 0;
       fAvailable = UNKNOWN;
 
@@ -226,58 +157,31 @@ namespace D3PDReader {
       ::TBranch* branch = tree->GetBranch( GetName() );
       if( branch ) return branch;
 
-      int status;
-      char* type_name = abi::__cxa_demangle( typeid( Type ).name(), 0, 0, &status );
-      if( status ) {
+      if( ! ::strcmp( GetType(), "" ) ) {
          fParent->Error( "WriteTo",
                          "Couldn't demangle type name: %s",
                          typeid( Type ).name() );
-         return 0;      }
+         return 0;
+      }
       if( ! fVariable ) {
          fVariable = new Type();
       }
-      branch = tree->Bronch( GetName(), type_name, &fVariable );
+      branch = tree->Bronch( GetName(), GetType(), &fVariable );
       if( ! branch ) {
          fParent->Error( "WriteTo",
                          "Couldn't add variable %s to tree %s",
                          GetName(), tree->GetName() );
+      } else {
+         for( ::Long64_t i = 0; i < tree->GetEntries(); ++i ) {
+            branch->Fill();         }
       }
-      free( type_name );
+
       return branch;
    }
 
    template< typename Type >
-   ::Bool_t VarHandle< Type* >::IsAvailable() const {
-
-      if( ! fFromInput ) return kTRUE;
-      switch( fAvailable ) {
-
-      case AVAILABLE:
-         return kTRUE;
-         break;
-      case UNAVAILABLE:
-         return kFALSE;
-         break;
-      case UNKNOWN:
-         {
-            if( ! fInTree ) return kTRUE;
-            ::Bool_t temp = kFALSE;
-            fAvailable = ( temp = fInTree->GetBranch( GetName() ) ) ? AVAILABLE :
-                         UNAVAILABLE;
-            return temp;
-         }
-         break;
-      default:
-         // This should really never be reached...
-         break;
-      }
-
-      // It's just here to make the compiler happy:
-      return kFALSE;
-   }
-
-   template< typename Type >
-   typename VarHandle< Type* >::result_type VarHandle< Type* >::operator()() {
+   typename VarHandle< Type* >::result_type
+   VarHandle< Type* >::operator()() {
 
       if( ! fFromInput ) {
          if( ! fVariable ) fVariable = new Type();
@@ -285,28 +189,21 @@ namespace D3PDReader {
       }
 
       if( ! fInBranch ) {
-         if( ! fInTree ) {
-            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
-            return fVariable;
-         }
-         if( ! fInTree->GetBranch( GetName() ) ) {
+         if( ! ConnectVariable( &fVariable, TClass::GetClass( typeid( Type ) ),
+                                TDataType::GetType( typeid( Type ) ), kTRUE ) ) {
             fParent->Error( ::TString( GetName() ) + "()",
-                            "The following variable doesn't exist: %s",
-                            GetName() );
+                            "Failed connecting to D3PD" );
             return fVariable;
          }
-         fInTree->SetBranchStatus( ::TString( GetName() ) + "*", 1 );
-         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
       }
-      if( *fMaster != fInBranch->GetReadEntry() ) {
-         fInBranch->GetEntry( *fMaster );
-      }
+      UpdateBranch();
 
       return fVariable;
    }
 
    template< typename Type >
-   typename VarHandle< Type* >::const_result_type VarHandle< Type* >::operator()() const {
+   typename VarHandle< Type* >::const_result_type
+   VarHandle< Type* >::operator()() const {
 
       if( ! fFromInput ) {
          if( ! fVariable ) fVariable = new Type();
@@ -314,24 +211,35 @@ namespace D3PDReader {
       }
 
       if( ! fInBranch ) {
-         if( ! fInTree ) {
-            fParent->Error( ::TString( GetName() ) + "()", "Object not connected yet!" );
-            return fVariable;
-         }
-         if( ! fInTree->GetBranch( GetName() ) ) {
+         if( ! ConnectVariable( &fVariable, TClass::GetClass( typeid( Type ) ),
+                                TDataType::GetType( typeid( Type ) ), kTRUE ) ) {
             fParent->Error( ::TString( GetName() ) + "()",
-                            "The following variable doesn't exist: %s",
-                            GetName() );
+                            "Failed connecting to D3PD" );
             return fVariable;
          }
-         fInTree->SetBranchStatus( ::TString( GetName() ) + "*", 1 );
-         fInTree->SetBranchAddress( GetName(), &fVariable, &fInBranch );
       }
-      if( *fMaster != fInBranch->GetReadEntry() ) {
-         fInBranch->GetEntry( *fMaster );
-      }
+      UpdateBranch();
 
       return fVariable;
+   }
+
+   template< typename Type >
+   void VarHandle< Type* >::ReadCurrentEntry() const {
+
+      if( IsAvailable() ) {
+         this->operator()();
+      } else {
+         if( ! fVariable ) fVariable = new Type();
+         fVariable->clear();
+      }
+      return;
+   }
+
+   template< typename Type >
+   void VarHandle< Type* >::Clear() {
+
+      this->operator()()->clear();
+      return;
    }
 
 } // namespace D3PDReader

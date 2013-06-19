@@ -4,6 +4,8 @@
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyDefs.h"
 
+#include "SusyNtuple/D3PDReadStats.h"
+#include "SusyNtuple/D3PDPerfStats.h"
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/SusyNtAna.h"
@@ -30,7 +32,11 @@
 
 #pragma link C++ namespace Susy+;
 #pragma link C++ namespace BTagCalib;
+#pragma link C++ namespace D3PDReader;
 
+#pragma link C++ class D3PDReader::VariableStats+;
+#pragma link C++ class D3PDReader::D3PDReadStats+;
+#pragma link C++ class D3PDReader::D3PDPerfStats+;
 
 #pragma link C++ class Susy::SusyNtObject;
 #pragma link C++ class Susy::Particle+;

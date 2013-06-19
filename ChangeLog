@@ -1,6 +1,12 @@
 # vim: set noexpandtab:
 
 2013-06-18 Steve
+	* Updates for p1512 D3PDs
+		* Had to update VarHandle
+		* Had to add D3PDReadStats, D3PDPerfStats, Utils.
+		  Got weird errors otherwise
+
+2013-06-18 Steve
 	* Tagging SusyNtuple-00-00-60
 
 2013-06-18 Matt

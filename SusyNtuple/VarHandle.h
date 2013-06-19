@@ -1,10 +1,14 @@
 // Dear emacs, this is -*- c++ -*-
-// $Id: VarHandle.h 242132 2012-01-12 13:37:55Z lucian $
+// $Id: CodeGenerator_v2_constants.h 510583 2012-07-18 09:12:16Z krasznaa $
 #ifndef D3PDREADER_VARHANDLE_H
 #define D3PDREADER_VARHANDLE_H
 
 // ROOT include(s):
 #include <TString.h>
+#include <TDataType.h>
+
+// Local include(s):
+#include "SusyNtuple/D3PDReadStats.h"
 
 // Forward declaration(s):
 class TObject;
@@ -19,11 +23,12 @@ namespace D3PDReader {
     *         This class is used to keep a list of all the VarHandle members of
     *         a D3PDObject class. It makes some operations much easier.
     *
-    * $Revision: 242132 $
-    * $Date: 2012-01-12 05:37:55 -0800 (Thu, 12 Jan 2012) $
+    * $Revision: 510583 $
+    * $Date: 2012-07-18 11:12:16 +0200 (Wed, 18 Jul 2012) $
     */
-    class VarHandleBase {
+   class VarHandleBase {
 
+   protected:
       /// Custom enumeration describing the availability of the branch
       enum BranchAvailability {
          UNKNOWN = 0, ///< The input TTree has not yet been checked
@@ -31,16 +36,32 @@ namespace D3PDReader {
          UNAVAILABLE = 2 ///< The input branch is not available
       };
 
-    public:
+   public:
       /// Constructor specifying all the needed parameters
-      VarHandleBase( ::TObject* parent, const char* name, const ::Long64_t* master = 0 );
+      VarHandleBase( ::TObject* parent = 0, const char* name = "",
+                     const ::Long64_t* master = 0 );
       /// The destructor is actually only useful in the specialized class...
       virtual ~VarHandleBase() {}
+
+      /// Get a pointer to the parent of the object
+      ::TObject* GetParent() const;
+      /// Set the pointer to the parent of the object
+      void SetParent( ::TObject* parent );
 
       /// Get the name of the branch handled by this class
       const char* GetName() const;
       /// Set the name of the branch handled by this class
       void SetName( const char* name );
+
+      /// Get the type name of the branch handled by this object
+      const char* GetType() const;
+      /// Set the type name of the branch handled by this object
+      void SetType( const char* type );
+
+      /// Get a pointer to the master entry variable
+      const ::Long64_t* GetMaster() const;
+      /// Set the pointer to the master entry variable
+      void SetMaster( const ::Long64_t* master );
 
       /// Connect the object to an input tree
       virtual void ReadFrom( ::TTree* tree ) = 0;
@@ -53,9 +74,30 @@ namespace D3PDReader {
       void SetActive( ::Bool_t active = kTRUE );
 
       /// Check if the variable is available in the input
-      virtual ::Bool_t IsAvailable() const = 0;
+      virtual ::Bool_t IsAvailable() const;
 
-    protected:
+      /// Read in the current entry from the branch
+      virtual void ReadCurrentEntry() const = 0;
+
+      /// "Clear" the variable of its contents
+      virtual void Clear() = 0;
+
+      /// Get information about the read statistics
+      virtual VariableStats GetStatistics() const;
+
+   protected:
+      /// Connect the variable to the branch
+      ::Bool_t ConnectVariable( void* var, ::TClass* realClass,
+                                EDataType dtype, Bool_t isptr ) const;
+      /// Update the variable to the current entry in the D3PD
+      void UpdateBranch() const;
+      /// Switch to a new tree in the statistics gathering
+      void UpdateStat( ::TBranch* br ) const;
+      /// Translate the typeid() type name to something ROOT understands
+      const char* RootType( const char* typeid_type ) const;
+      /// Translate the typeid() type name to a huma-readable ROOT type name
+      const char* RootCppType( const char* typeid_type ) const;
+
       const ::Long64_t* fMaster; ///< Pointer to the current entry number
       ::TObject* fParent; ///< Pointer to the parent D3PDObject
       ::Bool_t fFromInput; ///< Flag showing if the variable is read from an input TTree
@@ -63,11 +105,16 @@ namespace D3PDReader {
       mutable ::TBranch* fInBranch; /// The input branch belonging to this variable
       mutable BranchAvailability fAvailable; ///< Availability of the branch
 
-    private:
+   private:
       ::TString fName; ///< Name of the branch to handle
       ::Bool_t fActive; ///< Flag telling if the variable can be written to the output
 
-    }; // class VarHandleBase
+      ::TString fType; ///< Variable type
+      mutable std::vector< ::Long64_t > fEntriesRead; ///< Number of read entries for each tree
+      mutable std::vector< ::Float_t > fBranchSize; ///< Unzipped entry size for each tree
+      mutable std::vector< ::Float_t > fZippedSize; ///< Zipped entry size for each tree
+
+   }; // class VarHandleBase
 
    /**
     *  @short Class responsible for reading primitive types from the D3PD
@@ -77,8 +124,8 @@ namespace D3PDReader {
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
-    * $Revision: 242132 $
-    * $Date: 2012-01-12 05:37:55 -0800 (Thu, 12 Jan 2012) $
+    * $Revision: 510583 $
+    * $Date: 2012-07-18 11:12:16 +0200 (Wed, 18 Jul 2012) $
     */
    template< typename Type >
    class VarHandle : public VarHandleBase {
@@ -90,7 +137,8 @@ namespace D3PDReader {
       typedef const Type& const_result_type;
 
       /// Constructor specifying all the needed parameters
-      VarHandle( ::TObject* parent, const char* name, const ::Long64_t* master = 0 );
+      VarHandle( ::TObject* parent = 0, const char* name = "",
+                 const ::Long64_t* master = 0 );
       /// The destructor is actually only useful in the specialized class...
       ~VarHandle();
 
@@ -99,18 +147,18 @@ namespace D3PDReader {
       /// Connect the object to an output tree
       virtual ::TBranch* WriteTo( ::TTree* tree );
 
-      /// Check if the variable is available in the input
-      virtual ::Bool_t IsAvailable() const;
-
       /// Operator used to access the branch itself
       result_type operator()();
       /// Operator used to access the branch itself (constant version)
       const_result_type operator()() const;
 
-   private:
-      /// Translate the typeid() type name to something ROOT understands
-      const char* RootType( const char* typeid_type ) const;
+      /// Read in the current entry from the branch
+      virtual void ReadCurrentEntry() const;
 
+      /// "Clear" the variable of its contents
+      virtual void Clear();
+
+   private:
       mutable Type fVariable; ///< The variable in memory
 
    }; // class VarHandle
@@ -124,8 +172,8 @@ namespace D3PDReader {
     *
     * @author Attila Krasznahorkay <Attila.Krasznahorkay@cern.ch>
     *
-    * $Revision: 242132 $
-    * $Date: 2012-01-12 05:37:55 -0800 (Thu, 12 Jan 2012) $
+    * $Revision: 510583 $
+    * $Date: 2012-07-18 11:12:16 +0200 (Wed, 18 Jul 2012) $
     */
    template< typename Type >
    class VarHandle< Type* > : public VarHandleBase {
@@ -137,7 +185,8 @@ namespace D3PDReader {
       typedef const Type* const_result_type;
 
       /// Constructor specifying all the needed parameters
-      VarHandle( ::TObject* parent, const char* name, const ::Long64_t* master = 0 );
+      VarHandle( ::TObject* parent = 0, const char* name = "",
+                 const ::Long64_t* master = 0 );
       /// This destructor actually does something...
       ~VarHandle();
 
@@ -146,16 +195,20 @@ namespace D3PDReader {
       /// Connect the object to an output tree
       virtual ::TBranch* WriteTo( ::TTree* tree );
 
-      /// Check if the variable is available in the input
-      virtual ::Bool_t IsAvailable() const;
-
       /// Operator used to access the branch itself
       result_type operator()();
       /// Operator used to access the branch itself (constant version)
       const_result_type operator()() const;
 
+      /// Read in the current entry from the branch
+      virtual void ReadCurrentEntry() const;
+
+      /// "Clear" the variable of its contents
+      virtual void Clear();
+
    private:
       mutable Type* fVariable; ///< The variable in memory
+
    }; // class VarHandle
 
 } // namespace D3PDReader
