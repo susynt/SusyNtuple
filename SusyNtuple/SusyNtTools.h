@@ -247,6 +247,9 @@ class SusyNtTools
     // pass tile trip cut
     bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
 
+    // look at the MC truth record and determine whether SUSY propagators were involved
+    static bool eventHasSusyPropagators(const std::vector< int > &pdgs,
+                                        const std::vector< std::vector< int > > &parentIndices);
 
     //
     // Object level cleaning cut methods

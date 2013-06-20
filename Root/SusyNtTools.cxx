@@ -1126,7 +1126,31 @@ void SusyNtTools::removeSFOSPair(TauVector& taus, float MllCut)
   // Now replace the supplied vector with this cleaned vector
   taus = tausPass;
 }
-
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::eventHasSusyPropagators(const std::vector< int > &pdgs,
+                                          const std::vector< std::vector< int > > &parentIndices)
+{
+  // Loop over mc_* particles, find the C1 that is not a self-copy,
+  // look at the mother and accept event only if it's Z0/gamma/W+-.
+  // Code is not optmized in any meaningful way, feel free to do so
+  // if you wish. Also please report any unwanted behavior to
+  // amete@cern.ch
+  bool passDiagram = true;
+  const int  kPgam(+22),  kPz(+23), kPw(+24), kPchargino1(1000024);
+  size_t nParticles(pdgs.size());
+  for(size_t ii=0; ii<nParticles; ++ii) {
+    int pdg(TMath::Abs(pdgs.at(ii)));
+    if(passDiagram && pdg==kPchargino1) {
+      for(unsigned int jj=0; jj<parentIndices.at(ii).size(); ++jj) {
+        int parenPdg(TMath::Abs(pdgs.at(parentIndices.at(ii).at(jj))));
+        if(parenPdg==kPchargino1) break; // Self-copy
+        if(parenPdg!=kPgam && parenPdg!=kPz && parenPdg!=kPw) { passDiagram=false; break; }
+      } // end of parent loop
+    }
+  } // end of truth particle loop
+  bool  involvesSusyProp(!passDiagram);
+  return involvesSusyProp;
+}
 /*--------------------------------------------------------------------------------*/
 // Event cleaning cut flags
 /*--------------------------------------------------------------------------------*/
