@@ -246,12 +246,12 @@ void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVe
   e_e_overlap(elecs, E_E_DR);
   // Remove jets from electrons
   e_j_overlap(elecs, jets, J_E_DR, true);
-  // Remove electrons from jets
-  e_j_overlap(elecs, jets, E_J_DR, false);
   // Remove taus from electrons
   t_e_overlap(taus, elecs, T_E_DR);
   // Remove taus from muons
   t_m_overlap(taus, muons, T_M_DR);
+  // Remove electrons from jets
+  e_j_overlap(elecs, jets, E_J_DR, false);
   // Remove muons from jets
   m_j_overlap(muons, jets, M_J_DR);
   // Remove electrons and muons that overlap

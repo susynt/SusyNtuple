@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-06-21 Steve
+	* Fixed position of tau overlap removal
+		* Slight mistake introduced on 2013-06-10 commit below
+
 2013-06-20 Davide
 	* Add the counters to correct for events with the SUSY propagator bug
 	* Tagging SusyNtuple-00-01-01
