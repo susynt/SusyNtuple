@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-06-22 Matt
+	* Changed passDeadRegions Pt threshold 30-->40 following 2Lep update.
+	
 2013-06-21 Steve
 	* Fixed position of tau overlap removal
 		* Slight mistake introduced on 2013-06-10 commit below

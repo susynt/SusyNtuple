@@ -1220,7 +1220,7 @@ bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int
   
   for(uint ij = 0; ij<baseJets.size(); ++ij){
     const Jet* jet = baseJets.at(ij);
-    if( !(jet->Pt() > 30.) )          continue;
+    if( !(jet->Pt() > 40.) )          continue;
     if( !(jet->bch_corr_jet > 0.05) ) continue;
   
     if( fabs(jet->DeltaPhi( met->lv() )) < 0.3 ) return false;
