@@ -12,7 +12,7 @@ SusyNtAna::SusyNtAna() :
         SusyNtTools(),
         nt(m_entry),
         m_entry(0),
-        m_selectTaus(false),
+        m_selectTaus(true),
         m_printFreq(50000),
         m_dbg(0),
 	m_dbgEvt(false),
