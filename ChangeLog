@@ -3,6 +3,7 @@
 2013-06-26 Steve
 	* Addd isSemiSignalElectron and isSemiSignalMuon from Tina
 	* Updated 3L isolation corrections to only subtract semi-signal leptons
+	* Tagging SusyNtuple-00-01-03
 
 2013-06-26 Steve
 	* Added event trigger cut to TrilTrigLogic
