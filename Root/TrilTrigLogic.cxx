@@ -51,8 +51,23 @@ APReweightND* TrilTrigLogic::loadTrigWeighter(TFile* f, TString name)
 }
 
 /*--------------------------------------------------------------------------------*/
+// Event trigger requirement without object matching
+/*--------------------------------------------------------------------------------*/
+bool TrilTrigLogic::passEventTrigger(const Event* evt)
+{
+  // Take logical OR of the following triggers
+  unsigned int mask = TRIG_e24vhi_medium1 |
+                      TRIG_2e12Tvh_loose1 |
+                      TRIG_e24vh_medium1_e7_medium1 |
+                      TRIG_mu24i_tight |
+                      TRIG_2mu13 |
+                      TRIG_mu18_tight_mu8_EFFS |
+                      TRIG_e12Tvh_medium1_mu8 |
+                      TRIG_mu18_tight_e7_medium1;
+  return evt->passTrig(mask, false);
+}
+/*--------------------------------------------------------------------------------*/
 // Trigger matching for data
-// Being updated for 2012
 /*--------------------------------------------------------------------------------*/
 bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, 
                                         const Event* evt, bool useDilepTrigs)

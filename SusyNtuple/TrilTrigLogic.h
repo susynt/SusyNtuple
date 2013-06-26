@@ -18,7 +18,7 @@
 
 */
 
-using namespace Susy;
+//using namespace Susy;
 
 class TrilTrigLogic
 {
@@ -32,9 +32,12 @@ class TrilTrigLogic
     void loadTriggerMaps();
     APReweightND* loadTrigWeighter(TFile* f, TString chain);
 
+    // Trigger cut without matching
+    bool passEventTrigger(const Susy::Event* evt);
+
     // Trigger matching in data (and MC at the moment)
     //bool passTriggerMatching(const LeptonVector& leptons, Event* evt);
-    bool passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Event* evt, 
+    bool passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Susy::Event* evt, 
                              bool useDilepTrigs=true);
     bool matchLepTrigger(const Susy::Lepton* lep, int trigMask, float ptMin, float etaMax, 
                          bool accOnly=false);
@@ -50,7 +53,7 @@ class TrilTrigLogic
     //}
 
     // Trigger reweighting in MC - not currently setup
-    float getTriggerWeight(const LeptonVector& leptons, Event* evt);
+    float getTriggerWeight(const LeptonVector& leptons, Susy::Event* evt);
 
     // Only apply pt threshold cuts for trigger acceptance
     void setAccOnly(bool doIt=true) { m_accOnly = doIt; }
