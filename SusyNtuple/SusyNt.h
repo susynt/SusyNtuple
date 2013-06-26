@@ -57,8 +57,9 @@ namespace Susy
 
       // Check trigger firing
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
-      bool passTrig(unsigned int mask) const {
-        return (trigFlags & mask) == mask;
+      bool passTrig(unsigned int mask, bool requireAll=true) const {
+        if(requireAll) return (trigFlags & mask) == mask;
+        else return mask == 0 || (trigFlags & mask) != 0;
       }
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
@@ -110,7 +111,7 @@ namespace Susy
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 23);
+      ClassDef(Event, 24);
   };
 
   // Particle class, base class for other object types
