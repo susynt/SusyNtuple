@@ -127,6 +127,8 @@ class SusyNtTools
                       uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalTau(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
                      TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
+    bool isSemiSignalElectron(const Susy::Electron* ele);
+    bool isSemiSignalMuon(const Susy::Muon* mu);
     bool isSignalJet(const Susy::Jet* jet);
     bool isSignalJet2Lep(const Susy::Jet* jet);
 

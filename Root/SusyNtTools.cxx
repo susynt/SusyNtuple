@@ -594,6 +594,28 @@ bool SusyNtTools::isSignalTau(const Tau* tau, TauID tauJetID, TauID tauEleID, Ta
   return isTauBDT(tau, tauJetID, tauEleID, tauMuoID);
 }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
+{
+  if(!ele->tightPP) return false;
+  // Impact parameter
+  if(m_doIPCut){
+    if(fabs(ele->d0Sig(true)) >= ELECTRON_D0SIG_CUT) return false;
+    if(fabs(ele->z0SinTheta(true)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+  }
+  return true;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
+{
+  // Impact parameter
+  if(m_doIPCut){
+    if(fabs(mu->d0Sig(true)) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta(true)) >= MUON_Z0_SINTHETA_CUT) return false;
+  }
+  return true;
+}
+
+/*--------------------------------------------------------------------------------*/
 // Isolation corrections
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::elPtConeCorr(const Electron* e, 
@@ -605,11 +627,13 @@ float SusyNtTools::elPtConeCorr(const Electron* e,
     for(uint iEl=0; iEl<baseElectrons.size(); iEl++){
       const Electron* e2 = baseElectrons[iEl];
       if(e==e2) continue;
+      if( !isSemiSignalElectron(e2) ) continue;
       float dR = e->DeltaR(*e2);
       if(dR < 0.3) ptcone -= e2->trackPt;
     }
     for(uint iMu=0; iMu<baseMuons.size(); iMu++){
       const Muon* mu = baseMuons[iMu];
+      if( !isSemiSignalMuon(mu) ) continue;
       float dR = e->DeltaR(*mu);
       if(dR < 0.3) ptcone -= mu->idTrackPt;
     }
@@ -627,6 +651,7 @@ float SusyNtTools::elEtTopoConeCorr(const Electron* e,
     for(uint iEl=0; iEl<baseElectrons.size(); iEl++){
       const Electron* e2 = baseElectrons[iEl];
       if(e==e2) continue;
+      if( !isSemiSignalElectron(e2) ) continue;
       float dR = e->DeltaR(*e2);
       if(dR < 0.28) etcone -= e2->clusE / cosh(e2->clusEta);
     }
@@ -643,12 +668,14 @@ float SusyNtTools::muPtConeCorr(const Muon* mu,
   if(removeLeps){
     for(uint iEl=0; iEl<baseElectrons.size(); iEl++){
       const Electron* e = baseElectrons[iEl];
+      if( !isSemiSignalElectron(e) ) continue;
       float dR = mu->DeltaR(*e);
       if(dR < 0.3) ptcone -= e->trackPt;
     }
     for(uint iMu=0; iMu<baseMuons.size(); iMu++){
       const Muon* mu2 = baseMuons[iMu];
       if(mu==mu2) continue;
+      if( !isSemiSignalMuon(mu2) ) continue;
       float dR = mu->DeltaR(*mu2);
       if(dR < 0.3) ptcone -= mu2->idTrackPt;
     }
@@ -666,6 +693,7 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
   if(removeLeps){
     for(uint iEl=0; iEl<baseElectrons.size(); iEl++){
       const Electron* e = baseElectrons[iEl];
+      if( !isSemiSignalElectron(e) ) continue;
       float dR = mu->DeltaR(*e);
       if(dR < 0.28) etcone -= e->clusE / cosh(e->clusEta);
     }

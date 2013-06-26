@@ -1,6 +1,10 @@
 # vim: set noexpandtab:
 
 2013-06-26 Steve
+	* Addd isSemiSignalElectron and isSemiSignalMuon from Tina
+	* Updated 3L isolation corrections to only subtract semi-signal leptons
+
+2013-06-26 Steve
 	* Added event trigger cut to TrilTrigLogic
 	* Added getHT and getThrT methods to SusyNtTools
 	* Made isSelectTau and performOverlap virtual for overriding in matrix method
