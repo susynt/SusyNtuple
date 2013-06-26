@@ -2,6 +2,9 @@
 
 2013-06-26 Steve
 	* Added event trigger cut to TrilTrigLogic
+	* Added getHT and getThrT methods to SusyNtTools
+	* Made isSelectTau and performOverlap virtual for overriding in matrix method
+	* Tagging SusyNtuple-00-01-02
 
 2013-06-24 Steve
 	* Turned on m_selectTaus by default

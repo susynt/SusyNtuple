@@ -113,9 +113,9 @@ class SusyNtTools
                   TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     // TODO: add new selection methods for light leptons and jets
     //bool isSelectLepton()
-    //bool isSelectTau(const Susy::Tau* tau, TauID id=TauID_medium);
-    bool isSelectTau(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
-                     TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
+    //virtual bool isSelectTau(const Susy::Tau* tau, TauID id=TauID_medium);
+    virtual bool isSelectTau(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
+                             TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
 
     // Check if signal object
     // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
@@ -160,7 +160,7 @@ class SusyNtTools
     //
   
     // Perform all overlap on pre objects  
-    void performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets);
+    virtual void performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets);
 
     // e-e overlap
     void e_e_overlap(ElectronVector& elecs, float minDr);
@@ -363,6 +363,12 @@ class SusyNtTools
     // MT2
     float getMT2(const LeptonVector& leptons, const Susy::Met* met);
     float getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Susy::Met* met);
+
+    // HT
+    float getHT(const JetVector& jets);
+
+    // Transverse thrust
+    float getThrT(const LeptonVector& leptons);
 
     // Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,

@@ -25,14 +25,12 @@ SusyNtTools::SusyNtTools() :
         m_doIPCut(true),
 	m_btagTool(NULL)
 {
-
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREDIR");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
   bool isJVF = true;
   m_btagTool = new BTagCalib2013("MV1", calibration, calibFolder, "0_3511", isJVF, MV1_80);
-
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -1596,6 +1594,43 @@ float SusyNtTools::getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2
   
   return mt2_event.get_mt2();
 }
+
+/*--------------------------------------------------------------------------------*/
+// Calculate HT
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getHT(const JetVector& jets)
+{
+  float ht = 0;
+  for(uint i=0; i<jets.size(); i++){
+    float pt = jets[i]->Pt();
+    if(pt > 40) ht += pt;
+  }
+  return ht;
+}
+
+/*--------------------------------------------------------------------------------*/
+// Calculate transverse thrust
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getThrT(const LeptonVector& leptons)
+{
+  float sumPx = 0;
+  float sumPy = 0;
+  float sumPt = 0;
+  float max = 0;
+    
+  for(uint i=0; i<leptons.size(); i++) {
+    sumPx += leptons[i]->Px();
+    sumPy += leptons[i]->Py();
+    sumPt += leptons[i]->Pt();
+  }
+  float nx = sumPx/sqrt(sumPx*sumPx + sumPy*sumPy);
+  float ny = sumPy/sqrt(sumPx*sumPx + sumPy*sumPy);
+    
+  for(uint i=0; i<leptons.size(); i++) {
+    max += fabs(leptons[i]->Px()*nx + leptons[i]->Py()*ny);
+  }
+  return max/sumPt;
+} 
 
 /*--------------------------------------------------------------------------------*/
 // Top Tagging methods borrowed from SUSYTools. Yes this is duplication of code...
