@@ -25,12 +25,22 @@ SusyNtTools::SusyNtTools() :
         m_doIPCut(true),
 	m_btagTool(NULL)
 {
+
+}
+/*--------------------------------------------------------------------------------*/
+// Method to configure bTag SF tool.  Necessary since 2L and 3L differ
+// on whether or not JVF is used.  Also allow for different operating points
+// to be toggled                                                            
+/*--------------------------------------------------------------------------------*/
+void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
+{
+
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREDIR");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
-  bool isJVF = true;
-  m_btagTool = new BTagCalib2013("MV1", calibration, calibFolder, "0_3511", isJVF, MV1_80);
+  m_btagTool = new BTagCalib2013("MV1", calibration, calibFolder, OP, isJVF, opVal);
+
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -1523,9 +1533,16 @@ bool SusyNtTools::isBJet(const Jet* jet, float weight)
 //float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
 //			  std::string taggerName, std::string OP, float opval,
 //			  BTagSys sys)
-float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool isSherpa, BTagSys sys)
+// float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool isSherpa, BTagSys sys)
+float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
 {
   if(!evt->isMC) return 1;
+  
+  if( !m_btagTool ){
+    if( m_anaType == Ana_2Lep ) configureBTagTool("0_3511",MV1_80, false);
+    else                        configureBTagTool("0_3511",MV1_80, true);
+  }
+
   static const float MEV = 1000;
   static vector<float>  pt_btag;
   static vector<float> eta_btag;
@@ -1535,6 +1552,8 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool isSherpa
   eta_btag.clear();
   val_btag.clear();
   pdgid_btag.clear();
+
+  bool isSherpa = isSherpaSample(mcID);
 
   uint nJet = jets.size();
   for(uint i=0; i<nJet; i++){

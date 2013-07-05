@@ -24,9 +24,9 @@ DilTrigLogic::DilTrigLogic(string period, bool useReweightUtils) :
   string directory = "$ROOTCOREDIR/../DGTriggerReweight/data";
   m_triggerWeight->setDbg(1);
   if(useReweightUtils)
-    m_triggerWeight->initialize(directory, period, true, true);//To turn on ReweightUtils 
+    m_triggerWeight->initialize(directory, period, true);//To turn on ReweightUtils 
   else
-    m_triggerWeight->initialize(directory, period);//To turn off ReweightUtils 
+    m_triggerWeight->initialize(directory, period, false);//To turn off ReweightUtils 
   m_triggerWeight->setDbg(0);
   
 

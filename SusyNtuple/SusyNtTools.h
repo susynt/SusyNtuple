@@ -32,6 +32,11 @@ class SusyNtTools
     void setAnaType(AnalysisType A){ m_anaType = A; };
 
     //
+    // Configure the btag sf tool
+    //
+    void configureBTagTool(std::string OP, float opVal, bool isJVF);
+
+    //
     // Get event weight - contains generator, pileup, xsec, and lumi weights
     //
 
@@ -346,7 +351,8 @@ class SusyNtTools
     //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
     //std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
     //BTagSys sys=BTag_NOM);    
-    float bTagSF(const Susy::Event*, const JetVector& jets, bool isSherpa, BTagSys sys=BTag_NOM);
+    //float bTagSF(const Susy::Event*, const JetVector& jets, bool isSherpa, BTagSys sys=BTag_NOM);
+    float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
     bool isCentralLightJet(const Susy::Jet* jet);

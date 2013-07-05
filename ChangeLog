@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2013-07-05 Matt
+	* Changed how bTagSF is called, see header.
+	* Added configure method for bTagSF tool
+	* Updated initialization of DilTrigTool to be compatibile with latest DGTrigger package
+	
 2013-07-02 Matt
 	* Adding sumet to all met terms except refCell and softJet since these are no longer used.
 	* Fixed missing copy constructor for softTerm in SusyNt.cxx
