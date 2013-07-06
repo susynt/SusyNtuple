@@ -459,7 +459,9 @@ Jet::Jet(const Jet &rhs):
   bch_corr_jet(rhs.bch_corr_jet),
   jes_up(rhs.jes_up),
   jes_dn(rhs.jes_dn),
-  jer(rhs.jer)
+  jer(rhs.jer),
+  met_wpx(rhs.met_wpx),
+  met_wpy(rhs.met_wpy)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -482,6 +484,8 @@ Jet& Jet::operator=(const Jet &rhs)
     jes_up = rhs.jes_up;
     jes_dn = rhs.jes_dn;
     jer = rhs.jer;
+    met_wpx = rhs.met_wpx;
+    met_wpy = rhs.met_wpy;
   }
   return *this;
 }

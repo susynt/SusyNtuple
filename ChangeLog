@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-07-06 Matt
+	* Added met weights for the jets x,y components.
+
 2013-07-05 Matt
 	* Changed how bTagSF is called, see header.
 	* Added configure method for bTagSF tool

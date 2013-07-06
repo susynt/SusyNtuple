@@ -521,6 +521,10 @@ namespace Susy
       float jes_dn;             // jet energy scale down
       float jer;                // jet energy resolution
 
+      // Jet-Met Weights
+      float met_wpx;
+      float met_wpy;
+
       void setState(int sys);
 
       // print method
@@ -535,10 +539,11 @@ namespace Susy
         isBadVeryLoose = isHotTile = false;
 	bch_corr_jet = 0;
 	jer = jes_up = jes_dn = 0;
+	met_wpx = met_wpy = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 6);
+      ClassDef(Jet, 7);
   };
 
   // Met class
