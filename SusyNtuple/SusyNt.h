@@ -71,6 +71,8 @@ namespace Susy
 
       // Reweighting and scaling
       float wPileup;            // pileup weight for full dataset
+      float wPileup_up;         // pileup weight shifted for systematic
+      float wPileup_dn;         // pileup weight shifted for systematic
       float wPileupAB3;         // pileup weight for 2012 period A-B3 only
       float wPileupAB;          // pileup weight for 2012 period A-B only
       float wPileupIL;          // pileup weight for 2012 period I,L only (TEMPORARY)
@@ -106,12 +108,12 @@ namespace Susy
         passMllForAlpgen = true;
         memset(evtFlag,0,sizeof(evtFlag));
         memset(cutFlags,0,sizeof(cutFlags));
-        wPileup = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
+        wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
         xsec = errXsec = sumw = pdfSF = 0;
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 24);
+      ClassDef(Event, 25);
   };
 
   // Particle class, base class for other object types

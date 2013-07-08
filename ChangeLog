@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-07-07 Steve
+	* Added shifted pileup weights for pileup systematic
+	* Tagging SusyNtuple-00-01-04
+
 2013-07-06 Matt
 	* Added met weights for the jets x,y components.
 
@@ -7,11 +11,11 @@
 	* Changed how bTagSF is called, see header.
 	* Added configure method for bTagSF tool
 	* Updated initialization of DilTrigTool to be compatibile with latest DGTrigger package
-	
+
 2013-07-02 Matt
 	* Adding sumet to all met terms except refCell and softJet since these are no longer used.
 	* Fixed missing copy constructor for softTerm in SusyNt.cxx
-	
+
 2013-06-26 Steve
 	* Addd isSemiSignalElectron and isSemiSignalMuon from Tina
 	* Updated 3L isolation corrections to only subtract semi-signal leptons
