@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-07-12 Steve
+	* Added hasZlll and hasZllll methods to SusyNtTools
+
 2013-07-07 Steve
 	* Added shifted pileup weights for pileup systematic
 	* Tagging SusyNtuple-00-01-04

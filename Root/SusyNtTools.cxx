@@ -1440,10 +1440,35 @@ bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool useMulti
   return false;
 }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasZlll(const LeptonVector& leps, float massWindow)
+{
+  for(uint i=0; i<leps.size(); i++){
+    for(uint j=i+1; j<leps.size(); j++){
+      for(uint k=j+1; k<leps.size(); k++){
+        if(isZ(leps[i], leps[j], leps[k], massWindow)) return true;
+      }
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasZllll(const LeptonVector& leps, float massWindow)
+{
+  for(uint i=0; i<leps.size(); i++){
+    for(uint j=i+1; j<leps.size(); j++){
+      for(uint k=j+1; k<leps.size(); k++){
+        for(uint l=k+1; l<leps.size(); l++){
+          if(isZ(leps[i], leps[j], leps[k], leps[l], massWindow)) return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
 {
   for(uint i=0; i<leps.size(); i++){
-    //if(ignoreTau && leps[i]->isTau()) continue;
     for(uint j=i+1; j<leps.size(); j++){
       if( isZWindow(leps[i],leps[j],minMll,maxMll) ) return true;
     }

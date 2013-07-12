@@ -48,9 +48,10 @@ namespace Susy
 
       int susyFinalState;       // Susy process
       int hDecay;               // Higgs decay (see WhTruthExtractor)
-      bool eventWithSusyProp;   // Event generated involving SUSY propagators (See Serhan's msg http://goo.gl/ucwl9)
+      bool eventWithSusyProp;   // Event generated involving SUSY propagators 
+                                // (See Serhan's msg http://goo.gl/ucwl9)
 
-      float mllMcTruth;         // mll from mcTruth (needed to avoid samples' overlap, filled for Z->ll samples)
+      float mllMcTruth;         // mll from mcTruth (filled for Z->ll overlapping samples)
       bool passMllForAlpgen;    // computed from value above; see MultiLep/TruthTools for details
 
       unsigned int trigFlags;   // Event level trigger bits
