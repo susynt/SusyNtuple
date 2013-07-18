@@ -205,7 +205,7 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "TRIGSF_MU_UP",
   "TRIGSF_MU_DN",
   "TES_UP",
-  "TES_DN",
+  "TES_DN"
 };
 
 //Enum for BTag SF & systematics
