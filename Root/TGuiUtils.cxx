@@ -882,15 +882,15 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     _dataTG->Draw("SAME && P");
     _pTop->Update();
   }
-  else{
-    if(logy) _pTop->SetLogy();
-  }
+  
+  if(logy) _pTop->SetLogy();
   if(_l){
     _l->SetTextSize(0.05);
     _l->Draw();
   }
 
   _pTop->RedrawAxis();
+  _pTop->Modified();
   _pTop->Update();
   
   //Bottom Ratio

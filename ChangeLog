@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
-
+2013-07-22 Anyes
+	* Added mEff w/o leptons
+	* Few tweaks to TGuiUtils
+	
 2013-07-12 Steve
 	* Added hasZlll and hasZllll methods to SusyNtTools
 
