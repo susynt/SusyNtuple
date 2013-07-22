@@ -405,7 +405,7 @@ class SusyNtTools
     // used to calculate the total sumw for each MCID.
     // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
     // However, one can have more than one (complete) dataset in the chain.
-    std::map<unsigned int, float> buildSumwMap(TChain* chain);
+    std::map<unsigned int, float> buildSumwMap(TChain* chain, bool isSimplifiedModel = false);
 
     // Sherpa sample check
     bool isSherpaSample(unsigned int mcID);

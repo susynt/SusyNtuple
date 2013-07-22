@@ -1,4 +1,8 @@
 # vim: set noexpandtab:
+
+2013-7-22 Serhan Mete <amete@cern.ch>
+	* */SusyNtTools.[cxx,h]: SusyNtTools::buildSumwMap now handles Simplified Model
+
 2013-07-22 Anyes
 	* Added mEff w/o leptons
 	* Few tweaks to TGuiUtils

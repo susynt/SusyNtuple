@@ -1880,7 +1880,7 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
 // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
 // However, one can have more than one (complete) dataset in the chain which is why we use the map.
 /*--------------------------------------------------------------------------------*/
-map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain)
+map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
 {
   // The sumw map
   map<unsigned int, float> sumwMap;
@@ -1907,7 +1907,10 @@ map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain)
     // Get the generator weighted histogram
     TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
     //cout << "sumw: " << hGenCF->GetBinContent(1) << endl;
-    sumwMap[evt->mcChannel] += hGenCF->GetBinContent(1);
+    if(!isSimplifiedModel)
+      sumwMap[evt->mcChannel] += hGenCF->GetBinContent(1);
+    else
+      sumwMap[evt->mcChannel] += hGenCF->GetBinContent(2);
 
     // Is it ok to close the file like this?  Will it screw up the TChain later on?
     f->Close();
