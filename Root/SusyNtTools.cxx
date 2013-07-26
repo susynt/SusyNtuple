@@ -1481,13 +1481,13 @@ bool SusyNtTools::hasZllZll(const LeptonVector& leps, float massWindow)
   // Find first pair
   for(uint i=0; i<leps.size(); i++){
     for(uint j=i+1; j<leps.size(); j++){
-      if(isZ(leps[i], leps[j])){
+      if(isZ(leps[i], leps[j], massWindow)){
         // Find second pair
         for(uint k=0; k<leps.size(); k++){
           if(k==i || k==j) continue;
           for(uint l=k+1; l<leps.size(); l++){
             if(l==i || l==j) continue;
-            if(isZ(leps[k], leps[l])) return true;
+            if(isZ(leps[k], leps[l], massWindow)) return true;
           }
         }
       }
