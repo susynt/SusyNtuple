@@ -339,6 +339,7 @@ class SusyNtTools
     bool hasZ(const LeptonVector& leps, float massWindow=10., bool useMultiLep=false);
     bool hasZlll(const LeptonVector& leps, float massWindow=10.);
     bool hasZllll(const LeptonVector& leps, float massWindow=10.);
+    bool hasZllZll(const LeptonVector& leps, float massWindow=10.);
     bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
     //void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
 

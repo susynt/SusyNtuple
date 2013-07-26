@@ -1476,6 +1476,26 @@ bool SusyNtTools::hasZllll(const LeptonVector& leps, float massWindow)
   return false;
 }
 /*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasZllZll(const LeptonVector& leps, float massWindow)
+{
+  // Find first pair
+  for(uint i=0; i<leps.size(); i++){
+    for(uint j=i+1; j<leps.size(); j++){
+      if(isZ(leps[i], leps[j])){
+        // Find second pair
+        for(uint k=0; k<leps.size(); k++){
+          if(k==i || k==j) continue;
+          for(uint l=k+1; l<leps.size(); l++){
+            if(l==i || l==j) continue;
+            if(isZ(leps[k], leps[l])) return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasZWindow(const LeptonVector& leps, float minMll, float maxMll)
 {
   for(uint i=0; i<leps.size(); i++){
