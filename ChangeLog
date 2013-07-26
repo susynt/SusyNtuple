@@ -1,5 +1,7 @@
 # vim: set noexpandtab:
-
+2013-07-27 Anyes
+	* Update hasZllZll method to retrn lep idx making Z's
+	
 2013-07-12 Steve
 	* Added hasZllZll method to SusyNtTools
 
