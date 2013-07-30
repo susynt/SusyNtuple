@@ -1370,34 +1370,34 @@ float SusyNtTools::Mlljj(const Lepton* l1, const Lepton* l2, const Jet* j1, cons
 float SusyNtTools::Mt(const Lepton* lep, const Met* met)
 { return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::Meff(const JetVector& jets, const Met* met)
+float SusyNtTools::Meff(const JetVector& jets, const Met* met, float jetPtCut)
 {
   float meff = 0;
   for(uint i=0; i<jets.size(); i++){
-    if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
+    if(jets[i]->Pt() > jetPtCut) meff += jets[i]->Pt();
   }
   meff += met->Et;
   return meff;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::Meff(const LeptonVector& leps, const JetVector& jets, const Met* met)
+float SusyNtTools::Meff(const LeptonVector& leps, const JetVector& jets, const Met* met, float jetPtCut)
 {
   float meff = 0;
   for(uint i=0; i<leps.size(); i++) meff += leps[i]->Pt();
   for(uint i=0; i<jets.size(); i++){
-    if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
+    if(jets[i]->Pt() > jetPtCut) meff += jets[i]->Pt();
   }
   meff += met->Et;
   return meff;
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets, const Met* met)
+float SusyNtTools::Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets, const Met* met, float jetPtCut)
 {
   float meff = 0;
   for(uint i=0; i<leps.size(); i++) meff += leps[i]->Pt();
   for(uint i=0; i<taus.size(); i++) meff += taus[i]->Pt();
   for(uint i=0; i<jets.size(); i++){
-    if(jets[i]->Pt() > 40) meff += jets[i]->Pt();
+    if(jets[i]->Pt() > jetPtCut) meff += jets[i]->Pt();
   }
   meff += met->Et;
   return meff;

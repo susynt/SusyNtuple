@@ -322,10 +322,10 @@ class SusyNtTools
     float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2,
                 const Susy::Jet* j1, const Susy::Jet* j2);
     float Mt(const Susy::Lepton* lep, const Susy::Met* met);
-    float Meff(const JetVector& jets, const Susy::Met* met);
-    float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met);
+    float Meff(const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
+    float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
     float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets,
-               const Susy::Met* met);
+               const Susy::Met* met, float jetPtCut=40.);
 
     // Z selection methods
     bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
