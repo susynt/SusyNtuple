@@ -449,6 +449,7 @@ Jet::Jet(const Jet &rhs):
   Particle(rhs),
   jvf(rhs.jvf),
   detEta(rhs.detEta),
+  emfrac(rhs.emfrac),
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
   sv0(rhs.sv0),
@@ -473,6 +474,7 @@ Jet& Jet::operator=(const Jet &rhs)
     Particle::operator=(rhs);
     jvf  = rhs.jvf; 
     detEta = rhs.detEta;
+    emfrac = rhs.emfrac;
     truthLabel = rhs.truthLabel;
     matchTruth = rhs.matchTruth;
     sv0 = rhs.sv0;

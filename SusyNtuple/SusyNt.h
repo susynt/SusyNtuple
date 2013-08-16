@@ -506,6 +506,7 @@ namespace Susy
 
       float jvf;                // Jet vertex fraction
       float detEta;             // Detector eta
+      float emfrac;             // EM fraction
       int truthLabel;           // Flavor truth label
       bool matchTruth;          // Matches truth jet
 
@@ -538,6 +539,7 @@ namespace Susy
         jvf = truthLabel = 0;
         matchTruth = false;
         detEta = 0;
+        emfrac = 0;
         sv0 = combNN = mv1 = 0;
         isBadVeryLoose = isHotTile = false;
 	bch_corr_jet = 0;
@@ -546,7 +548,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Jet, 7);
+      ClassDef(Jet, 8);
   };
 
   // Met class
