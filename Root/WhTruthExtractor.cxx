@@ -7,13 +7,11 @@
 #include <set>
 #include <sstream>
 
-
 using std::vector;
 using std::cout;
 using std::endl;
 using std::find;
 using std::setw;
-
 
 
 //----------------------------------
@@ -203,5 +201,75 @@ std::string WhTruthExtractor::decayToString(const WhTruthExtractor::Hdecays &d)
   case WhTruthExtractor::kUnknown :  return "unknown";
   default :                          return "undefined";
   }
+}
+//----------------------------------
+// Util functions for ttbarMcAtNloParticles
+//----------------------------------
+WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *pdgs,
+                                                                 const vvint_t *childrenIndices)
+
+{
+  //! a SM top has pdg (-6,+6) and decays qqbar or lv
+  struct isSmTop {
+    const vint_t &pdgs_;
+    const vvint_t &chIdxs_;
+    isSmTop(const vint_t *pdgs, const vvint_t *childrenIndices) :
+      pdgs_(*pdgs), chIdxs_(*childrenIndices) {}
+    bool isTop(const int &i) { const int &p=pdgs_[i]; return(p==kPt || p==kAt); }
+    bool isTopChild(const int &i) {
+      const int p=abs(pdgs_[i]);
+      return(p==kPd || p==kPs || p==kPb || p==kPw || p==kPglu); // can radiate gluon
+    }
+    bool areAllTopChildren(const int &itop) {
+      size_t cnt(0);
+      const vint_t &chIdxs = chIdxs_[itop];
+      for(size_t i=0; i<chIdxs.size(); ++i) if(isTopChild(chIdxs[i])) cnt++;
+      return cnt==chIdxs.size();
+    }
+    bool operator() (const int & i) { return isTop(i) && areAllTopChildren(i); }
+  }; // end isSmTop
+
+  //! just a function to find Ws that decay, and avoid intermetiate ones
+  struct isDecayingW {
+    const vint_t &pdgs_;
+    const vvint_t &chIdxs_;
+    isDecayingW(const vint_t *pdgs, const vvint_t *childrenIndices) :
+      pdgs_(*pdgs), chIdxs_(*childrenIndices) {}
+    bool isW(const int &i) { const int &p=pdgs_[i]; return(p==kPw || p==kAw); }
+    bool isWintermediate(const int &iW) {
+      const vint_t &chIdxs = chIdxs_[iW];
+      for(size_t i=0; i<chIdxs.size(); ++i) if(isW(chIdxs[i])) return true;
+      return false;
+    }
+    bool isWChild(const int &i) {
+      const int p=abs(pdgs_[i]);
+      return(p==kPd || p==kPu || p==kPs || p==kPc || p==kPb
+             || p==kPel || p==kPve || p==kPmu || p==kPvm || p==kPtau || p==kPvt
+             || p==kPgam); // can radiate gamma
+    }
+    bool areAllWChildren(const int &iW) {
+      size_t cnt(0);
+      const vint_t &chIdxs = chIdxs_[iW];
+      for(size_t i=0; i<chIdxs.size(); ++i) if(isWChild(chIdxs[i])) cnt++;
+      return cnt==chIdxs.size();
+    }
+    bool operator() (const int & i) {
+      return isW(i) && !isWintermediate(i) && areAllWChildren(i);
+    }
+  }; // end isDecayingW
+
+  vint_t particles;
+  isSmTop topFilter(pdgs, childrenIndices);
+  isDecayingW wFilter(pdgs, childrenIndices);
+  int nParts(pdgs->size());
+  for(int i=0; i<nParts; ++i){
+    if(topFilter(i)) particles.push_back(i);
+    else if(wFilter(i)){
+      particles.push_back(i);
+      const vint_t &chIdxs = childrenIndices->at(i);
+      particles.insert(particles.end(), chIdxs.begin(), chIdxs.end());
+    }
+  }
+  return particles;
 }
 //----------------------------------

@@ -9,7 +9,7 @@
   This class goes through the pdg, parents, and children stored in
   a d3pd file, and extract pieces of information about the Higgs decay.
   For now, the main piece of information is the decay type of the Higgs.
-  
+
   See this wiki for more information about the samples:
   https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalGridDirectSlepton
 
@@ -30,9 +30,20 @@ class WhTruthExtractor {
     kUnknown,
   };
   enum PdgIds{
+    kPd=+1, kAd=-1,
+    kPu=+2, kAu=-2,
+    kPs=+3, kAs=-3,
+    kPc=+4, kAc=-4,
     kPb=+5, kAb=-5,
+    kPt=+6, kAt=-6,
+    kPel=+11, kAel=-11,
+    kPve=+12, kAve=-12,
     kPmu=+13, kAmu=-13,
+    kPvm=+14, kAvm=-14,
     kPtau=+15, kAtau=-15,
+    kPvt=+16, kAvt=-16,
+    kPglu=21,
+    kPgam=22,
     kPz=+23,
     kPw=+24, kAw=-24,
     kPh=+25
@@ -48,6 +59,13 @@ class WhTruthExtractor {
   static std::string vecToString(const vint_t &vec);
   static std::string vecVecToString(const vvint_t &vvec);
   static std::string decayToString(const WhTruthExtractor::Hdecays &d);
+  //! indices of relevant particles (top, W, and their children) in a MC@NLO ttbar event
+  /*! We might want to rename WhTruthExtractor to some generic truth extractor class.
+    Discuss this with Steve.
+    Davide, Aug 2013
+   */
+  static vint_t ttbarMcAtNloParticles(const vint_t *pdgs,
+                                      const vvint_t *childrenIndices);
  public:
   bool verbose_;
   const vint_t pdgsPbAb_;
