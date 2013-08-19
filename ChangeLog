@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-08-19 Davide
+	* Add secondary vtx mass to Jet
+
 2013-08-16 Davide
 	* Add emfrac to Jet
 	* Add mc truth particles for ttbar (implemented in WhTruthExtractor::ttbarMcAtNloParticles)

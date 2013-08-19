@@ -514,6 +514,9 @@ namespace Susy
       float sv0;                // SV0 btag weight
       float combNN;             // JetFitterCombNN btag weight
       float mv1;                // MV1 btag weight
+      float jfit_mass;          // secondary vtx mass (dev DG Aug13, will remove when done)
+      float sv0p_mass;
+      float svp_mass;
 
       // Flags/variables for cleaning
       bool isBadVeryLoose;      // bad jet flag computed with SUSYTools
@@ -541,6 +544,7 @@ namespace Susy
         detEta = 0;
         emfrac = 0;
         sv0 = combNN = mv1 = 0;
+        jfit_mass = sv0p_mass = svp_mass = 0;
         isBadVeryLoose = isHotTile = false;
 	bch_corr_jet = 0;
 	jer = jes_up = jes_dn = 0;
@@ -548,7 +552,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Jet, 8);
+      ClassDef(Jet, 9);
   };
 
   // Met class

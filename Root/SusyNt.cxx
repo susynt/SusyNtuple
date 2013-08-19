@@ -455,6 +455,9 @@ Jet::Jet(const Jet &rhs):
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
+  jfit_mass(rhs.jfit_mass),
+  sv0p_mass(rhs.sv0p_mass),
+  svp_mass (rhs.svp_mass ),
   isBadVeryLoose(rhs.isBadVeryLoose),
   isHotTile(rhs.isHotTile),
   bch_corr_jet(rhs.bch_corr_jet),
@@ -480,6 +483,9 @@ Jet& Jet::operator=(const Jet &rhs)
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
     mv1 = rhs.mv1;
+    jfit_mass = rhs.jfit_mass;
+    sv0p_mass = rhs.sv0p_mass;
+    svp_mass  = rhs.svp_mass ;
     isBadVeryLoose = rhs.isBadVeryLoose;
     isHotTile = rhs.isHotTile;
     bch_corr_jet = rhs.bch_corr_jet;
