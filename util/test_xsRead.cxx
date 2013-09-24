@@ -10,8 +10,10 @@ using namespace std;
 void printHelp(const char *exeName)
 {
   cout<<"Usage :"<<endl
-      <<exeName<<" -i inputFile.root"<<endl
+      <<exeName<<endl
+      <<"\t -i inputFile.root"<<endl
       <<"\t -t treeName"<<endl
+      <<"\t -x xsecFile.txt"<<endl
       <<endl
       <<"See https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalGridDirectSlepton"<<endl
       <<endl;
@@ -26,23 +28,30 @@ bool isFloatEqual(const float &lhs, const float &rhs, float fractionalAccuracy=1
 int main(int argc, char **argv)
 {
 
-  // get this file from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalGridDirectSlepton
-  string rootcoredir;
-  SleptonXsecReader::getRootcoreDir(rootcoredir);
-  string defaultInputFile = ( rootcoredir + "/data/SusyNtuple/DLiSlep_SignalUncertainties_All.root" );
-  string defaultTreeName = "SignalUncertainties";
-  string inputFilename = defaultInputFile;
-  string inputTreename = defaultTreeName;
+  // the default root file comes from
+  // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalGridDirectSlepton
+  string defaultTreeName  = SleptonXsecReader::getDefaultTreeName();
+  string defaultRootFname = SleptonXsecReader::getDefaultRootFilename();
+  string defaultTxtFname  = SleptonXsecReader::getDefaultDsidFilename();
+
+  string inputRootFname(defaultRootFname), inputTreename(defaultTreeName);
+  string inputXsecFname(defaultTxtFname);
   int optind(1);
   while ((optind < argc)) {
     if(argv[optind][0]!='-'){optind++; continue;}
     string sw = argv[optind];
     if     (sw == "-h"){ printHelp(argv[0]); return 0; }
-    else if(sw == "-i"){ optind++; inputFilename = argv[optind]; }
+    else if(sw == "-i"){ optind++; inputRootFname = argv[optind]; }
     else if(sw == "-t"){ optind++; inputTreename = argv[optind]; }
+    else if(sw == "-x"){ optind++; inputXsecFname = argv[optind]; }
     else if(argv[optind][0]=='-') cout<<"Unknown switch "<<argv[optind]<<endl;
     optind++;
   } // end if(optind<argc)
+  cout<<"Using the following inputs:"<<endl
+      <<"inputXsecFname : "<<inputXsecFname<<endl
+      <<"inputRootFname : "<<inputRootFname<<endl
+      <<"inputTreename  : "<<inputTreename<<endl
+      <<endl;
 
   cout<<endl<<" --- test point comparison ---"<<endl;
   SleptonPoint p1(1,1,SleptonPoint::kLeftHanded);
@@ -55,9 +64,10 @@ int main(int argc, char **argv)
   cout<<"p1!=p3 : inequality    " <<(p1!=p3 ? "PASS" : "FAIL")<<endl;
 
   cout<<endl<<" --- test reader           ---"<<endl;
-  SleptonXsecReader reader(inputFilename.c_str(), inputTreename.c_str(),
-			   SleptonXsecReader::kAverageMultipleEntries, // see SleptonXsecReader.h for possible values
-			   true);
+  SleptonXsecReader reader(inputXsecFname.c_str(),
+                           inputRootFname.c_str(), inputTreename.c_str(),
+                           SleptonXsecReader::kAverageMultipleEntries, // see SleptonXsecReader.h for possible values
+                           true);
   //reader.printKnownPoints(); // --lots of lines-- 
   SleptonPoint p4(1, 2, SleptonPoint::kLeftHanded);
   SleptonPoint p5(150, 30, SleptonPoint::kRightHanded);

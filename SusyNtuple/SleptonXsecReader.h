@@ -65,6 +65,10 @@ std::ostream& operator<< ( std::ostream& m, const SleptonPoint& d ); //<! printi
   SleptonPoint, you can either average them, or take the last one, or
   drop them all.
 
+  If one wants to retrieve the values by dataset id, then one should
+  also provide a xsec text file, used to map dsid<-->SleptonPoint.
+  See constructor for default filenames.
+
   davide.gerbaudo@gmail.com
   Feb 2013
  */
@@ -97,7 +101,8 @@ class SleptonXsecReader {
 
  public:
   SleptonXsecReader(WorkingMode mode=kAverageMultipleEntries, bool verbose=false);
-  SleptonXsecReader(const char* fileName, const char* treeName,
+  SleptonXsecReader(const char* txtDsidFileName,
+                    const char* rootFileName, const char* treeName,
 					WorkingMode=kAverageMultipleEntries, bool verbose=false);
   int readFile(const char* fileName, const char* treeName); //!< return number of valid entries found
   float getCrossSection(const SleptonPoint &point) const;
@@ -108,7 +113,10 @@ class SleptonXsecReader {
   static bool extractDsetidMslM1FromString(const char* dsetName, int &dsid, int &msl, int &m1, bool verbose=false);
   static std::string rmLeadingTrailingWhitespaces(const std::string &str);
   static bool getRootcoreDir(std::string &dir); //!< safe getenv; return false if ROOTCOREDIR not defined
- public:
+  static std::string getDefaultDsidFilename(); //!< file with the dsid and mass values
+  static std::string getDefaultRootFilename(); //!< file with the tree containing the xsec values 
+  static std::string getDefaultTreeName();     //!< tree containing the xsec values
+  public:
   bool verbose_;     //!< toggle on/off messages
   WorkingMode mode_; //!< defines how multiple entries for the same point are handled
  private:
