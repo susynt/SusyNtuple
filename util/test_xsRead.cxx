@@ -27,7 +27,8 @@ int main(int argc, char **argv)
 {
 
   // get this file from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalGridDirectSlepton
-  string rootcoredir = getenv("ROOTCOREDIR");
+  string rootcoredir;
+  SleptonXsecReader::getRootcoreDir(rootcoredir);
   string defaultInputFile = ( rootcoredir + "/data/SusyNtuple/DLiSlep_SignalUncertainties_All.root" );
   string defaultTreeName = "SignalUncertainties";
   string inputFilename = defaultInputFile;

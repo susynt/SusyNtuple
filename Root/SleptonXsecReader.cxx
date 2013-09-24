@@ -288,8 +288,11 @@ int SleptonXsecReader::populateDsidList(const char* filename)
 {
   string line, fileToParse(filename);
   if(!fileToParse.length()){
-    string rootcoredir = getenv("ROOTCOREDIR");
-    fileToParse = (rootcoredir + "/data/SusyNtuple/samplesList_pMSSM_DLiSlep.txt");
+    string rootcoredir;
+    bool rcDirFound(SleptonXsecReader::getRootcoreDir(rootcoredir));
+    if(rcDirFound)
+      fileToParse = (rootcoredir + "/data/SusyNtuple/samplesList_pMSSM_DLiSlep.txt");
+    else if(verbose_) cout<<"invalid ROOTCOREDIR, cannot determine the xsec file to parse"<<endl;
   }
   ifstream inputFile(fileToParse.c_str());
   if(!inputFile){
@@ -318,6 +321,19 @@ std::string str( const SleptonXsecReader& d )
   stringstream ss;
   ss<<"Not implemented yet";
   return ss.str();
+}
+//--------------------------------------
+bool SleptonXsecReader::getRootcoreDir(std::string &dir)
+{
+  char* rootcoredir = getenv("ROOTCOREDIR");
+  bool envvarDefined(rootcoredir!=0);
+  if (!envvarDefined) {
+    dir = "";
+    cout<<"SleptonXsecReader::getRootcoreDir: ROOTCOREDIR not defined"<<endl;
+  } else {
+    dir = rootcoredir;
+  }
+  return envvarDefined;
 }
 //--------------------------------------
 std::ostream& operator<< ( std::ostream& m, const SleptonXsecReader& d )

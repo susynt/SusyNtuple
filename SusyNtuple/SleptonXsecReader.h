@@ -107,6 +107,7 @@ class SleptonXsecReader {
   void printKnownPoints() const;
   static bool extractDsetidMslM1FromString(const char* dsetName, int &dsid, int &msl, int &m1, bool verbose=false);
   static std::string rmLeadingTrailingWhitespaces(const std::string &str);
+  static bool getRootcoreDir(std::string &dir); //!< safe getenv; return false if ROOTCOREDIR not defined
  public:
   bool verbose_;     //!< toggle on/off messages
   WorkingMode mode_; //!< defines how multiple entries for the same point are handled
