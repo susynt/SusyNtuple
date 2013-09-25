@@ -542,7 +542,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
     // All ana using unbiased IP cuts
     //if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
     //if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
-    if(fabs(ele->d0Sig(true)) >= ELECTRON_D0SIG_CUT) return false;
+    float maxD0Sig = (m_anaType != Ana_2LepWH  ? ELECTRON_D0SIG_CUT : ELECTRON_D0SIG_CUT_WH);
+    if(fabs(ele->d0Sig(true)) >= maxD0Sig) return false;
     if(fabs(ele->z0SinTheta(true)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
   }
 
@@ -593,6 +594,10 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
   if(m_doMuEtconeCut){ // FALSE by default
     float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
     if(m_doMuEtconeCut && etcone30/mu->Pt() >= MUON_ETCONE30_PT_CUT) return false;
+  } else if(m_anaType == Ana_2LepWH) {
+    float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    float pt = mu->Pt();
+    if(pt==0.0 || (etcone30/pt >= MUON_ETCONE30_PT_CUT_WH)) return false;    
   }
 
   return true;
@@ -1603,8 +1608,9 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTa
   if(!evt->isMC) return 1;
   
   if( !m_btagTool ){
-    if( m_anaType == Ana_2Lep ) configureBTagTool("0_3511",MV1_80, false);
-    else                        configureBTagTool("0_3511",MV1_80, true);
+    if(m_anaType == Ana_2Lep
+       || m_anaType == Ana_2LepWH) configureBTagTool("0_3511",MV1_80, false);
+    else                           configureBTagTool("0_3511",MV1_80, true);
   }
 
   static const float MEV = 1000;

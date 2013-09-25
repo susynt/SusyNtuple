@@ -111,6 +111,7 @@ enum AnalysisType
 {
   Ana_2Lep = 0,
   Ana_3Lep,
+  Ana_2LepWH,
   Ana_N
 };
 
@@ -437,6 +438,7 @@ const float ELECTRON_TOPOCONE30_SLOPE_DATA = 0.02015;
 const float ELECTRON_TOPOCONE30_SLOPE_MC   = 0.01794;
 const float ELECTRON_TOPOCONE30_PT_CUT     = 0.18;
 const float ELECTRON_D0SIG_CUT             = 5.0;
+const float ELECTRON_D0SIG_CUT_WH          = 3.0;
 const float ELECTRON_Z0_SINTHETA_CUT       = 0.4;
 
 const float MUON_PTCONE30_SLOPE_DATA    = 0.01098;
@@ -448,6 +450,7 @@ const float MUON_ETCONE30_K2_DATA       = 0.00098;
 const float MUON_ETCONE30_K1_MC         = 0.0692;
 const float MUON_ETCONE30_K2_MC         = 0.00076;
 const float MUON_ETCONE30_PT_CUT        = 0.12;
+const float MUON_ETCONE30_PT_CUT_WH     = 0.10;
 const float MUON_D0SIG_CUT              = 3.0;
 const float MUON_Z0_SINTHETA_CUT        = 1.0;//0.2;
 
