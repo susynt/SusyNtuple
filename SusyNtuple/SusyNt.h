@@ -175,6 +175,7 @@ namespace Susy
 
       // public member vars
       int q;                    // Charge
+      float etcone20;           // etcone20 for mu, topoEtcone20_corrected for el
       float ptcone20;           // ptcone20 isolation
       float ptcone30;           // ptcone30 isolation
       // TODO: move additional iso variables here??
@@ -227,7 +228,7 @@ namespace Susy
 
       // clear vars
       void clear(){
-        q = ptcone20 = ptcone30 = 0;
+        q = etcone20 = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
 	d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
@@ -239,7 +240,7 @@ namespace Susy
         Particle::clear();
       }
       
-      ClassDef(Lepton, 10);
+      ClassDef(Lepton, 11);
   };
 
   // Electron class

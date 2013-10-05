@@ -52,6 +52,7 @@ Particle& Particle::operator=(const Particle &rhs)
 Lepton::Lepton(const Lepton &rhs):
   Particle(rhs),
   q(rhs.q),
+  etcone20(rhs.etcone20),
   ptcone20(rhs.ptcone20),
   ptcone30(rhs.ptcone30),
   d0(rhs.d0),
@@ -80,6 +81,7 @@ Lepton& Lepton::operator=(const Lepton &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     q = rhs.q; 
+    etcone20 = rhs.etcone20;
     ptcone20 = rhs.ptcone20;
     ptcone30 = rhs.ptcone30;
     d0 = rhs.d0;
