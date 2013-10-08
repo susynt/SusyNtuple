@@ -205,6 +205,38 @@ std::string WhTruthExtractor::decayToString(const WhTruthExtractor::Hdecays &d)
 //----------------------------------
 // Util functions for ttbarMcAtNloParticles
 //----------------------------------
+
+// filter a vector (remove elements for which Predicate is true)
+template < template <typename, typename> class Container,
+           typename Predicate,
+           typename Allocator,
+           typename A
+           >
+Container<A, Allocator> filter(Container<A, Allocator> const & container, Predicate const & pred) {
+  Container<A, Allocator> filtered(container);
+  filtered.erase(remove_if(filtered.begin(), filtered.end(), pred), filtered.end());
+  return filtered;
+}
+
+struct isBfilter : public std::unary_function<int, bool> {
+  isBfilter(const std::vector<int> *pdgs) : pdgs_(*pdgs) {}
+  const std::vector<int> &pdgs_;
+  bool operator() (int i) const { return (pdgs_[i]==WhTruthExtractor::kPb || pdgs_[i]==WhTruthExtractor::kAb); }
+};
+
+struct PdgGetter{
+  const std::vector<int> &pdgs_;
+  PdgGetter(const std::vector<int> *pdgs) : pdgs_(*pdgs) {}
+  int operator() (const int &i) const { return pdgs_[i]; }
+};
+
+struct RemoveDuplicatesFunctor {
+  void operator() (std::vector<int> &vec) {
+    std::sort(vec.begin(), vec.end());
+    vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
+  }
+} removeDuplicates;
+
 WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *pdgs,
                                                                  const vvint_t *childrenIndices)
 
@@ -229,7 +261,7 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
     bool operator() (const int & i) { return isTop(i) && areAllTopChildren(i); }
   }; // end isSmTop
 
-  //! just a function to find Ws that decay, and avoid intermetiate ones
+  //! function to find Ws that decay, and avoid intermediate ones
   struct isDecayingW {
     const vint_t &pdgs_;
     const vvint_t &chIdxs_;
@@ -253,9 +285,7 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
       for(size_t i=0; i<chIdxs.size(); ++i) if(isWChild(chIdxs[i])) cnt++;
       return cnt==chIdxs.size();
     }
-    bool operator() (const int & i) {
-      return isW(i) && !isWintermediate(i) && areAllWChildren(i);
-    }
+    bool operator() (const int & i) { return isW(i) && !isWintermediate(i) && areAllWChildren(i); }
   }; // end isDecayingW
 
   vint_t particles;
@@ -263,13 +293,23 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
   isDecayingW wFilter(pdgs, childrenIndices);
   int nParts(pdgs->size());
   for(int i=0; i<nParts; ++i){
-    if(topFilter(i)) particles.push_back(i);
-    else if(wFilter(i)){
+    if(topFilter(i)){
+      particles.push_back(i);
+      vint_t bs(filter(childrenIndices->at(i), std::not1(isBfilter(pdgs))));
+      particles.insert(particles.end(), bs.begin(), bs.end());
+    } else if(wFilter(i)){
       particles.push_back(i);
       const vint_t &chIdxs = childrenIndices->at(i);
       particles.insert(particles.end(), chIdxs.begin(), chIdxs.end());
     }
   }
+  removeDuplicates(particles);
+
+  std::vector<int> foo; foo.resize(particles.size());
+  std::transform (particles.begin(), particles.end(), foo.begin(), PdgGetter(pdgs));
+  cout<<"indices : "<<vecToString(particles)
+      <<" pdgs : "<<vecToString(foo)
+      <<endl;
   return particles;
 }
 //----------------------------------
