@@ -288,6 +288,7 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
     bool operator() (const int & i) { return isW(i) && !isWintermediate(i) && areAllWChildren(i); }
   }; // end isDecayingW
 
+  // actually identify the particles we want to store
   vint_t particles;
   isSmTop topFilter(pdgs, childrenIndices);
   isDecayingW wFilter(pdgs, childrenIndices);
@@ -304,12 +305,6 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
     }
   }
   removeDuplicates(particles);
-
-  std::vector<int> foo; foo.resize(particles.size());
-  std::transform (particles.begin(), particles.end(), foo.begin(), PdgGetter(pdgs));
-  cout<<"indices : "<<vecToString(particles)
-      <<" pdgs : "<<vecToString(foo)
-      <<endl;
   return particles;
 }
 //----------------------------------
