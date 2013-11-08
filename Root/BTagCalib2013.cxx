@@ -5,7 +5,7 @@ BTagCalib2013::BTagCalib2013( const std::string& taggerName , const std::string&
   m_BTagCalib = new Analysis::CalibrationDataInterfaceROOT(taggerName,calibration,calibfolder);
 
   m_jetAuthor = "AntiKt4TopoLCnoJVF";
-  if(isJVF) m_jetAuthor = "AntiKt4TopoLCJVF";
+  if(isJVF) m_jetAuthor = "AntiKt4TopoLCJVF0_5";
 
   m_sfIndex_C = m_sfIndex_B = m_sfIndex_T = m_sfIndex_L = 0;
   bool worked = m_BTagCalib->retrieveCalibrationIndex( "C" , OP , m_jetAuthor , true , m_sfIndex_C );
