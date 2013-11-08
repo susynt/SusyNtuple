@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-10-04 Steve
+	* Tagging SusyNtuple-00-01-05
+
 2013-10-04 Davide
 	* Add etcone20 to Lepton
 
@@ -23,7 +26,7 @@
 	* Added hasZllZll method to SusyNtTools
 
 2013-7-22 Serhan Mete <amete@cern.ch>
-	* */SusyNtTools.[cxx,h]: SusyNtTools::buildSumwMap now handles Simplified Model
+	* SusyNtTools.[cxx,h]: SusyNtTools::buildSumwMap now handles Simplified Model
 
 2013-07-22 Anyes
 	* Added mEff w/o leptons
