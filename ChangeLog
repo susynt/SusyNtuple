@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2013-11-11 Davide
+	* Changed several SusyNtTools functions to be static (this allows
+	to reduce the code duplication downstream in classes inheriting
+	from SusyNtTools)
+
 2013-11-11 Steve
 	* Removed obsolete btag codes for p1181
 

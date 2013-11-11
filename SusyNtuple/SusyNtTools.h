@@ -299,58 +299,58 @@ class SusyNtTools
     // 
   
     // Lepton flavor checks
-    bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
-    bool isOppSign(const Susy::Lepton* l1, const Susy::Lepton* l2);
-    bool isOppSign(const Susy::Tau* tau1, const Susy::Tau* tau2);
-    bool isOppSign(const Susy::Lepton* lep, const Susy::Tau* tau);
-    bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-    bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-    bool isOFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
-    bool hasSFOS(const LeptonVector& leps);
-    bool hasSFSS(const LeptonVector& leps);
-    bool hasOFOS(const LeptonVector& leps);
-    bool hasOS(const LeptonVector& leps);
-    bool hasSS(const LeptonVector& leps);
-    bool hasOS(const TauVector& taus);
+    static bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    static bool isOppSign(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    static bool isOppSign(const Susy::Tau* tau1, const Susy::Tau* tau2);
+    static bool isOppSign(const Susy::Lepton* lep, const Susy::Tau* tau);
+    static bool isSFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    static bool isSFSS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    static bool isOFOS(const Susy::Lepton* l1, const Susy::Lepton* l2);
+    static bool hasSFOS(const LeptonVector& leps);
+    static bool hasSFSS(const LeptonVector& leps);
+    static bool hasOFOS(const LeptonVector& leps);
+    static bool hasOS(const LeptonVector& leps);
+    static bool hasSS(const LeptonVector& leps);
+    static bool hasOS(const TauVector& taus);
 
     // Mass calculation methods
-    float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
-    float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
-    float Mllll(const Susy::Lepton* l1, const Susy::Lepton* l2,
-                const Susy::Lepton* l3, const Susy::Lepton* l4);
-    float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
-    float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2,
-                const Susy::Jet* j1, const Susy::Jet* j2);
-    float Mt(const Susy::Lepton* lep, const Susy::Met* met);
-    float Meff(const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
-    float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
-    float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets,
-               const Susy::Met* met, float jetPtCut=40.);
+    static float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
+    static float Mlll(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3);
+    static float Mllll(const Susy::Lepton* l1, const Susy::Lepton* l2,
+                       const Susy::Lepton* l3, const Susy::Lepton* l4);
+    static float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
+    static float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2,
+                       const Susy::Jet* j1, const Susy::Jet* j2);
+    static float Mt(const Susy::Lepton* lep, const Susy::Met* met);
+    static float Meff(const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
+    static float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
+    static float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets,
+                      const Susy::Met* met, float jetPtCut=40.);
 
     // Z selection methods
-    bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
-    bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, 
-             float massWindow=10.);
-    bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, 
-             const Susy::Lepton* l4, float massWindow=10.);
-    bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, 
-                   float minMll=MZ-10, float maxMll=MZ+10);
+    static bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, float massWindow=10.);
+    static bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, 
+                    float massWindow=10.);
+    static bool isZ(const Susy::Lepton* l1, const Susy::Lepton* l2, const Susy::Lepton* l3, 
+                    const Susy::Lepton* l4, float massWindow=10.);
+    static bool isZWindow(const Susy::Lepton* l1, const Susy::Lepton* l2, 
+                          float minMll=MZ-10, float maxMll=MZ+10);
     // NEW Argument useMultiLep will check for mlll and mllll in Z peak
-    bool hasZ(const LeptonVector& leps, float massWindow=10., bool useMultiLep=false);
-    bool hasZlll(const LeptonVector& leps, float massWindow=10.);
-    bool hasZllll(const LeptonVector& leps, float massWindow=10.);
-    bool hasZllZll(const LeptonVector& leps, uint* Z1l1, uint* Z1l2, uint* Z2l1, uint* Z2l2,  float massWindow=10.);
-    bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
+    static bool hasZ(const LeptonVector& leps, float massWindow=10., bool useMultiLep=false);
+    static bool hasZlll(const LeptonVector& leps, float massWindow=10.);
+    static bool hasZllll(const LeptonVector& leps, float massWindow=10.);
+    static bool hasZllZll(const LeptonVector& leps, uint* Z1l1, uint* Z1l2, uint* Z2l1, uint* Z2l2,  float massWindow=10.);
+    static bool hasZWindow(const LeptonVector& leps, float minMll=MZ-10, float maxMll=MZ+10);
     //void bestZ(uint& l1, uint& l2, const LeptonVector& leps, bool ignoreTau=true);
 
     // Safer functions, to replace the one above, which return false if no candidates found
-    bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps);
-    bool findBestZ(uint& j1, uint& j2, const JetVector& jets);
-    bool findBestW(uint& j1, uint& j2, const JetVector& jets);
+    static bool findBestZ(uint& l1, uint& l2, const LeptonVector& leps);
+    static bool findBestZ(uint& j1, uint& j2, const JetVector& jets);
+    static bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets
-    bool hasBJet(const JetVector& jets, float weight=MV1_80);
-    bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
+    static bool hasBJet(const JetVector& jets, float weight=MV1_80);
+    static bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
     
     //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
     //std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
@@ -359,28 +359,28 @@ class SusyNtTools
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
-    bool isCentralLightJet(const Susy::Jet* jet);
-    bool isCentralBJet    (const Susy::Jet* jet);
-    bool isForwardJet     (const Susy::Jet* jet);
+    static bool isCentralLightJet(const Susy::Jet* jet);
+    static bool isCentralBJet    (const Susy::Jet* jet);
+    static bool isForwardJet     (const Susy::Jet* jet);
 
-    int numberOfCLJets    (const JetVector& jets);
-    int numberOfCBJets    (const JetVector& jets);
-    int numberOfFJets     (const JetVector& jets);
+    static int numberOfCLJets    (const JetVector& jets);
+    static int numberOfCBJets    (const JetVector& jets);
+    static int numberOfFJets     (const JetVector& jets);
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
 
     // MET Rel
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, 
-                    bool useForward=false);
+    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, 
+                           bool useForward=false);
   
     // MT2
-    float getMT2(const LeptonVector& leptons, const Susy::Met* met);
-    float getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Susy::Met* met);
+    static float getMT2(const LeptonVector& leptons, const Susy::Met* met);
+    static float getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Susy::Met* met);
 
     // HT
-    float getHT(const JetVector& jets);
+    static float getHT(const JetVector& jets);
 
     // Transverse thrust
-    float getThrT(const LeptonVector& leptons);
+    static float getThrT(const LeptonVector& leptons);
 
     // Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
