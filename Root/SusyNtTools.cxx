@@ -7,8 +7,6 @@
 #include "Mt2/mt2_bisect.h" 
 
 #include "SusyNtuple/SusyNtTools.h"
-//#include "SusyNtuple/BTagCalib.h"
-//#include "SusyNtuple/BTagCalibp1181.h"
 
 using namespace std;
 using namespace Susy;
@@ -34,13 +32,11 @@ SusyNtTools::SusyNtTools() :
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
-
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREDIR");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
   m_btagTool = new BTagCalib2013("MV1", calibration, calibFolder, OP, isJVF, opVal);
-
 }
 
 /*--------------------------------------------------------------------------------*/

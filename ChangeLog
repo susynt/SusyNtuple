@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2013-11-11 Steve
+	* Removed obsolete btag codes for p1181
+
 2013-11-07 Steve
 	* Updated BTag calibrations to match SUSYTools-00-03-06
 
