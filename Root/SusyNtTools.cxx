@@ -36,7 +36,7 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
   string rootcoredir = getenv("ROOTCOREDIR");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
-  m_btagTool = new BTagCalib2013("MV1", calibration, calibFolder, OP, isJVF, opVal);
+  m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
 
 /*--------------------------------------------------------------------------------*/

@@ -10,10 +10,10 @@ namespace Analysis{
   class CalibrationDataInterfaceROOT;
 }
 
-class BTagCalib2013
+class BTagCalib
 {
   public:
-   BTagCalib2013( const std::string& , const std::string& , const std::string& , const std::string& , bool, double opval1=0.7892 , double opval2=-1);
+   BTagCalib( const std::string& , const std::string& , const std::string& , const std::string& , bool, double opval1=0.7892 , double opval2=-1);
 
    std::pair<std::vector<float>, std::vector<float> >* BTagCalibrationFunction(const std::vector<float>& pt,
 									       const std::vector<float>& eta,

@@ -6,10 +6,15 @@
 asetup AtlasProduction,17.2.9.1,setup,here
 
 # For now, we will need SUSYTools and Mt2 and DGTriggerReweighting
-svn co svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-02-08 SUSYTools
-svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01 Mt2
-svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-25 DGTriggerReweight
-python SUSYTools/python/install.py
+# Do we really still need all of these? Commenting them out for now
+#svn co svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-02-08 SUSYTools
+#svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01 Mt2
+#svn co svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-25 DGTriggerReweight
+#python SUSYTools/python/install.py
+
+# For BTag calibration, need to check out CalibrationDataInterface
+calibTag="svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-04"
+svn co $calibTag/cmt $calibTag/CalibrationDataInterface $calibTag/Root $calibTag/src CalibrationDataInterface
 
 # Configure RootCore
 cd RootCore

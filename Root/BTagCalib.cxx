@@ -1,7 +1,7 @@
 #include "CalibrationDataInterface/CalibrationDataInterfaceROOT.h"
-#include "SusyNtuple/BTagCalib2013.h"
+#include "SusyNtuple/BTagCalib.h"
 
-BTagCalib2013::BTagCalib2013( const std::string& taggerName , const std::string& calibration , const std::string& calibfolder , const std::string& OP , bool isJVF , double opval1 , double opval2 ){
+BTagCalib::BTagCalib( const std::string& taggerName , const std::string& calibration , const std::string& calibfolder , const std::string& OP , bool isJVF , double opval1 , double opval2 ){
   m_BTagCalib = new Analysis::CalibrationDataInterfaceROOT(taggerName,calibration,calibfolder);
 
   m_jetAuthor = "AntiKt4TopoLCnoJVF";
@@ -24,7 +24,7 @@ BTagCalib2013::BTagCalib2013( const std::string& taggerName , const std::string&
   else          m_opval2 = opval1;
 }
 
-std::pair<std::vector<float>, std::vector<float> >* BTagCalib2013::BTagCalibrationFunction(const std::vector<float>& pt,
+std::pair<std::vector<float>, std::vector<float> >* BTagCalib::BTagCalibrationFunction(const std::vector<float>& pt,
 										       const std::vector<float>& eta,
 										       const std::vector<float>& bWeight,
 										       const std::vector<int>& pdgid,
@@ -35,7 +35,7 @@ std::pair<std::vector<float>, std::vector<float> >* BTagCalib2013::BTagCalibrati
 
 
 
-std::pair<std::vector<float>, std::vector<float> >* BTagCalib2013::BTagCalibrationFunction(const std::vector<float>& pt, 
+std::pair<std::vector<float>, std::vector<float> >* BTagCalib::BTagCalibrationFunction(const std::vector<float>& pt, 
 										       const std::vector<float>& eta,
 										       const std::vector<float>& bWeight1, 
 										       const std::vector<float>& bWeight2,

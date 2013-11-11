@@ -7,7 +7,7 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
-#include "SusyNtuple/BTagCalib2013.h"
+#include "SusyNtuple/BTagCalib.h"
 
 /*
 
@@ -423,7 +423,7 @@ class SusyNtTools
     bool m_doMuEtconeCut;               // etcone isolation cuts for muons
     bool m_doIPCut;                     // impact parameter cuts
 
-    BTagCalib2013* m_btagTool;          // BTag tool
+    BTagCalib* m_btagTool;          // BTag tool
 
 };
 
