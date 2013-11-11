@@ -13,7 +13,8 @@
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
-#include "SusyNtuple/BTagCalib.h"
+//#include "SusyNtuple/BTagCalib.h"
+#include "SusyNtuple/BTagCalib2013.h"
 #include "SusyNtuple/SleptonXsecReader.h"
 
 #ifdef __CINT__
@@ -31,7 +32,8 @@
 #pragma link C++ class Susy3LepCutflow;
 
 #pragma link C++ namespace Susy+;
-#pragma link C++ namespace BTagCalib;
+//#pragma link C++ namespace BTagCalib;
+#pragma link C++ namespace BTagCalib2013;
 #pragma link C++ namespace D3PDReader;
 
 #pragma link C++ class D3PDReader::VariableStats+;
