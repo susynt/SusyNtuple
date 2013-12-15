@@ -93,7 +93,7 @@ namespace Susy
       // print event
       void print() const;
 
-      // clear vars
+      // Clear vars
       void clear(){
         run = event = lb = 0;
         stream = Stream_Unknown;
@@ -128,18 +128,18 @@ namespace Susy
       /** Assignment operator */
       Particle& operator=(const Particle &);
 
-      unsigned int idx;   // d3pd index
+      // Index in the D3PD; might not be necessary
+      unsigned int idx;
       
-      // Crowd wants pt, eta, phi of nominal stored
+      // Nominal pt, eta, phi, m, by request
       float pt;
       float eta;
       float phi;
       float m;
       void resetTLV(){ this->SetPtEtaPhiM(pt,eta,phi,m); };
 	
-      // Internal state for particles.
-      // Makes easier to grab right TLV
-      // given systematic variations
+      // Systematic-shifted state for particles.
+      // Base class method simply resets
       void setState(int sys){ resetTLV(); };
 
       void clear() { 
@@ -148,7 +148,7 @@ namespace Susy
         pt = eta = phi = m = 0;
       }
 
-      // print method
+      // Print method
       virtual void print() const {};
 
       // Comparison operators for sorting, etc.
@@ -201,7 +201,7 @@ namespace Susy
 
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
-      // functions to return impact parameter variables
+      // Methods to return impact parameter variables
       // Note that these are not absolute valued!
       float d0Sig(bool unbiased=false) const {
         if(unbiased) return d0Unbiased/errD0Unbiased;
@@ -212,21 +212,21 @@ namespace Susy
 	else return z0 * sin(Theta());
       }
 
-      // trigger matching
-      // provide the trigger chain via bit mask, e.g. TRIG_mu18
+      // Trigger matching
+      // Provide the trigger chain via bit mask, e.g. TRIG_mu18
       bool matchTrig(unsigned int mask) const {
         return (trigFlags & mask) == mask;
       }
 
-      // polymorphism, baby!!
+      // Polymorphism, baby!!
       virtual bool isEle() const { return false; }
       virtual bool isMu()  const { return false; }
       void setState(int sys){ resetTLV(); }
 
-      // print method
+      // Print method
       virtual void print() const {};
 
-      // clear vars
+      // Clear vars
       void clear(){
         q = etcone20 = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
@@ -253,10 +253,13 @@ namespace Susy
       /** Assignment operator */
       Electron& operator=(const Electron &);
 
+      // Cluster/track variables
       float clusE;              // CaloCluster energy
       float clusEta;            // CaloCluster eta
       float clusPhi;            // CaloCluster phi
       float trackPt;            // ID track pt
+
+      // isEM quality flags
       bool mediumPP;            // isEM medium++
       bool tightPP;             // isEM tight++
 
@@ -266,13 +269,13 @@ namespace Susy
 
       bool isChargeFlip;        // Charge flip flag from RecoTruthMatch
 
-      // polymorphism, baby!!
+      // Polymorphism, baby!!
       bool isEle() const { return true;  }
       bool isMu()  const { return false; }
 
       // Systematic scale factors
-      //float ees_up;             // Energy Scale + sigma
-      //float ees_dn;             // Energy Scale - sigma
+      //float ees_up;           // Energy Scale + sigma
+      //float ees_dn;           // Energy Scale - sigma
       float ees_z_up;           // Energy Scale Z + sigma
       float ees_z_dn;           // Energy Scale Z - sigma
       float ees_mat_up;         // Energy Scale Material + sigma
@@ -284,12 +287,13 @@ namespace Susy
       float eer_up;             // Energy Reso. + sigma
       float eer_dn;             // Energy Reso. - sigma
 
+      // Shift energy up/down for systematic
       void setState(int sys);
 
-      // print method
+      // Print method
       void print() const;
 
-      // clear vars
+      // Clear vars
       void clear(){
         clusE = clusEta = clusPhi = trackPt = 0;
         mediumPP = tightPP = false;
@@ -323,8 +327,8 @@ namespace Susy
       int idTrackQ;             // ID track charge
 
       float msTrackPt;          // MS track pt
-      float msTrackEta;         // MS track pt
-      float msTrackPhi;         // MS track pt
+      float msTrackEta;         // MS track eta
+      float msTrackPhi;         // MS track phi
       int msTrackQ;             // ID track charge
 
       float thetaPV;            // Theta extrapolated to PV, by request.
@@ -332,7 +336,7 @@ namespace Susy
       float ptcone30ElStyle;    // ptcone with electron style tracks
 
       // Variables for charge misid
-      // TODO: these variables are not currently used???
+      // TODO: Redundant variables?!
       float id_theta;
       float id_phi;
       float id_qoverp;
@@ -349,15 +353,15 @@ namespace Susy
       float id_up;              // ID Pt + sigma
       float id_dn;              // ID Pt - sigma
 
-      // polymorphism, baby!!
+      // Polymorphism, baby!!
       bool isEle() const { return false; }
       bool isMu()  const { return true; }
       void setState(int sys);
 
-      // print method
+      // Print method
       void print() const;
 
-      // clear vars
+      // Clear vars
       void clear(){
         isCombined = 0;
         idTrackPt = idTrackEta = idTrackPhi = 0;
@@ -421,22 +425,22 @@ namespace Susy
       //float effSF;            // Efficiency scale factor
       //float errEffSF;         // Uncertainty on the efficiency scale factor
 
-      // systematic factors
+      // Systematic factors
       float tes_up;             // tau energy scale + sigma
       float tes_dn;             // tau energy scale - sigma
 
       unsigned int trigFlags;   // Bit word representing matched trigger chains
 
-      // trigger matching
+      // Trigger matching
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
       bool matchTrig(unsigned int mask) const {
         return (trigFlags & mask) == mask;
       }
 
-      // set systematic state
+      // Set systematic state
       void setState(int sys);
 
-      // print method
+      // Print method
       void print() const;
 
       void clear(){
@@ -465,7 +469,7 @@ namespace Susy
   class Photon : public Particle
   {
     public:
-      Photon(){ clear(); };
+      Photon() { clear(); }
       virtual ~Photon(){};
       Photon(const Photon &);
       /** Assignment operator */
@@ -474,18 +478,17 @@ namespace Susy
       // Conversion Information
       bool isConv;
 
-      // Systematics
+      // Systematics - not current supported??
       //float pes_up;        // Photon Energy Scale up
       //float pes_dn;        // Photon Energy Scale down
       //float per_up;        // Photon Energy Resolution up
       //float per_dn;        // Photon Energy Resolution down
-
-      void setState(int sys){ resetTLV();};
+      //void setState(int sys){ resetTLV();};
       
-      // print method
+      // Print method
       void print() const {};
 
-      // clear
+      // Clear
       void clear(){
 	//pes_up = pes_dn = per_up = per_dn = 0;
 	isConv = false;
@@ -516,8 +519,8 @@ namespace Susy
       float combNN;             // JetFitterCombNN btag weight
       float mv1;                // MV1 btag weight
       float jfit_mass;          // secondary vtx mass (dev DG Aug13, will remove when done)
-      float sv0p_mass;
-      float svp_mass;
+      float sv0p_mass;          // ???
+      float svp_mass;           // ???
 
       // Flags/variables for cleaning
       bool isBadVeryLoose;      // bad jet flag computed with SUSYTools
@@ -533,12 +536,13 @@ namespace Susy
       float met_wpx;
       float met_wpy;
 
+      // Shift energy for systematic
       void setState(int sys);
 
-      // print method
+      // Print method
       void print() const;
 
-      // clear vars
+      // Clear vars
       void clear(){
         jvf = truthLabel = 0;
         matchTruth = false;
@@ -615,7 +619,7 @@ namespace Susy
       // print vars
       void print() const;
 
-      // clear vars
+      // Clear vars
       void clear(){
         Et = phi = sumet = 0;
         refEle = refMuo = refJet = softJet = refGamma = refCell = softTerm = 0;
@@ -643,7 +647,7 @@ namespace Susy
       int status;
       int motherPdgId;
 
-      // print method
+      // Print method
       void print() const;
 
       void clear(){
@@ -669,7 +673,7 @@ namespace Susy
 
       int flavor;
 
-      // print method
+      // Print method
       void print() const;
 
       void clear(){
@@ -704,7 +708,7 @@ namespace Susy
       // print vars
       void print() const;
 
-      // clear vars
+      // Clear vars
       void clear(){
         Et  = 0;
         phi = 0;

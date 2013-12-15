@@ -306,7 +306,6 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
 {
-  // No tau systematics yet
   TauVector taus;
   for(uint iTau=0; iTau < susyNt->tau()->size(); iTau++){
     Tau* tau = & susyNt->tau()->at(iTau);
@@ -314,8 +313,6 @@ TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
 
     // Apply any additional selection
     if(isSelectTau(tau)) taus.push_back(tau);
-    //if(tau->Pt() < TAU_PT_CUT) continue;
-    //taus.push_back(tau);
   }
   return taus;
 }
@@ -1580,11 +1577,20 @@ bool SusyNtTools::findBestW(uint& j1, uint& j2, const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 // B-Jet methods
 /*--------------------------------------------------------------------------------*/
+int SusyNtTools::numBJets(const JetVector& jets, float weight)
+{
+  int nBJet = 0;
+  for(uint i=0; i<jets.size(); i++){
+    if(isBJet(jets[i], weight)) nBJet++;
+  }
+  return nBJet;
+}
+/*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasBJet(const JetVector& jets, float weight)
 {
   uint nJet = jets.size();
   for(uint i=0; i<nJet; i++){
-    if(isBJet(jets[i])) return true;
+    if(isBJet(jets[i], weight)) return true;
   }
   return false;
 }
@@ -1593,6 +1599,15 @@ bool SusyNtTools::isBJet(const Jet* jet, float weight)
 {
   // Switching to MV1
   return jet->mv1 > weight;
+}
+/*--------------------------------------------------------------------------------*/
+JetVector SusyNtTools::getBJets(const JetVector& jets, float weight)
+{
+  JetVector bJets;
+  for(uint i=0; i<jets.size(); i++){
+    if(isBJet(jets[i], weight)) bJets.push_back(jets[i]);
+  }
+  return bJets;
 }
 /*--------------------------------------------------------------------------------*/
 //float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,

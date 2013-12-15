@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2013-12-14 Steve
+	* Adding skeleton of script to check out minimal required classes from SUSYTools,
+	  installMinimalSUSYTools.sh
+	* Adding methods to SusyNtTools: numBJets(jets), getBJets(jets)
+	* Minor cleanup in SusyNt.h
+
 2013-11-11 Davide
 	* Changed several SusyNtTools functions to be static (this allows
 	to reduce the code duplication downstream in classes inheriting

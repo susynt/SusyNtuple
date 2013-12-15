@@ -349,8 +349,10 @@ class SusyNtTools
     static bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets
+    static int numBJets(const JetVector& jets, float weight=MV1_80);
     static bool hasBJet(const JetVector& jets, float weight=MV1_80);
     static bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
+    static JetVector getBJets(const JetVector& jets, float weight=MV1_80);
     
     //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
     //std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
