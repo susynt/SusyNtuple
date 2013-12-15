@@ -5,6 +5,7 @@
 	  installMinimalSUSYTools.sh
 	* Adding methods to SusyNtTools: numBJets(jets), getBJets(jets)
 	* Minor cleanup in SusyNt.h
+	* Tagging SusyNtuple-00-01-06
 
 2013-11-11 Davide
 	* Changed several SusyNtTools functions to be static (this allows
