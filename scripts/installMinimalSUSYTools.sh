@@ -14,7 +14,7 @@ susyURL="$atlasBaseURL/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-1
 rootCoreURL="$atlasBaseURL/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
 bTagURL="$atlasBaseURL/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-06"
 mt2URL="svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
-trigURL="svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-25"
+trigURL="svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
 reweightUtilsURL="svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
 
 # Run this from your work dir, not within this package
