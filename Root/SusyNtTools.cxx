@@ -36,6 +36,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
   string rootcoredir = getenv("ROOTCOREDIR");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
+  //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
+  //string calibFolder = rootcoredir + "/data/SusyNtuple/";
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
 
@@ -1644,21 +1646,20 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTa
     pdgid_btag.push_back(jets[i]->truthLabel);
   }
 
-  pair< vector<float>, vector<float> >* wgtbtag = m_btagTool->BTagCalibrationFunction(pt_btag,
-						eta_btag,
-						val_btag,
-						pdgid_btag,
-						isSherpa);
+  pair< vector<float>, vector<float> > wgtbtag = 
+    m_btagTool->BTagCalibrationFunction(pt_btag, eta_btag,
+                                        val_btag, pdgid_btag,
+                                        isSherpa);
   
   
-  if( sys == BTag_BJet_DN ) return wgtbtag->first.at(1);  
-  if( sys == BTag_CJet_DN ) return wgtbtag->first.at(2);  
-  if( sys == BTag_LJet_DN ) return wgtbtag->first.at(3);  
-  if( sys == BTag_BJet_UP ) return wgtbtag->first.at(4); 
-  if( sys == BTag_CJet_UP ) return wgtbtag->first.at(5); 
-  if( sys == BTag_LJet_UP ) return wgtbtag->first.at(6); 
+  if( sys == BTag_BJet_DN ) return wgtbtag.first.at(1);  
+  if( sys == BTag_CJet_DN ) return wgtbtag.first.at(2);  
+  if( sys == BTag_LJet_DN ) return wgtbtag.first.at(3);  
+  if( sys == BTag_BJet_UP ) return wgtbtag.first.at(4); 
+  if( sys == BTag_CJet_UP ) return wgtbtag.first.at(5); 
+  if( sys == BTag_LJet_UP ) return wgtbtag.first.at(6); 
 
-  return wgtbtag->first.at(0); 
+  return wgtbtag.first.at(0); 
 }
 
 /*--------------------------------------------------------------------------------*/

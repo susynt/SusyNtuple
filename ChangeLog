@@ -1,5 +1,12 @@
 # vim: set noexpandtab:
 
+2013-12-15 Steve
+	* Updated new installation script for checking out minimal SUSYTools content
+		* Script only checks out BTagCalib and SUSYCrossSection;
+		  it modifies the Makefile to remove the dependencies
+	* Removed BTagCalib in favor of the SUSYTools class, 
+	  which required updated usage.
+
 2013-12-14 Steve
 	* Adding skeleton of script to check out minimal required classes from SUSYTools,
 	  installMinimalSUSYTools.sh

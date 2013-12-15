@@ -7,7 +7,8 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
-#include "SusyNtuple/BTagCalib.h"
+//#include "SusyNtuple/BTagCalib.h"
+#include "SUSYTools/BTagCalib.h"
 
 /*
 
