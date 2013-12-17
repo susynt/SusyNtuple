@@ -47,7 +47,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 // You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
-                                  bool useSumwMap, const map<unsigned int, float>* sumwMap)
+                                  bool useSumwMap, const map<unsigned int, float>* sumwMap,
+                                  bool useSusyXsec)
 {
   if(!evt->isMC) return 1;
   else{
@@ -68,10 +69,16 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
         abort();
       }
     }
-    return evt->w * evt->wPileup * evt->xsec * lumi / sumw;
+    float xsec = evt->xsec;
+    if(useSusyXsec){
+      SUSY::CrossSectionDB::Process p = getCrossSection(evt);
+      xsec = p.xsect() * p.kfactor() * p.efficiency();
+    }
+    return evt->w * evt->wPileup * xsec * lumi / sumw;
   }
 }
 /*--------------------------------------------------------------------------------*/
+/*
 float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt, float lumi)
 {
   if(!evt->isMC) return 1;
@@ -121,18 +128,47 @@ float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt,
   //else if(mcChannel==157819) xsec = 9.557000;
   return evt->w * evt->wPileup * xsec * lumi / sumw;
   //return getEventWeight(evt, lumi);
-}
+}*/
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getEventWeightAB3(const Event* evt)
+/*float SusyNtTools::getEventWeightAB3(const Event* evt)
 {
   if(!evt->isMC) return 1;
   else return evt->w * evt->wPileupAB3 * evt->xsec * LUMI_A_B3 / evt->sumw;
-}
+}*/
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getEventWeightAB(const Event* evt)
+/*float SusyNtTools::getEventWeightAB(const Event* evt)
 {
   if(!evt->isMC) return 1;
   else return evt->w * evt->wPileupAB * evt->xsec * LUMI_A_B14 / evt->sumw;
+}*/
+
+/*--------------------------------------------------------------------------------*/
+// Get the SUSYTools cross section for this sample
+/*--------------------------------------------------------------------------------*/
+SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* evt)
+{
+  using namespace SUSY;
+  // Use one DB and map for all instances of this class
+  typedef std::pair<int, int> intpair;
+  typedef std::map<intpair, CrossSectionDB::Process> XSecMap;
+  static CrossSectionDB xsecDB;
+  static XSecMap xsecCache;
+  if(evt->isMC){
+    int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
+    //const CrossSectionDB::Process::Key k(evt->mcChannel, proc);
+    const intpair k(evt->mcChannel, proc);
+    // Check to see if we've cached this process yet.
+    XSecMap::const_iterator iter = xsecCache.find(k);
+    if(iter != xsecCache.end()){
+      return iter->second;
+    }
+    else{
+      // Hasn't been cached yet, load it from the DB
+      CrossSectionDB::Process p = xsecDB.process(evt->mcChannel, proc);
+      xsecCache[k] = p;
+    }
+  }
+  return CrossSectionDB::Process();
 }
 
 /*--------------------------------------------------------------------------------*/

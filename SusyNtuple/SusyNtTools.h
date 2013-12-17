@@ -9,6 +9,7 @@
 #include "SusyNtuple/SusyNtObject.h"
 //#include "SusyNtuple/BTagCalib.h"
 #include "SUSYTools/BTagCalib.h"
+#include "SUSYTools/SUSYCrossSection.h"
 
 /*
 
@@ -45,17 +46,21 @@ class SusyNtTools
     // Pileup weights correspond to same dataset.
     virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
                                  bool useSumwMap = false, 
-                                 const std::map<unsigned int, float>* sumwMap = 0);
+                                 const std::map<unsigned int, float>* sumwMap = 0,
+                                 bool useSusyXsec = false);
     // Temporary fixed version of getEventWeight for n0138
-    virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, 
-                                      float lumi = LUMI_A_L);
+    //virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, 
+    //                                  float lumi = LUMI_A_L);
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
     // This will use the correct pileup weights for A-B3
-    virtual float getEventWeightAB3(const Susy::Event* evt);
+    //virtual float getEventWeightAB3(const Susy::Event* evt);
 
     // Scale MC to A-B dataset (5.83/fb)
-    virtual float getEventWeightAB(const Susy::Event* evt);
+    //virtual float getEventWeightAB(const Susy::Event* evt);
+
+    // Get the SUSYTools cross section for this event
+    static SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
 
     //
     // Methods to grab objects based on systematic shift desired

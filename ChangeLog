@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2013-12-17 Steve
+	* Commented out old getEventWeight methods
+	* Added static method to SusyNtTools to get cross section info from SUSYTools: getCrossSection
+	* Added bool flag to getEventWeight which will use the SUSYTools xsec: useSusyXsec
+
 2013-12-15 Steve
 	* Updated new installation script for checking out minimal SUSYTools content
 		* Script only checks out BTagCalib and SUSYCrossSection;

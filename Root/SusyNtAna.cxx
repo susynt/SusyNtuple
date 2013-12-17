@@ -170,25 +170,25 @@ bool SusyNtAna::isDuplicate(unsigned int run, unsigned int event){
 // Default weight uses A-D lumi
 // You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
-float SusyNtAna::getEventWeight(float lumi, bool useSumwMap)
+float SusyNtAna::getEventWeight(float lumi, bool useSumwMap, bool useSusyXsec)
 {
-  return SusyNtTools::getEventWeight(nt.evt(), lumi, useSumwMap, &m_sumwMap);
+  return SusyNtTools::getEventWeight(nt.evt(), lumi, useSumwMap, &m_sumwMap, useSusyXsec);
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtAna::getEventWeightFixed(unsigned int mcChannel, float lumi)
+/*float SusyNtAna::getEventWeightFixed(unsigned int mcChannel, float lumi)
 {
   return SusyNtTools::getEventWeightFixed(mcChannel, nt.evt(), lumi);
-}
+}*/
 /*--------------------------------------------------------------------------------*/
-float SusyNtAna::getEventWeightAB3()
+/*float SusyNtAna::getEventWeightAB3()
 {
   return SusyNtTools::getEventWeightAB3(nt.evt());
-}
+}*/
 /*--------------------------------------------------------------------------------*/
-float SusyNtAna::getEventWeightAB()
+/*float SusyNtAna::getEventWeightAB()
 {
   return SusyNtTools::getEventWeightAB(nt.evt());
-}
+}*/
 
 /*--------------------------------------------------------------------------------*/
 // Clear objects
