@@ -32,12 +32,13 @@ svn co $trigURL DGTriggerReweight
 svn co $reweightUtilsURL ReweightUtils
 
 # Checkout minimal SUSYTools
-mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt
+mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt SUSYTools/data
 svn export $susyURL/SUSYTools/SUSYCrossSection.h SUSYTools/SUSYTools/SUSYCrossSection.h
 svn export $susyURL/SUSYTools/BTagCalib.h SUSYTools/SUSYTools/BTagCalib.h
 svn export $susyURL/Root/SUSYCrossSection.cxx SUSYTools/Root/SUSYCrossSection.cxx
 svn export $susyURL/Root/BTagCalib.cxx SUSYTools/Root/BTagCalib.cxx
 svn export $susyURL/cmt/Makefile.RootCore SUSYTools/cmt/Makefile.RootCore
+svn co $susyURL/data SUSYTools/data
 
 # Modify the SUSYTools Makefile dependencies
 #sed -i "s/Internal/Thesis/g" *.eps
