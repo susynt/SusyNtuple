@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2013-12-30 Steve
+	* Fixed method to retrieve SUSYTools cross section
+	* Tagging SusyNtuple-00-01-07
+
 2013-12-19 Steve
 	* Added SUSYTools/data directory to the new installation script
 

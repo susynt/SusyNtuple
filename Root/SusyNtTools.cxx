@@ -149,13 +149,15 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* ev
 {
   using namespace SUSY;
   // Use one DB and map for all instances of this class
-  typedef std::pair<int, int> intpair;
-  typedef std::map<intpair, CrossSectionDB::Process> XSecMap;
-  static CrossSectionDB xsecDB;
+  typedef pair<int, int> intpair;
+  typedef map<intpair, CrossSectionDB::Process> XSecMap;
+  static string xsecDir = string(getenv("ROOTCOREDIR")) + "/data/SUSYTools/mc12_8TeV/";
+  static CrossSectionDB xsecDB(xsecDir);
   static XSecMap xsecCache;
   if(evt->isMC){
+    // TODO: fix this! We currently save -1 as default value, 
+    // but SUSYTools expects 0 as default value
     int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
-    //const CrossSectionDB::Process::Key k(evt->mcChannel, proc);
     const intpair k(evt->mcChannel, proc);
     // Check to see if we've cached this process yet.
     XSecMap::const_iterator iter = xsecCache.find(k);
@@ -166,6 +168,7 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* ev
       // Hasn't been cached yet, load it from the DB
       CrossSectionDB::Process p = xsecDB.process(evt->mcChannel, proc);
       xsecCache[k] = p;
+      return p;
     }
   }
   return CrossSectionDB::Process();
