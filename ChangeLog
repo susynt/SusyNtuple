@@ -1,5 +1,19 @@
 # vim: set noexpandtab:
 
+2014-01-04 Steve
+	* Updated the sumw map to handle signal samples with multiple processes
+		* The map is now keyed by (MCID, proc)
+		* New typedefs in SusyDefs: SumwMap, SumwMapKey
+		* buildSumwMap method will now find all process cutflow hists
+		  in the input files and fill the map accordingly
+	* getEventWeight now has new argument for controlling the sumw feature: useProcSumw
+		* Setting this to true for all bkg MC and data shouldn't have any effect
+		* It should only be set to false for samples that have multiple 
+		  processes and you DON'T want to normalize each process separately.
+		* NOTE: I changed the order of the arguments!
+			* Luckily, the other affected arg is new and 
+			  probably nobody is using it yet anyway.
+
 2013-12-30 Steve
 	* Fixed method to retrieve SUSYTools cross section
 	* Tagging SusyNtuple-00-01-07

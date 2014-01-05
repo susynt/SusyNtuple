@@ -1,6 +1,7 @@
 #include <set>
 
 #include "TFile.h"
+#include "TKey.h"
 #include "TChainElement.h"
 #include "TH1F.h"
 
@@ -47,8 +48,9 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 // You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
-                                  bool useSumwMap, const map<unsigned int, float>* sumwMap,
-                                  bool useSusyXsec)
+                                  //bool useSumwMap, const map<unsigned int, float>* sumwMap,
+                                  bool useSumwMap, const SumwMap* sumwMap,
+                                  bool useProcSumw, bool useSusyXsec)
 {
   if(!evt->isMC) return 1;
   else{
@@ -56,7 +58,10 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
     if(useSumwMap){
       if(sumwMap != NULL){
         unsigned int mcid = evt->mcChannel;
-        map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
+        int sumwProc = useProcSumw? evt->susyFinalState : -1;
+        SumwMapKey key(mcid, -1);
+        //map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
+        SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
         if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
         else{
           cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
@@ -1966,10 +1971,14 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
 // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
 // However, one can have more than one (complete) dataset in the chain which is why we use the map.
 /*--------------------------------------------------------------------------------*/
-map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
+SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
 {
+  //cout << "SusyNtTools::buildSumwMap" << endl;
+
   // The sumw map
-  map<unsigned int, float> sumwMap;
+  //typedef pair<unsigned int, int> uintpair;
+  //map<unsigned int, float> sumwMap;
+  SumwMap sumwMap;
 
   // Loop over files in the chain
   TObjArray* fileElements = chain->GetListOfFiles();
@@ -1990,25 +1999,69 @@ map<unsigned int, float> SusyNtTools::buildSumwMap(TChain* chain, bool isSimplif
     tree->GetEntry(0);
     //cout << "mcid: " << evt->mcChannel << endl;
 
+    // General key, default process number (-1)
+    SumwMapKey genKey(evt->mcChannel, -1);
+    if(sumwMap.find(genKey) == sumwMap.end()) sumwMap[genKey] = 0;
+
     // Get the generator weighted histogram
     TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
     //cout << "sumw: " << hGenCF->GetBinContent(1) << endl;
-    if(!isSimplifiedModel)
-      sumwMap[evt->mcChannel] += hGenCF->GetBinContent(1);
-    else
-      sumwMap[evt->mcChannel] += hGenCF->GetBinContent(2);
 
-    // Is it ok to close the file like this?  Will it screw up the TChain later on?
+    // TODO: unify this prescription
+    if(!isSimplifiedModel)
+      sumwMap[genKey] += hGenCF->GetBinContent(1);
+    else
+      sumwMap[genKey] += hGenCF->GetBinContent(2);
+
+    // Find the histograms per process
+    TIter next(f->GetListOfKeys());
+    while(TKey* tkey = (TKey*) next()){
+      // Test to see if object is a cutflow histogram
+      TObject* obj = tkey->ReadObj();
+      if(obj->InheritsFrom("TH1")){
+        string histoName = obj->GetName();
+        if(histoName.find("procCutFlow") != string::npos){
+          TH1F* hProcCF = (TH1F*) obj;
+          //cout << "Found a proc cutflow" << endl;
+          //hProcCF->Print();
+
+          // Extract the process ID from the histo name
+          string procString = histoName.substr(11, string::npos);
+          stringstream stream;
+          stream << procString;
+          int proc;
+          stream >> proc;
+          //cout << "proc: " << proc << endl;
+
+          // Skip the default with proc = -1
+          if(proc != -1){
+            SumwMapKey procKey(evt->mcChannel, proc);
+            if(sumwMap.find(procKey) == sumwMap.end()) sumwMap[procKey] = 0;
+            //cout << "filling the sumw map" << endl;
+
+            // TODO: unify the prescription
+            if(!isSimplifiedModel)
+              sumwMap[procKey] += hProcCF->GetBinContent(1);
+            else
+              sumwMap[procKey] += hProcCF->GetBinContent(2);
+          }
+        } // Is a proc cutflow
+      } // Object is a histo
+    } // Loop over TKeys in TFile
+
     f->Close();
     delete f;
   }
 
   // Dump out the MCIDs and calculated sumw
-  map<unsigned int, float>::iterator sumwMapIter;
+  SumwMap::iterator sumwMapIter;
   cout << endl << "On-the-fly sumw computation:" << endl;
   cout.precision(8);
   for(sumwMapIter = sumwMap.begin(); sumwMapIter != sumwMap.end(); sumwMapIter++){
-    cout << "mcid: " << sumwMapIter->first << " sumw: " << sumwMapIter->second << endl;
+    cout << "mcid: " << sumwMapIter->first.first 
+         << " proc: " << sumwMapIter->first.second 
+         << " sumw: " << sumwMapIter->second 
+         << endl;
   }
   cout.precision(6);
 

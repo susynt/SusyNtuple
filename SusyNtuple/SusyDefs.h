@@ -69,6 +69,9 @@ typedef std::vector<Susy::Jet*>           JetVector;
 typedef std::vector<Susy::TruthParticle*> TruthParticleVector;
 typedef std::vector<Susy::TruthJet*>      TruthJetVector;
 
+typedef std::pair<unsigned int, int> SumwMapKey;
+typedef std::map<SumwMapKey, float> SumwMap;
+
 //-----------------------------------------------------------------------------------
 // Global enums
 //-----------------------------------------------------------------------------------

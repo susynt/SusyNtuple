@@ -46,11 +46,10 @@ class SusyNtTools
     // Pileup weights correspond to same dataset.
     virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
                                  bool useSumwMap = false, 
-                                 const std::map<unsigned int, float>* sumwMap = 0,
+                                 //const std::map<unsigned int, float>* sumwMap = 0,
+                                 const SumwMap* sumwMap = 0,
+                                 bool useProcSumw = false,
                                  bool useSusyXsec = false);
-    // Temporary fixed version of getEventWeight for n0138
-    //virtual float getEventWeightFixed(unsigned int mcChannel, const Susy::Event* evt, 
-    //                                  float lumi = LUMI_A_L);
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
     // This will use the correct pileup weights for A-B3
@@ -414,7 +413,7 @@ class SusyNtTools
     // used to calculate the total sumw for each MCID.
     // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
     // However, one can have more than one (complete) dataset in the chain.
-    std::map<unsigned int, float> buildSumwMap(TChain* chain, bool isSimplifiedModel = false);
+    SumwMap buildSumwMap(TChain* chain, bool isSimplifiedModel = false);
 
     // Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
