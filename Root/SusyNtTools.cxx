@@ -59,7 +59,7 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
       if(sumwMap != NULL){
         unsigned int mcid = evt->mcChannel;
         int sumwProc = useProcSumw? evt->susyFinalState : -1;
-        SumwMapKey key(mcid, -1);
+        SumwMapKey key(mcid, sumwProc);
         //map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
         SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
         if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
@@ -2008,6 +2008,9 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
     //cout << "sumw: " << hGenCF->GetBinContent(1) << endl;
 
     // TODO: unify this prescription
+    // Bin 1 is all initial events
+    // Bin 2 is events after susy propagators have been removed
+    // (relevant for the simplified models only)
     if(!isSimplifiedModel)
       sumwMap[genKey] += hGenCF->GetBinContent(1);
     else
@@ -2020,12 +2023,14 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
       TObject* obj = tkey->ReadObj();
       if(obj->InheritsFrom("TH1")){
         string histoName = obj->GetName();
+
+        // Histo is named procCutFlowXYZ where XYZ is the process number
         if(histoName.find("procCutFlow") != string::npos){
           TH1F* hProcCF = (TH1F*) obj;
           //cout << "Found a proc cutflow" << endl;
           //hProcCF->Print();
 
-          // Extract the process ID from the histo name
+          // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
           string procString = histoName.substr(11, string::npos);
           stringstream stream;
           stream << procString;
@@ -2039,7 +2044,7 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
             if(sumwMap.find(procKey) == sumwMap.end()) sumwMap[procKey] = 0;
             //cout << "filling the sumw map" << endl;
 
-            // TODO: unify the prescription
+            // TODO: unify the prescription - see above
             if(!isSimplifiedModel)
               sumwMap[procKey] += hProcCF->GetBinContent(1);
             else

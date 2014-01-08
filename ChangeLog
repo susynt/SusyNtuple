@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2014-01-07 Steve
+	* Added clarification comments for the sumw map update of last commit
+	* Fixed usage of proc ID when retrieving the sumw
+
 2014-01-04 Steve
 	* Updated the sumw map to handle signal samples with multiple processes
 		* The map is now keyed by (MCID, proc)
