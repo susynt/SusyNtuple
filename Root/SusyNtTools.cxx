@@ -1474,11 +1474,24 @@ bool SusyNtTools::isZWindow(const Lepton* l1, const Lepton* l2, float minMll, fl
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasZ(const LeptonVector& leps, float massWindow, bool useMultiLep)
 {
+  uint dummy;
+  return hasZ(leps, &dummy, &dummy, massWindow, useMultiLep);
+}
+
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasZ(const LeptonVector& leps, 
+		       uint* Zl2, uint* Zl1, 
+		       float massWindow, bool useMultiLep)
+{
   uint nLep = leps.size();
   for(uint i=0; i<nLep; i++){
     for(uint j=i+1; j<nLep; j++){
       // check for Z->ll
-      if( isZ(leps[i], leps[j], massWindow) ) return true;
+      if( isZ(leps[i], leps[j], massWindow) ){
+	*Zl1=i;
+	*Zl2=j;
+	return true;
+      }
       if(useMultiLep){
         for(uint k=j+1; k<nLep; k++){
           // check for Z->lll(l)
@@ -1766,6 +1779,25 @@ float SusyNtTools::getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2
   mt2_event.set_mn(0); // LSP mass = 0 is Generic
   
   return mt2_event.get_mt2();
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Susy::Met* met, 
+			  bool zeroMass, float lspMass)
+{
+  // necessary variables
+  TLorentzVector metLV = met->lv();
+
+  double pTMiss[3] = {0.0, metLV.Px(), metLV.Py()};
+  double pA[3]     = { (zeroMass) ? 0.0 : p1->M() , p1->Px(), p1->Py()};
+  double pB[3]     = { (zeroMass) ? 0.0 : p2->M() , p2->Px(), p2->Py()};
+  
+  // Create Mt2 object
+  mt2_bisect::mt2 mt2_event;
+  mt2_event.set_momenta(pA,pB,pTMiss);
+  mt2_event.set_mn(lspMass); 
+  
+  return mt2_event.get_mt2();
+
 }
 
 /*--------------------------------------------------------------------------------*/

@@ -31,7 +31,10 @@ class SusyNtTools
     //
     // Set Analysis type to determine selection
     //
-    void setAnaType(AnalysisType A){ m_anaType = A; };
+    void setAnaType(AnalysisType A, bool verbose=false){ 
+      m_anaType = A; 
+      if(verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
+    };
 
     //
     // Configure the btag sf tool
@@ -342,6 +345,7 @@ class SusyNtTools
                           float minMll=MZ-10, float maxMll=MZ+10);
     // NEW Argument useMultiLep will check for mlll and mllll in Z peak
     static bool hasZ(const LeptonVector& leps, float massWindow=10., bool useMultiLep=false);
+    static bool hasZ(const LeptonVector& leps,  uint* Zl1, uint* Zl2, float massWindow=10.,bool useMultiLep=false);
     static bool hasZlll(const LeptonVector& leps, float massWindow=10.);
     static bool hasZllll(const LeptonVector& leps, float massWindow=10.);
     static bool hasZllZll(const LeptonVector& leps, uint* Z1l1, uint* Z1l2, uint* Z2l1, uint* Z2l2,  float massWindow=10.);
@@ -382,6 +386,7 @@ class SusyNtTools
     // MT2
     static float getMT2(const LeptonVector& leptons, const Susy::Met* met);
     static float getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Susy::Met* met);
+    static float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Susy::Met* met,  bool zeroMass, float lspMass=0);
 
     // HT
     static float getHT(const JetVector& jets);

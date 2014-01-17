@@ -118,6 +118,13 @@ enum AnalysisType
   Ana_N
 };
 
+// Human-readable names for enum SusyNtSys 
+const std::string SusyNtAnalysisType[Ana_N] = {
+  "Ana_2Lep",
+  "Ana_3Lep",
+  "Ana_2LepWH",
+};
+
 // SUSY D3PD tag, for controlling which branch names to grab
 enum D3PDTag
 {

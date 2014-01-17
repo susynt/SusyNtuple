@@ -133,6 +133,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
     // However, one can have more than one (complete) dataset in the chain which is why we use the map.
     void buildSumwMap(TChain* chain);
     const SumwMap* getSumwMap() { return &m_sumwMap; }
+    void setSumwMap(const SumwMap map) {m_sumwMap = map; }
+
 
     // Dump timer
     void dumpTimer();

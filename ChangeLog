@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2014-01-16 Anyes
+	* Added SusyDefs: human readable analysis type
+	* Added SusyNtAna function to get/set sumw map
+	* Added SystNtTools overload function for hasZ and getMT2
+	
 2014-01-07 Steve
 	* Added clarification comments for the sumw map update of last commit
 	* Fixed usage of proc ID when retrieving the sumw
