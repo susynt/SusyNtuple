@@ -102,7 +102,7 @@ namespace Susy
         larError = 0;
         nVtx = avgMu = trigFlags = 0;
         hfor = -1;
-        susyFinalState = -1;
+        susyFinalState = 0;
         mllMcTruth = -1.0;
         hDecay = -1;
         eventWithSusyProp = false;

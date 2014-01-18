@@ -58,7 +58,7 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
     if(useSumwMap){
       if(sumwMap != NULL){
         unsigned int mcid = evt->mcChannel;
-        int sumwProc = useProcSumw? evt->susyFinalState : -1;
+        int sumwProc = useProcSumw? evt->susyFinalState : 0;
         SumwMapKey key(mcid, sumwProc);
         //map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
         SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
@@ -2008,8 +2008,6 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
   //cout << "SusyNtTools::buildSumwMap" << endl;
 
   // The sumw map
-  //typedef pair<unsigned int, int> uintpair;
-  //map<unsigned int, float> sumwMap;
   SumwMap sumwMap;
 
   // Loop over files in the chain
@@ -2029,17 +2027,15 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
     tree->SetBranchStatus("mcChannel", 1);
     tree->SetBranchAddress("event", &evt);
     tree->GetEntry(0);
-    //cout << "mcid: " << evt->mcChannel << endl;
 
-    // General key, default process number (-1)
-    SumwMapKey genKey(evt->mcChannel, -1);
+    // General key, default process number (0)
+    SumwMapKey genKey(evt->mcChannel, 0);
     if(sumwMap.find(genKey) == sumwMap.end()) sumwMap[genKey] = 0;
 
     // Get the generator weighted histogram
     TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
-    //cout << "sumw: " << hGenCF->GetBinContent(1) << endl;
 
-    // TODO: unify this prescription
+    // TODO: Check if bin 2 can be used for everything yet
     // Bin 1 is all initial events
     // Bin 2 is events after susy propagators have been removed
     // (relevant for the simplified models only)
@@ -2059,8 +2055,6 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
         // Histo is named procCutFlowXYZ where XYZ is the process number
         if(histoName.find("procCutFlow") != string::npos){
           TH1F* hProcCF = (TH1F*) obj;
-          //cout << "Found a proc cutflow" << endl;
-          //hProcCF->Print();
 
           // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
           string procString = histoName.substr(11, string::npos);
@@ -2068,13 +2062,11 @@ SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
           stream << procString;
           int proc;
           stream >> proc;
-          //cout << "proc: " << proc << endl;
 
-          // Skip the default with proc = -1
-          if(proc != -1){
+          // Skip the default with proc = -1 or 0
+          if(proc != -1 && proc != 0){
             SumwMapKey procKey(evt->mcChannel, proc);
             if(sumwMap.find(procKey) == sumwMap.end()) sumwMap[procKey] = 0;
-            //cout << "filling the sumw map" << endl;
 
             // TODO: unify the prescription - see above
             if(!isSimplifiedModel)

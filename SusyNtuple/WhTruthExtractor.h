@@ -21,13 +21,14 @@ class WhTruthExtractor {
  public:
   typedef std::vector< int > vint_t;
   typedef std::vector< vint_t > vvint_t;
+  // 2014-01-17: Order of enum changed so that kUnknown is zero
   enum Hdecays {
+    kUnknown = 0,
     kPwAw,
     kZZ,
     kPtauAtau,
     kPbAb,
     kPmuAmu,
-    kUnknown,
   };
   enum PdgIds{
     kPd=+1, kAd=-1,
