@@ -7,7 +7,7 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
-//#include "SusyNtuple/BTagCalib.h"
+#include "SusyNtuple/MCWeighter.h"
 #include "SUSYTools/BTagCalib.h"
 #include "SUSYTools/SUSYCrossSection.h"
 
@@ -52,7 +52,8 @@ class SusyNtTools
                                  //const std::map<unsigned int, float>* sumwMap = 0,
                                  const SumwMap* sumwMap = 0,
                                  bool useProcSumw = false,
-                                 bool useSusyXsec = false);
+                                 bool useSusyXsec = false,
+                                 MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
 
     // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
     // This will use the correct pileup weights for A-B3

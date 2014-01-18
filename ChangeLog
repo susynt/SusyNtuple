@@ -4,6 +4,9 @@
 	* Changed default value of susyFinalState to 0 to be consistent with SUSYTools
 	* Changed order of Hdecay enum in WhTruthExtractor. kUnknown is now 0 to be
 	  consistent with susyFinalState and SUSYTools.
+	* Added empty MCWeighter class definition which will handle the MC normalization
+		* At the moment it only holds the sys enum
+	* Added cross section systematic to getEventWeight methods
 
 2014-01-16 Anyes
 	* Added SusyDefs: human readable analysis type

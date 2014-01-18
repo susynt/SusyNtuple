@@ -18,7 +18,7 @@ trigURL="svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProducti
 reweightUtilsURL="svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
 
 # Run this from your work dir, not within this package
-asetup AtlasProduction,17.2.9.1,here,slc5
+asetup 17.2.9.1,here,slc5
 
 # Install fresh RootCore
 svn co $rootCoreURL RootCore

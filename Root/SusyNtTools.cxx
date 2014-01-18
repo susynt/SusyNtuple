@@ -50,7 +50,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
                                   //bool useSumwMap, const map<unsigned int, float>* sumwMap,
                                   bool useSumwMap, const SumwMap* sumwMap,
-                                  bool useProcSumw, bool useSusyXsec)
+                                  bool useProcSumw, bool useSusyXsec, 
+                                  MCWeighter::WeightSys sys)
 {
   if(!evt->isMC) return 1;
   else{
@@ -78,6 +79,10 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
     if(useSusyXsec){
       SUSY::CrossSectionDB::Process p = getCrossSection(evt);
       xsec = p.xsect() * p.kfactor() * p.efficiency();
+      if(sys==MCWeighter::Sys_XSEC_UP)
+        xsec *= (1. + p.relunc());
+      else if(sys==MCWeighter::Sys_XSEC_DN)
+        xsec *= (1. - p.relunc());
     }
     return evt->w * evt->wPileup * xsec * lumi / sumw;
   }
