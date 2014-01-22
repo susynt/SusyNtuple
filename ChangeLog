@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2014-01-22 Steve
+	* Fixed SusyNtAna getEventWeight
+		* Added useProcSumw argument. Order of args has changed,
+		  so be careful!
+
 2014-01-17 Steve
 	* Changed default value of susyFinalState to 0 to be consistent with SUSYTools
 	* Changed order of Hdecay enum in WhTruthExtractor. kUnknown is now 0 to be

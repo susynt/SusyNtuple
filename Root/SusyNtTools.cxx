@@ -1416,7 +1416,7 @@ float SusyNtTools::Mjj(const Jet* j1, const Jet* j2)
 float SusyNtTools::Mlljj(const Lepton* l1, const Lepton* l2, const Jet* j1, const Jet* j2)
 { return (*l1 + *l2 + *j1 + *j2).M(); }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::Mt(const Lepton* lep, const Met* met)
+float SusyNtTools::Mt(const TLorentzVector* lep, const Met* met)
 { return sqrt( 2.*lep->Pt()*met->Et*(1 - cos(lep->DeltaPhi((met->lv())))) ); }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::Meff(const JetVector& jets, const Met* met, float jetPtCut)

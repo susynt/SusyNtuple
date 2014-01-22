@@ -49,7 +49,6 @@ class SusyNtTools
     // Pileup weights correspond to same dataset.
     virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
                                  bool useSumwMap = false, 
-                                 //const std::map<unsigned int, float>* sumwMap = 0,
                                  const SumwMap* sumwMap = 0,
                                  bool useProcSumw = false,
                                  bool useSusyXsec = false,
@@ -330,7 +329,8 @@ class SusyNtTools
     static float Mjj(const Susy::Jet* j1, const Susy::Jet* j2);
     static float Mlljj(const Susy::Lepton* l1, const Susy::Lepton* l2,
                        const Susy::Jet* j1, const Susy::Jet* j2);
-    static float Mt(const Susy::Lepton* lep, const Susy::Met* met);
+    //static float Mt(const Susy::Lepton* lep, const Susy::Met* met);
+    static float Mt(const TLorentzVector* lep, const Susy::Met* met);
     static float Meff(const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
     static float Meff(const LeptonVector& leps, const JetVector& jets, const Susy::Met* met, float jetPtCut=40.);
     static float Meff(const LeptonVector& leps, const TauVector& taus, const JetVector& jets,

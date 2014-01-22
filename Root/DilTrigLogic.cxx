@@ -29,16 +29,14 @@ DilTrigLogic::DilTrigLogic(string period, bool useReweightUtils) :
     m_triggerWeight->initialize(directory, period, false);//To turn off ReweightUtils 
   m_triggerWeight->setDbg(0);
   
-
 }
+
 /*--------------------------------------------------------------------------------*/
 // Destructor
 /*--------------------------------------------------------------------------------*/
 DilTrigLogic::~DilTrigLogic()
 {
-  
   if(m_triggerWeight) delete m_triggerWeight;
-  
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -64,7 +62,7 @@ bool DilTrigLogic::passDilEvtTrig(LeptonVector leptons, float met, Event* evt)
   DataStream stream = evt->stream;
 
   // If unknown stream, then return
-  if( stream == Stream_Unknown){
+  if(stream == Stream_Unknown){
     cout<<"Error: Stream is unknown! Returning false from passDilTrig."<<endl;
     return false;
   }
@@ -388,7 +386,6 @@ double DilTrigLogic::getTriggerWeightEM(LeptonVector leptons, int NPV, SusyNtSys
   int isComb   = isElec0 ? 
     ((Muon*) leptons[1])->isCombined : 
     ((Muon*) leptons[0])->isCombined;
-  
     
   return m_triggerWeight->triggerReweightEMU(elpt, eleta, mupt, mueta, muphi, isComb, 
 					     trigSys, NPV);

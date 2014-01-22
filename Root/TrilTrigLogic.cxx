@@ -113,7 +113,6 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
     // Electrons
     if(lep->isEle()){
       // If leading lepton, check isolated trigger
-      //if(i==0 && matchLepTrigger(lep, TRIG_e24vhi_medium1, 25, 2.47, m_accOnly)) n1E++;
       if(i==0 && matchEle(TRIG_e24vhi_medium1, 25)) n1E++;
       if(useDilepTrigs){
         // 2e symmetric trigger
@@ -133,7 +132,6 @@ bool TrilTrigLogic::passTriggerMatching(const LeptonVector& leptons, const TauVe
     // Muons
     else{
       // If leading lepton, check isolated trigger
-      //if(i==0 && matchLepTrigger(lep, TRIG_mu24i_tight, 25, m_accOnly)) n1M++;
       if(i==0 && matchMu(TRIG_mu24i_tight, 25)) n1M++;
       if(useDilepTrigs){
         // 2m symmetric trigger
