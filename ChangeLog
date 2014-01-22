@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2014-01-22 Anyes
+	* Added functions for mljj 
+	* Update 2LSSWh isolation cuts to tighter set (not backward compatible)
+	
 2014-01-22 Steve
 	* Fixed SusyNtAna getEventWeight
 		* Added useProcSumw argument. Order of args has changed,

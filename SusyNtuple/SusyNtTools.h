@@ -392,6 +392,11 @@ class SusyNtTools
     // HT
     static float getHT(const JetVector& jets);
 
+
+    //Mljj. Returns mlj if only 1-jet
+    static float mljj(const LeptonVector& leptons, const JetVector& jets);
+
+
     // Transverse thrust
     static float getThrT(const LeptonVector& leptons);
 

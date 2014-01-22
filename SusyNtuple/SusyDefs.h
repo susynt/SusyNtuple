@@ -443,24 +443,29 @@ const float JET_ETA_MAX_CUT  = 4.5;
 const float JET_ETA_CUT_2L   = 2.4;
 
 // Signal Requirements
-const float ELECTRON_PTCONE30_PT_CUT       = 0.16; 
+const float ELECTRON_ISO_PT_THRS           = 60.0;
+const float ELECTRON_PTCONE30_PT_CUT       = 0.16;
+const float ELECTRON_PTCONE30_PT_WH_CUT    = 0.07; 
 const float ELECTRON_TOPOCONE30_SLOPE_DATA = 0.02015;
 const float ELECTRON_TOPOCONE30_SLOPE_MC   = 0.01794;
 const float ELECTRON_TOPOCONE30_PT_CUT     = 0.18;
+const float ELECTRON_TOPOCONE30_PT_WH_CUT  = 0.13;
 const float ELECTRON_D0SIG_CUT             = 5.0;
 const float ELECTRON_D0SIG_CUT_WH          = 3.0;
 const float ELECTRON_Z0_SINTHETA_CUT       = 0.4;
 
+const float MUON_ISO_PT_THRS            = 60.0;
 const float MUON_PTCONE30_SLOPE_DATA    = 0.01098;
 const float MUON_PTCONE30_SLOPE_MC      = 0.00627;
 const float MUON_PTCONE30_PT_CUT        = 0.12;
 const float MUON_PTCONE30ELSTYLE_PT_CUT = 0.12;
+const float MUON_PTCONE30ELSTYLE_PT_WH_CUT = 0.06;
 const float MUON_ETCONE30_K1_DATA       = 0.0648;
 const float MUON_ETCONE30_K2_DATA       = 0.00098;
 const float MUON_ETCONE30_K1_MC         = 0.0692;
 const float MUON_ETCONE30_K2_MC         = 0.00076;
 const float MUON_ETCONE30_PT_CUT        = 0.12;
-const float MUON_ETCONE30_PT_CUT_WH     = 0.10;
+const float MUON_ETCONE30_PT_WH_CUT     = 0.14;//0.10;
 const float MUON_D0SIG_CUT              = 3.0;
 const float MUON_Z0_SINTHETA_CUT        = 1.0;//0.2;
 
