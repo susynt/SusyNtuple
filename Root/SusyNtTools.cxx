@@ -60,6 +60,7 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
       if(sumwMap != NULL){
         unsigned int mcid = evt->mcChannel;
         int sumwProc = useProcSumw? evt->susyFinalState : 0;
+        if(sumwProc < 0) sumwProc = 0;
         SumwMapKey key(mcid, sumwProc);
         //map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
         SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
