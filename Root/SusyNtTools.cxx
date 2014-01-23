@@ -48,7 +48,6 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 // You can supply a different luminosity, but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
-                                  //bool useSumwMap, const map<unsigned int, float>* sumwMap,
                                   bool useSumwMap, const SumwMap* sumwMap,
                                   bool useProcSumw, bool useSusyXsec, 
                                   MCWeighter::WeightSys sys)
@@ -59,15 +58,14 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
     if(useSumwMap){
       if(sumwMap != NULL){
         unsigned int mcid = evt->mcChannel;
-        int sumwProc = useProcSumw? evt->susyFinalState : 0;
-        if(sumwProc < 0) sumwProc = 0;
-        SumwMapKey key(mcid, sumwProc);
-        //map<unsigned int, float>::const_iterator sumwMapIter = sumwMap->find(mcid);
+        int procID = useProcSumw? evt->susyFinalState : 0;
+        if(procID < 0) procID = 0;
+        SumwMapKey key(mcid, procID);
         SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
         if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
         else{
           cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
-               << "mcid " << mcid << " not found!" << endl;
+               << "mcid " << mcid << " proc " << procID << " not found!" << endl;
           abort();
         }
       }
