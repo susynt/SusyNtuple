@@ -8,6 +8,7 @@
 	* Cleaned up mljj method
 	* Added MCID and prod ID to Event.print()
 	* Added Met.sumet to the copy constructor and assignment operator (was missing)
+	* Added scripts/refreshSUSYToolsData.sh to update SUSYTools/data to trunk
 
 2014-01-22 Steve
 	* Fixed SusyNtTools getEventWeight to use 0 when proc ID -1 is found
