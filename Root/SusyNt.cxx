@@ -12,7 +12,12 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 void Event::print() const
 {
-  cout << "Run " << run << " Event " << event << " Stream " << streamName(stream) 
+  cout << "Run " << run;
+  if(isMC){
+    cout << " MCID " << mcChannel
+         << " proc " << susyFinalState;
+  }
+  cout << " Event " << event << " Stream " << streamName(stream) 
        << " w " << w << endl;
 }
 
@@ -540,6 +545,7 @@ Met::Met(const Met &rhs):
   TObject(rhs),
   Et(rhs.Et),
   phi(rhs.phi),
+  sumet(rhs.sumet),
   refEle(rhs.refEle),
   refEle_etx(rhs.refEle_etx),
   refEle_ety(rhs.refEle_ety),
@@ -578,6 +584,7 @@ Met& Met::operator=(const Met &rhs)
     TObject::operator=(rhs);
     Et = rhs.Et; 
     phi = rhs.phi; 
+    sumet = rhs.sumet;
     refEle = rhs.refEle; 
     refEle_etx = rhs.refEle_etx; 
     refEle_ety = rhs.refEle_ety; 

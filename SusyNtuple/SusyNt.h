@@ -584,6 +584,7 @@ namespace Susy
       }
 
       // MET Composition info - do we want TLorentzVectors, TVector2, or just floats?
+      // TODO: clean out the obsolete terms
       float refEle;             // Ref electron term magnitude
       float refEle_etx;         // Ref electron term
       float refEle_ety;         // Ref electron term

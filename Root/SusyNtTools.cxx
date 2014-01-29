@@ -164,9 +164,10 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* ev
   static CrossSectionDB xsecDB(xsecDir);
   static XSecMap xsecCache;
   if(evt->isMC){
-    // TODO: fix this! We currently save -1 as default value, 
-    // but SUSYTools expects 0 as default value
+    // SUSYTools expects 0 as default value, but we have existing tags with default of -1
     int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
+    // Temporary bugfix for Wh nohadtau
+    if(evt->mcChannel >= 177501 && evt->mcChannel <= 177528) proc = 125;
     const intpair k(evt->mcChannel, proc);
     // Check to see if we've cached this process yet.
     XSecMap::const_iterator iter = xsecCache.find(k);
@@ -1835,20 +1836,23 @@ float SusyNtTools::getHT(const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::mljj(const LeptonVector& leptons, const JetVector& jets)
 {
-  if(jets.size()<1) return -999;
+  if(jets.size() < 1 || leptons.size() < 2) return -999;
 
-  TLorentzVector l0 = *leptons.at(0);
-  TLorentzVector l1 = *leptons.at(1);
-  TLorentzVector j0 = *jets.at(0);
-  TLorentzVector j1; //initilized to (0,0,0,0)
-  if(jets.size()>=2) j1 = *jets.at(1);
-  TLorentzVector jj = j0+j1;
+  const Lepton& l0 = *leptons.at(0);
+  const Lepton& l1 = *leptons.at(1);
+  TLorentzVector jj(*jets.at(0));
+  if(jets.size() >= 2) jj += *jets.at(1);
+  //TLorentzVector l0 = *leptons.at(0);
+  //TLorentzVector l1 = *leptons.at(1);
+  //TLorentzVector j0 = *jets.at(0);
+  //TLorentzVector j1; //initilized to (0,0,0,0)
+  //if(jets.size()>=2) j1 = *jets.at(1);
+  //TLorentzVector jj = j0+j1;
 
   float dR1 = jj.DeltaR(l0);
   float dR2 = jj.DeltaR(l1);
   
   return (dR1<dR2) ? (jj+l0).M() : (jj+l1).M();
-
 }
 
 
