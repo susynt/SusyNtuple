@@ -788,7 +788,9 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
   // JVF cut is now only to be applied to jets with pt < 50 GeV and |detEta| < 2.4
   // Note that I'm just hardcoding the 50 and 2.4 requirements. I don't expect those to change
   //if(jet->jvf < JET_JVF_CUT) return false;
-  if(jet->Pt() < 50 && fabs(jet->detEta) < 2.4 && jet->jvf < JET_JVF_CUT) return false; 
+  if(jet->Pt() < JET_JVF_PT &&  
+     fabs(jet->detEta) < JET_JVF_ETA && 
+     jet->jvf < JET_JVF_CUT) return false; 
   return true;
 }
 
@@ -1690,15 +1692,15 @@ JetVector SusyNtTools::getBJets(const JetVector& jets, float weight)
 //float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
 //			  std::string taggerName, std::string OP, float opval,
 //			  BTagSys sys)
-// float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool isSherpa, BTagSys sys)
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
 {
   if(!evt->isMC) return 1;
   
-  if( !m_btagTool ){
-    if(m_anaType == Ana_2Lep
-       || m_anaType == Ana_2LepWH) configureBTagTool("0_3511",MV1_80, false);
-    else                           configureBTagTool("0_3511",MV1_80, true);
+  if(!m_btagTool){
+    if(m_anaType == Ana_2Lep || m_anaType == Ana_2LepWH) 
+      configureBTagTool("0_3511", MV1_80, false);
+    else
+      configureBTagTool("0_3511", MV1_80, true);
   }
 
   static const float MEV = 1000;
@@ -1725,7 +1727,6 @@ float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTa
     m_btagTool->BTagCalibrationFunction(pt_btag, eta_btag,
                                         val_btag, pdgid_btag,
                                         isSherpa);
-  
   
   if( sys == BTag_BJet_DN ) return wgtbtag.first.at(1);  
   if( sys == BTag_CJet_DN ) return wgtbtag.first.at(2);  

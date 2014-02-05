@@ -13,11 +13,10 @@ using namespace Susy;
 void Event::print() const
 {
   cout << "Run " << run;
-  if(isMC){
-    cout << " MCID " << mcChannel
-         << " proc " << susyFinalState;
-  }
-  cout << " Event " << event << " Stream " << streamName(stream) 
+  if(isMC) cout << " MCID " << mcChannel;
+  cout << " Event " << event;
+  if(isMC) cout << " proc " << susyFinalState;
+  cout << " Stream " << streamName(stream) 
        << " w " << w << endl;
 }
 

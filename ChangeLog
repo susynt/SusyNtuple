@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2014-02-05 Steve
+	* Added MCID and proc ID to Event.print()
+	* Changed from hardcoded values to JET_JVF_PT and JET_JVF_ETA in isSignalJet
+	* Added template method, dumpObjects, for looping and dumping any 
+	  objects with a print() method.
+
 2014-01-29 Steve
 	* Added bugfix to getCrossSection for Wh nohadtau signal samples
 		* proc ID (susyFinalState) was not saved correctly

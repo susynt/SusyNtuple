@@ -411,6 +411,17 @@ class SusyNtTools
   
     float calcMCT(TLorentzVector v1, TLorentzVector v2);
   
+    //
+    // Object printing
+    //
+
+    // Call print on all objects in a vector
+    template<class T> void dumpObjects(const std::vector<T*> objects){
+      for(unsigned int i = 0; i < objects.size(); i++){
+        std::cout << i << " ";
+        objects[i]->print();
+      }
+    }
 
     //
     // Misc methods
