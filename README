@@ -22,17 +22,25 @@ svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/Sus
 
 
 
-# Note that if you are not planning on producing SusyNt files, you do not need to check out SusyCommon or the MultiLep package.
-# This package does still depend on SUSYTools, however. So, to install the minimal required setup use the install script.
-# This will checkout SUSYTools and run the install script from there.
-# It is recommended that you do this installation in a clean workarea.
-source SusyNtuple/scripts/install.sh
+# Note that if you are not planning on producing SusyNt files, you do not need 
+# to check out the SusyCommon, MultiLep, or SUSYTools packages. Instead, you 
+# can use this install script which will checkout the minimal RootCore package
+# content necessary to read and analyze SusyNt. It will check out a few classes
+# from SUSYTools rather than the entire package with all of its dependencies.
+source SusyNtuple/scripts/installMinimalSUSYTools.sh
 
-# If you plan to produce SusyNt or just want to have the whole machinery available to look at, then check out
-# the SusyCommon package and use the install instructions from there. In that case, this package will be checked out automatically
+# If you've already done the minimal installation above but want to update
+# the SUSYTools/data content (e.g., to pick up updated cross sections),
+# then use the following script.
+source SusyNtuple/scripts/refreshSUSYToolsData.sh
 
-# for examples of how to utilize this package, you can see the example cutflow codes below,
-# or here is my analysis code which depends on this package
+# If you plan to produce SusyNt or just want to have the whole machinery 
+# available to look at, then check out the SusyCommon package and use the 
+# install instructions from there. In that case, this package will be checked 
+# out automatically.
+
+# for examples of how to utilize this package, you can see the example cutflow 
+# codes below, or see my personal analysis code here:
 https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/sfarrell/SusyAna
 
 
@@ -80,7 +88,7 @@ Susy3LepCF
 #------------------------------------------------------------------------------------
 
 SusyDefs
-  - typedefs, constants, global functions, etc.
+  - typedefs, constants, globals, etc.
 
 SusyNt
   - Definitions for the SusyNt classes: particles, jets, event variables, etc.
@@ -94,3 +102,16 @@ SusyNtTools
 SusyNtAna
   - Analysis looper class, inherits from TSelector, used to process the SusyNt
   - Also inherits from SusyNtTools and allows to easily select all baseline and signal objects
+
+DilTrigLogic
+  - Class which implements the current 2-lepton trigger logic
+
+TrilTrigLogic
+  - Class which implements the current 3-lepton trigger logic
+
+WhTruthExtractor
+  - A class to extract from d3pd the truth information for simplifiedModel_wA_noslep_WH samples
+  - This should maybe be moved into SusyCommon
+
+SusyNtTruthAna
+  - A looper class for analyzing only the truth particles from SusyNt
