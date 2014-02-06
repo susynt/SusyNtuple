@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2014-02-06 Steve
+	* Added getBTagSFJets2Lep to SusyNtTools which returns
+	  the subset of baseline jets which are tested for the b-veto.
+	  These are thus the jets to be passed to the bTagSF method.
+
 2014-02-05 Steve
 	* Added MCID and proc ID to Event.print()
 	* Changed from hardcoded values to JET_JVF_PT and JET_JVF_ETA in isSignalJet

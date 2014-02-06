@@ -829,7 +829,6 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 {
   if(jet->Pt() < JET_PT_B20_CUT) return false;
-  //if(fabs(jet->Eta()) > JET_ETA_CUT_2L) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
   if(jet->mv1 < MV1_80) return false;
 
@@ -1676,7 +1675,7 @@ bool SusyNtTools::hasBJet(const JetVector& jets, float weight)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isBJet(const Jet* jet, float weight)
 {
-  // Switching to MV1
+  // Use MV1 algorithm
   return jet->mv1 > weight;
 }
 /*--------------------------------------------------------------------------------*/
@@ -1689,9 +1688,18 @@ JetVector SusyNtTools::getBJets(const JetVector& jets, float weight)
   return bJets;
 }
 /*--------------------------------------------------------------------------------*/
-//float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, bool useNoJVF,
-//			  std::string taggerName, std::string OP, float opval,
-//			  BTagSys sys)
+JetVector SusyNtTools::getBTagSFJets2Lep(const JetVector& baseJets)
+{
+  JetVector bTagSFJets;
+  for(uint i=0; i<baseJets.size(); i++){
+    Jet* jet = baseJets[i];
+    if(jet->Pt() > JET_PT_B20_CUT && fabs(jet->detEta) < JET_ETA_CUT_2L){
+      bTagSFJets.push_back(jet);
+    }
+  }
+  return bTagSFJets;
+}
+/*--------------------------------------------------------------------------------*/
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
 {
   if(!evt->isMC) return 1;

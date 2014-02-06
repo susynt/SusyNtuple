@@ -364,6 +364,7 @@ class SusyNtTools
     static bool isBJet(const Susy::Jet* jet, float weight=MV1_80);
     static JetVector getBJets(const JetVector& jets, float weight=MV1_80);
     
+    static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
     //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
     //std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
     //BTagSys sys=BTag_NOM);    
