@@ -9,16 +9,16 @@
 # This script is currently for testing, so things will probably get moved around later
 #
 
-atlasBaseURL="svn+ssh://svn.cern.ch/reps/atlasoff/"
-susyURL="$atlasBaseURL/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-14"
-rootCoreURL="$atlasBaseURL/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
-bTagURL="$atlasBaseURL/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-06"
-mt2URL="svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
-trigURL="svn+ssh://svn.cern.ch/reps/atlasphys/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
-reweightUtilsURL="svn+ssh://svn.cern.ch/reps/atlasoff/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
-
 # Run this from your work dir, not within this package
 asetup 17.2.9.1,here,slc5
+
+#SVNOFF="svn+ssh://svn.cern.ch/reps/atlasoff/"
+susyURL="$SVNOFF/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-14"
+rootCoreURL="$SVNOFF/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
+bTagURL="$SVNOFF/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-06"
+mt2URL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
+trigURL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
+reweightUtilsURL="$SVNOFF/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
 
 # Install fresh RootCore
 svn co $rootCoreURL RootCore
@@ -41,7 +41,6 @@ svn export $susyURL/cmt/Makefile.RootCore SUSYTools/cmt/Makefile.RootCore
 svn co $susyURL/data SUSYTools/data
 
 # Modify the SUSYTools Makefile dependencies
-#sed -i "s/Internal/Thesis/g" *.eps
 sed -i "s/^PACKAGE_DEP.*/PACKAGE_DEP = CalibrationDataInterface/" SUSYTools/cmt/Makefile.RootCore
 
 # Configure RootCore
