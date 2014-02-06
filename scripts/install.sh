@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+# This script is obsolete! See installMinimalSUSYTools.sh instead, 
+# and the general instructions in the README of this package
+#
+
 # It is better to run kinit before this script
 
 # Run this from your work dir, not within this package
