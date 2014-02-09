@@ -10,24 +10,25 @@ using namespace Susy;
 // Susy3LepCutflow Constructor
 /*--------------------------------------------------------------------------------*/
 Susy3LepCutflow::Susy3LepCutflow() :
-        m_nLepMin   (  3  ),
-        m_nLepMax   (  3  ),
-        m_selectZ   (false),
-        m_vetoZ     (false),
-        m_selectB   (false),
-        m_vetoB     (false),
+        m_nLepMin(3),
+        m_nLepMax(3),
+        m_selectZ(false),
+        m_vetoZ(false),
+        m_selectB(false),
+        m_vetoB(false),
         m_selectSFOS(false),
-        m_vetoSFOS  (false),
-        m_metMin    ( -1  ),
-        m_minMt     ( -1  ),
-        m_writeOut  (false)
+        m_vetoSFOS(false),
+        m_metMi(-1),
+        m_minMt(-1),
+        m_writeOut(false)
 {
   n_readin        = 0;
-  n_pass_LAr      = 0;
-  n_pass_HotSpot  = 0;
-  n_pass_BadJet   = 0;
-  n_pass_BadMuon  = 0;
-  n_pass_Cosmic   = 0;
+  n_pass_lar      = 0;
+  n_pass_hotSpot  = 0;
+  n_pass_badJet   = 0;
+  n_pass_badMuon  = 0;
+  n_pass_cosmic   = 0;
+  n_pass_feb      = 0;
   n_pass_nLep     = 0;
   n_pass_trig     = 0;
   n_pass_sfos     = 0;
@@ -52,11 +53,12 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
   if(m_dbg) cout << "Susy3LepCutflow::Begin" << endl;
 
   if(m_sel=="sr1") {
-    m_vetoZ      = true;
-    m_vetoB      = true;
+    m_vetoZ = true;
+    m_vetoB = true;
     m_selectSFOS = true;
-    m_metMin     = 75;
-  } else {
+    m_metMin = 75;
+  } 
+  else {
     cout << "Susy3LepCutflow::ERROR - Unknown selection type [" << m_sel << "], terminating..." << endl;
     abort();
   }
@@ -76,7 +78,6 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   n_readin++;
 
   // Chain entry not the same as tree entry
-  //static Long64_t chainEntry = -1;
   m_chainEntry++;
   if(m_dbg || m_chainEntry%50000==0)
   {
@@ -115,37 +116,39 @@ void Susy3LepCutflow::Terminate()
 bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& jets, const Met* met)
 {
   // In this method place all event selection cuts.
-  //int flag = nt.evt()->cutFlags[NtSys_NOM];
+
+  const Event* evt = nt.evt();
   int flag = cleaningCutFlags();
 
-  if( !passLAr(flag) ) return false;
-  n_pass_LAr++;
-  if( !passHotSpot(flag) ) return false;
-  n_pass_HotSpot++;
-  if( !passBadJet(flag) ) return false;
-  n_pass_BadJet++;
-  if( !passBadMuon(flag) ) return false;
-  n_pass_BadMuon++;
-  if( !passCosmic(flag) ) return false;
-  n_pass_Cosmic++;
-  //if( hasJetInBadFCAL(m_baseJets, nt.evt()->run, nt.evt()->isMC) ) return false;
-  //if( !passFCal() ) return false;
-  if( !passNLepCut(leptons) ) return false;
+  // Cleaning cuts
+  if(!passLAr(flag)) return false;
+  n_pass_lar++;
+  if(!passHotSpot(flag)) return false;
+  n_pass_hotSpot++;
+  if(!passBadJet(flag)) return false;
+  n_pass_badJet++;
+  if(!passBadMuon(flag)) return false;
+  n_pass_badMuon++;
+  if(!passCosmic(flag)) return false;
+  n_pass_cosmic++;
+  if(!passDeadRegions(m_preJets, met, evt->run, evt->ismc)) return false;
+  n_pass_feb++;
+  if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
-  if( !passTrigger(leptons) ) return false;
+  if(!passTrigger(leptons)) return false;
   n_pass_trig++;
-  if( !passSFOSCut(leptons) ) return false;
+  if(!passSFOSCut(leptons)) return false;
   n_pass_sfos++;
-  if( !passMetCut(met) ) return false;
+  if(!passMetCut(met)) return false;
   n_pass_met++;
-  if( !passZCut(leptons) ) return false;
+  if(!passZCut(leptons)) return false;
   n_pass_z++;
-  if( !passBJetCut() ) return false;
+  if(!passBJetCut()) return false;
   n_pass_bjet++;
-  if( !passMtCut(leptons, met)) return false;
+  if(!passMtCut(leptons, met)) return false;
   n_pass_mt++;
 
-  if( m_writeOut ) {
+  if(m_writeOut){
     out << nt.evt()->run << " " << nt.evt()->event << endl;
   }
 
