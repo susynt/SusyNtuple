@@ -10,16 +10,21 @@ using namespace Susy;
 // Susy3LepCutflow Constructor
 /*--------------------------------------------------------------------------------*/
 Susy3LepCutflow::Susy3LepCutflow() :
+        m_nBaseLepMin(3),
+        m_nBaseLepMax(3),
         m_nLepMin(3),
         m_nLepMax(3),
+        m_nTauMin(0),
+        m_nTauMax(0),
+        m_baseLepMinDR(0.3),
+        m_selectSFOS(false),
+        m_vetoSFOS(false),
         m_selectZ(false),
         m_vetoZ(false),
         m_selectB(false),
         m_vetoB(false),
-        m_selectSFOS(false),
-        m_vetoSFOS(false),
-        m_metMi(-1),
-        m_minMt(-1),
+        m_metMin(-1),
+        m_mtMin(-1),
         m_writeOut(false)
 {
   n_readin        = 0;
@@ -34,7 +39,7 @@ Susy3LepCutflow::Susy3LepCutflow() :
   n_pass_sfos     = 0;
   n_pass_met      = 0;
   n_pass_z        = 0;
-  n_pass_bjet     = 0;
+  n_pass_bJet     = 0;
   n_pass_mt       = 0;
 
   setAnaType(Ana_3Lep);
@@ -131,7 +136,7 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
   n_pass_badMuon++;
   if(!passCosmic(flag)) return false;
   n_pass_cosmic++;
-  if(!passDeadRegions(m_preJets, met, evt->run, evt->ismc)) return false;
+  if(!passDeadRegions(m_preJets, met, evt->run, evt->isMC)) return false;
   n_pass_feb++;
   if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
@@ -144,7 +149,7 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
   if(!passZCut(leptons)) return false;
   n_pass_z++;
   if(!passBJetCut()) return false;
-  n_pass_bjet++;
+  n_pass_bJet++;
   if(!passMtCut(leptons, met)) return false;
   n_pass_mt++;
 
@@ -215,13 +220,13 @@ bool Susy3LepCutflow::passBJetCut( )
 bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
 {
   // Find the best Z candidate pair, use remaining lepton to form Mt
-  if(m_minMt > 0)
+  if(m_mtMin > 0)
   {
     uint zl1, zl2;
     if(findBestZ(zl1, zl2, leptons)){
       for(uint iL=0; iL<leptons.size(); iL++) {
         if(iL!=zl1 && iL!=zl2) {
-          if( Mt(leptons[iL],met) < m_minMt ) return false;
+          if( Mt(leptons[iL],met) < m_mtMin ) return false;
         }
       }
     }
@@ -236,17 +241,17 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << endl;
   cout << "Susy3LepCutflow event counters"    << endl;
   cout << "read in     :  " << n_readin        << endl;
-  cout << "pass LAr    :  " << n_pass_LAr      << endl;
-  cout << "pass HotSpot:  " << n_pass_HotSpot  << endl;
-  cout << "pass BadJet :  " << n_pass_BadJet   << endl;
-  cout << "pass BadMu  :  " << n_pass_BadMuon  << endl;
-  cout << "pass Cosmic :  " << n_pass_Cosmic   << endl;
+  cout << "pass LAr    :  " << n_pass_lar      << endl;
+  cout << "pass HotSpot:  " << n_pass_hotSpot  << endl;
+  cout << "pass BadJet :  " << n_pass_badJet   << endl;
+  cout << "pass BadMu  :  " << n_pass_badMuon  << endl;
+  cout << "pass Cosmic :  " << n_pass_cosmic   << endl;
   cout << "pass nLep   :  " << n_pass_nLep     << endl;
   cout << "pass trig   :  " << n_pass_trig     << "\t(" << 100.*n_pass_trig/n_pass_nLep << "%)" << endl;
   cout << "pass sfos   :  " << n_pass_sfos     << endl;
   cout << "pass met    :  " << n_pass_met      << endl;
   cout << "pass z      :  " << n_pass_z        << endl;
-  cout << "pass b-jet  :  " << n_pass_bjet     << endl;
+  cout << "pass b-jet  :  " << n_pass_bJet     << endl;
   cout << "pass mt     :  " << n_pass_mt       << endl;
 }
 

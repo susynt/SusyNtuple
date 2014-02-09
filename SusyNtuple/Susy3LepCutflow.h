@@ -69,16 +69,21 @@ class Susy3LepCutflow : public SusyNtAna
     TrilTrigLogic*      m_trigObj;      // My trigger logic class
 
     // Cut variables
+    uint                m_nBaseLepMin;  // min base leptons
+    uint                m_nBaseLepMax;  // max base leptons
     uint                m_nLepMin;      // min leptons
     uint                m_nLepMax;      // max leptons
+    uint                m_nTauMin;      // min taus
+    uint                m_nTauMax;      // max taus
+    float               m_baseLepMinDR; // min dR between base leptons
+    bool                m_selectSFOS;   // switch to select SFOS pairs
+    bool                m_vetoSFOS;     // switch to veto SFOS pairs
     bool                m_selectZ;      // switch to select Zs
     bool                m_vetoZ;        // switch to veto Zs
     bool                m_selectB;      // switch to select b-tagged jets
     bool                m_vetoB;        // switch to veto b-tagged jets
-    bool                m_selectSFOS;   // switch to select SFOS pairs
-    bool                m_vetoSFOS;     // switch to veto SFOS pairs
     double              m_metMin;       // min MET cut
-    double              m_minMt;        // minimum Mt cut
+    double              m_mtMin;        // minimum Mt cut
 
     bool                m_writeOut;     // switch to control output dump
 
