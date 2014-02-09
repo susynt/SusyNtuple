@@ -53,7 +53,7 @@ class TrilTrigLogic
     //}
 
     // Trigger reweighting in MC - not currently setup
-    float getTriggerWeight(const LeptonVector& leptons, Susy::Event* evt);
+    float getTriggerWeight(const LeptonVector& leptons, const Susy::Event* evt);
 
     // Only apply pt threshold cuts for trigger acceptance
     void setAccOnly(bool doIt=true) { m_accOnly = doIt; }
