@@ -1307,7 +1307,7 @@ bool SusyNtTools::hasBadJet(const JetVector& baseJets)
 /*--------------------------------------------------------------------------------*/
 // Pass Dead Region based on met, jets and run number
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int RunNumber, bool isMC)
+bool SusyNtTools::passDeadRegions(const JetVector& preJets, const Met* met, int RunNumber, bool isMC)
 {
   // Info taken from here:
   // https://indico.cern.ch/getFile.py/access?contribId=9&resId=0&materialId=slides&confId=223778
@@ -1317,8 +1317,8 @@ bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int
 
   if( !(RunNumber > 213863 || isMC) ) return true;
   
-  for(uint ij = 0; ij<baseJets.size(); ++ij){
-    const Jet* jet = baseJets.at(ij);
+  for(uint ij = 0; ij<preJets.size(); ++ij){
+    const Jet* jet = preJets.at(ij);
     if( !(jet->Pt() > 40.) )          continue;
     if( !(jet->bch_corr_jet > 0.05) ) continue;
   

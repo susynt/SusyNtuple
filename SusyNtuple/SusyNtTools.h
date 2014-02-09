@@ -284,7 +284,7 @@ class SusyNtTools
     bool hasBadJet(const JetVector& baseJets);
 
     // Pass FEB dead region check
-    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber, bool isMC);
+    bool passDeadRegions(const JetVector& preJets, const Susy::Met* met, int RunNumber, bool isMC);
 
     // To determine if there is baseline jets within bad FCAL region 
     bool hasJetInBadFCAL(const JetVector& baseJets, uint run=206248, bool isMC=false);
