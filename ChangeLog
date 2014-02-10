@@ -1,5 +1,11 @@
 # vim: set noexpandtab:
 
+2014-02-10 Steve
+	* Updated SusyNtTools.eventHasSusyPropagators to return
+	  true as soon as a problematic sparticle is found
+	* Added susySpartId1 and susySpartId2 to Event class
+		* Allows us to recalculate the proc ID on the fly later
+
 2014-02-09 Steve
 	* Updated Susy3LepCutflow code
 		* Updated cleaning cuts
