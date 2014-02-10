@@ -36,18 +36,34 @@ class Susy3LepCutflow : public SusyNtAna
     // Main event loop function
     virtual Bool_t  Process(Long64_t entry);
 
+    // Book histograms
+    void bookHistos();
+
     // Full event selection. Specify which leptons to use.
-    bool selectEvent(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met);
+    bool selectEvent(const LeptonVector& leptons, const TauVector& taus, 
+                     const JetVector& jets, const Susy::Met* met);
+
+    // Fill histograms
+    void fillHistos(const LeptonVector& leptons, const TauVector& taus,
+                    const JetVector& jets, const Susy::Met* met, float weight);
+
+    // Finalize histograms
+    void finalizeHistos();
 		     
     // Cut methods
     bool passFCal();
     bool passNLepCut(const LeptonVector& leptons);
+    bool passNTauCut(const TauVector& taus);
     bool passTrigger(const LeptonVector& leptons);
     bool passSFOSCut(const LeptonVector& leptons);
     bool passMetCut(const Susy::Met* met);
     bool passZCut(const LeptonVector& leptons);
     bool passBJetCut();
     bool passMtCut(const LeptonVector& leptons, const Susy::Met* met);
+
+    // Event weighting
+    float getLeptonSF(const LeptonVector& leptons);
+    float getTauSF(const TauVector& taus);
             
     // Dump cutflow - if derived class uses different cut ordering,
     // override this method
@@ -96,12 +112,16 @@ class Susy3LepCutflow : public SusyNtAna
     uint                n_pass_cosmic;
     uint                n_pass_feb;
     uint                n_pass_nLep;
+    uint                n_pass_nTau;
     uint                n_pass_trig;
     uint                n_pass_sfos;
-    uint                n_pass_met;
     uint                n_pass_z;
+    uint                n_pass_met;
     uint                n_pass_bJet;
     uint                n_pass_mt;
+
+    // Final estimate weighted to full lumi
+    float               n_evt_tot;
 };
 
 #endif

@@ -35,12 +35,15 @@ Susy3LepCutflow::Susy3LepCutflow() :
   n_pass_cosmic   = 0;
   n_pass_feb      = 0;
   n_pass_nLep     = 0;
+  n_pass_nTau     = 0;
   n_pass_trig     = 0;
   n_pass_sfos     = 0;
-  n_pass_met      = 0;
   n_pass_z        = 0;
+  n_pass_met      = 0;
   n_pass_bJet     = 0;
   n_pass_mt       = 0;
+
+  n_evt_tot       = 0;
 
   setAnaType(Ana_3Lep);
 
@@ -70,6 +73,9 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
 
   m_trigObj = new TrilTrigLogic();
   m_trigObj->loadTriggerMaps();
+
+  // Book histograms
+  bookHistos();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -91,11 +97,60 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
          << " event " << setw(7) << nt.evt()->event << " ****" << endl;
   }
 
-  // select signal objects
-  selectObjects();
+  //
+  // Object selection
+  //
 
-  // Check Event
-  if(!selectEvent(m_signalLeptons, m_signalJets, m_met)) return false;
+  SusyNtSys sys = NtSys_NOM;
+  bool subtractLepsFromIso = false;
+  TauID tauID = TauID_medium;
+  selectObjects(sys, subtractLepsFromIso, tauID);
+
+  //
+  // Event selection
+  //
+
+  if(!selectEvent(m_signalLeptons, m_signalTaus, m_signalJets, m_met)) return false;
+
+  //
+  // Event weighting
+  //
+
+  // Use sumw from the SumwMap
+  const bool useSumwMap = true;         
+  // Proc ID dependent sumw (affects signals)
+  const bool useProcSumw = true;        
+  // Use cross section from SUSYTools
+  const bool useSusyXsec = true;        
+  // Cross section and luminosity weight
+  float w = getEventWeight(LUMI_A_L, useSumwMap, useProcSumw, useSusyXsec);
+
+  // Lepton efficiency correction
+  const Event* evt = nt.evt();
+  float lepSF = getLeptonSF(m_signalLeptons);
+  float tauSF = getTauSF(m_signalTaus);
+
+  // Apply btag efficiency correction if selecting on b-jets
+  bool applyBTagSF = m_vetoB;
+  float btagSF = applyBTagSF? bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
+
+  // Full event weight
+  float fullWeight = w * lepSF * tauSF * btagSF;
+  n_evt_tot += fullWeight;
+
+  //cout << "mcSF   " << w << endl;
+  //cout << "lepSF  " << lepSF << endl;
+  //cout << "tauSF  " << tauSF << endl;
+  //cout << "btagSF " << btagSF << endl;
+  //cout << "full   " << fullWeight << endl;
+  //cout << "n_evt_tot " << n_evt_tot << endl;
+
+  //
+  // Plotting
+  //
+
+  // Fill histograms
+  fillHistos(m_signalLeptons, m_signalTaus, m_signalJets, m_met, fullWeight);
 
   return kTRUE;
 }
@@ -108,6 +163,8 @@ void Susy3LepCutflow::Terminate()
   SusyNtAna::Terminate();
   if(m_dbg) cout << "Susy3LepCutflow::Terminate" << endl;
 
+  finalizeHistos();
+
   dumpEventCounters();
 
   if(m_writeOut) {
@@ -116,12 +173,19 @@ void Susy3LepCutflow::Terminate()
 }
 
 /*--------------------------------------------------------------------------------*/
+// Book histograms
+/*--------------------------------------------------------------------------------*/
+void Susy3LepCutflow::bookHistos()
+{
+  // Initialize histograms here
+}
+
+/*--------------------------------------------------------------------------------*/
 // Full event selection
 /*--------------------------------------------------------------------------------*/
-bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& jets, const Met* met)
+bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& taus, 
+                                  const JetVector& jets, const Met* met)
 {
-  // In this method place all event selection cuts.
-
   const Event* evt = nt.evt();
   int flag = cleaningCutFlags();
 
@@ -140,14 +204,16 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
   n_pass_feb++;
   if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
+  if(!passNTauCut(taus)) return false;
+  n_pass_nTau++;
   if(!passTrigger(leptons)) return false;
   n_pass_trig++;
   if(!passSFOSCut(leptons)) return false;
   n_pass_sfos++;
-  if(!passMetCut(met)) return false;
-  n_pass_met++;
   if(!passZCut(leptons)) return false;
   n_pass_z++;
+  if(!passMetCut(met)) return false;
+  n_pass_met++;
   if(!passBJetCut()) return false;
   n_pass_bJet++;
   if(!passMtCut(leptons, met)) return false;
@@ -159,6 +225,24 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const JetVector& 
 
   return true;
 }
+
+/*--------------------------------------------------------------------------------*/
+// Fill histograms
+/*--------------------------------------------------------------------------------*/
+void Susy3LepCutflow::fillHistos(const LeptonVector& leptons, const TauVector& taus,
+                                 const JetVector& jets, const Met* met, float weight)
+{
+  // Fill histograms here
+}
+
+/*--------------------------------------------------------------------------------*/
+// Finalize histograms
+/*--------------------------------------------------------------------------------*/
+void Susy3LepCutflow::finalizeHistos()
+{
+  // Finalize histograms here
+}
+
 /*--------------------------------------------------------------------------------*/
 // Analysis cuts
 /*--------------------------------------------------------------------------------*/
@@ -177,11 +261,16 @@ bool Susy3LepCutflow::passNLepCut(const LeptonVector& leptons)
   return true;
 }
 /*--------------------------------------------------------------------------------*/
+bool Susy3LepCutflow::passNTauCut(const TauVector& taus)
+{
+  uint nTau = taus.size();
+  if(m_nTauMin>=0 && nTau < m_nTauMin) return false;
+  if(m_nTauMax>=0 && nTau > m_nTauMax) return false;
+  return true;
+}
+/*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons) 
 {
-  //cout << endl << "----------------------------------------------------------------" << endl;
-  //nt.evt()->print();
-  //dumpSignalObjects();
   if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
   return true;
 }
@@ -233,6 +322,32 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
   }
   return true;
 }
+
+/*--------------------------------------------------------------------------------*/
+// Lepton efficiency scale factor
+/*--------------------------------------------------------------------------------*/
+float Susy3LepCutflow::getLeptonSF(const LeptonVector& leptons)
+{
+  float sf = 1.;
+  for(uint i=0; i<leptons.size(); i++){
+    const Lepton* lep = leptons[i];
+    sf *= lep->effSF;
+  }
+  return sf;
+}
+/*--------------------------------------------------------------------------------*/
+// Tau efficiency scale factor
+/*--------------------------------------------------------------------------------*/
+float Susy3LepCutflow::getTauSF(const TauVector& taus)
+{
+  float sf = 1.;
+  for(uint i=0; i<taus.size(); i++){
+    const Tau* tau = taus[i];
+    sf *= tau->mediumEffSF;
+  }
+  return sf;
+}
+
 /*--------------------------------------------------------------------------------*/
 // Event counters
 /*--------------------------------------------------------------------------------*/
@@ -247,12 +362,15 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << "pass BadMu  :  " << n_pass_badMuon  << endl;
   cout << "pass Cosmic :  " << n_pass_cosmic   << endl;
   cout << "pass nLep   :  " << n_pass_nLep     << endl;
-  cout << "pass trig   :  " << n_pass_trig     << "\t(" << 100.*n_pass_trig/n_pass_nLep << "%)" << endl;
+  cout << "pass trig   :  " << n_pass_trig     << endl;
   cout << "pass sfos   :  " << n_pass_sfos     << endl;
-  cout << "pass met    :  " << n_pass_met      << endl;
   cout << "pass z      :  " << n_pass_z        << endl;
+  cout << "pass met    :  " << n_pass_met      << endl;
   cout << "pass b-jet  :  " << n_pass_bJet     << endl;
   cout << "pass mt     :  " << n_pass_mt       << endl;
+  cout << endl;
+  cout << "Weighted event yields"              << endl;
+  cout << "A-L (20/fb) :  " << n_evt_tot       << endl;
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -260,10 +378,9 @@ void Susy3LepCutflow::dumpEventCounters()
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::debugEvent()
 {
-  uint run = nt.evt()->run;
-  uint evt = nt.evt()->event;
+  //uint run = nt.evt()->run;
+  //uint evt = nt.evt()->event;
   //if(run==191139 && evt==140644832) return true;
-  if(run==180164&&evt==24769) return true;
-
+  //if(run==180164&&evt==24769) return true;
   return false;
 }

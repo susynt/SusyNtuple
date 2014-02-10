@@ -12,7 +12,7 @@ using namespace std;
 
 /*
 
-SusySelection - perform selection and dump cutflows 
+  Susy3LepCF - perform selection and dump cutflows 
 
 */
 
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
   string fileDir;
   string sel = "sr1";  
  
-  cout << "Susy3LepCutflow" << endl;
+  cout << "Susy3LepCF" << endl;
   cout << endl;
 
   /** Read inputs to program */
@@ -116,6 +116,10 @@ int main(int argc, char** argv)
   susyAna->setSampleName(sample);
   susyAna->setSelection(sel);
 
+  // Calculate the sumw map if MC
+  if(sample.find("data") == string::npos)
+    susyAna->buildSumwMap(chain);
+
   // Run the job
   if(nEvt<0) nEvt = nEntries;
   cout << endl;
@@ -124,7 +128,7 @@ int main(int argc, char** argv)
   if(nEvt>0) chain->Process(susyAna, sample.c_str(), nEvt, nSkip);
 
   cout << endl;
-  cout << "SusySelection job done" << endl;
+  cout << "Susy3LepCF job done" << endl;
 
   delete chain;
   return 0;

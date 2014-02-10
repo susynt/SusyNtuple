@@ -1,7 +1,12 @@
 # vim: set noexpandtab:
 
 2014-02-09 Steve
-	* Updating Susy3LepCutflow code
+	* Updated Susy3LepCutflow code
+		* Updated cleaning cuts
+		* More event selection methods
+		* Full MC weighting, including the latest
+		  prescriptions for sumw and cross section
+		* Skeleton methods for histograms
 
 2014-02-06 Steve
 	* Added getBTagSFJets2Lep to SusyNtTools which returns
