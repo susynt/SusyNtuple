@@ -1234,21 +1234,28 @@ bool SusyNtTools::eventHasSusyPropagators(const std::vector< int > &pdgs,
   // Code is not optmized in any meaningful way, feel free to do so
   // if you wish. Also please report any unwanted behavior to
   // amete@cern.ch
-  bool passDiagram = true;
+  //bool passDiagram = true;
   const int  kPgam(+22),  kPz(+23), kPw(+24), kPchargino1(1000024);
   size_t nParticles(pdgs.size());
   for(size_t ii=0; ii<nParticles; ++ii) {
     int pdg(TMath::Abs(pdgs.at(ii)));
-    if(passDiagram && pdg==kPchargino1) {
+    //if(passDiagram && pdg==kPchargino1)
+    if(pdg==kPchargino1) {
       for(unsigned int jj=0; jj<parentIndices.at(ii).size(); ++jj) {
         int parenPdg(TMath::Abs(pdgs.at(parentIndices.at(ii).at(jj))));
         if(parenPdg==kPchargino1) break; // Self-copy
-        if(parenPdg!=kPgam && parenPdg!=kPz && parenPdg!=kPw) { passDiagram=false; break; }
+        if(parenPdg!=kPgam && parenPdg!=kPz && parenPdg!=kPw) { 
+          return true;
+          //passDiagram=false; 
+          //break; 
+        }
       } // end of parent loop
     }
   } // end of truth particle loop
-  bool  involvesSusyProp(!passDiagram);
-  return involvesSusyProp;
+
+  return false;
+  //bool involvesSusyProp(!passDiagram);
+  //return involvesSusyProp;
 }
 /*--------------------------------------------------------------------------------*/
 // Event cleaning cut flags
