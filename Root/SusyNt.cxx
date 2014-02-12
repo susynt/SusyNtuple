@@ -276,7 +276,7 @@ Muon& Muon::operator=(const Muon &rhs)
 /*--------------------------------------------------------------------------------*/
 // Muon Set State
 /*--------------------------------------------------------------------------------*/
-void Muon::setState(int sys)
+void Muon::setState(int sys, bool isTag0150)
 {
   resetTLV();
   if(sys == NtSys_NOM) return;
@@ -287,6 +287,9 @@ void Muon::setState(int sys)
   else if( sys == NtSys_ID_UP ) sf = id_up;
   else if( sys == NtSys_ID_DN ) sf = id_dn;
   else return;
+
+  // Bugfix for SusyNt tag n0150
+  if(isTag0150) sf *= 1000.;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
 }

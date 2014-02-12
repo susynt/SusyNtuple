@@ -1,5 +1,13 @@
 # vim: set noexpandtab:
 
+2014-02-11 Steve
+	* Bugfix for muon systematics in n0150
+		* Added temporary boolean argument to 
+		  SusyNtAna.selectObjects: n0150BugFix
+		* This flag propagates down through SusyNtTools 
+		  getBaselineObjects, getPreMuons, and finally
+		  Muon.setState
+
 2014-02-10 Steve
 	* Updated SusyNtTools.eventHasSusyPropagators to return
 	  true as soon as a problematic sparticle is found

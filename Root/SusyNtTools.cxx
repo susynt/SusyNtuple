@@ -190,11 +190,11 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* ev
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, 
                                      ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
                                      ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
-                                     SusyNtSys sys, bool selectTaus)
+                                     SusyNtSys sys, bool selectTaus, bool n0150BugFix)
 {
   // Preselection
   preElecs = getPreElectrons(susyNt, sys);
-  preMuons = getPreMuons(susyNt, sys);
+  preMuons = getPreMuons(susyNt, sys, n0150BugFix);
   preJets  = getPreJets(susyNt, sys);
   if(selectTaus) taus = getPreTaus(susyNt, sys);
   else taus.clear();
@@ -214,11 +214,11 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
                                      MuonVector& muons, TauVector& taus, JetVector& jets, 
-                                     SusyNtSys sys, bool selectTaus)
+                                     SusyNtSys sys, bool selectTaus, bool n0150BugFix)
 {
   // Get all objects
   elecs = getPreElectrons(susyNt, sys);
-  muons = getPreMuons(susyNt, sys);
+  muons = getPreMuons(susyNt, sys, n0150BugFix);
   jets  = getPreJets(susyNt, sys);
   if(selectTaus) taus = getPreTaus(susyNt, sys);
   else taus.clear();
@@ -339,12 +339,12 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
   return elecs;
 }
 /*--------------------------------------------------------------------------------*/
-MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
+MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix)
 {
   MuonVector muons;
   for(uint im=0; im<susyNt->muo()->size(); ++im){
     Muon* mu = & susyNt->muo()->at(im);
-    mu->setState(sys);
+    mu->setState(sys, n0150BugFix);
 
     // Apply any additional selection
     if(mu->Pt() < MUON_PT_CUT) continue;
