@@ -356,7 +356,7 @@ namespace Susy
       // Polymorphism, baby!!
       bool isEle() const { return false; }
       bool isMu()  const { return true; }
-      void setState(int sys);
+      void setState(int sys, bool isTag0150 = false);
 
       // Print method
       void print() const;

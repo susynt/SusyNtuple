@@ -1,5 +1,27 @@
 # vim: set noexpandtab:
 
+2014-02-11 Steve
+	* Bugfix for muon systematics in n0150
+		* Added temporary boolean argument to 
+		  SusyNtAna.selectObjects: n0150BugFix
+		* This flag propagates down through SusyNtTools 
+		  getBaselineObjects, getPreMuons, and finally
+		  Muon.setState
+
+2014-02-10 Steve
+	* Updated SusyNtTools.eventHasSusyPropagators to return
+	  true as soon as a problematic sparticle is found
+	* Added susySpartId1 and susySpartId2 to Event class
+		* Allows us to recalculate the proc ID on the fly later
+
+2014-02-09 Steve
+	* Updated Susy3LepCutflow code
+		* Updated cleaning cuts
+		* More event selection methods
+		* Full MC weighting, including the latest
+		  prescriptions for sumw and cross section
+		* Skeleton methods for histograms
+
 2014-02-06 Steve
 	* Added getBTagSFJets2Lep to SusyNtTools which returns
 	  the subset of baseline jets which are tested for the b-veto.
