@@ -105,7 +105,6 @@ class Susy3LepCutflow : public SusyNtAna
 
     // Event counters
     uint                n_readin;
-    uint                n_pass_lar;
     uint                n_pass_hotSpot;
     uint                n_pass_badJet;
     uint                n_pass_badMuon;

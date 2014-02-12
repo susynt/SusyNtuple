@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2014-02-12 Steve
+	* Added call to clearObjects at beginning of SusyNtAna selectObjects
+	* Removed LAr veto from Susy3LepCutflow
+
 2014-02-11 Steve
 	* Bugfix for muon systematics in n0150
 		* Added temporary boolean argument to 

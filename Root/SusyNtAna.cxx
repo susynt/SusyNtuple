@@ -218,6 +218,9 @@ void SusyNtAna::clearObjects()
 void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, 
                               TauID signalTauID, bool n0150BugFix)
 {
+  // Empty the object vectors
+  clearObjects();
+
   // Get the Baseline objets
   getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
                      m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 

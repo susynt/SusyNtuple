@@ -214,7 +214,6 @@ class SusyNtTools
     //
   
     // No electron or jet in the LAr hole - shouldn't be used anymore
-    //bool passLAr(int flag)     { return ( flag & PASS_LAr );     }
     bool passLAr(int flag)     { return true; }
 
     // Pass Tile hot spot veto

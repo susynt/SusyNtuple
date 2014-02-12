@@ -28,7 +28,6 @@ Susy3LepCutflow::Susy3LepCutflow() :
         m_writeOut(false)
 {
   n_readin        = 0;
-  n_pass_lar      = 0;
   n_pass_hotSpot  = 0;
   n_pass_badJet   = 0;
   n_pass_badMuon  = 0;
@@ -190,8 +189,6 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& 
   int flag = cleaningCutFlags();
 
   // Cleaning cuts
-  if(!passLAr(flag)) return false;
-  n_pass_lar++;
   if(!passHotSpot(flag)) return false;
   n_pass_hotSpot++;
   if(!passBadJet(flag)) return false;
@@ -356,7 +353,6 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << endl;
   cout << "Susy3LepCutflow event counters"    << endl;
   cout << "read in     :  " << n_readin        << endl;
-  cout << "pass LAr    :  " << n_pass_lar      << endl;
   cout << "pass HotSpot:  " << n_pass_hotSpot  << endl;
   cout << "pass BadJet :  " << n_pass_badJet   << endl;
   cout << "pass BadMu  :  " << n_pass_badMuon  << endl;
