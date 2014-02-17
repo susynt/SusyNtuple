@@ -123,7 +123,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     bool isDuplicate(unsigned int run, unsigned int event);
 
     // Sample name - can be used however you like
-    std::string sampleName() { return m_sample; }
+    std::string sampleName() const { return m_sample; }
     void setSampleName(std::string s) { m_sample = s; }
 
     // Build a map of MCID -> sumw.
