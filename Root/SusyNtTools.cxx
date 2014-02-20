@@ -12,6 +12,8 @@
 using namespace std;
 using namespace Susy;
 
+// TODO: implement a feature for sharing the tool, rather than making it static
+//BTagCalib* SusyNtTools::m_btagTool = NULL;
 
 /*--------------------------------------------------------------------------------*/
 // Constructor
@@ -54,6 +56,11 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
 {
   if(!evt->isMC) return 1;
   else{
+    float sumw = getSumw(evt, sumwMap, useSumwMap, useProcSumw);
+    float xsec = getXsecTimesEff(evt, useSusyXsec, sys);
+    float pupw = getPileupWeight(evt, sys);
+    return evt->w * pupw * xsec * lumi / sumw;
+    /*
     float sumw = evt->sumw;
     if(useSumwMap){
       if(sumwMap != NULL){
@@ -84,77 +91,44 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
         xsec *= (1. - p.relunc());
     }
     return evt->w * evt->wPileup * xsec * lumi / sumw;
+    */
   }
 }
+
 /*--------------------------------------------------------------------------------*/
-/*
-float SusyNtTools::getEventWeightFixed(unsigned int mcChannel, const Event* evt, float lumi)
+// Get the sumw for this event
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getSumw(const Event* evt, const SumwMap* sumwMap, bool useSumwMap, bool useProcSumw)
 {
-  if(!evt->isMC) return 1;
   float sumw = evt->sumw;
-  float xsec = evt->xsec;
-  if(mcChannel==107650) sumw = 6548782.0;
-  else if(mcChannel==107651) sumw = 1335000.0;
-  else if(mcChannel==107652) sumw = 404499.0;
-  else if(mcChannel==107653) sumw = 110000.0;
-  else if(mcChannel==107654) sumw = 30000.0;
-  else if(mcChannel==107654) sumw = 30000.0;
-  else if(mcChannel==107660) sumw = 6619489.0;
-  else if(mcChannel==107661) sumw = 1334706.0;
-  else if(mcChannel==107662) sumw = 404997.0;
-  else if(mcChannel==107663) sumw = 110000.0;
-  else if(mcChannel==107664) sumw = 30000.0;
-  else if(mcChannel==107665) sumw = 10000.0;
-  else if(mcChannel==107670) sumw = 6619683.0;
-  else if(mcChannel==107671) sumw = 1334996.0;
-  else if(mcChannel==107672) sumw = 404997.0;
-  else if(mcChannel==107673) sumw = 110000.0;
-  else if(mcChannel==107674) sumw = 30000.0;
-  else if(mcChannel==107675) sumw = 10000.0;
-  else if(mcChannel==108346) sumw = 1687598.0;
-  else if(mcChannel==117210) sumw = 14988492.0;
-  else if(mcChannel==126937) sumw = 1099997.0;
-  else if(mcChannel==126938) sumw = 1599696.0;
-  else if(mcChannel==126940) sumw = 1099798.0;
-  else if(mcChannel==126951) sumw = 299999.0;
-  else if(mcChannel==160255) sumw = 150000.0;
-  else if(mcChannel==164450) sumw = 3279080.0;
-  else if(mcChannel==173044) sumw = 15290487.0;
-  else if(mcChannel==173046) sumw = 14992666.0;
-  else if(mcChannel==174830) sumw = 389896.0;
-  else if(mcChannel==147770) sumw = 2.45339943895e+13;
-  else if(mcChannel==147771) sumw = 2.35467290378e+13;
-  else if(mcChannel==146854) sumw = 168400.0;
-  else if(mcChannel==146855) sumw = 120139.0;
-  //if(mcChannel==147770) sumw = 2.47983337636e+13;
-  //if(mcChannel==147771) sumw = 2.35447863214e+13;
-  //if(mcChannel==147772) sumw = 1.05702941e+13;
-  //if(mcChannel==157814) xsec = 1.702;
-  //else if(mcChannel==157815) xsec = 1.687;
-  //else if(mcChannel==157816) xsec = 1.702;
-  //else if(mcChannel==157817) xsec = 9.557000;
-  //else if(mcChannel==157818) xsec = 9.554000;
-  //else if(mcChannel==157819) xsec = 9.557000;
-  return evt->w * evt->wPileup * xsec * lumi / sumw;
-  //return getEventWeight(evt, lumi);
-}*/
-/*--------------------------------------------------------------------------------*/
-/*float SusyNtTools::getEventWeightAB3(const Event* evt)
-{
-  if(!evt->isMC) return 1;
-  else return evt->w * evt->wPileupAB3 * evt->xsec * LUMI_A_B3 / evt->sumw;
-}*/
-/*--------------------------------------------------------------------------------*/
-/*float SusyNtTools::getEventWeightAB(const Event* evt)
-{
-  if(!evt->isMC) return 1;
-  else return evt->w * evt->wPileupAB * evt->xsec * LUMI_A_B14 / evt->sumw;
-}*/
+  if(useSumwMap){
+    if(sumwMap != NULL){
+      // Map key is pair(mcid, proc)
+      unsigned int mcid = evt->mcChannel;
+      int procID = useProcSumw? evt->susyFinalState : 0;
+      // Correct for procID == -1
+      if(procID < 0) procID = 0;
+      SumwMapKey key(mcid, procID);
+      SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
+      if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
+      else{
+        cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
+             << "mcid " << mcid << " proc " << procID << " not found!" << endl;
+        abort(); // better to return a default, like -1?
+      }
+    }
+    else{
+      cout << "SusyNtTools::getEventWeight - ERROR - sumw map is NULL!" << endl;
+      abort(); // better to return a default, like -1?
+    }
+  }
+  return sumw;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Get the SUSYTools cross section for this sample
 /*--------------------------------------------------------------------------------*/
-SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* evt)
+SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Event* evt)
 {
   using namespace SUSY;
   // Use one DB and map for all instances of this class
@@ -166,7 +140,7 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* ev
   if(evt->isMC){
     // SUSYTools expects 0 as default value, but we have existing tags with default of -1
     int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
-    // Temporary bugfix for Wh nohadtau
+    // Temporary bugfix for Wh nohadtau in n0150
     if(evt->mcChannel >= 177501 && evt->mcChannel <= 177528) proc = 125;
     const intpair k(evt->mcChannel, proc);
     // Check to see if we've cached this process yet.
@@ -182,6 +156,29 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Susy::Event* ev
     }
   }
   return CrossSectionDB::Process();
+}
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getXsecTimesEff(const Event* evt, bool useSusyXsec, MCWeighter::WeightSys sys)
+{
+  float xsec = evt->xsec;
+  if(useSusyXsec){
+    SUSY::CrossSectionDB::Process p = getCrossSection(evt);
+    xsec = p.xsect() * p.kfactor() * p.efficiency();
+    if(sys==MCWeighter::Sys_XSEC_UP)
+      xsec *= (1. + p.relunc());
+    else if(sys==MCWeighter::Sys_XSEC_DN)
+      xsec *= (1. - p.relunc());
+  }
+  return xsec;
+}
+/*--------------------------------------------------------------------------------*/
+// Get the pileup weight for this event
+/*--------------------------------------------------------------------------------*/
+float SusyNtTools::getPileupWeight(const Event* evt, MCWeighter::WeightSys sys)
+{
+  if(sys==MCWeighter::Sys_PILEUP_UP) return evt->wPileup_up;
+  else if(sys==MCWeighter::Sys_PILEUP_DN) return evt->wPileup_dn;
+  else return evt->wPileup;
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -480,7 +477,7 @@ PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susyNt)
 /*--------------------------------------------------------------------------------*/
 // Get Met
 /*--------------------------------------------------------------------------------*/
-Susy::Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiForMetSys)
+Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiForMetSys)
 {
   // Right now not being clever. Could maybe make sys index correspond to 
   // index on the array.
@@ -811,7 +808,7 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
+bool SusyNtTools::isCentralLightJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_L20_CUT) return false;
   //if(fabs(jet->Eta()) > JET_ETA_CUT_2L) return false;
@@ -826,7 +823,7 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton B Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
+bool SusyNtTools::isCentralBJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_B20_CUT) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
@@ -838,7 +835,7 @@ bool SusyNtTools::isCentralBJet(const Susy::Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Forward Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isForwardJet(const Susy::Jet* jet)
+bool SusyNtTools::isForwardJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
   //if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
@@ -926,7 +923,7 @@ bool SusyNtTools::hasJetInBadFCAL(const JetVector& baseJets, uint run, bool isMC
 /*--------------------------------------------------------------------------------*/
 // Jet in bad FCAL
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isBadFCALJet(const Susy::Jet* jet)
+bool SusyNtTools::isBadFCALJet(const Jet* jet)
 {
   if(jet->Pt() > BAD_FCAL_PT  && 
      fabs(jet->Eta()) > BAD_FCAL_ETA &&
@@ -1446,7 +1443,7 @@ float SusyNtTools::Meff(const JetVector& jets, const Met* met, float jetPtCut)
   for(uint i=0; i<jets.size(); i++){
     if(jets[i]->Pt() > jetPtCut) meff += jets[i]->Pt();
   }
-  meff += met->Et;
+  if(met) meff += met->Et;
   return meff;
 }
 /*--------------------------------------------------------------------------------*/
@@ -1457,7 +1454,7 @@ float SusyNtTools::Meff(const LeptonVector& leps, const JetVector& jets, const M
   for(uint i=0; i<jets.size(); i++){
     if(jets[i]->Pt() > jetPtCut) meff += jets[i]->Pt();
   }
-  meff += met->Et;
+  if(met) meff += met->Et;
   return meff;
 }
 /*--------------------------------------------------------------------------------*/
@@ -1469,7 +1466,7 @@ float SusyNtTools::Meff(const LeptonVector& leps, const TauVector& taus, const J
   for(uint i=0; i<jets.size(); i++){
     if(jets[i]->Pt() > jetPtCut) meff += jets[i]->Pt();
   }
-  meff += met->Et;
+  if(met) meff += met->Et;
   return meff;
 }
 
@@ -1777,7 +1774,7 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
 /*--------------------------------------------------------------------------------*/
 // Calculate MT2
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getMT2(const LeptonVector& leptons, const Susy::Met* met)
+float SusyNtTools::getMT2(const LeptonVector& leptons, const Met* met)
 {
   if( leptons.size() < 2 ) return -999;
 
@@ -1815,7 +1812,7 @@ float SusyNtTools::getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2
   return mt2_event.get_mt2();
 }
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Susy::Met* met, 
+float SusyNtTools::getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met, 
 			  bool zeroMass, float lspMass)
 {
   // necessary variables

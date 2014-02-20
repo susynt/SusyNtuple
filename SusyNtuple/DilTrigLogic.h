@@ -68,7 +68,6 @@ class DilTrigLogic
   float getMCWeight();
 
   // Trigger reweighting
-  // TODO: Add SusyNtSys for trigger?
   double getTriggerWeight(LeptonVector leptons, bool isMC, 
 			  float met, int njets, int NPV,
 			  SusyNtSys sys = NtSys_NOM);

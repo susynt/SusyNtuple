@@ -28,21 +28,18 @@ class SusyNtTools
       if(m_btagTool) delete m_btagTool;
     };
 
-    //
     // Set Analysis type to determine selection
-    //
     void setAnaType(AnalysisType A, bool verbose=false){ 
       m_anaType = A; 
       if(verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
 
-    //
     // Configure the btag sf tool
-    //
     void configureBTagTool(std::string OP, float opVal, bool isJVF);
 
     //
     // Get event weight - contains generator, pileup, xsec, and lumi weights
+    // TODO: move this machinery into MCWeighter class
     //
 
     // Default weight uses full dataset, currently A-L
@@ -61,8 +58,16 @@ class SusyNtTools
     // Scale MC to A-B dataset (5.83/fb)
     //virtual float getEventWeightAB(const Susy::Event* evt);
 
-    // Get the SUSYTools cross section for this event
+    // Get the sumw for this event
+    static float getSumw(const Susy::Event* evt, const SumwMap* sumwMap, 
+                         bool useSumwMap=true, bool useProcSumw=true);
+    // Get the SUSYTools cross section info for this event
     static SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
+    // Get the final cross section times efficiency for this event
+    static float getXsecTimesEff(const Susy::Event* evt, bool useSusyXsec=true, 
+                                 MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
+    // Get the pileup weight
+    static float getPileupWeight(const Susy::Event* evt, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
 
     //
     // Methods to grab objects based on systematic shift desired
@@ -365,10 +370,6 @@ class SusyNtTools
     static JetVector getBJets(const JetVector& jets, float weight=MV1_80);
     
     static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
-    //float bTagSF(const Susy::Event*, const JetVector& jets, bool useNoJVF=false,
-    //std::string taggerName = "MV1", std::string OP="0_122", float opval=MV1_80,
-    //BTagSys sys=BTag_NOM);    
-    //float bTagSF(const Susy::Event*, const JetVector& jets, bool isSherpa, BTagSys sys=BTag_NOM);
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
@@ -453,7 +454,8 @@ class SusyNtTools
     bool m_doMuEtconeCut;               // etcone isolation cuts for muons
     bool m_doIPCut;                     // impact parameter cuts
 
-    BTagCalib* m_btagTool;          // BTag tool
+    BTagCalib* m_btagTool;              // BTag tool
+    //static BTagCalib* m_btagTool;     // BTag tool
 
 };
 
