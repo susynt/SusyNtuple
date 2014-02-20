@@ -1,5 +1,19 @@
 # vim: set noexpandtab:
 
+2014-02-19 Steve
+	* Split up the functionality for weighting the MC
+		* Temporary change until everything is moved into MCWeighter
+		* Added getSumw, getXsecTimesEff, getPileupWeight to SusyNtTools.
+		  getEventWeight calls each of these
+		* Can now request pileup systematic via sys flag
+	* Now allow for NULL Met pointer in Meff methods
+		* For calculating Meff/HT without met
+	* Added pileup sys enums to MCWeighter: Sys_PILEUP_UP, Sys_PILEUP_DN
+
+2014-02-12 Steve
+	* Added call to clearObjects at beginning of SusyNtAna selectObjects
+	* Removed LAr veto from Susy3LepCutflow
+
 2014-02-11 Steve
 	* Bugfix for muon systematics in n0150
 		* Added temporary boolean argument to 
