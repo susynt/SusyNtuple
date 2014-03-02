@@ -1,5 +1,12 @@
 # vim: set noexpandtab:
 
+2014-03-02 Steve
+	* Added full functionality to MCWeighter class
+		* getMCWeight, getSumw, getCrossSection, getXsecTimesEff, getPileupWeight
+		* Also added methods and enums for controlling the sumw and xsec methods
+		* Currently copies the functionality in SusyNtTools. I haven't removed
+		  the old approach yet.
+
 2014-02-19 Steve
 	* Split up the functionality for weighting the MC
 		* Temporary change until everything is moved into MCWeighter
