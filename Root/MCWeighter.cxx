@@ -68,7 +68,9 @@ void MCWeighter::buildSumwMap(TChain* chain)
     TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
 
     // TODO: Check if bin 2 can be used for everything yet
-    m_sumwMap[genKey] += hGenCF->GetBinContent(2);
+    // This bin counts events after susy propagators have been removed
+    int sumwBin = hGenCF->GetXaxis()->FindBin("SusyProp Veto");
+    m_sumwMap[genKey] += hGenCF->GetBinContent(sumwBin);
     // Bin 1 is all initial events
     // Bin 2 is events after susy propagators have been removed
     // (relevant for the simplified models only)
@@ -84,11 +86,19 @@ void MCWeighter::buildSumwMap(TChain* chain)
         string histoName = obj->GetName();
 
         // Histo is named procCutFlowXYZ where XYZ is the process number
-        if(histoName.find("procCutFlow") != string::npos){
+        string prefix = "procCutFlow";
+        if(histoName.find(prefix) != string::npos){
           TH1F* hProcCF = (TH1F*) obj;
 
           // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
-          string procString = histoName.substr(11, string::npos);
+          string procString = histoName.substr(prefix.size(), string::npos);
+          // Make sure the string is an int
+          if(!isInt(procString)){
+            cerr << "MCWeighter::buildSumwMap - ERROR - proc string from procCutFlow "
+                 << "histo is not an integer! Histo name: " << histoName
+                 << " proc string: " << procString << endl;
+            abort();
+          }
           stringstream stream;
           stream << procString;
           int proc;
@@ -97,9 +107,7 @@ void MCWeighter::buildSumwMap(TChain* chain)
           if(proc != -1 && proc != 0){
             SumwMapKey procKey(evt->mcChannel, proc);
             if(m_sumwMap.find(procKey) == m_sumwMap.end()) m_sumwMap[procKey] = 0;
-
-            // TODO: Check if bin 2 can be used for everything yet
-            m_sumwMap[procKey] += hProcCF->GetBinContent(2);
+            m_sumwMap[procKey] += hProcCF->GetBinContent(sumwBin);
             //if(!isSimplifiedModel) m_sumwMap[procKey] += hProcCF->GetBinContent(1);
             //else m_sumwMap[procKey] += hProcCF->GetBinContent(2);
           }
@@ -159,7 +167,7 @@ float MCWeighter::getSumw(const Event* evt)
     else{
       cerr << "MCWeighter::getEventWeight - ERROR - requesting to use sumw map but "
            << "mcid " << mcid << " proc " << procID << " not found!" << endl;
-      abort(); // better to return a default, like -1?
+      abort();
     }
   }
   return sumw;
@@ -175,6 +183,7 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
     // SUSYTools expects 0 as default value, but we have existing tags with default of -1
     int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
     // Temporary bugfix for Wh nohadtau in n0150
+    #warning "Temporary bugfix for Wh nohadtau in n0150"
     if(evt->mcChannel >= 177501 && evt->mcChannel <= 177528) proc = 125;
     const intpair k(evt->mcChannel, proc);
     // Check to see if we've cached this process yet.
@@ -217,3 +226,26 @@ float MCWeighter::getPileupWeight(const Event* evt, MCWeighter::WeightSys sys)
   else if(sys==MCWeighter::Sys_PILEUP_DN) return evt->wPileup_dn;
   else return evt->wPileup;
 }
+
+/*--------------------------------------------------------------------------------*/
+// Utils for checking that a string is an int. See
+// http://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
+/*--------------------------------------------------------------------------------*/
+std::string MCWeighter::rmLeadingTrailingWhitespaces(const std::string& str)
+{
+  using std::string;
+  size_t startpos = str.find_first_not_of(" \t");
+  size_t endpos = str.find_last_not_of(" \t");
+  if(( string::npos == startpos ) || ( string::npos == endpos)) return string("");
+  else return str.substr(startpos, endpos-startpos+1);
+}
+/*--------------------------------------------------------------------------------*/
+bool MCWeighter::isInt(const std::string& s)
+{
+  std::string rs(rmLeadingTrailingWhitespaces(s));
+  if(rs.empty() || ((!isdigit(rs[0])) && (rs[0] != '-') && (rs[0] != '+'))) return false ;
+  char * p ;
+  strtol(rs.c_str(), &p, 10) ;
+  return (*p == 0) ;
+}
+
