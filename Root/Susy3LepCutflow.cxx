@@ -10,6 +10,9 @@ using namespace Susy;
 // Susy3LepCutflow Constructor
 /*--------------------------------------------------------------------------------*/
 Susy3LepCutflow::Susy3LepCutflow() :
+        m_sel(""),
+        m_mcWeighter(0),
+        m_trigObj(0),
         m_nBaseLepMin(3),
         m_nBaseLepMax(3),
         m_nLepMin(3),
@@ -100,10 +103,10 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // Object selection
   //
 
-  SusyNtSys sys = NtSys_NOM;
+  SusyNtSys ntSys = NtSys_NOM;
   bool subtractLepsFromIso = false;
   TauID tauID = TauID_medium;
-  selectObjects(sys, subtractLepsFromIso, tauID);
+  selectObjects(ntSys, subtractLepsFromIso, tauID);
 
   //
   // Event selection
@@ -115,17 +118,21 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // Event weighting
   //
 
+  // Weight event to luminosity with cross section and pileup
+  // New approach, using MCWeighter
+  const Event* evt = nt.evt();
+  MCWeighter::WeightSys wSys = MCWeighter::Sys_NOM;
+  float w = m_mcWeighter->getMCWeight(evt, LUMI_A_L, wSys);
   // Use sumw from the SumwMap
-  const bool useSumwMap = true;         
+  //const bool useSumwMap = true;         
   // Proc ID dependent sumw (affects signals)
-  const bool useProcSumw = true;        
+  //const bool useProcSumw = true;        
   // Use cross section from SUSYTools
-  const bool useSusyXsec = true;        
+  //const bool useSusyXsec = true;        
   // Cross section and luminosity weight
-  float w = getEventWeight(LUMI_A_L, useSumwMap, useProcSumw, useSusyXsec);
+  //float w = getEventWeight(LUMI_A_L, useSumwMap, useProcSumw, useSusyXsec);
 
   // Lepton efficiency correction
-  const Event* evt = nt.evt();
   float lepSF = getLeptonSF(m_signalLeptons);
   float tauSF = getTauSF(m_signalTaus);
 

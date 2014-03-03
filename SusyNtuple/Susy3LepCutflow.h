@@ -13,6 +13,7 @@
 // Susy Common
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/MCWeighter.h"
 #include "SusyNtuple/TrilTrigLogic.h"
 
 #include <fstream>
@@ -72,6 +73,9 @@ class Susy3LepCutflow : public SusyNtAna
     // Selection region
     void setSelection(std::string s) { m_sel = s; }
 
+    // MC Weighter
+    void setMCWeighter(MCWeighter* mcw) { m_mcWeighter = mcw; }
+
     // debug check
     bool debugEvent();
 
@@ -82,6 +86,7 @@ class Susy3LepCutflow : public SusyNtAna
 
     std::string         m_sel;          // event selection string
 
+    MCWeighter*         m_mcWeighter;   // My MC weight class
     TrilTrigLogic*      m_trigObj;      // My trigger logic class
 
     // Cut variables
