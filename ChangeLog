@@ -6,6 +6,11 @@
 		* Also added methods and enums for controlling the sumw and xsec methods
 		* Currently copies the functionality in SusyNtTools. I haven't removed
 		  the old approach yet.
+	* Made BTagCalib a static pointer in SusyNtTools
+		* This is to reduce the number of instantiations of the class
+		  and open root files polluting the ROOT space when a user
+		  uses many instantiations of SusyNtTools (like I do).
+		  If this causes problems for users, I can change it back.
 
 2014-02-19 Steve
 	* Split up the functionality for weighting the MC

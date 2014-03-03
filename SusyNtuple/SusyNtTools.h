@@ -455,8 +455,8 @@ class SusyNtTools
     bool m_doMuEtconeCut;               // etcone isolation cuts for muons
     bool m_doIPCut;                     // impact parameter cuts
 
-    BTagCalib* m_btagTool;              // BTag tool
-    //static BTagCalib* m_btagTool;     // BTag tool
+    //BTagCalib* m_btagTool;              // BTag tool
+    static BTagCalib* m_btagTool;     // BTag tool
 
 };
 

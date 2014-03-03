@@ -13,7 +13,7 @@ using namespace std;
 using namespace Susy;
 
 // TODO: implement a feature for sharing the tool, rather than making it static
-//BTagCalib* SusyNtTools::m_btagTool = NULL;
+BTagCalib* SusyNtTools::m_btagTool = NULL;
 
 /*--------------------------------------------------------------------------------*/
 // Constructor
@@ -23,8 +23,8 @@ SusyNtTools::SusyNtTools() :
         m_doPtconeCut(true),
         m_doElEtconeCut(true),
         m_doMuEtconeCut(false),
-        m_doIPCut(true),
-	m_btagTool(NULL)
+        m_doIPCut(true)
+	//m_btagTool(NULL)
 {
 
 }
