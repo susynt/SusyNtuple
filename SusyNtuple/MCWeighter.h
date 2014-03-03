@@ -52,12 +52,6 @@ class MCWeighter
       Sys_N
     };
 
-    // typedefs
-    typedef std::pair<unsigned int, int> SumwMapKey;
-    typedef std::map<SumwMapKey, float> SumwMap;
-    typedef std::pair<int, int> intpair;
-    typedef std::map<intpair, SUSY::CrossSectionDB::Process> XSecMap;
-
     //
     // Initialization and configuration
     //
@@ -97,7 +91,19 @@ class MCWeighter
 
   private:
 
+    // Utils for checking that a string is an int. See
+    // http://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
+    std::string rmLeadingTrailingWhitespaces(const std::string& str);
+    bool isInt(const std::string& s);
+
     bool m_useProcSumw;
+
+    // typedefs, for convenience
+    typedef std::pair<unsigned int, int> SumwMapKey;
+    typedef std::map<SumwMapKey, float> SumwMap;
+    typedef std::pair<int, int> intpair;
+    typedef std::map<intpair, SUSY::CrossSectionDB::Process> XSecMap;
+
     SumwMethod m_sumwMethod;
     XsecMethod m_xsecMethod;
 
