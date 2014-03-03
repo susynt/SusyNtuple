@@ -7,6 +7,7 @@
 
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
+#include "SusyNtuple/MCWeighter.h"
 
 using namespace std;
 
@@ -116,6 +117,14 @@ int main(int argc, char** argv)
   susyAna->setSampleName(sample);
   susyAna->setSelection(sel);
 
+  // MC Weighter
+  MCWeighter* mcWeighter = new MCWeighter();
+  if(sample.find("data") == string::npos){
+    //susyAna->buildSumwMap(chain);
+    mcWeighter->buildSumwMap(chain);
+  }
+  susyAna->setMCWeighter(mcWeighter);
+
   // Run the job
   if(nEvt<0) nEvt = nEntries;
   cout << endl;
@@ -127,5 +136,6 @@ int main(int argc, char** argv)
   cout << "SusySelection job done" << endl;
 
   delete chain;
+  delete mcWeighter;
   return 0;
 }

@@ -10,12 +10,16 @@ using namespace Susy;
 // Susy3LepCutflow Constructor
 /*--------------------------------------------------------------------------------*/
 Susy3LepCutflow::Susy3LepCutflow() :
-        m_nLepMin   (  3  ),
-        m_nLepMax   (  3  ),
-        m_selectZ   (false),
-        m_vetoZ     (false),
-        m_selectB   (false),
-        m_vetoB     (false),
+        m_sel(""),
+        m_mcWeighter(0),
+        m_trigObj(0),
+        m_nBaseLepMin(3),
+        m_nBaseLepMax(3),
+        m_nLepMin(3),
+        m_nLepMax(3),
+        m_nTauMin(0),
+        m_nTauMax(0),
+        m_baseLepMinDR(0.3),
         m_selectSFOS(false),
         m_vetoSFOS  (false),
         m_metMin    ( -1  ),
@@ -85,8 +89,57 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
          << " event " << setw(7) << nt.evt()->event << " ****" << endl;
   }
 
-  // select signal objects
-  selectObjects();
+  //
+  // Object selection
+  //
+
+  SusyNtSys ntSys = NtSys_NOM;
+  bool subtractLepsFromIso = false;
+  TauID tauID = TauID_medium;
+  selectObjects(ntSys, subtractLepsFromIso, tauID);
+
+  //
+  // Event selection
+  //
+
+  if(!selectEvent(m_signalLeptons, m_signalTaus, m_signalJets, m_met)) return false;
+
+  //
+  // Event weighting
+  //
+
+  // Weight event to luminosity with cross section and pileup
+  // New approach, using MCWeighter
+  const Event* evt = nt.evt();
+  MCWeighter::WeightSys wSys = MCWeighter::Sys_NOM;
+  float w = m_mcWeighter->getMCWeight(evt, LUMI_A_L, wSys);
+  // Use sumw from the SumwMap
+  //const bool useSumwMap = true;         
+  // Proc ID dependent sumw (affects signals)
+  //const bool useProcSumw = true;        
+  // Use cross section from SUSYTools
+  //const bool useSusyXsec = true;        
+  // Cross section and luminosity weight
+  //float w = getEventWeight(LUMI_A_L, useSumwMap, useProcSumw, useSusyXsec);
+
+  // Lepton efficiency correction
+  float lepSF = getLeptonSF(m_signalLeptons);
+  float tauSF = getTauSF(m_signalTaus);
+
+  // Apply btag efficiency correction if selecting on b-jets
+  bool applyBTagSF = m_vetoB;
+  float btagSF = applyBTagSF? bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
+
+  // Full event weight
+  float fullWeight = w * lepSF * tauSF * btagSF;
+  n_evt_tot += fullWeight;
+
+  //cout << "mcSF   " << w << endl;
+  //cout << "lepSF  " << lepSF << endl;
+  //cout << "tauSF  " << tauSF << endl;
+  //cout << "btagSF " << btagSF << endl;
+  //cout << "full   " << fullWeight << endl;
+  //cout << "n_evt_tot " << n_evt_tot << endl;
 
   // Check Event
   if(!selectEvent(m_signalLeptons, m_signalJets, m_met)) return false;

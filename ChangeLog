@@ -11,6 +11,7 @@
 		  and open root files polluting the ROOT space when a user
 		  uses many instantiations of SusyNtTools (like I do).
 		  If this causes problems for users, I can change it back.
+	* Updated Susy3LepCutflow code to use new MCWeighter
 
 2014-02-19 Steve
 	* Split up the functionality for weighting the MC
