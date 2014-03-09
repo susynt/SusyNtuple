@@ -21,14 +21,13 @@ SusyNtAna::SusyNtAna() :
 }
 
 /*--------------------------------------------------------------------------------*/
-// Attach tree (actually a TChain)
+// Attach tree (normally a TChain)
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::Init(TTree* tree)
 {
   if(m_dbg) cout << "SusyNtAna::Init" << endl;
   m_tree = tree;
   nt.ReadFrom(tree);
-  //evtlist.open("evtListTest.out");
 }
 
 /*--------------------------------------------------------------------------------*/

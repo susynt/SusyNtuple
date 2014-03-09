@@ -57,7 +57,7 @@ class MCWeighter
     //
 
     // Constructor and destructor
-    MCWeighter(TChain* chain=0, 
+    MCWeighter(TTree* tree,
                std::string xsecDir="$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
     ~MCWeighter();
 
@@ -69,7 +69,11 @@ class MCWeighter
     // dataset used here must be complete, they CANNOT be spread out across multiple jobs.
     // However, one can have more than one (complete) dataset in the chain, which is why
     // we use the map.
-    void buildSumwMap(TChain* chain);
+    void buildSumwMap(TTree* tree);
+    void buildSumwMapFromTree(TTree* tree);
+    void buildSumwMapFromChain(TChain* chain);
+    //void buildSumwMap(TChain* chain);
+    void dumpSumwMap();
 
     // Specify methods to retrieve sumw and xsec
     void setUseProcSumw(bool useProcSumw=true) { m_useProcSumw = useProcSumw; }

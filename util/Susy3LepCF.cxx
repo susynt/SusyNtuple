@@ -118,12 +118,13 @@ int main(int argc, char** argv)
   susyAna->setSelection(sel);
 
   // MC Weighter
-  MCWeighter* mcWeighter = new MCWeighter();
+  /*MCWeighter* mcWeighter = new MCWeighter();
   if(sample.find("data") == string::npos){
     //susyAna->buildSumwMap(chain);
     mcWeighter->buildSumwMap(chain);
   }
   susyAna->setMCWeighter(mcWeighter);
+  */
 
   // Run the job
   if(nEvt<0) nEvt = nEntries;
@@ -136,6 +137,6 @@ int main(int argc, char** argv)
   cout << "Susy3LepCF job done" << endl;
 
   delete chain;
-  delete mcWeighter;
+  //delete mcWeighter;
   return 0;
 }

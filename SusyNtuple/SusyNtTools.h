@@ -418,7 +418,13 @@ class SusyNtTools
     //
 
     // Call print on all objects in a vector
-    template<class T> void dumpObjects(const std::vector<T*> objects){
+    template<class T> void dumpObjects(const std::vector<T>& objects){
+      for(unsigned int i = 0; i < objects.size(); i++){
+        std::cout << i << " ";
+        objects[i].print();
+      }
+    }
+    template<class T> void dumpObjects(const std::vector<T*>& objects){
       for(unsigned int i = 0; i < objects.size(); i++){
         std::cout << i << " ";
         objects[i]->print();
