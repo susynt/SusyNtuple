@@ -29,8 +29,10 @@ class Susy3LepCutflow : public SusyNtAna
     // Output Text File
     ofstream out;
 
+    // Init is called when TTree (or TChain) is attached
+    virtual void    Init(TTree* tree);
     // Begin is called before looping on entries
-    virtual void    Begin(TTree *tree);
+    virtual void    Begin(TTree* tree);
     // Terminate is called after looping is finished
     virtual void    Terminate();
 

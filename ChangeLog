@@ -1,5 +1,25 @@
 # vim: set noexpandtab:
 
+2014-03-08 Steve
+	* Updated MCWeighter
+		* Now accepts a TTree for building the sumw map,
+		  and has dedicated methods for TTree and TChain
+		* TTree arg to constructor no longer default
+	* Updated usage of MCWeighter in Susy3LepCutflow
+		* Now instantiated and initialized in Init method rather than main.
+		  It cannot be initialized in Begin because the tree pointer isn't set.
+		  	* This is just one way to initialize the MCWeighter.
+			* NOTE: This is explicitly incompatible with PROOF. But then
+			  again, I don't think the rest of our code is PROOF-compatible
+			  anyway.
+	* MCWeighter TODO
+		* Update usage in Susy2LepCutflow
+		* Change SusyNtAna and SusyNtTools methods to use 
+		  MCWeighter behind the scenes.
+	* Added second version of template dumpObjects method to SusyNtTools,
+	  a version for vectors of objects as well as the original one for
+	  vectors of object pointers.
+
 2014-03-03 Steve
 	* Code improvements for MCWeighter
 

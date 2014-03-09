@@ -1,4 +1,5 @@
 #include <iomanip>
+#include "TSystem.h"
 #include "TCanvas.h"
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
@@ -65,8 +66,28 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
     abort();
   }
 
+  // Trigger logic
   m_trigObj = new TrilTrigLogic();
   m_trigObj->loadTriggerMaps();
+
+  // MC Normalization - safe to initialize on data also
+  //string xsecDir = gSystem->ExpandPathName("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+  //m_mcWeighter = new MCWeighter(m_tree, xsecDir);
+
+  // Book histograms
+  bookHistos();
+}
+
+/*--------------------------------------------------------------------------------*/
+// Init is called when TTree or TChain is attached
+/*--------------------------------------------------------------------------------*/
+void Susy3LepCutflow::Init(TTree* tree)
+{
+  SusyNtAna::Init(tree);
+
+  // MC Normalization - safe to initialize on data also
+  string xsecDir = gSystem->ExpandPathName("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+  m_mcWeighter = new MCWeighter(m_tree, xsecDir);
 }
 
 /*--------------------------------------------------------------------------------*/
