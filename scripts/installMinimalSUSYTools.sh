@@ -21,6 +21,7 @@ bTagURL="$SVNOFF/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/Calibra
 mt2URL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
 trigURL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
 reweightUtilsURL="$SVNOFF/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
+jvfURL="$SVNOFF/Reconstruction/Jet/JetAnalysisTools/JVFUncertaintyTool/tags/JVFUncertaintyTool-00-00-04"
 
 # Install fresh RootCore
 svn co $rootCoreURL RootCore || exit $?
@@ -32,6 +33,7 @@ svn co $bTagURL/cmt $bTagURL/CalibrationDataInterface $bTagURL/Root $bTagURL/src
 svn co $mt2URL Mt2 || exit $?
 svn co $trigURL DGTriggerReweight || exit $?
 svn co $reweightUtilsURL ReweightUtils || exit $?
+svn co $jvfURL JVFUncertaintyTool || exit $?
 
 # Checkout minimal SUSYTools
 mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt SUSYTools/data

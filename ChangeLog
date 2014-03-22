@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2014-03-21 Steve
+	* Added JVFUncertaintyTool to installMinimalSUSYTools script,
+	  necessary for applying the JVF systematic
+
 2014-03-08 Steve
 	* Updated MCWeighter
 		* Now accepts a TTree for building the sumw map,
@@ -1175,4 +1179,3 @@
 
 2012-05-10 Anyes
 	* Initial create of SusyNtuple package from SusyCommon
-	
