@@ -185,6 +185,11 @@ enum SusyNtSys
   NtSys_TES_UP,      // Tau energy scale + sigma
   NtSys_TES_DN,      // Tau energy scale - sigma
 
+  // Nothing is stored for these, but convenient to define
+  // the enum here for usage in selectObjects methods
+  NtSys_JVF_UP,      // Jet JVF cut + sigma
+  NtSys_JVF_DN,      // Jet JVF cut - sigma
+
   NtSys_N
 };
 
@@ -217,6 +222,8 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "TRIGSF_MU_DN",
   "TES_UP",
   "TES_DN"
+  "JVF_UP",
+  "JVF_DN"
 };
 
 //Enum for BTag SF & systematics
@@ -243,7 +250,8 @@ const std::string BTagSysNames[BTag_N] = {
   "BTag_LJet_UP"
 };
 
-enum JVFSys
+// Oops, might actually put this in NtSys
+/*enum JVFSys
 {
   JVF_NOM=0,
   JVF_UP,
@@ -255,21 +263,7 @@ const std::string JVFSysNames[JVF_N] = {
   "JVF_NOM",
   "JVF_UP",
   "JVF_DN"
-};
-
-// Enum for checking event level cuts
-// This will be phased out
-/*
-enum EventCheck 
-{
-  PASS_LAr      = 1<<0,
-  PASS_BadJet   = 1<<1,
-  PASS_BadMuon  = 1<<2,
-  PASS_Cosmic   = 1<<3,
-  PASS_Event    = 1<<4,
-  PASS_HotSpot  = 1<<5
-};
-*/
+};*/
 
 // Enum for event cleaning cuts
 enum EventCleaningCuts

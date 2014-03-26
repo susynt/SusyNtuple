@@ -26,8 +26,10 @@ SusyNtTools::SusyNtTools() :
         m_doIPCut(true)
 	//m_btagTool(NULL)
 {
-
+  m_jvfTool = new JVFUncertaintyTool();
+  m_jvfTool->UseGeV(true);
 }
+
 /*--------------------------------------------------------------------------------*/
 // Method to configure bTag SF tool.  Necessary since 2L and 3L differ
 // on whether or not JVF is used.  Also allow for different operating points
@@ -43,6 +45,14 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
   //string calibFolder = rootcoredir + "/data/SusyNtuple/";
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
+
+/*--------------------------------------------------------------------------------*/
+// Method to configure JVF uncertainty tool
+/*--------------------------------------------------------------------------------*/
+/*void SusyNtTools::configureJVFTool(string jetAlgo)
+{
+  m_jvfTool = new JVFUncertaintyTool(jetAlgo.c_str());
+}*/
 
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
@@ -237,14 +247,15 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep, 
                                    uint nVtx, bool isMC, bool removeLepsFromIso, 
-                                   TauID tauJetID, TauID tauEleID, TauID tauMuoID)
+                                   TauID tauJetID, TauID tauEleID, TauID tauMuoID,
+                                   SusyNtSys sys)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
   sigTaus  = getSignalTaus(baseTaus, tauJetID, tauEleID, tauMuoID);
-  sigJets  = getSignalJets(baseJets);
-  sigJets2Lep = getSignalJets2Lep(baseJets);
+  sigJets  = getSignalJets(baseJets, sys);
+  sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 }
 /*--------------------------------------------------------------------------------*/
 // New signal tau prescription, fill both ID levels at once!
@@ -253,13 +264,14 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& mediumTaus, TauVector& tightTaus,
                                    JetVector& sigJets, JetVector& sigJets2Lep, 
-                                   uint nVtx, bool isMC, bool removeLepsFromIso)
+                                   uint nVtx, bool isMC, bool removeLepsFromIso,
+                                   SusyNtSys sys)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
-  sigJets  = getSignalJets(baseJets);
-  sigJets2Lep = getSignalJets2Lep(baseJets);
+  sigJets  = getSignalJets(baseJets, sys);
+  sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 
   getSignalTaus(baseTaus, mediumTaus, tightTaus);
 }
@@ -439,24 +451,24 @@ void SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus
   }
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
+JetVector SusyNtTools::getSignalJets(const JetVector& baseJets, SusyNtSys sys)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
     Jet* j = baseJets.at(ij);
-    if(isSignalJet(j)){
+    if(isSignalJet(j, sys)){
       sigJets.push_back(j);
     }
   }
   return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets)
+JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
     Jet* j = baseJets.at(ij);
-    if(isSignalJet2Lep(j)){
+    if(isSignalJet2Lep(j, sys)){
       sigJets.push_back(j);
     }
   }
@@ -773,7 +785,7 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
 /*--------------------------------------------------------------------------------*/
 // Signal jet selection
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalJet(const Jet* jet)
+bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
 {
   // For now, 2lep analysis is not using this jet definition
   //float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
@@ -783,22 +795,27 @@ bool SusyNtTools::isSignalJet(const Jet* jet)
   if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
 
   // JVF cut is now only to be applied to jets with pt < 50 GeV and |detEta| < 2.4
-  // Note that I'm just hardcoding the 50 and 2.4 requirements. I don't expect those to change
   //if(jet->jvf < JET_JVF_CUT) return false;
-  if(jet->Pt() < JET_JVF_PT &&  
-     fabs(jet->detEta) < JET_JVF_ETA && 
-     jet->jvf < JET_JVF_CUT) return false; 
+  if(jet->Pt() < JET_JVF_PT && fabs(jet->detEta) < JET_JVF_ETA){
+    float jvfCut = JET_JVF_CUT;
+    bool isPileUp = false; // Twiki says to treat all jets as hardscatter
+    if(sys == NtSys_JVF_UP){
+      jvfCut = m_jvfTool->getJVFcut(JET_JVF_CUT, isPileUp, jet->Pt(), jet->detEta, true);
+    } else if(sys == NtSys_JVF_DN){
+      jvfCut = m_jvfTool->getJVFcut(JET_JVF_CUT, isPileUp, jet->Pt(), jet->detEta, false);
+    }
+    if(jet->jvf < jvfCut) return false; 
+  }
   return true;
 }
 
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Signal Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
+bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 {
-  if(
-     !isCentralLightJet(jet) &&
-     !isCentralBJet(jet)     &&
+  if(!isCentralLightJet(jet, sys) &&
+     !isCentralBJet(jet) &&
      !isForwardJet(jet)
     ) return false;
 
@@ -808,13 +825,21 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet)
+bool SusyNtTools::isCentralLightJet(const Jet* jet, SusyNtSys sys)
 {
   if(jet->Pt() < JET_PT_L20_CUT) return false;
   //if(fabs(jet->Eta()) > JET_ETA_CUT_2L) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
-  if(jet->Pt() < JET_JVF_PT && 
-     fabs(jet->jvf) - 1e-3 < JET_JVF_CUT_2L) return false;
+  if(jet->Pt() < JET_JVF_PT){
+    float jvfCut = JET_JVF_CUT_2L;
+    bool isPileUp = false; // Twiki says to treat all jets as hardscatter
+    if(sys == NtSys_JVF_UP){
+      jvfCut = m_jvfTool->getJVFcut(JET_JVF_CUT_2L, isPileUp, jet->Pt(), jet->detEta, true);
+    } else if(sys == NtSys_JVF_DN){
+      jvfCut = m_jvfTool->getJVFcut(JET_JVF_CUT_2L, isPileUp, jet->Pt(), jet->detEta, false);
+    }
+    if(fabs(jet->jvf) - 1e-3 < jvfCut) return false;
+  }
   if(jet->mv1 > MV1_80) return false;
 
   return true;
@@ -848,13 +873,13 @@ bool SusyNtTools::isForwardJet(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton Central Light Jets
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numberOfCLJets(const JetVector& jets)
+int SusyNtTools::numberOfCLJets(const JetVector& jets, SusyNtSys sys)
 {
   int ans = 0;
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isCentralLightJet(j)){
+    if(isCentralLightJet(j, sys)){
       ans++;
     }
   }
@@ -899,9 +924,10 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 // Pass 2 Lepton Jet Counts by Reference
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf)
+void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf,
+                                      SusyNtSys sys)
 {
-  Ncl = numberOfCLJets(jets);
+  Ncl = numberOfCLJets(jets, sys);
   Ncb = numberOfCBJets(jets);
   Nf  = numberOfFJets (jets);
   return;

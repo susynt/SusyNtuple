@@ -66,8 +66,8 @@ namespace Susy
       }
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
-      // This will be replaced
-      int evtFlag[NtSys_N];
+      // Use cutFlags instead
+      //int evtFlag[NtSys_N];
 
       // Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
       unsigned int cutFlags[NtSys_N];
@@ -110,14 +110,14 @@ namespace Susy
         eventWithSusyProp = false;
         susySpartId1 = susySpartId2 = 0;
         passMllForAlpgen = true;
-        memset(evtFlag,0,sizeof(evtFlag));
+        //memset(evtFlag,0,sizeof(evtFlag));
         memset(cutFlags,0,sizeof(cutFlags));
         wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
         xsec = errXsec = sumw = pdfSF = 0;
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 26);
+      ClassDef(Event, 27);
   };
 
   // Particle class, base class for other object types

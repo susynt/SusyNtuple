@@ -1,5 +1,20 @@
 # vim: set noexpandtab:
 
+2014-03-26 Steve
+	* Moved JVF sys enums to SusyNtSys
+		* Kinda goes against my thinking that this enum should
+		  only be for variations that are saved in the ntuple,
+		  but otherwise I'd have to add an additional sys enum
+		  argument to the selectObjects methods, so this is
+		  cleaner to the user
+	* Added JVF systematic to SusyNtTools
+		* JVFUncertaintyTool instantiated in SusyNtTools
+		* Controlled via usual object syst enum, SusyNtSys,
+		  when calling selectObjects method
+		* I had to make some of the jet counting methods
+		  (and getMetRel) non-static to accommodate the usage
+		  of the JVFUncertaintyTool
+
 2014-03-25 Steve
 	* Added JVF sys enums to SusyDefs.h
 
