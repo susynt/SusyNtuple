@@ -1,5 +1,8 @@
 # vim: set noexpandtab:
 
+2014-03-25 Steve
+	* Added JVF sys enums to SusyDefs.h
+
 2014-03-21 Steve
 	* Added JVFUncertaintyTool to installMinimalSUSYTools script,
 	  necessary for applying the JVF systematic

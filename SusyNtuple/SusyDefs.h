@@ -243,6 +243,20 @@ const std::string BTagSysNames[BTag_N] = {
   "BTag_LJet_UP"
 };
 
+enum JVFSys
+{
+  JVF_NOM=0,
+  JVF_UP,
+  JVF_DN,
+  JVF_N
+};
+
+const std::string JVFSysNames[JVF_N] = {
+  "JVF_NOM",
+  "JVF_UP",
+  "JVF_DN"
+};
+
 // Enum for checking event level cuts
 // This will be phased out
 /*
