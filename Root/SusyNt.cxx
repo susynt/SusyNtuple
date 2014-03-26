@@ -661,9 +661,9 @@ void TruthParticle::print() const
   cout << fixed << "TruthParticle : pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
        << " phi "         << setw(5)  << Phi()
        << " pdgId "       << setw(10) << pdgId
-       << " charge "      << setw(4)  << charge
-       << " status "      << setw(4)  << status
-       << " motherPdgId " << setw(10) << motherPdgId 
+       << " charge "      << setw(2)  << charge
+       //<< " status "      << setw(2)  << status
+       //<< " motherPdgId " << setw(10) << motherPdgId 
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);
