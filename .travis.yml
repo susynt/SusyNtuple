@@ -58,8 +58,9 @@ install:
 
 script:
   # Check if root and PyROOT work ok
-  - time root -l -q
+  - time root -l -b -q
   - time python -c 'import ROOT; ROOT.TBrowser()'
 
   # Now run the tests
-  - echo "Running the tests"
+  - Susy2LepCF --help
+
