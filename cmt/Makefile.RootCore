@@ -3,7 +3,7 @@
 # edit with care
 
 PACKAGE          = SusyNtuple
-PACKAGE_PRELOAD  = Hist Tree
+PACKAGE_PRELOAD  = Graf Gpad Hist Tree
 PACKAGE_CXXFLAGS = 
 PACKAGE_LDFLAGS  = $(shell root-config --libs --glibs)
 PACKAGE_BINFLAGS = -lCintex -lReflex -lPyROOT -lXMLParser -lEG 
