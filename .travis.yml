@@ -58,6 +58,4 @@ script:
   - time python -c 'import ROOT; ROOT.TBrowser()'
 
   # Now run the tests
-  #
-  echo "Running the tests"
-
+  - echo "Running the tests"
