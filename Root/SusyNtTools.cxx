@@ -787,7 +787,7 @@ bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 {
-  if(!isCentralLightJet(jet, sys) &&
+  if(!isCentralLightJet(jet, m_jvfTool, sys) &&
      !isCentralBJet(jet) &&
      !isForwardJet(jet)
     ) return false;
@@ -798,14 +798,14 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet, SusyNtSys sys)
+bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys)
 {
     bool pass = false;
     if(jet) {
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
                 && jet->mv1 < MV1_80
-                && SusyNtTools::jetPassesJvfRequirement(jet, m_jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys));
+                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys));
     } else {
         cout<<"isCentralLightJet: invalid jet("<<jet<<"), return "<<pass<<endl;
     }
@@ -840,13 +840,13 @@ bool SusyNtTools::isForwardJet(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton Central Light Jets
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numberOfCLJets(const JetVector& jets, SusyNtSys sys)
+int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys)
 {
   int ans = 0;
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isCentralLightJet(j, sys)){
+    if(isCentralLightJet(j, jvfTool, sys)){
       ans++;
     }
   }
@@ -894,7 +894,7 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf,
                                       SusyNtSys sys)
 {
-  Ncl = numberOfCLJets(jets, sys);
+  Ncl = numberOfCLJets(jets, m_jvfTool, sys);
   Ncb = numberOfCBJets(jets);
   Nf  = numberOfFJets (jets);
   return;

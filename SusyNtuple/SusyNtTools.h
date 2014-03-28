@@ -371,19 +371,19 @@ class SusyNtTools
 
     // 2 Lepton jet methods and counters
     // These will no longer be static because of the systematic uncert requirement
-    bool isCentralLightJet(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
-    bool isCentralBJet    (const Susy::Jet* jet);
-    bool isForwardJet     (const Susy::Jet* jet);
+    static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys);
+    static bool isCentralBJet    (const Susy::Jet* jet);
+    static bool isForwardJet     (const Susy::Jet* jet);
 
-    int numberOfCLJets    (const JetVector& jets, SusyNtSys sys=NtSys_NOM);
-    int numberOfCBJets    (const JetVector& jets);
-    int numberOfFJets     (const JetVector& jets);
+    static int numberOfCLJets    (const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys);
+    static int numberOfCBJets    (const JetVector& jets);
+    static int numberOfFJets     (const JetVector& jets);
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf, 
                              SusyNtSys sys=NtSys_NOM);
 
     // MET Rel
-    float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, 
-                    bool useForward=false);
+    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets,
+                           bool useForward=false);
   
     // MT2
     static float getMT2(const LeptonVector& leptons, const Susy::Met* met);
