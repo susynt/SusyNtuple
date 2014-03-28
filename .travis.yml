@@ -62,5 +62,8 @@ script:
   - time python -c 'import ROOT; ROOT.TBrowser()'
 
   # Now run the tests
-  - Susy2LepCF --help
+  # get an example test file
+  - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
+  # run the 2l cutflow
+  - Susy2LepCF -F mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
 
