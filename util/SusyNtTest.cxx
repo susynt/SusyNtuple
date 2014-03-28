@@ -79,6 +79,7 @@ int main(int argc, char** argv)
     //if (strcmp(argv[i], "-h") == 0)
     else
     {
+        cout<<"unknown opt '"<<argv[i]<<"'"<<endl;
       help();
       return 0;
     }
