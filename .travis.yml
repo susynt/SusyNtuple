@@ -38,6 +38,8 @@ install:
   - time tar zxf root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
   - mv root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION} root
   - source root/bin/thisroot.sh
+  # just to debug and see what root features are available
+  - root-config --config
 
   # get dependencies
   - cd ..
