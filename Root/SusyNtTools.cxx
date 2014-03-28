@@ -9,6 +9,8 @@
 
 #include "SusyNtuple/SusyNtTools.h"
 
+#include <cassert>
+
 using namespace std;
 using namespace Susy;
 
@@ -2172,19 +2174,21 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                                           float minPt, float maxEta, float nominalJvtThres, SusyNtSys sys)
 {
     bool pass=false;
-    if(jet && jvfTool) {
+    if(jet) {
         float pt(jet->Pt()), eta(jet->detEta);
         float jvfThres(nominalJvtThres);
         bool applyJvf(pt < minPt && fabs(eta) < maxEta);
         bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
         if(jvfUp || jvfDown) {
-            bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
-            jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+            if(jvfTool) {
+                bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
+                jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+            } else {
+                cout<<"jetPassesJvfRequirement: error, jvfTool required ("<<jvfTool<<")"<<endl;
+                assert(jvfTool);
+            }
         }
-        if(applyJvf) pass = (jet->jvf > jvfThres);
-        else         pass = true;
-        //        cout<<"jvf: pt "<<(pt > minPt)<<", eta "<<(fabs(eta) < maxEta)<<", jvf "<<(fabs(jet->jvf) > jvfThres)<<endl;
-//        cout<<"jvf: apply "<<applyJvf<<", jvf "<<(fabs(jet->jvf) > jvfThres)<<endl;
+        pass = (applyJvf ? (jet->jvf > jvfThres) : true);
     } else {
         cout<<"jetPassesJvfRequirement: invalid inputs jet("<<jet<<"), jvfTool("<<jvfTool<<")."
             <<"Return "<<pass<<endl;
