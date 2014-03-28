@@ -464,6 +464,9 @@ class SusyNtTools
     static BTagCalib* m_btagTool;       // BTag tool
     JVFUncertaintyTool* m_jvfTool;      // JVF tool
 
+ private:
+    static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
+                                        float minPt, float maxEta, float nominalJvtThres, SusyNtSys sys);
 };
 
 #endif
