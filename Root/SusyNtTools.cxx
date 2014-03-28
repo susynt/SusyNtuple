@@ -5,7 +5,7 @@
 #include "TChainElement.h"
 #include "TH1F.h"
 
-#include "Mt2/mt2_bisect.h" 
+//#include "Mt2/mt2_bisect.h"
 
 #include "SusyNtuple/SusyNtTools.h"
 
@@ -1769,58 +1769,61 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getMT2(const LeptonVector& leptons, const Met* met)
 {
-  if( leptons.size() < 2 ) return -999;
+    return 0.0;
+  // if( leptons.size() < 2 ) return -999;
 
-  // necessary variables
-  TLorentzVector metlv = met->lv();
-  TLorentzVector l0    = *leptons.at(0);
-  TLorentzVector l1    = *leptons.at(1);
+  // // necessary variables
+  // TLorentzVector metlv = met->lv();
+  // TLorentzVector l0    = *leptons.at(0);
+  // TLorentzVector l1    = *leptons.at(1);
 
-  double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
-  double pA[3]     = {0.0, l0.Px(), l0.Py()};
-  double pB[3]     = {0.0, l1.Px(), l1.Py()};
+  // double pTMiss[3] = {0.0, metlv.Px(), metlv.Py()};
+  // double pA[3]     = {0.0, l0.Px(), l0.Py()};
+  // double pB[3]     = {0.0, l1.Px(), l1.Py()};
   
-  // Create Mt2 object
-  mt2_bisect::mt2 mt2_event;
-  mt2_event.set_momenta(pA,pB,pTMiss);
-  mt2_event.set_mn(0); // LSP mass = 0 is Generic
+  // // Create Mt2 object
+  // mt2_bisect::mt2 mt2_event;
+  // mt2_event.set_momenta(pA,pB,pTMiss);
+  // mt2_event.set_mn(0); // LSP mass = 0 is Generic
   
-  return mt2_event.get_mt2();
+  // return mt2_event.get_mt2();
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Met* met)
 {
-  // necessary variables
-  TLorentzVector metLV = met->lv();
+    return 0.0;
+  // // necessary variables
+  // TLorentzVector metLV = met->lv();
 
-  double pTMiss[3] = {0.0, metLV.Px(), metLV.Py()};
-  double pA[3]     = {0.0, lep1->Px(), lep1->Py()};
-  double pB[3]     = {0.0, lep2->Px(), lep2->Py()};
+  // double pTMiss[3] = {0.0, metLV.Px(), metLV.Py()};
+  // double pA[3]     = {0.0, lep1->Px(), lep1->Py()};
+  // double pB[3]     = {0.0, lep2->Px(), lep2->Py()};
   
-  // Create Mt2 object
-  mt2_bisect::mt2 mt2_event;
-  mt2_event.set_momenta(pA,pB,pTMiss);
-  mt2_event.set_mn(0); // LSP mass = 0 is Generic
+  // // Create Mt2 object
+  // mt2_bisect::mt2 mt2_event;
+  // mt2_event.set_momenta(pA,pB,pTMiss);
+  // mt2_event.set_mn(0); // LSP mass = 0 is Generic
   
-  return mt2_event.get_mt2();
+  // return mt2_event.get_mt2();
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met, 
 			  bool zeroMass, float lspMass)
 {
-  // necessary variables
-  TLorentzVector metLV = met->lv();
+    return 0.0;
+  // // necessary variables
+  // TLorentzVector metLV = met->lv();
 
-  double pTMiss[3] = {0.0, metLV.Px(), metLV.Py()};
-  double pA[3]     = { (zeroMass) ? 0.0 : p1->M() , p1->Px(), p1->Py()};
-  double pB[3]     = { (zeroMass) ? 0.0 : p2->M() , p2->Px(), p2->Py()};
+  // double pTMiss[3] = {0.0, metLV.Px(), metLV.Py()};
+  // double pA[3]     = { (zeroMass) ? 0.0 : p1->M() , p1->Px(), p1->Py()};
+  // double pB[3]     = { (zeroMass) ? 0.0 : p2->M() , p2->Px(), p2->Py()};
   
-  // Create Mt2 object
-  mt2_bisect::mt2 mt2_event;
-  mt2_event.set_momenta(pA,pB,pTMiss);
-  mt2_event.set_mn(lspMass); 
+  // // Create Mt2 object
+  // mt2_bisect::mt2 mt2_event;
+  // mt2_event.set_momenta(pA,pB,pTMiss);
+  // mt2_event.set_mn(lspMass); 
   
-  return mt2_event.get_mt2();
+  // return mt2_event.get_mt2();
 
 }
 
