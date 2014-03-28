@@ -2171,13 +2171,13 @@ bool SusyNtTools::isSherpaSample(unsigned int mcID)
 }
 //----------------------------------------------------------
 bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
-                                          float minPt, float maxEta, float nominalJvtThres, SusyNtSys sys)
+                                          float maxPt, float maxEta, float nominalJvtThres, SusyNtSys sys)
 {
     bool pass=false;
     if(jet) {
         float pt(jet->Pt()), eta(jet->detEta);
         float jvfThres(nominalJvtThres);
-        bool applyJvf(pt < minPt && fabs(eta) < maxEta);
+        bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
         bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
         if(jvfUp || jvfDown) {
             if(jvfTool) {

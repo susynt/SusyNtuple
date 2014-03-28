@@ -465,8 +465,9 @@ class SusyNtTools
     JVFUncertaintyTool* m_jvfTool;      // JVF tool
 
  private:
+    //! check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
     static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
-                                        float minPt, float maxEta, float nominalJvtThres, SusyNtSys sys);
+                                        float maxPt, float maxEta, float nominalJvtThres, SusyNtSys sys);
 };
 
 #endif
