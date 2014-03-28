@@ -53,6 +53,7 @@ script:
 
   # setup RootCore
   cd RootCore
+  echo "pwd is now `pwd`"
   ./configure
   source scripts/setup.sh
   cd ..
