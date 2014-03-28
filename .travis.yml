@@ -37,13 +37,20 @@ install:
   - time tar zxf root_v${ROOT}_Python_${TRAVIS_PYTHON_VERSION}.tar.gz
   - source root_v${ROOT}_Python_${TRAVIS_PYTHON_VERSION}/bin/thisroot.sh
 
-  # adjust environment
+  # get dependencies
   - cd ..
-  - export PYTHONPATH=$PYTHONPATH:`pwd`
-  - export PATH=$PATH:`pwd`/supy/bin
+  - tar xzf SusyNtuple/data/SusyNt_dependencies.tgz
+  - cd -
 
-  # add a configuration
-  - ln -s supy/defaults.py configuration.py
+  # setup RootCore
+  - cd ../RootCore
+  - echo "pwd is now `pwd`"
+  - ./configure
+  - cd ..
+  - source RootCore/scripts/setup.sh
+  - ./RootCore/scripts/find_packages.sh
+  - ./RootCore/scripts/compile.sh
+  - cd SusyNtuple/run
 
 script:
 
@@ -51,19 +58,6 @@ script:
   - time root -l -q
   - time python -c 'import ROOT; ROOT.TBrowser()'
 
-  tar xzf data/SusyNt_dependencies.tgz
-  ls
-  echo "pwd is now `pwd`"
-
-  # setup RootCore
-  cd RootCore
-  echo "pwd is now `pwd`"
-  ./configure
-  source scripts/setup.sh
-  cd ..
-
-  # compile
-  ./RootCore/scripts/compile.sh
 
   # Now run the tests
   #
