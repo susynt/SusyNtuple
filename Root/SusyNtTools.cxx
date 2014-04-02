@@ -64,44 +64,23 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
                                   bool useProcSumw, bool useSusyXsec, 
                                   MCWeighter::WeightSys sys)
 {
+  // Method is deprecated
+  static uint warningCount = 0;
+  if(warningCount < 50){
+    cout << "SusyNtTools::getEventWeight - WARNING - This method is deprecated. "
+         << "You should update your code to use the MCWeighter class, as demonstrated "
+         << "in Susy3LepCutflow" << endl;
+    warningCount++;
+    if(warningCount == 50){
+      cout << "Warning was printed 50 times, and will now stop" << endl;
+    }
+  }
   if(!evt->isMC) return 1;
   else{
     float sumw = getSumw(evt, sumwMap, useSumwMap, useProcSumw);
     float xsec = getXsecTimesEff(evt, useSusyXsec, sys);
     float pupw = getPileupWeight(evt, sys);
     return evt->w * pupw * xsec * lumi / sumw;
-    /*
-    float sumw = evt->sumw;
-    if(useSumwMap){
-      if(sumwMap != NULL){
-        unsigned int mcid = evt->mcChannel;
-        int procID = useProcSumw? evt->susyFinalState : 0;
-        if(procID < 0) procID = 0;
-        SumwMapKey key(mcid, procID);
-        SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
-        if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
-        else{
-          cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
-               << "mcid " << mcid << " proc " << procID << " not found!" << endl;
-          abort();
-        }
-      }
-      else{
-        cout << "SusyNtTools::getEventWeight - ERROR - sumw map is NULL!" << endl;
-        abort();
-      }
-    }
-    float xsec = evt->xsec;
-    if(useSusyXsec){
-      SUSY::CrossSectionDB::Process p = getCrossSection(evt);
-      xsec = p.xsect() * p.kfactor() * p.efficiency();
-      if(sys==MCWeighter::Sys_XSEC_UP)
-        xsec *= (1. + p.relunc());
-      else if(sys==MCWeighter::Sys_XSEC_DN)
-        xsec *= (1. - p.relunc());
-    }
-    return evt->w * evt->wPileup * xsec * lumi / sumw;
-    */
   }
 }
 
@@ -2088,6 +2067,9 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
 SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
 {
   //cout << "SusyNtTools::buildSumwMap" << endl;
+  cout << "SusyNtTools::buildSumwMap - WARNING - use of buildSumwMap is deprecated. "
+       << "You should update your code to use the MCWeighter class, as demonstrated "
+       << "in Susy3LepCutflow" << endl;
 
   // The sumw map
   SumwMap sumwMap;

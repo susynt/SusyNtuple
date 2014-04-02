@@ -53,13 +53,6 @@ class SusyNtTools
                                  bool useSusyXsec = false,
                                  MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
 
-    // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
-    // This will use the correct pileup weights for A-B3
-    //virtual float getEventWeightAB3(const Susy::Event* evt);
-
-    // Scale MC to A-B dataset (5.83/fb)
-    //virtual float getEventWeightAB(const Susy::Event* evt);
-
     // Get the sumw for this event
     static float getSumw(const Susy::Event* evt, const SumwMap* sumwMap, 
                          bool useSumwMap=true, bool useProcSumw=true);

@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2014-04-02 Steve
+	* Added deprecation warnings to SusyNtTools methods: buildSumwMap and getEventWeight
+		* Users should update to usage of the MCWeighter class,
+		  as demonstrated in the Susy3LepCutflow class
+
 2014-03-26 Steve
 	* Moved JVF sys enums to SusyNtSys
 		* Kinda goes against my thinking that this enum should
