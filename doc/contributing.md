@@ -31,6 +31,10 @@ Notes:
   [Git Configuration](http://git-scm.com/book/en/Customizing-Git-Git-Configuration)
   docs
 - report issues and bugs: use the github and open a new issue.
+- you can either push to the repo gerbaudo/SusyNtuple (simpler,
+  recommended option, but you should ask to add your username as a
+  developer), or you can fork that repo and then issue the pull
+  request from your fork
 
 For more details on the workflow, see
 [a simple git branching model](https://gist.github.com/jbenet/ee6c9ac48068889b0912)
