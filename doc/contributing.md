@@ -4,7 +4,7 @@ Setup a clean area
 ```bash
 mkdir susynt_dev
 cd susynt_dev
-git clone git@github.com:<user>/SusyNtuple.git
+git clone git@github.com:gerbaudo/SusyNtuple.git
 source scripts/installMinimalSUSYTools.sh
 ```
 
