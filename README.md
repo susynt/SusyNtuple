@@ -24,8 +24,8 @@ To make a tag, use the script/makeTag.sh script (only for developers)
 
 
 
-Note that if you are not planning on producing SusyNt files, you do not need 
-to check out the SusyCommon, MultiLep, or SUSYTools packages. Instead, you 
+Note that if you are not planning on producing SusyNt files, you do not need
+to check out the SusyCommon, MultiLep, or SUSYTools packages. Instead, you
 can use this install script which will checkout the minimal RootCore package
 content necessary to read and analyze SusyNt. It will check out a few classes
 from SUSYTools rather than the entire package with all of its dependencies.
@@ -36,12 +36,12 @@ the SUSYTools/data content (e.g., to pick up updated cross sections),
 then use the following script.
 `source SusyNtuple/scripts/refreshSUSYToolsData.sh`
 
-If you plan to produce SusyNt or just want to have the whole machinery 
-available to look at, then check out the SusyCommon package and use the 
-install instructions from there. In that case, this package will be checked 
+If you plan to produce SusyNt or just want to have the whole machinery
+available to look at, then check out the SusyCommon package and use the
+install instructions from there. In that case, this package will be checked
 out automatically.
 
-for examples of how to utilize this package, you can see the example cutflow 
+for examples of how to utilize this package, you can see the example cutflow
 codes below, or see my personal analysis code here:
 https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/sfarrell/SusyAna
 
@@ -49,7 +49,7 @@ https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/sfarrell/SusyA
 Examples on how to run
 ----------------------
 
-We have include some example codes that demonstrate the usage of SusyNt and 
+We have include some example codes that demonstrate the usage of SusyNt and
 can reproduce the 2L and 3L cutflows.
 It is recommended that you write your own analysis loopers which inherit from SusyNtAna
 (or from the cutflow classes)
@@ -72,7 +72,7 @@ If you run with option '-h' you will get the list of command line options
   -k number of events to skip
      defaults: 0
   -d debug printout level
-     defaults: 0 (quiet) 
+     defaults: 0 (quiet)
   -F name of single input file
      defaults: ''
   -f name of input filelist
