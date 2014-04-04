@@ -6,7 +6,6 @@ SusyNtuple
 A RootCore package for common UCI SUSY analysis
 -----------------------------------------------
 
-
 For useful information on using these packages, please consult the TWiki:
 https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/UCISusyNtuples
 
