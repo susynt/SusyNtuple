@@ -40,6 +40,9 @@ install:
   - source root/bin/thisroot.sh
   # just to debug and see what root features are available
   - root-config --config
+  - echo "running on `uname -a`
+  - echo "and `cat /etc/redhat-release`"
+  - echo "whith ldd `ldd --version`"
 
   # get dependencies
   - cd ..
