@@ -29,6 +29,14 @@ install:
   # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
+  - time sudo apt-get install -qq dpkg-dev make g++ gcc binutils libx11-dev libxpm-dev \
+  libxft-dev libxext-dev \
+  gfortran libssl-dev libpcre3-dev \
+  xlibmesa-glu-dev libglew1.5-dev libftgl-dev \
+  libmysqlclient-dev libfftw3-dev cfitsio-dev \
+  graphviz-dev libavahi-compat-libdnssd-dev \
+  libldap2-dev python-dev libxml2-dev libkrb5-dev \
+  libgsl0-dev libqt4-de
   # # matplotlib and PyTables are not available for Python 3 as packages from the main repo yet.
   # - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then time sudo apt-get install -qq python${PYTHON_SUFFIX}-matplotlib python${PYTHON_SUFFIX}-tables; fi
 
