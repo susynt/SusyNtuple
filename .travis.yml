@@ -30,7 +30,7 @@ install:
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
   - time sudo apt-get install -qq dpkg-dev make g++ gcc binutils libx11-dev libxpm-dev
-  - time sudo apt-get install -11 libxml2-dev
+  - time sudo apt-get install -qq libxml2-dev
   # libxft-dev libxext-dev \
   # gfortran libssl-dev libpcre3-dev \
   # xlibmesa-glu-dev libglew1.5-dev libftgl-dev \
