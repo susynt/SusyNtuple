@@ -34,10 +34,11 @@ install:
 
   # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM
   # for the correct Python / ROOT version
-  - time wget --tries=2 --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
-  - time tar zxf root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
-  - mv root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION} root
-  - source root/bin/thisroot.sh
+  #- time wget --tries=2 --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
+  #- time tar zxf root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
+  - time wget --tries=2 --no-check-certificate https://copy.com/c48nvHuPYBN7 -O root_v5.34.18.tgz
+  - tar xzf root_v5.34.18.tgz
+  - source root_v5.34.18/bin/thisroot.sh
   # just to debug and see what root features are available
   - root-config --config
   - echo "running on `uname -a`"
