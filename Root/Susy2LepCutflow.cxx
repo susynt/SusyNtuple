@@ -302,9 +302,9 @@ bool Susy2LepCutflow::passSR5(const LeptonVector& leptons, const JetVector& jets
   if( !passMETRel(met,leptons,jets,40) ) return false;
   n_pass_SR5MET[m_ET]++;
 
-  // // Check MT2 > 90
-  // if( !passMT2(leptons, met, 90) )      return false;
-  // n_pass_SR5MT2[m_ET]++;
+  // Check MT2 > 90
+  if( !passMT2(leptons, met, 90) )      return false;
+  n_pass_SR5MT2[m_ET]++;
   
   return true;
 
@@ -445,9 +445,8 @@ bool Susy2LepCutflow::passdPhi(TLorentzVector v0, TLorentzVector v1, float cut)
 /*--------------------------------------------------------------------------------*/
 bool Susy2LepCutflow::passMT2(const LeptonVector& leptons, const Met* met, float cut)
 {
-  // float mT2 = getMT2(leptons, met);
-  // return (mT2 > cut);
-  return false;
+  float mT2 = getMT2(leptons, met);
+  return (mT2 > cut);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -499,7 +498,7 @@ void Susy2LepCutflow::dumpEventCounters()
     cout << "pass SR5 JV:   " << n_pass_SR5jv[i]   << endl;
     cout << "pass SR5 ZV:   " << n_pass_SR5Zv[i]   << endl;
     cout << "pass SR5 MET:  " << n_pass_SR5MET[i]  << endl;
-//    cout << "pass SR Mt2:   " << n_pass_SR5MT2[i]  << endl;
+    cout << "pass SR Mt2:   " << n_pass_SR5MT2[i]  << endl;
   }
 
 }

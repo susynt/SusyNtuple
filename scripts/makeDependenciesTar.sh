@@ -42,7 +42,7 @@ function checkout_packages {
 
     cd ${TMP_DIR}    
     svn co ${rootCoreURL} RootCore
-    # svn co ${mt2URL} Mt2
+    svn co ${mt2URL} Mt2
     svn co ${trigURL} DGTriggerReweight
     svn co ${reweightUtilsURL} ReweightUtils
     svn co ${jvfURL} JVFUncertaintyTool
