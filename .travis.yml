@@ -30,8 +30,8 @@ install:
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
   # see http://sourceforge.net/projects/cernrootdebs
-  - time wget --tries=2 --no-check-certificate http://downloads.sourceforge.net/project/cernrootdebs/latest-recommended/root_5.34.03-1_amd64.deb
-  - time sudo dpkg -i root_5.34.03-1_amd64.deb
+  #- time wget --tries=2 --no-check-certificate http://downloads.sourceforge.net/project/cernrootdebs/latest-recommended/root_5.34.03-1_amd64.deb
+  #- time sudo dpkg -i root_5.34.03-1_amd64.deb
   #- time sudo apt-get install -qq dpkg-dev make g++ gcc binutils libx11-dev libxpm-dev
   # - time sudo apt-get install -qq liblzma1 liblzma-dev libxml2-dev
   # libxft-dev libxext-dev \
@@ -43,14 +43,13 @@ install:
   # libgsl0-dev libqt4-de
   # # matplotlib and PyTables are not available for Python 3 as packages from the main repo yet.
   # - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then time sudo apt-get install -qq python${PYTHON_SUFFIX}-matplotlib python${PYTHON_SUFFIX}-tables; fi
-
   # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM
   # for the correct Python / ROOT version
   #- time wget --tries=2 --no-check-certificate https://copy.com/rtIyUdxgjt7h/ci/root_builds/root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
   #- time tar zxf root_v${ROOT}_python_${TRAVIS_PYTHON_VERSION}.tar.gz
-  # - time wget --tries=2 --no-check-certificate https://copy.com/c48nvHuPYBN7 -O root_v5.34.18.tgz
-  # - tar xzf root_v5.34.18.tgz
-  # - source root_v5.34.18/bin/thisroot.sh
+  - time wget --tries=2 --no-check-certificate https://copy.com/GArqtEGYzIKV -O root_v5.34.18.tgz
+  - tar xzf root_v5.34.18.tgz
+  - source root_v5.34.18/bin/thisroot.sh
   # just to debug and see what root features are available
   - which root
   - root-config --config
