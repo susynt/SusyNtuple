@@ -1,5 +1,9 @@
 # vim: set noexpandtab:
 
+2014-04-11 Steve
+	* Setup branch in git for the purpose of adding 
+	  triggers requested for the ISR analysis.
+
 2013-10-04 Steve
 	* Tagging SusyNtuple-00-01-05
 
