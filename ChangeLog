@@ -18,6 +18,10 @@
 2013-11-07 Steve
 	* Updated BTag calibrations to match SUSYTools-00-03-06
 
+2014-04-11 Steve
+	* Setup branch in git for the purpose of adding 
+	  triggers requested for the ISR analysis.
+
 2013-11-07 Steve
 	* Tagging SusyNtuple-00-01-05
 
