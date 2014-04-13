@@ -54,11 +54,12 @@ namespace Susy
       float mllMcTruth;         // mll from mcTruth (filled for Z->ll overlapping samples)
       bool passMllForAlpgen;    // computed from value above; see MultiLep/TruthTools for details
 
-      unsigned int trigFlags;   // Event level trigger bits
+      //unsigned int trigFlags; // Event level trigger bits
+      long long trigFlags;      // Event level trigger bits
 
       // Check trigger firing
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
-      bool passTrig(unsigned int mask, bool requireAll=true) const {
+      bool passTrig(long long mask, bool requireAll=true) const {
         if(requireAll) return (trigFlags & mask) == mask;
         else return mask == 0 || (trigFlags & mask) != 0;
       }
@@ -114,7 +115,7 @@ namespace Susy
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 25);
+      ClassDef(Event, 26);
   };
 
   // Particle class, base class for other object types
@@ -199,7 +200,8 @@ namespace Susy
       float effSF;              // Efficiency scale factor
       float errEffSF;           // Uncertainty on the efficiency scale factor
 
-      unsigned int trigFlags;   // Bit word representing matched trigger chains
+      //unsigned int trigFlags; // Bit word representing matched trigger chains
+      long long trigFlags;      // Bit word representing matched trigger chains
 
       // Methods to return impact parameter variables
       // Note that these are not absolute valued!
@@ -240,7 +242,7 @@ namespace Susy
         Particle::clear();
       }
       
-      ClassDef(Lepton, 11);
+      ClassDef(Lepton, 12);
   };
 
   // Electron class
@@ -429,11 +431,11 @@ namespace Susy
       float tes_up;             // tau energy scale + sigma
       float tes_dn;             // tau energy scale - sigma
 
-      unsigned int trigFlags;   // Bit word representing matched trigger chains
+      long long trigFlags;      // Bit word representing matched trigger chains
 
       // Trigger matching
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
-      bool matchTrig(unsigned int mask) const {
+      bool matchTrig(long long mask) const {
         return (trigFlags & mask) == mask;
       }
 
@@ -462,7 +464,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Tau, 5);
+      ClassDef(Tau, 6);
   };
 
   // Photon class
