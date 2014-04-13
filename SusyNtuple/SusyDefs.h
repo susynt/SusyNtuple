@@ -347,6 +347,8 @@ enum TrigBit
   // Triggers requested for ISR analysis
 
   // 3L triggers
+  BIT_mu6,
+  BIT_2mu6,
   BIT_e18vh_medium1_2e7T_medium1,
   BIT_3mu6,
   BIT_mu18_tight_2mu4_EFFS,
@@ -409,6 +411,8 @@ const long long TRIG_mu15                    = 1LL<<BIT_mu15;
 const long long TRIG_2mu8_EFxe40wMu_tclcw    = 1LL<<BIT_2mu8_EFxe40wMu_tclcw;
 
 // Triggers requested for ISR analysis
+const long long TRIG_mu6                                = 1LL<<BIT_mu6;
+const long long TRIG_2mu6                               = 1LL<<BIT_2mu6;
 const long long TRIG_e18vh_medium1_2e7T_medium1         = 1LL<<BIT_e18vh_medium1_2e7T_medium1;
 const long long TRIG_3mu6                               = 1LL<<BIT_3mu6;
 const long long TRIG_mu18_tight_2mu4_EFFS               = 1LL<<BIT_mu18_tight_2mu4_EFFS;
