@@ -5,7 +5,7 @@ Setup a clean area
 mkdir susynt_dev
 cd susynt_dev
 git clone git@github.com:gerbaudo/SusyNtuple.git
-source scripts/installMinimalSUSYTools.sh
+source SusyNtuple/scripts/installMinimalSUSYTools.sh
 ```
 
 Commit changes to your local repository and push them to github:
