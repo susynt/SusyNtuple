@@ -20,7 +20,7 @@ namespace Susy {
   - if you are using a TChain, the trees must be added in the same
     order from one run to the next. Use a filelist to ensure this
 
-  See test_EventlistHandler.cxx for an example.
+  See test_EventlistHandler.cxx for an example of how this class can be used
 
   davide.gerbaudo@gmail.com, April 2014
  */

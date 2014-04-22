@@ -86,13 +86,11 @@ EventlistHandler& EventlistHandler::addEvent(Long64_t entry)
 EventlistHandler& EventlistHandler::setCacheFilename(const std::string value)
 {
     string dir = basedir(value);
-    if(!dirExists(dir)) {
-        bool validDir(mkdirIfNeeded(dir).length()>0);
-        if(!validDir) {
-            cout<<"EventlistHandler::setCacheFilename: cannot set cache to '"<<value<<"', "
-                " invalid directory '"<<dir<<"', using './'"<<endl;
-            m_cacheFilename = "./"+value.substr(0, value.find_last_of('/'));
-        }
+    if(dirExists(dir)) m_cacheFilename = value;
+    else {
+        bool dirWasCreated(mkdirIfNeeded(dir).length()>0);
+        dir = dirWasCreated ? dir : "./";
+        m_cacheFilename = dir+"/"+value.substr(0, value.find_last_of('/'));
     }
     if(m_verbose)
         cout<<"EventlistHandler: using cache file '"<<m_cacheFilename<<"'"<<endl;
@@ -106,6 +104,7 @@ TEventList* EventlistHandler::fetchEventList()
         TDirectory *pwd = gDirectory;
         m_cacheFile->cd();
         m_eventlist.Read(m_listName.c_str());
+        m_eventlist.SetDirectory(0);
         m_cacheFile->Close();
         m_cacheFile->Delete();
         m_cacheFile = NULL;
@@ -120,9 +119,10 @@ TEventList* EventlistHandler::fetchEventList()
 //----------------------------------------------------------
 bool EventlistHandler::initOutputFile()
 {
+    cout<<"EventlistHandler::initOutputFile "<<m_cacheFilename<<endl;
     m_cacheFile = TFile::Open(m_cacheFilename.c_str(), "recreate");
     if(m_cacheFile){
-        m_eventlist.SetDirectory(m_cacheFile);        
+        m_eventlist.SetDirectory(m_cacheFile);
     } else {
         cout<<"EventlistHandler: cannot init output file '"<<m_cacheFilename<<"'"<<endl;
     }
@@ -135,7 +135,7 @@ bool EventlistHandler::closeOutputFile()
     if(m_cacheFile){
         TDirectory *pwd = gDirectory;
         m_cacheFile->cd();
-        m_eventlist.Write();
+        m_eventlist.Write(m_listName.c_str());
         m_cacheFile->Close();
         m_cacheFile->Delete();
         m_cacheFile = NULL;
