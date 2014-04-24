@@ -777,7 +777,7 @@ bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
                 && fabs(jet->Eta()) < JET_ETA_CUT
                 && SusyNtTools::jetPassesJvfRequirement(jet, m_jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys));
     } else {
-        cout<<"isSignalJet: invalid jet("<<jet<<"), return "<<pass<<endl;
+        cout << "isSignalJet: invalid jet(" << jet << "), return " << pass << endl;
     }
     return pass;
 }
@@ -807,7 +807,7 @@ bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool,
                 && jet->mv1 < MV1_80
                 && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys));
     } else {
-        cout<<"isCentralLightJet: invalid jet("<<jet<<"), return "<<pass<<endl;
+        cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
     return pass;
 }
@@ -2184,14 +2184,14 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                 bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
                 jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
             } else {
-                cout<<"jetPassesJvfRequirement: error, jvfTool required ("<<jvfTool<<")"<<endl;
+                cout << "jetPassesJvfRequirement: error, jvfTool required (" << jvfTool << ")" <<endl;
                 assert(jvfTool);
             }
         }
         pass = (applyJvf ? (jet->jvf > jvfThres) : true);
     } else {
-        cout<<"jetPassesJvfRequirement: invalid inputs jet("<<jet<<"), jvfTool("<<jvfTool<<")."
-            <<"Return "<<pass<<endl;
+        cout<< "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
+            << "Return " << pass << endl;
     }
     return pass;
 }
