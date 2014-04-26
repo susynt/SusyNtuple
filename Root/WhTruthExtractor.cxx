@@ -308,3 +308,54 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
   return particles;
 }
 //----------------------------------
+int WhTruthExtractor::determineParentPdg(const vint_t *pdgs, const vvint_t *parentsIndices,
+                                         const int &particleIndex)
+{
+    //! functor that navigates up the chain when there are intermediate particles
+    struct IntermediateParentWalker {
+        const vint_t &pdgs_;
+        const vvint_t &parsIdxs_;
+        size_t i_; //!< index current particle
+        int pdg_; //!< pdg current particle
+        vint_t parIndices_; //!< indices parents of current particle
+        vint_t parPdgs_; //!< pdgs parents of current particle
+        IntermediateParentWalker(const vint_t *pdgs, const vvint_t *parentsIndices, const int &particleIndex) :
+            pdgs_(*pdgs), parsIdxs_(*parentsIndices), i_(0), pdg_(0) {
+            setIndexCurrentParticle(particleIndex);
+        }
+        int defaultParentPdg() const { return -999; }
+        //! take the first one, usually fine
+        int parentPdg() const { return parPdgs_.size()>0 ? parPdgs_[0] : defaultParentPdg(); }
+        void setIndexCurrentParticle(const int &i) {
+            i_ = i;
+            pdg_ = pdgs_[i];
+            parIndices_ = parsIdxs_[ i ];
+            parPdgs_.resize(parIndices_.size());
+            std::transform(parIndices_.begin(), parIndices_.end(), parPdgs_.begin(), IndexToPdg(pdgs_));
+        }
+        bool hasParent() { return parIndices_.size()>0; }
+        bool hasSelfParent() {
+            return find(parPdgs_.begin(), parPdgs_.end(), pdg_) != parPdgs_.end();
+        }
+        size_t indexSelfParent() {
+            vint_t::iterator it = find(parPdgs_.begin(), parPdgs_.end(), pdg_);
+            return parIndices_[std::distance(parPdgs_.begin(), it)];
+        }
+        void walkUp() {
+            while(hasParent() && hasSelfParent())
+                setIndexCurrentParticle(indexSelfParent());
+        }
+    };
+    IntermediateParentWalker ipw(pdgs, parentsIndices, particleIndex);
+    int parentPdg = ipw.defaultParentPdg();
+    if(ipw.hasParent()){
+        if(!ipw.hasSelfParent())
+            parentPdg = ipw.parentPdg();
+        else  {
+            ipw.walkUp();
+            if(ipw.hasParent()) parentPdg = ipw.parentPdg();
+        }
+    }
+    return parentPdg;
+}
+//----------------------------------

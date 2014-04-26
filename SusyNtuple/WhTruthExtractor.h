@@ -67,6 +67,7 @@ class WhTruthExtractor {
    */
   static vint_t ttbarMcAtNloParticles(const vint_t *pdgs,
                                       const vvint_t *childrenIndices);
+  static int determineParentPdg(const vint_t *pdgs, const vvint_t *parentsIndices, const int &particleIndex);
  public:
   bool verbose_;
   const vint_t pdgsPbAb_;
