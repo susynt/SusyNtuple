@@ -90,7 +90,7 @@ EventlistHandler& EventlistHandler::setCacheFilename(const std::string value)
     else {
         bool dirWasCreated(mkdirIfNeeded(dir).length()>0);
         dir = dirWasCreated ? dir : "./";
-        m_cacheFilename = dir+"/"+value.substr(0, value.find_last_of('/'));
+        m_cacheFilename = dir+"/"+value.substr(value.find_last_of('/'));
     }
     if(m_verbose)
         cout<<"EventlistHandler: using cache file '"<<m_cacheFilename<<"'"<<endl;
