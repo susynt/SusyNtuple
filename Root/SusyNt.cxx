@@ -470,6 +470,7 @@ Jet::Jet(const Jet &rhs):
   isBadVeryLoose(rhs.isBadVeryLoose),
   isHotTile(rhs.isHotTile),
   bch_corr_jet(rhs.bch_corr_jet),
+  bch_corr_cell(rhs.bch_corr_cell),
   jes_up(rhs.jes_up),
   jes_dn(rhs.jes_dn),
   jer(rhs.jer),
@@ -498,6 +499,7 @@ Jet& Jet::operator=(const Jet &rhs)
     isBadVeryLoose = rhs.isBadVeryLoose;
     isHotTile = rhs.isHotTile;
     bch_corr_jet = rhs.bch_corr_jet;
+    bch_corr_cell = rhs.bch_corr_cell;
     jes_up = rhs.jes_up;
     jes_dn = rhs.jes_dn;
     jer = rhs.jer;
