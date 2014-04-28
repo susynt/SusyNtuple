@@ -529,6 +529,14 @@ namespace Susy
       bool isBadVeryLoose;      // bad jet flag computed with SUSYTools
       bool isHotTile;           // tile hot spot flag computed with SUSYTools
       float bch_corr_jet;       // Needed for dead region veto
+      float bch_corr_cell;      // For studying BCH cleaning prescription
+
+      // BCH cleaning flags
+      // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BCHCleaningTool
+      bool isBadMediumBCH;      // BCH cleaning flag
+      bool isBadMediumBCH_up;   // BCH cleaning flag
+      bool isBadMediumBCH_dn;   // BCH cleaning flag
+      bool isBadTightBCH;       // BCH cleaning flag
 
       // Systematics
       float jes_up;             // jet energy scale up
@@ -554,13 +562,14 @@ namespace Susy
         sv0 = combNN = mv1 = 0;
         jfit_mass = sv0p_mass = svp_mass = 0;
         isBadVeryLoose = isHotTile = false;
-	bch_corr_jet = 0;
+	bch_corr_jet = bch_corr_cell = 0;
+        isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;
 	jer = jes_up = jes_dn = 0;
 	met_wpx = met_wpy = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 9);
+      ClassDef(Jet, 10);
   };
 
   // Met class
@@ -722,6 +731,5 @@ namespace Susy
   };
 
 };
-
 
 #endif
