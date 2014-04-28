@@ -371,15 +371,15 @@ class SusyNtTools
 
     // 2 Lepton jet methods and counters
     // These will no longer be static because of the systematic uncert requirement
-    static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys);
+    static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
     static bool isCentralBJet    (const Susy::Jet* jet);
     static bool isForwardJet     (const Susy::Jet* jet);
 
-    static int numberOfCLJets    (const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys);
+    static int numberOfCLJets    (const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
     static int numberOfCBJets    (const JetVector& jets);
     static int numberOfFJets     (const JetVector& jets);
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf, 
-                             SusyNtSys sys=NtSys_NOM);
+                             SusyNtSys sys, AnalysisType anaType);
 
     // MET Rel
     static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets,
@@ -467,7 +467,8 @@ class SusyNtTools
  private:
     //! check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
     static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
-                                        float maxPt, float maxEta, float nominalJvtThres, SusyNtSys sys);
+                                        float maxPt, float maxEta, float nominalJvtThres,
+                                        SusyNtSys sys, AnalysisType anaType);
 };
 
 #endif

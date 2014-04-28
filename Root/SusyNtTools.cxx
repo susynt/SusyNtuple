@@ -775,7 +775,7 @@ bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
         float ptCut = JET_SIGNAL_PT_CUT_3L;
         pass = (jet->Pt() > ptCut
                 && fabs(jet->Eta()) < JET_ETA_CUT
-                && SusyNtTools::jetPassesJvfRequirement(jet, m_jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys));
+                && SusyNtTools::jetPassesJvfRequirement(jet, m_jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys, m_anaType));
     } else {
         cout << "isSignalJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -787,7 +787,7 @@ bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 {
-  if(!isCentralLightJet(jet, m_jvfTool, sys) &&
+  if(!isCentralLightJet(jet, m_jvfTool, sys, m_anaType) &&
      !isCentralBJet(jet) &&
      !isForwardJet(jet)
     ) return false;
@@ -798,14 +798,14 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys)
+bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
 {
     bool pass = false;
     if(jet) {
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
                 && jet->mv1 < MV1_80
-                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys));
+                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys, anaType));
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -840,13 +840,14 @@ bool SusyNtTools::isForwardJet(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton Central Light Jets
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys)
+int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool,
+                                SusyNtSys sys, AnalysisType anaType)
 {
   int ans = 0;
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isCentralLightJet(j, jvfTool, sys)){
+    if(isCentralLightJet(j, jvfTool, sys, anaType)){
       ans++;
     }
   }
@@ -892,9 +893,9 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 // Pass 2 Lepton Jet Counts by Reference
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf,
-                                      SusyNtSys sys)
+                                      SusyNtSys sys, AnalysisType anaType)
 {
-  Ncl = numberOfCLJets(jets, m_jvfTool, sys);
+  Ncl = numberOfCLJets(jets, m_jvfTool, sys, anaType);
   Ncb = numberOfCBJets(jets);
   Nf  = numberOfFJets (jets);
   return;
@@ -2171,7 +2172,8 @@ bool SusyNtTools::isSherpaSample(unsigned int mcID)
 }
 //----------------------------------------------------------
 bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
-                                          float maxPt, float maxEta, float nominalJvtThres, SusyNtSys sys)
+                                          float maxPt, float maxEta, float nominalJvtThres,
+                                          SusyNtSys sys, AnalysisType anaType)
 {
     bool pass=false;
     if(jet) {
@@ -2188,7 +2190,13 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                 assert(jvfTool);
             }
         }
-        pass = (applyJvf ? (jet->jvf > jvfThres) : true);
+        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 [add explanation here]
+        bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
+        if(applyJvf) {
+            pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
+        } else {
+            pass = true;
+        }
     } else {
         cout<< "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
             << "Return " << pass << endl;
