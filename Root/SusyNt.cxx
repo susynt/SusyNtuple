@@ -471,6 +471,10 @@ Jet::Jet(const Jet &rhs):
   isHotTile(rhs.isHotTile),
   bch_corr_jet(rhs.bch_corr_jet),
   bch_corr_cell(rhs.bch_corr_cell),
+  isBadMediumBCH(rhs.isBadMediumBCH),
+  isBadMediumBCH_up(rhs.isBadMediumBCH_up),
+  isBadMediumBCH_dn(rhs.isBadMediumBCH_dn),
+  isBadTightBCH(rhs.isBadTightBCH),
   jes_up(rhs.jes_up),
   jes_dn(rhs.jes_dn),
   jer(rhs.jer),
@@ -500,6 +504,10 @@ Jet& Jet::operator=(const Jet &rhs)
     isHotTile = rhs.isHotTile;
     bch_corr_jet = rhs.bch_corr_jet;
     bch_corr_cell = rhs.bch_corr_cell;
+    isBadMediumBCH = rhs.isBadMediumBCH;
+    isBadMediumBCH_up = rhs.isBadMediumBCH_up;
+    isBadMediumBCH_dn = rhs.isBadMediumBCH_dn;
+    isBadTightBCH = rhs.isBadTightBCH;
     jes_up = rhs.jes_up;
     jes_dn = rhs.jes_dn;
     jer = rhs.jer;
