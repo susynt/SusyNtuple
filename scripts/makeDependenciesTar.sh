@@ -53,7 +53,7 @@ function checkout_packages {
 
 function checkout_SUSYTools {    
     local TMP_DIR=$1
-    susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-14"
+    susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-19"
     # special treatment: only pick the minimum number of required files
     mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt SUSYTools/data
     svn export ${susyURL}/SUSYTools/SUSYCrossSection.h SUSYTools/SUSYTools/SUSYCrossSection.h
