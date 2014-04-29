@@ -787,12 +787,9 @@ bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 {
-  if(!isCentralLightJet(jet, m_jvfTool, sys, m_anaType) &&
-     !isCentralBJet(jet) &&
-     !isForwardJet(jet)
-    ) return false;
-
-  return true; 
+    return (isCentralLightJet(jet, m_jvfTool, sys, m_anaType)
+            || isCentralBJet(jet)
+            || isForwardJet(jet));
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -800,12 +797,19 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
 {
+    // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
     if(jet) {
+        float minJvf = JET_JVF_CUT;
+        float maxJvtEta = JET_JVF_ETA;
+        if(anaType == Ana_2Lep || anaType == Ana_2LepWH) {
+            minJvf = JET_JVF_CUT_2L;
+            maxJvtEta = JET_ETA_CUT_2L;
+        }
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
                 && jet->mv1 < MV1_80
-                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys, anaType));
+                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -2190,7 +2194,7 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                 assert(jvfTool);
             }
         }
-        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 [add explanation here]
+        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
         bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
         if(applyJvf) {
             pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
