@@ -75,6 +75,17 @@ typedef std::map<SumwMapKey, float> SumwMap;
 //-----------------------------------------------------------------------------------
 // Global enums
 //-----------------------------------------------------------------------------------
+
+// MC production campaign
+enum MCProduction
+{
+  MCProd_Unknown = 0,
+  MCProd_MC12a,
+  MCProd_MC12b,
+  MCProd_N
+};
+
+// Data stream
 enum DataStream
 {
   Stream_Unknown = 0,
