@@ -12,13 +12,13 @@ https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/UCISusyNtuples
 Link to code in SVN browser
 https://svnweb.cern.ch/trac/atlasinst/browser/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple
 
-To checkout the package trunk
+To checkout the package trunk  
 `svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/trunk SusyNtuple`
 
-Or the current recommended tag (get the latest tag from the TWiki)
+Or the current recommended tag (get the latest tag from the TWiki)  
 `svn co svn+ssh://svn.cern.ch/reps/atlasinst/Institutes/UCIrvine/SUSYAnalysis/SusyNtuple/tags/SusyNtuple-XX-YY-ZZ SusyNtuple`
 
-To make a tag, use the script/makeTag.sh script (only for developers)
+To make a tag, use the script/makeTag.sh script (only for developers)  
 `./scripts/makeTag.sh SusyNtuple-XX-YY-ZZ "Some message"`
 
 
@@ -27,12 +27,12 @@ Note that if you are not planning on producing SusyNt files, you do not need
 to check out the SusyCommon, MultiLep, or SUSYTools packages. Instead, you
 can use this install script which will checkout the minimal RootCore package
 content necessary to read and analyze SusyNt. It will check out a few classes
-from SUSYTools rather than the entire package with all of its dependencies.
+from SUSYTools rather than the entire package with all of its dependencies.  
 `source SusyNtuple/scripts/installMinimalSUSYTools.sh`
 
 If you've already done the minimal installation above but want to update
 the SUSYTools/data content (e.g., to pick up updated cross sections),
-then use the following script.
+then use the following script.  
 `source SusyNtuple/scripts/refreshSUSYToolsData.sh`
 
 If you plan to produce SusyNt or just want to have the whole machinery
