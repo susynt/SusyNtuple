@@ -20,7 +20,7 @@ namespace utils{
 typedef std::vector< int > vint_t;
 typedef std::vector< vint_t > vvint_t;
 
-//! determine whether a vector contains a subvector
+//! returns true if the intersection of the two vectors is non-empty
 bool containsAnyOf(const vint_t &firstVec, const vint_t &subVec);
 //! convert vint_t to string
 std::string vecToString(const vint_t &vec);
