@@ -50,6 +50,8 @@ namespace Susy
       int hDecay;               // Higgs decay (see WhTruthExtractor)
       bool eventWithSusyProp;   // Event generated involving SUSY propagators 
                                 // (See Serhan's msg http://goo.gl/ucwl9)
+      int susySpartId1;         // SUSY sparticle 1 pdg ID
+      int susySpartId2;         // SUSY sparticle 2 pdg ID
 
       float mllMcTruth;         // mll from mcTruth (filled for Z->ll overlapping samples)
       bool passMllForAlpgen;    // computed from value above; see MultiLep/TruthTools for details
@@ -106,6 +108,7 @@ namespace Susy
         mllMcTruth = -1.0;
         hDecay = -1;
         eventWithSusyProp = false;
+        susySpartId1 = susySpartId2 = 0;
         passMllForAlpgen = true;
         memset(evtFlag,0,sizeof(evtFlag));
         memset(cutFlags,0,sizeof(cutFlags));
@@ -114,7 +117,7 @@ namespace Susy
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 25);
+      ClassDef(Event, 26);
   };
 
   // Particle class, base class for other object types

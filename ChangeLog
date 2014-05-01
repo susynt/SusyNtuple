@@ -1,5 +1,102 @@
 # vim: set noexpandtab:
 
+2014-02-10 Steve
+	* Updated SusyNtTools.eventHasSusyPropagators to return
+	  true as soon as a problematic sparticle is found
+	* Added susySpartId1 and susySpartId2 to Event class
+		* Allows us to recalculate the proc ID on the fly later
+
+2014-02-09 Steve
+	* Updated Susy3LepCutflow code
+		* Updated cleaning cuts
+		* More event selection methods
+		* Full MC weighting, including the latest
+		  prescriptions for sumw and cross section
+		* Skeleton methods for histograms
+
+2014-02-06 Steve
+	* Added getBTagSFJets2Lep to SusyNtTools which returns
+	  the subset of baseline jets which are tested for the b-veto.
+	  These are thus the jets to be passed to the bTagSF method.
+
+2014-02-05 Steve
+	* Added MCID and proc ID to Event.print()
+	* Changed from hardcoded values to JET_JVF_PT and JET_JVF_ETA in isSignalJet
+	* Added template method, dumpObjects, for looping and dumping any 
+	  objects with a print() method.
+
+2014-01-29 Steve
+	* Added bugfix to getCrossSection for Wh nohadtau signal samples
+		* proc ID (susyFinalState) was not saved correctly
+		* I will work on redesigning the approach upstream to
+		  prevent similar future issues
+	* Cleaned up mljj method
+	* Added MCID and prod ID to Event.print()
+	* Added Met.sumet to the copy constructor and assignment operator (was missing)
+	* Added scripts/refreshSUSYToolsData.sh to update SUSYTools/data to trunk
+
+2014-01-22 Steve
+	* Fixed SusyNtTools getEventWeight to use 0 when proc ID -1 is found
+
+2014-01-22 Anyes
+	* Added functions for mljj 
+	* Update 2LSSWh isolation cuts to tighter set (not backward compatible)
+
+2014-01-22 Steve
+	* Fixed SusyNtAna getEventWeight
+		* Added useProcSumw argument. Order of args has changed,
+		  so be careful!
+
+2014-01-17 Steve
+	* Changed default value of susyFinalState to 0 to be consistent with SUSYTools
+	* Changed order of Hdecay enum in WhTruthExtractor. kUnknown is now 0 to be
+	  consistent with susyFinalState and SUSYTools.
+	* Added empty MCWeighter class definition which will handle the MC normalization
+		* At the moment it only holds the sys enum
+	* Added cross section systematic to getEventWeight methods
+
+2014-01-16 Anyes
+	* Added SusyDefs: human readable analysis type
+	* Added SusyNtAna function to get/set sumw map
+	* Added SystNtTools overload function for hasZ and getMT2
+
+2014-01-07 Steve
+	* Added clarification comments for the sumw map update of last commit
+	* Fixed usage of proc ID when retrieving the sumw
+
+2014-01-04 Steve
+	* Updated the sumw map to handle signal samples with multiple processes
+		* The map is now keyed by (MCID, proc)
+		* New typedefs in SusyDefs: SumwMap, SumwMapKey
+		* buildSumwMap method will now find all process cutflow hists
+		  in the input files and fill the map accordingly
+	* getEventWeight now has new argument for controlling the sumw feature: useProcSumw
+		* Setting this to true for all bkg MC and data shouldn't have any effect
+		* It should only be set to false for samples that have multiple 
+		  processes and you DON'T want to normalize each process separately.
+		* NOTE: I changed the order of the arguments!
+			* Luckily, the other affected arg is new and 
+			  probably nobody is using it yet anyway.
+
+2013-12-30 Steve
+	* Fixed method to retrieve SUSYTools cross section
+	* Tagging SusyNtuple-00-01-07
+
+2013-12-19 Steve
+	* Added SUSYTools/data directory to the new installation script
+
+2013-12-17 Steve
+	* Commented out old getEventWeight methods
+	* Added static method to SusyNtTools to get cross section info from SUSYTools: getCrossSection
+	* Added bool flag to getEventWeight which will use the SUSYTools xsec: useSusyXsec
+
+2013-12-15 Steve
+	* Updated new installation script for checking out minimal SUSYTools content
+		* Script only checks out BTagCalib and SUSYCrossSection;
+		  it modifies the Makefile to remove the dependencies
+	* Removed BTagCalib in favor of the SUSYTools class, 
+	  which required updated usage.
+
 2013-12-14 Steve
 	* Adding skeleton of script to check out minimal required classes from SUSYTools,
 	  installMinimalSUSYTools.sh
