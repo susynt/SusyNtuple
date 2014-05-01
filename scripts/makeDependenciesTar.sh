@@ -34,7 +34,7 @@ function checkout_packages {
     local TMP_DIR=$1
     # Tags to checkout
     rootCoreURL=${SVNOFF}"/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
-    bTagURL=${SVNOFF}"/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-06"
+    bTagURL=${SVNOFF}"/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-04-03"
     mt2URL=${SVNPHYS}"/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
     trigURL=${SVNPHYS}"/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
     reweightUtilsURL=${SVNOFF}"/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
@@ -51,7 +51,7 @@ function checkout_packages {
 }
 
 
-function checkout_SUSYTools {    
+function checkout_SUSYTools {
     local TMP_DIR=$1
     susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-19"
     # special treatment: only pick the minimum number of required files
@@ -64,6 +64,10 @@ function checkout_SUSYTools {
     svn co     ${susyURL}/data SUSYTools/data
     # Modify the SUSYTools Makefile dependencies
     sed -i "s/^PACKAGE_DEP.*/PACKAGE_DEP = CalibrationDataInterface/" SUSYTools/cmt/Makefile.RootCore
+    # apply SUSYTools-00-03-19 patches
+    cp -p  ${BASE_DIR}/SusyNtuple/data/McUtils.cxx SUSYTools/Root
+    cp -p  ${BASE_DIR}/SusyNtuple/data/McUtils.h   SUSYTools/SUSYTools
+    patch -p0 < ${BASE_DIR}/SusyNtuple/data/SUSYTools-00-03-19.patch
 }
 
 function cleanup_temp_dir {
@@ -73,6 +77,12 @@ function cleanup_temp_dir {
 #
 # main
 #
+
+if [ "$ROOTSYS" = "" ]
+then
+    echo "ROOTSYS not defined, please setup root"
+    return
+fi
 
 clean_and_create_temp_dir ${TMP_DIR}
 cd ${TMP_DIR}

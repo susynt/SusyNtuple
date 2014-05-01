@@ -1,8 +1,8 @@
-Index: Root/SUSYCrossSection.cxx
+Index: SUSYTools/Root/SUSYCrossSection.cxx
 ===================================================================
 1a2
 > 
-Index: SUSYTools/SUSYCrossSection.h
+Index: SUSYTools/SUSYTools/SUSYCrossSection.h
 ===================================================================
 3a4,5
 > #include "SUSYTools/McUtils.h"
