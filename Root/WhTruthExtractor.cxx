@@ -1,5 +1,7 @@
 #include "SusyNtuple/WhTruthExtractor.h"
 
+#include "SusyNtuple/vec_utils.h"
+
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
@@ -48,7 +50,8 @@ WhTruthExtractor::Hdecays WhTruthExtractor::update(const vint_t* pdg, const vvin
 //----------------------------------
 void WhTruthExtractor::printStatus() const
 {
-  printVector(hIndices_, "hIndices");
+  using susy::utils::vecToString;
+  cout<<" hIndices ["<<vecToString(hIndices_)<<"]"<<endl;
   for(size_t iH=0; iH<hIndices_.size(); iH++){
     cout<<"  higgs["<<hIndices_[iH]<<"]"
 	<<" parents : "<<vecToString(hParPdgs_[iH])
@@ -57,18 +60,6 @@ void WhTruthExtractor::printStatus() const
   } // end for(iH)
   cout<<"interesting higgs : "<<hIndices_[interestingHiggs_]
       <<" with decay '"<<WhTruthExtractor::decayToString(decay_)<<"'"<<endl;
-}
-//----------------------------------
-bool WhTruthExtractor::containsAnyOf(const vint_t &firstVec, const vint_t &subVec)
-{
-  typedef std::set< int > sint;
-  sint a(firstVec.begin(), firstVec.end());
-  sint b(subVec.begin(), subVec.end());
-  vint_t intersection(std::min(a.size(), b.size()));
-  vint_t::iterator it = set_intersection(a.begin(), a.end(),
-					 b.begin(), b.end(),
-					 intersection.begin());
-  return it!=intersection.begin();
 }
 //--------------------------------------
 // match criterion to be used with find_if; store indices of higgs
@@ -118,10 +109,11 @@ void WhTruthExtractor::buildHiggsParentsPgds(const vint_t &pdgs, const vvint_t &
 //----------------------------------
 bool WhTruthExtractor::isBoringHiggs(size_t iHiggs) const
 {
+  using susy::utils::containsAnyOf;
   if(iHiggs >= hIndices_.size()) return true;
   return (hChiPdgs_[iHiggs].size()<2
-	  ||
-	  containsAnyOf(hChiPdgs_[iHiggs], vint_t(1, WhTruthExtractor::kPh)));
+        ||
+        containsAnyOf(hChiPdgs_[iHiggs], vint_t(1, WhTruthExtractor::kPh)));
 }
 //----------------------------------
 int WhTruthExtractor::firstInterestingHiggs() const
@@ -132,6 +124,7 @@ int WhTruthExtractor::firstInterestingHiggs() const
 //----------------------------------
 WhTruthExtractor::Hdecays WhTruthExtractor::decayType(size_t iHiggs) const
 {
+  using susy::utils::containsAnyOf;
   if(iHiggs >= hIndices_.size())                  return WhTruthExtractor::kUnknown;
   const vint_t &children = hChiPdgs_[iHiggs];
   if      (containsAnyOf(children, pdgsPwAw_))      return WhTruthExtractor::kPwAw;
@@ -146,6 +139,7 @@ void WhTruthExtractor::printEvent(const vint_t &pdg, const vvint_t &childIndex, 
 {
   using std::left;
   using std::right;
+  using susy::utils::vecToString;
   int maxNpartToPrint=70;
   int colW=20;
   cout
@@ -168,28 +162,6 @@ void WhTruthExtractor::printEvent(const vint_t &pdg, const vvint_t &childIndex, 
   } // end for(iP)
 }
 //----------------------------------
-std::string WhTruthExtractor::vecToString(const vint_t &vec)
-{
-  std::stringstream ss;
-  std::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(ss,", "));
-  return ss.str();
-}
-//----------------------------------
-std::string WhTruthExtractor::vecVecToString(const vvint_t &vvec)
-{
-  std::stringstream ss;
-  for(size_t i=0; i<vvec.size(); i++) ss<<"["<<WhTruthExtractor::vecToString(vvec[i])<<"], ";
-  return ss.str();
-}
-//----------------------------------
-void WhTruthExtractor::printVector(const vint_t &vec, const char* label)
-{
-  cout<<label<<"[";
-  std::ostream_iterator< int > out_it (cout,", ");
-  std::copy(vec.begin(), vec.end(), out_it);
-  cout<<"]"<<endl;
-}
-//----------------------------------
 std::string WhTruthExtractor::decayToString(const WhTruthExtractor::Hdecays &d)
 {
   switch(d) {
@@ -206,18 +178,6 @@ std::string WhTruthExtractor::decayToString(const WhTruthExtractor::Hdecays &d)
 // Util functions for ttbarMcAtNloParticles
 //----------------------------------
 
-// filter a vector (remove elements for which Predicate is true)
-template < template <typename, typename> class Container,
-           typename Predicate,
-           typename Allocator,
-           typename A
-           >
-Container<A, Allocator> filter(Container<A, Allocator> const & container, Predicate const & pred) {
-  Container<A, Allocator> filtered(container);
-  filtered.erase(remove_if(filtered.begin(), filtered.end(), pred), filtered.end());
-  return filtered;
-}
-
 struct isBfilter : public std::unary_function<int, bool> {
   isBfilter(const std::vector<int> *pdgs) : pdgs_(*pdgs) {}
   const std::vector<int> &pdgs_;
@@ -230,12 +190,6 @@ struct PdgGetter{
   int operator() (const int &i) const { return pdgs_[i]; }
 };
 
-struct RemoveDuplicatesFunctor {
-  void operator() (std::vector<int> &vec) {
-    std::sort(vec.begin(), vec.end());
-    vec.erase(std::unique(vec.begin(), vec.end()), vec.end());
-  }
-} removeDuplicates;
 
 WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *pdgs,
                                                                  const vvint_t *childrenIndices)
@@ -296,7 +250,7 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
   for(int i=0; i<nParts; ++i){
     if(topFilter(i)){
       particles.push_back(i);
-      vint_t bs(filter(childrenIndices->at(i), std::not1(isBfilter(pdgs))));
+      vint_t bs(susy::utils::filter(childrenIndices->at(i), std::not1(isBfilter(pdgs))));
       particles.insert(particles.end(), bs.begin(), bs.end());
     } else if(wFilter(i)){
       particles.push_back(i);
@@ -304,7 +258,7 @@ WhTruthExtractor::vint_t WhTruthExtractor::ttbarMcAtNloParticles(const vint_t *p
       particles.insert(particles.end(), chIdxs.begin(), chIdxs.end());
     }
   }
-  removeDuplicates(particles);
+  susy::utils::removeDuplicates(particles);
   return particles;
 }
 //----------------------------------
