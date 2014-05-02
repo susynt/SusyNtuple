@@ -209,11 +209,13 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
     else{
       // Hasn't been cached yet, load it from the DB
       CrossSectionDB::Process p = m_xsecDB.process(evt->mcChannel, proc);
+      if(p.xsect() < 0){
+        cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
+      }
       m_xsecCache[k] = p;
       return p;
     }
   }
-  cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
   return CrossSectionDB::Process();
 }
 
