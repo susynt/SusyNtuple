@@ -361,6 +361,16 @@ enum TrigBit
   BIT_j80_a4tchad_xe100_tclcw_loose,
   BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10,
 
+  // More triggers requested for ISR analysis
+  BIT_mu4T,
+  BIT_mu24,
+  BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose,
+  BIT_2mu4T_xe60_tclcw,
+  BIT_2mu8_EFxe40_tclcw,
+  BIT_e24vh_medium1_EFxe35_tclcw,
+  BIT_mu24_j65_a4tchad_EFxe40_tclcw,
+  BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw,
+
   N_TRIG
 };
 
@@ -422,6 +432,15 @@ const long long TRIG_xe80_tclcw_loose                   = 1LL<<BIT_xe80_tclcw_lo
 const long long TRIG_j110_a4tchad_xe90_tclcw_loose      = 1LL<<BIT_j110_a4tchad_xe90_tclcw_loose;
 const long long TRIG_j80_a4tchad_xe100_tclcw_loose      = 1LL<<BIT_j80_a4tchad_xe100_tclcw_loose;
 const long long TRIG_j80_a4tchad_xe70_tclcw_dphi2j45xe10= 1LL<<BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10;
+
+const long long TRIG_mu4T                               = 1LL<<BIT_mu4T;
+const long long TRIG_mu24                               = 1LL<<BIT_mu24;
+const long long TRIG_mu4T_j65_a4tchad_xe70_tclcw_veryloose = 1LL<<BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose;
+const long long TRIG_2mu4T_xe60_tclcw                   = 1LL<<BIT_2mu4T_xe60_tclcw;
+const long long TRIG_2mu8_EFxe40_tclcw                  = 1LL<<BIT_2mu8_EFxe40_tclcw;
+const long long TRIG_e24vh_medium1_EFxe35_tclcw         = 1LL<<BIT_e24vh_medium1_EFxe35_tclcw;
+const long long TRIG_mu24_j65_a4tchad_EFxe40_tclcw      = 1LL<<BIT_mu24_j65_a4tchad_EFxe40_tclcw;
+const long long TRIG_mu24_j65_a4tchad_EFxe40wMu_tclcw   = 1LL<<BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw;
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();
