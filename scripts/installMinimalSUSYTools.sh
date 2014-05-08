@@ -24,16 +24,16 @@ reweightUtilsURL="$SVNOFF/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/Rewe
 jvfURL="$SVNOFF/Reconstruction/Jet/JetAnalysisTools/JVFUncertaintyTool/tags/JVFUncertaintyTool-00-00-04"
 
 # Install fresh RootCore
-svn co $rootCoreURL RootCore || exit $?
+svn co $rootCoreURL RootCore || return || exit
 
 # Checkout CalibrationDataInterface
-svn co $bTagURL/cmt $bTagURL/CalibrationDataInterface $bTagURL/Root $bTagURL/src CalibrationDataInterface || exit $?
+svn co $bTagURL/cmt $bTagURL/CalibrationDataInterface $bTagURL/Root $bTagURL/src CalibrationDataInterface || return || exit
 
 # Additional checkouts for 2-lepton
-svn co $mt2URL Mt2 || exit $?
-svn co $trigURL DGTriggerReweight || exit $?
-svn co $reweightUtilsURL ReweightUtils || exit $?
-svn co $jvfURL JVFUncertaintyTool || exit $?
+svn co $mt2URL Mt2 || return || exit
+svn co $trigURL DGTriggerReweight || return || exit
+svn co $reweightUtilsURL ReweightUtils || return || exit
+svn co $jvfURL JVFUncertaintyTool || return || exit
 
 # Checkout minimal SUSYTools
 mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt SUSYTools/data
@@ -42,19 +42,19 @@ svn export $susyURL/SUSYTools/BTagCalib.h SUSYTools/SUSYTools/BTagCalib.h
 svn export $susyURL/Root/SUSYCrossSection.cxx SUSYTools/Root/SUSYCrossSection.cxx
 svn export $susyURL/Root/BTagCalib.cxx SUSYTools/Root/BTagCalib.cxx
 svn export $susyURL/cmt/Makefile.RootCore SUSYTools/cmt/Makefile.RootCore
-svn co $susyURL/data SUSYTools/data || exit $?
+svn co $susyURL/data SUSYTools/data || return || exit
 
 # Modify the SUSYTools Makefile dependencies
 sed -i "s/^PACKAGE_DEP.*/PACKAGE_DEP = CalibrationDataInterface/" SUSYTools/cmt/Makefile.RootCore
 
 # Configure RootCore
 cd RootCore
-./configure || exit $?
-source scripts/setup.sh || exit $?
+./configure || return || exit
+source scripts/setup.sh || return || exit
 cd ..
 
 # Compile everything
-$ROOTCOREDIR/scripts/build.sh || exit $?
+$ROOTCOREDIR/scripts/build.sh || return || exit
 
 echo "Installation successful"
 echo "You may want to update SUSYTools/data to the trunk,"
