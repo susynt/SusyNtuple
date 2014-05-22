@@ -53,7 +53,7 @@ function checkout_packages {
 
 function checkout_SUSYTools {
     local TMP_DIR=$1
-    susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-19"
+    susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-21"
     # special treatment: only pick the minimum number of required files
     mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt SUSYTools/data
     svn export ${susyURL}/SUSYTools/SUSYCrossSection.h SUSYTools/SUSYTools/SUSYCrossSection.h
@@ -64,10 +64,6 @@ function checkout_SUSYTools {
     svn co     ${susyURL}/data SUSYTools/data
     # Modify the SUSYTools Makefile dependencies
     sed -i "s/^PACKAGE_DEP.*/PACKAGE_DEP = CalibrationDataInterface/" SUSYTools/cmt/Makefile.RootCore
-    # apply SUSYTools-00-03-19 patches
-    cp -p  ${BASE_DIR}/SusyNtuple/data/McUtils.cxx SUSYTools/Root
-    cp -p  ${BASE_DIR}/SusyNtuple/data/McUtils.h   SUSYTools/SUSYTools
-    patch -p0 < ${BASE_DIR}/SusyNtuple/data/SUSYTools-00-03-19.patch
 }
 
 function cleanup_temp_dir {

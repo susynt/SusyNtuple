@@ -15,7 +15,7 @@ SVNOFF="svn+ssh://svn.cern.ch/reps/atlasoff/"
 SVNPHYS="svn+ssh://svn.cern.ch/reps/atlasphys/"
 
 # Tags to checkout
-susyURL="$SVNOFF/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-19"
+susyURL="$SVNOFF/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-21"
 rootCoreURL="$SVNOFF/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
 bTagURL="$SVNOFF/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-04-03"
 mt2URL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
@@ -43,9 +43,6 @@ svn export $susyURL/Root/SUSYCrossSection.cxx SUSYTools/Root/SUSYCrossSection.cx
 svn export $susyURL/Root/BTagCalib.cxx SUSYTools/Root/BTagCalib.cxx
 svn export $susyURL/cmt/Makefile.RootCore SUSYTools/cmt/Makefile.RootCore
 svn co $susyURL/data SUSYTools/data || exit $?
-mv SusyNtuple/data/McUtils.cxx SUSYTools/Root
-mv SusyNtuple/data/McUtils.h   SUSYTools/SUSYTools
-patch -p0 < SusyNtuple/data/SUSYTools-00-03-19.patch
 
 # Modify the SUSYTools Makefile dependencies
 sed -i "s/^PACKAGE_DEP.*/PACKAGE_DEP = CalibrationDataInterface/" SUSYTools/cmt/Makefile.RootCore
