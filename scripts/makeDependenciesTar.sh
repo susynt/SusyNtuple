@@ -34,7 +34,7 @@ function checkout_packages {
     local TMP_DIR=$1
     # Tags to checkout
     rootCoreURL=${SVNOFF}"/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
-    bTagURL=${SVNOFF}"/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-06"
+    bTagURL=${SVNOFF}"/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-04-03"
     mt2URL=${SVNPHYS}"/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
     trigURL=${SVNPHYS}"/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
     reweightUtilsURL=${SVNOFF}"/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
@@ -51,9 +51,9 @@ function checkout_packages {
 }
 
 
-function checkout_SUSYTools {    
+function checkout_SUSYTools {
     local TMP_DIR=$1
-    susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-14"
+    susyURL=${SVNOFF}"/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-21"
     # special treatment: only pick the minimum number of required files
     mkdir -p SUSYTools/SUSYTools SUSYTools/Root SUSYTools/cmt SUSYTools/data
     svn export ${susyURL}/SUSYTools/SUSYCrossSection.h SUSYTools/SUSYTools/SUSYCrossSection.h
@@ -73,6 +73,12 @@ function cleanup_temp_dir {
 #
 # main
 #
+
+if [ "$ROOTSYS" = "" ]
+then
+    echo "ROOTSYS not defined, please setup root"
+    return
+fi
 
 clean_and_create_temp_dir ${TMP_DIR}
 cd ${TMP_DIR}

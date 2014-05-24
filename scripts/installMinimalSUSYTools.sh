@@ -15,9 +15,9 @@ SVNOFF="svn+ssh://svn.cern.ch/reps/atlasoff/"
 SVNPHYS="svn+ssh://svn.cern.ch/reps/atlasphys/"
 
 # Tags to checkout
-susyURL="$SVNOFF/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-14"
+susyURL="$SVNOFF/PhysicsAnalysis/SUSYPhys/SUSYTools/tags/SUSYTools-00-03-21"
 rootCoreURL="$SVNOFF/PhysicsAnalysis/D3PDTools/RootCore/tags/RootCore-00-02-99"
-bTagURL="$SVNOFF/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-03-06"
+bTagURL="$SVNOFF/PhysicsAnalysis/JetTagging/JetTagPerformanceCalibration/CalibrationDataInterface/tags/CalibrationDataInterface-00-04-03"
 mt2URL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/Mt2/tags/Mt2-00-00-01"
 trigURL="$SVNPHYS/Physics/SUSY/Analyses/WeakProduction/DGTriggerReweight/tags/DGTriggerReweight-00-00-29"
 reweightUtilsURL="$SVNOFF/PhysicsAnalysis/AnalysisCommon/ReweightUtils/tags/ReweightUtils-00-02-13"
