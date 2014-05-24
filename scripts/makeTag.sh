@@ -7,7 +7,7 @@ if [[ $# < 2 ]]; then
 
     echo "Usage:"
     echo "> makeTag.sh SusyNtuple-XX-YY-ZZ \"My message\""
-    exit 1
+    return || exit
 
 fi
 
@@ -33,7 +33,7 @@ read response
 if [[ $response != "yes" ]]; then
 
     echo "Canceled..."
-    exit 1
+    return || exit
 
 fi
 
