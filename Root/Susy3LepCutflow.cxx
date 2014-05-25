@@ -79,7 +79,7 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
   m_trigObj->loadTriggerMaps();
 
   // MC Normalization - safe to initialize on data also
-  //string xsecDir = gSystem->ExpandPathName("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+  //string xsecDir = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
   //m_mcWeighter = new MCWeighter(m_tree, xsecDir);
 
   // Book histograms
@@ -94,7 +94,7 @@ void Susy3LepCutflow::Init(TTree* tree)
   SusyNtAna::Init(tree);
 
   // MC Normalization - safe to initialize on data also
-  string xsecDir = gSystem->ExpandPathName("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+  string xsecDir = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
   m_mcWeighter = new MCWeighter(m_tree, xsecDir);
 }
 

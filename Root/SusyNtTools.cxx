@@ -40,7 +40,7 @@ SusyNtTools::SusyNtTools() :
 void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   // Initialize b-tag tool
-  string rootcoredir = getenv("ROOTCOREDIR");
+  string rootcoredir = getenv("ROOTCOREBIN");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
   //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
@@ -125,7 +125,7 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Event* evt)
   // Use one DB and map for all instances of this class
   typedef pair<int, int> intpair;
   typedef map<intpair, CrossSectionDB::Process> XSecMap;
-  static string xsecDir = string(getenv("ROOTCOREDIR")) + "/data/SUSYTools/mc12_8TeV/";
+  static string xsecDir = string(getenv("ROOTCOREBIN")) + "/data/SUSYTools/mc12_8TeV/";
   static CrossSectionDB xsecDB(xsecDir);
   static XSecMap xsecCache;
   if(evt->isMC){

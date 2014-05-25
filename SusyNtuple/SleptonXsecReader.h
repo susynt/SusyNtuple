@@ -112,7 +112,7 @@ class SleptonXsecReader {
   void printKnownPoints() const;
   static bool extractDsetidMslM1FromString(const char* dsetName, int &dsid, int &msl, int &m1, bool verbose=false);
   static std::string rmLeadingTrailingWhitespaces(const std::string &str);
-  static bool getRootcoreDir(std::string &dir); //!< safe getenv; return false if ROOTCOREDIR not defined
+  static bool getRootcoreBin(std::string &dir); //!< safe getenv; return false if ROOTCOREBIN not defined
   static std::string getDefaultDsidFilename(); //!< file with the dsid and mass values
   static std::string getDefaultRootFilename(); //!< file with the tree containing the xsec values 
   static std::string getDefaultTreeName();     //!< tree containing the xsec values

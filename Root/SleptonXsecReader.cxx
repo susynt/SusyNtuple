@@ -310,13 +310,13 @@ int SleptonXsecReader::populateDsidList(const char* filename)
   return knownDsids_.size() - initialKnownPoints;
 }
 //--------------------------------------
-bool SleptonXsecReader::getRootcoreDir(std::string &dir)
+bool SleptonXsecReader::getRootcoreBin(std::string &dir)
 {
-  char* rootcoredir = getenv("ROOTCOREDIR");
+  char* rootcoredir = getenv("ROOTCOREBIN");
   bool envvarDefined(rootcoredir!=0);
   if (!envvarDefined) {
     dir = "";
-    cout<<"SleptonXsecReader::getRootcoreDir: ROOTCOREDIR not defined"<<endl;
+    cout<<"SleptonXsecReader::getRootcoreBin: ROOTCOREBIN not defined"<<endl;
   } else {
     dir = rootcoredir;
   }
@@ -326,18 +326,18 @@ bool SleptonXsecReader::getRootcoreDir(std::string &dir)
 std::string SleptonXsecReader::getDefaultDsidFilename()
 {
   string rootcoredir, filename;
-  bool rcDirFound(SleptonXsecReader::getRootcoreDir(rootcoredir));
+  bool rcDirFound(SleptonXsecReader::getRootcoreBin(rootcoredir));
   if(rcDirFound) filename = rootcoredir + "/data/SusyNtuple/samplesList_pMSSM_DLiSlep.txt";
-  else           cout<<"invalid ROOTCOREDIR, cannot determine the default dsid file"<<endl;
+  else           cout<<"invalid ROOTCOREBIN, cannot determine the default dsid file"<<endl;
   return filename;
 }
 //--------------------------------------
 std::string SleptonXsecReader::getDefaultRootFilename()
 {
   string rootcoredir, filename;
-  bool rcDirFound(SleptonXsecReader::getRootcoreDir(rootcoredir));
+  bool rcDirFound(SleptonXsecReader::getRootcoreBin(rootcoredir));
   if(rcDirFound) filename = rootcoredir + "/data/SusyNtuple/DLiSlep_SignalUncertainties_All.root";
-  else           cout<<"invalid ROOTCOREDIR, cannot determine the default root file"<<endl;
+  else           cout<<"invalid ROOTCOREBIN, cannot determine the default root file"<<endl;
   return filename;
 }
 //--------------------------------------
