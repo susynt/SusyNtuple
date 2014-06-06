@@ -5,9 +5,9 @@
 #include "TString.h"
 
 #include "SUSYTools/SUSYCrossSection.h"
-//#include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNt.h"
 
+#include <string>
 /*
 
     MCWeighter - a class to handle the normalization of Monte Carlo
@@ -70,9 +70,7 @@ class MCWeighter
     // However, one can have more than one (complete) dataset in the chain, which is why
     // we use the map.
     void buildSumwMap(TTree* tree);
-    void buildSumwMapFromTree(TTree* tree);
-    void buildSumwMapFromChain(TChain* chain);
-    //void buildSumwMap(TChain* chain);
+    void clearAndRebuildSumwMap(TTree* tree) { m_sumwMap.clear(); buildSumwMap(tree); }
     void dumpSumwMap();
 
     // Specify methods to retrieve sumw and xsec
@@ -84,6 +82,7 @@ class MCWeighter
     // Default weight uses 2012 A-D lumi. You can supply a different luminosity,
     // but the pileup weights will still correspond to A-D.
     float getMCWeight(const Susy::Event* evt, float lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
+    bool sumwmapHasKey(SumwMapKey k);
 
     // Get sumw for this event
     float getSumw(const Susy::Event* evt);
@@ -92,9 +91,21 @@ class MCWeighter
     float getXsecTimesEff(const Susy::Event* evt, WeightSys sys=Sys_NOM);
     // Get the pileup weight
     float getPileupWeight(const Susy::Event* evt, WeightSys sys=Sys_NOM);
+    /// specify the bin used to compute sumw; requires you to call clearAndRebuildSumwMap.
+    /**
+       For a list of available bin labels (counters), see SusyNtMaker::makeCutFlow()
+    */
+    MCWeighter& setLabelBinCounter(const std::string &v);
+    /// default counter used to compute the normalization
+    /**
+       This counter seems to work fine for all samples, except for
+       some n015* pmssm ones, for which you want to use "Initial"
+     */
+    static std::string defaultLabelBinCounter() { return "SusyProp Veto"; }
 
   private:
-
+    void buildSumwMapFromTree(TTree* tree);
+    void buildSumwMapFromChain(TChain* chain);
     // Utils for checking that a string is an int. See
     // http://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
     std::string rmLeadingTrailingWhitespaces(const std::string& str);
@@ -118,6 +129,8 @@ class MCWeighter
     SUSY::CrossSectionDB m_xsecDB;
     XSecMap m_xsecCache;
 
+    std::string m_labelBinCounter; ///< label of the bin (from the SusyNt histos) used to determine sumw
+    size_t m_warningCounter;
 };
 
 
