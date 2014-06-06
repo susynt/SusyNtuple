@@ -14,13 +14,8 @@ Susy3LepCutflow::Susy3LepCutflow() :
         m_sel(""),
         m_mcWeighter(0),
         m_trigObj(0),
-        m_nBaseLepMin(3),
-        m_nBaseLepMax(3),
         m_nLepMin(3),
         m_nLepMax(3),
-        m_nTauMin(0),
-        m_nTauMax(0),
-        m_baseLepMinDR(0.3),
         m_selectSFOS(false),
         m_vetoSFOS  (false),
         m_metMin    ( -1  ),
@@ -75,7 +70,7 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
   //m_mcWeighter = new MCWeighter(m_tree, xsecDir);
 
   // Book histograms
-  bookHistos();
+  //bookHistos();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -123,7 +118,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // Event selection
   //
 
-  if(!selectEvent(m_signalLeptons, m_signalTaus, m_signalJets, m_met)) return false;
+  if(!selectEvent(m_signalLeptons, m_signalJets, m_met)) return false;
 
   //
   // Event weighting
@@ -144,16 +139,16 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   //float w = getEventWeight(LUMI_A_L, useSumwMap, useProcSumw, useSusyXsec);
 
   // Lepton efficiency correction
-  float lepSF = getLeptonSF(m_signalLeptons);
-  float tauSF = getTauSF(m_signalTaus);
+//   float lepSF = getLeptonSF(m_signalLeptons);
+//   float tauSF = getTauSF(m_signalTaus);
 
-  // Apply btag efficiency correction if selecting on b-jets
-  bool applyBTagSF = m_vetoB;
-  float btagSF = applyBTagSF? bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
+//   // Apply btag efficiency correction if selecting on b-jets
+//   bool applyBTagSF = m_vetoB;
+//   float btagSF = applyBTagSF? bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
 
-  // Full event weight
-  float fullWeight = w * lepSF * tauSF * btagSF;
-  n_evt_tot += fullWeight;
+//   // Full event weight
+//   float fullWeight = w * lepSF * tauSF * btagSF;
+//   n_evt_tot += fullWeight;
 
   //cout << "mcSF   " << w << endl;
   //cout << "lepSF  " << lepSF << endl;
