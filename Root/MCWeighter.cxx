@@ -148,20 +148,27 @@ void MCWeighter::dumpSumwMap()
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
 // Default weight uses A-D lumi
-// You can supply a different luminosity, 
+// You can supply a different luminosity,
 // but the pileup weights will still correspond to A-D
 /*--------------------------------------------------------------------------------*/
 float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys)
 {
-  if(!evt->isMC) return 1;
-  else{
-    float sumw = getSumw(evt);
-    float xsec = getXsecTimesEff(evt, sys);
-    float pupw = getPileupWeight(evt, sys);
-    return evt->w * pupw * xsec * lumi / sumw;
-  }
+    float weight = 1.0;
+    if(evt->isMC){
+        float sumw = getSumw(evt);
+        float xsec = getXsecTimesEff(evt, sys);
+        float pupw = getPileupWeight(evt, sys);
+        if(sumw) {
+            weight = evt->w * pupw * xsec * lumi / sumw;
+        } else {
+            weight = 0.0;
+            cout<<"MCWeighter::getMCWeight: warning: trying to normalize an event with sumw=0"<<endl
+                <<"\tSomething must be wrong in your sumw map"<<endl
+                <<"\tReturning a default weight of "<<weight<<endl;
+        }
+    }
+    return weight;
 }
-
 /*--------------------------------------------------------------------------------*/
 // Get the sumw for this event
 /*--------------------------------------------------------------------------------*/
