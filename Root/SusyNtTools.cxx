@@ -9,6 +9,8 @@
 
 #include "SusyNtuple/SusyNtTools.h"
 
+#include <cassert>
+
 using namespace std;
 using namespace Susy;
 
@@ -26,8 +28,10 @@ SusyNtTools::SusyNtTools() :
         m_doIPCut(true)
 	//m_btagTool(NULL)
 {
-
+  m_jvfTool = new JVFUncertaintyTool();
+  m_jvfTool->UseGeV(true);
 }
+
 /*--------------------------------------------------------------------------------*/
 // Method to configure bTag SF tool.  Necessary since 2L and 3L differ
 // on whether or not JVF is used.  Also allow for different operating points
@@ -36,13 +40,21 @@ SusyNtTools::SusyNtTools() :
 void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   // Initialize b-tag tool
-  string rootcoredir = getenv("ROOTCOREDIR");
+  string rootcoredir = getenv("ROOTCOREBIN");
   string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   string calibFolder = rootcoredir + "/data/SusyNtuple/";
   //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
   //string calibFolder = rootcoredir + "/data/SusyNtuple/";
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
+
+/*--------------------------------------------------------------------------------*/
+// Method to configure JVF uncertainty tool
+/*--------------------------------------------------------------------------------*/
+/*void SusyNtTools::configureJVFTool(string jetAlgo)
+{
+  m_jvfTool = new JVFUncertaintyTool(jetAlgo.c_str());
+}*/
 
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
@@ -54,44 +66,23 @@ float SusyNtTools::getEventWeight(const Event* evt, float lumi,
                                   bool useProcSumw, bool useSusyXsec, 
                                   MCWeighter::WeightSys sys)
 {
+  // Method is deprecated
+  static uint warningCount = 0;
+  if(warningCount < 50){
+    cout << "SusyNtTools::getEventWeight - WARNING - This method is deprecated. "
+         << "You should update your code to use the MCWeighter class, as demonstrated "
+         << "in Susy3LepCutflow" << endl;
+    warningCount++;
+    if(warningCount == 50){
+      cout << "Warning was printed 50 times, and will now stop" << endl;
+    }
+  }
   if(!evt->isMC) return 1;
   else{
     float sumw = getSumw(evt, sumwMap, useSumwMap, useProcSumw);
     float xsec = getXsecTimesEff(evt, useSusyXsec, sys);
     float pupw = getPileupWeight(evt, sys);
     return evt->w * pupw * xsec * lumi / sumw;
-    /*
-    float sumw = evt->sumw;
-    if(useSumwMap){
-      if(sumwMap != NULL){
-        unsigned int mcid = evt->mcChannel;
-        int procID = useProcSumw? evt->susyFinalState : 0;
-        if(procID < 0) procID = 0;
-        SumwMapKey key(mcid, procID);
-        SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
-        if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
-        else{
-          cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
-               << "mcid " << mcid << " proc " << procID << " not found!" << endl;
-          abort();
-        }
-      }
-      else{
-        cout << "SusyNtTools::getEventWeight - ERROR - sumw map is NULL!" << endl;
-        abort();
-      }
-    }
-    float xsec = evt->xsec;
-    if(useSusyXsec){
-      SUSY::CrossSectionDB::Process p = getCrossSection(evt);
-      xsec = p.xsect() * p.kfactor() * p.efficiency();
-      if(sys==MCWeighter::Sys_XSEC_UP)
-        xsec *= (1. + p.relunc());
-      else if(sys==MCWeighter::Sys_XSEC_DN)
-        xsec *= (1. - p.relunc());
-    }
-    return evt->w * evt->wPileup * xsec * lumi / sumw;
-    */
   }
 }
 
@@ -134,7 +125,7 @@ SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Event* evt)
   // Use one DB and map for all instances of this class
   typedef pair<int, int> intpair;
   typedef map<intpair, CrossSectionDB::Process> XSecMap;
-  static string xsecDir = string(getenv("ROOTCOREDIR")) + "/data/SUSYTools/mc12_8TeV/";
+  static string xsecDir = string(getenv("ROOTCOREBIN")) + "/data/SUSYTools/mc12_8TeV/";
   static CrossSectionDB xsecDB(xsecDir);
   static XSecMap xsecCache;
   if(evt->isMC){
@@ -237,14 +228,15 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep, 
                                    uint nVtx, bool isMC, bool removeLepsFromIso, 
-                                   TauID tauJetID, TauID tauEleID, TauID tauMuoID)
+                                   TauID tauJetID, TauID tauEleID, TauID tauMuoID,
+                                   SusyNtSys sys)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
   sigTaus  = getSignalTaus(baseTaus, tauJetID, tauEleID, tauMuoID);
-  sigJets  = getSignalJets(baseJets);
-  sigJets2Lep = getSignalJets2Lep(baseJets);
+  sigJets  = getSignalJets(baseJets, sys);
+  sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 }
 /*--------------------------------------------------------------------------------*/
 // New signal tau prescription, fill both ID levels at once!
@@ -253,13 +245,14 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
 				   ElectronVector& sigElecs, MuonVector& sigMuons, 
                                    TauVector& mediumTaus, TauVector& tightTaus,
                                    JetVector& sigJets, JetVector& sigJets2Lep, 
-                                   uint nVtx, bool isMC, bool removeLepsFromIso)
+                                   uint nVtx, bool isMC, bool removeLepsFromIso,
+                                   SusyNtSys sys)
 {
   // Set signal objects
   sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
   sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
-  sigJets  = getSignalJets(baseJets);
-  sigJets2Lep = getSignalJets2Lep(baseJets);
+  sigJets  = getSignalJets(baseJets, sys);
+  sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 
   getSignalTaus(baseTaus, mediumTaus, tightTaus);
 }
@@ -439,24 +432,24 @@ void SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus
   }
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
+JetVector SusyNtTools::getSignalJets(const JetVector& baseJets, SusyNtSys sys)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
     Jet* j = baseJets.at(ij);
-    if(isSignalJet(j)){
+    if(isSignalJet(j, sys)){
       sigJets.push_back(j);
     }
   }
   return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets)
+JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys)
 {
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
     Jet* j = baseJets.at(ij);
-    if(isSignalJet2Lep(j)){
+    if(isSignalJet2Lep(j, sys)){
       sigJets.push_back(j);
     }
   }
@@ -773,51 +766,54 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
 /*--------------------------------------------------------------------------------*/
 // Signal jet selection
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalJet(const Jet* jet)
+bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
 {
   // For now, 2lep analysis is not using this jet definition
   //float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
-  float ptCut = JET_SIGNAL_PT_CUT_3L;
-  
-  if(jet->Pt() < ptCut) return false;
-  if(fabs(jet->Eta()) > JET_ETA_CUT) return false;
-
-  // JVF cut is now only to be applied to jets with pt < 50 GeV and |detEta| < 2.4
-  // Note that I'm just hardcoding the 50 and 2.4 requirements. I don't expect those to change
-  //if(jet->jvf < JET_JVF_CUT) return false;
-  if(jet->Pt() < JET_JVF_PT &&  
-     fabs(jet->detEta) < JET_JVF_ETA && 
-     jet->jvf < JET_JVF_CUT) return false; 
-  return true;
+    bool pass = false;
+    if(jet) {
+        float ptCut = JET_SIGNAL_PT_CUT_3L;
+        pass = (jet->Pt() > ptCut
+                && fabs(jet->Eta()) < JET_ETA_CUT
+                && SusyNtTools::jetPassesJvfRequirement(jet, m_jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys, m_anaType));
+    } else {
+        cout << "isSignalJet: invalid jet(" << jet << "), return " << pass << endl;
+    }
+    return pass;
 }
 
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Signal Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalJet2Lep(const Jet* jet)
+bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 {
-  if(
-     !isCentralLightJet(jet) &&
-     !isCentralBJet(jet)     &&
-     !isForwardJet(jet)
-    ) return false;
-
-  return true; 
+    return (isCentralLightJet(jet, m_jvfTool, sys, m_anaType)
+            || isCentralBJet(jet)
+            || isForwardJet(jet));
 }
 
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet)
+bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
 {
-  if(jet->Pt() < JET_PT_L20_CUT) return false;
-  //if(fabs(jet->Eta()) > JET_ETA_CUT_2L) return false;
-  if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
-  if(jet->Pt() < JET_JVF_PT && 
-     fabs(jet->jvf) - 1e-3 < JET_JVF_CUT_2L) return false;
-  if(jet->mv1 > MV1_80) return false;
-
-  return true;
+    // This function is mostly used by the 2L analyses. Needs to be reorganized...
+    bool pass = false;
+    if(jet) {
+        float minJvf = JET_JVF_CUT;
+        float maxJvtEta = JET_JVF_ETA;
+        if(anaType == Ana_2Lep || anaType == Ana_2LepWH) {
+            minJvf = JET_JVF_CUT_2L;
+            maxJvtEta = JET_ETA_CUT_2L;
+        }
+        pass = (jet->Pt() > JET_PT_L20_CUT
+                && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
+                && jet->mv1 < MV1_80
+                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
+    } else {
+        cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
+    }
+    return pass;
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -848,13 +844,14 @@ bool SusyNtTools::isForwardJet(const Jet* jet)
 /*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton Central Light Jets
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numberOfCLJets(const JetVector& jets)
+int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool,
+                                SusyNtSys sys, AnalysisType anaType)
 {
   int ans = 0;
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isCentralLightJet(j)){
+    if(isCentralLightJet(j, jvfTool, sys, anaType)){
       ans++;
     }
   }
@@ -899,9 +896,10 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 // Pass 2 Lepton Jet Counts by Reference
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf)
+void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf,
+                                      SusyNtSys sys, AnalysisType anaType)
 {
-  Ncl = numberOfCLJets(jets);
+  Ncl = numberOfCLJets(jets, m_jvfTool, sys, anaType);
   Ncb = numberOfCBJets(jets);
   Nf  = numberOfFJets (jets);
   return;
@@ -1231,21 +1229,28 @@ bool SusyNtTools::eventHasSusyPropagators(const std::vector< int > &pdgs,
   // Code is not optmized in any meaningful way, feel free to do so
   // if you wish. Also please report any unwanted behavior to
   // amete@cern.ch
-  bool passDiagram = true;
+  //bool passDiagram = true;
   const int  kPgam(+22),  kPz(+23), kPw(+24), kPchargino1(1000024);
   size_t nParticles(pdgs.size());
   for(size_t ii=0; ii<nParticles; ++ii) {
     int pdg(TMath::Abs(pdgs.at(ii)));
-    if(passDiagram && pdg==kPchargino1) {
+    //if(passDiagram && pdg==kPchargino1)
+    if(pdg==kPchargino1) {
       for(unsigned int jj=0; jj<parentIndices.at(ii).size(); ++jj) {
         int parenPdg(TMath::Abs(pdgs.at(parentIndices.at(ii).at(jj))));
         if(parenPdg==kPchargino1) break; // Self-copy
-        if(parenPdg!=kPgam && parenPdg!=kPz && parenPdg!=kPw) { passDiagram=false; break; }
+        if(parenPdg!=kPgam && parenPdg!=kPz && parenPdg!=kPw) { 
+          return true;
+          //passDiagram=false; 
+          //break; 
+        }
       } // end of parent loop
     }
   } // end of truth particle loop
-  bool  involvesSusyProp(!passDiagram);
-  return involvesSusyProp;
+
+  return false;
+  //bool involvesSusyProp(!passDiagram);
+  //return involvesSusyProp;
 }
 /*--------------------------------------------------------------------------------*/
 // Event cleaning cut flags
@@ -1304,7 +1309,7 @@ bool SusyNtTools::hasBadJet(const JetVector& baseJets)
 /*--------------------------------------------------------------------------------*/
 // Pass Dead Region based on met, jets and run number
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int RunNumber, bool isMC)
+bool SusyNtTools::passDeadRegions(const JetVector& preJets, const Met* met, int RunNumber, bool isMC)
 {
   // Info taken from here:
   // https://indico.cern.ch/getFile.py/access?contribId=9&resId=0&materialId=slides&confId=223778
@@ -1314,8 +1319,8 @@ bool SusyNtTools::passDeadRegions(const JetVector& baseJets, const Met* met, int
 
   if( !(RunNumber > 213863 || isMC) ) return true;
   
-  for(uint ij = 0; ij<baseJets.size(); ++ij){
-    const Jet* jet = baseJets.at(ij);
+  for(uint ij = 0; ij<preJets.size(); ++ij){
+    const Jet* jet = preJets.at(ij);
     if( !(jet->Pt() > 40.) )          continue;
     if( !(jet->bch_corr_jet > 0.05) ) continue;
   
@@ -2055,6 +2060,9 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
 SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
 {
   //cout << "SusyNtTools::buildSumwMap" << endl;
+  cout << "SusyNtTools::buildSumwMap - WARNING - use of buildSumwMap is deprecated. "
+       << "You should update your code to use the MCWeighter class, as demonstrated "
+       << "in Susy3LepCutflow" << endl;
 
   // The sumw map
   SumwMap sumwMap;
@@ -2166,3 +2174,37 @@ bool SusyNtTools::isSherpaSample(unsigned int mcID)
 
   return false;
 }
+//----------------------------------------------------------
+bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
+                                          float maxPt, float maxEta, float nominalJvtThres,
+                                          SusyNtSys sys, AnalysisType anaType)
+{
+    bool pass=false;
+    if(jet) {
+        float pt(jet->Pt()), eta(jet->detEta);
+        float jvfThres(nominalJvtThres);
+        bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
+        bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
+        if(jvfUp || jvfDown) {
+            if(jvfTool) {
+                bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
+                jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+            } else {
+                cout << "jetPassesJvfRequirement: error, jvfTool required (" << jvfTool << ")" <<endl;
+                assert(jvfTool);
+            }
+        }
+        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
+        bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
+        if(applyJvf) {
+            pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
+        } else {
+            pass = true;
+        }
+    } else {
+        cout<< "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
+            << "Return " << pass << endl;
+    }
+    return pass;
+}
+//----------------------------------------------------------

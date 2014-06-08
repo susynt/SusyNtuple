@@ -11,7 +11,7 @@ if [ $# -gt 0 ]; then target=$1; fi
 dir="$ROOTCOREDIR/../SUSYTools/data"
 if [ ! -d $dir ]; then 
         echo "$dir doesn't exist. Did you setup RootCore first?"
-        exit 1
+        return || exit
 fi
 
 cd $dir
@@ -38,5 +38,5 @@ else
 fi
 
 sleep .5s
-$command || exit $?
+$command || return || exit
 

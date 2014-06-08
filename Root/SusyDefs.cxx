@@ -136,6 +136,29 @@ stringvector getTrigChains()
 
   triggers[BIT_2mu8_EFxe40wMu_tclcw]            = "EF_2mu8_EFxe40wMu_tclcw";
 
+  triggers[BIT_mu6]                             = "EF_mu6";
+  triggers[BIT_2mu6]                            = "EF_2mu6";
+  triggers[BIT_e18vh_medium1_2e7T_medium1]      = "EF_e18vh_medium1_2e7T_medium1";
+  triggers[BIT_3mu6]                            = "EF_3mu6";
+  triggers[BIT_mu18_tight_2mu4_EFFS]            = "EF_mu18_tight_2mu4_EFFS";
+  triggers[BIT_2e7T_medium1_mu6]                = "EF_2e7T_medium1_mu6";
+  triggers[BIT_e7T_medium1_2mu6]                = "EF_e7T_medium1_2mu6";
+
+  triggers[BIT_xe80_tclcw_loose]                = "EF_xe80_tclcw_loose";
+
+  triggers[BIT_j110_a4tchad_xe90_tclcw_loose]   = "EF_j110_a4tchad_xe90_tclcw_loose";
+  triggers[BIT_j80_a4tchad_xe100_tclcw_loose]   = "EF_j80_a4tchad_xe100_tclcw_loose";
+  triggers[BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10] = "EF_j80_a4tchad_xe70_tclcw_dphi2j45xe10";
+
+  triggers[BIT_mu4T]                              = "EF_mu4T";
+  triggers[BIT_mu24]                              = "EF_mu24";
+  triggers[BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose] = "EF_mu4T_j65_a4tchad_xe70_tclcw_veryloose";
+  triggers[BIT_2mu4T_xe60_tclcw]                  = "EF_2mu4T_xe60_tclcw";
+  triggers[BIT_2mu8_EFxe40_tclcw]                 = "EF_2mu8_EFxe40_tclcw";
+  triggers[BIT_e24vh_medium1_EFxe35_tclcw]        = "EF_e24vh_medium1_EFxe35_tclcw";
+  triggers[BIT_mu24_j65_a4tchad_EFxe40_tclcw]     = "EF_mu24_j65_a4tchad_EFxe40_tclcw";
+  triggers[BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw]  = "EF_mu24_j65_a4tchad_EFxe40wMu_tclcw";
+
   return triggers;
 }
 

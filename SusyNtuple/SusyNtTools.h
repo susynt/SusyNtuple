@@ -10,6 +10,7 @@
 #include "SusyNtuple/MCWeighter.h"
 #include "SUSYTools/BTagCalib.h"
 #include "SUSYTools/SUSYCrossSection.h"
+#include "JVFUncertaintyTool/JVFUncertaintyTool.h"
 
 /*
 
@@ -36,6 +37,7 @@ class SusyNtTools
 
     // Configure the btag sf tool
     void configureBTagTool(std::string OP, float opVal, bool isJVF);
+    //void configureJVFTool(std::string jetAlgo="AntiKt4TopoEM");
 
     //
     // Get event weight - contains generator, pileup, xsec, and lumi weights
@@ -50,13 +52,6 @@ class SusyNtTools
                                  bool useProcSumw = false,
                                  bool useSusyXsec = false,
                                  MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
-
-    // Use this function to scale MC to the A-B3 unblinded dataset (1.04/fb)
-    // This will use the correct pileup weights for A-B3
-    //virtual float getEventWeightAB3(const Susy::Event* evt);
-
-    // Scale MC to A-B dataset (5.83/fb)
-    //virtual float getEventWeightAB(const Susy::Event* evt);
 
     // Get the sumw for this event
     static float getSumw(const Susy::Event* evt, const SumwMap* sumwMap, 
@@ -99,8 +94,8 @@ class SusyNtTools
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
     TauVector      getSignalTaus(const TauVector& baseTaus, TauID tauJetID=TauID_medium, 
                                  TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
-    JetVector      getSignalJets(const JetVector& baseJets);
-    JetVector      getSignalJets2Lep(const JetVector& baseJets);
+    JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys=NtSys_NOM);
+    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys=NtSys_NOM);
 
     // Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
@@ -108,7 +103,8 @@ class SusyNtTools
                           ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false,
-                          TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
+                          TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium,
+                          SusyNtSys sys=NtSys_NOM);
     // This method cannot be used anymore because it doesn't provide the baseline objects after OR.
     // Analyzers need these baseline objects for cleaning cuts.
     //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
@@ -125,7 +121,8 @@ class SusyNtTools
                           ElectronVector& sigElecs, MuonVector& sigMuons, 
                           TauVector& mediumTaus, TauVector& tightTaus, 
                           JetVector& sigJets, JetVector& sigJets2Lep,
-                          uint nVtx, bool isMC, bool removeLepsFromIso=false);
+                          uint nVtx, bool isMC, bool removeLepsFromIso=false,
+                          SusyNtSys sys=NtSys_NOM);
     
     // Check if selected object
     bool isTauBDT(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
@@ -148,8 +145,8 @@ class SusyNtTools
                      TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     bool isSemiSignalElectron(const Susy::Electron* ele);
     bool isSemiSignalMuon(const Susy::Muon* mu);
-    bool isSignalJet(const Susy::Jet* jet);
-    bool isSignalJet2Lep(const Susy::Jet* jet);
+    bool isSignalJet(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
+    bool isSignalJet2Lep(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
 
 
     // Build Lepton vector - we should probably sort them here
@@ -219,7 +216,6 @@ class SusyNtTools
     //
   
     // No electron or jet in the LAr hole - shouldn't be used anymore
-    //bool passLAr(int flag)     { return ( flag & PASS_LAr );     }
     bool passLAr(int flag)     { return true; }
 
     // Pass Tile hot spot veto
@@ -290,7 +286,7 @@ class SusyNtTools
     bool hasBadJet(const JetVector& baseJets);
 
     // Pass FEB dead region check
-    bool passDeadRegions(const JetVector& baseJets, const Susy::Met* met, int RunNumber, bool isMC);
+    bool passDeadRegions(const JetVector& preJets, const Susy::Met* met, int RunNumber, bool isMC);
 
     // To determine if there is baseline jets within bad FCAL region 
     bool hasJetInBadFCAL(const JetVector& baseJets, uint run=206248, bool isMC=false);
@@ -374,17 +370,19 @@ class SusyNtTools
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
-    static bool isCentralLightJet(const Susy::Jet* jet);
+    // These will no longer be static because of the systematic uncert requirement
+    static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
     static bool isCentralBJet    (const Susy::Jet* jet);
     static bool isForwardJet     (const Susy::Jet* jet);
 
-    static int numberOfCLJets    (const JetVector& jets);
+    static int numberOfCLJets    (const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
     static int numberOfCBJets    (const JetVector& jets);
     static int numberOfFJets     (const JetVector& jets);
-    void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf);
+    void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf, 
+                             SusyNtSys sys, AnalysisType anaType);
 
     // MET Rel
-    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets, 
+    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets,
                            bool useForward=false);
   
     // MT2
@@ -463,7 +461,12 @@ class SusyNtTools
 
     //BTagCalib* m_btagTool;              // BTag tool
     static BTagCalib* m_btagTool;     // BTag tool
-
+    JVFUncertaintyTool* m_jvfTool;      // JVF tool
+ private:
+    //! check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
+    static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
+                                        float maxPt, float maxEta, float nominalJvtThres,
+                                        SusyNtSys sys, AnalysisType anaType);
 };
 
 #endif

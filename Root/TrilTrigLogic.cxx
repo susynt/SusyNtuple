@@ -221,7 +221,7 @@ bool TrilTrigLogic::matchTauTrigger(const Tau* tau, int trigMask, float ptMin, b
 /*--------------------------------------------------------------------------------*/
 // Trigger reweighting for MC - not currently used
 /*--------------------------------------------------------------------------------*/
-float TrilTrigLogic::getTriggerWeight(const LeptonVector& leptons, Event* evt)
+float TrilTrigLogic::getTriggerWeight(const LeptonVector& leptons, const Event* evt)
 {
   DataStream stream = evt->stream;
   if(stream!=Stream_MC) return 1;

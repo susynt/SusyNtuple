@@ -50,22 +50,25 @@ namespace Susy
       int hDecay;               // Higgs decay (see WhTruthExtractor)
       bool eventWithSusyProp;   // Event generated involving SUSY propagators 
                                 // (See Serhan's msg http://goo.gl/ucwl9)
+      int susySpartId1;         // SUSY sparticle 1 pdg ID
+      int susySpartId2;         // SUSY sparticle 2 pdg ID
 
       float mllMcTruth;         // mll from mcTruth (filled for Z->ll overlapping samples)
       bool passMllForAlpgen;    // computed from value above; see MultiLep/TruthTools for details
 
-      unsigned int trigFlags;   // Event level trigger bits
+      //unsigned int trigFlags; // Event level trigger bits
+      long long trigFlags;      // Event level trigger bits
 
       // Check trigger firing
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
-      bool passTrig(unsigned int mask, bool requireAll=true) const {
+      bool passTrig(long long mask, bool requireAll=true) const {
         if(requireAll) return (trigFlags & mask) == mask;
         else return mask == 0 || (trigFlags & mask) != 0;
       }
 
       // Event Flag to check for LAr, bad jet, etc. List found in SusyDefs.h under EventCheck
-      // This will be replaced
-      int evtFlag[NtSys_N];
+      // Use cutFlags instead
+      //int evtFlag[NtSys_N];
 
       // Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
       unsigned int cutFlags[NtSys_N];
@@ -106,15 +109,16 @@ namespace Susy
         mllMcTruth = -1.0;
         hDecay = -1;
         eventWithSusyProp = false;
+        susySpartId1 = susySpartId2 = 0;
         passMllForAlpgen = true;
-        memset(evtFlag,0,sizeof(evtFlag));
+        //memset(evtFlag,0,sizeof(evtFlag));
         memset(cutFlags,0,sizeof(cutFlags));
         wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
         xsec = errXsec = sumw = pdfSF = 0;
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 25);
+      ClassDef(Event, 27);
   };
 
   // Particle class, base class for other object types
@@ -199,7 +203,8 @@ namespace Susy
       float effSF;              // Efficiency scale factor
       float errEffSF;           // Uncertainty on the efficiency scale factor
 
-      unsigned int trigFlags;   // Bit word representing matched trigger chains
+      //unsigned int trigFlags; // Bit word representing matched trigger chains
+      long long trigFlags;      // Bit word representing matched trigger chains
 
       // Methods to return impact parameter variables
       // Note that these are not absolute valued!
@@ -240,7 +245,7 @@ namespace Susy
         Particle::clear();
       }
       
-      ClassDef(Lepton, 11);
+      ClassDef(Lepton, 12);
   };
 
   // Electron class
@@ -429,11 +434,11 @@ namespace Susy
       float tes_up;             // tau energy scale + sigma
       float tes_dn;             // tau energy scale - sigma
 
-      unsigned int trigFlags;   // Bit word representing matched trigger chains
+      long long trigFlags;      // Bit word representing matched trigger chains
 
       // Trigger matching
       // provide the trigger chain via bit mask, e.g. TRIG_mu18
-      bool matchTrig(unsigned int mask) const {
+      bool matchTrig(long long mask) const {
         return (trigFlags & mask) == mask;
       }
 
@@ -462,7 +467,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Tau, 5);
+      ClassDef(Tau, 6);
   };
 
   // Photon class
@@ -526,6 +531,14 @@ namespace Susy
       bool isBadVeryLoose;      // bad jet flag computed with SUSYTools
       bool isHotTile;           // tile hot spot flag computed with SUSYTools
       float bch_corr_jet;       // Needed for dead region veto
+      float bch_corr_cell;      // For studying BCH cleaning prescription
+
+      // BCH cleaning flags
+      // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BCHCleaningTool
+      bool isBadMediumBCH;      // BCH cleaning flag
+      bool isBadMediumBCH_up;   // BCH cleaning flag
+      bool isBadMediumBCH_dn;   // BCH cleaning flag
+      bool isBadTightBCH;       // BCH cleaning flag
 
       // Systematics
       float jes_up;             // jet energy scale up
@@ -551,13 +564,14 @@ namespace Susy
         sv0 = combNN = mv1 = 0;
         jfit_mass = sv0p_mass = svp_mass = 0;
         isBadVeryLoose = isHotTile = false;
-	bch_corr_jet = 0;
+	bch_corr_jet = bch_corr_cell = 0;
+        isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;
 	jer = jes_up = jes_dn = 0;
 	met_wpx = met_wpy = 0;
         Particle::clear();
       }
 
-      ClassDef(Jet, 9);
+      ClassDef(Jet, 10);
   };
 
   // Met class
@@ -719,6 +733,5 @@ namespace Susy
   };
 
 };
-
 
 #endif

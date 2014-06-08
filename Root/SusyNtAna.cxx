@@ -15,8 +15,8 @@ SusyNtAna::SusyNtAna() :
         m_selectTaus(true),
         m_printFreq(50000),
         m_dbg(0),
-	m_dbgEvt(false),
-	m_duplicate(false)
+        m_dbgEvt(false),
+        m_duplicate(false)
 {
 }
 
@@ -217,6 +217,9 @@ void SusyNtAna::clearObjects()
 void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, 
                               TauID signalTauID, bool n0150BugFix)
 {
+  // Empty the object vectors
+  clearObjects();
+
   // Get the Baseline objets
   getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
                      m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
@@ -225,19 +228,17 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   // Now grab Signal objects
   // New signal tau prescription, fill both ID levels at once
   getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-		   m_signalElectrons, m_signalMuons, 
+                   m_signalElectrons, m_signalMuons, 
                    m_mediumTaus, m_tightTaus, 
                    m_signalJets, m_signalJets2Lep, 
-                   nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso);
+                   nt.evt()->nVtx, nt.evt()->isMC, 
+                   removeLepsFromIso, sys);
   m_signalTaus = signalTauID==TauID_tight? m_tightTaus : m_mediumTaus;
 
-  //getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-  //                 m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets, m_signalJets2Lep, 
-  //                 nt.evt()->nVtx, nt.evt()->isMC, removeLepsFromIso,
-  //                 signalTauID);
-
   // Grab met
-  m_met = getMet(&nt, sys);
+  SusyNtSys metSys = sys;
+  if(sys==NtSys_JVF_UP || sys==NtSys_JVF_DN) metSys = NtSys_NOM;
+  m_met = getMet(&nt, metSys);
 
   // Build Lepton vectors
   buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);

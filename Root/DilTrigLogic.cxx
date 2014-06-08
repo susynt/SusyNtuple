@@ -21,7 +21,7 @@ DilTrigLogic::DilTrigLogic(string period, bool useReweightUtils) :
 
   // Create trigger reweight object
   m_triggerWeight = new triggerReweight2Lep();
-  string directory = "$ROOTCOREDIR/../DGTriggerReweight/data";
+  string directory = "$ROOTCOREBIN/data/DGTriggerReweight";
   m_triggerWeight->setDbg(1);
   if(useReweightUtils)
     m_triggerWeight->initialize(directory, period, true);//To turn on ReweightUtils 
