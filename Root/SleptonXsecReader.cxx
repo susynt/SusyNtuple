@@ -1,4 +1,5 @@
 #include "SusyNtuple/SleptonXsecReader.h"
+#include "SusyNtuple/string_utils.h"
 
 #include "TFile.h"
 #include "TTree.h"
@@ -245,14 +246,6 @@ bool SleptonXsecReader::extractDsetidMslM1FromString(const char* dsetName, int &
   return true;
 }
 //--------------------------------------
-std::string SleptonXsecReader::rmLeadingTrailingWhitespaces(const std::string &str)
-{
-  size_t startpos = str.find_first_not_of(" \t");
-  size_t endpos = str.find_last_not_of(" \t");
-  if(( string::npos == startpos ) || ( string::npos == endpos)) return string("");
-  else return str.substr(startpos, endpos-startpos+1); 
-}
-//--------------------------------------
 struct CriterionSamePointWithXsecCounts:
   public std::unary_function<const SleptonXsecReader::PointWithXsecCounts&, bool> {
   CriterionSamePointWithXsecCounts(const SleptonXsecReader::PointWithXsecCounts &p): p_(p) { }
@@ -298,7 +291,7 @@ int SleptonXsecReader::populateDsidList(const char* filename)
   }
   int initialKnownPoints(knownDsids_.size());
   while(getline(inputFile,line)){
-    line = SleptonXsecReader::rmLeadingTrailingWhitespaces(line);
+    line = susy::utils::rmLeadingTrailingWhitespaces(line);
     bool boringLine(line.size()<2 || (line.size()>0 && line[0] == '#'));
     if(boringLine) continue;
     int dsid(0), msl(0), m1(0);
