@@ -2,6 +2,7 @@
 
 #include <algorithm> // transform
 #include <cstdlib> // strtod
+#include <dirent.h> // DIR
 #include <functional> // multiplies
 #include <iostream>
 #include <numeric> // accumulate
@@ -69,5 +70,21 @@ bool susy::utils::isInt(const std::string& s)
   char * p ;
   strtol(rs.c_str(), &p, 10);
   return (*p == 0) ;
+}
+//----------------------------------------------------------
+std::vector<std::string> susy::utils::filesFromDir(const std::string &dirname)
+{
+// from http://stackoverflow.com/questions/306533/how-do-i-get-a-list-of-files-in-a-directory-in-c
+    vector<string> filenames;
+    DIR *dpdf;
+    struct dirent *epdf;
+    dpdf = opendir(dirname.c_str());
+    if (dpdf != NULL){
+        while ((epdf = readdir(dpdf))){
+            filenames.push_back(dirname+"/"+epdf->d_name);
+        }
+    }
+    closedir(dpdf);
+    return filenames;
 }
 //----------------------------------------------------------

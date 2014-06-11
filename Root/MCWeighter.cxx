@@ -1,4 +1,6 @@
-#include <iostream>
+#include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/string_utils.h"
+
 #include "TSystem.h"
 #include "TFile.h"
 #include "TKey.h"
@@ -6,8 +8,10 @@
 #include "TObjArray.h"
 #include "TChainElement.h"
 #include "TH1F.h"
-#include "SusyNtuple/MCWeighter.h"
-#include "SusyNtuple/string_utils.h"
+
+#include <iostream>
+#include <cstdlib> // atoi
+#include <iterator> // distance
 
 using namespace std;
 using namespace Susy;
@@ -15,7 +19,7 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-MCWeighter::MCWeighter(TTree* tree, string xsecDir) : 
+MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
         m_useProcSumw(true),
         m_sumwMethod(Sumw_MAP),
         m_xsecMethod(Xsec_ST),
@@ -34,12 +38,12 @@ MCWeighter::~MCWeighter()
 
 /*--------------------------------------------------------------------------------*/
 // Build a map of MCID -> sumw.
-// This method will loop over the input files associated with the TChain. The MCID 
-// in the first entry of the tree will be used, so one CANNOT use this if multiple 
-// datasets are combined into one SusyNt tree file! The generator weighted cutflow 
-// histograms will then be used to calculate the total sumw for each MCID. Each 
+// This method will loop over the input files associated with the TChain. The MCID
+// in the first entry of the tree will be used, so one CANNOT use this if multiple
+// datasets are combined into one SusyNt tree file! The generator weighted cutflow
+// histograms will then be used to calculate the total sumw for each MCID. Each
 // dataset used here must be complete, they CANNOT be spread out across multiple jobs.
-// However, one can have more than one (complete) dataset in the chain, which is why 
+// However, one can have more than one (complete) dataset in the chain, which is why
 // we use the map.
 /*--------------------------------------------------------------------------------*/
 void MCWeighter::buildSumwMap(TTree* tree)
@@ -267,5 +271,109 @@ MCWeighter& MCWeighter::setLabelBinCounter(const std::string &v)
 {
     m_labelBinCounter = v;
     return *this;
+}
+//----------------------------------------------------------
+size_t MCWeighter::parseAdditionalXsecFile(const std::string &filename, bool verbose)
+{
+    size_t nInitialElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
+    bool inputFileIsValid(MCWeighter::isFormattedAsSusyCrossSection(filename, verbose));
+    if(inputFileIsValid) {
+        SUSY::CrossSectionDB tmpXsecDb;
+        tmpXsecDb.loadFile(gSystem->ExpandPathName(filename.c_str()));
+        for(SUSY::CrossSectionDB::iterator p=tmpXsecDb.begin(); p!=tmpXsecDb.end(); ++p) {
+            int sample_id(p->second.ID());
+            // this is an ugly conversion we inherit from SUSYCrossSection; drop when they provide Key::get_proc_id
+            int proc_id(atoi(p->second.name().c_str()));
+            bool alreadyThere(m_xsecDB.process(sample_id, proc_id).ID()!=-1);
+            if(alreadyThere)
+                cout<<"MCWeighter::parseAdditionalXsecFile:"
+                    <<" warning: the entry for (dsid="<<p->second.ID()<<" proc="<<p->second.name()<<")"
+                    <<" will be overwritten"<<endl;
+        } // for(p)
+        m_xsecDB.loadFile(gSystem->ExpandPathName(filename.c_str()));
+    } else {
+        cout<<"MCWeighter::parseAdditionalXsecFile: invalid input file '"<<filename<<"'"<<endl;
+    }
+    size_t nFinalElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
+    if(verbose)
+        cout<<"MCWeighter::parseAdditionalXsecFile: parsed "<<(nFinalElements - nInitialElements)<<" values from "<<filename<<endl;
+    return nFinalElements - nInitialElements;
+}
+//----------------------------------------------------------
+size_t MCWeighter::parseAdditionalXsecDirectory(const std::string &dir, bool verbose)
+{
+    size_t nInitialElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
+    vector<string> filenames = susy::utils::filesFromDir(dir);
+    for(vector<string>::const_iterator fname = filenames.begin(); fname!=filenames.end(); ++fname)
+        if(susy::utils::contains(*fname, ".txt"))
+            parseAdditionalXsecFile(*fname, verbose);
+    size_t nFinalElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
+    return nFinalElements - nInitialElements;
+}
+//----------------------------------------------------------
+bool MCWeighter::isFormattedAsSusyCrossSection(std::string filename, bool verbose)
+{
+    size_t nUsefulLines = readDsidsFromSusyCrossSectionFile(filename, verbose).size();
+    return nUsefulLines>0;
+}
+//----------------------------------------------------------
+bool isEmptyLine(const std::string &line)
+{
+    return susy::utils::rmLeadingTrailingWhitespaces(line).size()==0;
+}
+bool isCommentLine(const std::string &line)
+{
+    string strippedLine(susy::utils::rmLeadingTrailingWhitespaces(line));
+    return strippedLine.size()>0 && strippedLine[0]=='#';
+}
+std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose)
+{
+    std::vector<int> dsids;
+    ifstream input;
+    input.open(filename.c_str(), ifstream::in);
+    bool fileIsOpen(input.is_open());
+    if(!fileIsOpen) {
+        cout<<"MCWeighter::readDsidsFromSusyCrossSectionFile: cannot open file "<<filename<<endl;
+        return dsids;
+    }
+    size_t nEmptyOrCommentLines=0;
+    size_t nValidLines=0;
+    size_t nInvalidLines=0;
+    const size_t nExpectedTokens=6;
+    std::string line;
+    if(verbose)
+        cout<<"readDsidsFromSusyCrossSectionFile: parsing '"<<filename<<"'"<<endl;
+    while (std::getline(input, line)) {
+        bool skipThisLine(isEmptyLine(line) || isCommentLine(line));
+        if(skipThisLine) {
+            nEmptyOrCommentLines++;
+            continue;
+        } else {
+            vector<string> tokens(susy::utils::tokenizeString(line, ' '));
+            bool hasExpectedTokens(tokens.size()==nExpectedTokens);
+            bool firstTokenIsDsid(tokens.size()>0 && susy::utils::isInt(tokens[0]));
+            bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
+            if(isValidLine) {
+                dsids.push_back(atoi(tokens[0].c_str()));
+                nValidLines++;
+            } else {
+                if(verbose)
+                    cout<<"invalid line"
+                        <<" ("<<tokens.size()<<" tokens, expected "<<nExpectedTokens<<","
+                        <<" firstTokenIsDsid "<<(firstTokenIsDsid?"true":"false")
+                        <<", "<<(tokens.size() ? tokens[0] : "")
+                        <<" ):"
+                        <<" '"<<line<<"'"<<endl;
+                nInvalidLines++;
+            } // if(!isValidLine)
+        } // if(!skipThisLine)
+    } // while(getline)
+    if(verbose)
+        cout<<"readDsidsFromSusyCrossSectionFile('"<<filename<<"') : "
+            <<" "<<nValidLines<<" valid"
+            <<", "<<nInvalidLines<<" invalid"
+            <<", "<<nEmptyOrCommentLines<<" empty/comment"
+            <<" lines"<<endl;
+    return dsids;
 }
 //----------------------------------------------------------

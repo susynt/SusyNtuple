@@ -36,6 +36,11 @@ double string2double(const std::string &s);
 double multiply(const std::string &str);
 /// whether a string can be safely converted to an int
 bool isInt(const std::string& s);
+/// given a directory, return the list of its files
+/**
+   This function could be in another header.
+ */
+std::vector<std::string> filesFromDir(const std::string &dirname);
 
 } // utils
 } // susy
