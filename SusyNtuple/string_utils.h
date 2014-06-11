@@ -34,6 +34,8 @@ std::vector< std::string > tokenizeString(const std::string &inputString, char s
 double string2double(const std::string &s);
 /// convert a string to a double accounting for '*' multiplicative factors
 double multiply(const std::string &str);
+/// whether a string can be safely converted to an int
+bool isInt(const std::string& s);
 
 } // utils
 } // susy

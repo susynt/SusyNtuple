@@ -7,6 +7,7 @@
 #include "TChainElement.h"
 #include "TH1F.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/string_utils.h"
 
 using namespace std;
 using namespace Susy;
@@ -90,7 +91,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
         // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
         string procString = histoName.substr(prefix.size(), string::npos);
         // Make sure the string is an int
-        if(!isInt(procString)){
+        if(!susy::utils::isInt(procString)){
           cerr << "MCWeighter::buildSumwMap - ERROR - proc string from procCutFlow "
                << "histo is not an integer! Histo name: " << histoName
                << " proc string: " << procString << endl;
@@ -267,25 +268,4 @@ MCWeighter& MCWeighter::setLabelBinCounter(const std::string &v)
     m_labelBinCounter = v;
     return *this;
 }
-/*--------------------------------------------------------------------------------*/
-// Utils for checking that a string is an int. See
-// http://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
-/*--------------------------------------------------------------------------------*/
-std::string MCWeighter::rmLeadingTrailingWhitespaces(const std::string& str)
-{
-  using std::string;
-  size_t startpos = str.find_first_not_of(" \t");
-  size_t endpos = str.find_last_not_of(" \t");
-  if(( string::npos == startpos ) || ( string::npos == endpos)) return string("");
-  else return str.substr(startpos, endpos-startpos+1);
-}
-/*--------------------------------------------------------------------------------*/
-bool MCWeighter::isInt(const std::string& s)
-{
-  std::string rs(rmLeadingTrailingWhitespaces(s));
-  if(rs.empty() || ((!isdigit(rs[0])) && (rs[0] != '-') && (rs[0] != '+'))) return false ;
-  char * p ;
-  strtol(rs.c_str(), &p, 10);
-  return (*p == 0) ;
-}
-
+//----------------------------------------------------------

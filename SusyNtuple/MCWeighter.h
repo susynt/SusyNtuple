@@ -102,14 +102,9 @@ class MCWeighter
        some n015* pmssm ones, for which you want to use "Initial"
      */
     static std::string defaultLabelBinCounter() { return "SusyProp Veto"; }
-
   private:
     void buildSumwMapFromTree(TTree* tree);
     void buildSumwMapFromChain(TChain* chain);
-    // Utils for checking that a string is an int. See
-    // http://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
-    std::string rmLeadingTrailingWhitespaces(const std::string& str);
-    bool isInt(const std::string& s);
 
     bool m_useProcSumw;
 

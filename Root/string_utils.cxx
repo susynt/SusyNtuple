@@ -62,3 +62,12 @@ double susy::utils::multiply(const std::string &str)
   return std::accumulate(factors.begin(), factors.end(), 1.0, std::multiplies<double>());
 }
 //----------------------------------------------------------
+bool susy::utils::isInt(const std::string& s)
+{
+  std::string rs(rmLeadingTrailingWhitespaces(s));
+  if(rs.empty() || ((!isdigit(rs[0])) && (rs[0] != '-') && (rs[0] != '+'))) return false ;
+  char * p ;
+  strtol(rs.c_str(), &p, 10);
+  return (*p == 0) ;
+}
+//----------------------------------------------------------
