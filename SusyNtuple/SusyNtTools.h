@@ -459,11 +459,9 @@ class SusyNtTools
     bool m_doMuEtconeCut;               // etcone isolation cuts for muons
     bool m_doIPCut;                     // impact parameter cuts
 
-    // Using static btag tool for now...
-    //BTagCalib* m_btagTool;            // BTag tool
-    static BTagCalib* m_btagTool;       // BTag tool
+    //BTagCalib* m_btagTool;              // BTag tool
+    static BTagCalib* m_btagTool;     // BTag tool
     JVFUncertaintyTool* m_jvfTool;      // JVF tool
-
  private:
     //! check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
     static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,

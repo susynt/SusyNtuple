@@ -795,7 +795,7 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
+bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
 {
     // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
