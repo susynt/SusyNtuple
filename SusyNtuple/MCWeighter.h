@@ -96,20 +96,35 @@ class MCWeighter
        For a list of available bin labels (counters), see SusyNtMaker::makeCutFlow()
     */
     MCWeighter& setLabelBinCounter(const std::string &v);
+    /// read additional files containing more cross section values
+    /**
+       This is to account for samples that are not in the SUSYTools lists.
+       Returns the number of cross section values read from the file.
+     */
+    size_t parseAdditionalXsecFile(const std::string &filename, bool verbose);
+    /// same as parseAdditionalXsecFile, but get any *.txt in a given directory
+    size_t parseAdditionalXsecDirectory(const std::string &dir, bool verbose);
     /// default counter used to compute the normalization
     /**
        This counter seems to work fine for all samples, except for
        some n015* pmssm ones, for which you want to use "Initial"
      */
     static std::string defaultLabelBinCounter() { return "SusyProp Veto"; }
+    /// determine whether a given file is formatted following the CrossSectionDB format
+    /**
+       The format is essentially 6 words:
 
-  private:
+       id       name(or final_state)   xsect    kfactor    efficiency    rel.uncertainty
+
+       Empty lines and comments ('#') are skipped.
+       For more details, see SUSYTools/SUSYCrossSection.h
+    */
+    static bool isFormattedAsSusyCrossSection(std::string filename, bool verbose);
+    /// given a text file containing cross sections for CrossSectionDB, return the dsids
+    static std::vector<int> readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose);
+ private:
     void buildSumwMapFromTree(TTree* tree);
     void buildSumwMapFromChain(TChain* chain);
-    // Utils for checking that a string is an int. See
-    // http://stackoverflow.com/questions/2844817/how-do-i-check-if-a-c-string-is-an-int
-    std::string rmLeadingTrailingWhitespaces(const std::string& str);
-    bool isInt(const std::string& s);
 
     bool m_useProcSumw;
 
