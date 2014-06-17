@@ -44,6 +44,12 @@ bool susy::utils::contains(const std::string &str, const std::string &substr)
   return (str.find(substr)!=std::string::npos);
 }
 //----------------------------------------------------------
+// http://stackoverflow.com/questions/874134/find-if-string-endswith-another-string-in-c
+bool endswith(const std::string &str, const std::string &ending) {
+    if(str.length()<ending.length()) return false;
+    else return (0==str.compare(str.length() - ending.length(), ending.length(), ending));
+}
+//----------------------------------------------------------
 std::vector< std::string > susy::utils::tokenizeString(const std::string &inputString, char separator)
 {
   vector<string> tokens;

@@ -28,6 +28,8 @@ std::string rmLeadingTrailingWhitespaces(const std::string &str);
 std::string multipleSpaces2singleSpace(std::string str);
 /// whether str contains substr
 bool contains(const std::string &str, const std::string &substr);
+/// whether str ends with ending
+bool endswith(const std::string &str, const std::string &ending);
 /// split inputString in a vector of tokens
 std::vector< std::string > tokenizeString(const std::string &inputString, char separator);
 /// convert a string to a double
