@@ -63,30 +63,15 @@ Executables 2L and 3L cutflows
 `Susy2LepCF`
 `Susy3LepCF`
 
-If you run with option '-h' you will get the list of command line options
-```
-  Options:
-  -n number of events to process
-     defaults: -1 (all events)
-  -k number of events to skip
-     defaults: 0
-  -d debug printout level
-     defaults: 0 (quiet)
-  -F name of single input file
-     defaults: ''
-  -f name of input filelist
-     defaults: ''
-  -D name of input file dir
-     defaults: ''
-  -s sample name, for naming files
-     defaults: ntuple sample name
-  -h print this help
-```
+If you run with option `-h` you will get the list of command line options.
 
 
 Overview of the package
 -----------------------
+The up-to-date doxygen documentation is available at
+[this link](http://gerbaudo.github.io/SusyNtuple/doxygen-html).
 
+Below is a brief (and somewhat outdated) description of the main classes.
 - SusyDefs: typedefs, constants, globals, etc.
 - SusyNt: Definitions for the SusyNt classes: particles, jets, event variables, etc.
 - SusyNtObject: Manages SusyNt read/write of branches
