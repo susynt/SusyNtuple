@@ -11,6 +11,9 @@ env:
 # - ROOT=5.34.05
 # - ROOT=5-34-08
 
+global:
+  secure: MZDZhrKlxAlBmWmQV/xCN5xdfkDTKYzKvuzYDR3kQjz6JCYnCG2O4PZ3w3jAhOW/xqe/4dD+Se1HQl79FXUy+fQN0AfkLgZFObabYOEYtNhYpDxhz7rwe6RH0pOB1Qvp/pj50FfZZSjc5hdpBfMOstVmD4UgTl+TKYd/eLP0hFU=
+
 install:
   # Check if we are running Python 2 or 3. This is needed for the apt-get package names
   - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PYTHON_SUFFIX="3"; fi
@@ -59,4 +62,5 @@ script:
   - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
   # run the 2l cutflow
   - Susy2LepCF -F mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
-
+after_success:
+- doc/run_doxygen.sh
