@@ -64,8 +64,5 @@ script:
   - Susy2LepCF -F mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
 after_success:
   # from SusyNtuple/run, go back to the base dir and run doxygen if necessary
-  - echo "where am I? ${PWD}"
   - cd ${TRAVIS_BUILD_DIR}
-  - echo "now in ${PWD}"
-  - ls
   - doc/run_doxygen.sh
