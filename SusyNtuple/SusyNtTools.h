@@ -411,6 +411,18 @@ class SusyNtTools
                   TLorentzVector v1j, TLorentzVector v2j, TVector2 met, int iopt1);
   
     float calcMCT(TLorentzVector v1, TLorentzVector v2);
+
+
+    //Razor
+    void superRazor(const LeptonVector& leptons, const Susy::Met* met,
+		    TVector3& vBETA_z, TVector3& pT_CM,
+		    TVector3& vBETA_T_CMtoR, TVector3& vBETA_R,
+		    double& SHATR, double& dphi_LL_vBETA_T, double& dphi_L1_L2,
+		    double& gamma_R, double&  dphi_vBETA_R_vBETA_T,
+		    double& MDELTAR, double& costhetaRp1 );
+    
+
+
   
     //
     // Object printing
