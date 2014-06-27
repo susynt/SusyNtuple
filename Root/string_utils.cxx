@@ -1,6 +1,6 @@
 #include "SusyNtuple/string_utils.h"
 
-#include <algorithm> // transform
+#include <algorithm> // transform, replace
 #include <cstdlib> // strtod
 #include <dirent.h> // DIR
 #include <functional> // multiplies
@@ -39,6 +39,12 @@ std::string susy::utils::multipleSpaces2singleSpace(std::string str)
  return str;
 }
 //----------------------------------------------------------
+std::string susy::utils::tab2space(std::string str)
+{
+    std::replace(str.begin(), str.end(), '\t', ' ');
+    return str;
+}
+//----------------------------------------------------------
 bool susy::utils::contains(const std::string &str, const std::string &substr)
 {
   return (str.find(substr)!=std::string::npos);
@@ -53,7 +59,7 @@ bool susy::utils::endswith(const std::string &str, const std::string &ending) {
 std::vector< std::string > susy::utils::tokenizeString(const std::string &inputString, char separator)
 {
   vector<string> tokens;
-  std::istringstream buffer(string(multipleSpaces2singleSpace(inputString)));
+  std::istringstream buffer(string(multipleSpaces2singleSpace(tab2space(inputString))));
   for(string token; getline(buffer, token, separator); /*nothing*/ ) tokens.push_back(token);
   return tokens;
 }
