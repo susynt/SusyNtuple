@@ -272,13 +272,14 @@ MCWeighter& MCWeighter::setLabelBinCounter(const std::string &v)
     return *this;
 }
 //----------------------------------------------------------
-size_t MCWeighter::parseAdditionalXsecFile(const std::string &filename, bool verbose)
+size_t MCWeighter::parseAdditionalXsecFile(const std::string &input_filename, bool verbose)
 {
+    string filename = gSystem->ExpandPathName(input_filename.c_str());
     size_t nInitialElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
     bool inputFileIsValid(MCWeighter::isFormattedAsSusyCrossSection(filename, verbose));
     if(inputFileIsValid) {
         SUSY::CrossSectionDB tmpXsecDb;
-        tmpXsecDb.loadFile(gSystem->ExpandPathName(filename.c_str()));
+        tmpXsecDb.loadFile(filename.c_str());
         for(SUSY::CrossSectionDB::iterator p=tmpXsecDb.begin(); p!=tmpXsecDb.end(); ++p) {
             int sample_id(p->second.ID());
             // this is an ugly conversion we inherit from SUSYCrossSection; drop when they provide Key::get_proc_id
