@@ -3,29 +3,11 @@
 import glob
 import os
 import ROOT as r
-
 r.gROOT.SetBatch(1)
 r.PyConfig.IgnoreCommandLineOptions = True # don't let root steal your cmd-line options
 
-def load_packages():
-    rootcoredir = os.environ['ROOTCOREDIR']
-    for l in open(os.path.join(rootcoredir, 'preload')):
-        r.gSystem.Load(l.strip())
-    for l in open(os.path.join(rootcoredir, 'load')):
-        r.gSystem.Load('lib%s'%l.strip())
-    #r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
-    #r.load_packages()
-
 from Selector2Lep import TauID
 from cutflow import SkipEvent, Cutflow
-
-def generate_dicts():
-    wd = os.getcwd()
-    cpp_dir = 'tmp_cpp'
-    r.gSystem.ChangeDirectory(cpp_dir)
-    dict_macro = 'linkdef.cxx'
-    r.gROOT.LoadMacro(dict_macro+'+')
-    r.gSystem.ChangeDirectory(wd)
 
 def main():
     load_packages()
@@ -43,6 +25,25 @@ def main():
     print "About to loop on %d entries"%num_entries_to_process
     # run_with_selector(chain)
     run_with_chain(chain)
+
+def load_packages():
+    "Equivalent to RootCore's load_packages.C"
+    rootcoredir = os.environ['ROOTCOREDIR']
+    for l in open(os.path.join(rootcoredir, 'preload')):
+        r.gSystem.Load(l.strip())
+    for l in open(os.path.join(rootcoredir, 'load')):
+        r.gSystem.Load('lib%s'%l.strip())
+    #r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
+    #r.load_packages()
+
+def generate_dicts():
+    'generate missing dicts to access SusyNtuple objects'
+    wd = os.getcwd()
+    cpp_dir = 'tmp_cpp'
+    r.gSystem.ChangeDirectory(cpp_dir)
+    dict_macro = 'linkdef.cxx'
+    r.gROOT.LoadMacro(dict_macro+'+')
+    r.gSystem.ChangeDirectory(wd)
 
 def run_with_selector(tree):
     print 'Running with selector'
