@@ -6,11 +6,16 @@ import ROOT as r
 
 r.gROOT.SetBatch(1)
 r.PyConfig.IgnoreCommandLineOptions = True # don't let root steal your cmd-line options
-rootcoredir = os.environ['ROOTCOREDIR']
-r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
-r.load_packages()
 
-from ROOT import SusyNtAna
+def load_packages():
+    rootcoredir = os.environ['ROOTCOREDIR']
+    for l in open(os.path.join(rootcoredir, 'preload')):
+        r.gSystem.Load(l.strip())
+    for l in open(os.path.join(rootcoredir, 'load')):
+        r.gSystem.Load('lib%s'%l.strip())
+    #r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
+    #r.load_packages()
+
 from Selector2Lep import TauID
 from cutflow import SkipEvent, Cutflow
 
@@ -23,6 +28,7 @@ def generate_dicts():
     r.gSystem.ChangeDirectory(wd)
 
 def main():
+    load_packages()
     generate_dicts()
     sample_name = 'Sherpa_CT10_lllnu_WZ'
     input_dir = '/var/tmp/susynt_dev/data/ntup_susy/'
