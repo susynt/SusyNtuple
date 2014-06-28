@@ -25,5 +25,11 @@ Standalone/
 bin/
 obj/
 
+# python bytecode
+*.pyc
+
+# aclic files
+*cxx.d
+
 # emacs autosave
 *~
