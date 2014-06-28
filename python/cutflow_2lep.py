@@ -11,9 +11,19 @@ r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
 r.load_packages()
 
 from ROOT import SusyNtAna
+from Selector2Lep import TauID
+from cutflow import SkipEvent, Cutflow
+
+def generate_dicts():
+    wd = os.getcwd()
+    cpp_dir = 'tmp_cpp'
+    r.gSystem.ChangeDirectory(cpp_dir)
+    dict_macro = 'linkdef.cxx'
+    r.gROOT.LoadMacro(dict_macro+'+')
+    r.gSystem.ChangeDirectory(wd)
 
 def main():
-
+    generate_dicts()
     sample_name = 'Sherpa_CT10_lllnu_WZ'
     input_dir = '/var/tmp/susynt_dev/data/ntup_susy/'
     #input_dir = '/var/tmp/susynt_dev/data/ntup_common/'
@@ -25,32 +35,78 @@ def main():
     num_entries = chain.GetEntries()
     num_entries_to_process = num_entries if num_entries<1e4 else int(1e4)
     print "About to loop on %d entries"%num_entries_to_process
+    # run_with_selector(chain)
+    run_with_chain(chain)
+
+def run_with_selector(tree):
+    print 'Running with selector'
     # aa = r.SusyNtAna()
     # aa.clearObjects()
     # aa.dumpEvent()
     # aa = Foo()
     # chain.Process(aa) #, sample_name, 100)
-    chain.Process('TPySelector', 'Selector2Lep', 10)
+    tree.Process('TPySelector', 'Selector2Lep', 10)
 
-    # cutflow = r.Susy2LepCutflow()
-    # cutflow.setDebug(True)
-    # cutflow.setSampleName(sample_name)
-
-    # chain.Process(cutflow, sample_name, num_entries_to_process)
-
-class Foo(r.TSelector):
-    def __inif__(self):
-        print "Foo ctor"
-        # self.nttools = r.SusyNtTools()
-        # self.nttools.setAnaType(0, True) # Ana_2Lep
-    def Version(self):
-        return 2
-    def Begin(self, tree):
-        print "being"
-    def Terminate(self):
-        print "terminate"
-    def Process(self, entry):
-        print "process ",entry
+def run_with_chain(tree):
+    nttool = r.SusyNtTools()
+    m_entry = r.Long(-1)
+    ntevent = r.Susy.SusyNtObject(m_entry)
+    ntevent.ReadFrom(tree)
+    isSimplifiedModel = False
+    nttool.buildSumwMap(tree, isSimplifiedModel)
+    period, useRewUtils = 'Moriond', False
+    trig_logic = r.DilTrigLogic(period, useRewUtils)
+    n_max_entries = -1 #1000
+    n_entries_to_print = 4
+    sys = 0 # SusyDefs::SusyNtSys
+    cutflow = Cutflow()
+    for iEntry, entry in enumerate(tree):
+        m_entry = iEntry
+        if n_max_entries>0 and m_entry > n_max_entries : break
+        if iEntry < n_entries_to_print:
+                print 'run ', ntevent.evt().run,' event ',ntevent.evt().event
+        sys = 0
+        pre_elecs  = nttool.getPreElectrons(ntevent, sys)
+        pre_muons  = nttool.getPreMuons(ntevent, sys)
+        pre_taus   = nttool.getPreTaus(ntevent, sys)
+        pre_jets   = nttool.getPreJets(ntevent, sys)
+        nttool.performOverlap(pre_elecs, pre_muons, pre_taus, pre_jets)
+        nttool.removeSFOSPair(pre_elecs, 12.0)
+        nttool.removeSFOSPair(pre_muons, 12.0)
+        rmLepsFromIso = False
+        n_vertices = ntevent.evt().nVtx
+        is_mc = ntevent.evt().isMC
+        tauJetId, tauEleId, tauMuoId = TauID.loose, TauID.medium, TauID.medium
+        sig_elecs = nttool.getSignalElectrons(pre_elecs, pre_muons, n_vertices, is_mc, rmLepsFromIso)
+        sig_muons = nttool.getSignalMuons(pre_muons, pre_elecs, n_vertices, is_mc, rmLepsFromIso)
+        sig_taus = nttool.getSignalTaus(pre_taus, tauJetId, tauEleId, tauMuoId)
+        sig_jets = nttool.getSignalJets(pre_jets, sys)
+        sig_jets2l = nttool.getSignalJets2Lep(pre_jets, sys)
+        tmp_met = ntevent.met()
+        # print 'met.sys: [%s]'%(', '.join("%d"%tmp_met.at(iMet).sys for iMet in range(tmp_met.size())))
+        met = nttool.getMet(ntevent, sys)
+        pre_lep, sig_lep = r.LeptonVector(), r.LeptonVector()
+        nttool.buildLeptons(pre_lep, pre_elecs, pre_muons)
+        nttool.buildLeptons(sig_lep, sig_elecs, sig_muons)
+        if iEntry<n_entries_to_print:
+            print 'pre_lep:\n','\n'.join(["[%d] %s (eta,phi,pt) = (%.3f, %.3f, %.3f)"
+                                          %
+                                          (iL, "mu" if l.isMu() else "el", l.Eta(), l.Phi(), l.Pt())
+                                          for iL, l in enumerate(pre_lep)])
+        event_flag = ntevent.evt().cutFlags[0]
+        def mll(leps):
+            return (leps[0] + leps[1]).M()
+        try:
+            cutflow.cut_if(not nttool.passLAr(event_flag), "lar")
+            cutflow.cut_if(not nttool.passBadJet(event_flag), 'bad_jet')
+            cutflow.cut_if(not nttool.passBadMuon(event_flag), 'bad_mu')
+            cutflow.cut_if(not nttool.passCosmic(event_flag), 'cosmic')
+            cutflow.cut_if(not pre_lep.size()==2, '2lep')
+            cutflow.cut_if(not trig_logic.passDilTrig(pre_lep, met.Et, ntevent.evt()), 'trigger')
+            cutflow.cut_if(not mll(pre_lep)>20.0, 'mll20')
+        except SkipEvent:
+            continue
+    print cutflow
 
 if __name__=='__main__':
     main()
