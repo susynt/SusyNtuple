@@ -23,7 +23,6 @@ def main():
     num_entries = chain.GetEntries()
     num_entries_to_process = num_entries if num_entries<1e4 else int(1e4)
     print "About to loop on %d entries"%num_entries_to_process
-    # run_with_selector(chain)
     run_with_chain(chain)
 
 def load_packages():
@@ -44,15 +43,6 @@ def generate_dicts():
     dict_macro = 'linkdef.cxx'
     r.gROOT.LoadMacro(dict_macro+'+')
     r.gSystem.ChangeDirectory(wd)
-
-def run_with_selector(tree):
-    print 'Running with selector'
-    # aa = r.SusyNtAna()
-    # aa.clearObjects()
-    # aa.dumpEvent()
-    # aa = Foo()
-    # chain.Process(aa) #, sample_name, 100)
-    tree.Process('TPySelector', 'Selector2Lep', 10)
 
 def run_with_chain(tree):
     nttool = r.SusyNtTools()
