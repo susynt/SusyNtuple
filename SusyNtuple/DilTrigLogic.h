@@ -64,9 +64,6 @@ class DilTrigLogic
   bool passEvtTrigger(uint evtflag, DilTriggerRegion dtr);
   bool passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr);
 
-  // MC will need to be reweighted
-  float getMCWeight();
-
   // Trigger reweighting
   double getTriggerWeight(LeptonVector leptons, bool isMC, 
 			  float met, int njets, int NPV,
