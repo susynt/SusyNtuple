@@ -19,6 +19,9 @@
 #pragma link C++ class D3PDReader::VarHandle<vector<Susy::Tau>*>+;
 #pragma link C++ class D3PDReader::VarHandle<vector<Susy::Met>*>+;
 
-#pragma link C++ class std::vector<Susy::Lepton*>+;
 #pragma link C++ class DilTrigLogic+;
+#pragma link C++ class std::vector<Susy::Lepton*>+;
+#pragma link C++ class std::vector<Susy::Electron*>+;
+#pragma link C++ class std::vector<Susy::Muon*>+;
+#pragma link C++ class std::vector<Susy::Jet*>+;
 #endif
