@@ -100,3 +100,11 @@ def import_SUSYDefs_enums():
                                                               for k in dict_keys_sorted_by_value(e_vals)]))
         exec enum_expr in globals()
 import_SUSYDefs_enums()
+
+def mkdir_if_needed(dirname) :
+    if not os.path.exists(dirname) : os.mkdir(dirname)
+def is_valid_output_dir(dirname):
+    mkdir_if_needed(dirname)
+    return os.path.isdir(dirname)
+def commonPrefix(lst) : return os.path.commonprefix(lst)
+def commonSuffix(lst) : return os.path.commonprefix([l[::-1] for l in lst])[::-1]
