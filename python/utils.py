@@ -19,13 +19,14 @@ def import_root():
 r = import_root()
 def load_packages():
     "Equivalent to RootCore's load_packages.C"
-    rootcoredir = os.environ['ROOTCOREDIR']
+    rootcoredir = os.environ['ROOTCOREBIN']
+    r.gSystem.AddIncludePath('-I"'+rootcoredir+'/include"')
     for l in open(os.path.join(rootcoredir, 'preload')):
         r.gSystem.Load(l.strip())
     for l in open(os.path.join(rootcoredir, 'load')):
         r.gSystem.Load('lib%s'%l.strip())
-    #r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
-    #r.load_packages()
+    # r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
+    # r.load_packages()
 
 def generate_dicts():
     'generate missing dicts to access SusyNtuple objects'
