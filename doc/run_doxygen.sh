@@ -10,7 +10,7 @@
 # June 2014
 
 # trigger doxygen build only when the commit message title contains "[build-doxygen]"
-LAST_COMMIT_MESSAGE=$(git log  --pretty=oneline  -n 1)
+LAST_COMMIT_MSG=$(git log  --pretty=oneline  -n 1)
 if [[ "${LAST_COMMIT_MSG}" == *\[build-doxygen\]* ]] && [ "$TRAVIS_REPO_SLUG" == "gerbaudo/SusyNtuple" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
   echo -e "Publishing doxygen...\n"
