@@ -25,5 +25,8 @@ Standalone/
 bin/
 obj/
 
+# directory created by doxygen
+doc/doxygen/
+
 # emacs autosave
 *~
