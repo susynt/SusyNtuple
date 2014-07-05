@@ -6,17 +6,15 @@
 #include "TFile.h"
 #include "TChain.h"
 
-/*
 
-    ChainHelper
-    
-    A set of static methods to help build a TChain from input root files
-    The chain can be built easily by specifying
 
-        - single input root file
-        - input directory of root files
-        - a file with list of root files
-
+///    A set of static methods to help build a TChain from input root files
+/**
+   The chain can be built easily by specifying
+   
+   - single input root file
+   - input directory of root files
+   - a file with list of root files   
 */
 
 class ChainHelper
