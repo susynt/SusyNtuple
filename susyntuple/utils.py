@@ -31,7 +31,8 @@ def load_packages():
 def generate_dicts():
     'generate missing dicts to access SusyNtuple objects'
     wd = os.getcwd()
-    cpp_dir = 'tmp_cpp'
+    cpp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../run/tmp_cpp/')
+    print 'cpp_dir ',cpp_dir
     r.gSystem.ChangeDirectory(cpp_dir)
     dict_macro = 'linkdef.cxx'
     r.gROOT.LoadMacro(dict_macro+'+')
