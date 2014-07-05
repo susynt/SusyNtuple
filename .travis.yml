@@ -6,6 +6,10 @@ python:
   - "2.7"
 #  - "3.2"
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq  doxygen graphviz
+
 env:
 # - ROOT.27.06
 # - ROOT=5.34.05
@@ -26,7 +30,7 @@ install:
   - deactivate # the virtualenv
 
   # Needed because sometimes travis' repositories get out of date
-  - time sudo apt-get update -qq
+  #- time sudo apt-get update -qq
 
   # Install the dependencies we need
   # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
