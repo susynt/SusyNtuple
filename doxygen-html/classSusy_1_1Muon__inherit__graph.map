@@ -1,4 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classSusy_1_1Lepton.html" title="Susy::Lepton" alt="" coords="7,83,116,112"/>
-<area shape="rect" id="node4" href="$classSusy_1_1Particle.html" title="Susy::Particle" alt="" coords="5,5,117,35"/>
+<area shape="rect" id="node2" href="$classSusy_1_1Lepton.html" title="Lepton class, common to electrons and muons." alt="" coords="7,83,111,112"/>
+<area shape="rect" id="node4" href="$classSusy_1_1Particle.html" title="Particle class, base class for other object types." alt="" coords="5,5,112,35"/>
 </map>

@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node1" href="$classSusyNtTools.html" title="SusyNtTools" alt="" coords="7,32,108,61"/>
-<area shape="rect" id="node3" href="$classSusyNtAna.html" title="SusyNtAna" alt="" coords="159,32,252,61"/>
-<area shape="rect" id="node5" href="$classSusy2LepCutflow.html" title="Susy2LepCutflow" alt="" coords="301,5,440,35"/>
-<area shape="rect" id="node9" href="$classSusy3LepCutflow.html" title="Susy3LepCutflow" alt="" coords="301,59,440,88"/>
-<area shape="rect" id="node7" href="$classSusy_1_1DileptonCutflowWithList.html" title="Susy::DileptonCutflowWithList" alt="" coords="489,5,716,35"/>
-</map>
