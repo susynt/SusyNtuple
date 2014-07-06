@@ -11,6 +11,7 @@
 #include <map>
 #include <set>
 
+/// Example SusyNt-based truth study
 class SusyNtTruthAna : public TSelector
 {
 
