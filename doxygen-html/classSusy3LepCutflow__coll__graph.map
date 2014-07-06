@@ -15,5 +15,5 @@
 <area shape="rect" id="node36" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Tau \&gt; * \&gt;" alt="" coords="292,485,628,515"/>
 <area shape="rect" id="node41" href="$classSusy_1_1Met.html" title="Met class." alt="" coords="771,140,853,169"/>
 <area shape="rect" id="node43" href="$classTrilTrigLogic.html" title="TrilTrigLogic &#45; class to implement the multilepton trigger logic." alt="" coords="1009,385,1100,415"/>
-<area shape="rect" id="node45" href="$classMCWeighter.html" title="MCWeighter" alt="" coords="1007,439,1103,468"/>
+<area shape="rect" id="node45" href="$classMCWeighter.html" title="A class to handle the normalization of Monte Carlo." alt="" coords="1007,439,1103,468"/>
 </map>

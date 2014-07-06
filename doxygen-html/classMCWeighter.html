@@ -86,6 +86,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <!-- doxytag: class="MCWeighter" -->
+<p>A class to handle the normalization of Monte Carlo.  
+ <a href="classMCWeighter.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="MCWeighter_8h_source.html">MCWeighter.h</a>&gt;</code></p>
+
 <p><a href="classMCWeighter-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-types"></a>
@@ -110,30 +115,34 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a978ec62eb7345ce0b08d70a88d5f3504"></a><!-- doxytag: member="MCWeighter::MCWeighter" ref="a978ec62eb7345ce0b08d70a88d5f3504" args="(TTree *tree, std::string xsecDir=&quot;$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/&quot;)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>MCWeighter</b> (TTree *tree, std::string xsecDir=&quot;$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/&quot;)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a406e90f5582be900e439f30692ca5269"></a><!-- doxytag: member="MCWeighter::buildSumwMap" ref="a406e90f5582be900e439f30692ca5269" args="(TTree *tree)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>buildSumwMap</b> (TTree *tree)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a406e90f5582be900e439f30692ca5269">buildSumwMap</a> (TTree *tree)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a map of MCID -&gt; sumw.  <a href="#a406e90f5582be900e439f30692ca5269"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0da8d8832298e0f4d0a535019252e479"></a><!-- doxytag: member="MCWeighter::clearAndRebuildSumwMap" ref="a0da8d8832298e0f4d0a535019252e479" args="(TTree *tree)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clearAndRebuildSumwMap</b> (TTree *tree)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac17d9aef6be26b0574d54ec3764d12fe"></a><!-- doxytag: member="MCWeighter::dumpSumwMap" ref="ac17d9aef6be26b0574d54ec3764d12fe" args="()" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>dumpSumwMap</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0130094914bc7dd165a61bcdcde6090"></a><!-- doxytag: member="MCWeighter::setUseProcSumw" ref="af0130094914bc7dd165a61bcdcde6090" args="(bool useProcSumw=true)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setUseProcSumw</b> (bool useProcSumw=true)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#af0130094914bc7dd165a61bcdcde6090">setUseProcSumw</a> (bool useProcSumw=true)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify methods to retrieve sumw and xsec. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4051575b275a77eca6515a0c4b17360a"></a><!-- doxytag: member="MCWeighter::setSumwMethod" ref="a4051575b275a77eca6515a0c4b17360a" args="(SumwMethod opt=Sumw_MAP)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSumwMethod</b> (SumwMethod opt=Sumw_MAP)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aad46a1ad49aad6b88e2067bc9f180c4f"></a><!-- doxytag: member="MCWeighter::setXsecMethod" ref="aad46a1ad49aad6b88e2067bc9f180c4f" args="(XsecMethod opt=Xsec_ST)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setXsecMethod</b> (XsecMethod opt=Xsec_ST)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6dec6b6b68b445f45c0c014df70d5dc1"></a><!-- doxytag: member="MCWeighter::getMCWeight" ref="a6dec6b6b68b445f45c0c014df70d5dc1" args="(const Susy::Event *evt, float lumi=LUMI_A_L, WeightSys sys=Sys_NOM)" -->
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getMCWeight</b> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, float lumi=LUMI_A_L, WeightSys sys=Sys_NOM)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a6dec6b6b68b445f45c0c014df70d5dc1">getMCWeight</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, float lumi=LUMI_A_L, WeightSys sys=Sys_NOM)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">MC Weight includes generator, xsec, lumi, and pileup weights.  <a href="#a6dec6b6b68b445f45c0c014df70d5dc1"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f45e8d922205d4a82297bb8b4f0bc86"></a><!-- doxytag: member="MCWeighter::sumwmapHasKey" ref="a7f45e8d922205d4a82297bb8b4f0bc86" args="(SumwMapKey k)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>sumwmapHasKey</b> (SumwMapKey k)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6e44bd7f4f6d96f6560087cfe168af90"></a><!-- doxytag: member="MCWeighter::getSumw" ref="a6e44bd7f4f6d96f6560087cfe168af90" args="(const Susy::Event *evt)" -->
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getSumw</b> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt)</td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a6e44bd7f4f6d96f6560087cfe168af90">getSumw</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get sumw for this event. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aed421e8fb4cd78abf48a289f9926ecca"></a><!-- doxytag: member="MCWeighter::getCrossSection" ref="aed421e8fb4cd78abf48a289f9926ecca" args="(const Susy::Event *evt)" -->
-SUSY::CrossSectionDB::Process&#160;</td><td class="memItemRight" valign="bottom"><b>getCrossSection</b> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt)</td></tr>
+SUSY::CrossSectionDB::Process&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#aed421e8fb4cd78abf48a289f9926ecca">getCrossSection</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get cross section for this event. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a47e7f8c8f2bbfcbec599438e158081ab"></a><!-- doxytag: member="MCWeighter::getXsecTimesEff" ref="a47e7f8c8f2bbfcbec599438e158081ab" args="(const Susy::Event *evt, WeightSys sys=Sys_NOM)" -->
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getXsecTimesEff</b> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, WeightSys sys=Sys_NOM)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9978be33f28230ebc53e52f9e5acd331"></a><!-- doxytag: member="MCWeighter::getPileupWeight" ref="a9978be33f28230ebc53e52f9e5acd331" args="(const Susy::Event *evt, WeightSys sys=Sys_NOM)" -->
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getPileupWeight</b> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, WeightSys sys=Sys_NOM)</td></tr>
+float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a9978be33f28230ebc53e52f9e5acd331">getPileupWeight</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, WeightSys sys=Sys_NOM)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the pileup weight. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMCWeighter.html">MCWeighter</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a1355c8724ec2d7ec6f6722e7b26ca8c1">setLabelBinCounter</a> (const std::string &amp;v)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">specify the bin used to compute sumw; requires you to call clearAndRebuildSumwMap.  <a href="#a1355c8724ec2d7ec6f6722e7b26ca8c1"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a3435aa6505f35d6091c5aabbc95bdc52">parseAdditionalXsecFile</a> (const std::string &amp;filename, bool verbose)</td></tr>
@@ -151,7 +160,30 @@ Static Public Member Functions</h2></td></tr>
 static std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMCWeighter.html#a76fcc78a03c034f40270c39a495b95cd">readDsidsFromSusyCrossSectionFile</a> (std::string filename, bool verbose)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">given a text file containing cross sections for CrossSectionDB, return the dsids <br/></td></tr>
 </table>
-<hr/><h2>Member Function Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>A class to handle the normalization of Monte Carlo. </p>
+<p>There are options to control how to retrieve the sumw, xsec, etc. The defaults are recommended, as long as they work. </p>
+</div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a406e90f5582be900e439f30692ca5269"></a><!-- doxytag: member="MCWeighter::buildSumwMap" ref="a406e90f5582be900e439f30692ca5269" args="(TTree *tree)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classMCWeighter.html#a406e90f5582be900e439f30692ca5269">MCWeighter::buildSumwMap</a> </td>
+          <td>(</td>
+          <td class="paramtype">TTree *&#160;</td>
+          <td class="paramname"><em>tree</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Build a map of MCID -&gt; sumw. </p>
+<p>This method will loop over the input files associated with the TChain. The MCID in the first entry of the tree will be used, so one CANNOT use this if multiple datasets are combined into one SusyNt tree file! The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID. Each dataset used here must be complete, they CANNOT be spread out across multiple jobs. However, one can have more than one (complete) dataset in the chain, which is why we use the map. </p>
+
+</div>
+</div>
 <a class="anchor" id="a09a8f40fd327d325b988007e4cc6e5bf"></a><!-- doxytag: member="MCWeighter::defaultLabelBinCounter" ref="a09a8f40fd327d325b988007e4cc6e5bf" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -168,6 +200,42 @@ static std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 <p>default counter used to compute the normalization </p>
 <p>This counter seems to work fine for all samples, except for some n015* pmssm ones, for which you want to use "Initial" </p>
+
+</div>
+</div>
+<a class="anchor" id="a6dec6b6b68b445f45c0c014df70d5dc1"></a><!-- doxytag: member="MCWeighter::getMCWeight" ref="a6dec6b6b68b445f45c0c014df70d5dc1" args="(const Susy::Event *evt, float lumi=LUMI_A_L, WeightSys sys=Sys_NOM)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float <a class="el" href="classMCWeighter.html#a6dec6b6b68b445f45c0c014df70d5dc1">MCWeighter::getMCWeight</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *&#160;</td>
+          <td class="paramname"><em>evt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>lumi</em> = <code>LUMI_A_L</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">WeightSys&#160;</td>
+          <td class="paramname"><em>sys</em> = <code>Sys_NOM</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>MC Weight includes generator, xsec, lumi, and pileup weights. </p>
+<p>Default weight uses 2012 A-D lumi. You can supply a different luminosity, but the pileup weights will still correspond to A-D. </p>
 
 </div>
 </div>

@@ -104,6 +104,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <!-- doxytag: class="Susy::EventlistHandler" -->
+<p>A class to cache a TEventList for SusyNt.  
+ <a href="classSusy_1_1EventlistHandler.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="EventlistHandler_8h_source.html">EventlistHandler.h</a>&gt;</code></p>
+
 <p><a href="classSusy_1_1EventlistHandler-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
@@ -125,7 +130,16 @@ TEventList *&#160;</td><td class="memItemRight" valign="bottom"><b>fetchEventLis
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24ae8a3391c196ae472f0466a93e928d"></a><!-- doxytag: member="Susy::EventlistHandler::cacheFilename" ref="a24ae8a3391c196ae472f0466a93e928d" args="() const " -->
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>cacheFilename</b> () const </td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>A class to cache a TEventList for SusyNt. </p>
+<p>Usage: set the cache filename. On the first run, the TEventList is created and filled. Then just check cacheDoesExists(), and call TChain::SetEventList(EventlistHandler::fecthEventList())</p>
+<p>Caveat:</p>
+<ul>
+<li>if you are using a TChain, the trees must be added in the same order from one run to the next. Use a filelist to ensure this</li>
+</ul>
+<p>See test_EventlistHandler.cxx for an example of how this class can be used</p>
+<p><a href="mailto:davide.gerbaudo@gmail.com">davide.gerbaudo@gmail.com</a>, April 2014 </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>SusyNtuple/<a class="el" href="EventlistHandler_8h_source.html">EventlistHandler.h</a></li>
 <li>Root/EventlistHandler.cxx</li>
 </ul>

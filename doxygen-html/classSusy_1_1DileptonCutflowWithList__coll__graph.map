@@ -16,5 +16,5 @@
 <area shape="rect" id="node38" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Tau \&gt; * \&gt;" alt="" coords="292,485,628,515"/>
 <area shape="rect" id="node43" href="$classSusy_1_1Met.html" title="Met class." alt="" coords="771,353,853,383"/>
 <area shape="rect" id="node45" href="$classDilTrigLogic.html" title="Trigger logic for dilepton events." alt="" coords="1007,327,1097,356"/>
-<area shape="rect" id="node47" href="$classSusy_1_1EventlistHandler.html" title="Susy::EventlistHandler" alt="" coords="1215,353,1377,383"/>
+<area shape="rect" id="node47" href="$classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt." alt="" coords="1215,353,1377,383"/>
 </map>

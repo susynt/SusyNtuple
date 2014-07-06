@@ -21,6 +21,7 @@ var searchData=
   ['settype',['SetType',['../classD3PDReader_1_1VarHandleBase.html#a63a69bf2df67b5966d8f383975c5901f',1,'D3PDReader::VarHandleBase']]],
   ['setunzippedbytesread',['SetUnzippedBytesRead',['../classD3PDReader_1_1VariableStats.html#adcf223aecba4c7e178b5adf3284256d0',1,'D3PDReader::VariableStats']]],
   ['setunziptime',['SetUnzipTime',['../classD3PDReader_1_1D3PDReadStats.html#a558b18e9a8a1bff62da9d56d017a5330',1,'D3PDReader::D3PDReadStats']]],
+  ['setuseprocsumw',['setUseProcSumw',['../classMCWeighter.html#af0130094914bc7dd165a61bcdcde6090',1,'MCWeighter']]],
   ['setvariablenum',['SetVariableNum',['../classD3PDReader_1_1D3PDReadStats.html#a54fdd8bd174f34bdbad519975b2124ed',1,'D3PDReader::D3PDReadStats']]],
   ['setzippedbytesread',['SetZippedBytesRead',['../classD3PDReader_1_1VariableStats.html#a28081d1a1947b6347b64535b3a952698',1,'D3PDReader::VariableStats']]],
   ['start',['Start',['../classD3PDReader_1_1D3PDPerfStats.html#a8e6629414394f480751537df92dc238c',1,'D3PDReader::D3PDPerfStats']]],

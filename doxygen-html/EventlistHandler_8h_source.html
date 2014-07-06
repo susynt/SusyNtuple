@@ -90,54 +90,40 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00009"></a>00009 <span class="keyword">class </span>TFile;
 <a name="l00010"></a>00010 
 <a name="l00011"></a><a class="code" href="namespaceSusy.html">00011</a> <span class="keyword">namespace </span>Susy {
-<a name="l00012"></a>00012 <span class="comment">/*</span>
-<a name="l00013"></a>00013 <span class="comment">  A class to cache a TEventList for SusyNt</span>
-<a name="l00014"></a>00014 <span class="comment"></span>
-<a name="l00015"></a>00015 <span class="comment">  Usage: set the cache filename. On the first run, the TEventList is</span>
-<a name="l00016"></a>00016 <span class="comment">  created and filled. Then just check cacheDoesExists(), and call</span>
-<a name="l00017"></a>00017 <span class="comment">  TChain::SetEventList(EventlistHandler::fecthEventList())</span>
-<a name="l00018"></a>00018 <span class="comment"></span>
-<a name="l00019"></a>00019 <span class="comment">  Caveat:</span>
-<a name="l00020"></a>00020 <span class="comment">  - if you are using a TChain, the trees must be added in the same</span>
-<a name="l00021"></a>00021 <span class="comment">    order from one run to the next. Use a filelist to ensure this</span>
-<a name="l00022"></a>00022 <span class="comment"></span>
-<a name="l00023"></a>00023 <span class="comment">  See test_EventlistHandler.cxx for an example of how this class can be used</span>
-<a name="l00024"></a>00024 <span class="comment"></span>
-<a name="l00025"></a>00025 <span class="comment">  davide.gerbaudo@gmail.com, April 2014</span>
-<a name="l00026"></a>00026 <span class="comment"> */</span>
-<a name="l00027"></a><a class="code" href="classSusy_1_1EventlistHandler.html">00027</a> <span class="keyword">class </span><a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a> {
-<a name="l00028"></a>00028 
-<a name="l00029"></a>00029 <span class="keyword">public</span>:
-<a name="l00030"></a>00030     <a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a>();
-<a name="l00031"></a>00031     ~<a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a>();
-<a name="l00032"></a>00032     <span class="keywordtype">bool</span> cacheDoesExists() <span class="keyword">const</span>;
-<a name="l00033"></a>00033     <a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a>&amp; setCacheFilename(<span class="keyword">const</span> std::string value=<span class="stringliteral">&quot;./cache/Sample_eventList.root&quot;</span>);
-<a name="l00034"></a>00034     <a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a>&amp; setListName(<span class="keyword">const</span> std::string value=<span class="stringliteral">&quot;EventList&quot;</span>) { m_listName = value; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00035"></a>00035     <a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a>&amp; addEvent(Long64_t entry);
-<a name="l00036"></a>00036     <a class="code" href="classSusy_1_1EventlistHandler.html">EventlistHandler</a>&amp; setVerbose(<span class="keywordtype">bool</span> value=<span class="keyword">true</span>) { m_verbose = value; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
-<a name="l00037"></a>00037     TEventList* eventList() { <span class="keywordflow">return</span> &amp;m_eventlist; }
-<a name="l00038"></a>00038     TEventList* fetchEventList();
-<a name="l00039"></a>00039     std::string cacheFilename()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_cacheFilename; }
-<a name="l00040"></a>00040     
-<a name="l00041"></a>00041 <span class="keyword">private</span>: <span class="comment">// rule of three</span>
-<a name="l00042"></a>00042 <span class="comment">//    EventlistHandler&amp; (const EventlistHandler&amp;);</span>
-<a name="l00043"></a>00043 <span class="comment">//    EventlistHandler&amp; operator=(const EventlistHandler&amp;);</span>
-<a name="l00044"></a>00044 <span class="keyword">private</span>:
-<a name="l00045"></a>00045     <span class="keywordtype">bool</span> initOutputFile();
-<a name="l00046"></a>00046     <span class="keywordtype">bool</span> outputFileExists();
-<a name="l00047"></a>00047     <span class="keywordtype">bool</span> closeOutputFile();
-<a name="l00048"></a>00048     <span class="keywordtype">void</span> setDefaultValues();
-<a name="l00049"></a>00049 <span class="keyword">private</span>:
-<a name="l00050"></a>00050     std::string m_cacheFilename;
-<a name="l00051"></a>00051     std::string m_listName;
-<a name="l00052"></a>00052     <span class="keywordtype">bool</span> m_firstEventHasBeenProcessed;
-<a name="l00053"></a>00053     TEventList m_eventlist;
-<a name="l00054"></a>00054     TFile *m_cacheFile;
-<a name="l00055"></a>00055     <span class="keywordtype">bool</span> m_verbose;
-<a name="l00056"></a>00056 };
-<a name="l00057"></a>00057 } <span class="comment">// Susy</span>
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059 <span class="preprocessor">#endif</span>
+<a name="l00013"></a>00013 
+<a name="l00026"></a><a class="code" href="classSusy_1_1EventlistHandler.html">00026</a> <span class="keyword">class </span><a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a> {
+<a name="l00027"></a>00027 
+<a name="l00028"></a>00028 <span class="keyword">public</span>:
+<a name="l00029"></a>00029     <a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a>();
+<a name="l00030"></a>00030     ~<a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a>();
+<a name="l00031"></a>00031     <span class="keywordtype">bool</span> cacheDoesExists() <span class="keyword">const</span>;
+<a name="l00032"></a>00032     <a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a>&amp; setCacheFilename(<span class="keyword">const</span> std::string value=<span class="stringliteral">&quot;./cache/Sample_eventList.root&quot;</span>);
+<a name="l00033"></a>00033     <a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a>&amp; setListName(<span class="keyword">const</span> std::string value=<span class="stringliteral">&quot;EventList&quot;</span>) { m_listName = value; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00034"></a>00034     <a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a>&amp; addEvent(Long64_t entry);
+<a name="l00035"></a>00035     <a class="code" href="classSusy_1_1EventlistHandler.html" title="A class to cache a TEventList for SusyNt.">EventlistHandler</a>&amp; setVerbose(<span class="keywordtype">bool</span> value=<span class="keyword">true</span>) { m_verbose = value; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00036"></a>00036     TEventList* eventList() { <span class="keywordflow">return</span> &amp;m_eventlist; }
+<a name="l00037"></a>00037     TEventList* fetchEventList();
+<a name="l00038"></a>00038     std::string cacheFilename()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_cacheFilename; }
+<a name="l00039"></a>00039     
+<a name="l00040"></a>00040 <span class="keyword">private</span>: <span class="comment">// rule of three</span>
+<a name="l00041"></a>00041 <span class="comment">//    EventlistHandler&amp; (const EventlistHandler&amp;);</span>
+<a name="l00042"></a>00042 <span class="comment">//    EventlistHandler&amp; operator=(const EventlistHandler&amp;);</span>
+<a name="l00043"></a>00043 <span class="keyword">private</span>:
+<a name="l00044"></a>00044     <span class="keywordtype">bool</span> initOutputFile();
+<a name="l00045"></a>00045     <span class="keywordtype">bool</span> outputFileExists();
+<a name="l00046"></a>00046     <span class="keywordtype">bool</span> closeOutputFile();
+<a name="l00047"></a>00047     <span class="keywordtype">void</span> setDefaultValues();
+<a name="l00048"></a>00048 <span class="keyword">private</span>:
+<a name="l00049"></a>00049     std::string m_cacheFilename;
+<a name="l00050"></a>00050     std::string m_listName;
+<a name="l00051"></a>00051     <span class="keywordtype">bool</span> m_firstEventHasBeenProcessed;
+<a name="l00052"></a>00052     TEventList m_eventlist;
+<a name="l00053"></a>00053     TFile *m_cacheFile;
+<a name="l00054"></a>00054     <span class="keywordtype">bool</span> m_verbose;
+<a name="l00055"></a>00055 };
+<a name="l00056"></a>00056 } <span class="comment">// Susy</span>
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
