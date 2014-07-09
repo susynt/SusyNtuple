@@ -2280,7 +2280,7 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
             if(anaType==Ana_2Lep || anaType==Ana_2LepWH) 
               pass = (fabs(jet->jvf) - 0.001 > JET_JVF_CUT_2L); 
             else if (anaType==Ana_3Lep) 
-              pass = jet->jvf > JET_JVF_CUT;
+              pass = (jet->jvf > JET_JVF_CUT);
             else {
               cout << "jetPassesJvfRequirement: Unknown anaType (" << anaType << "), return true" << endl;
               pass = true;
