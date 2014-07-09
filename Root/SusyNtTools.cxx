@@ -807,7 +807,7 @@ bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool,
             maxJvtEta = JET_ETA_CUT_2L;
         }
         pass = (jet->Pt() > JET_PT_L20_CUT
-                && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
+                && fabs(jet->detEta) < JET_ETA_CUT_2L
                 && jet->mv1 < MV1_80
                 && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
     } else {
@@ -2187,17 +2187,32 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
         bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
         if(jvfUp || jvfDown) {
             if(jvfTool) {
+                // For JVF working point 0 there is no down variation. The recommendations is to use up variation,
+                // and then symmetrize the uncertainty upstream. Therefore, we currently set down to nominal
                 bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
-                jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+                if( !applyJvf ) {
+                  jvfThres = nominalJvtThres; 
+                } else {
+                  if (fabs(nominalJvtThres) < 0.001 && jvfDown) 
+                    jvfThres = nominalJvtThres;
+                  else 
+                    jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+                }
             } else {
                 cout << "jetPassesJvfRequirement: error, jvfTool required (" << jvfTool << ")" <<endl;
                 assert(jvfTool);
             }
         }
-        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
-        bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
+        // Apply JVF cut, this bit is analysis dependent
         if(applyJvf) {
-            pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
+            if(anaType==Ana_2Lep || anaType==Ana_2LepWH) 
+              pass = (fabs(jet->jvf) - 0.001 > JET_JVF_CUT_2L); 
+            else if (anaType==Ana_3Lep) 
+              pass = jet->jvf > JET_JVF_CUT;
+            else {
+              cout << "jetPassesJvfRequirement: Unknown anaType (" << anaType << "), return true" << endl;
+              pass = true;
+            }
         } else {
             pass = true;
         }
