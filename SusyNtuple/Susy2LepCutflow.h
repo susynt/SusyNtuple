@@ -1,10 +1,6 @@
 #ifndef SusyAna_Susy2LepCutflow_h
 #define SusyAna_Susy2LepCutflow_h
 
-//////////////////////////////////////////////////////////
-// General script to implement basic selection with all //
-// signal region cut methods.                           //
-//////////////////////////////////////////////////////////
 
 // Common Packages
 
@@ -18,6 +14,11 @@
 
 #include <fstream>
 
+/// Two lepton cutflow
+/**
+General script to implement basic selection with all signal region cut
+ methods.
+*/
 class Susy2LepCutflow : public SusyNtAna
 {
 

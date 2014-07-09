@@ -14,9 +14,8 @@ using namespace std;
 
 namespace Susy
 {
-/*
-  Example class showing how to use an EventlistHandler
-
+///  Example class showing how to use an EventlistHandler
+/**
   davide.gerbaudo@gmail.com, April 2014
 */
 class DileptonCutflowWithList : public Susy2LepCutflow

@@ -1,11 +1,6 @@
 #ifndef SusyAna_Susy3LepCutflow_h
 #define SusyAna_Susy3LepCutflow_h
 
-//////////////////////////////////////////////////////////
-// General script to implement basic selection with all //
-// signal region cut methods.                           //
-//////////////////////////////////////////////////////////
-
 
 // Root Packages
 #include "TTree.h"
@@ -17,6 +12,12 @@
 #include "SusyNtuple/TrilTrigLogic.h"
 
 #include <fstream>
+
+/// Three lepton cutflow
+/**
+General script to implement basic selection with all signal region cut
+methods.
+*/
 
 class Susy3LepCutflow : public SusyNtAna
 {

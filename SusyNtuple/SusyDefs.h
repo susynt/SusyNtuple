@@ -77,7 +77,7 @@ typedef std::map<SumwMapKey, float> SumwMap;
 // Global enums
 //-----------------------------------------------------------------------------------
 
-// MC production campaign
+/// MC production campaign
 enum MCProduction
 {
   MCProd_Unknown = 0,
@@ -86,7 +86,7 @@ enum MCProduction
   MCProd_N
 };
 
-// Data stream
+/// Data stream
 enum DataStream
 {
   Stream_Unknown = 0,
@@ -97,7 +97,7 @@ enum DataStream
   Stream_N
 };
 
-// Enum for Data Periods
+/// Enum for Data Periods
 enum DataPeriod
 {
   Period_A = 0,
@@ -113,15 +113,15 @@ enum DataPeriod
   Period_Num
 };
 
-// MC periods have less granularity than data
-// Not currently relevant!
+/// MC periods have less granularity than data
+/** Not currently relevant! */
 enum McPeriod
 {
   McPeriod_AB = 0,
   McPeriod_Num
 };
 
-// 2-lep or 3-lep flag
+/// 2-lep or 3-lep flag
 enum AnalysisType 
 {
   Ana_2Lep = 0,
@@ -137,7 +137,7 @@ const std::string SusyNtAnalysisType[Ana_N] = {
   "Ana_2LepWH",
 };
 
-// SUSY D3PD tag, for controlling which branch names to grab
+/// SUSY D3PD tag, for controlling which branch names to grab
 enum D3PDTag
 {
   D3PD_p1032 = 0,
@@ -147,7 +147,7 @@ enum D3PDTag
   D3PD_N
 };
 
-// Tau ID enum
+/// Tau ID enum
 enum TauID
 {
   TauID_none = 0,
@@ -157,55 +157,55 @@ enum TauID
   TauID_N
 };
 
-// Enum for systematic checks
+/// Enum for systematic checks
 enum SusyNtSys 
 {
   NtSys_NOM = 0,
-  //NtSys_EES_UP,      // Electron Scale + sigma
-  //NtSys_EES_DN,      // Electron Scale - sigma
-  NtSys_EES_Z_UP,    // Electron Scale Zsys + sigma
-  NtSys_EES_Z_DN,    // Electron Scale Zsys - sigma
-  NtSys_EES_MAT_UP,  // Electron Scale Material + sigma
-  NtSys_EES_MAT_DN,  // Electron Scale Material - sigma
-  NtSys_EES_PS_UP,   // Electron Scale Presampler + sigma
-  NtSys_EES_PS_DN,   // Electron Scale Presampler - sigma
-  NtSys_EES_LOW_UP,  // Electron Scale Low Pt + sigma
-  NtSys_EES_LOW_DN,  // Electron Scale Low Pt - sigma
-  NtSys_EER_UP,      // Electron Resolution + sigma
-  NtSys_EER_DN,      // Electron Resolution - sigma
-  NtSys_MS_UP,       // Muon MS track + sigma
-  NtSys_MS_DN,       // Muon MS track - sigma
-  NtSys_ID_UP,       // Muon ID track + sigma
-  NtSys_ID_DN,       // Muon ID track - sigma
-  NtSys_JES_UP,      // Jet Energy Scale + sigma
-  NtSys_JES_DN,      // Jet Energy Scale - sigma
-  NtSys_JER,         // Jet Energy Resolution (gaussian)
-  NtSys_SCALEST_UP,  // Met scale soft term + sigma
-  NtSys_SCALEST_DN,  // Met scale soft term - sigma
+  //NtSys_EES_UP,      ///< Electron Scale + sigma
+  //NtSys_EES_DN,      ///< Electron Scale - sigma
+  NtSys_EES_Z_UP,    ///< Electron Scale Zsys + sigma
+  NtSys_EES_Z_DN,    ///< Electron Scale Zsys - sigma
+  NtSys_EES_MAT_UP,  ///< Electron Scale Material + sigma
+  NtSys_EES_MAT_DN,  ///< Electron Scale Material - sigma
+  NtSys_EES_PS_UP,   ///< Electron Scale Presampler + sigma
+  NtSys_EES_PS_DN,   ///< Electron Scale Presampler - sigma
+  NtSys_EES_LOW_UP,  ///< Electron Scale Low Pt + sigma
+  NtSys_EES_LOW_DN,  ///< Electron Scale Low Pt - sigma
+  NtSys_EER_UP,      ///< Electron Resolution + sigma
+  NtSys_EER_DN,      ///< Electron Resolution - sigma
+  NtSys_MS_UP,       ///< Muon MS track + sigma
+  NtSys_MS_DN,       ///< Muon MS track - sigma
+  NtSys_ID_UP,       ///< Muon ID track + sigma
+  NtSys_ID_DN,       ///< Muon ID track - sigma
+  NtSys_JES_UP,      ///< Jet Energy Scale + sigma
+  NtSys_JES_DN,      ///< Jet Energy Scale - sigma
+  NtSys_JER,         ///< Jet Energy Resolution (gaussian)
+  NtSys_SCALEST_UP,  ///< Met scale soft term + sigma
+  NtSys_SCALEST_DN,  ///< Met scale soft term - sigma
   // Only one of these now???
   //NtSys_RESOST_UP,    // Met resolution soft term + sigma
   //NtSys_RESOST_DN,    // Met resolution soft term - sigma
-  NtSys_RESOST,      // Met resolution soft term + sigma
+  NtSys_RESOST,      ///< Met resolution soft term + sigma
   //NtSys_TRIGSF_UP,    // Trigger Scale factor + error
   //NtSys_TRIGSF_DN,    // Trigger Scale factor - error
-  NtSys_TRIGSF_EL_UP,    // Trigger Scale factor + error for el
-  NtSys_TRIGSF_EL_DN,    // Trigger Scale factor - error for el
-  NtSys_TRIGSF_MU_UP,    // Trigger Scale factor + error for mu
-  NtSys_TRIGSF_MU_DN,    // Trigger Scale factor - error for mu
+  NtSys_TRIGSF_EL_UP,    ///< Trigger Scale factor + error for el
+  NtSys_TRIGSF_EL_DN,    ///< Trigger Scale factor - error for el
+  NtSys_TRIGSF_MU_UP,    ///< Trigger Scale factor + error for mu
+  NtSys_TRIGSF_MU_DN,    ///< Trigger Scale factor - error for mu
 
   // Tau systematics added to the end
-  NtSys_TES_UP,      // Tau energy scale + sigma
-  NtSys_TES_DN,      // Tau energy scale - sigma
+  NtSys_TES_UP,      ///< Tau energy scale + sigma
+  NtSys_TES_DN,      ///< Tau energy scale - sigma
 
   // Nothing is stored for these, but convenient to define
   // the enum here for usage in selectObjects methods
-  NtSys_JVF_UP,      // Jet JVF cut + sigma
-  NtSys_JVF_DN,      // Jet JVF cut - sigma
+  NtSys_JVF_UP,      ///< Jet JVF cut + sigma
+  NtSys_JVF_DN,      ///< Jet JVF cut - sigma
 
   NtSys_N
 };
 
-// Human-readable names for enum SusyNtSys 
+/// Human-readable names for enum SusyNtSys 
 const std::string SusyNtSystNames[NtSys_N] = {
   "NOM",
   "EES_Z_UP",    
@@ -238,7 +238,7 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "JVF_DN"
 };
 
-//Enum for BTag SF & systematics
+///Enum for BTag SF & systematics
 enum BTagSys
 {
   BTag_NOM=0,
@@ -251,7 +251,7 @@ enum BTagSys
   BTag_N
 };
 
-// Human-readable names for enum BTagSys 
+/// Human-readable names for enum BTagSys 
 const std::string BTagSysNames[BTag_N] = {
   "BTag_NOM",
   "BTag_BJet_DN",
@@ -277,7 +277,7 @@ const std::string JVFSysNames[JVF_N] = {
   "JVF_DN"
 };*/
 
-// Enum for event cleaning cuts
+/// Enum for event cleaning cuts
 enum EventCleaningCuts
 {
   ECut_GRL       = 1 << 0,
@@ -293,8 +293,8 @@ enum EventCleaningCuts
   ECut_TileTrip  = 1 << 10
 };
 
-// Way to check Event Types
-// Could make it a flag to also store Pt info...
+/// Way to check Event Types
+/** Could make it a flag to also store Pt info... */
 enum DiLepEvtType 
 { 
   ET_ee = 0,
@@ -328,7 +328,8 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
 // Trigger flags
 //-----------------------------------------------------------------------------------
 
-// Trigger enums - try to respect backwards compatibility by adding to the end
+/// Trigger enums
+/** try to respect backwards compatibility by adding to the end */
 enum TrigBit
 {
   // 2012 triggers
@@ -471,7 +472,7 @@ const long long TRIG_e24vh_medium1_EFxe35_tclcw         = 1LL<<BIT_e24vh_medium1
 const long long TRIG_mu24_j65_a4tchad_EFxe40_tclcw      = 1LL<<BIT_mu24_j65_a4tchad_EFxe40_tclcw;
 const long long TRIG_mu24_j65_a4tchad_EFxe40wMu_tclcw   = 1LL<<BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw;
 
-// Trigger chain names, for convenience
+/// Trigger chain names, for convenience
 stringvector getTrigChains();
 
 
