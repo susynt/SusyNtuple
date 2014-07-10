@@ -273,10 +273,13 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
     } else {
         m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
     }
+    bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
+    if(processIsInvalid)
+        cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
+             << "(mcid "<<mcid<<", proc "<<proc<<")"
+             << endl;
+
   }
-  bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
-  if(processIsInvalid)
-      cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
   return process;
 }
 
