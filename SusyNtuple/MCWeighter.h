@@ -70,7 +70,9 @@ class MCWeighter
     */
     void buildSumwMap(TTree* tree);
     void clearAndRebuildSumwMap(TTree* tree) { m_sumwMap.clear(); buildSumwMap(tree); }
-    void dumpSumwMap();
+    void dumpSumwMap() const;
+    void dumpXsecCache() const;
+    void dumpXsecDb() const;
 
     /// Specify methods to retrieve sumw and xsec
     void setUseProcSumw(bool useProcSumw=true) { m_useProcSumw = useProcSumw; }

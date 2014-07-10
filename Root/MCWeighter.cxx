@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstdlib> // atoi
 #include <iterator> // distance
+#include <sstream> // std::ostringstream
 
 using namespace std;
 using namespace Susy;
@@ -139,10 +140,10 @@ void MCWeighter::buildSumwMapFromChain(TChain* chain)
 }
 
 /*--------------------------------------------------------------------------------*/
-void MCWeighter::dumpSumwMap()
+void MCWeighter::dumpSumwMap() const
 {
   // Dump out the MCIDs and calculated sumw
-  SumwMap::iterator sumwMapIter;
+  SumwMap::const_iterator sumwMapIter;
   cout.precision(8);
   for(sumwMapIter = m_sumwMap.begin(); sumwMapIter != m_sumwMap.end(); sumwMapIter++){
     cout << "mcid: " << sumwMapIter->first.first
@@ -152,7 +153,45 @@ void MCWeighter::dumpSumwMap()
   }
   cout.precision(6);
 }
+/*--------------------------------------------------------------------------------*/
+void MCWeighter::dumpXsecCache() const
+{
+    struct XSecEntry2str {
+        string operator() (const XSecMap::const_iterator &entry) {
+            std::ostringstream oss;
+            oss<<" (first, second): "<<entry->first.first<<", "<<entry->first.second;
+            return oss.str();
+        }
+    } entry2str;
+    XSecMap::const_iterator it = m_xsecCache.begin();
+    XSecMap::const_iterator end = m_xsecCache.end();
+    cout<<"printing xsec cache ("<<std::distance(it, end)<<" lines)"<<endl;
+    cout.precision(8);
+    for( ; it!=end; ++it){
+        cout<<entry2str(it);
+    }
+    cout.precision(6);
+}
+/*--------------------------------------------------------------------------------*/
+void MCWeighter::dumpXsecDb() const
+{
+    struct Process2str { //should really be provided by CrossSectionDB...
+        string header() const { return string("ID\tname\t(xsec*kfactor*efficiency)"); }
+        string operator() (const SUSY::CrossSectionDB::Process &p) {
+            std::ostringstream oss;
+            oss<<" "<<p.ID()
+               <<" "<<p.name()
+               <<" "<<(p.xsect()*p.kfactor()*p.efficiency());
+            return oss.str();
+        }
+    } process2str;
+    SUSY::CrossSectionDB::iterator it = m_xsecDB.begin();
+    SUSY::CrossSectionDB::iterator end = m_xsecDB.end();
 
+    cout<<"printing xsec db ("<<std::distance(it, end)<<" lines)"<<endl;
+    for(; it!=end; ++it)
+        cout<<process2str(it->second)<<endl;
+}
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
 // Default weight uses A-D lumi
