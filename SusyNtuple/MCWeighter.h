@@ -49,6 +49,21 @@ class MCWeighter
       Sys_N
     };
 
+    /// Helper to keep track of events with  invalid process id
+    struct ProcessValidator {
+    ProcessValidator() : counts_total(0), counts_invalid(0), max_warnings(4), valid(false), last(0) {}
+      size_t counts_total;
+      size_t counts_invalid;
+      size_t max_warnings;
+      /// if necessary, convert our 'unknown' value (-1) to the SUSYTools 'unknown' value (0)
+      /**
+         Also flag as invalid the suspicious events (i.e. when proc==-1 and proc!=previous_proc)
+       */
+      ProcessValidator& validate(int &value);
+      bool valid; ///< status from the current call to validate()
+      int last; ///< procid from the last call to validate()
+      std::string summary() const;
+    };
     //
     // Initialization and configuration
     //
@@ -145,6 +160,7 @@ class MCWeighter
 
     std::string m_labelBinCounter; ///< label of the bin (from the SusyNt histos) used to determine sumw
     size_t m_warningCounter;
+    ProcessValidator m_procidValidator; ///< validate susy process id
 };
 
 

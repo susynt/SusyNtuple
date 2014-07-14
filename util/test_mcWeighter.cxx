@@ -56,6 +56,24 @@ int main(int argc, char **argv)
     mcw.dumpXsecCache();
     mcw.dumpXsecDb();
     //cout<<"xsec for 105200: "<<mcw.getXsecTimesEff()<<endl; // bummer! can only test with Susy::Event...to be modified.
+
+    MCWeighter::ProcessValidator validator;
+    int procID=137;
+    validator.validate(procID);
+    validator.validate(procID);
+    cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect true"<<endl;
+    procID=-1;
+validator.validate(procID);
+    cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect false"<<endl;
+    procID=137;
+validator.validate(procID);
+    procID=0;
+validator.validate(procID);
+    cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect false"<<endl;
+
+
+
     return 0;
+
 }
 //----------------------------------------------------------

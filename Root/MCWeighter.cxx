@@ -35,7 +35,9 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
 // Destructor
 /*--------------------------------------------------------------------------------*/
 MCWeighter::~MCWeighter()
-{}
+{
+    cout<<"ProcessValidator summary: "<<m_procidValidator.summary()<<endl;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Build a map of MCID -> sumw.
@@ -237,7 +239,7 @@ float MCWeighter::getSumw(const Event* evt)
     unsigned int mcid = evt->mcChannel;
     int procID = m_useProcSumw? evt->susyFinalState : 0;
     // Correct for procID == -1
-    if(procID < 0) procID = 0;
+    m_procidValidator.validate(procID);
     SumwMapKey key(mcid, procID);
     SumwMap::const_iterator sumwMapIter = m_sumwMap.find(key);
     if(sumwMapIter != m_sumwMap.end()) sumw = sumwMapIter->second;
@@ -261,24 +263,30 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
   CrossSectionDB::Process process;
   if(evt->isMC){
     // SUSYTools expects 0 as default value, but we have existing tags with default of -1
-    int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
-    unsigned int mcid = evt->mcChannel;
-    #warning "Temporary bugfix for Wh nohadtau in n0150"
-    if(mcid >= 177501 && mcid <= 177528) proc = 125;
-    const intpair k(mcid, proc);
-    XSecMap::const_iterator iter = m_xsecCache.find(k);
-    bool isAlreadyCached(iter != m_xsecCache.end());
-    if(isAlreadyCached){
-        process = iter->second;
-    } else {
-        m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
-    }
-    bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
-    if(processIsInvalid)
-        cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
-             << "(mcid "<<mcid<<", proc "<<proc<<")"
-             << endl;
-
+      int susyFs = evt->susyFinalState;
+      int proc = evt->susyFinalState;
+      unsigned int mcid = evt->mcChannel;
+      if(m_procidValidator.validate(proc).valid){
+#warning "Temporary bugfix for Wh nohadtau in n0150"
+          if(mcid >= 177501 && mcid <= 177528) proc = 125;
+          const intpair k(mcid, proc);
+          XSecMap::const_iterator iter = m_xsecCache.find(k);
+          bool isAlreadyCached(iter != m_xsecCache.end());
+          if(isAlreadyCached){
+              process = iter->second;
+          } else {
+              m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
+          }
+      } else {
+          if(m_procidValidator.counts_invalid<m_procidValidator.max_warnings)
+              cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
+                   << "(mcid "<<mcid<<", proc "<<proc<<")"
+                   << endl;
+          float invalidXsec=0.0; // default from SUSYTools is -1; use 0.0 instead (no bias)
+          process = CrossSectionDB::Process(process.ID(), process.name(), invalidXsec,
+                                            process.kfactor(), process.efficiency(),
+                                            process.relunc(), process.sumweight(), process.stat());
+      }
   }
   return process;
 }
@@ -417,5 +425,41 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             <<", "<<nEmptyOrCommentLines<<" empty/comment"
             <<" lines"<<endl;
     return dsids;
+}
+//----------------------------------------------------------
+MCWeighter::ProcessValidator& MCWeighter::ProcessValidator::validate(int &value)
+{
+    bool isFirstEvent(counts_total==0);
+    const int defaultSusyNt = -1; // see SusyNtMaker::selectEvent() (was -1, then 0)
+    const int defaultSusyTools = 0; // see SUSYCrossSection.h: CrossSectionDB::Key c'tor
+    if(isFirstEvent){
+        valid = true;
+        last = value;
+        value = value==defaultSusyNt ? defaultSusyTools : value;
+        counts_total++;
+    } else {
+        bool invalid = (value!=last && (value==defaultSusyNt || value==defaultSusyTools));
+        valid = !invalid;
+        last = value;
+        value = value==defaultSusyNt ? defaultSusyTools : value;
+        counts_total++;
+        if(invalid){
+            counts_invalid++;
+            if(counts_invalid<max_warnings)
+                cout<<"ProcessValidator.validate("<<last<<") is invalid, converting to "<<value<<endl;
+        }
+    }
+    counts_total++;
+    return *this;
+}
+//----------------------------------------------------------
+std::string MCWeighter::ProcessValidator::summary() const
+{
+    std::ostringstream oss;
+    oss<<" ProcessValidator:"
+       <<" processed "<<counts_total<<" entries,"
+       <<" "<<counts_invalid<<" invalid ones";
+    return oss.str();
+
 }
 //----------------------------------------------------------
