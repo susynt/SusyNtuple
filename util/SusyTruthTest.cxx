@@ -29,13 +29,7 @@ void help()
   cout << "  -d debug printout level"           << endl;
   cout << "     defaults: 0 (quiet) "           << endl;
 
-  cout << "  -F name of single input file"      << endl;
-  cout << "     defaults: ''"                   << endl;
-
-  cout << "  -f name of input filelist"         << endl;
-  cout << "     defaults: ''"                   << endl;
-
-  cout << "  -D name of input file dir"         << endl;
+  cout << "  -i input (file, list, or dir)"     << endl;
   cout << "     defaults: ''"                   << endl;
 
   cout << "  -s sample name, for naming files"  << endl;
@@ -53,34 +47,21 @@ int main(int argc, char** argv)
   int nSkip = 0;
   int dbg = 0;
   string sample;
-  string file;
-  string fileList;
-  string fileDir;
+  string input;
   
   cout << "Susy2LepTruthCF" << endl;
   cout << endl;
 
   /** Read inputs to program */
   for(int i = 1; i < argc; i++) {
-    if (strcmp(argv[i], "-n") == 0)
-      nEvt = atoi(argv[++i]);
-    else if (strcmp(argv[i], "-k") == 0)
-      nSkip = atoi(argv[++i]);
-    else if (strcmp(argv[i], "-d") == 0)
-      dbg = atoi(argv[++i]);
-    else if (strcmp(argv[i], "-F") == 0)
-      file = argv[++i];
-    else if (strcmp(argv[i], "-f") == 0)
-      fileList = argv[++i];
-    else if (strcmp(argv[i], "-D") == 0)
-      fileDir = argv[++i];
-    else if (strcmp(argv[i], "-s") == 0)
-      sample = argv[++i];
-    //if (strcmp(argv[i], "-h") == 0)
-    else
-    {
-      help();
-      return 0;
+    if (strcmp(argv[i], "-n") == 0) nEvt = atoi(argv[++i]);
+    else if (strcmp(argv[i], "-k") == 0) nSkip = atoi(argv[++i]);
+    else if (strcmp(argv[i], "-d") == 0) dbg = atoi(argv[++i]);
+    else if (strcmp(argv[i], "-i") == 0) input = argv[++i];
+    else if (strcmp(argv[i], "-s") == 0) sample = argv[++i];
+    else {
+        help();
+        return 0;
     }
   }
 
@@ -89,16 +70,12 @@ int main(int argc, char** argv)
   cout << "  nEvt    " << nEvt     << endl;
   cout << "  nSkip   " << nSkip    << endl;
   cout << "  dbg     " << dbg      << endl;
-  if(!file.empty())     cout << "  input   " << file     << endl;
-  if(!fileList.empty()) cout << "  input   " << fileList << endl;
-  if(!fileDir.empty())  cout << "  input   " << fileDir  << endl;
+  cout << "  input   " << input    << endl;
   cout << endl;
 
   // Build the input chain
   TChain* chain = new TChain("susyNt");
-  ChainHelper::addFile(chain, file);
-  ChainHelper::addFileList(chain, fileList);
-  ChainHelper::addFileDir(chain, fileDir);
+  ChainHelper::addInput(chain, input, dbg>0);
   Long64_t nEntries = chain->GetEntries();
   chain->ls();
 
