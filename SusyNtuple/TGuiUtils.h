@@ -21,10 +21,11 @@
 #include "TGraphAsymmErrors.h"
 
 
-/*! \class TGuiUtils
- This class contains the functionalities to format the ROOT canvas 
- and plots accroding to the ATLAS standard
- */
+/// TGuiUtils
+/**
+ This class contains the functionalities to format the ROOT canvas and
+ plots accroding to the ATLAS standard
+*/
 class TGuiUtils : public TObject
 {
  public: 
@@ -126,7 +127,7 @@ class TGuiUtils : public TObject
 
   void getStackHisto(THStack* _hStack, TH1F* _stackH);
 
-  void moveUnderOverFlow(TH1* h, int opt=0); //0 both under/over, 1: under 2:over
+  void moveUnderOverFlow(TH1* h, int opt=0); ///< 0 both under/over, 1: under 2:over
 
   double getMax(TH1* h1, TH1* h2);
   double getMin(TH1* h1, TH1* h2);
@@ -134,7 +135,7 @@ class TGuiUtils : public TObject
   void legendSetting(TLegend* leg, float fontSize=0.02);
 
 
-  double getHistMean(TH1* h);//under-over flow excluded
+  double getHistMean(TH1* h); ///< under-over flow excluded
 
   /** Events / X [Unit]. Assume constant bin size */
   void yAxis(TH1* h1, const char* _unit);
@@ -148,7 +149,7 @@ class TGuiUtils : public TObject
   /**  Calculate poisson error on data using Neyman Procedure
        http://www.pp.rhul.ac.uk/~cowan/atlas/ErrorBars.pdf
        http://pdg.web.cern.ch/pdg/2011/reviews/rpp2011-rev-statistics.pdf     
-   **/
+   */
   TGraphAsymmErrors* updateDataError(TH1* h, bool fillZero=false);
 
 

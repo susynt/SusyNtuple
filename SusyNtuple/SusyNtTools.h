@@ -12,40 +12,34 @@
 #include "SUSYTools/SUSYCrossSection.h"
 #include "JVFUncertaintyTool/JVFUncertaintyTool.h"
 
-/*
-
-    SusyNtTools - a class of useful tools for working with SusyNt
-
-*/
-
+/// A class of useful tools for working with SusyNt
 class SusyNtTools
 {
 
   public:
 
-    // Constructor and destructor
+    /// Constructor and destructor
     SusyNtTools();
     virtual ~SusyNtTools(){
       if(m_btagTool) delete m_btagTool;
     };
 
-    // Set Analysis type to determine selection
+    /// Set Analysis type to determine selection
     void setAnaType(AnalysisType A, bool verbose=false){ 
       m_anaType = A; 
       if(verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
 
-    // Configure the btag sf tool
+    /// Configure the btag sf tool
     void configureBTagTool(std::string OP, float opVal, bool isJVF);
     //void configureJVFTool(std::string jetAlgo="AntiKt4TopoEM");
 
-    //
-    // Get event weight - contains generator, pileup, xsec, and lumi weights
-    // TODO: move this machinery into MCWeighter class
-    //
-
-    // Default weight uses full dataset, currently A-L
-    // Pileup weights correspond to same dataset.
+    /// Get event weight - contains generator, pileup, xsec, and lumi weights
+    /**
+       Now this machinery is in the MCWeighter class Default weight
+       uses full dataset, currently A-L Pileup weights correspond to
+       same dataset.
+    */
     virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
                                  bool useSumwMap = false, 
                                  const SumwMap* sumwMap = 0,
@@ -53,40 +47,40 @@ class SusyNtTools
                                  bool useSusyXsec = false,
                                  MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
 
-    // Get the sumw for this event
+    /// Get the sumw for this event
     static float getSumw(const Susy::Event* evt, const SumwMap* sumwMap, 
                          bool useSumwMap=true, bool useProcSumw=true);
-    // Get the SUSYTools cross section info for this event
+    /// Get the SUSYTools cross section info for this event
     static SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
-    // Get the final cross section times efficiency for this event
+    /// Get the final cross section times efficiency for this event
     static float getXsecTimesEff(const Susy::Event* evt, bool useSusyXsec=true, 
                                  MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
-    // Get the pileup weight
+    /// Get the pileup weight
     static float getPileupWeight(const Susy::Event* evt, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
 
     //
     // Methods to grab objects based on systematic shift desired
     //
 
-    // 'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna
+    /// 'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna
     ElectronVector getPreElectrons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
-    // Bugfix for muon systematics in n0150
+    /// Bugfix for muon systematics in n0150
     MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix=false);
     TauVector      getPreTaus(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
   
-    // Get Baseline objects. Pre + overlap removal.
-    // First method provides the pre-selected objects before OR and baseline objects after OR.
+    /// Get Baseline objects. Pre + overlap removal.
+    /** First method provides the pre-selected objects before OR and baseline objects after OR. */
     void getBaselineObjects(Susy::SusyNtObject* susyNt, 
                             ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
                             ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
                             SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false);
-    // Second method only provides the baseline objects after OR.
+    /// Second method only provides the baseline objects after OR.
     void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
                             MuonVector& muons, TauVector& taus, JetVector& jets, 
                             SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false);
   
-    // Signal objects
+    /// Signal objects
     ElectronVector getSignalElectrons(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                                       uint nVtx, bool isMC, bool removeLepsFromIso=false);
     MuonVector     getSignalMuons(const MuonVector& baseMuons, const ElectronVector& baseElecs, 
@@ -97,7 +91,7 @@ class SusyNtTools
     JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys=NtSys_NOM);
     JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys=NtSys_NOM);
 
-    // Get the signal objects
+    /// Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
                           const TauVector& baseTaus, const JetVector& baseJets, 
                           ElectronVector& sigElecs, MuonVector& sigMuons, 
@@ -113,7 +107,7 @@ class SusyNtTools
     //                      bool selectTaus=false, bool removeLepsFromIso=false,
     //                      TauID tauID=TauID_medium);
 
-    // New signal tau prescription, fill both ID levels at once
+    /// New signal tau prescription, fill both ID levels at once
     // These will replace the methods above
     void getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus);
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
@@ -124,7 +118,7 @@ class SusyNtTools
                           uint nVtx, bool isMC, bool removeLepsFromIso=false,
                           SusyNtSys sys=NtSys_NOM);
     
-    // Check if selected object
+    /// Check if selected object
     bool isTauBDT(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
                   TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     // TODO: add new selection methods for light leptons and jets
@@ -133,8 +127,8 @@ class SusyNtTools
     virtual bool isSelectTau(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
                              TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
 
-    // Check if signal object
-    // Signal lepton definitions include pileup and near-by lepton corrected isolation cuts
+    /// Check if signal object
+    /** Signal lepton definitions include pileup and near-by lepton corrected isolation cuts */
     bool isSignalLepton(const Susy::Lepton* l, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                         uint nVtx, bool isMC, bool removeLepsFromIso=false);
     bool isSignalElectron(const Susy::Electron* ele, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
@@ -149,7 +143,7 @@ class SusyNtTools
     bool isSignalJet2Lep(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
 
 
-    // Build Lepton vector - we should probably sort them here
+    /// Build Lepton vector - we should probably sort them here
     void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo)
     {
       for(uint ie=0; ie<ele.size(); ie++)
@@ -158,9 +152,7 @@ class SusyNtTools
         lep.push_back( muo[im] );
     };
     
-    //
-    // Electron, Muon isolation correction for pileup
-    //
+    /// Electron, Muon isolation correction for pileup
     float elPtConeCorr(const Susy::Electron* e, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                        uint nVtx, bool isMC, bool removeLeps=false);
     float elEtTopoConeCorr(const Susy::Electron* e, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
@@ -170,43 +162,43 @@ class SusyNtTools
     float muEtConeCorr(const Susy::Muon* mu, const ElectronVector& baseElectrons, const MuonVector& baseMuons, 
                        uint nVtx, bool isMC, bool removeLeps=false);
   
-    // Get the Met, for the appropriate systematic
+    /// Get the Met, for the appropriate systematic
     Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
 
     //
     // Methods for performing overlap removal
     //
   
-    // Perform all overlap on pre objects  
+    /// Perform all overlap on pre objects  
     virtual void performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets);
 
-    // e-e overlap
+    /// e-e overlap
     void e_e_overlap(ElectronVector& elecs, float minDr);
   
-    // e-j overlap
+    /// e-j overlap
     void e_j_overlap(ElectronVector& elecs, JetVector& jets, float minDr, 
                      bool removeJets = true);
   
-    // m-j overlap
+    /// m-j overlap
     void m_j_overlap(MuonVector& muons, JetVector jets, float minDr);
 
-    // e-m overlap 
+    /// e-m overlap 
     void e_m_overlap(ElectronVector& elecs, MuonVector& muons, float minDr);
   
-    // m-m overlap
+    /// m-m overlap
     void m_m_overlap(MuonVector& muons, float minDr);
 
-    // t-e overlap
+    /// t-e overlap
     void t_e_overlap(TauVector& taus, ElectronVector& elecs, float minDr);
 
-    // t-m overlap
+    /// t-m overlap
     void t_m_overlap(TauVector& taus, MuonVector& muons, float minDr);
 
-    // t-j overlap
+    /// t-j overlap
     void t_j_overlap(TauVector& taus, JetVector& jets, float minDr, 
                      bool removeJets = true);
 
-    // Msfos cuts now applied along with overlap removal
+    /// Msfos cuts now applied along with overlap removal
     void removeSFOSPair(ElectronVector& elecs, float MllCut);
     void removeSFOSPair(MuonVector& muons, float MllCut);
     void removeSFOSPair(TauVector& taus, float MllCut);
@@ -215,26 +207,25 @@ class SusyNtTools
     // Event level checks
     //
   
-    // No electron or jet in the LAr hole - shouldn't be used anymore
+    /// No electron or jet in the LAr hole - shouldn't be used anymore
     bool passLAr(int flag)     { return true; }
 
-    // Pass Tile hot spot veto
-    //bool passHotSpot(int flag) { return ( flag & PASS_HotSpot ); }
+    /// Pass Tile hot spot veto
     bool passHotSpot(int flag) { return ( flag & ECut_HotSpot ); }
   
-    // Pass the Bad Jet requirement
+    /// Pass the Bad Jet requirement
     bool passBadJet(int flag)  { return ( flag & ECut_BadJet );  }
     
-    // Pass the Bad Muon requirement
+    /// Pass the Bad Muon requirement
     bool passBadMuon(int flag) { return ( flag & ECut_BadMuon ); }
     
-    // No cosmic muons
+    /// No cosmic muons
     bool passCosmic(int flag)  { return ( flag & ECut_Cosmic );  }
     
-    // Pass Smart Veto
+    /// Pass Smart Veto
     bool passSmartVeto(int flag) { return (flag & ECut_SmartVeto); }
 
-    // Pass All the above, incase you don't care about cut flow
+    /// Pass All the above, incase you don't care about cut flow
     bool passAll(int flag)
     { 
       int mask = ECut_HotSpot || ECut_BadJet || ECut_BadMuon || ECut_Cosmic || ECut_SmartVeto;
@@ -246,57 +237,52 @@ class SusyNtTools
     // in the event filtering has been turned off
     // NOTE: Filtering on by default!
     
-    // pass GRL
+    /// pass GRL
     bool passGRL(int flag)         { return (flag & ECut_GRL);      }
 
-    // pass LArErr
+    /// pass LArErr
     bool passLarErr(int flag)      { return (flag & ECut_LarErr);   }
     
-    // pass Tile Err
+    /// pass Tile Err
     bool passTileErr(int flag)     { return (flag & ECut_TileErr);  }
 
-    // Pass TTC veto
+    /// Pass TTC veto
     bool passTTCVeto(int flag)     { return (flag & ECut_TTC);      }
 
-    // pass primary vertex
+    /// pass primary vertex
     bool passGoodVtx(int flag)     { return (flag & ECut_GoodVtx);  }
 
-    // pass tile trip cut
+    /// pass tile trip cut
     bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
 
-    // look at the MC truth record and determine whether SUSY propagators were involved
+    /// look at the MC truth record and determine whether SUSY propagators were involved
     static bool eventHasSusyPropagators(const std::vector< int > &pdgs,
                                         const std::vector< std::vector< int > > &parentIndices);
 
-    //
-    // Object level cleaning cut methods
-    //
-
+    /// Object level cleaning cut methods
     int cleaningCutFlags(int ntCutFlag, 
                          const MuonVector& preMuons, const MuonVector& baseMuons, 
                          const JetVector& preJets, const JetVector& baseJets);
 
-    // Bad muon
+    /// Bad muon
     bool hasBadMuon(const MuonVector& preMuons);
-    // Cosmic muons
+    /// Cosmic muons
     bool hasCosmicMuon(const MuonVector& baseMuons);
-    // Tile hot spot
+    /// Tile hot spot
     bool hasHotSpotJet(const JetVector& preJets);
-    // Bad jet
+    /// Bad jet
     bool hasBadJet(const JetVector& baseJets);
 
-    // Pass FEB dead region check
+    /// Pass FEB dead region check
     bool passDeadRegions(const JetVector& preJets, const Susy::Met* met, int RunNumber, bool isMC);
 
-    // To determine if there is baseline jets within bad FCAL region 
+    /// To determine if there is baseline jets within bad FCAL region 
     bool hasJetInBadFCAL(const JetVector& baseJets, uint run=206248, bool isMC=false);
     bool isBadFCALJet(const Susy::Jet* jet);
 
   
-    //
-    // Object selection control toggles
-    // Currently all are on by default except muon etcone
-    //
+    /// Object selection control toggles
+    /** Currently all are on by default except muon etcone */
     void setDoPtcone(bool doPtcone=true) { m_doPtconeCut = doPtcone; }
     void setDoElEtcone(bool doElEtcone=true) { m_doElEtconeCut = doElEtcone; }
     void setDoMuEtcone(bool doMuEtcone=false) { m_doMuEtconeCut = doMuEtcone; }
@@ -370,7 +356,6 @@ class SusyNtTools
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys=BTag_NOM);
 
     // 2 Lepton jet methods and counters
-    // These will no longer be static because of the systematic uncert requirement
     static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
     static bool isCentralBJet    (const Susy::Jet* jet);
     static bool isForwardJet     (const Susy::Jet* jet);
@@ -381,27 +366,27 @@ class SusyNtTools
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf, 
                              SusyNtSys sys, AnalysisType anaType);
 
-    // MET Rel
+    /// MET Rel
     static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets,
                            bool useForward=false);
   
-    // MT2
+    /// MT2
     static float getMT2(const LeptonVector& leptons, const Susy::Met* met);
     static float getMT2(const TLorentzVector* lep1, const TLorentzVector* lep2, const Susy::Met* met);
     static float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Susy::Met* met,  bool zeroMass, float lspMass=0);
 
-    // HT
+    /// HT
     static float getHT(const JetVector& jets);
 
 
-    //Mljj. Returns mlj if only 1-jet
+    /// Mljj. Returns mlj if only 1-jet
     static float mljj(const LeptonVector& leptons, const JetVector& jets);
 
 
-    // Transverse thrust
+    /// Transverse thrust
     static float getThrT(const LeptonVector& leptons);
 
-    // Top Tagger methods
+    /// Top Tagger methods
     bool passTopTag(const LeptonVector& leptons, const JetVector& jets, const Susy::Met* met,
                     int opt=0, float ptJetCut=0, float mEffCut=100);
     
@@ -413,7 +398,7 @@ class SusyNtTools
     float calcMCT(TLorentzVector v1, TLorentzVector v2);
 
 
-    //Razor
+    /// Razor http://arxiv.org/abs/1310.4827
     void superRazor(const LeptonVector& leptons, const Susy::Met* met,
 		    TVector3& vBETA_z, TVector3& pT_CM,
 		    TVector3& vBETA_T_CMtoR, TVector3& vBETA_R,
@@ -428,7 +413,7 @@ class SusyNtTools
     // Object printing
     //
 
-    // Call print on all objects in a vector
+    /// Call print on all objects in a vector
     template<class T> void dumpObjects(const std::vector<T>& objects){
       for(unsigned int i = 0; i < objects.size(); i++){
         std::cout << i << " ";
@@ -446,36 +431,38 @@ class SusyNtTools
     // Misc methods
     //
 
-    // Build a map of MCID -> sumw.
-    // This method will loop over the input files associated with the TChain.
-    // The MCID in the first entry of the tree will be used, so one CANNOT use this
-    // if multiple datasets are combined into one SusyNt tree file!
-    // The generator weighted cutflow histograms will then be 
-    // used to calculate the total sumw for each MCID.
-    // Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
-    // However, one can have more than one (complete) dataset in the chain.
+    /// Build a map of MCID -> sumw.
+
+    /** This method will loop over the input files associated with the
+     TChain.  The MCID in the first entry of the tree will be used, so
+     one CANNOT use this if multiple datasets are combined into one
+     SusyNt tree file!  The generator weighted cutflow histograms will
+     then be used to calculate the total sumw for each MCID.  Each
+     dataset used here must be complete, they CANNOT be spread out
+     across multiple jobs.  However, one can have more than one
+     (complete) dataset in the chain.
+    */
     SumwMap buildSumwMap(TChain* chain, bool isSimplifiedModel = false);
 
-    // Sherpa sample check
+    /// Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
     
   protected:
     
-    AnalysisType m_anaType;             // Analysis type. currently 2-lep or 3-lep
+    AnalysisType m_anaType;             ///< Analysis type. currently 2-lep or 3-lep
 
     // For analyzing different signal lepton cut scenarios, adding some toggles
     // This might only be temporary
 
-    bool m_doPtconeCut;                 // ptcone isolation cuts
-    bool m_doElEtconeCut;               // etcone isolation cuts for electrons
-    bool m_doMuEtconeCut;               // etcone isolation cuts for muons
-    bool m_doIPCut;                     // impact parameter cuts
+    bool m_doPtconeCut;                 ///< ptcone isolation cuts
+    bool m_doElEtconeCut;               ///< etcone isolation cuts for electrons
+    bool m_doMuEtconeCut;               ///< etcone isolation cuts for muons
+    bool m_doIPCut;                     ///< impact parameter cuts
 
-    //BTagCalib* m_btagTool;              // BTag tool
-    static BTagCalib* m_btagTool;     // BTag tool
-    JVFUncertaintyTool* m_jvfTool;      // JVF tool
+    static BTagCalib* m_btagTool;     ///< BTag tool
+    JVFUncertaintyTool* m_jvfTool;    ///< JVF tool
  private:
-    //! check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
+    /// check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
     static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
                                         float maxPt, float maxEta, float nominalJvtThres,
                                         SusyNtSys sys, AnalysisType anaType);

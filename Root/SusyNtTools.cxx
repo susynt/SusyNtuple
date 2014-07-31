@@ -4,6 +4,7 @@
 #include "TKey.h"
 #include "TChainElement.h"
 #include "TH1F.h"
+#include "TSystem.h"
 
 #include "Mt2/mt2_bisect.h" 
 
@@ -41,10 +42,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREBIN");
-  string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  string calibFolder = rootcoredir + "/data/SusyNtuple/";
-  //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  //string calibFolder = rootcoredir + "/data/SusyNtuple/";
+  string calibration = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/BTagCalibration.env");
+  string calibFolder = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/");
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
 
