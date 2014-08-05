@@ -181,25 +181,25 @@ public:
     //
 
     /// No electron or jet in the LAr hole - shouldn't be used anymore
-    bool passLAr(int flag) { return true; }
+    static bool passLAr(int flag) { return true; }
 
     /// Pass Tile hot spot veto
-    bool passHotSpot(int flag) { return (flag & ECut_HotSpot); }
+    static bool passHotSpot(int flag) { return (flag & ECut_HotSpot); }
 
     /// Pass the Bad Jet requirement
-    bool passBadJet(int flag) { return (flag & ECut_BadJet); }
+    static bool passBadJet(int flag) { return (flag & ECut_BadJet); }
 
     /// Pass the Bad Muon requirement
-    bool passBadMuon(int flag) { return (flag & ECut_BadMuon); }
+    static bool passBadMuon(int flag) { return (flag & ECut_BadMuon); }
 
     /// No cosmic muons
-    bool passCosmic(int flag) { return (flag & ECut_Cosmic); }
+    static bool passCosmic(int flag) { return (flag & ECut_Cosmic); }
 
     /// Pass Smart Veto
-    bool passSmartVeto(int flag) { return (flag & ECut_SmartVeto); }
+    static bool passSmartVeto(int flag) { return (flag & ECut_SmartVeto); }
 
     /// Pass All the above, incase you don't care about cut flow
-    bool passAll(int flag)
+    static bool passAll(int flag)
     {
         int mask = ECut_HotSpot || ECut_BadJet || ECut_BadMuon || ECut_Cosmic || ECut_SmartVeto;
         return (flag & mask) == mask;
@@ -211,22 +211,22 @@ public:
     // NOTE: Filtering on by default!
 
     /// pass GRL
-    bool passGRL(int flag) { return (flag & ECut_GRL); }
+    static bool passGRL(int flag) { return (flag & ECut_GRL); }
 
     /// pass LArErr
-    bool passLarErr(int flag) { return (flag & ECut_LarErr); }
+    static bool passLarErr(int flag) { return (flag & ECut_LarErr); }
 
     /// pass Tile Err
-    bool passTileErr(int flag) { return (flag & ECut_TileErr); }
+    static bool passTileErr(int flag) { return (flag & ECut_TileErr); }
 
     /// Pass TTC veto
-    bool passTTCVeto(int flag) { return (flag & ECut_TTC); }
+    static bool passTTCVeto(int flag) { return (flag & ECut_TTC); }
 
     /// pass primary vertex
-    bool passGoodVtx(int flag) { return (flag & ECut_GoodVtx); }
+    static bool passGoodVtx(int flag) { return (flag & ECut_GoodVtx); }
 
     /// pass tile trip cut
-    bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
+    static bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
 
     /// look at the MC truth record and determine whether SUSY propagators were involved
     static bool eventHasSusyPropagators(const std::vector< int > &pdgs,

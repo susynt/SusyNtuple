@@ -23,7 +23,7 @@ typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
 
 
 ///    SusyNtAna - base class for analyzing SusyNt
-class SusyNtAna : public TSelector, public SusyNtTools
+class SusyNtAna : public TSelector
 {
 
   public:
@@ -34,7 +34,10 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     /// SusyNt object, access to the SusyNt variables
     Susy::SusyNtObject nt;
-
+    /// helper tools and functions
+    SusyNtTools m_nttools;
+    inline void setAnaType(AnalysisType v){ m_nttools.setAnaType(v); }
+    /*const*/ SusyNtTools& nttools() /*const*/ { return m_nttools; } // DG should be const
 
     //
     // TSelector methods
