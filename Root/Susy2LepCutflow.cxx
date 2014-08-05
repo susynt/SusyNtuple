@@ -63,7 +63,7 @@ Susy2LepCutflow::Susy2LepCutflow() :
 
   //out.open("event.dump");
   
-  setAnaType(Ana_2Lep);
+  m_nttools.setAnaType(Ana_2Lep);
 
 }
 
@@ -150,13 +150,13 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   //int flag = nt.evt()->evtFlag[NtSys_NOM];
   int flag = nt.evt()->cutFlags[NtSys_NOM];
 
-  if( !passLAr(flag) )              return false;
+  if( !SusyNtTools::passLAr(flag) )              return false;
   n_pass_LAr++;
-  if( !passBadJet(flag) )           return false;
+  if( !SusyNtTools::passBadJet(flag) )           return false;
   n_pass_BadJet++;
-  if( !passBadMuon(flag) )          return false;
+  if( !SusyNtTools::passBadMuon(flag) )          return false;
   n_pass_BadMuon++;
-  if( !passCosmic(flag) )           return false;
+  if( !SusyNtTools::passCosmic(flag) )           return false;
   n_pass_Cosmic++;
   if(!passNBaseLepCut(baseLeps))    return false;
   
@@ -231,7 +231,7 @@ bool Susy2LepCutflow::passSR3(const LeptonVector& leptons, const JetVector& jets
   n_pass_SR3bjv[m_ET]++;
 
   // Veto top-tag events 
-  if( !passTopTag(leptons,jets,met) )    return false;
+  if( !m_nttools.passTopTag(leptons,jets,met) )    return false;
   n_pass_SR3mct[m_ET]++;
 
   // MetRel > 50
@@ -409,7 +409,7 @@ bool Susy2LepCutflow::passbJetVeto(const JetVector& jets)
   for(uint i=0; i<jets.size(); ++i){
     const Jet* jet = jets.at(i);
     if( jet->combNN < -1.25    ) continue;
-    SusyNtTools::bTagSF(nt.evt(), jets, nt.evt()->mcChannel, BTag_NOM); // just to test the btag tool
+    m_nttools.bTagSF(nt.evt(), jets, nt.evt()->mcChannel, BTag_NOM); // just to test the btag tool
     hasbjet = true;
     break;
   }
@@ -435,7 +435,7 @@ bool Susy2LepCutflow::passZVeto(const LeptonVector& leptons, float Zlow, float Z
 bool Susy2LepCutflow::passMETRel(const Met *met, const LeptonVector& leptons, 
 				 const JetVector& jets, float metMax){
   
-  if( getMetRel(met,leptons,jets) < metMax ) return false;
+  if( m_nttools.getMetRel(met,leptons,jets) < metMax ) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -446,7 +446,7 @@ bool Susy2LepCutflow::passdPhi(TLorentzVector v0, TLorentzVector v1, float cut)
 /*--------------------------------------------------------------------------------*/
 bool Susy2LepCutflow::passMT2(const LeptonVector& leptons, const Met* met, float cut)
 {
-  float mT2 = getMT2(leptons, met);
+  float mT2 = m_nttools.getMT2(leptons, met);
   return (mT2 > cut);
 }
 
