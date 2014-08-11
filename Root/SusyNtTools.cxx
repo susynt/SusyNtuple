@@ -9,6 +9,7 @@
 #include "Mt2/mt2_bisect.h" 
 
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/JetSelector.h"
 
 #include <cassert>
 
@@ -436,7 +437,7 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets, SusyNtSys sys)
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
     Jet* j = baseJets.at(ij);
-    if(isSignalJet(j, sys)){
+    if(JetSelector(m_jvfTool, sys, m_anaType).isSignalJet(j)){
       sigJets.push_back(j);
     }
   }
@@ -448,7 +449,7 @@ JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sy
   JetVector sigJets;
   for(uint ij=0; ij<baseJets.size(); ++ij){
     Jet* j = baseJets.at(ij);
-    if(isSignalJet2Lep(j, sys)){
+    if(JetSelector(m_jvfTool, sys, m_anaType).isSignalJet2Lep(j)){
       sigJets.push_back(j);
     }
   }
@@ -763,84 +764,6 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
 }
 
 /*--------------------------------------------------------------------------------*/
-// Signal jet selection
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalJet(const Jet* jet, SusyNtSys sys)
-{
-  // For now, 2lep analysis is not using this jet definition
-  //float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
-    bool pass = false;
-    if(jet) {
-        float ptCut = JET_SIGNAL_PT_CUT_3L;
-        pass = (jet->Pt() > ptCut
-                && fabs(jet->Eta()) < JET_ETA_CUT
-                && SusyNtTools::jetPassesJvfRequirement(jet, m_jvfTool, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT, sys, m_anaType));
-    } else {
-        cout << "isSignalJet: invalid jet(" << jet << "), return " << pass << endl;
-    }
-    return pass;
-}
-
-/*--------------------------------------------------------------------------------*/
-// Check if given Jet is 2 Lepton Signal Jet
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
-{
-    return (isCentralLightJet(jet, m_jvfTool, sys, m_anaType)
-            || isCentralBJet(jet)
-            || isForwardJet(jet));
-}
-
-/*--------------------------------------------------------------------------------*/
-// Check if given Jet is 2 Lepton Central Light Jet
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
-{
-    // This function is mostly used by the 2L analyses. Needs to be reorganized...
-    bool pass = false;
-    if(jet) {
-        float minJvf = JET_JVF_CUT;
-        float maxJvtEta = JET_JVF_ETA;
-        if(anaType == Ana_2Lep || anaType == Ana_2LepWH) {
-            minJvf = JET_JVF_CUT_2L;
-            maxJvtEta = JET_ETA_CUT_2L;
-        }
-        pass = (jet->Pt() > JET_PT_L20_CUT
-                && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
-                && jet->mv1 < MV1_80
-                && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
-    } else {
-        cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
-    }
-    return pass;
-}
-
-/*--------------------------------------------------------------------------------*/
-// Check if given Jet is 2 Lepton B Jet
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralBJet(const Jet* jet)
-{
-  if(jet->Pt() < JET_PT_B20_CUT) return false;
-  if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
-  if(jet->mv1 < MV1_80) return false;
-
-  return true;
-}
-
-/*--------------------------------------------------------------------------------*/
-// Check if given Jet is 2 Lepton Forward Jet
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isForwardJet(const Jet* jet)
-{
-  if(jet->Pt() < JET_PT_F30_CUT         ) return false;
-  //if(fabs(jet->Eta()) < JET_ETA_CUT_2L  ) return false; 
-  //if(fabs(jet->Eta()) > JET_ETA_MAX_CUT ) return false;
-  if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false; 
-  if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
-  return true;
-}
-
-/*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton Central Light Jets
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool,
@@ -850,7 +773,7 @@ int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTo
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isCentralLightJet(j, jvfTool, sys, anaType)){
+    if(JetSelector(jvfTool, sys, anaType).isCentralLightJet(j)){
       ans++;
     }
   }
@@ -867,7 +790,7 @@ int SusyNtTools::numberOfCBJets(const JetVector& jets)
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isCentralBJet(j)){
+    if(JetSelector::isCentralBJet(j)){
       ans++;
     }
   }
@@ -884,7 +807,7 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* j = jets.at(ij);
-    if(isForwardJet(j)){
+    if(JetSelector::isForwardJet(j)){
       ans++;
     }
   }
@@ -1760,7 +1683,7 @@ float SusyNtTools::getMetRel(const Met* met, const LeptonVector& leptons, const 
       dPhi = fabs(metLV.DeltaPhi( *leptons.at(il) ));
   for(uint ij=0; ij<jets.size(); ++ij){
     const Jet* jet = jets.at(ij);
-    if( !useForward && isForwardJet(jet) ) continue; // Use only central jets
+    if( !useForward && JetSelector::isForwardJet(jet) ) continue; // Use only central jets
     if( fabs(metLV.DeltaPhi( *jet )) < dPhi )
       dPhi = fabs(metLV.DeltaPhi( *jet ));    
   }// end loop over jets

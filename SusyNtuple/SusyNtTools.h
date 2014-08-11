@@ -139,8 +139,6 @@ class SusyNtTools
                      TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     bool isSemiSignalElectron(const Susy::Electron* ele);
     bool isSemiSignalMuon(const Susy::Muon* mu);
-    bool isSignalJet(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
-    bool isSignalJet2Lep(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
 
 
     /// Build Lepton vector - we should probably sort them here
@@ -355,10 +353,6 @@ class SusyNtTools
     static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys=BTag_NOM);
 
-    // 2 Lepton jet methods and counters
-    static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
-    static bool isCentralBJet    (const Susy::Jet* jet);
-    static bool isForwardJet     (const Susy::Jet* jet);
 
     static int numberOfCLJets    (const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
     static int numberOfCBJets    (const JetVector& jets);
