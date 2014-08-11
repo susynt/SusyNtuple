@@ -3,6 +3,7 @@
 
 #include "JVFUncertaintyTool/JVFUncertaintyTool.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 
@@ -126,7 +127,7 @@ bool JetSelector::isCentralBJet(const Jet* jet)
 bool JetSelector::isForwardJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
-  if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false; 
+  if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false;
   if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
   return true;
 }
@@ -144,15 +145,14 @@ bool JetSelector::hasJetInBadFCAL(const JetVector& baseJets, uint run, bool isMC
 //----------------------------------------------------------
 bool JetSelector::isBadFCALJet(const Jet* jet)
 {
-  if(jet->Pt() > BAD_FCAL_PT  && 
+  if(jet->Pt() > BAD_FCAL_PT  &&
      fabs(jet->Eta()) > BAD_FCAL_ETA &&
-     jet->Phi() > BAD_FCAL_PHILOW && 
+     jet->Phi() > BAD_FCAL_PHILOW &&
      jet->Phi() < BAD_FCAL_PHIHIGH)
     return true;
   return false;
 }
 //----------------------------------------------------------
-
 bool JetSelector::jetPassesJvfRequirement(const Jet* jet, float maxPt, float maxEta, float nominalJvtThres)
 {
     bool pass=false;
@@ -184,4 +184,19 @@ bool JetSelector::jetPassesJvfRequirement(const Jet* jet, float maxPt, float max
     return pass;
 }
 //----------------------------------------------------------
-
+size_t JetSelector::count_CL_jets(const JetVector &jets)
+{
+    return std::count_if(jets.begin(), jets.end(),
+                         std::bind1st(std::mem_fun(&JetSelector::isCentralLightJet), this));
+}
+//----------------------------------------------------------
+size_t JetSelector::count_CB_jets(const JetVector &jets)
+{
+    return std::count_if(jets.begin(), jets.end(), JetSelector::isCentralBJet);
+}
+//----------------------------------------------------------
+size_t JetSelector::count_F_jets(const JetVector &jets)
+{
+    return std::count_if(jets.begin(), jets.end(), JetSelector::isForwardJet);
+}
+//----------------------------------------------------------

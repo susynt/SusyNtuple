@@ -768,33 +768,14 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
 int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool,
                                 SusyNtSys sys, AnalysisType anaType)
 {
-  int ans = 0;
-
-  for(uint ij=0; ij<jets.size(); ++ij){
-    const Jet* j = jets.at(ij);
-    if(JetSelector(jvfTool, sys, anaType).isCentralLightJet(j)){
-      ans++;
-    }
-  }
-
-  return ans;
+    return JetSelector(jvfTool, sys, anaType).count_CL_jets(jets);
 }
-
 /*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton B Jets
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCBJets(const JetVector& jets)
 {
-  int ans = 0;
-
-  for(uint ij=0; ij<jets.size(); ++ij){
-    const Jet* j = jets.at(ij);
-    if(JetSelector::isCentralBJet(j)){
-      ans++;
-    }
-  }
-
-  return ans;
+    return JetSelector::count_CB_jets(jets);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -802,16 +783,7 @@ int SusyNtTools::numberOfCBJets(const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfFJets(const JetVector& jets)
 {
-  int ans = 0;
-
-  for(uint ij=0; ij<jets.size(); ++ij){
-    const Jet* j = jets.at(ij);
-    if(JetSelector::isForwardJet(j)){
-      ans++;
-    }
-  }
-
-  return ans;
+    return JetSelector::count_F_jets(jets);
 }
 
 /*--------------------------------------------------------------------------------*/
