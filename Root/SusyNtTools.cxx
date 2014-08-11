@@ -30,8 +30,7 @@ SusyNtTools::SusyNtTools() :
         m_doIPCut(true)
 	//m_btagTool(NULL)
 {
-  m_jvfTool = new JVFUncertaintyTool();
-  m_jvfTool->UseGeV(true);
+    m_jvfTool = JetSelector::build_jvf_tool();
 }
 
 /*--------------------------------------------------------------------------------*/
