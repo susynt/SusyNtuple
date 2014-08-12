@@ -11,40 +11,41 @@
 #include <map>
 #include <set>
 
+/// Example SusyNt-based truth study
 class SusyNtTruthAna : public TSelector
 {
 
   public:
 
-    // Constructor and destructor
+    /// Constructor and destructor
     SusyNtTruthAna();
     virtual ~SusyNtTruthAna(){};
 
-    // SusyNt object, access to the SusyNt variables
+    /// SusyNt object, access to the SusyNt variables
     Susy::SusyNtObject nt;
 
     //
     // TSelector methods
     //
 
-    // Init is called every time a new TTree is attached
+    /// Init is called every time a new TTree is attached
     virtual void    Init(TTree *tree);
-    // Begin is called before looping on entries
+    /// Begin is called before looping on entries
     virtual void    Begin(TTree *tree);
-    // Called at the first entry of a new file in a chain
+    /// Called at the first entry of a new file in a chain
     virtual Bool_t  Notify() { return kTRUE; }
-    // Terminate is called after looping is finished
+    /// Terminate is called after looping is finished
     virtual void    Terminate();
-    // Due to ROOT's stupid design, need to specify version >= 2 or the tree will not connect automatically
+    /// Due to ROOT's stupid design, need to specify version >= 2 or the tree will not connect automatically
     virtual Int_t   Version() const {
       return 2;
     }
 
-    // Main event loop function
+    /// Main event loop function
     virtual Bool_t  Process(Long64_t entry);
 
-    // Get entry simply communicates the entry number from TSelector 
-    // to this class and hence to all of the VarHandles
+    /** Get entry simply communicates the entry number from TSelector 
+        to this class and hence to all of the VarHandles */
     virtual Int_t   GetEntry(Long64_t e, Int_t getall = 0) {
       m_entry=e;
       return kTRUE;
@@ -107,12 +108,12 @@ class SusyNtTruthAna : public TSelector
     // General
     //
 
-    TTree* m_tree;              // Input tree (I think it actually points to a TChain)
+    TTree* m_tree;              ///< Input tree (I think it actually points to a TChain)
 
-    Long64_t m_entry;           // Current entry in the current tree (not chain index!)
-    Long64_t m_chainEntry;      // Current entry in the full TChain
+    Long64_t m_entry;           ///< Current entry in the current tree (not chain index!)
+    Long64_t m_chainEntry;      ///< Current entry in the full TChain
 
-    int   m_dbg;                // debug level
+    int   m_dbg;                ///< debug level
  
     //
     // Object collections
@@ -128,7 +129,7 @@ class SusyNtTruthAna : public TSelector
     TruthJetVector              m_signalTruthJets;
     const Susy::TruthMet*       m_truthMet;
 
-    // Timer
+    /// Timer
     TStopwatch          m_timer;
 };
 

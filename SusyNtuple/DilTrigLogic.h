@@ -1,14 +1,6 @@
 #ifndef DilTrigLogic_h
 #define DilTrigLogic_h
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-// This class will implement the dilepton trigger logic based  //
-// on the leptons, run number and stream                       //
-// The user will need to call one basic method:                //
-// passDilTrig(Electrons,Muons,RunNumber,Stream)               //
-// and it will return pass or fail based on kinematics         //
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-
 #include "TFile.h"
 #include "THnSparse.h"
 
@@ -36,6 +28,13 @@ enum DilTriggerRegion
   DTR_N
 };
 
+/// Trigger logic for dilepton events
+/**
+ This class will implement the dilepton trigger logic based on the
+ leptons, run number and stream The user will need to call one basic
+ method: passDilTrig(Electrons,Muons,RunNumber,Stream) and it will
+ return pass or fail based on kinematicsx
+*/
 class DilTrigLogic
 {
 
