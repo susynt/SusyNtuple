@@ -400,6 +400,11 @@ enum TrigBit
   BIT_mu24_j65_a4tchad_EFxe40_tclcw,
   BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw,
 
+  // LFV single lepton triggers
+  BIT_e60_medium1,
+  BIT_mu24_tight,
+  BIT_mu36_tight,
+
   N_TRIG
 };
 
@@ -480,6 +485,10 @@ const long long TRIG_2mu8_EFxe40_tclcw                  = 1LL<<BIT_2mu8_EFxe40_t
 const long long TRIG_e24vh_medium1_EFxe35_tclcw         = 1LL<<BIT_e24vh_medium1_EFxe35_tclcw;
 const long long TRIG_mu24_j65_a4tchad_EFxe40_tclcw      = 1LL<<BIT_mu24_j65_a4tchad_EFxe40_tclcw;
 const long long TRIG_mu24_j65_a4tchad_EFxe40wMu_tclcw   = 1LL<<BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw;
+
+const long long TRIG_e60_medium1                        = 1LL<<BIT_e60_medium1;
+const long long TRIG_mu24_tight                         = 1LL<<BIT_mu24_tight;
+const long long TRIG_mu36_tight                         = 1LL<<BIT_mu36_tight;
 
 // Trigger chain names, for convenience
 stringvector getTrigChains();
