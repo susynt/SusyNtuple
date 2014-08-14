@@ -403,6 +403,16 @@ enum TrigBit
   N_TRIG
 };
 
+// make sure we are not running out of bits
+// see http://stackoverflow.com/questions/6765770/compile-time-assertion
+const size_t MAX_NUM_BITS_FOR_TRIGGER_WORD=64;
+const int MAX_NUMBER_OF_ENUM_ELEMENTS_IS_VALID=0;
+#define STATIC_ASSERT( condition, MAX_NUMBER_OF_ENUM_ELEMENTS_IS_VALID )  \
+  typedef char assert_failed_ ## MAX_NUMBER_OF_ENUM_ELEMENTS_IS_VALID [ (condition) ? 1 : -1 ];
+
+STATIC_ASSERT( (N_TRIG) < MAX_NUM_BITS_FOR_TRIGGER_WORD, MAX_NUMBER_OF_ENUM_ELEMENTS_IS_VALID );
+#undef STATIC_ASSERT
+
 //
 // Trigger bit masks - could in principle represent multiple chains at once
 //
