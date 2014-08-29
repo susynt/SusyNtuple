@@ -4,6 +4,7 @@
 #include "TKey.h"
 #include "TChainElement.h"
 #include "TH1F.h"
+#include "TSystem.h"
 
 #include "Mt2/mt2_bisect.h" 
 
@@ -41,10 +42,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREBIN");
-  string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  string calibFolder = rootcoredir + "/data/SusyNtuple/";
-  //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  //string calibFolder = rootcoredir + "/data/SusyNtuple/";
+  string calibration = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/BTagCalibration.env");
+  string calibFolder = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/");
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
 
@@ -795,7 +794,7 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
+bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
 {
     // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
@@ -807,7 +806,7 @@ bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool,
             maxJvtEta = JET_ETA_CUT_2L;
         }
         pass = (jet->Pt() > JET_PT_L20_CUT
-                && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
+                && fabs(jet->detEta) < JET_ETA_CUT_2L
                 && jet->mv1 < MV1_80
                 && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
     } else {
@@ -2049,6 +2048,79 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
 }
 
 /*--------------------------------------------------------------------------------*/
+void SusyNtTools::superRazor(const LeptonVector& leptons, const Susy::Met* met,
+			     TVector3& vBETA_z, TVector3& pT_CM,
+			     TVector3& vBETA_T_CMtoR, TVector3& vBETA_R,
+			     double& SHATR, double& dphi_LL_vBETA_T, double& dphi_L1_L2,
+			     double& gamma_R, double&  dphi_vBETA_R_vBETA_T,
+			     double& MDELTAR, double& costhetaRp1)
+{
+// MDR CALCULATION 
+//
+// Code written by Christopher Rogan <crogan@cern.ch>, 04-23-13
+// Details given in paper (http://arxiv.org/abs/1310.4827) written by 
+// Matthew R. Buckley, Joseph D. Lykken, Christopher Rogan, Maria Spiropulu
+//
+  if( leptons.size() < 2 ) return;
+  
+  // necessary variables
+  TLorentzVector metlv = met->lv();
+  TLorentzVector l0    = *leptons.at(0);
+  TLorentzVector l1    = *leptons.at(1);
+
+  //
+  // Lab frame
+  //
+  //Longitudinal boost
+  vBETA_z = (1./(l0.E()+l1.E()))*(l0+l1).Vect(); 
+  vBETA_z.SetX(0.0);         
+  vBETA_z.SetY(0.0);
+  
+  l0.Boost(-vBETA_z);
+  l1.Boost(-vBETA_z);
+
+  //pT of CM frame
+  pT_CM = (l0+l1).Vect() + metlv.Vect();
+  pT_CM.SetZ(0.0);     
+  
+  TLorentzVector ll = l0+l1;
+  //invariant mass of the total event
+  SHATR = sqrt( 2.*(ll.E()*ll.E() - ll.Vect().Dot(pT_CM) 
+		   + ll.E()*sqrt( ll.E()*ll.E() + pT_CM.Mag2() - 2.*ll.Vect().Dot(pT_CM) )));
+  
+  vBETA_T_CMtoR = (1./sqrt(pT_CM.Mag2() + SHATR*SHATR))*pT_CM;
+  
+  l0.Boost(-vBETA_T_CMtoR);
+  l1.Boost(-vBETA_T_CMtoR);
+  ll.Boost(-vBETA_T_CMtoR);  
+
+  //
+  //R-frame
+  //
+  dphi_LL_vBETA_T = fabs((ll.Vect()).DeltaPhi(vBETA_T_CMtoR));
+  
+  dphi_L1_L2 = fabs(l0.Vect().DeltaPhi(l1.Vect()));
+  
+  vBETA_R = (1./(l0.E()+l1.E()))*(l0.Vect() - l1.Vect());
+  
+  gamma_R = 1./sqrt(1.-vBETA_R.Mag2());
+  
+  dphi_vBETA_R_vBETA_T = fabs(vBETA_R.DeltaPhi(vBETA_T_CMtoR));
+  
+  l0.Boost(-vBETA_R);
+  l1.Boost(vBETA_R);
+ 
+  //
+  //R+1 frame
+  //
+  MDELTAR = 2.*l0.E();
+  costhetaRp1 = l0.Vect().Dot(vBETA_R)/(l0.Vect().Mag()*vBETA_R.Mag());
+
+  return;
+}
+
+
+/*--------------------------------------------------------------------------------*/
 // Build a map of MCID -> sumw.
 // This method will loop over the input files associated with the TChain.
 // The MCID in the first entry of the tree will be used, so one CANNOT use this
@@ -2180,30 +2252,43 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                                           SusyNtSys sys, AnalysisType anaType)
 {
     bool pass=false;
+    // Check if the jet is valid
     if(jet) {
+        // Set the necessary variables
         float pt(jet->Pt()), eta(jet->detEta);
-        float jvfThres(nominalJvtThres);
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
+        float jvfThres(nominalJvtThres);
         bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
+        // See if JVF need to be checked
+        if (!applyJvf) return true;
+        // Set the threshold for systematic variations, otherwise always use nominal
         if(jvfUp || jvfDown) {
             if(jvfTool) {
+                // For JVF working point 0 there is no down variation. The recommendations is to use up variation,
+                // and then symmetrize the uncertainty upstream. Therefore, we currently set down to nominal
                 bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
-                jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+                if (fabs(nominalJvtThres) < 0.001 && jvfDown) { 
+                    jvfThres = nominalJvtThres; 
+                } else { 
+                    jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp); 
+                }
             } else {
                 cout << "jetPassesJvfRequirement: error, jvfTool required (" << jvfTool << ")" <<endl;
                 assert(jvfTool);
             }
         }
-        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
-        bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
-        if(applyJvf) {
-            pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
+        // Apply JVF cut, this bit is analysis dependent
+        if(anaType==Ana_2Lep || anaType==Ana_2LepWH) {
+            pass = (fabs(jet->jvf) - 0.001 > jvfThres); 
+        } else if (anaType==Ana_3Lep) {
+            pass = (jet->jvf > jvfThres);
         } else {
+            cout << "jetPassesJvfRequirement: Unknown anaType (" << anaType << "), return true" << endl;
             pass = true;
         }
     } else {
-        cout<< "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
-            << "Return " << pass << endl;
+        cout << "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
+             << "Return " << pass << endl;
     }
     return pass;
 }

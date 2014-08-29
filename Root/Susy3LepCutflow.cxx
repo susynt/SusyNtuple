@@ -79,11 +79,11 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
   m_trigObj->loadTriggerMaps();
 
   // MC Normalization - safe to initialize on data also
-  //string xsecDir = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
+  //string xsecDir = gSystem->ExpandPathName("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
   //m_mcWeighter = new MCWeighter(m_tree, xsecDir);
 
   // Book histograms
-  bookHistos();
+  //bookHistos();
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -161,6 +161,13 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // Full event weight
   float fullWeight = w * lepSF * tauSF * btagSF;
   n_evt_tot += fullWeight;
+
+  //cout << "mcSF   " << w << endl;
+  //cout << "lepSF  " << lepSF << endl;
+  //cout << "tauSF  " << tauSF << endl;
+  //cout << "btagSF " << btagSF << endl;
+  //cout << "full   " << fullWeight << endl;
+  //cout << "n_evt_tot " << n_evt_tot << endl;
 
   //cout << "mcSF   " << w << endl;
   //cout << "lepSF  " << lepSF << endl;
