@@ -146,8 +146,8 @@ namespace Susy
       void setState(int sys){ resetTLV(); };
 
       void clear() { 
-	TLorentzVector::Clear(); 
-	idx = 999;      // This is not a very good choice...
+        TLorentzVector::Clear();
+        idx = 999;      // This is not a very good choice...
         pt = eta = phi = m = 0;
       }
 
@@ -178,6 +178,8 @@ namespace Susy
 
       // public member vars
       int q;                    ///< Charge
+      bool isBaseline; ///< flag computed by SUSYTools_xAOD
+      bool isSignal; ///< flag computed by SUSYTools_xAOD
       float etcone20;           ///< etcone20 for mu, topoEtcone20_corrected for el
       float ptcone20;           ///< ptcone20 isolation
       float ptcone30;           ///< ptcone30 isolation
@@ -234,17 +236,18 @@ namespace Susy
       void clear(){
         q = etcone20 = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
-	d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
+        d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
         matched2TruthLepton = false;
         truthType = -1;
         effSF = 1; 
         errEffSF = 0;
         trigFlags = 0;
+        isBaseline = isSignal = false;
         Particle::clear();
       }
       
-      ClassDef(Lepton, 12);
+      ClassDef(Lepton, 13);
   };
 
   /// Electron class
