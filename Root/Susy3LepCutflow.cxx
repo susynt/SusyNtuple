@@ -293,7 +293,7 @@ bool Susy3LepCutflow::passNTauCut(const TauVector& taus)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons) 
 {
-  if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
+  if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, m_signalJets, m_met, nt.evt())) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
