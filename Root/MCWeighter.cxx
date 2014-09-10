@@ -238,7 +238,12 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
     bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
     if(processIsInvalid){
       cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
-      if(!m_allowInvalid) abort();
+      if(!m_allowInvalid){
+          cout<<"You need to either provide a xsec file (see test_mcWeighter),"
+              <<" or call MCWeighter::setAllowInvalid(true)"
+              <<endl;
+          abort();
+      }
     }
   }
   return process;
