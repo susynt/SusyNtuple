@@ -104,6 +104,8 @@ class MCWeighter
     size_t parseAdditionalXsecFile(const std::string &filename, bool verbose);
     /// same as parseAdditionalXsecFile, but get any *.txt in a given directory
     size_t parseAdditionalXsecDirectory(const std::string &dir, bool verbose);
+    /// toggle m_allowInvalid option
+    MCWeighter& setAllowInvalid(bool v);
     /// default counter used to compute the normalization
     /**
        This counter seems to work fine for all samples, except for
@@ -144,6 +146,7 @@ class MCWeighter
 
     std::string m_labelBinCounter; ///< label of the bin (from the SusyNt histos) used to determine sumw
     size_t m_warningCounter;
+    bool m_allowInvalid; ///< whether we allow invalid processes (i.e. missing xsec from db)
 };
 
 

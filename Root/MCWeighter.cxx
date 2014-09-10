@@ -25,7 +25,8 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
         m_xsecMethod(Xsec_ST),
         m_xsecDB(gSystem->ExpandPathName(xsecDir.c_str())),
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
-        m_warningCounter(0)
+        m_warningCounter(0),
+        m_allowInvalid(false)
 {
   if(tree) buildSumwMap(tree);
 }
@@ -234,10 +235,12 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
     } else {
         m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
     }
-  }
-  bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
-  if(processIsInvalid)
+    bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
+    if(processIsInvalid){
       cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
+      if(!m_allowInvalid) abort();
+    }
+  }
   return process;
 }
 
@@ -375,5 +378,11 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             <<", "<<nEmptyOrCommentLines<<" empty/comment"
             <<" lines"<<endl;
     return dsids;
+}
+//----------------------------------------------------------
+MCWeighter& MCWeighter::setAllowInvalid(bool v)
+{
+    m_allowInvalid = v;
+    return *this;
 }
 //----------------------------------------------------------
