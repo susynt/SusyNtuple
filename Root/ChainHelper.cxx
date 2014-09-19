@@ -80,7 +80,7 @@ ChainHelper::Status ChainHelper::addInput(TChain* chain, const std::string &inpu
 //----------------------------------------------------------
 bool ChainHelper::inputIsFile(const std::string &input)
 {
-    return susy::utils::endswith(susy::utils::rmLeadingTrailingWhitespaces(input), ".root");
+    return susy::utils::contains(susy::utils::rmLeadingTrailingWhitespaces(input), ".root");
 }
 //----------------------------------------------------------
 bool ChainHelper::inputIsList(const std::string &input)
