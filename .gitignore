@@ -31,5 +31,8 @@ obj/
 # aclic files
 *cxx.d
 
+# directory created by doxygen
+doc/doxygen/
+
 # emacs autosave
 *~

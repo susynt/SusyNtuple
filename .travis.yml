@@ -6,10 +6,17 @@ python:
   - "2.7"
 #  - "3.2"
 
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq  doxygen graphviz
 env:
+  global:
+     secure: MZDZhrKlxAlBmWmQV/xCN5xdfkDTKYzKvuzYDR3kQjz6JCYnCG2O4PZ3w3jAhOW/xqe/4dD+Se1HQl79FXUy+fQN0AfkLgZFObabYOEYtNhYpDxhz7rwe6RH0pOB1Qvp/pj50FfZZSjc5hdpBfMOstVmD4UgTl+TKYd/eLP0hFU=
+
 # - ROOT.27.06
 # - ROOT=5.34.05
 # - ROOT=5-34-08
+
 
 install:
   # Check if we are running Python 2 or 3. This is needed for the apt-get package names
@@ -23,7 +30,7 @@ install:
   - deactivate # the virtualenv
 
   # Needed because sometimes travis' repositories get out of date
-  - time sudo apt-get update -qq
+  #- time sudo apt-get update -qq
 
   # Install the dependencies we need
   # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
@@ -59,4 +66,7 @@ script:
   - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
   # run the 2l cutflow
   - Susy2LepCF -F mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
-
+after_success:
+  # from SusyNtuple/run, go back to the base dir and run doxygen if necessary
+  - cd ${TRAVIS_BUILD_DIR}
+  - doc/run_doxygen.sh

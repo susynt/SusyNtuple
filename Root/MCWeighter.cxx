@@ -12,6 +12,7 @@
 #include <iostream>
 #include <cstdlib> // atoi
 #include <iterator> // distance
+#include <sstream> // std::ostringstream
 
 using namespace std;
 using namespace Susy;
@@ -35,7 +36,9 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
 // Destructor
 /*--------------------------------------------------------------------------------*/
 MCWeighter::~MCWeighter()
-{}
+{
+    cout<<"ProcessValidator summary: "<<m_procidValidator.summary()<<endl;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Build a map of MCID -> sumw.
@@ -140,10 +143,10 @@ void MCWeighter::buildSumwMapFromChain(TChain* chain)
 }
 
 /*--------------------------------------------------------------------------------*/
-void MCWeighter::dumpSumwMap()
+void MCWeighter::dumpSumwMap() const
 {
   // Dump out the MCIDs and calculated sumw
-  SumwMap::iterator sumwMapIter;
+  SumwMap::const_iterator sumwMapIter;
   cout.precision(8);
   for(sumwMapIter = m_sumwMap.begin(); sumwMapIter != m_sumwMap.end(); sumwMapIter++){
     cout << "mcid: " << sumwMapIter->first.first
@@ -153,7 +156,45 @@ void MCWeighter::dumpSumwMap()
   }
   cout.precision(6);
 }
+/*--------------------------------------------------------------------------------*/
+void MCWeighter::dumpXsecCache() const
+{
+    struct XSecEntry2str {
+        string operator() (const XSecMap::const_iterator &entry) {
+            std::ostringstream oss;
+            oss<<" (first, second): "<<entry->first.first<<", "<<entry->first.second;
+            return oss.str();
+        }
+    } entry2str;
+    XSecMap::const_iterator it = m_xsecCache.begin();
+    XSecMap::const_iterator end = m_xsecCache.end();
+    cout<<"printing xsec cache ("<<std::distance(it, end)<<" lines)"<<endl;
+    cout.precision(8);
+    for( ; it!=end; ++it){
+        cout<<entry2str(it);
+    }
+    cout.precision(6);
+}
+/*--------------------------------------------------------------------------------*/
+void MCWeighter::dumpXsecDb() const
+{
+    struct Process2str { //should really be provided by CrossSectionDB...
+        string header() const { return string("ID\tname\t(xsec*kfactor*efficiency)"); }
+        string operator() (const SUSY::CrossSectionDB::Process &p) {
+            std::ostringstream oss;
+            oss<<" "<<p.ID()
+               <<" "<<p.name()
+               <<" "<<(p.xsect()*p.kfactor()*p.efficiency());
+            return oss.str();
+        }
+    } process2str;
+    SUSY::CrossSectionDB::iterator it = m_xsecDB.begin();
+    SUSY::CrossSectionDB::iterator end = m_xsecDB.end();
 
+    cout<<"printing xsec db ("<<std::distance(it, end)<<" lines)"<<endl;
+    for(; it!=end; ++it)
+        cout<<process2str(it->second)<<endl;
+}
 /*--------------------------------------------------------------------------------*/
 // Get event weight, combine gen, pileup, xsec, and lumi weights
 // Default weight uses A-D lumi
@@ -199,7 +240,7 @@ float MCWeighter::getSumw(const Event* evt)
     unsigned int mcid = evt->mcChannel;
     int procID = m_useProcSumw? evt->susyFinalState : 0;
     // Correct for procID == -1
-    if(procID < 0) procID = 0;
+    m_procidValidator.validate(procID);
     SumwMapKey key(mcid, procID);
     SumwMap::const_iterator sumwMapIter = m_sumwMap.find(key);
     if(sumwMapIter != m_sumwMap.end()) sumw = sumwMapIter->second;
@@ -222,30 +263,35 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
   using namespace SUSY;
   CrossSectionDB::Process process;
   if(evt->isMC){
-    // SUSYTools expects 0 as default value, but we have existing tags with default of -1
-    int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
-    unsigned int mcid = evt->mcChannel;
-    #warning "Temporary bugfix for Wh nohadtau in n0150"
-    if(mcid >= 177501 && mcid <= 177528) proc = 125;
-    const intpair k(mcid, proc);
-    XSecMap::const_iterator iter = m_xsecCache.find(k);
-    bool isAlreadyCached(iter != m_xsecCache.end());
-    if(isAlreadyCached){
-        process = iter->second;
-    } else {
-        m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
-    }
-    bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
-    if(processIsInvalid){
-      cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
-      if(!m_allowInvalid){
-          cout<<"You need to either provide a xsec file (see test_mcWeighter),"
-              <<" or call MCWeighter::setAllowInvalid(true)"
-              <<endl;
-          abort();
+      // SUSYTools expects 0 as default proc value, but we have existing tags with default of -1
+      int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
+      unsigned int mcid = evt->mcChannel;
+      if(m_procidValidator.validate(proc).valid){
+#warning "Temporary bugfix for Wh nohadtau in n0150"
+          if(mcid >= 177501 && mcid <= 177528) proc = 125;
+          const intpair k(mcid, proc);
+          XSecMap::const_iterator iter = m_xsecCache.find(k);
+          bool isAlreadyCached(iter != m_xsecCache.end());
+          if(isAlreadyCached){    process = iter->second; }
+          else { m_xsecCache[k] = process = m_xsecDB.process(mcid, proc); }
+      } else {
+          if(m_allowInvalid){
+              float invalidXsec=0.0; // default xsec from SUSYTools is -1; use 0.0 instead (no bias)
+              process = CrossSectionDB::Process(process.ID(), process.name(), invalidXsec,
+                                                process.kfactor(), process.efficiency(),
+                                                process.relunc(), process.sumweight(), process.stat()); 
+              if(m_procidValidator.counts_invalid<m_procidValidator.max_warnings)
+                  cerr<<"MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
+                      <<"(mcid "<<mcid<<", proc "<<proc<<"), returning xsec "<<invalidXsec
+                      <<endl;
+          } else {
+              cout<<"You need to either provide a xsec file (see test_mcWeighter),"
+                  <<" or call MCWeighter::setAllowInvalid(true)"
+                  <<endl;
+              abort();
+          }
       }
-    }
-  }
+  } // isMC
   return process;
 }
 
@@ -389,5 +435,41 @@ MCWeighter& MCWeighter::setAllowInvalid(bool v)
 {
     m_allowInvalid = v;
     return *this;
+}
+//----------------------------------------------------------
+MCWeighter::ProcessValidator& MCWeighter::ProcessValidator::validate(int &value)
+{
+    bool isFirstEvent(counts_total==0);
+    const int defaultSusyNt = -1; // see SusyNtMaker::selectEvent() (was -1, then 0)
+    const int defaultSusyTools = 0; // see SUSYCrossSection.h: CrossSectionDB::Key c'tor
+    if(isFirstEvent){
+        valid = true;
+        last = value;
+        value = value==defaultSusyNt ? defaultSusyTools : value;
+        counts_total++;
+    } else {
+        bool invalid = (value!=last && (value==defaultSusyNt || value==defaultSusyTools));
+        valid = !invalid;
+        last = value;
+        value = value==defaultSusyNt ? defaultSusyTools : value;
+        counts_total++;
+        if(invalid){
+            counts_invalid++;
+            if(counts_invalid<max_warnings)
+                cout<<"ProcessValidator.validate("<<last<<") is invalid, converting to "<<value<<endl;
+        }
+    }
+    counts_total++;
+    return *this;
+}
+//----------------------------------------------------------
+std::string MCWeighter::ProcessValidator::summary() const
+{
+    std::ostringstream oss;
+    oss<<" ProcessValidator:"
+       <<" processed "<<counts_total<<" entries,"
+       <<" "<<counts_invalid<<" invalid ones";
+    return oss.str();
+
 }
 //----------------------------------------------------------

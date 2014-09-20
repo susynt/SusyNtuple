@@ -4,6 +4,7 @@
 #include "TKey.h"
 #include "TChainElement.h"
 #include "TH1F.h"
+#include "TSystem.h"
 
 #include "Mt2/mt2_bisect.h" 
 
@@ -41,10 +42,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREBIN");
-  string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  string calibFolder = rootcoredir + "/data/SusyNtuple/";
-  //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  //string calibFolder = rootcoredir + "/data/SusyNtuple/";
+  string calibration = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/BTagCalibration.env");
+  string calibFolder = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/");
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
 
@@ -807,7 +806,7 @@ bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jv
             maxJvtEta = JET_ETA_CUT_2L;
         }
         pass = (jet->Pt() > JET_PT_L20_CUT
-                && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
+                && fabs(jet->detEta) < JET_ETA_CUT_2L
                 && jet->mv1 < MV1_80
                 && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
     } else {
@@ -2253,30 +2252,43 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                                           SusyNtSys sys, AnalysisType anaType)
 {
     bool pass=false;
+    // Check if the jet is valid
     if(jet) {
+        // Set the necessary variables
         float pt(jet->Pt()), eta(jet->detEta);
-        float jvfThres(nominalJvtThres);
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
+        float jvfThres(nominalJvtThres);
         bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
+        // See if JVF need to be checked
+        if (!applyJvf) return true;
+        // Set the threshold for systematic variations, otherwise always use nominal
         if(jvfUp || jvfDown) {
             if(jvfTool) {
+                // For JVF working point 0 there is no down variation. The recommendations is to use up variation,
+                // and then symmetrize the uncertainty upstream. Therefore, we currently set down to nominal
                 bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
-                jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+                if (fabs(nominalJvtThres) < 0.001 && jvfDown) { 
+                    jvfThres = nominalJvtThres; 
+                } else { 
+                    jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp); 
+                }
             } else {
                 cout << "jetPassesJvfRequirement: error, jvfTool required (" << jvfTool << ")" <<endl;
                 assert(jvfTool);
             }
         }
-        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
-        bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
-        if(applyJvf) {
-            pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
+        // Apply JVF cut, this bit is analysis dependent
+        if(anaType==Ana_2Lep || anaType==Ana_2LepWH) {
+            pass = (fabs(jet->jvf) - 0.001 > jvfThres); 
+        } else if (anaType==Ana_3Lep) {
+            pass = (jet->jvf > jvfThres);
         } else {
+            cout << "jetPassesJvfRequirement: Unknown anaType (" << anaType << "), return true" << endl;
             pass = true;
         }
     } else {
-        cout<< "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
-            << "Return " << pass << endl;
+        cout << "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
+             << "Return " << pass << endl;
     }
     return pass;
 }

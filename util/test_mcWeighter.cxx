@@ -1,4 +1,8 @@
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/SusyDefs.h" // SumwMapKey
+
+#include "TFile.h"
+#include "TTree.h"
 
 #include <iostream>
 #include <fstream>
@@ -31,11 +35,45 @@ int main(int argc, char **argv)
     bool verbose=true;
     string dummyFilename="/tmp/dummy_xsec.txt";
     writeDummyFile(dummyFilename);
-    TTree *noTree=NULL;
-    MCWeighter mcw(noTree); // this picks up the default xsec files in SUSYTools
+    TFile *inputFile = TFile::Open("/var/tmp/susynt_dev/data/" // test sample needed by Anyes
+                                   "ntup_c1c1_n0150/user.gerbaudo."
+                                   "mc12_8TeV.176558.Herwigpp_simplifiedModel_wC_slep_noWcasc_50."
+                                   "SusyNt.e1708_s1499_s1504_r3658_r3549_p1512_n0150/"
+                                   "user.gerbaudo.028813._00001.susyNt.root");
+    TTree *tree = ((inputFile && inputFile->IsOpen()) ?
+                    static_cast<TTree*>(inputFile->Get("susyNt")) :
+                    NULL);
+    MCWeighter mcw(tree); // this picks up the default xsec files in SUSYTools
     mcw.parseAdditionalXsecFile(dummyFilename, verbose);
     mcw.parseAdditionalXsecDirectory("/tmp/dummy_xsecs/", verbose);
+    SumwMapKey key(176558, 157);
+    cout<<"checking (dsid,proc)=("<<key.first<<", "<<key.second<<") :"
+        <<" has key "<<(mcw.sumwmapHasKey(key)?"true":"false")
+        <<endl;
+    cout<<"dumpSumwMap"<<endl;
+    mcw.dumpSumwMap();
+    cout<<"dumpXsecCache"<<endl;
+    mcw.dumpXsecCache();
+    mcw.dumpXsecDb();
     //cout<<"xsec for 105200: "<<mcw.getXsecTimesEff()<<endl; // bummer! can only test with Susy::Event...to be modified.
+
+    MCWeighter::ProcessValidator validator;
+    int procID=137;
+    validator.validate(procID);
+    validator.validate(procID);
+    cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect true"<<endl;
+    procID=-1;
+validator.validate(procID);
+    cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect false"<<endl;
+    procID=137;
+validator.validate(procID);
+    procID=0;
+validator.validate(procID);
+    cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect false"<<endl;
+
+
+
     return 0;
+
 }
 //----------------------------------------------------------

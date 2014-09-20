@@ -6,17 +6,15 @@
 #include "TFile.h"
 #include "TChain.h"
 
-/*
+/**
+   Static helper methods to build a TChain from input root files
 
-    ChainHelper
-    
-    A set of static methods to help build a TChain from input root files
-    The chain can be built easily by specifying
-
-        - single input root file
-        - input directory of root files
-        - a file with list of root files
-
+   The recommended method is ChainHelper::addInput().
+   The input can be one of the following
+   - single input root file
+   - input directory of root files
+   - a file with list of root files
+   - comma-separated list of any of the above
 */
 
 class ChainHelper
@@ -32,17 +30,27 @@ class ChainHelper
       BAD = 1
     };
 
-    // Add a file - not very useful
+    /// Add a file - not very useful (obsolete, use addInput() instead)
     static Status addFile(TChain* chain, std::string file);
 
-    // Add a fileList
+    /// Add a fileList (obsolete, use addInput() instead)
     static Status addFileList(TChain* chain, std::string fileListName);
 
-    // Add all files in a directory
+    // Add all files in a directory (obsolete, use addInput() instead)
     static Status addFileDir(TChain* chain, std::string fileDir);
 
-    // Add a comma separated list of files in a string
-    //static Status addCommaList(TChain* chain, std::string files);
+    /// add generic input
+    /**
+       Determine internally whether it's a file, filelist, or
+       directory. Also accepts comma-separated list of inputs.
+     */
+    static Status addInput(TChain* chain, const std::string &input, bool verbose=false);
+    /// input files are expected to have the '.root' extension
+    static bool inputIsFile(const std::string &input);
+    /// input filelists are expected to have the '.txt' extension
+    static bool inputIsList(const std::string &input);
+    /// input directories are expected to end with '/'
+    static bool inputIsDir(const std::string &input);
 
 };
 
