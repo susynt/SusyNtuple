@@ -26,7 +26,8 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
         m_xsecMethod(Xsec_ST),
         m_xsecDB(gSystem->ExpandPathName(xsecDir.c_str())),
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
-        m_warningCounter(0)
+        m_warningCounter(0),
+        m_allowInvalid(false)
 {
   if(tree) buildSumwMap(tree);
 }
@@ -262,9 +263,8 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
   using namespace SUSY;
   CrossSectionDB::Process process;
   if(evt->isMC){
-    // SUSYTools expects 0 as default value, but we have existing tags with default of -1
-      int susyFs = evt->susyFinalState;
-      int proc = evt->susyFinalState;
+      // SUSYTools expects 0 as default proc value, but we have existing tags with default of -1
+      int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
       unsigned int mcid = evt->mcChannel;
       if(m_procidValidator.validate(proc).valid){
 #warning "Temporary bugfix for Wh nohadtau in n0150"
@@ -272,22 +272,26 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
           const intpair k(mcid, proc);
           XSecMap::const_iterator iter = m_xsecCache.find(k);
           bool isAlreadyCached(iter != m_xsecCache.end());
-          if(isAlreadyCached){
-              process = iter->second;
-          } else {
-              m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
-          }
+          if(isAlreadyCached){    process = iter->second; }
+          else { m_xsecCache[k] = process = m_xsecDB.process(mcid, proc); }
       } else {
-          if(m_procidValidator.counts_invalid<m_procidValidator.max_warnings)
-              cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
-                   << "(mcid "<<mcid<<", proc "<<proc<<")"
-                   << endl;
-          float invalidXsec=0.0; // default from SUSYTools is -1; use 0.0 instead (no bias)
-          process = CrossSectionDB::Process(process.ID(), process.name(), invalidXsec,
-                                            process.kfactor(), process.efficiency(),
-                                            process.relunc(), process.sumweight(), process.stat());
+          if(m_allowInvalid){
+              float invalidXsec=0.0; // default xsec from SUSYTools is -1; use 0.0 instead (no bias)
+              process = CrossSectionDB::Process(process.ID(), process.name(), invalidXsec,
+                                                process.kfactor(), process.efficiency(),
+                                                process.relunc(), process.sumweight(), process.stat()); 
+              if(m_procidValidator.counts_invalid<m_procidValidator.max_warnings)
+                  cerr<<"MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
+                      <<"(mcid "<<mcid<<", proc "<<proc<<"), returning xsec "<<invalidXsec
+                      <<endl;
+          } else {
+              cout<<"You need to either provide a xsec file (see test_mcWeighter),"
+                  <<" or call MCWeighter::setAllowInvalid(true)"
+                  <<endl;
+              abort();
+          }
       }
-  }
+  } // isMC
   return process;
 }
 
@@ -425,6 +429,12 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             <<", "<<nEmptyOrCommentLines<<" empty/comment"
             <<" lines"<<endl;
     return dsids;
+}
+//----------------------------------------------------------
+MCWeighter& MCWeighter::setAllowInvalid(bool v)
+{
+    m_allowInvalid = v;
+    return *this;
 }
 //----------------------------------------------------------
 MCWeighter::ProcessValidator& MCWeighter::ProcessValidator::validate(int &value)
