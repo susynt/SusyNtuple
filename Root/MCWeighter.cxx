@@ -28,7 +28,7 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
         m_warningCounter(0)
 {
-  if(tree) buildSumwMap(tree);
+
 }
 
 /*--------------------------------------------------------------------------------*/
