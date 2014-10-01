@@ -29,7 +29,7 @@ MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
         m_warningCounter(0),
         m_allowInvalid(false)
 {
-  if(tree) buildSumwMap(tree);
+
 }
 
 /*--------------------------------------------------------------------------------*/

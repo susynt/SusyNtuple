@@ -124,10 +124,9 @@ class MCWeighter
     MCWeighter& setAllowInvalid(bool v);
     /// default counter used to compute the normalization
     /**
-       This counter seems to work fine for all samples, except for
-       some n015* pmssm ones, for which you want to use "Initial"
+       Use "Initial" for all samples, other than Simplified Model for which use "SusyProp Veto"
      */
-    static std::string defaultLabelBinCounter() { return "SusyProp Veto"; }
+    static std::string defaultLabelBinCounter() { return "Initial"; }
     /// determine whether a given file is formatted following the CrossSectionDB format
     /**
        The format is essentially 6 words:
