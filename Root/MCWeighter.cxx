@@ -196,11 +196,6 @@ void MCWeighter::dumpXsecDb() const
         cout<<process2str(it->second)<<endl;
 }
 /*--------------------------------------------------------------------------------*/
-// Get event weight, combine gen, pileup, xsec, and lumi weights
-// Default weight uses A-D lumi
-// You can supply a different luminosity,
-// but the pileup weights will still correspond to A-D
-/*--------------------------------------------------------------------------------*/
 float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys)
 {
     float weight = 1.0;

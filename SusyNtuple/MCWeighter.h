@@ -94,8 +94,6 @@ class MCWeighter
     void setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
 
     /// MC Weight includes generator, xsec, lumi, and pileup weights
-    /** Default weight uses 2012 A-D lumi. You can supply a different luminosity,
-        but the pileup weights will still correspond to A-D. */
     float getMCWeight(const Susy::Event* evt, float lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
     bool sumwmapHasKey(SumwMapKey k);
 
