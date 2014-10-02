@@ -11,6 +11,7 @@
 
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/MCWeighter.h"
 
 #include <fstream>
 #include <map>
@@ -126,7 +127,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     const SumwMap* getSumwMap() { return &m_sumwMap; }
     void setSumwMap(const SumwMap map) {m_sumwMap = map; }
-
+    /// getter to be used from outside (set xsec dir, access weight, etc.)
+    MCWeighter& mcWeighter() { return m_mcWeighter; }
 
     /// Dump timer
     void dumpTimer();
@@ -163,6 +165,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
     /// Map of (MCID,proc) -> sumw, optionally filled at beginning of job
     //std::map<unsigned int, float>       m_sumwMap;
     SumwMap m_sumwMap;
+
+    MCWeighter m_mcWeighter;   // provides MC normalization and event weight
 
 
     //
