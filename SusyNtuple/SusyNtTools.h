@@ -433,19 +433,6 @@ class SusyNtTools
     // Misc methods
     //
 
-    /// Build a map of MCID -> sumw.
-
-    /** This method will loop over the input files associated with the
-     TChain.  The MCID in the first entry of the tree will be used, so
-     one CANNOT use this if multiple datasets are combined into one
-     SusyNt tree file!  The generator weighted cutflow histograms will
-     then be used to calculate the total sumw for each MCID.  Each
-     dataset used here must be complete, they CANNOT be spread out
-     across multiple jobs.  However, one can have more than one
-     (complete) dataset in the chain.
-    */
-    SumwMap buildSumwMap(TChain* chain, bool isSimplifiedModel = false);
-
     /// Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
     
