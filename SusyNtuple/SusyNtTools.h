@@ -34,30 +34,6 @@ class SusyNtTools
     void configureBTagTool(std::string OP, float opVal, bool isJVF);
     //void configureJVFTool(std::string jetAlgo="AntiKt4TopoEM");
 
-    /// Get event weight - contains generator, pileup, xsec, and lumi weights
-    /**
-       Now this machinery is in the MCWeighter class Default weight
-       uses full dataset, currently A-L Pileup weights correspond to
-       same dataset.
-    */
-    virtual float getEventWeight(const Susy::Event* evt, float lumi = LUMI_A_L, 
-                                 bool useSumwMap = false, 
-                                 const SumwMap* sumwMap = 0,
-                                 bool useProcSumw = false,
-                                 bool useSusyXsec = false,
-                                 MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
-
-    /// Get the sumw for this event
-    static float getSumw(const Susy::Event* evt, const SumwMap* sumwMap, 
-                         bool useSumwMap=true, bool useProcSumw=true);
-    /// Get the SUSYTools cross section info for this event
-    static SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
-    /// Get the final cross section times efficiency for this event
-    static float getXsecTimesEff(const Susy::Event* evt, bool useSusyXsec=true, 
-                                 MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
-    /// Get the pileup weight
-    static float getPileupWeight(const Susy::Event* evt, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM);
-
     //
     // Methods to grab objects based on systematic shift desired
     //
