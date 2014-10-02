@@ -20,11 +20,11 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
+MCWeighter::MCWeighter() :
         m_useProcSumw(true),
         m_sumwMethod(Sumw_MAP),
         m_xsecMethod(Xsec_ST),
-        m_xsecDB(gSystem->ExpandPathName(xsecDir.c_str())),
+        m_xsecDB(gSystem->ExpandPathName(MCWeighter::defaultXsecDir().c_str())),
         m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
         m_warningCounter(0),
         m_allowInvalid(false)

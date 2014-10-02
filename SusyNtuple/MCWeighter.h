@@ -64,13 +64,12 @@ class MCWeighter
       int last; ///< procid from the last call to validate()
       std::string summary() const;
     };
+
     //
     // Initialization and configuration
     //
 
-    // Constructor and destructor
-    MCWeighter(TTree* tree,
-               std::string xsecDir="$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+    MCWeighter();
     ~MCWeighter();
 
     /// Build a map of MCID -> sumw.
@@ -127,6 +126,10 @@ class MCWeighter
        Use "Initial" for all samples, other than Simplified Model for which use "SusyProp Veto"
      */
     static std::string defaultLabelBinCounter() { return "Initial"; }
+    /// default directory from which we read the xsec files for SUSY::CrossSectionDB
+    static std::string defaultXsecDir() {
+      return std::string("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+    }
     /// determine whether a given file is formatted following the CrossSectionDB format
     /**
        The format is essentially 6 words:
