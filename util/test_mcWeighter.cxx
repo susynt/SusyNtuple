@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -28,6 +29,27 @@ void writeDummyFile(const string &filename)
     outFile<<"654321      999     1.0                2.0                3.0               4.0     "<<endl; // dummy dset
     outFile<<"654321      999     1.  0              2.   0             3.    0           4.   0  "<<endl; // broken line
     outFile.close();
+}
+//----------------------------------------------------------
+bool test_isSimplified()
+{
+    bool success=true;
+    bool verbose=true;
+    size_t num_failures = 0;
+    vector<int> known_simplified_dsids = MCWeighter::dsidsForKnownSimpliedModelSamples(verbose);
+    vector<int>::const_iterator dsid = known_simplified_dsids.begin();
+    for(;dsid!=known_simplified_dsids.end(); ++dsid)
+        if(!MCWeighter::isSimplifiedModel(*dsid, verbose)) {
+            num_failures++;
+            success = false;
+        }
+    int dummy_dsid = 1000;
+    if(MCWeighter::isSimplifiedModel(dummy_dsid, verbose)){
+        num_failures++;
+        success = false;
+    }
+    cout<<"test_isSimplified: "<<(success ? "passed":"failed")<<" ("<<num_failures<<" failures)"<<endl;
+    return success;
 }
 //----------------------------------------------------------
 int main(int argc, char **argv)
@@ -63,7 +85,10 @@ validator.validate(procID);
 validator.validate(procID);
     cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect false"<<endl;
 
-
+    cout<<"-------------------------"<<endl
+        <<"test_isSimplified"<<endl
+        <<"-------------------------"<<endl;
+    test_isSimplified();
 
     return 0;
 
