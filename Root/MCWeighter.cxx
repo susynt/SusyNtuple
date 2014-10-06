@@ -384,7 +384,6 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
     size_t nEmptyOrCommentLines=0;
     size_t nValidLines=0;
     size_t nInvalidLines=0;
-    const size_t nExpectedTokens=6;
     std::string line;
     if(verbose)
         cout<<"readDsidsFromSusyCrossSectionFile: parsing '"<<filename<<"'"<<endl;
@@ -394,23 +393,13 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             nEmptyOrCommentLines++;
             continue;
         } else {
-            vector<string> tokens(susy::utils::tokenizeString(line, ' '));
-            bool hasExpectedTokens(tokens.size()==nExpectedTokens);
-            bool firstTokenIsDsid(tokens.size()>0 && susy::utils::isInt(tokens[0]));
-            bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
-            if(isValidLine) {
-                dsids.push_back(atoi(tokens[0].c_str()));
+            int dsid;
+            if(MCWeighter::readDsidsFromSusyCrossSectionLine(line, dsid, verbose)) {
+                dsids.push_back(dsid);
                 nValidLines++;
             } else {
-                if(verbose)
-                    cout<<"invalid line"
-                        <<" ("<<tokens.size()<<" tokens, expected "<<nExpectedTokens<<","
-                        <<" firstTokenIsDsid "<<(firstTokenIsDsid?"true":"false")
-                        <<", "<<(tokens.size() ? tokens[0] : "")
-                        <<" ):"
-                        <<" '"<<line<<"'"<<endl;
                 nInvalidLines++;
-            } // if(!isValidLine)
+            }
         } // if(!skipThisLine)
     } // while(getline)
     if(verbose)
@@ -420,6 +409,35 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             <<", "<<nEmptyOrCommentLines<<" empty/comment"
             <<" lines"<<endl;
     return dsids;
+}
+//----------------------------------------------------------
+bool MCWeighter::readDsidsFromSusyCrossSectionLine(const std::string &line, int &dsid, bool verbose)
+{
+    bool valid_parse = false;
+    const size_t nExpectedTokens=6;
+    vector<string> tokens(susy::utils::tokenizeString(line, ' '));
+    bool hasExpectedTokens(tokens.size()==nExpectedTokens);
+    bool firstTokenIsDsid(tokens.size()>0 && susy::utils::isInt(tokens[0]));
+    bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
+    if(isValidLine) {
+        dsid = atoi(tokens[0].c_str());
+        valid_parse = true;
+    } else {
+        if(verbose)
+            cout<<"invalid line"
+                <<" ("<<tokens.size()<<" tokens, expected "<<nExpectedTokens<<","
+                <<" firstTokenIsDsid "<<(firstTokenIsDsid?"true":"false")
+                <<", "<<(tokens.size() ? tokens[0] : "")
+                <<" ):"
+                <<" '"<<line<<"'"<<endl;
+    } // if(!isValidLine)
+    return valid_parse;
+}
+//----------------------------------------------------------
+MCWeighter& MCWeighter::setAllowInvalid(bool v)
+{
+    m_allowInvalid = v;
+    return *this;
 }
 //----------------------------------------------------------
 MCWeighter::ProcessValidator& MCWeighter::ProcessValidator::validate(int &value)
