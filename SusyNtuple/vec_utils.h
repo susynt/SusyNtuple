@@ -13,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm> // find
 
 namespace susy{
 namespace utils{
@@ -20,6 +21,11 @@ namespace utils{
 typedef std::vector< int > vint_t;
 typedef std::vector< vint_t > vvint_t;
 
+/// returns true if vector contains val
+template < class T >
+bool contains(const std::vector<T> &v, const T& val) {
+    return std::find(v.begin(), v.end(), val)!=v.end();
+}
 //! returns true if the intersection of the two vectors is non-empty
 bool containsAnyOf(const vint_t &firstVec, const vint_t &subVec);
 //! convert vint_t to string
