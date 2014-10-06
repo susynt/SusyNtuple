@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -41,7 +42,7 @@ int test_mc_weighter_with_generic_sample(const std::string &ntuple_filename)
         cout<<"Cannot open input file, failing test"<<endl;
         return 1;
     }
-    MCWeighter mcw(tree); // this picks up the default xsec files in SUSYTools
+    MCWeighter mcw;
     unsigned int mcChannel, susyFinalState;
     tree->GetEntry(0); // just test on the values from the first entry
     if(TLeaf* l = tree->FindLeaf("mcChannel"))
@@ -67,6 +68,27 @@ int test_mc_weighter_with_generic_sample(const std::string &ntuple_filename)
     mcw.dumpXsecCache();
     mcw.dumpXsecDb();
     return 0;
+}
+//----------------------------------------------------------
+bool test_isSimplified()
+{
+    bool success=true;
+    bool verbose=true;
+    size_t num_failures = 0;
+    vector<int> known_simplified_dsids = MCWeighter::dsidsForKnownSimpliedModelSamples(verbose);
+    vector<int>::const_iterator dsid = known_simplified_dsids.begin();
+    for(;dsid!=known_simplified_dsids.end(); ++dsid)
+        if(!MCWeighter::isSimplifiedModel(*dsid, verbose)) {
+            num_failures++;
+            success = false;
+        }
+    int dummy_dsid = 1000;
+    if(MCWeighter::isSimplifiedModel(dummy_dsid, verbose)){
+        num_failures++;
+        success = false;
+    }
+    cout<<"test_isSimplified: "<<(success ? "passed":"failed")<<" ("<<num_failures<<" failures)"<<endl;
+    return success;
 }
 //----------------------------------------------------------
 int test_mc_weighter_with_susy_sample()
@@ -115,6 +137,10 @@ int main(int argc, char **argv)
     if(argc>1) test_mc_weighter_with_generic_sample(argv[1]);
     else test_mc_weighter_with_susy_sample();
     test_process_validator();
+    cout<<"-------------------------"<<endl
+        <<"test_isSimplified"<<endl
+        <<"-------------------------"<<endl;
+    test_isSimplified();
     return 0;
 
 }
