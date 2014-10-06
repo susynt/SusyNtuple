@@ -140,6 +140,8 @@ class MCWeighter
     static bool isFormattedAsSusyCrossSection(std::string filename, bool verbose);
     /// given a text file containing cross sections for CrossSectionDB, return the dsids
     static std::vector<int> readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose);
+    /// given a line from a xsec file, parse the dsid; return false if cannot parse
+    static bool readDsidsFromSusyCrossSectionLine(const std::string &line, int &dsid, bool verbose);
  private:
     void buildSumwMapFromTree(TTree* tree);
     void buildSumwMapFromChain(TChain* chain);
