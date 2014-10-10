@@ -11,6 +11,7 @@
   April 2014
 */
 
+#include <algorithm>
 #include <string>
 #include <vector>
 
