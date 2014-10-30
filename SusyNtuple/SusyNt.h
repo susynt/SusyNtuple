@@ -88,9 +88,9 @@ namespace Susy
       /// PDF Systematic information
       int pdf_id1;
       int pdf_id2;
-      double pdf_x1;     
-      double pdf_x2;
-      double pdf_scale;
+      float pdf_x1;     
+      float pdf_x2;
+      float pdf_scale;
 
       /// print event
       void print() const;
@@ -117,7 +117,7 @@ namespace Susy
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       }
 
-      ClassDef(Event, 27);
+      ClassDef(Event, 28);
   };
 
   /// Particle class, base class for other object types
@@ -271,8 +271,8 @@ namespace Susy
       bool tightPP;             ///< isEM tight++
 
       // New isolation variables, put them here for now
-      float etcone30Corr;       ///< Pt and ED corrected etcone iso
-      float topoEtcone30Corr;   ///< Corrected topo clus based iso
+      float etcone30Corr;       ///< Pt and ED corrected etcone iso //AT:2014-10-28: obsolete
+      float topoEtcone30Corr;   ///< Corrected topo clus based iso  //AT:2014-10-28: to rename topoEtcone30
 
       bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
 
@@ -485,6 +485,14 @@ namespace Susy
       /// Conversion Information
       bool isConv;
 
+      //AT 2014-10-29: new v2
+      bool  tight;       
+      float clusE;              ///< CaloCluster energy
+      float clusEta;            ///< CaloCluster eta
+      float clusPhi;            ///< CaloCluster phi
+      int   OQ;                 ///< GoodOQ
+
+
       // Systematics - not current supported??
       //float pes_up;        // Photon Energy Scale up
       //float pes_dn;        // Photon Energy Scale down
@@ -499,10 +507,13 @@ namespace Susy
       void clear(){
 	//pes_up = pes_dn = per_up = per_dn = 0;
 	isConv = false;
+	tight = false;
+	clusE = clusEta = clusPhi = 0;
+	OQ = 0;
 	Particle::clear();
       };
       
-      ClassDef(Photon, 1);
+      ClassDef(Photon, 2);
   };
 
   /// Jet class
