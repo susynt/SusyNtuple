@@ -464,6 +464,7 @@ Jet::Jet(const Jet &rhs):
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
+  sv1plusip3d(rhs.sv1plusip3d),
   jfit_mass(rhs.jfit_mass),
   sv0p_mass(rhs.sv0p_mass),
   svp_mass (rhs.svp_mass ),
