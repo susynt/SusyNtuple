@@ -92,6 +92,10 @@ namespace Susy
       float pdf_x2;
       float pdf_scale;
 
+      float eventScale;
+      float alphaQCD;
+      float alphaQED;
+
       /// print event
       void print() const;
 
@@ -115,6 +119,7 @@ namespace Susy
         wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
         xsec = errXsec = sumw = pdfSF = 0;
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
+	eventScale = alphaQCD = alphaQED = 0;
       }
 
       ClassDef(Event, 28);
