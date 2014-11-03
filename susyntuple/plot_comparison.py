@@ -70,7 +70,8 @@ def args_are_valid(args):
             os.path.exists(input2) and
             utils.is_valid_output_dir(out_dir))
 
-def parse_input(name):
+def parse_input(name, opts):
+    verbose = opts.verbose
     result = []
     if os.path.isfile(name) and '.root' in name:
         result = [name]
@@ -78,6 +79,7 @@ def parse_input(name):
         result = [l.strip() for l in open(name).readlines() if '.root' in l]
     elif os.path.isdir(name):
         result = glob.glob(os.path.join(name, '*.root*'))
+    if verbose : print "parsed {0} files from input {1}".format(len(result), name)
     return result
 
 def run_fill(input1, input2, histos_filename, opts):
@@ -85,8 +87,8 @@ def run_fill(input1, input2, histos_filename, opts):
     num_entries = int(opts.num_entries) if opts.num_entries else None
     histos1 = book_histos(suffix='_1')
     histos2 = book_histos(suffix='_2')
-    fill_histos(parse_input(input1), histos1, max_num_entries=num_entries, verbose=opts.verbose)
-    fill_histos(parse_input(input2), histos2, max_num_entries=num_entries, verbose=opts.verbose)
+    fill_histos(parse_input(input1, opts), histos1, max_num_entries=num_entries, verbose=opts.verbose)
+    fill_histos(parse_input(input2, opts), histos2, max_num_entries=num_entries, verbose=opts.verbose)
     write_dict_or_obj(histos_filename, {'h1':histos1, 'h2':histos2})
 
 def book_histos(suffix='', out_file=None):
@@ -151,7 +153,7 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
     chain = r.TChain(tree_name)
     for f in input_files : chain.Add(f)
     num_entries = chain.GetEntries()
-    if verbose : print "About to loop on %d entries"%num_entries
+    if verbose : print "About to loop on %d entries from %d files"%(num_entries, len(input_files))
     nttool = r.SusyNtTools()
     m_entry = r.Long(-1)
     ntevent = r.Susy.SusyNtObject(m_entry)
@@ -187,6 +189,7 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
         nttool.buildLeptons(pre_lep, pre_elecs, pre_muons)
         nttool.buildLeptons(sig_lep, sig_elecs, sig_muons)
         if verbose and iEntry<n_entries_to_print:
+            print "pre_elecs[{0}], pre_muons[{1}] pre_taus[{2}] pre_jets[{3}]".format(len(pre_elecs), len(pre_muons), len(pre_taus), len(pre_jets))
             print 'pre_lep:\n','\n'.join(["[%d] %s (eta,phi,pt) = (%.3f, %.3f, %.3f)"
                                           %
                                           (iL, "mu" if l.isMu() else "el", l.Eta(), l.Phi(), l.Pt())
