@@ -204,9 +204,9 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
         try:
             cutflow.cut_if(False, 'input')
             cutflow.cut_if(not nttool.passLAr(event_flag), 'lar')
-            cutflow.cut_if(not nttool.passBadJet(event_flag), 'bad_jet')
-            cutflow.cut_if(not nttool.passBadMuon(event_flag), 'bad_mu')
-            cutflow.cut_if(not nttool.passCosmic(event_flag), 'cosmic')
+            cutflow.cut_if(False, 'bad_jet') #not nttool.passBadJet(event_flag), 'bad_jet')
+            cutflow.cut_if(False, 'bad_mu')  #not nttool.passBadMuon(event_flag), 'bad_mu')
+            cutflow.cut_if(False, 'cosmic')  #not nttool.passCosmic(event_flag), 'cosmic')
             cutflow.cut_if(not pre_lep.size()==2, '2lep')
             cutflow.cut_if(not trig_logic.passDilTrig(pre_lep, met.Et, ntevent.evt()), 'trigger')
             cutflow.cut_if(not mll(pre_lep)>20.0, 'mll20')
