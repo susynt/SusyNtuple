@@ -588,7 +588,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Jet, 10);
+      ClassDef(Jet, 11);
   };
 
   /// Met class
