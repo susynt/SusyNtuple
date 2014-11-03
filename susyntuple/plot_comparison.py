@@ -96,9 +96,13 @@ def book_histos(suffix='', out_file=None):
     histos = {}
     suffix = suffix if suffix else ''
     suffix = ('_'+suffix) if suffix and not suffix.startswith('_') else suffix
+    histos['el_n_base' ] = r.TH1F('el_n_base'+suffix,  'N base electrons / event; N_{el}', 21, -0.5, 20.5)
+    histos['el_n_sign' ] = r.TH1F('el_n_sign'+suffix,  'N signal electrons / event; N_{el}', 21, -0.5, 20.5)
     histos['el_pt' ] = r.TH1F('el_pt'+suffix,  'el p_{T};p_{T} [GeV]', 50, 0.0, 250.0)
     histos['el_eta'] = r.TH1F('el_eta'+suffix, 'el #eta; #eta', 50, -3.0, +3.0)
     histos['el_phi'] = r.TH1F('el_phi'+suffix, 'el #phi; #phi [rad]', 50, -math.pi, +math.pi)
+    histos['mu_n_base' ] = r.TH1F('mu_n_base'+suffix,  'N base muons / event; N_{mu}', 21, -0.5, 20.5)
+    histos['mu_n_sign' ] = r.TH1F('mu_n_sign'+suffix,  'N signal muons / event; N_{mu}', 21, -0.5, 20.5)
     histos['mu_pt' ] = r.TH1F('mu_pt'+suffix,  '#mu p_{T};p_{T} [GeV]', 50, 0.0, 250.0)
     histos['mu_eta'] = r.TH1F('mu_eta'+suffix, '#mu #eta; #eta', 50, -3.0, +3.0)
     histos['mu_phi'] = r.TH1F('mu_phi'+suffix, '#mu #phi; #phi [rad]', 50, -math.pi, +math.pi)
@@ -206,6 +210,10 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
             cutflow.cut_if(not pre_lep.size()==2, '2lep')
             cutflow.cut_if(not trig_logic.passDilTrig(pre_lep, met.Et, ntevent.evt()), 'trigger')
             cutflow.cut_if(not mll(pre_lep)>20.0, 'mll20')
+            histos['el_n_base'].Fill(len(pre_elecs)) # todo: fix, use base rather than pre
+            histos['el_n_sign'].Fill(len(sig_elecs))
+            histos['mu_n_base'].Fill(len(pre_muons)) # todo: fix, use base rather than pre
+            histos['mu_n_sign'].Fill(len(sig_muons))
             for el in sig_elecs:
                 histos['el_pt'].Fill(el.Pt())
                 histos['el_eta'].Fill(el.Eta())
