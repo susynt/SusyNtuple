@@ -532,6 +532,7 @@ namespace Susy
       Jet& operator=(const Jet &);
 
       float jvf;                ///< Jet vertex fraction
+      float jvt;                ///< Jet vertex tagger
       float detEta;             ///< Detector eta
       float emfrac;             ///< EM fraction
       int truthLabel;           ///< Flavor truth label
@@ -574,7 +575,7 @@ namespace Susy
 
       // Clear vars
       void clear(){
-        jvf = truthLabel = 0;
+        jvf = jvt = truthLabel = 0;
         matchTruth = false;
         detEta = 0;
         emfrac = 0;
@@ -588,7 +589,7 @@ namespace Susy
         Particle::clear();
       }
 
-      ClassDef(Jet, 11);
+      ClassDef(Jet, 12);
   };
 
   /// Met class

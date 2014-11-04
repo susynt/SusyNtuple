@@ -457,6 +457,7 @@ Photon& Photon::operator=(const Photon &rhs)
 Jet::Jet(const Jet &rhs):
   Particle(rhs),
   jvf(rhs.jvf),
+  jvt(rhs.jvt),
   detEta(rhs.detEta),
   emfrac(rhs.emfrac),
   truthLabel(rhs.truthLabel),
@@ -491,6 +492,7 @@ Jet& Jet::operator=(const Jet &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     jvf  = rhs.jvf; 
+    jvt  = rhs.jvt; 
     detEta = rhs.detEta;
     emfrac = rhs.emfrac;
     truthLabel = rhs.truthLabel;
@@ -542,6 +544,7 @@ void Jet::print() const
   cout << fixed << "Jet : pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
        << " phi " << setw(5) << Phi()
        << " jvf " << setw(4) << jvf
+       << " jvt " << setw(4) << jvt
        << " mv1 " << setw(5) << mv1
        // No way do we want to see this every time we print
        //<< " jer " << jer << " jes_up " << jes_up << " jes_dn " << jes_dn
