@@ -121,7 +121,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // Object selection
   //
 
-  SusyNtSys ntSys = NtSys_NOM;
+  SusyNtSys ntSys = NtSys::NOM;
   bool subtractLepsFromIso = false;
   TauID tauID = TauID_medium;
   selectObjects(ntSys, subtractLepsFromIso, tauID);

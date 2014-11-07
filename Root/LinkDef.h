@@ -1,8 +1,10 @@
 #include <vector>
 
+#include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyDefs.h"
+
 
 #include "SusyNtuple/D3PDReadStats.h"
 #include "SusyNtuple/D3PDPerfStats.h"

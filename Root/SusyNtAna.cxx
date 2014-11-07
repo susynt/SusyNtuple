@@ -237,7 +237,7 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
 
   // Grab met
   SusyNtSys metSys = sys;
-  if(sys==NtSys_JVF_UP || sys==NtSys_JVF_DN) metSys = NtSys_NOM;
+  if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
   m_met = getMet(&nt, metSys);
 
   // Build Lepton vectors
@@ -255,7 +255,7 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
 /*--------------------------------------------------------------------------------*/
 int SusyNtAna::cleaningCutFlags()
 {
-  return SusyNtTools::cleaningCutFlags(nt.evt()->cutFlags[NtSys_NOM],
+  return SusyNtTools::cleaningCutFlags(nt.evt()->cutFlags[NtSys::NOM],
                                        m_preMuons, m_baseMuons,
                                        m_preJets, m_baseJets);
 }

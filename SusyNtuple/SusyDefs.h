@@ -157,6 +157,7 @@ enum TauID
   TauID_N
 };
 
+/*
 /// Enum for systematic checks
 enum SusyNtSys 
 {
@@ -237,6 +238,7 @@ const std::string SusyNtSystNames[NtSys_N] = {
   "JVF_UP",
   "JVF_DN"
 };
+*/
 
 ///Enum for BTag SF & systematics
 enum BTagSys

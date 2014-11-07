@@ -17,7 +17,7 @@
 #include "TLorentzVector.h"
 
 #include "SusyNtuple/SusyDefs.h"
-
+#include "SusyNtuple/SusyNtSys.h"
 
 namespace Susy
 {
@@ -70,7 +70,7 @@ namespace Susy
       //int evtFlag[NtSys_N];
 
       /// Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
-      unsigned int cutFlags[NtSys_N];
+      unsigned int cutFlags[NtSys::SYSUNKNOWN];
 
       // Reweighting and scaling
       float wPileup;            ///< pileup weight for full dataset

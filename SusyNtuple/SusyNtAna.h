@@ -80,7 +80,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // Object selection
     void clearObjects();
-    void selectObjects(SusyNtSys sys = NtSys_NOM, bool removeLepsFromIso=false, 
+    void selectObjects(SusyNtSys sys = NtSys::NOM, bool removeLepsFromIso=false, 
                        TauID signalTauID=TauID_medium, bool n0150BugFix = false);
 
     // Cleaning cuts

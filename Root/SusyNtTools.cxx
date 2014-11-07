@@ -2258,7 +2258,7 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
         float pt(jet->Pt()), eta(jet->detEta);
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
         float jvfThres(nominalJvtThres);
-        bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
+        bool jvfUp(sys == NtSys::JVF_UP), jvfDown(sys == NtSys::JVF_DN);
         // See if JVF need to be checked
         if (!applyJvf) return true;
         // Set the threshold for systematic variations, otherwise always use nominal

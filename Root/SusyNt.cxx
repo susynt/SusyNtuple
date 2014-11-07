@@ -170,21 +170,21 @@ Electron& Electron::operator=(const Electron &rhs)
 void Electron::setState(int sys)
 {
   resetTLV();
-  if(sys == NtSys_NOM) return;
+  if(sys == NtSys::NOM) return;
   
   float sf = 0;
   //if     ( sys == NtSys_EES_UP ) sf = ees_up;
   //else if( sys == NtSys_EES_DN ) sf = ees_dn;
-  if     ( sys == NtSys_EES_Z_UP   ) sf = ees_z_up;
-  else if( sys == NtSys_EES_Z_DN   ) sf = ees_z_dn;
-  else if( sys == NtSys_EES_MAT_UP ) sf = ees_mat_up;
-  else if( sys == NtSys_EES_MAT_DN ) sf = ees_mat_dn;
-  else if( sys == NtSys_EES_PS_UP  ) sf = ees_ps_up;
-  else if( sys == NtSys_EES_PS_DN  ) sf = ees_ps_dn;
-  else if( sys == NtSys_EES_LOW_UP ) sf = ees_low_up;
-  else if( sys == NtSys_EES_LOW_DN ) sf = ees_low_dn;
-  else if( sys == NtSys_EER_UP     ) sf = eer_up;
-  else if( sys == NtSys_EER_DN     ) sf = eer_dn;
+  if     ( sys == NtSys::EES_Z_UP   ) sf = ees_z_up;
+  else if( sys == NtSys::EES_Z_DN   ) sf = ees_z_dn;
+  else if( sys == NtSys::EES_MAT_UP ) sf = ees_mat_up;
+  else if( sys == NtSys::EES_MAT_DN ) sf = ees_mat_dn;
+  else if( sys == NtSys::EES_PS_UP  ) sf = ees_ps_up;
+  else if( sys == NtSys::EES_PS_DN  ) sf = ees_ps_dn;
+  else if( sys == NtSys::EES_LOW_UP ) sf = ees_low_up;
+  else if( sys == NtSys::EES_LOW_DN ) sf = ees_low_dn;
+  else if( sys == NtSys::EER_UP     ) sf = eer_up;
+  else if( sys == NtSys::EER_DN     ) sf = eer_dn;
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
@@ -279,13 +279,13 @@ Muon& Muon::operator=(const Muon &rhs)
 void Muon::setState(int sys, bool isTag0150)
 {
   resetTLV();
-  if(sys == NtSys_NOM) return;
+  if(sys == NtSys::NOM) return;
   
   float sf = 0;
-  if     ( sys == NtSys_MS_UP ) sf = ms_up;
-  else if( sys == NtSys_MS_DN ) sf = ms_dn;
-  else if( sys == NtSys_ID_UP ) sf = id_up;
-  else if( sys == NtSys_ID_DN ) sf = id_dn;
+  if     ( sys == NtSys::MS_UP ) sf = ms_up;
+  else if( sys == NtSys::MS_DN ) sf = ms_dn;
+  else if( sys == NtSys::ID_UP ) sf = id_up;
+  else if( sys == NtSys::ID_DN ) sf = id_dn;
   else return;
 
   // Bugfix for SusyNt tag n0150
@@ -402,11 +402,11 @@ Tau& Tau::operator=(const Tau &rhs)
 void Tau::setState(int sys)
 {
   resetTLV();
-  if(sys == NtSys_NOM) return;
+  if(sys == NtSys::NOM) return;
   
   float sf = 0;
-  if     ( sys == NtSys_TES_UP ) sf = tes_up;
-  else if( sys == NtSys_TES_DN ) sf = tes_dn;
+  if     ( sys == NtSys::TES_UP ) sf = tes_up;
+  else if( sys == NtSys::TES_DN ) sf = tes_dn;
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
@@ -525,12 +525,12 @@ Jet& Jet::operator=(const Jet &rhs)
 void Jet::setState(int sys)
 {
   resetTLV();
-  if(sys == NtSys_NOM) return;
+  if(sys == NtSys::NOM) return;
   
   float sf = 0;
-  if     ( sys == NtSys_JER    ) sf = jer;
-  else if( sys == NtSys_JES_UP ) sf = jes_up;
-  else if( sys == NtSys_JES_DN ) sf = jes_dn;
+  if     ( sys == NtSys::JER    ) sf = jer;
+  else if( sys == NtSys::JES_UP ) sf = jes_up;
+  else if( sys == NtSys::JES_DN ) sf = jes_dn;
   else return;
   
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());

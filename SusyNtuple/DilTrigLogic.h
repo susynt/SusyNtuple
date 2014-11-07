@@ -7,9 +7,11 @@
 #include "DGTriggerReweight/triggerReweight2Lep.h"
 
 #include "SusyNt.h"
-#include "SusyDefs.h"
+#include "SusyDefs.h" //AT-2014-11-06 can be remove ?
+#include "SusyNtuple/SusyNtSys.h"
 
 using namespace Susy;
+using namespace NtSys;
 using namespace std;
 
 
@@ -66,7 +68,7 @@ class DilTrigLogic
   // Trigger reweighting
   double getTriggerWeight(LeptonVector leptons, bool isMC, 
 			  float met, int njets, int NPV,
-			  SusyNtSys sys = NtSys_NOM);
+			  SusyNtSys sys = NtSys::NOM);
   double getTriggerWeightEE(LeptonVector leptons, SusyNtSys sys);
   double getTriggerWeightEM(LeptonVector leptons, int NPV, SusyNtSys sys);
   double getTriggerWeightMM(LeptonVector leptons, float met, 

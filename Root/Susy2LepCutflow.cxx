@@ -148,7 +148,7 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   // I have deleted Steve's so that I can build the
   // analysis up as I progress
   //int flag = nt.evt()->evtFlag[NtSys_NOM];
-  int flag = nt.evt()->cutFlags[NtSys_NOM];
+  int flag = nt.evt()->cutFlags[NtSys::NOM];
 
   if( !passLAr(flag) )              return false;
   n_pass_LAr++;

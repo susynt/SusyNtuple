@@ -12,10 +12,13 @@
 #include "SUSYTools/SUSYCrossSection.h"
 #include "JVFUncertaintyTool/JVFUncertaintyTool.h" //AT: not available in Base,2.0.14
 
+
+using namespace Susy;
+using namespace NtSys;
+
 /// A class of useful tools for working with SusyNt
 class SusyNtTools
 {
-
   public:
 
     /// Constructor and destructor
@@ -88,8 +91,8 @@ class SusyNtTools
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
     TauVector      getSignalTaus(const TauVector& baseTaus, TauID tauJetID=TauID_medium, 
                                  TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
-    JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys=NtSys_NOM);
-    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys=NtSys_NOM);
+    JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys=NtSys::NOM);
+    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys=NtSys::NOM);
 
     /// Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons, 
@@ -98,7 +101,7 @@ class SusyNtTools
                           TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false,
                           TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium,
-                          SusyNtSys sys=NtSys_NOM);
+                          SusyNtSys sys=NtSys::NOM);
     // This method cannot be used anymore because it doesn't provide the baseline objects after OR.
     // Analyzers need these baseline objects for cleaning cuts.
     //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
@@ -116,7 +119,7 @@ class SusyNtTools
                           TauVector& mediumTaus, TauVector& tightTaus, 
                           JetVector& sigJets, JetVector& sigJets2Lep,
                           uint nVtx, bool isMC, bool removeLepsFromIso=false,
-                          SusyNtSys sys=NtSys_NOM);
+                          SusyNtSys sys=NtSys::NOM);
     
     /// Check if selected object
     bool isTauBDT(const Susy::Tau* tau, TauID tauJetID=TauID_medium, 
@@ -139,8 +142,8 @@ class SusyNtTools
                      TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium);
     bool isSemiSignalElectron(const Susy::Electron* ele);
     bool isSemiSignalMuon(const Susy::Muon* mu);
-    bool isSignalJet(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
-    bool isSignalJet2Lep(const Susy::Jet* jet, SusyNtSys sys=NtSys_NOM);
+    bool isSignalJet(const Susy::Jet* jet, SusyNtSys sys=NtSys::NOM);
+    bool isSignalJet2Lep(const Susy::Jet* jet, SusyNtSys sys=NtSys::NOM);
 
 
     /// Build Lepton vector - we should probably sort them here
