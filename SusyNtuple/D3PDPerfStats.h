@@ -57,7 +57,7 @@ namespace D3PDReader {
                               const char *filename, ::Bool_t isStart );
       virtual void FileOpenEvent( ::TFile *file, const char *filename, ::Double_t start );
       virtual void FileReadEvent( ::TFile *file, ::Int_t len, ::Double_t start );
-      virtual void FileUnzipEvent( ::TFile *file, ::Long64_t pos, ::Double_t start, ::Int_t complen,
+      virtual void UnzipEvent( ::TObject *tree, ::Long64_t pos, ::Double_t start, ::Int_t complen,
                                    ::Int_t objlen );
       virtual void RateEvent( ::Double_t proctime, ::Double_t deltatime,
                               ::Long64_t eventsprocessed, ::Long64_t bytesRead );
