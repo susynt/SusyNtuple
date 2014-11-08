@@ -37,9 +37,9 @@ install:
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
   # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM (see scripts/build_root.sh)
-  - time wget --tries=2 --no-check-certificate https://copy.com/GArqtEGYzIKV -O root_v5.34.18.tgz
-  - tar xzf root_v5.34.18.tgz
-  - source root_v5.34.18/bin/thisroot.sh
+  - time wget --tries=2 --no-check-certificate https://copy.com/3vhULrCB2R2tjsfT -O root_v5.34.22.tgz
+  - tar xzf root_v5.34.22.tgz
+  - source root_v5.34.22/bin/thisroot.sh
 
   # get dependencies
   - cd ..
