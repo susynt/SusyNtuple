@@ -56,6 +56,8 @@ Particle& Particle::operator=(const Particle &rhs)
 Lepton::Lepton(const Lepton &rhs):
   Particle(rhs),
   q(rhs.q),
+  isBaseline(rhs.isBaseline),
+  isSignal(rhs.isSignal),
   etcone20(rhs.etcone20),
   ptcone20(rhs.ptcone20),
   ptcone30(rhs.ptcone30),
@@ -63,10 +65,6 @@ Lepton::Lepton(const Lepton &rhs):
   errD0(rhs.errD0),
   z0(rhs.z0),
   errZ0(rhs.errZ0),
-  d0Unbiased(rhs.d0Unbiased),
-  errD0Unbiased(rhs.errD0Unbiased),
-  z0Unbiased(rhs.z0Unbiased),
-  errZ0Unbiased(rhs.errZ0Unbiased),
   mcType(rhs.mcType),
   mcOrigin(rhs.mcOrigin),
   matched2TruthLepton(rhs.matched2TruthLepton),
@@ -85,6 +83,8 @@ Lepton& Lepton::operator=(const Lepton &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     q = rhs.q; 
+    isBaseline = rhs.isBaseline;
+    isSignal = rhs.isSignal;
     etcone20 = rhs.etcone20;
     ptcone20 = rhs.ptcone20;
     ptcone30 = rhs.ptcone30;
@@ -92,10 +92,6 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     errD0 = rhs.errD0;
     z0 = rhs.z0;
     errZ0 = rhs.errZ0;
-    d0Unbiased = rhs.d0Unbiased;
-    errD0Unbiased = rhs.errD0Unbiased;
-    z0Unbiased = rhs.z0Unbiased;
-    errZ0Unbiased = rhs.errZ0Unbiased;
     mcType = rhs.mcType;
     mcOrigin = rhs.mcOrigin;
     matched2TruthLepton = rhs.matched2TruthLepton;
@@ -120,9 +116,14 @@ Electron::Electron(const Electron &rhs):
   trackPt(rhs.trackPt),
   mediumPP(rhs.mediumPP),
   tightPP(rhs.tightPP),
+  looseLLH(rhs.looseLLH),
+  mediumLLH(rhs.mediumLLH),
+  veryTightLLH(rhs.veryTightLLH),
   etcone30Corr(rhs.etcone30Corr),
   topoEtcone30Corr(rhs.topoEtcone30Corr),
   isChargeFlip(rhs.isChargeFlip),
+  effSF_LLH(rhs.effSF_LLH),
+  errEffSF_LLH(rhs.errEffSF_LLH),
   ees_z_up(rhs.ees_z_up),
   ees_z_dn(rhs.ees_z_dn),  
   ees_mat_up(rhs.ees_mat_up),
@@ -148,9 +149,14 @@ Electron& Electron::operator=(const Electron &rhs)
     trackPt = rhs.trackPt;
     mediumPP = rhs.mediumPP;
     tightPP = rhs.tightPP;
+    looseLLH = rhs.looseLLH;
+    mediumLLH = rhs.mediumLLH;
+    veryTightLLH = rhs.veryTightLLH;
     etcone30Corr = rhs.etcone30Corr;
     topoEtcone30Corr = rhs.topoEtcone30Corr;
     isChargeFlip = rhs.isChargeFlip;
+    effSF_LLH = rhs.effSF_LLH;
+    errEffSF_LLH = rhs.errEffSF_LLH;
     ees_z_up = rhs.ees_z_up;
     ees_z_dn = rhs.ees_z_dn;  
     ees_mat_up = rhs.ees_mat_up;
@@ -435,7 +441,13 @@ void Tau::print() const
 /*--------------------------------------------------------------------------------*/
 Photon::Photon(const Photon &rhs):
   Particle(rhs),
-  isConv(rhs.isConv)
+  isConv(rhs.isConv),
+  tight(rhs.tight),
+  clusE(rhs.clusE),
+  clusEta(rhs.clusEta),
+  clusPhi(rhs.clusPhi),
+  OQ(rhs.OQ),
+  topoEtcone40(rhs.topoEtcone40)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -446,6 +458,12 @@ Photon& Photon::operator=(const Photon &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     isConv  = rhs.isConv; 
+    tight = rhs.tight;
+    clusE = rhs.clusE;
+    clusEta = rhs.clusEta;
+    clusPhi = rhs.clusPhi;
+    OQ = rhs.OQ;
+    topoEtcone40 = rhs.topoEtcone40;
   }
   return *this;
 }

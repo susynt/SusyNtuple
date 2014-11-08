@@ -576,8 +576,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
     //if(fabs(ele->d0Sig(m_anaType == Ana_2Lep)) >= ELECTRON_D0SIG_CUT) return false;
     //if(fabs(ele->z0SinTheta(m_anaType == Ana_2Lep)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
     float maxD0Sig = (m_anaType != Ana_2LepWH  ? ELECTRON_D0SIG_CUT : ELECTRON_D0SIG_CUT_WH);
-    if(fabs(ele->d0Sig(true)) >= maxD0Sig) return false;
-    if(fabs(ele->z0SinTheta(true)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    if(fabs(ele->d0Sig()) >= maxD0Sig) return false;
+    if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
   }
 
   float pt = ele->Pt();
@@ -615,8 +615,8 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
     // All ana using unbiased IP
     //if(fabs(mu->d0Sig(m_anaType == Ana_2Lep)) >= MUON_D0SIG_CUT) return false;
     //if(fabs(mu->z0SinTheta(m_anaType == Ana_2Lep)) >= MUON_Z0_SINTHETA_CUT) return false;
-    if(fabs(mu->d0Sig(true)) >= MUON_D0SIG_CUT) return false;
-    if(fabs(mu->z0SinTheta(true)) >= MUON_Z0_SINTHETA_CUT) return false;
+    if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
   }
 
   // ptcone isolation cut with pileup correction
@@ -660,8 +660,8 @@ bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
   if(!ele->tightPP) return false;
   // Impact parameter
   if(m_doIPCut){
-    if(fabs(ele->d0Sig(true)) >= ELECTRON_D0SIG_CUT) return false;
-    if(fabs(ele->z0SinTheta(true)) >= ELECTRON_Z0_SINTHETA_CUT) return false;
+    if(fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
+    if(fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
   }
   return true;
 }
@@ -670,8 +670,8 @@ bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
 {
   // Impact parameter
   if(m_doIPCut){
-    if(fabs(mu->d0Sig(true)) >= MUON_D0SIG_CUT) return false;
-    if(fabs(mu->z0SinTheta(true)) >= MUON_Z0_SINTHETA_CUT) return false;
+    if(fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
+    if(fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
   }
   return true;
 }

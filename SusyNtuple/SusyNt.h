@@ -195,11 +195,6 @@ namespace Susy
       float z0;                 ///< z0 extrapolated to PV 
       float errZ0;              ///< Uncertainty on z0
 
-      float d0Unbiased;         ///< Unbiased d0                     //AT:2014-11-07 obsolete
-      float errD0Unbiased;      ///< Uncertainty on unbiased d0
-      float z0Unbiased;         ///< Unbiased z0
-      float errZ0Unbiased;      ///< Uncertainty on unbiased z0
-
       unsigned int mcType;      ///< MCTruthClassifier particle type
       unsigned int mcOrigin;    ///< MCTruthClassifier particle origin
 
@@ -214,13 +209,11 @@ namespace Susy
 
       /// Methods to return impact parameter variables
       /** Note that these are not absolute valued! */
-      float d0Sig(bool unbiased=false) const {
-        if(unbiased) return d0Unbiased/errD0Unbiased;
-	else return d0/errD0;
+      float d0Sig() const {
+	return d0/errD0;
       }
-      float z0SinTheta(bool unbiased=false) const {
-        if(unbiased) return z0Unbiased * sin(Theta());
-	else return z0 * sin(Theta());
+      float z0SinTheta() const {
+	return z0 * sin(Theta());
       }
 
       /// Trigger matching
@@ -241,7 +234,6 @@ namespace Susy
       void clear(){
         q = etcone20 = ptcone20 = ptcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
-        d0Unbiased=errD0Unbiased=z0Unbiased=errZ0Unbiased=0;
         mcType = mcOrigin = 0;
         matched2TruthLepton = false;
         truthType = -1;
@@ -287,14 +279,7 @@ namespace Susy
       float effSF_LLH;              ///< Efficiency scale factor for LLH electron
       float errEffSF_LLH;           ///< Uncertainty on the efficiency scale factor LLH electron
 
-      
-      // Polymorphism, baby!!
-      bool isEle() const { return true;  }
-      bool isMu()  const { return false; }
-
       // Systematic scale factors
-      //float ees_up;           ///< Energy Scale + sigma
-      //float ees_dn;           ///< Energy Scale - sigma
       float ees_z_up;           ///< Energy Scale Z + sigma
       float ees_z_dn;           ///< Energy Scale Z - sigma
       float ees_mat_up;         ///< Energy Scale Material + sigma
@@ -305,6 +290,10 @@ namespace Susy
       float ees_low_dn;         ///< Energy Scale Low Pt - sigma
       float eer_up;             ///< Energy Reso. + sigma
       float eer_dn;             ///< Energy Reso. - sigma
+
+      // Polymorphism, baby!!
+      bool isEle() const { return true;  }
+      bool isMu()  const { return false; } 
 
       /// Shift energy up/down for systematic
       void setState(int sys);
@@ -321,7 +310,6 @@ namespace Susy
         isChargeFlip = false;
 	effSF_LLH = 1; 
         errEffSF_LLH = 0;
-	//ees_up = ees_dn = eer_up = eer_dn = 0;
 	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
 	ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
 	eer_up = eer_dn = 0;
@@ -526,6 +514,7 @@ namespace Susy
 	tight = false;
 	clusE = clusEta = clusPhi = 0;
 	OQ = false;
+	topoEtcone40=0;
 	Particle::clear();
       };
       
