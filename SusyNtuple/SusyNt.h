@@ -195,7 +195,7 @@ namespace Susy
       float z0;                 ///< z0 extrapolated to PV 
       float errZ0;              ///< Uncertainty on z0
 
-      float d0Unbiased;         ///< Unbiased d0
+      float d0Unbiased;         ///< Unbiased d0                     //AT:2014-11-07 obsolete
       float errD0Unbiased;      ///< Uncertainty on unbiased d0
       float z0Unbiased;         ///< Unbiased z0
       float errZ0Unbiased;      ///< Uncertainty on unbiased z0
@@ -274,6 +274,9 @@ namespace Susy
       // isEM quality flags
       bool mediumPP;            ///< isEM medium++
       bool tightPP;             ///< isEM tight++
+      bool looseLLH;            ///< isEM looseLLH
+      bool mediumLLH;           ///< isEM mediumLLH
+      bool veryTightLLH;        ///< isEM veryTightLLH
 
       // New isolation variables, put them here for now
       float etcone30Corr;       ///< Pt and ED corrected etcone iso //AT:2014-10-28: obsolete
@@ -281,6 +284,10 @@ namespace Susy
 
       bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
 
+      float effSF_LLH;              ///< Efficiency scale factor for LLH electron
+      float errEffSF_LLH;           ///< Uncertainty on the efficiency scale factor LLH electron
+
+      
       // Polymorphism, baby!!
       bool isEle() const { return true;  }
       bool isMu()  const { return false; }
@@ -309,8 +316,11 @@ namespace Susy
       void clear(){
         clusE = clusEta = clusPhi = trackPt = 0;
         mediumPP = tightPP = false;
+        looseLLH= mediumLLH = veryTightLLH = false;
         etcone30Corr = topoEtcone30Corr = 0;
         isChargeFlip = false;
+	effSF_LLH = 1; 
+        errEffSF_LLH = 0;
 	//ees_up = ees_dn = eer_up = eer_dn = 0;
 	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
 	ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
@@ -495,8 +505,9 @@ namespace Susy
       float clusE;              ///< CaloCluster energy
       float clusEta;            ///< CaloCluster eta
       float clusPhi;            ///< CaloCluster phi
-      int   OQ;                 ///< GoodOQ
+      bool  OQ;                 ///< GoodOQ
 
+      float topoEtcone40; 
 
       // Systematics - not current supported??
       //float pes_up;        // Photon Energy Scale up
@@ -514,7 +525,7 @@ namespace Susy
 	isConv = false;
 	tight = false;
 	clusE = clusEta = clusPhi = 0;
-	OQ = 0;
+	OQ = false;
 	Particle::clear();
       };
       
