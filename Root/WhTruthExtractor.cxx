@@ -116,17 +116,19 @@ smc::Hdecays WhTruthExtractor::decayType(size_t iHiggs) const
   else                                              return smc::kUnknown;
 }
 //----------------------------------
-void WhTruthExtractor::printEvent(const vint_t &pdg, const vvint_t &childIndex, const vvint_t &parentIndex)
+void WhTruthExtractor::printEvent(const vint_t &pdg, const vint_t &status,
+                                  const vvint_t &childIndex, const vvint_t &parentIndex)
 {
   using std::left;
   using std::right;
   using sut::vecToString;
   int maxNpartToPrint=70;
-  int colW=20;
+  int colW=12;
   cout
     <<"--------------------------------"<<endl
     << left  << setw(colW)<<"i"
     << right << setw(colW)<<"id"
+    << right << setw(colW)<<"status"
     << right << setw(colW)<<"par"
     << right << setw(colW)<<"chil"
     << endl
@@ -137,6 +139,7 @@ void WhTruthExtractor::printEvent(const vint_t &pdg, const vvint_t &childIndex, 
     cout
       << left  << setw(colW)<<iP
       << right << setw(colW)<<id
+      << right << setw(colW)<<status[iP]
       << right << setw(colW)<<vecToString(parentIndex.at(iP))
       << right << setw(colW)<<vecToString(childIndex.at(iP))
       << endl;

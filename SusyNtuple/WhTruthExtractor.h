@@ -47,6 +47,8 @@ class WhTruthExtractor {
   const vint_t pdgsPwAw_;
   const vint_t pdgsPmuAmu_;
   const vint_t pdgsPtauAtau_;
+  static void printEvent(const vint_t &pdg, const vint_t &status,
+                         const vvint_t &childIndex, const vvint_t &parentIndex);
  private:
   susy::mc::vint_t findHiggsIndices(const vint_t &pdg);
   void buildHiggsChildrenPgds(const vint_t &pdgs, const vvint_t &childIndices);
@@ -55,7 +57,6 @@ class WhTruthExtractor {
   int firstInterestingHiggs() const; //!< internal index 1st interesting higgs; -1 if none
   susy::mc::Hdecays decayType(size_t iHiggs) const; //!< classify the decay of the i^th higgs
   //! print table with all particles, mostly for development/debugging
-  void printEvent(const vint_t &pdg, const vvint_t &childIndex, const vvint_t &parentIndex);
   vint_t hIndices_;
   vvint_t hParPdgs_;
   vvint_t hChiPdgs_;
