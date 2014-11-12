@@ -91,6 +91,9 @@ namespace Susy
       double pdf_x1;     
       double pdf_x2;
       double pdf_scale;
+      /// higgs pt reweighting
+      int n_truth_jets;
+      float higgs_pt;
 
       /// print event
       void print() const;
@@ -115,9 +118,11 @@ namespace Susy
         wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
         xsec = errXsec = sumw = pdfSF = 0;
         pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
+        n_truth_jets = 0;
+        higgs_pt = 0.0;
       }
 
-      ClassDef(Event, 27);
+      ClassDef(Event, 28);
   };
 
   /// Particle class, base class for other object types
