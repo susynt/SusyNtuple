@@ -18,21 +18,13 @@ def import_root():
 
 r = import_root()
 def load_packages():
-    "Equivalent to RootCore's load_packages.C"
-    rootcoredir = os.environ['ROOTCOREBIN']
-    r.gSystem.AddIncludePath('-I"'+rootcoredir+'/include"')
-    for l in open(os.path.join(rootcoredir, 'preload')):
-        r.gSystem.Load(l.strip())
-    for l in open(os.path.join(rootcoredir, 'load')):
-        r.gSystem.Load('lib%s'%l.strip())
-    # r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
-    # r.load_packages()
+    "Just following the instructions at https://twiki.cern.ch/twiki/bin/viewauth/AtlasComputing/RootCore"
+    r.gROOT.ProcessLine(".x ${ROOTCOREDIR}/scripts/load_packages.C")
 
 def generate_dicts():
     'generate missing dicts to access SusyNtuple objects'
     wd = os.getcwd()
     cpp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../run/tmp_cpp/')
-    print 'cpp_dir ',cpp_dir
     r.gSystem.ChangeDirectory(cpp_dir)
     dict_macro = 'linkdef.cxx'
     r.gROOT.LoadMacro(dict_macro+'+')
