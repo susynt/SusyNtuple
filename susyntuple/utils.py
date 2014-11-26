@@ -97,6 +97,7 @@ def import_SUSYDefs_enums():
     enums = ['TauID', 'AnalysisType', 'SusyNtSys', 'BTagSys']
     for e_name in enums:
         e_vals = enum_from_header(os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'), e_name)
+        if not e_vals : continue
         enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
                                                               for k in dict_keys_sorted_by_value(e_vals)]))
         exec enum_expr in globals()
