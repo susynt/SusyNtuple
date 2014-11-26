@@ -8,7 +8,7 @@ import os
 import re
 
 def rootcoredir():
-    return os.environ['ROOTCOREDIR']
+    return os.environ['ROOTCOREBIN']
 
 def import_root():
     import ROOT as r
