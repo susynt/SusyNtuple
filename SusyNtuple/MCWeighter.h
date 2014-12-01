@@ -55,7 +55,6 @@ class MCWeighter
       size_t counts_total;
       size_t counts_invalid;
       size_t max_warnings;
-      /// if necessary, convert our 'unknown' value (-1) to the SUSYTools 'unknown' value (0)
       /**
          Also flag as invalid the suspicious events (i.e. when proc==-1 and proc!=previous_proc)
        */
@@ -63,6 +62,17 @@ class MCWeighter
       bool valid; ///< status from the current call to validate()
       int last; ///< procid from the last call to validate()
       std::string summary() const;
+      /// convert our 'unknown' value (-1) to the SUSYTools 'unknown' value (0)
+      /**
+         In some of our old productions we used a different default
+         process than the one used by SUSYTools. With this default
+         value we cannot find any xsec in the db, so we need to
+         convert the value when necessary (will become obsolete, DG 2014-11-30).
+       */
+      static int convertDefaultSusyNt2DefaultSusyTools(const int &v);
+      static const int defaultSusyNt = -1; ///< see SusyNtMaker::selectEvent() (was -1 for old prod, then 0)
+      static const int defaultSusyTools = 0; ///< see SUSYCrossSection.h: CrossSectionDB::Key c'tor
+
     };
 
     //

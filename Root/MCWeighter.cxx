@@ -238,7 +238,7 @@ float MCWeighter::getSumw(const Event* evt)
     // Map key is pair(mcid, proc)
     unsigned int mcid = evt->mcChannel;
     int procID = m_useProcSumw? evt->susyFinalState : 0;
-    // Correct for procID == -1
+    procID = ProcessValidator::convertDefaultSusyNt2DefaultSusyTools(procID);
     m_procidValidator.validate(procID);
     SumwMapKey key(mcid, procID);
     SumwMap::const_iterator sumwMapIter = m_sumwMap.find(key);
@@ -284,7 +284,8 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
                       <<"(mcid "<<mcid<<", proc "<<proc<<"), returning xsec "<<invalidXsec
                       <<endl;
           } else {
-              cout<<"You need to either provide a xsec file (see test_mcWeighter),"
+              cout<<"For mcid "<<mcid<<" and proc "<<proc
+                  <<" you need to either provide a xsec file (see test_mcWeighter),"
                   <<" or call MCWeighter::setAllowInvalid(true)"
                   <<endl;
               abort();
@@ -494,21 +495,24 @@ MCWeighter& MCWeighter::setVerbose(bool v)
     return *this;
 }
 //----------------------------------------------------------
+int MCWeighter::ProcessValidator::convertDefaultSusyNt2DefaultSusyTools(const int &v)
+{
+    return v==defaultSusyNt ? defaultSusyTools : v;
+}
+//----------------------------------------------------------
 MCWeighter::ProcessValidator& MCWeighter::ProcessValidator::validate(int &value)
 {
     bool isFirstEvent(counts_total==0);
-    const int defaultSusyNt = -1; // see SusyNtMaker::selectEvent() (was -1, then 0)
-    const int defaultSusyTools = 0; // see SUSYCrossSection.h: CrossSectionDB::Key c'tor
     if(isFirstEvent){
         valid = true;
         last = value;
-        value = value==defaultSusyNt ? defaultSusyTools : value;
+        value = convertDefaultSusyNt2DefaultSusyTools(value);
         counts_total++;
     } else {
         bool invalid = (value!=last && (value==defaultSusyNt || value==defaultSusyTools));
         valid = !invalid;
         last = value;
-        value = value==defaultSusyNt ? defaultSusyTools : value;
+        value = convertDefaultSusyNt2DefaultSusyTools(value);
         counts_total++;
         if(invalid){
             counts_invalid++;
