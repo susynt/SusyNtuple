@@ -14,12 +14,15 @@ before_install:
   - time wget --tries=2 --no-check-certificate https://ecsft.cern.ch/dist/cvmfs/cvmfs-keys/cvmfs-keys_1.4-1_all.deb
   - sudo dpkg -i cvmfs-keys_1.4-1_all.deb cvmfs_2.1.19_amd64.deb
   - sudo cvmfs_config setup
-  - sudo touch /tmp/default.local
-  - sudo echo "CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,atlas-nightlies.cern.ch" | sudo tee -a /tmp/default.local
-  - sudo echo "CVMFS_HTTP_PROXY=DIRECT" >> sudo tee -a /tmp/default.local
-  - sudo echo "CVMFS_QUOTA_LIMIT=20480" >> sudo tee -a /tmp/default.local
-  - sudo mv /tmp/default.local /etc/cvmfs/default.local
-  - sudo /etc/init.d/autofs restart
+  - sudo touch /etc/cvmfs/default.local
+  - sudo echo "CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,atlas-nightlies.cern.ch" | sudo tee -a /etc/cvmfs/default.local
+  - sudo echo "CVMFS_HTTP_PROXY=DIRECT" >> sudo tee -a /etc/cvmfs/default.local
+  - sudo echo "CVMFS_QUOTA_LIMIT=20480" >> sudo tee -a /etc/cvmfs/default.local
+  - sudo cat /etc/cvmfs/default.local
+  - sudo sudo service autofs restart
+  - ls /cvmfs
+  - ls /cvmfs/atlas.cern.ch
+  - ls /cvmfs/atlas.cern.ch/repo
 
 env:
   global:
