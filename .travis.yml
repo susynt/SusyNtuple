@@ -9,6 +9,21 @@ python:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq  doxygen graphviz
+  - sudo apt-get install -qq gawk build-essential autofs curl attr gdb openjdk-7-jre libnet-ldap-perl
+  - time wget --tries=2 --no-check-certificate https://ecsft.cern.ch/dist/cvmfs/cvmfs-2.1.19/cvmfs_2.1.19_amd64.deb
+  - time wget --tries=2 --no-check-certificate https://ecsft.cern.ch/dist/cvmfs/cvmfs-keys/cvmfs-keys_1.4-1_all.deb
+  - sudo dpkg -i cvmfs-keys_1.4-1_all.deb cvmfs_2.1.19_amd64.deb
+  - sudo cvmfs_config setup
+  - sudo touch /etc/cvmfs/default.local
+  - sudo echo "CVMFS_REPOSITORIES=atlas.cern.ch,atlas-condb.cern.ch,atlas-nightlies.cern.ch" | sudo tee -a /etc/cvmfs/default.local
+  - sudo echo "CVMFS_HTTP_PROXY=DIRECT" >> sudo tee -a /etc/cvmfs/default.local
+  - sudo echo "CVMFS_QUOTA_LIMIT=20480" >> sudo tee -a /etc/cvmfs/default.local
+  - sudo cat /etc/cvmfs/default.local
+  - sudo sudo service autofs restart
+  - ls /cvmfs
+  - ls /cvmfs/atlas.cern.ch
+  - ls /cvmfs/atlas.cern.ch/repo
+
 env:
   global:
      secure: MZDZhrKlxAlBmWmQV/xCN5xdfkDTKYzKvuzYDR3kQjz6JCYnCG2O4PZ3w3jAhOW/xqe/4dD+Se1HQl79FXUy+fQN0AfkLgZFObabYOEYtNhYpDxhz7rwe6RH0pOB1Qvp/pj50FfZZSjc5hdpBfMOstVmD4UgTl+TKYd/eLP0hFU=
@@ -32,28 +47,39 @@ install:
   # Needed because sometimes travis' repositories get out of date
   #- time sudo apt-get update -qq
 
-  # Install the dependencies we need
-  # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
-  - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
-  - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
-  # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM (see scripts/build_root.sh)
-  - time wget --tries=2 --no-check-certificate https://copy.com/3vhULrCB2R2tjsfT -O root_v5.34.22.tgz
-  - tar xzf root_v5.34.22.tgz
-  - source root_v5.34.22/bin/thisroot.sh
+  # # Install the dependencies we need
+  # # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy python${PYTHON_SUFFIX}-sphinx python${PYTHON_SUFFIX}-nose
+  # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
+  # - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
+  # # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM (see scripts/build_root.sh)
+  # - time wget --tries=2 --no-check-certificate https://copy.com/3vhULrCB2R2tjsfT -O root_v5.34.22.tgz
+  # - tar xzf root_v5.34.22.tgz
+  # - source root_v5.34.22/bin/thisroot.sh
 
-  # get dependencies
-  - cd ..
-  - tar xzf SusyNtuple/data/SusyNt_dependencies.tgz
-  - cd -
+  # # get dependencies
+  # - cd ..
+  # - tar xzf SusyNtuple/data/SusyNt_dependencies.tgz
+  # - cd -
 
-  # setup RootCore
-  - cd ../RootCore
-  - echo "pwd is now `pwd`"
-  - ./configure
-  - cd ..
-  - source RootCore/scripts/setup.sh
-  - ./RootCore/scripts/find_packages.sh
-  - ./RootCore/scripts/compile.sh
+  # # setup RootCore
+  # - cd ../RootCore
+  # - echo "pwd is now `pwd`"
+  # - ./configure
+  # - cd ..
+  # - source RootCore/scripts/setup.sh
+  # - ./RootCore/scripts/find_packages.sh
+  # - ./RootCore/scripts/compile.sh
+  # - cd SusyNtuple/run
+
+  - export ATLAS_LOCAL_ROOT_BASE=/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase
+  - alias setupATLAS='source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh'
+  - ls ${ATLAS_LOCAL_ROOT_BASE}
+  - source ${ATLAS_LOCAL_ROOT_BASE}/user/atlasLocalSetup.sh
+  # - setupATLAS
+  - rcSetup Base,2.0.16
+  - rc find_packages
+  - rc clean
+  - rc compile
   - cd SusyNtuple/run
 
 script:
