@@ -19,6 +19,7 @@ before_install:
   - sudo echo "CVMFS_HTTP_PROXY=DIRECT" >> sudo tee -a /tmp/default.local
   - sudo echo "CVMFS_QUOTA_LIMIT=20480" >> sudo tee -a /tmp/default.local
   - sudo mv /tmp/default.local /etc/cvmfs/default.local
+  - sudo /etc/init.d/autofs restart
 
 env:
   global:
