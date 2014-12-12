@@ -70,7 +70,4 @@
 #pragma link C++ class SusyNtTools+;
 #pragma link C++ class ChainHelper+;
 
-#pragma link C++ enum SusyNtSys+;
-#pragma link C++ enum BTagSys+;
-
 #endif

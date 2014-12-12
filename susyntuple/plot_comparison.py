@@ -166,7 +166,7 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
     period, useRewUtils = 'Moriond', False
     trig_logic = r.DilTrigLogic(period, useRewUtils)
     n_entries_to_print = 4
-    sys = utils.SusyNtSys.NtSys_NOM
+    sys = utils.SusyNtSys.NOM
     tauId = utils.TauID
     tauJetId, tauEleId, tauMuoId = tauId.TauID_loose, tauId.TauID_medium, tauId.TauID_medium
     cutflow = Cutflow()
@@ -193,11 +193,17 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
         nttool.buildLeptons(pre_lep, pre_elecs, pre_muons)
         nttool.buildLeptons(sig_lep, sig_elecs, sig_muons)
         if verbose and iEntry<n_entries_to_print:
+            print "run {0} event {1}".format(ntevent.evt().run, ntevent.evt().event)
             print "pre_elecs[{0}], pre_muons[{1}] pre_taus[{2}] pre_jets[{3}]".format(len(pre_elecs), len(pre_muons), len(pre_taus), len(pre_jets))
             print 'pre_lep:\n','\n'.join(["[%d] %s (eta,phi,pt) = (%.3f, %.3f, %.3f)"
                                           %
                                           (iL, "mu" if l.isMu() else "el", l.Eta(), l.Phi(), l.Pt())
                                           for iL, l in enumerate(pre_lep)])
+            print 'pre_jets:\n','\n'.join(["[%d] (eta,phi,pt) = (%.3f, %.3f, %.3f)"
+                                           %
+                                           (iL, j.Eta(), j.Phi(), j.Pt())
+                                           for iL, j in enumerate(pre_jets)])
+
         event_flag = ntevent.evt().cutFlags[0]
         def mll(leps):
             return (leps[0] + leps[1]).M()
