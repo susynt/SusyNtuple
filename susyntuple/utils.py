@@ -87,12 +87,16 @@ def import_SUSYDefs_enums():
     utils.TauID.TauID_loose
     """
     enums = ['TauID', 'AnalysisType', 'SusyNtSys', 'BTagSys']
-    for e_name in enums:
-        e_vals = enum_from_header(os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'), e_name)
-        if not e_vals : continue
-        enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
-                                                              for k in dict_keys_sorted_by_value(e_vals)]))
-        exec enum_expr in globals()
+    def build_enums_from_file(enum_names=[], filename=''):
+        for e_name in enum_names:
+            e_vals = enum_from_header(filename, e_name)
+            if not e_vals : continue
+            enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
+                                                                  for k in dict_keys_sorted_by_value(e_vals)]))
+            exec enum_expr in globals()
+    build_enums_from_file(['TauID', 'AnalysisType', 'BTagSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'))
+    build_enums_from_file(['SusyNtSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyNtSys.h'))
+
 import_SUSYDefs_enums()
 
 def mkdir_if_needed(dirname) :

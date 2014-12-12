@@ -166,7 +166,7 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
     period, useRewUtils = 'Moriond', False
     trig_logic = r.DilTrigLogic(period, useRewUtils)
     n_entries_to_print = 4
-    sys = utils.SusyNtSys.NtSys_NOM
+    sys = utils.SusyNtSys.NOM
     tauId = utils.TauID
     tauJetId, tauEleId, tauMuoId = tauId.TauID_loose, tauId.TauID_medium, tauId.TauID_medium
     cutflow = Cutflow()
