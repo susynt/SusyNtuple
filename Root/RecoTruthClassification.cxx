@@ -1,5 +1,6 @@
 #include "SusyNtuple/RecoTruthClassification.h"
 
+#include <cstdlib> // abs
 #include <iostream>
 
 //____________________________________________________________________________//
