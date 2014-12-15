@@ -280,6 +280,7 @@ namespace Susy
       float errEffSF_LLH;           ///< Uncertainty on the efficiency scale factor LLH electron
 
       // Systematic scale factors
+      /*
       float ees_z_up;           ///< Energy Scale Z + sigma
       float ees_z_dn;           ///< Energy Scale Z - sigma
       float ees_mat_up;         ///< Energy Scale Material + sigma
@@ -290,6 +291,65 @@ namespace Susy
       float ees_low_dn;         ///< Energy Scale Low Pt - sigma
       float eer_up;             ///< Energy Reso. + sigma
       float eer_dn;             ///< Energy Reso. - sigma
+      */
+      //AT: This is insane >50!
+      float res_all_dn;
+      float res_all_up;
+      float res_matCalo_dn;
+      float res_matCalo_up;
+      float res_matCryo_dn;
+      float res_matCryo_up;
+      float res_matGap_dn;
+      float res_matGap_up;
+      float res_matId_dn;
+      float res_matId_up;
+      float res_nom;
+      float res_none;
+      float res_pileup_dn;
+      float res_pileup_up;
+      float res_sampTerm_dn;
+      float res_sampTerm_up;
+      float res_z_dn;
+      float res_z_up;
+      float scale_all_dn;
+      float scale_all_up;
+      float scale_G4_dn;
+      float scale_G4_up;
+      float scale_L1_dn;
+      float scale_L1_up;
+      float scale_L2_dn;
+      float scale_L2_up;
+      float scale_LArCalib_dn;
+      float scale_LArCalib_up;
+      float scale_LArECalib_dn;
+      float scale_LArECalib_up;
+      float scale_LArEunconv_dn;
+      float scale_LArEunconv_up;
+      float scale_LArUnconv_dn;
+      float scale_LArUnconv_up;
+      float scale_last;
+      float scale_matCalo_dn;
+      float scale_matCalo_up;
+      float scale_matCryo_dn;
+      float scale_matCryo_up;
+      float scale_matId_dn;
+      float scale_matId_up;
+      float scale_nom;
+      float scale_none;
+      float scale_ped_dn;
+      float scale_ped_up;
+      float scale_ps_dn;
+      float scale_ps_up;
+      float scale_s12_dn;
+      float scale_s12_up;
+      float scale_ZeeStat_dn;
+      float scale_ZeeStat_up;
+      float scale_ZeeSys_dn;
+      float scale_ZeeSys_up;
+      float scale_mom_dn;
+      float scale_mom_up;
+
+
 
       // Polymorphism, baby!!
       bool isEle() const { return true;  }
@@ -310,13 +370,31 @@ namespace Susy
         isChargeFlip = false;
 	effSF_LLH = 1; 
         errEffSF_LLH = 0;
-	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
-	ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
-	eer_up = eer_dn = 0;
+	//	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
+	//ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
+	//	eer_up = eer_dn = 0;
+
+	res_all_dn= res_all_up= res_matCalo_dn= res_matCalo_up=0;
+	res_matCryo_dn= res_matCryo_up= res_matGap_dn= res_matGap_up=0;
+	res_matId_dn= res_matId_up= res_nom= res_none=0;
+	res_pileup_dn= res_pileup_up=0;
+	res_sampTerm_dn=res_sampTerm_up= res_z_dn=res_z_up=0;
+	scale_all_dn=scale_all_up=scale_G4_dn=scale_G4_up=0;
+	scale_L1_dn=scale_L1_up=scale_L2_dn=scale_L2_up=0;
+	scale_LArCalib_dn= scale_LArCalib_up=scale_LArECalib_dn=scale_LArECalib_up=0;
+	scale_LArEunconv_dn=scale_LArEunconv_up=scale_LArUnconv_dn=scale_LArUnconv_up=0;
+	scale_last=0;
+	scale_matCalo_dn=scale_matCalo_up=scale_matCryo_dn=scale_matCryo_up=scale_matId_dn=0;
+	scale_matId_up=scale_nom=scale_none=0;
+	scale_ped_dn=scale_ped_up=scale_ps_dn=scale_ps_up=scale_s12_dn=scale_s12_up=0;
+	scale_ZeeStat_dn=scale_ZeeStat_up=scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
+       
+
+
         Lepton::clear();
       }
 
-      ClassDef(Electron, 5);
+      ClassDef(Electron, 6);
   };
 
   /// Muon class
@@ -362,11 +440,13 @@ namespace Susy
       float ms_dn;              ///< MS Pt - sigma
       float id_up;              ///< ID Pt + sigma
       float id_dn;              ///< ID Pt - sigma
+      float scale_up;           ///< SCALE Pt + sigma
+      float scale_dn;           ///< SCALE Pt - sigma
 
       // Polymorphism, baby!!
       bool isEle() const { return false; }
       bool isMu()  const { return true; }
-      void setState(int sys, bool isTag0150 = false);
+      void setState(int sys);
 
       /// Print method
       void print() const;
@@ -381,12 +461,12 @@ namespace Susy
         id_theta = id_phi = id_qoverp = 0;
         ms_theta = ms_phi = ms_qoverp = 0;
         isBadMuon = isCosmic = false;
-	ms_up = ms_dn = id_up = id_dn = 0;
+	ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
 
         Lepton::clear();
       }
 
-      ClassDef(Muon, 6);
+      ClassDef(Muon, 7);
   };
 
   /// Tau class
@@ -436,8 +516,8 @@ namespace Susy
       //float errEffSF;         ///< Uncertainty on the efficiency scale factor
 
       // Systematic factors
-      float tes_up;             ///< tau energy scale + sigma
-      float tes_dn;             ///< tau energy scale - sigma
+      float sme_total_up;             ///< tau energy scale + sigma
+      float sme_total_dn;             ///< tau energy scale - sigma
 
       long long trigFlags;      ///< Bit word representing matched trigger chains
 
@@ -467,12 +547,12 @@ namespace Susy
         errLooseEffSF = errMediumEffSF = errTightEffSF = 0;
         looseEVetoSF = mediumEVetoSF = tightEVetoSF = 1;
         errLooseEVetoSF = errMediumEVetoSF = errTightEVetoSF = 0;
-        tes_up = tes_dn = 0;
+        sme_total_up = sme_total_dn = 0;
         trigFlags = 0;
         Particle::clear();
       }
 
-      ClassDef(Tau, 6);
+      ClassDef(Tau, 7);
   };
 
   /// Photon class
@@ -563,6 +643,18 @@ namespace Susy
       float jes_dn;             ///< jet energy scale down
       float jer;                ///< jet energy resolution
 
+
+      //ADD SYS!!! 18x2 + JER
+      float bjes[2];
+      //float effNp[6*2];
+      /*
+      float etaInter[2][2];
+      float flavor[2][2];
+      float pileup[4][2];
+      float punchThrough[2];
+      float relativeNC[2];
+      float singlePart[2];*/
+
       // Jet-Met Weights
       float met_wpx;
       float met_wpy;
@@ -586,10 +678,22 @@ namespace Susy
         isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;
 	jer = jes_up = jes_dn = 0;
 	met_wpx = met_wpy = 0;
+	
+	memset(bjes, 0, 2*sizeof(bjes));
+	/*
+	memset(effNp, 0, 6*2*sizeof(effNp));
+
+	memset(etaInter, 0, 2*2*sizeof(etaInter));
+	memset(flavor, 0, 2*2*sizeof(flavor));
+	memset(pileup, 0, 4*2*sizeof(pileup));
+	memset(punchThrough, 0, 2*sizeof(punchThrough));
+	memset(relativeNC, 0, 2*sizeof(relativeNC));
+	memset(singlePart, 0, 2*sizeof(singlePart));*/
+
         Particle::clear();
       }
 
-      ClassDef(Jet, 12);
+      ClassDef(Jet, 13);
   };
 
   /// Met class

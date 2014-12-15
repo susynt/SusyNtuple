@@ -67,8 +67,7 @@ class SusyNtTools
 
     /// 'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna
     ElectronVector getPreElectrons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
-    /// Bugfix for muon systematics in n0150
-    MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys, bool n0150BugFix=false);
+    MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     TauVector      getPreTaus(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
   
@@ -77,11 +76,11 @@ class SusyNtTools
     void getBaselineObjects(Susy::SusyNtObject* susyNt, 
                             ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
                             ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets, 
-                            SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false);
+                            SusyNtSys sys, bool selectTaus=false);
     /// Second method only provides the baseline objects after OR.
     void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs, 
                             MuonVector& muons, TauVector& taus, JetVector& jets, 
-                            SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false);
+                            SusyNtSys sys, bool selectTaus=false);
   
     /// Signal objects
     ElectronVector getSignalElectrons(const ElectronVector& baseElecs, const MuonVector& baseMuons, 

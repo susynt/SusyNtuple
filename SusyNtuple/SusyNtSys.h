@@ -9,91 +9,183 @@ namespace NtSys {
 
 enum SusyNtSys {
   NOM             // Central value
- 
-  //see EgammaCalibrationAndSmearingTool
-  ,EL_SCALE_MOMENTUM_DOWN //electron only
-  ,EL_SCALE_MOMENTUM_UP
-  ,EG_RESOLUTION_ALL_DOWN //electron/photon
+  ,EG_RESOLUTION_ALL_DN
   ,EG_RESOLUTION_ALL_UP
   ,EG_RESOLUTION_LASTRESOLUTIONVARIATION
-  ,EG_RESOLUTION_MATERIALCALO_DOWN
+  ,EG_RESOLUTION_MATERIALCALO_DN
   ,EG_RESOLUTION_MATERIALCALO_UP
-  ,EG_RESOLUTION_MATERIALCRYO_DOWN
+  ,EG_RESOLUTION_MATERIALCRYO_DN
   ,EG_RESOLUTION_MATERIALCRYO_UP
-  ,EG_RESOLUTION_MATERIALGAP_DOWN
+  ,EG_RESOLUTION_MATERIALGAP_DN
   ,EG_RESOLUTION_MATERIALGAP_UP
-  ,EG_RESOLUTION_MATERIALID_DOWN
+  ,EG_RESOLUTION_MATERIALID_DN
   ,EG_RESOLUTION_MATERIALID_UP
   ,EG_RESOLUTION_NOMINAL
   ,EG_RESOLUTION_NONE
-  ,EG_RESOLUTION_PILEUP_DOWN
+  ,EG_RESOLUTION_PILEUP_DN
   ,EG_RESOLUTION_PILEUP_UP
-  ,EG_RESOLUTION_SAMPLINGTERM_DOWN
+  ,EG_RESOLUTION_SAMPLINGTERM_DN
   ,EG_RESOLUTION_SAMPLINGTERM_UP
-  ,EG_RESOLUTION_ZSMEARING_DOWN
+  ,EG_RESOLUTION_ZSMEARING_DN
   ,EG_RESOLUTION_ZSMEARING_UP
-  ,EG_SCALE_ALL_DOWN
+  ,EG_SCALE_ALL_DN
   ,EG_SCALE_ALL_UP
-  ,EG_SCALE_G4_DOWN
+  ,EG_SCALE_G4_DN
   ,EG_SCALE_G4_UP
-  ,EG_SCALE_L1GAIN_DOWN
+  ,EG_SCALE_L1GAIN_DN
   ,EG_SCALE_L1GAIN_UP
-  ,EG_SCALE_L2GAIN_DOWN
+  ,EG_SCALE_L2GAIN_DN
   ,EG_SCALE_L2GAIN_UP
-  ,EG_SCALE_LARCALIB_DOWN
+  ,EG_SCALE_LARCALIB_DN
   ,EG_SCALE_LARCALIB_UP
-  ,EG_SCALE_LARELECCALIB_DOWN
+  ,EG_SCALE_LARELECCALIB_DN
   ,EG_SCALE_LARELECCALIB_UP
-  ,EG_SCALE_LARELECUNCONV_DOWN
+  ,EG_SCALE_LARELECUNCONV_DN
   ,EG_SCALE_LARELECUNCONV_UP
-  ,EG_SCALE_LARUNCONVCALIB_DOWN
+  ,EG_SCALE_LARUNCONVCALIB_DN
   ,EG_SCALE_LARUNCONVCALIB_UP
   ,EG_SCALE_LASTSCALEVARIATION
-  ,EG_SCALE_MATCALO_DOWN
+  ,EG_SCALE_MATCALO_DN
   ,EG_SCALE_MATCALO_UP
-  ,EG_SCALE_MATCRYO_DOWN
+  ,EG_SCALE_MATCRYO_DN
   ,EG_SCALE_MATCRYO_UP
-  ,EG_SCALE_MATID_DOWN
+  ,EG_SCALE_MATID_DN
   ,EG_SCALE_MATID_UP
   ,EG_SCALE_NOMINAL
   ,EG_SCALE_NONE
-  ,EG_SCALE_PEDESTAL_DOWN
+  ,EG_SCALE_PEDESTAL_DN
   ,EG_SCALE_PEDESTAL_UP
-  ,EG_SCALE_PS_DOWN
+  ,EG_SCALE_PS_DN
   ,EG_SCALE_PS_UP
-  ,EG_SCALE_S12_DOWN
+  ,EG_SCALE_S12_DN
   ,EG_SCALE_S12_UP
-  ,EG_SCALE_ZEESTAT_DOWN
+  ,EG_SCALE_ZEESTAT_DN
   ,EG_SCALE_ZEESTAT_UP
-  ,EG_SCALE_ZEESYST_DOWN
+  ,EG_SCALE_ZEESYST_DN
   ,EG_SCALE_ZEESYST_UP
-  // See MuonCalibrationAndSmearingTool
-  ,MU_SF_STAT_DOWN
-  ,MU_SF_STAT_UP
-  ,MU_SF_SYS_DOWN
-  ,MU_SF_SYS_UP
-  ,MU_ID_DOWN
-  ,MU_ID_UP
-  ,MU_MS_DOWN
-  ,MU_MS_UP
-  ,MU_SCALE_DOWN
-  ,MU_SCALE_UP
+  ,EL_EFF_CorrUncertainty_DN
+  ,EL_EFF_CorrUncertainty_UP
+  ,EL_EFF_UncorrUncertainty_DN
+  ,EL_EFF_UncorrUncertainty_UP
+  ,EL_SCALE_MOMENTUM_DN
+  ,EL_SCALE_MOMENTUM_UP
+  ,FT_Eigen_B_0_DN
+  ,FT_Eigen_B_0_UP
+  ,FT_Eigen_B_1_DN
+  ,FT_Eigen_B_1_UP
+  ,FT_Eigen_B_2_DN
+  ,FT_Eigen_B_2_UP
+  ,FT_Eigen_B_3_DN
+  ,FT_Eigen_B_3_UP
+  ,FT_Eigen_B_4_DN
+  ,FT_Eigen_B_4_UP
+  ,FT_Eigen_B_5_DN
+  ,FT_Eigen_B_5_UP
+  ,FT_Eigen_B_6_DN
+  ,FT_Eigen_B_6_UP
+  ,FT_Eigen_B_7_DN
+  ,FT_Eigen_B_7_UP
+  ,FT_Eigen_B_8_DN
+  ,FT_Eigen_B_8_UP
+  ,FT_Eigen_B_9_DN
+  ,FT_Eigen_B_9_UP
+  ,FT_Eigen_C_0_DN
+  ,FT_Eigen_C_0_UP
+  ,FT_Eigen_C_1_DN
+  ,FT_Eigen_C_1_UP
+  ,FT_Eigen_C_2_DN
+  ,FT_Eigen_C_2_UP
+  ,FT_Eigen_C_3_DN
+  ,FT_Eigen_C_3_UP
+  ,FT_Eigen_Light_0_DN
+  ,FT_Eigen_Light_0_UP
+  ,FT_Eigen_Light_10_DN
+  ,FT_Eigen_Light_10_UP
+  ,FT_Eigen_Light_11_DN
+  ,FT_Eigen_Light_11_UP
+  ,FT_Eigen_Light_1_DN
+  ,FT_Eigen_Light_1_UP
+  ,FT_Eigen_Light_2_DN
+  ,FT_Eigen_Light_2_UP
+  ,FT_Eigen_Light_3_DN
+  ,FT_Eigen_Light_3_UP
+  ,FT_Eigen_Light_4_DN
+  ,FT_Eigen_Light_4_UP
+  ,FT_Eigen_Light_5_DN
+  ,FT_Eigen_Light_5_UP
+  ,FT_Eigen_Light_6_DN
+  ,FT_Eigen_Light_6_UP
+  ,FT_Eigen_Light_7_DN
+  ,FT_Eigen_Light_7_UP
+  ,FT_Eigen_Light_8_DN
+  ,FT_Eigen_Light_8_UP
+  ,FT_Eigen_Light_9_DN
+  ,FT_Eigen_Light_9_UP
+  ,JER
+  ,JET_BJES_Response_DN
+  ,JET_BJES_Response_UP
+  ,JET_EffectiveNP_1_DN
+  ,JET_EffectiveNP_1_UP
+  ,JET_EffectiveNP_2_DN
+  ,JET_EffectiveNP_2_UP
+  ,JET_EffectiveNP_3_DN
+  ,JET_EffectiveNP_3_UP
+  ,JET_EffectiveNP_4_DN
+  ,JET_EffectiveNP_4_UP
+  ,JET_EffectiveNP_5_DN
+  ,JET_EffectiveNP_5_UP
+  ,JET_EffectiveNP_6restTerm_DN
+  ,JET_EffectiveNP_6restTerm_UP
+  ,JET_EtaIntercalibration_Modelling_DN
+  ,JET_EtaIntercalibration_Modelling_UP
+  ,JET_EtaIntercalibration_TotalStat_DN
+  ,JET_EtaIntercalibration_TotalStat_UP
+  ,JET_Flavor_Composition_DN
+  ,JET_Flavor_Composition_UP
+  ,JET_Flavor_Response_DN
+  ,JET_Flavor_Response_UP
+  ,JET_Pileup_OffsetMu_DN
+  ,JET_Pileup_OffsetMu_UP
+  ,JET_Pileup_OffsetNPV_DN
+  ,JET_Pileup_OffsetNPV_UP
+  ,JET_Pileup_PtTerm_DN
+  ,JET_Pileup_PtTerm_UP
+  ,JET_Pileup_RhoTopology_DN
+  ,JET_Pileup_RhoTopology_UP
+  ,JET_PunchThrough_MC12_DN
+  ,JET_PunchThrough_MC12_UP
+  ,JET_RelativeNonClosure_MC12_DN
+  ,JET_RelativeNonClosure_MC12_UP
+  ,JET_SingleParticle_HighPt_DN
+  ,JET_SingleParticle_HighPt_UP
+  ,MUONSFSTAT_DN
+  ,MUONSFSTAT_UP
+  ,MUONSFSYS_DN
+  ,MUONSFSYS_UP
+  ,MUONS_ID_DN
+  ,MUONS_ID_UP
+  ,MUONS_MS_DN
+  ,MUONS_MS_UP
+  ,MUONS_SCALE_DN
+  ,MUONS_SCALE_UP
+  ,PH_SCALE_CONVEFFICIENCY_DN
+  ,PH_SCALE_CONVEFFICIENCY_UP
+  ,PH_SCALE_CONVFAKERATE_DN
+  ,PH_SCALE_CONVFAKERATE_UP
+  ,PH_SCALE_CONVRADIUS_DN
+  ,PH_SCALE_CONVRADIUS_UP
+  ,PH_SCALE_LEAKAGECONV_DN
+  ,PH_SCALE_LEAKAGECONV_UP
+  ,PH_SCALE_LEAKAGEUNCONV_DN
+  ,PH_SCALE_LEAKAGEUNCONV_UP
+  ,TAUS_EFF_CONTJETID_STAT_DN
+  ,TAUS_EFF_CONTJETID_STAT_UP
+  ,TAUS_EFF_CONTJETID_SYST_DN
+  ,TAUS_EFF_CONTJETID_SYST_UP
+  ,TAUS_SME_TOTAL_DN
+  ,TAUS_SME_TOTAL_UP
   
-  ,TAUS_STAT_DOWN
-  ,TAUS_STAT_UP
-  ,TAUS_SYST_DOWN
-  ,TAUS_SYST_UP
-  ,TAUS_TOTAL_DOWN
-  ,TAUS_TOTAL_UP
-  
-  //EIGEN* TO ADD ???
-  ,JER_UP
-  ,BJES_Response_DOWN
-  ,BJES_Response_UP
-
   //AT:2014-11-06 OLD ONES - TO REMOVE/REPLACE
-
-  //Object systematics - affect event selection 
   ,EES_LOW_UP           // Positive shift in electron energy scale (LOW)
   ,EES_LOW_DN         // Negative shift in electron energy scale (LOW)
   ,EES_MAT_UP           // Positive shift in electron energy scale (Mat)
@@ -112,12 +204,9 @@ enum SusyNtSys {
   ,TES_DN            // Negative shift in TES variation
   ,JES_UP              // Positive Jet energy scale
   ,JES_DN            // Negative Jet energy scale
-  ,JER                // Jet energy resolution
   ,SCALEST_UP          // Positive shift in MET soft term scale
   ,SCALEST_DN        // Negative shift in MET soft term scale
   ,RESOST             // MET soft term resolution 
-  
-
   //Event weight systematics 
   ,TRIGSF_EL_UP    ///< Trigger Scale factor + error for el
   ,TRIGSF_EL_DN    ///< Trigger Scale factor - error for el
@@ -167,89 +256,183 @@ enum SusyNtSys {
  
 const std::string SusyNtSysNames[] = {
     "NOM"
-    
-    ,"EL_SCALE_MOMENTUM_DOWN"
-    ,"EL_SCALE_MOMENTUM_UP"
-    ,"EG_RESOLUTION_ALL_DOWN" //electron/photon
+    ,"EG_RESOLUTION_ALL_DN"
     ,"EG_RESOLUTION_ALL_UP"
     ,"EG_RESOLUTION_LASTRESOLUTIONVARIATION"
-    ,"EG_RESOLUTION_MATERIALCALO_DOWN"
+    ,"EG_RESOLUTION_MATERIALCALO_DN"
     ,"EG_RESOLUTION_MATERIALCALO_UP"
-    ,"EG_RESOLUTION_MATERIALCRYO_DOWN"
+    ,"EG_RESOLUTION_MATERIALCRYO_DN"
     ,"EG_RESOLUTION_MATERIALCRYO_UP"
-    ,"EG_RESOLUTION_MATERIALGAP_DOWN"
+    ,"EG_RESOLUTION_MATERIALGAP_DN"
     ,"EG_RESOLUTION_MATERIALGAP_UP"
-    ,"EG_RESOLUTION_MATERIALID_DOWN"
+    ,"EG_RESOLUTION_MATERIALID_DN"
     ,"EG_RESOLUTION_MATERIALID_UP"
     ,"EG_RESOLUTION_NOMINAL"
     ,"EG_RESOLUTION_NONE"
-    ,"EG_RESOLUTION_PILEUP_DOWN"
+    ,"EG_RESOLUTION_PILEUP_DN"
     ,"EG_RESOLUTION_PILEUP_UP"
-    ,"EG_RESOLUTION_SAMPLINGTERM_DOWN"
+    ,"EG_RESOLUTION_SAMPLINGTERM_DN"
     ,"EG_RESOLUTION_SAMPLINGTERM_UP"
-    ,"EG_RESOLUTION_ZSMEARING_DOWN"
+    ,"EG_RESOLUTION_ZSMEARING_DN"
     ,"EG_RESOLUTION_ZSMEARING_UP"
-    
-    ,"EG_SCALE_ALL_DOWN"
+    ,"EG_SCALE_ALL_DN"
     ,"EG_SCALE_ALL_UP"
-    ,"EG_SCALE_G4_DOWN"
+    ,"EG_SCALE_G4_DN"
     ,"EG_SCALE_G4_UP"
-    ,"EG_SCALE_L1GAIN_DOWN"
+    ,"EG_SCALE_L1GAIN_DN"
     ,"EG_SCALE_L1GAIN_UP"
-    ,"EG_SCALE_L2GAIN_DOWN"
+    ,"EG_SCALE_L2GAIN_DN"
     ,"EG_SCALE_L2GAIN_UP"
-    ,"EG_SCALE_LARCALIB_DOWN"
+    ,"EG_SCALE_LARCALIB_DN"
     ,"EG_SCALE_LARCALIB_UP"
-    ,"EG_SCALE_LARELECCALIB_DOWN"
+    ,"EG_SCALE_LARELECCALIB_DN"
     ,"EG_SCALE_LARELECCALIB_UP"
-    ,"EG_SCALE_LARELECUNCONV_DOWN"
+    ,"EG_SCALE_LARELECUNCONV_DN"
     ,"EG_SCALE_LARELECUNCONV_UP"
-    ,"EG_SCALE_LARUNCONVCALIB_DOWN"
+    ,"EG_SCALE_LARUNCONVCALIB_DN"
     ,"EG_SCALE_LARUNCONVCALIB_UP"
     ,"EG_SCALE_LASTSCALEVARIATION"
-    ,"EG_SCALE_MATCALO_DOWN"
+    ,"EG_SCALE_MATCALO_DN"
     ,"EG_SCALE_MATCALO_UP"
-    ,"EG_SCALE_MATCRYO_DOWN"
+    ,"EG_SCALE_MATCRYO_DN"
     ,"EG_SCALE_MATCRYO_UP"
-    ,"EG_SCALE_MATID_DOWN"
+    ,"EG_SCALE_MATID_DN"
     ,"EG_SCALE_MATID_UP"
     ,"EG_SCALE_NOMINAL"
     ,"EG_SCALE_NONE"
-    ,"EG_SCALE_PEDESTAL_DOWN"
+    ,"EG_SCALE_PEDESTAL_DN"
     ,"EG_SCALE_PEDESTAL_UP"
-    ,"EG_SCALE_PS_DOWN"
+    ,"EG_SCALE_PS_DN"
     ,"EG_SCALE_PS_UP"
-    ,"EG_SCALE_S12_DOWN"
+    ,"EG_SCALE_S12_DN"
     ,"EG_SCALE_S12_UP"
-    ,"EG_SCALE_ZEESTAT_DOWN"
+    ,"EG_SCALE_ZEESTAT_DN"
     ,"EG_SCALE_ZEESTAT_UP"
-    ,"EG_SCALE_ZEESYST_DOWN"
+    ,"EG_SCALE_ZEESYST_DN"
     ,"EG_SCALE_ZEESYST_UP"
-
-    ,"MU_SF_STAT_DOWN"
-    ,"MU_SF_STAT_UP"
-    ,"MU_SF_SYS_DOWN"
-    ,"MU_SF_SYS_UP"
-    ,"MU_ID_DOWN"
-    ,"MU_ID_UP"
-    ,"MU_MS_DOWN"
-    ,"MU_MS_UP"
-    ,"MU_SCALE_DOWN"
-    ,"MU_SCALE_UP"
-    
-    ,"TAUS_STAT_DOWN"
-    ,"TAUS_STAT_UP"
-    ,"TAUS_SYST_DOWN"
-    ,"TAUS_SYST_UP"
-    ,"TAUS_TOTAL_DOWN"
-    ,"TAUS_TOTAL_UP"
-    
-    ,"JER_UP"
-    ,"BJES_Response_DOWN"
-    ,"BJES_Response_UP"
-    
-    
-
+    ,"EL_EFF_CorrUncertainty_DN"
+    ,"EL_EFF_CorrUncertainty_UP"
+    ,"EL_EFF_UncorrUncertainty_DN"
+    ,"EL_EFF_UncorrUncertainty_UP"
+    ,"EL_SCALE_MOMENTUM_DN"
+    ,"EL_SCALE_MOMENTUM_UP"
+    ,"FT_Eigen_B_0_DN"
+    ,"FT_Eigen_B_0_UP"
+    ,"FT_Eigen_B_1_DN"
+    ,"FT_Eigen_B_1_UP"
+    ,"FT_Eigen_B_2_DN"
+    ,"FT_Eigen_B_2_UP"
+    ,"FT_Eigen_B_3_DN"
+    ,"FT_Eigen_B_3_UP"
+    ,"FT_Eigen_B_4_DN"
+    ,"FT_Eigen_B_4_UP"
+    ,"FT_Eigen_B_5_DN"
+    ,"FT_Eigen_B_5_UP"
+    ,"FT_Eigen_B_6_DN"
+    ,"FT_Eigen_B_6_UP"
+    ,"FT_Eigen_B_7_DN"
+    ,"FT_Eigen_B_7_UP"
+    ,"FT_Eigen_B_8_DN"
+    ,"FT_Eigen_B_8_UP"
+    ,"FT_Eigen_B_9_DN"
+    ,"FT_Eigen_B_9_UP"
+    ,"FT_Eigen_C_0_DN"
+    ,"FT_Eigen_C_0_UP"
+    ,"FT_Eigen_C_1_DN"
+    ,"FT_Eigen_C_1_UP"
+    ,"FT_Eigen_C_2_DN"
+    ,"FT_Eigen_C_2_UP"
+    ,"FT_Eigen_C_3_DN"
+    ,"FT_Eigen_C_3_UP"
+    ,"FT_Eigen_Light_0_DN"
+    ,"FT_Eigen_Light_0_UP"
+    ,"FT_Eigen_Light_10_DN"
+    ,"FT_Eigen_Light_10_UP"
+    ,"FT_Eigen_Light_11_DN"
+    ,"FT_Eigen_Light_11_UP"
+    ,"FT_Eigen_Light_1_DN"
+    ,"FT_Eigen_Light_1_UP"
+    ,"FT_Eigen_Light_2_DN"
+    ,"FT_Eigen_Light_2_UP"
+    ,"FT_Eigen_Light_3_DN"
+    ,"FT_Eigen_Light_3_UP"
+    ,"FT_Eigen_Light_4_DN"
+    ,"FT_Eigen_Light_4_UP"
+    ,"FT_Eigen_Light_5_DN"
+    ,"FT_Eigen_Light_5_UP"
+    ,"FT_Eigen_Light_6_DN"
+    ,"FT_Eigen_Light_6_UP"
+    ,"FT_Eigen_Light_7_DN"
+    ,"FT_Eigen_Light_7_UP"
+    ,"FT_Eigen_Light_8_DN"
+    ,"FT_Eigen_Light_8_UP"
+    ,"FT_Eigen_Light_9_DN"
+    ,"FT_Eigen_Light_9_UP"
+    ,"JER"
+    ,"JET_BJES_Response_DN"
+    ,"JET_BJES_Response_UP"
+    ,"JET_EffectiveNP_1_DN"
+    ,"JET_EffectiveNP_1_UP"
+    ,"JET_EffectiveNP_2_DN"
+    ,"JET_EffectiveNP_2_UP"
+    ,"JET_EffectiveNP_3_DN"
+    ,"JET_EffectiveNP_3_UP"
+    ,"JET_EffectiveNP_4_DN"
+    ,"JET_EffectiveNP_4_UP"
+    ,"JET_EffectiveNP_5_DN"
+    ,"JET_EffectiveNP_5_UP"
+    ,"JET_EffectiveNP_6restTerm_DN"
+    ,"JET_EffectiveNP_6restTerm_UP"
+    ,"JET_EtaIntercalibration_Modelling_DN"
+    ,"JET_EtaIntercalibration_Modelling_UP"
+    ,"JET_EtaIntercalibration_TotalStat_DN"
+    ,"JET_EtaIntercalibration_TotalStat_UP"
+    ,"JET_Flavor_Composition_DN"
+    ,"JET_Flavor_Composition_UP"
+    ,"JET_Flavor_Response_DN"
+    ,"JET_Flavor_Response_UP"
+    ,"JET_Pileup_OffsetMu_DN"
+    ,"JET_Pileup_OffsetMu_UP"
+    ,"JET_Pileup_OffsetNPV_DN"
+    ,"JET_Pileup_OffsetNPV_UP"
+    ,"JET_Pileup_PtTerm_DN"
+    ,"JET_Pileup_PtTerm_UP"
+    ,"JET_Pileup_RhoTopology_DN"
+    ,"JET_Pileup_RhoTopology_UP"
+    ,"JET_PunchThrough_MC12_DN"
+    ,"JET_PunchThrough_MC12_UP"
+    ,"JET_RelativeNonClosure_MC12_DN"
+    ,"JET_RelativeNonClosure_MC12_UP"
+    ,"JET_SingleParticle_HighPt_DN"
+    ,"JET_SingleParticle_HighPt_UP"
+    ,"MUONSFSTAT_DN"
+    ,"MUONSFSTAT_UP"
+    ,"MUONSFSYS_DN"
+    ,"MUONSFSYS_UP"
+    ,"MUONS_ID_DN"
+    ,"MUONS_ID_UP"
+    ,"MUONS_MS_DN"
+    ,"MUONS_MS_UP"
+    ,"MUONS_SCALE_DN"
+    ,"MUONS_SCALE_UP"
+    ,"PH_SCALE_CONVEFFICIENCY_DN"
+    ,"PH_SCALE_CONVEFFICIENCY_UP"
+    ,"PH_SCALE_CONVFAKERATE_DN"
+    ,"PH_SCALE_CONVFAKERATE_UP"
+    ,"PH_SCALE_CONVRADIUS_DN"
+    ,"PH_SCALE_CONVRADIUS_UP"
+    ,"PH_SCALE_LEAKAGECONV_DN"
+    ,"PH_SCALE_LEAKAGECONV_UP"
+    ,"PH_SCALE_LEAKAGEUNCONV_DN"
+    ,"PH_SCALE_LEAKAGEUNCONV_UP"
+    ,"TAUS_EFF_CONTJETID_STAT_DN"
+    ,"TAUS_EFF_CONTJETID_STAT_UP"
+    ,"TAUS_EFF_CONTJETID_SYST_DN"
+    ,"TAUS_EFF_CONTJETID_SYST_UP"
+    ,"TAUS_SME_TOTAL_DN"
+    ,"TAUS_SME_TOTAL_UP"
+        
+    //Old ones
     ,"EES_LOW_UP"
     ,"EES_LOW_DOWN"
     ,"EES_MAT_UP"
@@ -268,7 +451,6 @@ const std::string SusyNtSysNames[] = {
     ,"TES_DOWN"
     ,"JES_UP"
     ,"JES_DOWN"
-    ,"JER"
     ,"SCALEST_UP"
     ,"SCALEST_DOWN"
     ,"RESOST"

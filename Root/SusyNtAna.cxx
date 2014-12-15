@@ -215,7 +215,7 @@ void SusyNtAna::clearObjects()
 // Select baseline and signal leptons
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, 
-                              TauID signalTauID, bool n0150BugFix)
+                              TauID signalTauID)
 {
   // Empty the object vectors
   clearObjects();
@@ -223,7 +223,7 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   // Get the Baseline objets
   getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
                      m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
-                     sys, m_selectTaus, n0150BugFix);
+                     sys, m_selectTaus);
 
   // Now grab Signal objects
   // New signal tau prescription, fill both ID levels at once
