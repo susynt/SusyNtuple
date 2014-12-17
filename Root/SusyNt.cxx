@@ -671,19 +671,17 @@ Jet::Jet(const Jet &rhs):
   jes_up(rhs.jes_up),
   jes_dn(rhs.jes_dn),
   jer(rhs.jer),
+  bjes(rhs.bjes),
+  effNp(rhs.effNp),
+  etaInter(rhs.etaInter),
+  flavor(rhs.flavor),
+  pileup(rhs.pileup),
+  punchThrough(rhs.punchThrough),
+  relativeNC(rhs.relativeNC),
+  singlePart(rhs.singlePart),
   met_wpx(rhs.met_wpx),
   met_wpy(rhs.met_wpy)
-{
-  /*
-  std::copy(rhs.bjes, rhs.bjes+2, bjes);
-  std::copy(rhs.effNp, rhs.effNp+(6*2), effNp);
-  std::copy(rhs.etaInter, rhs.etaInter+(2*2), etaInter);
-  std::copy(rhs.flavor, rhs.flavor+(2*2), flavor);
-  std::copy(rhs.pileup, rhs.pileup+(4*2), pileup);
-  std::copy(rhs.punchThrough, rhs.punchThrough+2, punchThrough);
-  std::copy(rhs.relativeNC, rhs.relativeNC+2, relativeNC);
-  std::copy(rhs.singlePart, rhs.singlePart+2, singlePart);*/
- 
+{ 
 }
 /*--------------------------------------------------------------------------------*/
 // Assignment operator
@@ -715,18 +713,16 @@ Jet& Jet::operator=(const Jet &rhs)
     jes_up = rhs.jes_up;
     jes_dn = rhs.jes_dn;
     jer = rhs.jer;
+    bjes=rhs.bjes;
+    effNp=rhs.effNp;
+    etaInter=rhs.etaInter;
+    flavor=rhs.flavor;
+    pileup=rhs.pileup;
+    punchThrough=rhs.punchThrough;
+    relativeNC=rhs.relativeNC;
+    singlePart=rhs.singlePart;
     met_wpx = rhs.met_wpx;
     met_wpy = rhs.met_wpy;
-
-    /*
-    std::copy(rhs.bjes, rhs.bjes+2, bjes);
-    std::copy(rhs.effNp, rhs.effNp+(6*2), effNp);
-    std::copy(rhs.etaInter, rhs.etaInter+(2*2), etaInter);
-    std::copy(rhs.flavor, rhs.flavor+(2*2), flavor);
-    std::copy(rhs.pileup, rhs.pileup+(4*2), pileup);
-    std::copy(rhs.punchThrough, rhs.punchThrough+2, punchThrough);
-    std::copy(rhs.relativeNC, rhs.relativeNC+2, relativeNC);
-    std::copy(rhs.singlePart, rhs.singlePart+2, singlePart);*/
   }
   return *this;
 }
@@ -739,54 +735,43 @@ void Jet::setState(int sys)
   if(sys == NtSys::NOM) return;
   
   float sf = 0;
-  /*
-  if     ( sys == NtSys::JER    ) sf = jer;
-  else if( sys == NtSys::JES_UP ) sf = jes_up;
-  else if( sys == NtSys::JES_DN ) sf = jes_dn;
-  else return;
-  */
-
   if     ( sys == NtSys::JER) sf = jer;
   else if( sys == NtSys::JET_BJES_Response_DN) sf = bjes[0];
   else if( sys == NtSys::JET_BJES_Response_UP) sf = bjes[1];
-  /*
-  else if( sys == NtSys::JET_EffectiveNP_1_DN) sf = effNp[0];//effNp[0][0];
-  else if( sys == NtSys::JET_EffectiveNP_1_UP) sf = effNp[1];//effNp[0][1];
-  else if( sys == NtSys::JET_EffectiveNP_2_DN) sf = effNp[2];//effNp[1][0];
-  else if( sys == NtSys::JET_EffectiveNP_2_UP) sf = effNp[3];//effNp[1][1];
-  else if( sys == NtSys::JET_EffectiveNP_3_DN) sf = effNp[4];//effNp[2][0];
-  else if( sys == NtSys::JET_EffectiveNP_3_UP) sf = effNp[5];//effNp[2][1];
-  else if( sys == NtSys::JET_EffectiveNP_4_DN) sf = effNp[6];//effNp[3][0];
-  else if( sys == NtSys::JET_EffectiveNP_4_UP) sf = effNp[7];// effNp[3][1];
-  else if( sys == NtSys::JET_EffectiveNP_5_DN) sf = effNp[8];//effNp[4][0];
-  else if( sys == NtSys::JET_EffectiveNP_5_UP) sf = effNp[9];//effNp[4][1];
-  else if( sys == NtSys::JET_EffectiveNP_6restTerm_DN) sf = effNp[10];//effNp[5][0];
-  else if( sys == NtSys::JET_EffectiveNP_6restTerm_UP) sf =  effNp[11];//effNp[5][1];
-  */
-  /*
-  else if( sys == NtSys::JET_EtaIntercalibration_Modelling_DN) sf = etaInter[0][0];
-  else if( sys == NtSys::JET_EtaIntercalibration_Modelling_UP) sf = etaInter[0][1];
-  else if( sys == NtSys::JET_EtaIntercalibration_TotalStat_DN) sf = etaInter[1][0];
-  else if( sys == NtSys::JET_EtaIntercalibration_TotalStat_UP) sf = etaInter[1][1];
-  else if( sys == NtSys::JET_Flavor_Composition_DN) sf = flavor[0][0];
-  else if( sys == NtSys::JET_Flavor_Composition_UP) sf = flavor[0][1];
-  else if( sys == NtSys::JET_Flavor_Response_DN) sf = flavor[1][0];
-  else if( sys == NtSys::JET_Flavor_Response_UP) sf = flavor[1][1];
-  else if( sys == NtSys::JET_Pileup_OffsetMu_DN) sf = pileup[0][0];
-  else if( sys == NtSys::JET_Pileup_OffsetMu_UP) sf =  pileup[0][1];
-  else if( sys == NtSys::JET_Pileup_OffsetNPV_DN) sf = pileup[1][0];
-  else if( sys == NtSys::JET_Pileup_OffsetNPV_UP) sf = pileup[1][1];
-  else if( sys == NtSys::JET_Pileup_PtTerm_DN) sf =  pileup[2][0];
-  else if( sys == NtSys::JET_Pileup_PtTerm_UP) sf =  pileup[2][1];
-  else if( sys == NtSys::JET_Pileup_RhoTopology_DN) sf =  pileup[3][0];
-  else if( sys == NtSys::JET_Pileup_RhoTopology_UP) sf =  pileup[3][1];
+  else if( sys == NtSys::JET_EffectiveNP_1_DN) sf = effNp[0];
+  else if( sys == NtSys::JET_EffectiveNP_1_UP) sf = effNp[1];
+  else if( sys == NtSys::JET_EffectiveNP_2_DN) sf = effNp[2];
+  else if( sys == NtSys::JET_EffectiveNP_2_UP) sf = effNp[3];
+  else if( sys == NtSys::JET_EffectiveNP_3_DN) sf = effNp[4];
+  else if( sys == NtSys::JET_EffectiveNP_3_UP) sf = effNp[5];
+  else if( sys == NtSys::JET_EffectiveNP_4_DN) sf = effNp[6];
+  else if( sys == NtSys::JET_EffectiveNP_4_UP) sf = effNp[7];
+  else if( sys == NtSys::JET_EffectiveNP_5_DN) sf = effNp[8];
+  else if( sys == NtSys::JET_EffectiveNP_5_UP) sf = effNp[9];
+  else if( sys == NtSys::JET_EffectiveNP_6restTerm_DN) sf = effNp[10];
+  else if( sys == NtSys::JET_EffectiveNP_6restTerm_UP) sf =  effNp[11];
+  else if( sys == NtSys::JET_EtaIntercalibration_Modelling_DN) sf = etaInter[0];
+  else if( sys == NtSys::JET_EtaIntercalibration_Modelling_UP) sf = etaInter[1];
+  else if( sys == NtSys::JET_EtaIntercalibration_TotalStat_DN) sf = etaInter[2];
+  else if( sys == NtSys::JET_EtaIntercalibration_TotalStat_UP) sf = etaInter[3];
+  else if( sys == NtSys::JET_Flavor_Composition_DN) sf = flavor[0];
+  else if( sys == NtSys::JET_Flavor_Composition_UP) sf = flavor[1];
+  else if( sys == NtSys::JET_Flavor_Response_DN) sf = flavor[2];
+  else if( sys == NtSys::JET_Flavor_Response_UP) sf = flavor[3];
+  else if( sys == NtSys::JET_Pileup_OffsetMu_DN) sf = pileup[0];
+  else if( sys == NtSys::JET_Pileup_OffsetMu_UP) sf =  pileup[1];
+  else if( sys == NtSys::JET_Pileup_OffsetNPV_DN) sf = pileup[2];
+  else if( sys == NtSys::JET_Pileup_OffsetNPV_UP) sf = pileup[3];
+  else if( sys == NtSys::JET_Pileup_PtTerm_DN) sf =  pileup[4];
+  else if( sys == NtSys::JET_Pileup_PtTerm_UP) sf =  pileup[5];
+  else if( sys == NtSys::JET_Pileup_RhoTopology_DN) sf =  pileup[6];
+  else if( sys == NtSys::JET_Pileup_RhoTopology_UP) sf =  pileup[7];
   else if( sys == NtSys::JET_PunchThrough_MC12_DN) sf = punchThrough[0];
   else if( sys == NtSys::JET_PunchThrough_MC12_UP) sf = punchThrough[1];
   else if( sys == NtSys::JET_RelativeNonClosure_MC12_DN) sf = relativeNC[0];
   else if( sys == NtSys::JET_RelativeNonClosure_MC12_UP) sf = relativeNC[1];
   else if( sys == NtSys::JET_SingleParticle_HighPt_DN) sf = singlePart[0];
   else if( sys == NtSys::JET_SingleParticle_HighPt_UP) sf = singlePart[1];
-  */
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
