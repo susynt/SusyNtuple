@@ -141,7 +141,7 @@ class MCWeighter
     static std::string defaultLabelBinCounter(const unsigned int &dsid, bool verbose);
     /// default directory from which we read the xsec files for SUSY::CrossSectionDB
     static std::string defaultXsecDir() {
-      return std::string("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+      return std::string("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
     }
     /// a list of the xsec files containing known simplified models
     static std::vector<std::string> xsecFilesForSimplifiedModels();
