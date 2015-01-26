@@ -4,6 +4,7 @@
 #include "TKey.h"
 #include "TChainElement.h"
 #include "TH1F.h"
+#include "TSystem.h"
 
 #include "Mt2/mt2_bisect.h" 
 
@@ -41,10 +42,8 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   // Initialize b-tag tool
   string rootcoredir = getenv("ROOTCOREBIN");
-  string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  string calibFolder = rootcoredir + "/data/SusyNtuple/";
-  //string calibration = rootcoredir + "/data/SusyNtuple/BTagCalibration_2013.env";
-  //string calibFolder = rootcoredir + "/data/SusyNtuple/";
+  string calibration = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/BTagCalibration.env");
+  string calibFolder = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/");
   m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
 }
 
@@ -55,122 +54,6 @@ void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
 {
   m_jvfTool = new JVFUncertaintyTool(jetAlgo.c_str());
 }*/
-
-/*--------------------------------------------------------------------------------*/
-// Get event weight, combine gen, pileup, xsec, and lumi weights
-// Default weight uses A-D lumi
-// You can supply a different luminosity, but the pileup weights will still correspond to A-D
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::getEventWeight(const Event* evt, float lumi, 
-                                  bool useSumwMap, const SumwMap* sumwMap,
-                                  bool useProcSumw, bool useSusyXsec, 
-                                  MCWeighter::WeightSys sys)
-{
-  // Method is deprecated
-  static uint warningCount = 0;
-  if(warningCount < 50){
-    cout << "SusyNtTools::getEventWeight - WARNING - This method is deprecated. "
-         << "You should update your code to use the MCWeighter class, as demonstrated "
-         << "in Susy3LepCutflow" << endl;
-    warningCount++;
-    if(warningCount == 50){
-      cout << "Warning was printed 50 times, and will now stop" << endl;
-    }
-  }
-  if(!evt->isMC) return 1;
-  else{
-    float sumw = getSumw(evt, sumwMap, useSumwMap, useProcSumw);
-    float xsec = getXsecTimesEff(evt, useSusyXsec, sys);
-    float pupw = getPileupWeight(evt, sys);
-    return evt->w * pupw * xsec * lumi / sumw;
-  }
-}
-
-/*--------------------------------------------------------------------------------*/
-// Get the sumw for this event
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::getSumw(const Event* evt, const SumwMap* sumwMap, bool useSumwMap, bool useProcSumw)
-{
-  float sumw = evt->sumw;
-  if(useSumwMap){
-    if(sumwMap != NULL){
-      // Map key is pair(mcid, proc)
-      unsigned int mcid = evt->mcChannel;
-      int procID = useProcSumw? evt->susyFinalState : 0;
-      // Correct for procID == -1
-      if(procID < 0) procID = 0;
-      SumwMapKey key(mcid, procID);
-      SumwMap::const_iterator sumwMapIter = sumwMap->find(key);
-      if(sumwMapIter != sumwMap->end()) sumw = sumwMapIter->second;
-      else{
-        cout << "SusyNtTools::getEventWeight - ERROR - requesting to use sumw map but "
-             << "mcid " << mcid << " proc " << procID << " not found!" << endl;
-        abort(); // better to return a default, like -1?
-      }
-    }
-    else{
-      cout << "SusyNtTools::getEventWeight - ERROR - sumw map is NULL!" << endl;
-      abort(); // better to return a default, like -1?
-    }
-  }
-  return sumw;
-}
-
-/*--------------------------------------------------------------------------------*/
-// Get the SUSYTools cross section for this sample
-/*--------------------------------------------------------------------------------*/
-SUSY::CrossSectionDB::Process SusyNtTools::getCrossSection(const Event* evt)
-{
-  using namespace SUSY;
-  // Use one DB and map for all instances of this class
-  typedef pair<int, int> intpair;
-  typedef map<intpair, CrossSectionDB::Process> XSecMap;
-  static string xsecDir = string(getenv("ROOTCOREBIN")) + "/data/SUSYTools/mc12_8TeV/";
-  static CrossSectionDB xsecDB(xsecDir);
-  static XSecMap xsecCache;
-  if(evt->isMC){
-    // SUSYTools expects 0 as default value, but we have existing tags with default of -1
-    int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
-    // Temporary bugfix for Wh nohadtau in n0150
-    if(evt->mcChannel >= 177501 && evt->mcChannel <= 177528) proc = 125;
-    const intpair k(evt->mcChannel, proc);
-    // Check to see if we've cached this process yet.
-    XSecMap::const_iterator iter = xsecCache.find(k);
-    if(iter != xsecCache.end()){
-      return iter->second;
-    }
-    else{
-      // Hasn't been cached yet, load it from the DB
-      CrossSectionDB::Process p = xsecDB.process(evt->mcChannel, proc);
-      xsecCache[k] = p;
-      return p;
-    }
-  }
-  return CrossSectionDB::Process();
-}
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::getXsecTimesEff(const Event* evt, bool useSusyXsec, MCWeighter::WeightSys sys)
-{
-  float xsec = evt->xsec;
-  if(useSusyXsec){
-    SUSY::CrossSectionDB::Process p = getCrossSection(evt);
-    xsec = p.xsect() * p.kfactor() * p.efficiency();
-    if(sys==MCWeighter::Sys_XSEC_UP)
-      xsec *= (1. + p.relunc());
-    else if(sys==MCWeighter::Sys_XSEC_DN)
-      xsec *= (1. - p.relunc());
-  }
-  return xsec;
-}
-/*--------------------------------------------------------------------------------*/
-// Get the pileup weight for this event
-/*--------------------------------------------------------------------------------*/
-float SusyNtTools::getPileupWeight(const Event* evt, MCWeighter::WeightSys sys)
-{
-  if(sys==MCWeighter::Sys_PILEUP_UP) return evt->wPileup_up;
-  else if(sys==MCWeighter::Sys_PILEUP_DN) return evt->wPileup_dn;
-  else return evt->wPileup;
-}
 
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods
@@ -795,7 +678,7 @@ bool SusyNtTools::isSignalJet2Lep(const Jet* jet, SusyNtSys sys)
 /*--------------------------------------------------------------------------------*/
 // Check if given Jet is 2 Lepton Central Light Jet
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
+bool SusyNtTools::isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType)
 {
     // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
@@ -807,7 +690,7 @@ bool SusyNtTools::isCentralLightJet(const Jet* jet, JVFUncertaintyTool* jvfTool,
             maxJvtEta = JET_ETA_CUT_2L;
         }
         pass = (jet->Pt() > JET_PT_L20_CUT
-                && fabs(jet->Eta()) < JET_ETA_CUT_2L // DG why not detEta?
+                && fabs(jet->detEta) < JET_ETA_CUT_2L
                 && jet->mv1 < MV1_80
                 && SusyNtTools::jetPassesJvfRequirement(jet, jvfTool, JET_JVF_PT, maxJvtEta, minJvf, sys, anaType));
     } else {
@@ -2049,111 +1932,76 @@ float SusyNtTools::calcMCT(TLorentzVector v1, TLorentzVector v2)
 }
 
 /*--------------------------------------------------------------------------------*/
-// Build a map of MCID -> sumw.
-// This method will loop over the input files associated with the TChain.
-// The MCID in the first entry of the tree will be used, so one CANNOT use this
-// if multiple datasets are combined into one SusyNt tree file!
-// The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID.
-// Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
-// However, one can have more than one (complete) dataset in the chain which is why we use the map.
-/*--------------------------------------------------------------------------------*/
-SumwMap SusyNtTools::buildSumwMap(TChain* chain, bool isSimplifiedModel)
+void SusyNtTools::superRazor(const LeptonVector& leptons, const Susy::Met* met,
+			     TVector3& vBETA_z, TVector3& pT_CM,
+			     TVector3& vBETA_T_CMtoR, TVector3& vBETA_R,
+			     double& SHATR, double& dphi_LL_vBETA_T, double& dphi_L1_L2,
+			     double& gamma_R, double&  dphi_vBETA_R_vBETA_T,
+			     double& MDELTAR, double& costhetaRp1)
 {
-  //cout << "SusyNtTools::buildSumwMap" << endl;
-  cout << "SusyNtTools::buildSumwMap - WARNING - use of buildSumwMap is deprecated. "
-       << "You should update your code to use the MCWeighter class, as demonstrated "
-       << "in Susy3LepCutflow" << endl;
+// MDR CALCULATION 
+//
+// Code written by Christopher Rogan <crogan@cern.ch>, 04-23-13
+// Details given in paper (http://arxiv.org/abs/1310.4827) written by 
+// Matthew R. Buckley, Joseph D. Lykken, Christopher Rogan, Maria Spiropulu
+//
+  if( leptons.size() < 2 ) return;
+  
+  // necessary variables
+  TLorentzVector metlv = met->lv();
+  TLorentzVector l0    = *leptons.at(0);
+  TLorentzVector l1    = *leptons.at(1);
 
-  // The sumw map
-  SumwMap sumwMap;
+  //
+  // Lab frame
+  //
+  //Longitudinal boost
+  vBETA_z = (1./(l0.E()+l1.E()))*(l0+l1).Vect(); 
+  vBETA_z.SetX(0.0);         
+  vBETA_z.SetY(0.0);
+  
+  l0.Boost(-vBETA_z);
+  l1.Boost(-vBETA_z);
 
-  // Loop over files in the chain
-  TObjArray* fileElements = chain->GetListOfFiles();
-  TIter next(fileElements);
-  TChainElement* chainElement = 0;
-  while((chainElement = (TChainElement*)next())){
-    TString fileTitle = chainElement->GetTitle();
-    TFile* f = TFile::Open(fileTitle.Data());
+  //pT of CM frame
+  pT_CM = (l0+l1).Vect() + metlv.Vect();
+  pT_CM.SetZ(0.0);     
+  
+  TLorentzVector ll = l0+l1;
+  //invariant mass of the total event
+  SHATR = sqrt( 2.*(ll.E()*ll.E() - ll.Vect().Dot(pT_CM) 
+		   + ll.E()*sqrt( ll.E()*ll.E() + pT_CM.Mag2() - 2.*ll.Vect().Dot(pT_CM) )));
+  
+  vBETA_T_CMtoR = (1./sqrt(pT_CM.Mag2() + SHATR*SHATR))*pT_CM;
+  
+  l0.Boost(-vBETA_T_CMtoR);
+  l1.Boost(-vBETA_T_CMtoR);
+  ll.Boost(-vBETA_T_CMtoR);  
 
-    // Get the tree, for extracting mcid
-    TTree* tree = (TTree*) f->Get("susyNt");
+  //
+  //R-frame
+  //
+  dphi_LL_vBETA_T = fabs((ll.Vect()).DeltaPhi(vBETA_T_CMtoR));
+  
+  dphi_L1_L2 = fabs(l0.Vect().DeltaPhi(l1.Vect()));
+  
+  vBETA_R = (1./(l0.E()+l1.E()))*(l0.Vect() - l1.Vect());
+  
+  gamma_R = 1./sqrt(1.-vBETA_R.Mag2());
+  
+  dphi_vBETA_R_vBETA_T = fabs(vBETA_R.DeltaPhi(vBETA_T_CMtoR));
+  
+  l0.Boost(-vBETA_R);
+  l1.Boost(vBETA_R);
+ 
+  //
+  //R+1 frame
+  //
+  MDELTAR = 2.*l0.E();
+  costhetaRp1 = l0.Vect().Dot(vBETA_R)/(l0.Vect().Mag()*vBETA_R.Mag());
 
-    // Setup branch for accessing the MCID in the tree
-    Event* evt = 0;
-    tree->SetBranchStatus("*", 0);
-    tree->SetBranchStatus("mcChannel", 1);
-    tree->SetBranchAddress("event", &evt);
-    tree->GetEntry(0);
-
-    // General key, default process number (0)
-    SumwMapKey genKey(evt->mcChannel, 0);
-    if(sumwMap.find(genKey) == sumwMap.end()) sumwMap[genKey] = 0;
-
-    // Get the generator weighted histogram
-    TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
-
-    // TODO: Check if bin 2 can be used for everything yet
-    // Bin 1 is all initial events
-    // Bin 2 is events after susy propagators have been removed
-    // (relevant for the simplified models only)
-    if(!isSimplifiedModel)
-      sumwMap[genKey] += hGenCF->GetBinContent(1);
-    else
-      sumwMap[genKey] += hGenCF->GetBinContent(2);
-
-    // Find the histograms per process
-    TIter next(f->GetListOfKeys());
-    while(TKey* tkey = (TKey*) next()){
-      // Test to see if object is a cutflow histogram
-      TObject* obj = tkey->ReadObj();
-      if(obj->InheritsFrom("TH1")){
-        string histoName = obj->GetName();
-
-        // Histo is named procCutFlowXYZ where XYZ is the process number
-        if(histoName.find("procCutFlow") != string::npos){
-          TH1F* hProcCF = (TH1F*) obj;
-
-          // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
-          string procString = histoName.substr(11, string::npos);
-          stringstream stream;
-          stream << procString;
-          int proc;
-          stream >> proc;
-
-          // Skip the default with proc = -1 or 0
-          if(proc != -1 && proc != 0){
-            SumwMapKey procKey(evt->mcChannel, proc);
-            if(sumwMap.find(procKey) == sumwMap.end()) sumwMap[procKey] = 0;
-
-            // TODO: unify the prescription - see above
-            if(!isSimplifiedModel)
-              sumwMap[procKey] += hProcCF->GetBinContent(1);
-            else
-              sumwMap[procKey] += hProcCF->GetBinContent(2);
-          }
-        } // Is a proc cutflow
-      } // Object is a histo
-    } // Loop over TKeys in TFile
-
-    f->Close();
-    delete f;
-  }
-
-  // Dump out the MCIDs and calculated sumw
-  SumwMap::iterator sumwMapIter;
-  cout << endl << "On-the-fly sumw computation:" << endl;
-  cout.precision(8);
-  for(sumwMapIter = sumwMap.begin(); sumwMapIter != sumwMap.end(); sumwMapIter++){
-    cout << "mcid: " << sumwMapIter->first.first 
-         << " proc: " << sumwMapIter->first.second 
-         << " sumw: " << sumwMapIter->second 
-         << endl;
-  }
-  cout.precision(6);
-
-  return sumwMap;
+  return;
 }
-
 /*--------------------------------------------------------------------------------*/
 // Check if mcID is a known sherpa sample
 /*--------------------------------------------------------------------------------*/
@@ -2180,30 +2028,43 @@ bool SusyNtTools::jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTo
                                           SusyNtSys sys, AnalysisType anaType)
 {
     bool pass=false;
+    // Check if the jet is valid
     if(jet) {
+        // Set the necessary variables
         float pt(jet->Pt()), eta(jet->detEta);
-        float jvfThres(nominalJvtThres);
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
+        float jvfThres(nominalJvtThres);
         bool jvfUp(sys == NtSys_JVF_UP), jvfDown(sys == NtSys_JVF_DN);
+        // See if JVF need to be checked
+        if (!applyJvf) return true;
+        // Set the threshold for systematic variations, otherwise always use nominal
         if(jvfUp || jvfDown) {
             if(jvfTool) {
+                // For JVF working point 0 there is no down variation. The recommendations is to use up variation,
+                // and then symmetrize the uncertainty upstream. Therefore, we currently set down to nominal
                 bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
-                jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
+                if (fabs(nominalJvtThres) < 0.001 && jvfDown) { 
+                    jvfThres = nominalJvtThres; 
+                } else { 
+                    jvfThres = jvfTool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp); 
+                }
             } else {
                 cout << "jetPassesJvfRequirement: error, jvfTool required (" << jvfTool << ")" <<endl;
                 assert(jvfTool);
             }
         }
-        bool acceptMinusOne(anaType==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
-        bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
-        if(applyJvf) {
-            pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));
+        // Apply JVF cut, this bit is analysis dependent
+        if(anaType==Ana_2Lep || anaType==Ana_2LepWH) {
+            pass = (fabs(jet->jvf) - 0.001 > jvfThres); 
+        } else if (anaType==Ana_3Lep) {
+            pass = (jet->jvf > jvfThres);
         } else {
+            cout << "jetPassesJvfRequirement: Unknown anaType (" << anaType << "), return true" << endl;
             pass = true;
         }
     } else {
-        cout<< "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
-            << "Return " << pass << endl;
+        cout << "jetPassesJvfRequirement: invalid inputs jet(" << jet << "), jvfTool(" << jvfTool << ")."
+             << "Return " << pass << endl;
     }
     return pass;
 }

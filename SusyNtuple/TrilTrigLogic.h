@@ -12,14 +12,7 @@
 #include "SusyNtuple/SusyNtObject.h"
 
 
-/*
-
-    TrilTrigLogic - class to implement the multilepton trigger logic
-
-*/
-
-//using namespace Susy;
-
+/// TrilTrigLogic - class to implement the multilepton trigger logic
 class TrilTrigLogic
 {
 
@@ -28,14 +21,14 @@ class TrilTrigLogic
     TrilTrigLogic();
     ~TrilTrigLogic();
 
-    // Load the reweighters with maps from input files
+    /// Load the reweighters with maps from input files
     void loadTriggerMaps();
     APReweightND* loadTrigWeighter(TFile* f, TString chain);
 
-    // Trigger cut without matching
+    /// Trigger cut without matching
     bool passEventTrigger(const Susy::Event* evt);
 
-    // Trigger matching in data (and MC at the moment)
+    /// Trigger matching in data (and MC at the moment)
     //bool passTriggerMatching(const LeptonVector& leptons, Event* evt);
     bool passTriggerMatching(const LeptonVector& leptons, const TauVector& taus, const Susy::Event* evt, 
                              bool useDilepTrigs=true);
@@ -52,20 +45,20 @@ class TrilTrigLogic
     //  return tau->Pt() > ptThreshold && (accOnly || tau->matchTrig(trigMask));
     //}
 
-    // Trigger reweighting in MC - not currently setup
+    /// Trigger reweighting in MC - not currently setup
     float getTriggerWeight(const LeptonVector& leptons, const Susy::Event* evt);
 
-    // Only apply pt threshold cuts for trigger acceptance
+    /// Only apply pt threshold cuts for trigger acceptance
     void setAccOnly(bool doIt=true) { m_accOnly = doIt; }
 
-    // Debug info
+    /// Debug info
     void setDebug(bool doIt=true) { m_dbg = doIt; }
 
   protected:
 
-    bool                m_accOnly;      // Only check trigger kinematic acceptance
+    bool                m_accOnly;      ///< Only check trigger kinematic acceptance
 
-    int                 m_dbg;          // Debug flag
+    int                 m_dbg;          ///< Debug flag
 
 };
 

@@ -9,9 +9,8 @@
 class TFile;
 
 namespace Susy {
-/*
-  A class to cache a TEventList for SusyNt
-
+///  A class to cache a TEventList for SusyNt
+/**
   Usage: set the cache filename. On the first run, the TEventList is
   created and filled. Then just check cacheDoesExists(), and call
   TChain::SetEventList(EventlistHandler::fecthEventList())

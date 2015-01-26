@@ -1,14 +1,6 @@
 #ifndef DilTrigLogic_h
 #define DilTrigLogic_h
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-// This class will implement the dilepton trigger logic based  //
-// on the leptons, run number and stream                       //
-// The user will need to call one basic method:                //
-// passDilTrig(Electrons,Muons,RunNumber,Stream)               //
-// and it will return pass or fail based on kinematics         //
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-//
-
 #include "TFile.h"
 #include "THnSparse.h"
 
@@ -36,6 +28,13 @@ enum DilTriggerRegion
   DTR_N
 };
 
+/// Trigger logic for dilepton events
+/**
+ This class will implement the dilepton trigger logic based on the
+ leptons, run number and stream The user will need to call one basic
+ method: passDilTrig(Electrons,Muons,RunNumber,Stream) and it will
+ return pass or fail based on kinematicsx
+*/
 class DilTrigLogic
 {
 
@@ -63,9 +62,6 @@ class DilTrigLogic
   // Methods to check Evt Trigger and trigger matching
   bool passEvtTrigger(uint evtflag, DilTriggerRegion dtr);
   bool passTriggerMatch(uint flag0, uint flag1, DilTriggerRegion dtr);
-
-  // MC will need to be reweighted
-  float getMCWeight();
 
   // Trigger reweighting
   double getTriggerWeight(LeptonVector leptons, bool isMC, 

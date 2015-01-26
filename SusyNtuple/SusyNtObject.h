@@ -9,30 +9,24 @@
 
 namespace Susy
 {
-
-  /*
-
-      SusyNtObject - An interface class for accessing SusNt objects
-
-  */
-
+  /// An interface class for accessing SusNt objects
   class SusyNtObject : public TObject
   {
     public:
   
-      // Constructor for writing only
+      /// Constructor for writing only
       SusyNtObject();
-      // Constructor for reading and writing
+      /// Constructor for reading and writing
       SusyNtObject(const Long64_t& entry);
   
-      // Set branches active for writing
+      /// Set branches active for writing
       // I will later add flags here for controlling systematics
       void SetActive();
-      // Connect the objects to an output tree
+      /// Connect the objects to an output tree
       void WriteTo( TTree* tree );
-      // Connect the objects to an input tree
+      /// Connect the objects to an input tree
       void ReadFrom( TTree* tree );
-      // Clear variables when in read mode
+      /// Clear variables when in read mode
       void clear();
 
       //
@@ -40,25 +34,25 @@ namespace Susy
       // This may change to a map based usage later for systematics
       //
 
-      // Event variables
+      /// Event variables
       D3PDReader::VarHandle< Event* >                   evt;
-      // Electron variables
+      /// Electron variables
       D3PDReader::VarHandle< std::vector<Electron>* >   ele;
-      // Muon variables
+      /// Muon variables
       D3PDReader::VarHandle< std::vector<Muon>* >       muo;
-      // Jet variables
+      /// Jet variables
       D3PDReader::VarHandle< std::vector<Jet>* >        jet;
-      // Photon variables
+      /// Photon variables
       D3PDReader::VarHandle< std::vector<Photon>* >     pho;
-      // Tau variables
+      /// Tau variables
       D3PDReader::VarHandle< std::vector<Tau>* >        tau;
-      // Met variables
+      /// Met variables
       D3PDReader::VarHandle< std::vector<Met>* >        met;  
-      // TruthParticle variables
+      /// TruthParticle variables
       D3PDReader::VarHandle< std::vector<TruthParticle>* > tpr;
-      // TruthJet variables
+      /// TruthJet variables
       D3PDReader::VarHandle< std::vector<TruthJet>* >   tjt;
-      // TruthMet variables
+      /// TruthMet variables
       D3PDReader::VarHandle< std::vector<TruthMet>* >   tmt;
 
       ClassDef(SusyNtObject, 3);

@@ -1,5 +1,6 @@
 #include "SusyNtuple/MCWeighter.h"
 #include "SusyNtuple/string_utils.h"
+#include "SusyNtuple/vec_utils.h"
 
 #include "TSystem.h"
 #include "TFile.h"
@@ -12,6 +13,7 @@
 #include <iostream>
 #include <cstdlib> // atoi
 #include <iterator> // distance
+#include <sstream> // std::ostringstream
 
 using namespace std;
 using namespace Susy;
@@ -19,22 +21,25 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 // Constructor
 /*--------------------------------------------------------------------------------*/
-MCWeighter::MCWeighter(TTree* tree, string xsecDir) :
+MCWeighter::MCWeighter() :
         m_useProcSumw(true),
         m_sumwMethod(Sumw_MAP),
         m_xsecMethod(Xsec_ST),
-        m_xsecDB(gSystem->ExpandPathName(xsecDir.c_str())),
-        m_labelBinCounter(MCWeighter::defaultLabelBinCounter()),
-        m_warningCounter(0)
+        m_xsecDB(gSystem->ExpandPathName(MCWeighter::defaultXsecDir().c_str())),
+        m_warningCounter(0),
+        m_allowInvalid(false),
+        m_verbose(false)
 {
-  if(tree) buildSumwMap(tree);
+
 }
 
 /*--------------------------------------------------------------------------------*/
 // Destructor
 /*--------------------------------------------------------------------------------*/
 MCWeighter::~MCWeighter()
-{}
+{
+    cout<<"ProcessValidator summary: "<<m_procidValidator.summary()<<endl;
+}
 
 /*--------------------------------------------------------------------------------*/
 // Build a map of MCID -> sumw.
@@ -76,7 +81,10 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
   // Get the generator weighted histogram
   TH1F* hGenCF = (TH1F*) f->Get("genCutFlow");
 
-  int sumwBin = hGenCF->GetXaxis()->FindBin(m_labelBinCounter.c_str());
+  string labelCounter = (m_labelBinCounter.size()>0 ?
+                         m_labelBinCounter :
+                         defaultLabelBinCounter(static_cast<unsigned int>(mcid), m_verbose));
+  int sumwBin = hGenCF->GetXaxis()->FindBin(labelCounter.c_str());
   m_sumwMap[genKey] += hGenCF->GetBinContent(sumwBin);
 
   // Find the histograms per process
@@ -139,11 +147,10 @@ void MCWeighter::buildSumwMapFromChain(TChain* chain)
 }
 
 /*--------------------------------------------------------------------------------*/
-void MCWeighter::dumpSumwMap()
+void MCWeighter::dumpSumwMap() const
 {
   // Dump out the MCIDs and calculated sumw
-  cout<<"Sumw map built with from the bin '"<<m_labelBinCounter<<"'"<<endl;
-  SumwMap::iterator sumwMapIter;
+  SumwMap::const_iterator sumwMapIter;
   cout.precision(8);
   for(sumwMapIter = m_sumwMap.begin(); sumwMapIter != m_sumwMap.end(); sumwMapIter++){
     cout << "mcid: " << sumwMapIter->first.first
@@ -153,12 +160,45 @@ void MCWeighter::dumpSumwMap()
   }
   cout.precision(6);
 }
-
 /*--------------------------------------------------------------------------------*/
-// Get event weight, combine gen, pileup, xsec, and lumi weights
-// Default weight uses A-D lumi
-// You can supply a different luminosity,
-// but the pileup weights will still correspond to A-D
+void MCWeighter::dumpXsecCache() const
+{
+    struct XSecEntry2str {
+        string operator() (const XSecMap::const_iterator &entry) {
+            std::ostringstream oss;
+            oss<<" (first, second): "<<entry->first.first<<", "<<entry->first.second;
+            return oss.str();
+        }
+    } entry2str;
+    XSecMap::const_iterator it = m_xsecCache.begin();
+    XSecMap::const_iterator end = m_xsecCache.end();
+    cout<<"printing xsec cache ("<<std::distance(it, end)<<" lines)"<<endl;
+    cout.precision(8);
+    for( ; it!=end; ++it){
+        cout<<entry2str(it);
+    }
+    cout.precision(6);
+}
+/*--------------------------------------------------------------------------------*/
+void MCWeighter::dumpXsecDb() const
+{
+    struct Process2str { //should really be provided by CrossSectionDB...
+        string header() const { return string("ID\tname\t(xsec*kfactor*efficiency)"); }
+        string operator() (const SUSY::CrossSectionDB::Process &p) {
+            std::ostringstream oss;
+            oss<<" "<<p.ID()
+               <<" "<<p.name()
+               <<" "<<(p.xsect()*p.kfactor()*p.efficiency());
+            return oss.str();
+        }
+    } process2str;
+    SUSY::CrossSectionDB::iterator it = m_xsecDB.begin();
+    SUSY::CrossSectionDB::iterator end = m_xsecDB.end();
+
+    cout<<"printing xsec db ("<<std::distance(it, end)<<" lines)"<<endl;
+    for(; it!=end; ++it)
+        cout<<process2str(it->second)<<endl;
+}
 /*--------------------------------------------------------------------------------*/
 float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys)
 {
@@ -198,8 +238,8 @@ float MCWeighter::getSumw(const Event* evt)
     // Map key is pair(mcid, proc)
     unsigned int mcid = evt->mcChannel;
     int procID = m_useProcSumw? evt->susyFinalState : 0;
-    // Correct for procID == -1
-    if(procID < 0) procID = 0;
+    procID = ProcessValidator::convertDefaultSusyNt2DefaultSusyTools(procID);
+    m_procidValidator.validate(procID);
     SumwMapKey key(mcid, procID);
     SumwMap::const_iterator sumwMapIter = m_sumwMap.find(key);
     if(sumwMapIter != m_sumwMap.end()) sumw = sumwMapIter->second;
@@ -222,23 +262,36 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
   using namespace SUSY;
   CrossSectionDB::Process process;
   if(evt->isMC){
-    // SUSYTools expects 0 as default value, but we have existing tags with default of -1
-    int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
-    unsigned int mcid = evt->mcChannel;
-    #warning "Temporary bugfix for Wh nohadtau in n0150"
-    if(mcid >= 177501 && mcid <= 177528) proc = 125;
-    const intpair k(mcid, proc);
-    XSecMap::const_iterator iter = m_xsecCache.find(k);
-    bool isAlreadyCached(iter != m_xsecCache.end());
-    if(isAlreadyCached){
-        process = iter->second;
-    } else {
-        m_xsecCache[k] = process = m_xsecDB.process(mcid, proc);
-    }
-  }
-  bool processIsInvalid(process.ID()==-1); // see SUSYCrossSection.h
-  if(processIsInvalid)
-      cerr << "MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools." << endl;
+      // SUSYTools expects 0 as default proc value, but we have existing tags with default of -1
+      int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
+      unsigned int mcid = evt->mcChannel;
+      if(m_procidValidator.validate(proc).valid){
+#warning "Temporary bugfix for Wh nohadtau in n0150"
+          if(mcid >= 177501 && mcid <= 177528) proc = 125;
+          const intpair k(mcid, proc);
+          XSecMap::const_iterator iter = m_xsecCache.find(k);
+          bool isAlreadyCached(iter != m_xsecCache.end());
+          if(isAlreadyCached){    process = iter->second; }
+          else { m_xsecCache[k] = process = m_xsecDB.process(mcid, proc); }
+      } else {
+          if(m_allowInvalid){
+              float invalidXsec=0.0; // default xsec from SUSYTools is -1; use 0.0 instead (no bias)
+              process = CrossSectionDB::Process(process.ID(), process.name(), invalidXsec,
+                                                process.kfactor(), process.efficiency(),
+                                                process.relunc(), process.sumweight(), process.stat());
+              if(m_procidValidator.counts_invalid<m_procidValidator.max_warnings)
+                  cerr<<"MCWeighter::getCrossSection - WARNING - xsec not found in SUSYTools."
+                      <<"(mcid "<<mcid<<", proc "<<proc<<"), returning xsec "<<invalidXsec
+                      <<endl;
+          } else {
+              cout<<"For mcid "<<mcid<<" and proc "<<proc
+                  <<" you need to either provide a xsec file (see test_mcWeighter),"
+                  <<" or call MCWeighter::setAllowInvalid(true)"
+                  <<endl;
+              abort();
+          }
+      }
+  } // isMC
   return process;
 }
 
@@ -273,13 +326,22 @@ MCWeighter& MCWeighter::setLabelBinCounter(const std::string &v)
     return *this;
 }
 //----------------------------------------------------------
-size_t MCWeighter::parseAdditionalXsecFile(const std::string &filename, bool verbose)
+std::string MCWeighter::defaultLabelBinCounter(const unsigned int &dsid, bool verbose)
 {
+    string bin_label="Initial";
+    if(MCWeighter::isSimplifiedModel(dsid, verbose))
+        bin_label = "SusyProp Veto";
+    return bin_label;
+}
+//----------------------------------------------------------
+size_t MCWeighter::parseAdditionalXsecFile(const std::string &input_filename, bool verbose)
+{
+    string filename = gSystem->ExpandPathName(input_filename.c_str());
     size_t nInitialElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
     bool inputFileIsValid(MCWeighter::isFormattedAsSusyCrossSection(filename, verbose));
     if(inputFileIsValid) {
         SUSY::CrossSectionDB tmpXsecDb;
-        tmpXsecDb.loadFile(gSystem->ExpandPathName(filename.c_str()));
+        tmpXsecDb.loadFile(filename.c_str());
         for(SUSY::CrossSectionDB::iterator p=tmpXsecDb.begin(); p!=tmpXsecDb.end(); ++p) {
             int sample_id(p->second.ID());
             // this is an ugly conversion we inherit from SUSYCrossSection; drop when they provide Key::get_proc_id
@@ -339,7 +401,6 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
     size_t nEmptyOrCommentLines=0;
     size_t nValidLines=0;
     size_t nInvalidLines=0;
-    const size_t nExpectedTokens=6;
     std::string line;
     if(verbose)
         cout<<"readDsidsFromSusyCrossSectionFile: parsing '"<<filename<<"'"<<endl;
@@ -349,23 +410,13 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             nEmptyOrCommentLines++;
             continue;
         } else {
-            vector<string> tokens(susy::utils::tokenizeString(line, ' '));
-            bool hasExpectedTokens(tokens.size()==nExpectedTokens);
-            bool firstTokenIsDsid(tokens.size()>0 && susy::utils::isInt(tokens[0]));
-            bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
-            if(isValidLine) {
-                dsids.push_back(atoi(tokens[0].c_str()));
+            int dsid;
+            if(MCWeighter::readDsidsFromSusyCrossSectionLine(line, dsid, verbose)) {
+                dsids.push_back(dsid);
                 nValidLines++;
             } else {
-                if(verbose)
-                    cout<<"invalid line"
-                        <<" ("<<tokens.size()<<" tokens, expected "<<nExpectedTokens<<","
-                        <<" firstTokenIsDsid "<<(firstTokenIsDsid?"true":"false")
-                        <<", "<<(tokens.size() ? tokens[0] : "")
-                        <<" ):"
-                        <<" '"<<line<<"'"<<endl;
                 nInvalidLines++;
-            } // if(!isValidLine)
+            }
         } // if(!skipThisLine)
     } // while(getline)
     if(verbose)
@@ -375,5 +426,111 @@ std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filen
             <<", "<<nEmptyOrCommentLines<<" empty/comment"
             <<" lines"<<endl;
     return dsids;
+}
+//----------------------------------------------------------
+bool MCWeighter::readDsidsFromSusyCrossSectionLine(const std::string &line, int &dsid, bool verbose)
+{
+    bool valid_parse = false;
+    const size_t nExpectedTokens=6;
+    vector<string> tokens(susy::utils::tokenizeString(line, ' '));
+    bool hasExpectedTokens(tokens.size()==nExpectedTokens);
+    bool firstTokenIsDsid(tokens.size()>0 && susy::utils::isInt(tokens[0]));
+    bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
+    if(isValidLine) {
+        dsid = atoi(tokens[0].c_str());
+        valid_parse = true;
+    } else {
+        if(verbose)
+            cout<<"invalid line"
+                <<" ("<<tokens.size()<<" tokens, expected "<<nExpectedTokens<<","
+                <<" firstTokenIsDsid "<<(firstTokenIsDsid?"true":"false")
+                <<", "<<(tokens.size() ? tokens[0] : "")
+                <<" ):"
+                <<" '"<<line<<"'"<<endl;
+    } // if(!isValidLine)
+    return valid_parse;
+}
+//----------------------------------------------------------
+bool MCWeighter::isSimplifiedModel(const unsigned int &dsid, bool verbose)
+{
+    bool is_known_dsid=false;
+    // note: no need to propagate 'verbose' when parsing known files
+    vector<int> know_dsids = MCWeighter::dsidsForKnownSimpliedModelSamples(false);
+    is_known_dsid = susy::utils::contains<int>(know_dsids, dsid);
+    if(verbose)
+        cout<<"isSimplifiedModel('"<<dsid<<"'):"<<" is_known_dsid "<<(is_known_dsid ? "true":"false")<<endl;
+    return is_known_dsid;
+}
+//----------------------------------------------------------
+std::vector<std::string> MCWeighter::xsecFilesForSimplifiedModels()
+{
+    std::vector<std::string> filenames;
+    string basedir = gSystem->ExpandPathName(MCWeighter::defaultXsecDir().c_str());
+    filenames.push_back(basedir+"/"+"Herwigpp_UEEE3_CTEQ6L1_simplifiedModel_wA.txt");
+    filenames.push_back(basedir+"/"+"Herwigpp_UEEE3_CTEQ6L1_simplifiedModel_wC.txt");
+    return filenames;
+}
+//----------------------------------------------------------
+std::vector<int> MCWeighter::dsidsForKnownSimpliedModelSamples(bool verbose)
+{
+    vector<int> know_dsids;
+    vector<string> known_simplified_lists = MCWeighter::xsecFilesForSimplifiedModels();
+    vector<string>::const_iterator fname = known_simplified_lists.begin();
+    for(; fname!=known_simplified_lists.end(); ++fname){
+        vector<int> dsids(MCWeighter::readDsidsFromSusyCrossSectionFile(*fname, verbose));
+        know_dsids.insert(know_dsids.end(), dsids.begin(), dsids.end());
+    }
+    return know_dsids;
+}
+//----------------------------------------------------------
+MCWeighter& MCWeighter::setAllowInvalid(bool v)
+{
+    m_allowInvalid = v;
+    return *this;
+}
+//----------------------------------------------------------
+MCWeighter& MCWeighter::setVerbose(bool v)
+{
+    m_verbose = v;
+    return *this;
+}
+//----------------------------------------------------------
+int MCWeighter::ProcessValidator::convertDefaultSusyNt2DefaultSusyTools(const int &v)
+{
+    return v==defaultSusyNt ? defaultSusyTools : v;
+}
+//----------------------------------------------------------
+MCWeighter::ProcessValidator& MCWeighter::ProcessValidator::validate(int &value)
+{
+    bool isFirstEvent(counts_total==0);
+    if(isFirstEvent){
+        valid = true;
+        last = value;
+        value = convertDefaultSusyNt2DefaultSusyTools(value);
+        counts_total++;
+    } else {
+        bool invalid = (value!=last && (value==defaultSusyNt || value==defaultSusyTools));
+        valid = !invalid;
+        last = value;
+        value = convertDefaultSusyNt2DefaultSusyTools(value);
+        counts_total++;
+        if(invalid){
+            counts_invalid++;
+            if(counts_invalid<max_warnings)
+                cout<<"ProcessValidator.validate("<<last<<") is invalid, converting to "<<value<<endl;
+        }
+    }
+    counts_total++;
+    return *this;
+}
+//----------------------------------------------------------
+std::string MCWeighter::ProcessValidator::summary() const
+{
+    std::ostringstream oss;
+    oss<<" ProcessValidator:"
+       <<" processed "<<counts_total<<" entries,"
+       <<" "<<counts_invalid<<" invalid ones";
+    return oss.str();
+
 }
 //----------------------------------------------------------
