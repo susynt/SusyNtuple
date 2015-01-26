@@ -94,12 +94,17 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
     TObject* obj = tkey->ReadObj();
     if(obj->InheritsFrom("TH1")){
       string histoName = obj->GetName();
-
       // Histo is named procCutFlowXYZ where XYZ is the process number
       string prefix = "procCutFlow";
-      if(histoName.find(prefix) != string::npos){
+      if(histoName=="rawCutFlow"){ // this is for the case where we don't care about the process (==0)
+          TH1F* hProcCF = (TH1F*) obj;
+          int proc=0;
+          SumwMapKey procKey(mcid, proc);
+          bool keyNotThereYet(!sumwmapHasKey(procKey));
+          if(keyNotThereYet) m_sumwMap[procKey] = 0;
+          m_sumwMap[procKey] += hProcCF->GetBinContent(sumwBin);
+      } else if(histoName.find(prefix) != string::npos){
         TH1F* hProcCF = (TH1F*) obj;
-
         // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
         string procString = histoName.substr(prefix.size(), string::npos);
         // Make sure the string is an int
