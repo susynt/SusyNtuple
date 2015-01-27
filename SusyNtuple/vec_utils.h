@@ -11,6 +11,7 @@
   April 2014
 */
 
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <algorithm> // find
@@ -21,6 +22,19 @@ namespace utils{
 typedef std::vector< int > vint_t;
 typedef std::vector< vint_t > vvint_t;
 
+/// pointer to the end of an array
+/**
+   Useful for example to initialize vec from array
+   \code
+   const string tmp_strings[] = {"aaa", "bb", "c"};
+   vector<string> strings(strings, end(strings));
+   \endcode
+   from http://stackoverflow.com/questions/4268886/initialize-a-vector-array-of-strings
+*/
+template<typename T, size_t N>
+T * end(T (&ra)[N]) {
+    return ra + N;
+}
 /// returns true if vector contains val
 template < class T >
 bool contains(const std::vector<T> &v, const T& val) {
