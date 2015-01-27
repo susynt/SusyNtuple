@@ -28,6 +28,7 @@ void SusyNtAna::Init(TTree* tree)
   if(m_dbg) cout << "SusyNtAna::Init" << endl;
   m_tree = tree;
   nt.ReadFrom(tree);
+  m_mcWeighter.buildSumwMap(tree);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -164,17 +165,6 @@ bool SusyNtAna::isDuplicate(unsigned int run, unsigned int event){
   return false;
 }
 
-/*--------------------------------------------------------------------------------*/
-// Get event weight, combine gen, pileup, xsec, and lumi weights
-// Default weight uses A-D lumi
-// You can supply a different luminosity, but the pileup weights will still correspond to A-D
-/*--------------------------------------------------------------------------------*/
-float SusyNtAna::getEventWeight(float lumi, bool useSumwMap, bool useProcSumw,
-                                bool useSusyXsec, MCWeighter::WeightSys sys)
-{
-  return SusyNtTools::getEventWeight(nt.evt(), lumi, useSumwMap, &m_sumwMap, 
-                                     useProcSumw, useSusyXsec, sys);
-}
 /*--------------------------------------------------------------------------------*/
 /*float SusyNtAna::getEventWeightFixed(unsigned int mcChannel, float lumi)
 {
@@ -419,18 +409,4 @@ void SusyNtAna::dumpSignalJets()
       m_signalJets[iJ]->print();
     }
   }
-}
-
-/*--------------------------------------------------------------------------------*/
-// Build a map of MCID -> sumw.
-// This method will loop over the input files associated with the TChain.
-// The MCID in the first entry of the tree will be used, so one CANNOT use this
-// if multiple datasets are combined into one SusyNt tree file!
-// The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID.
-// Each dataset used here must be complete, they CANNOT be spread out across multiple jobs.
-// However, one can have more than one (complete) dataset in the chain which is why we use the map.
-/*--------------------------------------------------------------------------------*/
-void SusyNtAna::buildSumwMap(TChain* chain)
-{
-  m_sumwMap = SusyNtTools::buildSumwMap(chain);
 }

@@ -12,7 +12,6 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 Susy3LepCutflow::Susy3LepCutflow() :
         m_sel(""),
-        m_mcWeighter(0),
         m_trigObj(0),
         m_nBaseLepMin(3),
         m_nBaseLepMax(3),
@@ -78,10 +77,6 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
   m_trigObj = new TrilTrigLogic();
   m_trigObj->loadTriggerMaps();
 
-  // MC Normalization - safe to initialize on data also
-  //string xsecDir = gSystem->ExpandPathName("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
-  //m_mcWeighter = new MCWeighter(m_tree, xsecDir);
-
   // Book histograms
   //bookHistos();
 }
@@ -92,10 +87,6 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
 void Susy3LepCutflow::Init(TTree* tree)
 {
   SusyNtAna::Init(tree);
-
-  // MC Normalization - safe to initialize on data also
-  string xsecDir = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
-  m_mcWeighter = new MCWeighter(m_tree, xsecDir);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -140,15 +131,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // New approach, using MCWeighter
   const Event* evt = nt.evt();
   MCWeighter::WeightSys wSys = MCWeighter::Sys_NOM;
-  float w = m_mcWeighter->getMCWeight(evt, LUMI_A_L, wSys);
-  // Use sumw from the SumwMap
-  //const bool useSumwMap = true;         
-  // Proc ID dependent sumw (affects signals)
-  //const bool useProcSumw = true;        
-  // Use cross section from SUSYTools
-  //const bool useSusyXsec = true;        
-  // Cross section and luminosity weight
-  //float w = getEventWeight(LUMI_A_L, useSumwMap, useProcSumw, useSusyXsec);
+  float w = SusyNtAna::mcWeighter().getMCWeight(evt, LUMI_A_L, wSys);
 
   // Lepton efficiency correction
   float lepSF = getLeptonSF(m_signalLeptons);
