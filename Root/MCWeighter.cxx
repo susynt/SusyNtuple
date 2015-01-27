@@ -244,12 +244,13 @@ float MCWeighter::getSumw(const Event* evt)
     unsigned int mcid = evt->mcChannel;
     int procID = m_useProcSumw? evt->susyFinalState : 0;
     procID = ProcessValidator::convertDefaultSusyNt2DefaultSusyTools(procID);
-    m_procidValidator.validate(procID);
+    m_procidValidator.zero_hack(procID);
+    //m_procidValidator.validate(procID);
     SumwMapKey key(mcid, procID);
     SumwMap::const_iterator sumwMapIter = m_sumwMap.find(key);
     if(sumwMapIter != m_sumwMap.end()) sumw = sumwMapIter->second;
     else{
-      cerr << "MCWeighter::getEventWeight - ERROR - requesting to use sumw map but "
+      cerr << "MCWeighter::getSumw - ERROR - requesting to use sumw map but "
            << "mcid " << mcid << " proc " << procID << " not found!" << endl;
       cerr << "Here's what's currently in the map:" << endl;
       dumpSumwMap();
@@ -270,7 +271,8 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
     // SUSYTools expects 0 as default value, but we have existing tags with default of -1
       int proc = evt->susyFinalState > 0? evt->susyFinalState : 0;
       unsigned int mcid = evt->mcChannel;
-      if(m_procidValidator.validate(proc).valid){
+      if(m_procidValidator.zero_hack(proc).valid){
+      // if(m_procidValidator.validate(proc).valid){
           const intpair k(mcid, proc);
           XSecMap::const_iterator iter = m_xsecCache.find(k);
           bool isAlreadyCached(iter != m_xsecCache.end());

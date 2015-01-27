@@ -55,6 +55,7 @@ class MCWeighter
       size_t counts_total;
       size_t counts_invalid;
       size_t max_warnings;
+      ProcessValidator& zero_hack(int &value) { value = 0; valid = true; return *this; }
       /**
          Also flag as invalid the suspicious events (i.e. when proc==-1 and proc!=previous_proc)
        */
