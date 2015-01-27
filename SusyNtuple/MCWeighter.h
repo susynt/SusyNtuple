@@ -55,7 +55,6 @@ class MCWeighter
       size_t counts_total;
       size_t counts_invalid;
       size_t max_warnings;
-      /// if necessary, convert our 'unknown' value (-1) to the SUSYTools 'unknown' value (0)
       /**
          Also flag as invalid the suspicious events (i.e. when proc==-1 and proc!=previous_proc)
        */
@@ -63,14 +62,24 @@ class MCWeighter
       bool valid; ///< status from the current call to validate()
       int last; ///< procid from the last call to validate()
       std::string summary() const;
+      /// convert our 'unknown' value (-1) to the SUSYTools 'unknown' value (0)
+      /**
+         In some of our old productions we used a different default
+         process than the one used by SUSYTools. With this default
+         value we cannot find any xsec in the db, so we need to
+         convert the value when necessary (will become obsolete, DG 2014-11-30).
+       */
+      static int convertDefaultSusyNt2DefaultSusyTools(const int &v);
+      static const int defaultSusyNt = -1; ///< see SusyNtMaker::selectEvent() (was -1 for old prod, then 0)
+      static const int defaultSusyTools = 0; ///< see SUSYCrossSection.h: CrossSectionDB::Key c'tor
+
     };
+
     //
     // Initialization and configuration
     //
 
-    // Constructor and destructor
-    MCWeighter(TTree* tree,
-               std::string xsecDir="$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+    MCWeighter();
     ~MCWeighter();
 
     /// Build a map of MCID -> sumw.
@@ -95,8 +104,6 @@ class MCWeighter
     void setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
 
     /// MC Weight includes generator, xsec, lumi, and pileup weights
-    /** Default weight uses 2012 A-D lumi. You can supply a different luminosity,
-        but the pileup weights will still correspond to A-D. */
     float getMCWeight(const Susy::Event* evt, float lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
     bool sumwmapHasKey(SumwMapKey k);
 
@@ -107,8 +114,9 @@ class MCWeighter
     float getXsecTimesEff(const Susy::Event* evt, WeightSys sys=Sys_NOM);
     /// Get the pileup weight
     float getPileupWeight(const Susy::Event* evt, WeightSys sys=Sys_NOM);
-    /// specify the bin used to compute sumw; requires you to call clearAndRebuildSumwMap.
+    /// specify the bin used to compute sumw
     /**
+       If the label is set after sumwmap has been built, you need to call clearAndRebuildSumwMap.
        For a list of available bin labels (counters), see SusyNtMaker::makeCutFlow()
     */
     MCWeighter& setLabelBinCounter(const std::string &v);
@@ -122,12 +130,23 @@ class MCWeighter
     size_t parseAdditionalXsecDirectory(const std::string &dir, bool verbose);
     /// toggle m_allowInvalid option
     MCWeighter& setAllowInvalid(bool v);
-    /// default counter used to compute the normalization
+    /// toggle m_verbose
+    MCWeighter& setVerbose(bool v);
+    /// counter used to compute the normalization
     /**
-       This counter seems to work fine for all samples, except for
-       some n015* pmssm ones, for which you want to use "Initial"
+       Unless the user has specified a value with
+       setLabelBinCounter(), use "Initial" for all samples, and
+       "SusyProp Veto" for SUSY simplified models.
      */
-    static std::string defaultLabelBinCounter() { return "SusyProp Veto"; }
+    static std::string defaultLabelBinCounter(const unsigned int &dsid, bool verbose);
+    /// default directory from which we read the xsec files for SUSY::CrossSectionDB
+    static std::string defaultXsecDir() {
+      return std::string("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+    }
+    /// a list of the xsec files containing known simplified models
+    static std::vector<std::string> xsecFilesForSimplifiedModels();
+    /// a list of known SM dsids from xsecFilesForSimplifiedModels()
+    static std::vector<int> dsidsForKnownSimpliedModelSamples(bool verbose);
     /// determine whether a given file is formatted following the CrossSectionDB format
     /**
        The format is essentially 6 words:
@@ -140,6 +159,16 @@ class MCWeighter
     static bool isFormattedAsSusyCrossSection(std::string filename, bool verbose);
     /// given a text file containing cross sections for CrossSectionDB, return the dsids
     static std::vector<int> readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose);
+    /// given a line from a xsec file, parse the dsid; return false if cannot parse
+    static bool readDsidsFromSusyCrossSectionLine(const std::string &line, int &dsid, bool verbose);
+    /// guess from dsid whether this sample is a simplified model one
+    /**
+       This guess is based on whether the dsid is in a
+       list of known dsids from the xsec files in 'SUSYTools/data'.
+
+       See also util/test_mcWeighter.cxx
+     */
+    static bool isSimplifiedModel(const unsigned int &dsid, bool verbose);
  private:
     void buildSumwMapFromTree(TTree* tree);
     void buildSumwMapFromChain(TChain* chain);
@@ -164,6 +193,7 @@ class MCWeighter
     size_t m_warningCounter;
     bool m_allowInvalid; ///< whether we allow invalid processes (i.e. missing xsec from db)
     ProcessValidator m_procidValidator; ///< validate susy process id
+    bool m_verbose; ///< toggle verbose printout
 };
 
 

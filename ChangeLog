@@ -1,5 +1,13 @@
 # vim: set noexpandtab:
 
+2014-10-01 Serhan Mete <amete@cern.ch>
+	modified:   Root/MCWeighter.cxx
+	modified:   SusyNtuple/MCWeighter.h
+	* Drop buildSumwMap from constructor, user needs to call it,
+	this gives the freedom to invoke setBinCounter before buildingSumwMap,
+	which is necessary for Simplified Models
+	* Set defaultLabelBinCounter to "Initial" from "SusyProp Veto"
+
 2014-04-02 Steve
 	* Added deprecation warnings to SusyNtTools methods: buildSumwMap and getEventWeight
 		* Users should update to usage of the MCWeighter class,

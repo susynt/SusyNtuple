@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <algorithm> // find
 
 namespace susy{
 namespace utils{
@@ -34,7 +35,6 @@ template<typename T, size_t N>
 T * end(T (&ra)[N]) {
     return ra + N;
 }
-
 /// returns true if vector contains val
 template < class T >
 bool contains(const std::vector<T> &v, const T& val) {

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -30,24 +31,37 @@ void writeDummyFile(const string &filename)
     outFile.close();
 }
 //----------------------------------------------------------
+bool test_isSimplified()
+{
+    bool success=true;
+    bool verbose=true;
+    size_t num_failures = 0;
+    vector<int> known_simplified_dsids = MCWeighter::dsidsForKnownSimpliedModelSamples(verbose);
+    vector<int>::const_iterator dsid = known_simplified_dsids.begin();
+    for(;dsid!=known_simplified_dsids.end(); ++dsid)
+        if(!MCWeighter::isSimplifiedModel(*dsid, verbose)) {
+            num_failures++;
+            success = false;
+        }
+    int dummy_dsid = 1000;
+    if(MCWeighter::isSimplifiedModel(dummy_dsid, verbose)){
+        num_failures++;
+        success = false;
+    }
+    cout<<"test_isSimplified: "<<(success ? "passed":"failed")<<" ("<<num_failures<<" failures)"<<endl;
+    return success;
+}
+//----------------------------------------------------------
 int main(int argc, char **argv)
 {
     bool verbose=true;
     string dummyFilename="/tmp/dummy_xsec.txt";
     writeDummyFile(dummyFilename);
-    TFile *inputFile = TFile::Open("/var/tmp/susynt_dev/data/" // test sample needed by Anyes
-                                   "ntup_c1c1_n0150/user.gerbaudo."
-                                   "mc12_8TeV.176558.Herwigpp_simplifiedModel_wC_slep_noWcasc_50."
-                                   "SusyNt.e1708_s1499_s1504_r3658_r3549_p1512_n0150/"
-                                   "user.gerbaudo.028813._00001.susyNt.root");
-    TTree *tree = ((inputFile && inputFile->IsOpen()) ?
-                    static_cast<TTree*>(inputFile->Get("susyNt")) :
-                    NULL);
-    MCWeighter mcw(tree); // this picks up the default xsec files in SUSYTools
+    MCWeighter mcw;
     mcw.parseAdditionalXsecFile(dummyFilename, verbose);
     mcw.parseAdditionalXsecDirectory("/tmp/dummy_xsecs/", verbose);
-    SumwMapKey key(176558, 157);
-    cout<<"checking (dsid,proc)=("<<key.first<<", "<<key.second<<") :"
+    SumwMapKey key(176558, 157); // test sample needed by Anyes
+    cout<<"checking cache for (dsid,proc)=("<<key.first<<", "<<key.second<<") :"
         <<" has key "<<(mcw.sumwmapHasKey(key)?"true":"false")
         <<endl;
     cout<<"dumpSumwMap"<<endl;
@@ -71,7 +85,10 @@ validator.validate(procID);
 validator.validate(procID);
     cout<<"validator.validate("<<procID<<").valid : "<<(validator.valid?"true":"false")<<", expect false"<<endl;
 
-
+    cout<<"-------------------------"<<endl
+        <<"test_isSimplified"<<endl
+        <<"-------------------------"<<endl;
+    test_isSimplified();
 
     return 0;
 

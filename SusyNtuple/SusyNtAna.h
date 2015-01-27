@@ -11,6 +11,7 @@
 
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/MCWeighter.h"
 
 #include <fstream>
 #include <map>
@@ -62,22 +63,6 @@ class SusyNtAna : public TSelector, public SusyNtTools
       return kTRUE;
     }
 
-    /// Get event weight - contains generator, pileup, xsec, and lumi weights
-    /**
-     Default weight uses A-L lumi and pileup weights You can supply a
-     different luminosity, but the pileup weights will store
-     correspond to the default dataset
-    */
-    virtual float getEventWeight(float lumi = LUMI_A_L, bool useSumwMap = false, bool useProcSumw = false,
-                                 bool useSusyXsec = false, MCWeighter::WeightSys sys = MCWeighter::Sys_NOM);
-    // Temporary fixed version for n0105
-    //virtual float getEventWeightFixed(unsigned int mcChannel, float lumi = LUMI_A_L);
-    // Use this function to scale MC to the A-B3 unblinded dataset
-    // This will use the correct pileup weights for A-B3
-    //virtual float getEventWeightAB3();
-    // Scale MC to A-B (5.83/fb)
-    //virtual float getEventWeightAB();
-
     // Object selection
     void clearObjects();
     void selectObjects(SusyNtSys sys = NtSys_NOM, bool removeLepsFromIso=false, 
@@ -124,21 +109,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
     std::string sampleName() const { return m_sample; }
     void setSampleName(std::string s) { m_sample = s; }
 
-    /// Build a map of MCID -> sumw.
-    /**
-     This method will loop over the input files associated with the
-     TChain.  The MCID in the first entry of the tree will be used, so
-     one CANNOT use this if multiple datasets are combined into one
-     SusyNt tree file!  The generator weighted cutflow histograms will
-     then be used to calculate the total sumw for each MCID.  Each
-     dataset used here must be complete, they CANNOT be spread out
-     across multiple jobs.  However, one can have more than one
-     (complete) dataset in the chain which is why we use the map.
-    */
-    void buildSumwMap(TChain* chain);
-    const SumwMap* getSumwMap() { return &m_sumwMap; }
-    void setSumwMap(const SumwMap map) {m_sumwMap = map; }
-
+    /// getter to be used from outside (set xsec dir, access weight, etc.)
+    MCWeighter& mcWeighter() { return m_mcWeighter; }
 
     /// Dump timer
     void dumpTimer();
@@ -172,9 +144,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     RunEventMap m_eventList;          ///< run:event to debug 
     RunEventMap m_eventListDuplicate; ///< Checks for duplicate run/event
 
-    /// Map of (MCID,proc) -> sumw, optionally filled at beginning of job
-    //std::map<unsigned int, float>       m_sumwMap;
-    SumwMap m_sumwMap;
+    MCWeighter m_mcWeighter;   // provides MC normalization and event weight
 
 
     //
