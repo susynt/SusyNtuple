@@ -81,6 +81,10 @@ class MCWeighter
     //
 
     MCWeighter();
+
+    MCWeighter(TTree* tree,
+               std::string xsecDir = "$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+
     ~MCWeighter();
 
     /// Build a map of MCID -> sumw.
