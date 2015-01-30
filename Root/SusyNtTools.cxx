@@ -15,8 +15,6 @@
 using namespace std;
 using namespace Susy;
 
-// TODO: implement a feature for sharing the tool, rather than making it static
-BTagCalib* SusyNtTools::m_btagTool = NULL;
 
 /*--------------------------------------------------------------------------------*/
 // Constructor
@@ -27,34 +25,10 @@ m_doPtconeCut(true),
 m_doElEtconeCut(true),
 m_doMuEtconeCut(false),
 m_doIPCut(true)
-//m_btagTool(NULL)
 {
     m_jvfTool = new JVFUncertaintyTool();
     m_jvfTool->UseGeV(true);
 }
-
-/*--------------------------------------------------------------------------------*/
-// Method to configure bTag SF tool.  Necessary since 2L and 3L differ
-// on whether or not JVF is used.  Also allow for different operating points
-// to be toggled                                                            
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::configureBTagTool(string OP, float opVal, bool isJVF)
-{
-    // Initialize b-tag tool
-    string rootcoredir = getenv("ROOTCOREBIN");
-    string calibration = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/BTagCalibration.env");
-    string calibFolder = gSystem->ExpandPathName("$ROOTCOREBIN/data/SUSYTools/");
-    m_btagTool = new BTagCalib("MV1", calibration, calibFolder, OP, isJVF, opVal);
-}
-
-/*--------------------------------------------------------------------------------*/
-// Method to configure JVF uncertainty tool
-/*--------------------------------------------------------------------------------*/
-/*void SusyNtTools::configureJVFTool(string jetAlgo)
-{
-m_jvfTool = new JVFUncertaintyTool(jetAlgo.c_str());
-}*/
-
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods
 /*--------------------------------------------------------------------------------*/
@@ -1632,48 +1606,8 @@ JetVector SusyNtTools::getBTagSFJets2Lep(const JetVector& baseJets)
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
 {
+    return 1.0;
     if (!evt->isMC) return 1;
-
-    if (!m_btagTool) {
-        if (m_anaType == Ana_2Lep || m_anaType == Ana_2LepWH)
-            configureBTagTool("0_3511", MV1_80, false);
-        else
-            configureBTagTool("0_3511", MV1_80, true);
-    }
-
-    static const float MEV = 1000;
-    static vector<float>  pt_btag;
-    static vector<float> eta_btag;
-    static vector<float> val_btag;
-    static vector<int> pdgid_btag;
-    pt_btag.clear();
-    eta_btag.clear();
-    val_btag.clear();
-    pdgid_btag.clear();
-
-    bool isSherpa = isSherpaSample(mcID);
-
-    uint nJet = jets.size();
-    for (uint i = 0; i < nJet; i++) {
-        pt_btag.push_back(jets[i]->Pt()*MEV);
-        eta_btag.push_back(jets[i]->Eta());
-        val_btag.push_back(jets[i]->mv1); //Assume MV1 as input always
-        pdgid_btag.push_back(jets[i]->truthLabel);
-    }
-
-    pair< vector<float>, vector<float> > wgtbtag =
-        m_btagTool->BTagCalibrationFunction(pt_btag, eta_btag,
-        val_btag, pdgid_btag,
-        isSherpa);
-
-    if (sys == BTag_BJet_DN) return wgtbtag.first.at(1);
-    if (sys == BTag_CJet_DN) return wgtbtag.first.at(2);
-    if (sys == BTag_LJet_DN) return wgtbtag.first.at(3);
-    if (sys == BTag_BJet_UP) return wgtbtag.first.at(4);
-    if (sys == BTag_CJet_UP) return wgtbtag.first.at(5);
-    if (sys == BTag_LJet_UP) return wgtbtag.first.at(6);
-
-    return wgtbtag.first.at(0);
 }
 
 /*--------------------------------------------------------------------------------*/

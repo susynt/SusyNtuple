@@ -15,7 +15,6 @@
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
-//#include "SusyNtuple/BTagCalib.h"
 
 #ifdef __CINT__
 

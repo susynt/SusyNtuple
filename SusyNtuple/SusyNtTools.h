@@ -8,7 +8,6 @@
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/MCWeighter.h"
-#include "SUSYTools/BTagCalib.h"
 #include "SUSYTools/SUSYCrossSection.h"
 #include "JVFUncertaintyTool/JVFUncertaintyTool.h" //AT: not available in Base,2.0.14
 
@@ -24,7 +23,6 @@ public:
     SusyNtTools();
     virtual ~SusyNtTools()
     {
-        if (m_btagTool) delete m_btagTool;
     };
 
     /// Set Analysis type to determine selection
@@ -33,10 +31,6 @@ public:
         m_anaType = A;
         if (verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
-
-    /// Configure the btag sf tool
-    void configureBTagTool(std::string OP, float opVal, bool isJVF);
-    //void configureJVFTool(std::string jetAlgo="AntiKt4TopoEM");
 
     //
     // Methods to grab objects based on systematic shift desired
@@ -427,7 +421,6 @@ protected:
     bool m_doMuEtconeCut;               ///< etcone isolation cuts for muons
     bool m_doIPCut;                     ///< impact parameter cuts
 
-    static BTagCalib* m_btagTool;     ///< BTag tool
     JVFUncertaintyTool* m_jvfTool;    ///< JVF tool
 private:
     /// check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
