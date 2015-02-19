@@ -6,6 +6,7 @@
 import operator
 import os
 import re
+import subprocess
 
 def rootcoredir():
     return os.environ['ROOTCOREBIN']
@@ -106,3 +107,13 @@ def is_valid_output_dir(dirname):
     return os.path.isdir(dirname)
 def commonPrefix(lst) : return os.path.commonprefix(lst)
 def commonSuffix(lst) : return os.path.commonprefix([l[::-1] for l in lst])[::-1]
+
+def getCommandOutput(command, cwd=None):
+    "lifted from supy (https://github.com/elaird/supy/blob/master/utils/io.py)"
+    p = subprocess.Popen(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE, cwd = cwd)
+    stdout,stderr = p.communicate()
+    return {"stdout":stdout, "stderr":stderr, "returncode":p.returncode}
+
+def first(listOrDict) :
+    lod = listOrDict
+    return lod.itervalues().next() if type(lod) is dict else lod[0] if lod else None
