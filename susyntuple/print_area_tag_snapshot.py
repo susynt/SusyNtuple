@@ -18,7 +18,6 @@ def main():
     max_pkg_name_len = max(len(p) for p in pkg_names)
     for pkg, pkg_name in zip(pkg_dirs, pkg_names):
         msg = svn_info(pkg) if is_svn_dir(pkg) else git_info(pkg) if is_git_dir(pkg) else "{0} ?".format(pkg)
-        # print ('%'+str(max_pkg_name_len)+'s')%pkg_name.ljust(max_pkg_name_len)+' : '+msg
         print pkg_name.ljust(max_pkg_name_len)+' : '+msg
 
 def is_svn_dir(path):
@@ -46,10 +45,11 @@ def svn_info(path):
 
 def git_info(path):
     cmd = 'git describe --tags --dirty'
-    out = getCommandOutput(cmd)
+    out = getCommandOutput(cmd, cwd=path)
     tag_info = out['stdout'].strip()
-    modified_files = [l for l in getCommandOutput('git status', cwd=path)['stdout'].splitlines()
-                      if 'modified:' in l] if 'dirty' in tag_info else []
+    cmd = 'git status'
+    modified_files = getCommandOutput(cmd, cwd=path)['stdout'].splitlines()
+    modified_files = [l for l in modified_files if 'modified:' in l]
     return "{0} {1}".format(tag_info,
                             ('\n'.join(['']+modified_files) if modified_files else ''))
 
