@@ -83,7 +83,7 @@ namespace D3PDReader {
       ::Long64_t fUnzippedBytes; ///< Number of unzipped bytes read from this branch
       ::Long64_t fZippedBytes; ///< Number of zipped bytes read from this branch
 
-      ClassDef( VariableStats, 1 )
+      ClassDef( VariableStats, 2 )
 
    }; // class VariableStats
 
@@ -219,7 +219,7 @@ namespace D3PDReader {
       /// Time spent in processing the events
       ::Double_t fProcessTime;
 
-      ClassDef( D3PDReadStats, 1 )
+      ClassDef( D3PDReadStats, 2 )
 
    }; // class D3PDReadStats
 

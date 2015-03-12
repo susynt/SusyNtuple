@@ -93,7 +93,7 @@ namespace D3PDReader {
       /// Internal object for keeping track of the collected statistics
       D3PDReadStats fStats;
 
-      ClassDef( D3PDPerfStats, 0 )
+      ClassDef( D3PDPerfStats, 1 )
 
    }; // class D3PDPerfStats
 

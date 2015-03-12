@@ -3,7 +3,6 @@
 #include <string>
 
 #include "TChain.h"
-#include "Cintex/Cintex.h"
 
 #include "SusyNtuple/SusyNtTruthAna.h"
 #include "SusyNtuple/SusyDefs.h"
@@ -41,7 +40,6 @@ void help()
 
 int main(int argc, char** argv)
 {
-  ROOT::Cintex::Cintex::Enable();
 
   int nEvt = -1;
   int nSkip = 0;

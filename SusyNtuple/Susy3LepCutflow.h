@@ -27,7 +27,7 @@ class Susy3LepCutflow : public SusyNtAna
     virtual ~Susy3LepCutflow(){};
 
     // Output Text File
-    ofstream out;
+    std::ofstream out;
 
     // Init is called when TTree (or TChain) is attached
     virtual void    Init(TTree* tree);

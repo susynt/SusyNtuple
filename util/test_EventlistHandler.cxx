@@ -5,7 +5,6 @@
 #include "SusyNtuple/ChainHelper.h"
 
 #include "TChain.h"
-#include "Cintex/Cintex.h"
 
 #include <iostream>
 #include <string>
@@ -72,7 +71,6 @@ void printHelp(const char *exeName)
 int main(int argc, char **argv)
 {
 
-  ROOT::Cintex::Cintex::Enable();
   string sampleName;
   string inputRootFname;
   bool verbose(false);

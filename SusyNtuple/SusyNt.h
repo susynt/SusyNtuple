@@ -19,6 +19,8 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 
+#include "TBits.h"
+
 namespace Susy
 {
 
@@ -26,7 +28,11 @@ namespace Susy
   class Event: public TObject
   {
   public:
-    Event(){ clear(); }
+    Event() :
+    trigBits(m_nTriggerBits)
+    {
+      clear();
+    }
     virtual ~Event(){};
 
     unsigned int run;         ///< run number 
@@ -57,6 +63,9 @@ namespace Susy
 
     //unsigned int trigFlags; ///< Event level trigger bits
     long long trigFlags;      ///< Event level trigger bits
+
+    TBits               trigBits;
+    static const size_t m_nTriggerBits=64;
 
     /// Check trigger firing
     /** provide the trigger chain via bit mask, e.g. TRIG_mu18 */
