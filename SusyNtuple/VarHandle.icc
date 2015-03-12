@@ -167,7 +167,7 @@ namespace D3PDReader {
       if( ! fVariable ) {
          fVariable = new Type();
       }
-      branch = tree->Bronch( GetName(), GetType(), &fVariable );
+      branch = tree->Bronch( GetName(), GetType(), &fVariable, 32000, 0);
       if( ! branch ) {
          fParent->Error( "WriteTo",
                          "Couldn't add variable %s to tree %s",
