@@ -145,7 +145,7 @@ bool MuonSelector::isSignalMuon(const Muon* mu,
         float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
         if(etcone30/mu->Pt() >= MU_ETCONE30_PT_CUT) return false;
     }
-    else if (m_usePtIsoThrs) {
+    else if (m_2lepWH) {
         float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
         float pt = mu->Pt();
         if(pt==0.0 || (etcone30/std::min(pt, MU_ISO_PT_THRS) >= MU_ETCONE30_PT_CUT)) return false;
@@ -161,11 +161,11 @@ bool MuonSelector::muPassPtIso(const Muon* mu,
                                const unsigned int nVtx, bool isMC,
                                bool removeLepsFromIso)
 {
-    if(m_usePtIsoConeCorr) {
+    if(m_3lep) {
         float ptcone30 = muPtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
         if(ptcone30/mu->Pt() >= MU_PTCONE30_PT_CUT) return false;
     }
-    else if(m_usePtIsoThrs) {
+    else if(m_2lepWH) {
         float ptcone30 = mu->ptcone30ElStyle;
         float pt = mu->Pt();
         if(ptcone30/std::min(pt, MU_ISO_PT_THRS) >= MU_PTCONE30ELSTYLE_PT_CUT) return false;
