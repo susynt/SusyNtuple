@@ -111,7 +111,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
             string histoName = obj->GetName();
             // Histo is named procCutFlowXYZ where XYZ is the process number
             string prefix = "procCutFlow";
-            if (histoName == "rawCutFlow") { // this is for the case where we don't care about the process (==0)
+            if (histoName == "genCutFlow") { // this is for the case where we don't care about the process (==0)
                 TH1F* hProcCF = (TH1F*)obj;
                 int proc = 0;
                 SumwMapKey procKey(mcid, proc);
