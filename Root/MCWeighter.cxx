@@ -85,7 +85,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
     // Setup branch for accessing the MCID in the tree
     Event* evt = 0;
     tree->SetBranchStatus("*", 0);
-    tree->SetBranchStatus("mcChannel", 1);
+    tree->SetBranchStatus("event", 1);
     tree->SetBranchAddress("event", &evt);
     tree->GetEntry(0);
     // General key, default process number (0)
