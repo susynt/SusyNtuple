@@ -82,68 +82,49 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
 {
     TFile* f = tree->GetCurrentFile();
 
-    // Setup branch for accessing the MCID in the tree
-    Event* evt = 0;
-    tree->SetBranchStatus("*", 0);
-    tree->SetBranchStatus("event", 1);
-    tree->SetBranchAddress("event", &evt);
-    tree->GetEntry(0);
-    // General key, default process number (0)
-    unsigned int mcid = evt->mcChannel;
-    SumwMapKey genKey(mcid, 0);
-    if (!sumwmapHasKey(genKey)) m_sumwMap[genKey] = 0;
-
-    // Get the generator weighted histogram
-    TH1F* hGenCF = (TH1F*)f->Get("genCutFlow");
-
-    string labelCounter = (m_labelBinCounter.size() > 0 ?
-                       m_labelBinCounter :
-                                         defaultLabelBinCounter(static_cast<unsigned int>(mcid), m_verbose));
-    int sumwBin = hGenCF->GetXaxis()->FindBin(labelCounter.c_str());
-    m_sumwMap[genKey] += hGenCF->GetBinContent(sumwBin);
-
-    // Find the histograms per process
+    const Event &evt = MCWeighter::readFirstEvent(tree);
+    unsigned int mcid = evt.mcChannel;
+    string proc_indep_histoname = "genCutFlow";
+    string proc_dep_histoprefix = "procCutFlow"; // proc dependend histos are procCutFlowXYZ where XYZ is the process number
     TIter next(f->GetListOfKeys());
     while (TKey* tkey = (TKey*)next()) {
-        // Test to see if object is a cutflow histogram
         TObject* obj = tkey->ReadObj();
-        if (obj->InheritsFrom("TH1")) {
+        bool is_histogram = obj->InheritsFrom("TH1");
+        if(is_histogram){
             string histoName = obj->GetName();
-            // Histo is named procCutFlowXYZ where XYZ is the process number
-            string prefix = "procCutFlow";
-            if (histoName == "genCutFlow") { // this is for the case where we don't care about the process (==0)
-                TH1F* hProcCF = (TH1F*)obj;
-                int proc = 0;
+            TH1F* cutflowHisto = static_cast<TH1F*>(obj);
+            bool is_proc_dep_histo = susy::utils::contains(histoName, proc_dep_histoprefix);
+            bool is_proc_indep_histo = histoName==proc_indep_histoname;
+            if(is_proc_indep_histo || is_proc_dep_histo){
+                int default_proc = 0;
+                int proc = default_proc;
+                if(is_proc_dep_histo){
+                    proc = MCWeighter::extractProcessFromCutflowHistoname(histoName, proc_dep_histoprefix);
+                    if(proc==-1 || proc == 0){
+                        cout<<"MCWeighter: got invalid process '"<<proc<<"'"
+                            <<" for a process-dependent normalization from '"<<histoName<<"'...skipping it"
+                            <<endl;
+                        continue;
+                    }
+                }
                 SumwMapKey procKey(mcid, proc);
-                bool keyNotThereYet(!sumwmapHasKey(procKey));
+                bool keyNotThereYet = !sumwmapHasKey(procKey);
                 if (keyNotThereYet) m_sumwMap[procKey] = 0;
-                m_sumwMap[procKey] += hProcCF->GetBinContent(sumwBin);
+
+
+                bool user_did_specify_label = m_labelBinCounter.size() > 0;
+                string labelCounter = (user_did_specify_label ?
+                                       m_labelBinCounter :
+                                       defaultLabelBinCounter(static_cast<unsigned int>(mcid), m_verbose));
+                int sumwBin = cutflowHisto->GetXaxis()->FindBin(labelCounter.c_str());
+                checkHistoHasBin(*cutflowHisto, labelCounter);
+                double partialSumw = cutflowHisto->GetBinContent(sumwBin);
+                m_sumwMap[procKey] += partialSumw;
+                if(m_verbose)
+                    cout<<"MCWeighter: added sumw "<<partialSumw<<" to (mc="<<mcid<<", proc="<<proc<<") "<<endl;
             }
-            else if (histoName.find(prefix) != string::npos) {
-                TH1F* hProcCF = (TH1F*)obj;
-                // Extract the process ID (XYZ) from the histo name (procCutFlowXYZ)
-                string procString = histoName.substr(prefix.size(), string::npos);
-                // Make sure the string is an int
-                if (!susy::utils::isInt(procString)) {
-                    cerr << "MCWeighter::buildSumwMap - ERROR - proc string from procCutFlow "
-                        << "histo is not an integer! Histo name: " << histoName
-                        << " proc string: " << procString << endl;
-                    abort();
-                }
-                stringstream stream;
-                stream << procString;
-                int proc;
-                stream >> proc;
-                // Skip the default with proc = -1 or 0
-                if (proc != -1 && proc != 0) {
-                    SumwMapKey procKey(mcid, proc);
-                    bool keyNotThereYet(!sumwmapHasKey(procKey));
-                    if (keyNotThereYet) m_sumwMap[procKey] = 0;
-                    m_sumwMap[procKey] += hProcCF->GetBinContent(sumwBin);
-                }
-            } // Is a proc cutflow
-        } // Object is a histo
-    } // Loop over TKeys in TFile
+        } // is_histogram
+    } // while(key)
 }
 /*--------------------------------------------------------------------------------*/
 void MCWeighter::buildSumwMapFromChain(TChain* chain)
@@ -361,6 +342,18 @@ std::string MCWeighter::defaultLabelBinCounter(const unsigned int &dsid, bool ve
     return bin_label;
 }
 //----------------------------------------------------------
+void MCWeighter::checkHistoHasBin(const TH1F &histo, const std::string &binLabel)
+{
+    int bin = histo.GetXaxis()->FindFixBin(binLabel.c_str());
+    bool invalid_bin_label = bin==-1;
+    if(invalid_bin_label){
+        cout<<"MCWeighter: cannot find bin '"<<binLabel<<"' from histo '"<<histo.GetName()<<"'"<<endl
+            <<"Possible bins:"<<endl;
+        for(int iBin=1; iBin<histo.GetNbinsX()+1; ++iBin)
+            cout<<"'"<<histo.GetXaxis()->GetBinLabel(iBin)<<"'"<<endl;
+    }
+}
+//----------------------------------------------------------
 size_t MCWeighter::parseAdditionalXsecFile(const std::string &input_filename, bool verbose)
 {
     string filename = gSystem->ExpandPathName(input_filename.c_str());
@@ -491,6 +484,29 @@ bool MCWeighter::isSimplifiedModel(const unsigned int &dsid, bool verbose)
     if (verbose)
         cout << "isSimplifiedModel('" << dsid << "'):" << " is_known_dsid " << (is_known_dsid ? "true" : "false") << endl;
     return is_known_dsid;
+}
+//----------------------------------------------------------
+const Susy::Event& MCWeighter::readFirstEvent(TTree* tree)
+{
+    Susy::Event* evt = 0;
+    tree->SetBranchStatus("*", 0);
+    tree->SetBranchStatus("event", 1);
+    tree->SetBranchAddress("event", &evt);
+    tree->GetEntry(0);
+    return *evt;
+}
+//----------------------------------------------------------
+int MCWeighter::extractProcessFromCutflowHistoname(const std::string &histoName, const std::string &prefix)
+{
+    cout<<"histoName '"<<histoName<<"', prefix '"<<prefix<<"'"<<endl;
+    string procString = histoName.substr(prefix.size(), string::npos);
+    cout<<"procString "<<procString<<endl;
+    if (!susy::utils::isInt(procString)) {
+        cerr << "MCWeighter::extractProcessFromCutflowHistoname - ERROR"
+             <<" cannot extract integer process from '"<<histoName<<"' using prefix '"<<prefix<<"'"
+             <<endl;
+    }
+    return std::stoi(procString);
 }
 //----------------------------------------------------------
 std::vector<std::string> MCWeighter::xsecFilesForSimplifiedModels()
