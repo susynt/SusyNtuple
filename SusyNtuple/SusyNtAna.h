@@ -12,6 +12,7 @@
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/SusyNtSys.h"
 
 #include <fstream>
 #include <map>
@@ -68,7 +69,8 @@ class SusyNtAna : public TSelector
 
     // Object selection
     void clearObjects();
-    void selectObjects(SusyNtSys sys = NtSys::NOM, bool removeLepsFromIso=false, 
+    void selectObjects(Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM,
+                       bool removeLepsFromIso=false, 
                        TauID signalTauID=TauID_medium);
 
     // Cleaning cuts
