@@ -68,6 +68,12 @@ public:
 
     bool jetPassesJvfRequirement(const Jet* jet, float maxPt, float maxEta, float nominalJvtThres);
 
+    /// count central light jets \todo const (depends on jvf tool interface)
+    size_t count_CL_jets(const JetVector &jets) /*const*/;
+    /// count central b-tagged jets \todo const
+    static size_t count_CB_jets(const JetVector &jets) /*const*/;
+    /// count forward jets \todo const
+    static size_t count_F_jets(const JetVector &jets) /*const*/;
 
 private:
     /*
