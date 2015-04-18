@@ -12,6 +12,7 @@
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/SusyNtSys.h"
 
 #include <fstream>
 #include <map>
@@ -23,7 +24,7 @@ typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
 
 
 ///    SusyNtAna - base class for analyzing SusyNt
-class SusyNtAna : public TSelector, public SusyNtTools
+class SusyNtAna : public TSelector
 {
 
   public:
@@ -34,7 +35,10 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     /// SusyNt object, access to the SusyNt variables
     Susy::SusyNtObject nt;
-
+    /// helper tools and functions
+    SusyNtTools m_nttools;
+    inline void setAnaType(AnalysisType v){ m_nttools.setAnaType(v); }
+    /*const*/ SusyNtTools& nttools() /*const*/ { return m_nttools; } // DG should be const
 
     //
     // TSelector methods
@@ -65,7 +69,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // Object selection
     void clearObjects();
-    void selectObjects(SusyNtSys sys = NtSys::NOM, bool removeLepsFromIso=false, 
+    void selectObjects(Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM,
+                       bool removeLepsFromIso=false, 
                        TauID signalTauID=TauID_medium);
 
     // Cleaning cuts
@@ -88,7 +93,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void setPrintFreq(int freq) { m_printFreq = freq; }
 
     /// Debug level
-    void setDebug(int dbg) { m_dbg = dbg; }
+    void setDebug(int dbg) { m_dbg = dbg; m_mcWeighter.setVerbose(dbg); }
     int dbg() { return m_dbg; }
 
     void toggleCheckDuplicates(bool b=true) { m_duplicate = b; }
