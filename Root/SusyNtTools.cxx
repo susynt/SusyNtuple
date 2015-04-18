@@ -27,7 +27,6 @@ m_doElEtconeCut(true),
 m_doMuEtconeCut(false),
 m_doIPCut(true)
 {
-    m_jvfTool = JetSelector::build_jvf_tool();
 }
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods
@@ -294,7 +293,7 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets, SusyNtSys sys)
     JetVector sigJets;
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
-        if(JetSelector(m_jvfTool, sys, m_anaType).isSignalJet(j)){
+        if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet(j)){
             sigJets.push_back(j);
         }
     }
@@ -306,7 +305,7 @@ JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sy
     JetVector sigJets;
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
-        if(JetSelector(m_jvfTool, sys, m_anaType).isSignalJet2Lep(j)){
+        if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet2Lep(j)){
             sigJets.push_back(j);
         }
     }
@@ -631,7 +630,7 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
 int SusyNtTools::numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool,
                                 SusyNtSys sys, AnalysisType anaType)
 {
-    return JetSelector(jvfTool, sys, anaType).count_CL_jets(jets);
+    return JetSelector().setSystematic(sys).setAnalysis(anaType).count_CL_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 // Count Number of 2 Lepton B Jets

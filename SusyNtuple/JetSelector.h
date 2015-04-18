@@ -5,17 +5,13 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 
-class JVFUncertaintyTool;
+#include "JVFUncertaintyTool/JVFUncertaintyTool.h"
 
 namespace Susy {
 ///  A class to select jets
 /**
-   Each analysis has slightly different jet requirements.  This class
-   tries to provide a centralized place where such requirements are
-   defined.
-
-   The user should call build_*analysis_selector (rather than using
-   the default constructor).
+   Each analysis has slightly different jet requirements. This class
+   provides a centralized place where such requirements are defined.
 
    See test_JetSelector.cxx for an example of how this class can be used
 
@@ -30,16 +26,23 @@ class Jet;
 class JetSelector
 {
 public:
-    /// dummy c'tor; prefer analysis-specific build_*_selector methods
-    JetSelector(JVFUncertaintyTool* const jvftool, const NtSys::SusyNtSys systematic, const AnalysisType& analysis);
-    /// jet selection used for the two-lepton study
-    static JetSelector build_2L_analysis_selector(JVFUncertaintyTool* const, const NtSys::SusyNtSys&, const AnalysisType&);
-    /// jet selection used for the three-lepton study
-    static JetSelector build_3L_analysis_selector(JVFUncertaintyTool* const, const NtSys::SusyNtSys&, const AnalysisType&);
-    /// jet selection used for the WH study
-    static JetSelector build_WH_analysis_selector(JVFUncertaintyTool* const, const NtSys::SusyNtSys&, const AnalysisType&);
-    /// build a jvf tool; the user is responsible for its deletion
-    static JVFUncertaintyTool* build_jvf_tool();
+    /// Vanilla selector
+    JetSelector();
+    /// specify the current syst
+    JetSelector& setSystematic(const NtSys::SusyNtSys&);
+    /// specify the jet requirements for a specific analysis
+    /**
+       This is where all the thresholds are set.
+     */
+    JetSelector& setAnalysis(const AnalysisType&);
+    /// if you don't want to use the default tool
+    /**
+       Used for example when you are dealing with non-standard jet
+       collections, see JVFUncertaintyTool default constructor.
+     */
+    JetSelector& setJvfTool(const JVFUncertaintyTool &t);
+    static float defaultCentralEtaMax() { return 0.0; }; ///< \todo
+    static float defaultBtagMinValue() { return 0.0; }; ///< \todo
 /*
   \todo: these will be used internally when refactoring
 
@@ -86,7 +89,7 @@ private:
     float m_max_jvf_eta; ///< above this eta we cannot apply the JVF requirement
     float m_min_jvf; ///< below this value a jet is not JVF-confirmed
     */
-    JVFUncertaintyTool* const m_jvftool; ///< jvf tool (note weird design --> weird const-ness)
+    JVFUncertaintyTool m_jvftool; ///< jvf tool (note weird design --> weird const-ness)
     NtSys::SusyNtSys m_systematic; ///< current syst variation
     AnalysisType m_analysis; ///< analysis
     bool m_verbose; ///< toggle verbose messages

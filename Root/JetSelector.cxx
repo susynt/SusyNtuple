@@ -1,8 +1,6 @@
 #include "SusyNtuple/JetSelector.h"
 #include "SusyNtuple/SusyNt.h"
 
-#include "JVFUncertaintyTool/JVFUncertaintyTool.h"
-
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -15,9 +13,7 @@ using std::endl;
 
 namespace Susy {
 //----------------------------------------------------------
-JetSelector::JetSelector(JVFUncertaintyTool* const jvftool,
-                         const NtSys::SusyNtSys systematic,
-                         const AnalysisType& analysis):
+JetSelector::JetSelector():
 /*
   \todo: these will be used internally when refactoring
     m_skip_pt(true),
@@ -28,48 +24,36 @@ JetSelector::JetSelector(JVFUncertaintyTool* const jvftool,
     m_max_jvf_eta(0.0),
     m_min_jvf(0.0),
 */
-    m_jvftool(jvftool),
-    m_systematic(systematic),
-    m_analysis(analysis),
+    m_systematic(NtSys::NOM),
+    m_analysis(Ana_N),
     m_verbose(false)
 {
 }
 //----------------------------------------------------------
-JetSelector JetSelector::build_2L_analysis_selector(JVFUncertaintyTool* const t,
-                                                    const SusyNtSys &s,
-                                                    const AnalysisType &a)
+JetSelector& JetSelector::setSystematic(const NtSys::SusyNtSys &s)
 {
-    return JetSelector(t, s, a)
-        // .requireMinPt(20.0)
-        // .requireMaxEta(2.5)
-        ;
+    m_systematic = s;
+    return *this;
 }
 //----------------------------------------------------------
-JetSelector JetSelector::build_3L_analysis_selector(JVFUncertaintyTool* const t,
-                                                    const SusyNtSys &s,
-                                                    const AnalysisType &a)
+JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 {
-    return JetSelector(t, s, a)
-        // .requireMinPt(20.0)
-        // .requireMaxEta(2.5)
-        ;
+    m_analysis = a;
+    switch(m_analysis){
+    case Ana_2Lep: /**/ break;
+    case Ana_3Lep: /**/ break;
+    case Ana_2LepWH: /**/ break;
+    default:
+        cout<<"JetSelector::setAnalysis error: invalid analysis '"<<a<<"'"<<endl
+            <<"           will apply default jet selection"<<endl;
+    }
+    return *this;
 }
 //----------------------------------------------------------
-JetSelector JetSelector::build_WH_analysis_selector(JVFUncertaintyTool* const t,
-                                                    const SusyNtSys &s,
-                                                    const AnalysisType &a)
+JetSelector& JetSelector::setJvfTool(const JVFUncertaintyTool &t)
 {
-    return JetSelector(t, s, a)
-        // .requireMinPt(20.0)
-        // .requireMaxEta(2.5)
-        ;
-}
-//----------------------------------------------------------
-JVFUncertaintyTool* JetSelector::build_jvf_tool()
-{
-  JVFUncertaintyTool *jvfTool = new JVFUncertaintyTool();
-  jvfTool->UseGeV(true);
-  return jvfTool;
+    m_jvftool = t;
+    return *this;
 }
 //----------------------------------------------------------
 bool JetSelector::isSignalJet(const Jet* jet)
@@ -163,13 +147,8 @@ bool JetSelector::jetPassesJvfRequirement(const Jet* jet, float maxPt, float max
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
         bool jvfUp(m_systematic == NtSys::JVF_UP), jvfDown(m_systematic == NtSys::JVF_DN);
         if(jvfUp || jvfDown) {
-            if(m_jvftool) {
-                bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
-                jvfThres = m_jvftool->getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
-            } else {
-                cout<<"jetPassesJvfRequirement: error, jvfTool required ("<<m_jvftool<<")"<<endl;
-                assert(m_jvftool);
-            }
+            bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
+            jvfThres = m_jvftool.getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
         }
         bool acceptMinusOne(m_analysis==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
         bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
@@ -179,7 +158,7 @@ bool JetSelector::jetPassesJvfRequirement(const Jet* jet, float maxPt, float max
             pass = true;
         }
     } else {
-        cout<<"jetPassesJvfRequirement: invalid inputs jet("<<jet<<"), jvfTool("<<m_jvftool<<")."
+        cout<<"jetPassesJvfRequirement: invalid inputs jet("<<jet<<")."
             <<"Return " << pass << endl;
     }
     return pass;
