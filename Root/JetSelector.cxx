@@ -64,6 +64,13 @@ JetSelector JetSelector::build_WH_analysis_selector(JVFUncertaintyTool* const t,
         ;
 }
 //----------------------------------------------------------
+JVFUncertaintyTool* JetSelector::build_jvf_tool()
+{
+  JVFUncertaintyTool *jvfTool = new JVFUncertaintyTool();
+  jvfTool->UseGeV(true);
+  return jvfTool;
+}
+//----------------------------------------------------------
 bool JetSelector::isSignalJet(const Jet* jet)
 {
   // For now, 2lep analysis is not using this jet definition

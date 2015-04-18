@@ -27,8 +27,7 @@ m_doElEtconeCut(true),
 m_doMuEtconeCut(false),
 m_doIPCut(true)
 {
-    m_jvfTool = new JVFUncertaintyTool();
-    m_jvfTool->UseGeV(true);
+    m_jvfTool = JetSelector::build_jvf_tool();
 }
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods

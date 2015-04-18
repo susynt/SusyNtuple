@@ -38,6 +38,8 @@ public:
     static JetSelector build_3L_analysis_selector(JVFUncertaintyTool* const, const NtSys::SusyNtSys&, const AnalysisType&);
     /// jet selection used for the WH study
     static JetSelector build_WH_analysis_selector(JVFUncertaintyTool* const, const NtSys::SusyNtSys&, const AnalysisType&);
+    /// build a jvf tool; the user is responsible for its deletion
+    static JVFUncertaintyTool* build_jvf_tool();
 /*
   \todo: these will be used internally when refactoring
 
