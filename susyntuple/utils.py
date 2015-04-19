@@ -95,7 +95,8 @@ def import_SUSYDefs_enums():
             enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
                                                                   for k in dict_keys_sorted_by_value(e_vals)]))
             exec enum_expr in globals()
-    build_enums_from_file(['TauID', 'AnalysisType', 'BTagSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'))
+    build_enums_from_file(['TauID', 'BTagSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'))
+    build_enums_from_file(['AnalysisType'], os.path.join(rootcoredir(), 'include/SusyNtuple/AnalysisType.h'))
     build_enums_from_file(['SusyNtSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyNtSys.h'))
 
 import_SUSYDefs_enums()
