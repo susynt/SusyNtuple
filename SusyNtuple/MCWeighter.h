@@ -43,9 +43,8 @@ class MCWeighter
   struct SumwMapKey {
     unsigned int dsid;
     int proc;
-  SumwMapKey(unsigned int d, int p):
-    dsid(d),
-      proc(p){}
+  SumwMapKey(): dsid(0), proc(0) {}
+  SumwMapKey(unsigned int d, int p): dsid(d), proc(p){}
   };
 
   public:
