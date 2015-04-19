@@ -2,6 +2,8 @@
 #ifndef SUSYNTUPLE_EVENT_H
 #define SUSYNTUPLE_EVENT_H
 
+#include "SusyNtuple/SusyNtSys.h"
+
 #include "TBits.h"
 
 namespace Susy

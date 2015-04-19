@@ -1,5 +1,4 @@
 #include "SusyNtuple/MCWeighter.h"
-#include "SusyNtuple/SusyDefs.h" // SumwMapKey
 
 #include "TFile.h"
 #include "TLeaf.h"
@@ -58,8 +57,8 @@ int test_mc_weighter_with_generic_sample(const std::string &ntuple_filename)
         return 1;
     }
 
-    SumwMapKey key(mcChannel, susyFinalState);
-    cout<<"checking (dsid,proc)=("<<key.first<<", "<<key.second<<") :"
+    MCWeighter::SumwMapKey key(mcChannel, susyFinalState);
+    cout<<"checking (dsid,proc)=("<<key.dsid<<", "<<key.proc<<") :"
         <<" has key "<<(mcw.sumwmapHasKey(key)?"true":"false")
         <<endl;
     cout<<"dumpSumwMap"<<endl;
@@ -99,8 +98,8 @@ int test_mc_weighter_with_susy_sample()
     MCWeighter mcw;
     mcw.parseAdditionalXsecFile(dummyFilename, verbose);
     mcw.parseAdditionalXsecDirectory("/tmp/dummy_xsecs/", verbose);
-    SumwMapKey key(176558, 157); // test sample needed by Anyes
-    cout<<"checking cache for (dsid,proc)=("<<key.first<<", "<<key.second<<") :"
+    MCWeighter::SumwMapKey key(176558, 157); // test sample needed by Anyes
+    cout<<"checking cache for (dsid,proc)=("<<key.dsid<<", "<<key.proc<<") :"
         <<" has key "<<(mcw.sumwmapHasKey(key)?"true":"false")
         <<endl;
     cout<<"dumpSumwMap"<<endl;

@@ -5,11 +5,12 @@
 #include "TString.h"
 
 #include "SUSYTools/SUSYCrossSection.h"
-#include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/SusyDefs.h"
 
 #include <string>
 
 class TH1F;
+namespace Susy{ class Event; }
 
 /// A class to handle the normalization of Monte Carlo
 /**
@@ -38,7 +39,19 @@ class TH1F;
 class MCWeighter
 {
 
+ public:
+  struct SumwMapKey {
+    unsigned int dsid;
+    int proc;
+  SumwMapKey(unsigned int d, int p):
+    dsid(d),
+      proc(p){}
+  };
+
   public:
+
+  //typedef std::pair<unsigned int, int> SumwMapKey;
+typedef std::map<SumwMapKey, float> SumwMap;
 
     //
     // Enums to control weighting options
@@ -228,5 +241,8 @@ class MCWeighter
     bool m_verbose; ///< toggle verbose printout
 };
 
+/// needed for std::map
+inline bool operator<(const MCWeighter::SumwMapKey &a, const MCWeighter::SumwMapKey &b)
+{ return a.dsid<b.dsid && a.proc<b.proc; }
 
 #endif
