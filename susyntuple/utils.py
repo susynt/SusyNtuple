@@ -61,7 +61,8 @@ def enum_from_header(filename, enumName) :
     file_data = ' '.join(line.split('//')[0].split('#')[0] for line in file_data.splitlines())
     file_data = ' '.join(re.split(r'\/\*.*?\*\/', file_data))
     # Look for enums: In the first { } block after the keyword "enum"
-    enums = [(text.split('{')[0].replace('enum','').strip(), text.split('{')[1].split('}')[0])
+    enums = [(text.split('{')[0].replace('enum','').replace('class','').strip(),
+              text.split('{')[1].split('}')[0])
              for text in re.split(r'\benum\b', file_data)[1:]]
     enum = dict()
     for enum_name, enum_keyvals in enums:
