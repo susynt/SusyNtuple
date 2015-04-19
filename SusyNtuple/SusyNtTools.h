@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "SusyNtuple/SusyDefs.h"
+#include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/MCWeighter.h"
@@ -30,7 +31,7 @@ public:
     {
         m_anaType = A;
         m_jetSelector.setAnalysis(A);
-        if (verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
+        if (verbose) std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
     };
 
     //
@@ -75,9 +76,9 @@ public:
                           SusyNtSys sys = NtSys::NOM);
     // This method cannot be used anymore because it doesn't provide the baseline objects after OR.
     // Analyzers need these baseline objects for cleaning cuts.
-    //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs, 
-    //                      MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets, 
-    //                      JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC, 
+    //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs,
+    //                      MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets,
+    //                      JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC,
     //                      bool selectTaus=false, bool removeLepsFromIso=false,
     //                      TauID tauID=TauID_medium);
 
@@ -140,7 +141,7 @@ public:
     // Methods for performing overlap removal
     //
 
-    /// Perform all overlap on pre objects  
+    /// Perform all overlap on pre objects
     virtual void performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets);
 
     /// e-e overlap
@@ -153,7 +154,7 @@ public:
     /// m-j overlap
     void m_j_overlap(MuonVector& muons, JetVector jets, float minDr);
 
-    /// e-m overlap 
+    /// e-m overlap
     void e_m_overlap(ElectronVector& elecs, MuonVector& muons, float minDr);
 
     /// m-m overlap
@@ -258,7 +259,7 @@ public:
     //
     // Methods to get useful quantities for event, leptons, or jets
     // Moving global functions from SusyDefs here
-    // 
+    //
 
     // Lepton flavor checks
     static bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);

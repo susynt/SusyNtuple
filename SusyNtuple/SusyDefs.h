@@ -113,21 +113,6 @@ enum McPeriod {
     McPeriod_Num
 };
 
-/// 2-lep or 3-lep flag
-enum AnalysisType {
-    Ana_2Lep = 0,
-    Ana_3Lep,
-    Ana_2LepWH,
-    Ana_N
-};
-
-// Human-readable names for enum SusyNtSys 
-const std::string SusyNtAnalysisType[Ana_N] = {
-    "Ana_2Lep",
-    "Ana_3Lep",
-    "Ana_2LepWH",
-};
-
 /// SUSY D3PD tag, for controlling which branch names to grab
 enum D3PDTag {
     D3PD_p1032 = 0,

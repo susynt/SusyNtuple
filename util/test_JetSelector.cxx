@@ -1,7 +1,8 @@
 
 
 #include "SusyNtuple/JetSelector.h"
-#include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/AnalysisType.h"
+#include "SusyNtuple/Jet.h"
 
 #include <string>
 #include <vector>
@@ -24,7 +25,7 @@ int main(int argc, char **argv)
     forwardJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()+epsilon, 0.1, 100.0);
 
 
-    JetSelector selector = JetSelector().setAnalysis(Ana_2Lep).setVerbose(verbose);
+    JetSelector selector = JetSelector().setAnalysis(AnalysisType::Ana_2Lep).setVerbose(verbose);
 
     bool passAll = true;
     // passAll &= (selector.isCentral     (centralLightJet)==true);

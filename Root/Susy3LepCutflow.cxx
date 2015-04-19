@@ -47,7 +47,7 @@ Susy3LepCutflow::Susy3LepCutflow() :
 
   n_evt_tot       = 0;
 
-  setAnaType(Ana_3Lep);
+  setAnaType(AnalysisType::Ana_3Lep);
 
   if(m_writeOut) {
     out.open("event.dump");
