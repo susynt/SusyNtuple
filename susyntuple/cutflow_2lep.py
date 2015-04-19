@@ -16,11 +16,11 @@ def main():
     utils.generate_dicts()
     utils.import_SUSYDefs_enums()
 
-    sample_name = 'Sherpa_CT10_lllnu_WZ'
-    input_dir = '/var/tmp/susynt_dev/data/ntup_susy/'
-    #input_dir = '/var/tmp/susynt_dev/data/ntup_common/'
-    input_files = glob.glob(os.path.join(input_dir, '*.root*'))
-
+    sample_name = 'mc14_13TeV.110401.PowhegPythia_P2012_ttbar_nonallhad'
+    # input_dir = '/var/tmp/susynt_dev/data/ntup_susy/'
+    # #input_dir = '/var/tmp/susynt_dev/data/ntup_common/'
+    # input_files = glob.glob(os.path.join(input_dir, '*.root*'))
+    input_files = ['./susyNt.root']
     chain = r.TChain('susyNt')
     for f in input_files : chain.Add(f)
     num_entries = chain.GetEntries()
@@ -34,11 +34,10 @@ def run_with_chain(tree, n_max_entries=-1):
     ntevent = r.Susy.SusyNtObject(m_entry)
     ntevent.ReadFrom(tree)
     isSimplifiedModel = False
-    nttool.buildSumwMap(tree, isSimplifiedModel)
     period, useRewUtils = 'Moriond', False
     trig_logic = r.DilTrigLogic(period, useRewUtils)
     n_entries_to_print = 4
-    sys = utils.SusyNtSys.NtSys_NOM
+    sys = utils.SusyNtSys.NOM
     tauId = utils.TauID
     tauJetId, tauEleId, tauMuoId = tauId.TauID_loose, tauId.TauID_medium, tauId.TauID_medium
     cutflow = Cutflow()
