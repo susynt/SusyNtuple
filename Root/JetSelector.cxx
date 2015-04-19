@@ -40,9 +40,9 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 {
     m_analysis = a;
     switch(m_analysis){
-    case Ana_2Lep: /**/ break;
-    case Ana_3Lep: /**/ break;
-    case Ana_2LepWH: /**/ break;
+    case Ana_2Lep: /*\todo: set values*/ break;
+    case Ana_3Lep: /*\todo: set values*/ break;
+    case Ana_2LepWH: /*\todo: set values*/ break;
     default:
         cout<<"JetSelector::setAnalysis error: invalid analysis '"<<a<<"'"<<endl
             <<"           will apply default jet selection"<<endl;
@@ -62,21 +62,22 @@ bool JetSelector::isSignalJet(const Jet* jet)
   //float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
     bool pass = false;
     if(jet) {
-        float ptCut = JET_SIGNAL_PT_CUT_3L;
-        pass = (jet->Pt() > ptCut
-                && fabs(jet->Eta()) < JET_ETA_CUT
-                && jetPassesJvfRequirement(jet, JET_JVF_PT, JET_JVF_ETA, JET_JVF_CUT));
-    } else {
-        cout << "isSignalJet: invalid jet(" << jet << "), return " << pass << endl;
+        if(m_analysis==Ana_2Lep){
+            pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
+        } else {
+            float ptCut = JET_SIGNAL_PT_CUT_3L;
+            pass = (jet->Pt() > ptCut
+                    && fabs(jet->Eta()) < JET_ETA_CUT
+                    && jetPassesJvfRequirement(jet));
+        }
     }
     return pass;
 }
 //----------------------------------------------------------
 bool JetSelector::isSignalJet2Lep(const Jet* jet)
 {
-    return (isCentralLightJet(jet)
-            || isCentralBJet(jet)
-            || isForwardJet(jet));
+    cout<<"JetSelector::isSignalJet2Lep: obsolete, use JetSelector::isSignalJet"<<endl;
+    return false;
 }
 //----------------------------------------------------------
 bool JetSelector::isCentralLightJet(const Jet* jet)
@@ -84,16 +85,10 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
     // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
     if(jet) {
-        float minJvf = JET_JVF_CUT;
-        float maxJvtEta = JET_JVF_ETA;
-        if(m_analysis == Ana_2Lep || m_analysis == Ana_2LepWH) {
-            minJvf = JET_JVF_CUT_2L;
-            maxJvtEta = JET_ETA_CUT_2L;
-        }
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->detEta) < JET_ETA_CUT_2L
                 && jet->mv1 < MV1_80
-                && JetSelector::jetPassesJvfRequirement(jet, JET_JVF_PT, maxJvtEta, minJvf));
+                && JetSelector::jetPassesJvfRequirement(jet));
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -138,12 +133,19 @@ bool JetSelector::isBadFCALJet(const Jet* jet)
   return false;
 }
 //----------------------------------------------------------
-bool JetSelector::jetPassesJvfRequirement(const Jet* jet, float maxPt, float maxEta, float nominalJvtThres)
+bool JetSelector::jetPassesJvfRequirement(const Jet* jet)
 {
+    float maxPt=JET_JVF_PT;
+    float maxEta=JET_JVF_ETA;
+    float nominalJvtThres=JET_JVF_CUT;
+    float jvfThres(nominalJvtThres);
+    if(m_analysis == Ana_2Lep || m_analysis == Ana_2LepWH) {
+        nominalJvtThres = JET_JVF_CUT_2L;
+        maxEta = JET_ETA_CUT_2L;
+    }
     bool pass=false;
     if(jet) {
         float pt(jet->Pt()), eta(jet->detEta);
-        float jvfThres(nominalJvtThres);
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
         bool jvfUp(m_systematic == NtSys::JVF_UP), jvfDown(m_systematic == NtSys::JVF_DN);
         if(jvfUp || jvfDown) {

@@ -261,7 +261,7 @@ void Susy3LepCutflow::finalizeHistos()
 bool Susy3LepCutflow::passFCal()
 {
   const Event* evt = nt.evt();
-  if(nttools().hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
+  if(nttools().m_jetSelector.hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/

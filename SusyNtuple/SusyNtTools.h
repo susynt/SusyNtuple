@@ -8,8 +8,8 @@
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/JetSelector.h"
 #include "SUSYTools/SUSYCrossSection.h"
-#include "JVFUncertaintyTool/JVFUncertaintyTool.h" //AT: not available in Base,2.0.14
 
 
 using namespace Susy;
@@ -29,6 +29,7 @@ public:
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         m_anaType = A;
+        m_jetSelector.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
 
@@ -246,11 +247,6 @@ public:
     /// Pass FEB dead region check
     bool passDeadRegions(const JetVector& preJets, const Susy::Met* met, int RunNumber, bool isMC);
 
-    /// To determine if there is baseline jets within bad FCAL region 
-    bool hasJetInBadFCAL(const JetVector& baseJets, uint run = 206248, bool isMC = false);
-    bool isBadFCALJet(const Susy::Jet* jet);
-
-
     /// Object selection control toggles
     /** Currently all are on by default except muon etcone */
     void setDoPtcone(bool doPtcone = true) { m_doPtconeCut = doPtcone; }
@@ -317,23 +313,24 @@ public:
     static bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets
-    static int numBJets(const JetVector& jets, float weight = MV1_80);
-    static bool hasBJet(const JetVector& jets, float weight = MV1_80);
-    static bool isBJet(const Susy::Jet* jet, float weight = MV1_80);
-    static JetVector getBJets(const JetVector& jets, float weight = MV1_80);
+    int numBJets(const JetVector& jets);
+    bool hasBJet(const JetVector& jets);
+    JetVector getBJets(const JetVector& jets);
 
     static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys = BTag_NOM);
 
-    static int numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
-    static int numberOfCBJets(const JetVector& jets);
-    static int numberOfFJets(const JetVector& jets);
+    int numberOfCLJets(const JetVector& jets);
+    int numberOfCBJets(const JetVector& jets);
+    int numberOfFJets(const JetVector& jets);
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf,
                              SusyNtSys sys, AnalysisType anaType);
 
     /// MET Rel
-    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets,
-                           bool useForward = false);
+    /**
+       Usually built without forward jets; filter jet collection if necessary.
+     */
+    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets);
 
     /// MT2
     static float getMT2(const LeptonVector& leptons, const Susy::Met* met);
@@ -401,6 +398,8 @@ public:
     /// Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
 
+    JetSelector m_jetSelector; ///< select jets according to the current analysis settings
+
 protected:
 
     AnalysisType m_anaType;             ///< Analysis type. currently 2-lep or 3-lep
@@ -412,13 +411,6 @@ protected:
     bool m_doElEtconeCut;               ///< etcone isolation cuts for electrons
     bool m_doMuEtconeCut;               ///< etcone isolation cuts for muons
     bool m_doIPCut;                     ///< impact parameter cuts
-
-    JVFUncertaintyTool* m_jvfTool;    ///< JVF tool
-private:
-    /// check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
-    static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
-                                        float maxPt, float maxEta, float nominalJvtThres,
-                                        SusyNtSys sys, AnalysisType anaType);
 };
 
 #endif

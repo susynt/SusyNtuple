@@ -41,6 +41,7 @@ public:
        collections, see JVFUncertaintyTool default constructor.
      */
     JetSelector& setJvfTool(const JVFUncertaintyTool &t);
+    static float defaultMinPt() { return JET_PT_CUT; }
     static float defaultCentralEtaMax() { return 0.0; }; ///< \todo
     static float defaultBtagMinValue() { return 0.0; }; ///< \todo
 /*
@@ -69,7 +70,8 @@ public:
     bool verbose() const { return m_verbose; }
     JetSelector& setVerbose(bool v) { m_verbose = v; return *this; }
 
-    bool jetPassesJvfRequirement(const Jet* jet, float maxPt, float maxEta, float nominalJvtThres);
+    // The jet-vertex-fraction requirement: usually applied to low-pt central jets
+    bool jetPassesJvfRequirement(const Jet* jet);
 
     /// count central light jets \todo const (depends on jvf tool interface)
     size_t count_CL_jets(const JetVector &jets) /*const*/;
@@ -78,17 +80,27 @@ public:
     /// count forward jets \todo const
     static size_t count_F_jets(const JetVector &jets) /*const*/;
 
-private:
-    /*
-  \todo: these will be used internally when refactoring
-    bool m_skip_pt;
-    bool m_skip_eta;
-    bool m_skip_jvf;
     float m_min_pt; ///< do not consider jets with pt below this value
     float m_max_eta; ///< do not consider jets with eta above this value
+    float m_min_jvf; ///< below this jvf value a jet is not JVF-confirmed
     float m_max_jvf_eta; ///< above this eta we cannot apply the JVF requirement
-    float m_min_jvf; ///< below this value a jet is not JVF-confirmed
-    */
+
+    static constexpr float JET_PT_CUT = 20; // GeV
+    static constexpr float JET_SIGNAL_PT_CUT_3L = 20; // GeV
+    static constexpr float JET_SIGNAL_PT_CUT_2L = 30; // GeV
+    static constexpr float JET_ETA_CUT = 2.5;
+    static constexpr float JET_JVF_CUT = 0.5;
+    static constexpr float JET_JVF_CUT_2L = 0.0;
+    static constexpr float JET_JVF_PT = 50;
+    static constexpr float JET_JVF_ETA = 2.4;
+    static constexpr float JET_PT_L25_CUT = 25;
+    static constexpr float JET_PT_L20_CUT = 20;
+    static constexpr float JET_PT_B20_CUT = 20;
+    static constexpr float JET_PT_F30_CUT = 30;
+    static constexpr float JET_ETA_MAX_CUT = 4.5;
+    static constexpr float JET_ETA_CUT_2L = 2.4;
+
+private:
     JVFUncertaintyTool m_jvftool; ///< jvf tool (note weird design --> weird const-ness)
     NtSys::SusyNtSys m_systematic; ///< current syst variation
     AnalysisType m_analysis; ///< analysis
