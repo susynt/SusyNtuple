@@ -883,11 +883,6 @@ void Met::print() const
   cout.unsetf(ios_base::fixed);
 }
 
-
-
-
-
-
 MetTrack::MetTrack(const MetTrack &rhs) :
 TObject(rhs),
 Et(rhs.Et),
@@ -921,13 +916,6 @@ void MetTrack::print() const
     cout.precision(6);
     cout.unsetf(ios_base::fixed);
 }
-
-
-
-
-
-
-
 /*--------------------------------------------------------------------------------*/
 // Copy constructor
 /*--------------------------------------------------------------------------------*/
