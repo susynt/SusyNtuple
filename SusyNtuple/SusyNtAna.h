@@ -88,7 +88,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void setPrintFreq(int freq) { m_printFreq = freq; }
 
     /// Debug level
-    void setDebug(int dbg) { m_dbg = dbg; }
+    void setDebug(int dbg) { m_dbg = dbg; m_mcWeighter.setVerbose(dbg); }
     int dbg() { return m_dbg; }
 
     void toggleCheckDuplicates(bool b=true) { m_duplicate = b; }

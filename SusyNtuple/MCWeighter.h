@@ -8,10 +8,31 @@
 #include "SusyNtuple/SusyNt.h"
 
 #include <string>
+
+class TH1F;
+
 /// A class to handle the normalization of Monte Carlo
 /**
-    There are options to control how to retrieve the sumw, xsec, etc.
-    The defaults are recommended, as long as they work.
+   A MC sample is normalized with the factor \f$\sigma * lumi / \Sum
+   w\f$ This factor multiplies the generator event weight and all the
+   other factors (pileup, lepton efficiency, trigger scale factors
+   etc.)  Some samples can include multiple processes. This class
+   holds a map of the \f$\Sum w\f$ values for each process. The
+   \f$\Sum w\f$ is computed from the cutflow histograms that are
+   stored with the susyNt tree.
+
+   The user can specify the bin whose contents are used to compute
+   \Sum w; otherwise defaultLabelBinCounter() will be used.
+
+   Two types of histograms are considered:
+   - for samples that contain only one process (most of them)
+     `genCutFlow`
+   - for samples that contain multiple processes (mostly slepton
+     samples) `procCutFlowXYZ`, where `XYZ` is the process number
+
+  \todo drop all the obsolete functionalities. Right now we support
+  only the sumwmap method with the sumw retrieved from the histogram.
+
 */
 
 class MCWeighter
@@ -144,6 +165,8 @@ class MCWeighter
        "SusyProp Veto" for SUSY simplified models.
      */
     static std::string defaultLabelBinCounter(const unsigned int &dsid, bool verbose);
+    /// print a warning if the histo doesn't have a bin with the given label
+    static void checkHistoHasBin(const TH1F &histo, const std::string &binLabel);
     /// default directory from which we read the xsec files for SUSY::CrossSectionDB
     static std::string defaultXsecDir() {
       return std::string("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
@@ -174,6 +197,10 @@ class MCWeighter
        See also util/test_mcWeighter.cxx
      */
     static bool isSimplifiedModel(const unsigned int &dsid, bool verbose);
+    /// read the first event from the tree (often used to retrieve sample parameters)
+    static const Susy::Event& readFirstEvent(TTree* tree);
+    /// extract 'XYZ' from 'prefixXYZ'
+    static int extractProcessFromCutflowHistoname(const std::string &histoName, const std::string &prefix);
  private:
     void buildSumwMapFromTree(TTree* tree);
     void buildSumwMapFromChain(TChain* chain);
