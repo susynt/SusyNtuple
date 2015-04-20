@@ -200,6 +200,7 @@ void SusyNtAna::clearObjects()
   m_mediumTaus.clear();
   m_tightTaus.clear();
   m_met = NULL;
+  m_metTrack = NULL;
 }
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
@@ -229,7 +230,7 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   SusyNtSys metSys = sys;
   if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
   m_met = getMet(&nt, metSys);
-
+  m_metTrack = getMetTrack(&nt, metSys);
   // Build Lepton vectors
   buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
   buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);

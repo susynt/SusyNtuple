@@ -173,6 +173,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     TauVector           m_tightTaus;            ///< taus with tight ID
 
     const Susy::Met*    m_met;                  ///< Met
+    const Susy::MetTrack*    m_metTrack;        ///< MetTrack
 
     /// Timer
     TStopwatch          m_timer;
