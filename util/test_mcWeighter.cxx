@@ -1,4 +1,5 @@
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/string_utils.h"
 
 #include "TFile.h"
 #include "TLeaf.h"
@@ -135,6 +136,7 @@ int main(int argc, char **argv)
 {
     if(argc>1) test_mc_weighter_with_generic_sample(argv[1]);
     else test_mc_weighter_with_susy_sample();
+    cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
     test_process_validator();
     cout<<"-------------------------"<<endl
         <<"test_isSimplified"<<endl

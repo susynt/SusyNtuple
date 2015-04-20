@@ -1,8 +1,7 @@
-
-
 #include "SusyNtuple/EventlistHandler.h"
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
+#include "SusyNtuple/string_utils.h"
 
 #include "TChain.h"
 
@@ -86,6 +85,9 @@ int main(int argc, char **argv)
     else if(argv[optind][0]=='-') cout<<"Unknown switch "<<sw<<endl;
     optind++;
   } // end if(optind<argc)
+  
+  if(verbose)
+      cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
   cout<<"Using the following options:"<<endl
       <<"inputRootFname : "<<inputRootFname<<endl
       <<"sample         : "<<sampleName<<endl

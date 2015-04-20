@@ -3,6 +3,7 @@
 #include "SusyNtuple/JetSelector.h"
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/Jet.h"
+#include "SusyNtuple/string_utils.h"
 
 #include <string>
 #include <vector>
@@ -14,7 +15,8 @@ int main(int argc, char **argv)
 {
 
     bool verbose(true);
-
+    if(verbose)
+        cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
     float epsilon = 0.01;
     Jet centralLightJet;
     centralLightJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()-epsilon, 0.1, 100.0);
