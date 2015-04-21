@@ -9,6 +9,8 @@
 #include "Mt2/mt2_bisect.h" 
 
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/ElectronSelector.h"
+#include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/JetSelector.h"
 
 #include <cassert>
@@ -355,6 +357,42 @@ Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiF
     }
 
     return met;
+}
+MetTrack* SusyNtTools::getMetTrack(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiForMetSys)
+{
+    // Right now not being clever. Could maybe make sys index correspond to 
+    // index on the array.
+
+    MetTrack* metTrack = NULL;
+    vector<MetTrack>* metTrackTmp = susyNt->mtk();
+    for (uint i = 0; i < metTrackTmp->size(); i++)
+    {
+        if (metTrackTmp->at(i).sys == sys)
+        {
+            metTrack = &(metTrackTmp->at(i));
+
+            // NEW: For NtSys_SCALEST_UP/NtSys_SCALEST_DOWN use nominal phi
+            // Mar 1, 2013 -- No longer recommeneded, left over from HCP.
+            //if(useNomPhiForMetSys && (sys == NtSys_SCALEST_UP || 
+            //sys == NtSys_SCALEST_DN ||
+            //sys == NtSys_RESOST)){
+            //for(uint j=0; j<metTmp->size(); ++j){
+            //if(metTmp->at(j).sys == NtSys_NOM){
+            //met->phi = metTmp->at(j).phi;
+            //break;
+            //}
+            //}
+            //}
+
+            return metTrack;
+        }
+    }
+    if (!metTrack)
+    {
+        cout << "Error: Unable to find metTrack for given systematic!  Returning NULL!! " << sys << endl;
+    }
+
+    return metTrack;
 }
 
 /*--------------------------------------------------------------------------------*/

@@ -10,8 +10,9 @@
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/MCWeighter.h"
 #include "SusyNtuple/JetSelector.h"
+#include "SusyNtuple/MuonSelector.h"
+#include "SusyNtuple/ElectronSelector.h"
 #include "SUSYTools/SUSYCrossSection.h"
-
 
 using namespace Susy;
 using namespace NtSys;
@@ -30,6 +31,8 @@ public:
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         m_anaType = A;
+        m_electronSelector.setAnalysis(A);
+        m_muonSelector.setAnalysis(A);
         m_jetSelector.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
     };
@@ -136,6 +139,7 @@ public:
 
     /// Get the Met, for the appropriate systematic
     Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
+    Susy::MetTrack* getMetTrack(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
 
     //
     // Methods for performing overlap removal
@@ -399,6 +403,8 @@ public:
     /// Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
 
+    ElectronSelector m_electronSelector;
+    MuonSelector m_muonSelector;
     JetSelector m_jetSelector; ///< select jets according to the current analysis settings
 
 protected:
