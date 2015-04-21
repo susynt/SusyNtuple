@@ -882,6 +882,40 @@ void Met::print() const
   cout.precision(6);
   cout.unsetf(ios_base::fixed);
 }
+
+MetTrack::MetTrack(const MetTrack &rhs) :
+TObject(rhs),
+Et(rhs.Et),
+phi(rhs.phi),
+sumet(rhs.sumet),
+sys(rhs.sys)
+{}
+/*--------------------------------------------------------------------------------*/
+// Assignment operator
+/*--------------------------------------------------------------------------------*/
+MetTrack& MetTrack::operator=(const MetTrack &rhs)
+{
+    if (this != &rhs)
+    {
+        TObject::operator=(rhs);
+        Et = rhs.Et;
+        phi = rhs.phi;
+        sumet = rhs.sumet;
+        sys = rhs.sys;
+    }
+    return *this;
+}
+/*--------------------------------------------------------------------------------*/
+// MetTrack print
+/*--------------------------------------------------------------------------------*/
+void MetTrack::print() const
+{
+    cout.precision(2);
+    cout << fixed << "MetTrack : pt " << setw(6) << Et << " phi " << setw(4) << phi
+        << endl;
+    cout.precision(6);
+    cout.unsetf(ios_base::fixed);
+}
 /*--------------------------------------------------------------------------------*/
 // Copy constructor
 /*--------------------------------------------------------------------------------*/

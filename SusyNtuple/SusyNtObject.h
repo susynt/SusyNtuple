@@ -49,6 +49,8 @@ namespace Susy
       D3PDReader::VarHandle< std::vector<Tau>* >        tau;
       /// Met variables
       D3PDReader::VarHandle< std::vector<Met>* >        met;  
+      /// MetTrack variables
+      D3PDReader::VarHandle< std::vector<MetTrack>* >   mtk;
       /// TruthParticle variables
       D3PDReader::VarHandle< std::vector<TruthParticle>* > tpr;
       /// TruthJet variables

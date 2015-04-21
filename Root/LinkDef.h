@@ -47,6 +47,7 @@
 #pragma link C++ class Susy::Photon+;
 #pragma link C++ class Susy::Jet+;
 #pragma link C++ class Susy::Met+;
+#pragma link C++ class Susy::MetTrack+;
 #pragma link C++ class Susy::Event+;
 #pragma link C++ class Susy::TruthParticle+;
 #pragma link C++ class Susy::TruthJet+;
@@ -61,6 +62,7 @@
 #pragma link C++ class std::vector< Susy::Photon >+;
 #pragma link C++ class std::vector< Susy::Jet >+;
 #pragma link C++ class std::vector< Susy::Met >+;
+#pragma link C++ class std::vector< Susy::MetTrack >+;
 #pragma link C++ class std::vector< Susy::TruthParticle >+;
 #pragma link C++ class std::vector< Susy::TruthJet >+;
 #pragma link C++ class std::vector< Susy::TruthMet >+;
