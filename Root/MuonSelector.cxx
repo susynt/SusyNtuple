@@ -8,8 +8,11 @@
 
 using Susy::MuonSelector;
 using Susy::Muon;
+using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;
+
+namespace Susy {
 
 void MuonSelector::buildRequirements(const AnalysisType& a)
 {
@@ -17,8 +20,13 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // 2L-ANALYSIS
     //////////////////////////////////////
-    case(Ana_2Lep) { 
+    case(Ana_2Lep) : { 
         m_2lep  = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtConeCut = true;
+        m_doMuEtconeCut = false;        
 
         // muons
         MU_MIN_PT                       = 10.0;
@@ -33,7 +41,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K1_MC               = 0.0692;
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.12;
-        MU_MAX_D0SIG                    = 3.0;
+        MU_MAX_D0SIG_CUT                = 3.0;
         MU_MAX_Z0_SINTHETA              = 1.0;
 
         break;
@@ -41,8 +49,13 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // 3L-ANALYSIS
     //////////////////////////////////////
-    case(Ana_3Lep) {
+    case(Ana_3Lep) : {
         m_3lep  = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtConeCut = true;
+        m_doMuEtconeCut = false;        
     
         // muons
         MU_MIN_PT                       = 10.0;
@@ -57,7 +70,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K1_MC               = 0.0692;
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.12;
-        MU_MAX_D0SIG                    = 3.0;
+        MU_MAX_D0SIG_CUT                = 3.0;
         MU_MAX_Z0_SINTHETA              = 1.0;
 
         break;
@@ -65,8 +78,13 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // WH-ANALYSIS
     //////////////////////////////////////
-    case(Ana_2LepWH) {
+    case(Ana_2LepWH) : {
         m_2lepWH = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtConeCut = true;
+        m_doMuEtconeCut = false;        
 
         // muons
         MU_MIN_PT                       = 10.0;
@@ -81,7 +99,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K1_MC               = 0.0692;
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.14;
-        MU_MAX_D0SIG                    = 3.0;
+        MU_MAX_D0SIG_CUT                = 3.0;
         MU_MAX_Z0_SINTHETA              = 1.0;
 
         break;
@@ -89,21 +107,46 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
-    case(Ana_N) {
-        cout << "MuonSelector::buildRequirements() : AnalysisType not supported. Exitting." << endl;
-        exit(1);
-    }
+    case(Ana_N) : {
+        cout << "MuonSelector::buildRequirements() error: invalid analysis '" << a << "'" << endl;
+        cout << "              will apply default muon selection (Ana_2Lep)." << endl;
+        m_analysis = Ana_2Lep;
+        m_2lep = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtConeCut = true;
+        m_doMuEtconeCut = false;        
+
+        // muons
+        MU_MIN_PT                       = 10.0;
+        MU_MAX_ETA                      = 2.4;
+        MU_ISO_PT_THRS                  = 60.0;
+        MU_PTCONE30_SLOPE_DATA          = 0.01098;
+        MU_PTCONE30_SLOPE_MC            = 0.00627;
+        MU_PTCONE30_PT_CUT              = 0.12;
+        MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        MU_ETCONE30_K1_DATA             = 0.0648;
+        MU_ETCONE30_K2_DATA             = 0.00098;
+        MU_ETCONE30_K1_MC               = 0.0692;
+        MU_ETCONE30_K2_MC               = 0.00076;
+        MU_ETCONE30_PT_CUT              = 0.12;
+        MU_MAX_D0SIG_CUT                = 3.0;
+        MU_MAX_Z0_SINTHETA              = 1.0;
+
+        break;
 
     }
+
+    } // end switch
 }
 
 // -------------------------------------------------------------------------------------------- //
 // Constructor
 // -------------------------------------------------------------------------------------------- //
-MuonSelector::MuonSelector(const SusyNtSys& systematic,
-                           const AnalysisType& analysis):
-    m_systematic(systematic),
-    m_analysis(analysis),
+MuonSelector::MuonSelector() :
+    m_systematic(NtSys::NOM),
+    m_analysis(Ana_N),
     m_doIPCut(true),
     m_doPtconeCut(true),
     m_doElEtConeCut(true),
@@ -113,7 +156,19 @@ MuonSelector::MuonSelector(const SusyNtSys& systematic,
     m_2lepWH(false),
     m_verbose(false)
 {
-    buildRequirements(m_analysis);
+}
+// -------------------------------------------------------------------------------------------- //
+MuonSelector& MuonSelector::setSystematic(const NtSys::SusyNtSys &s)
+{
+    m_systematic = s;
+    return *this;
+}
+// -------------------------------------------------------------------------------------------- //
+MuonSelector& MuonSelector::setAnalysis(const AnalysisType &a)
+{
+    m_analysis = a;
+    buildRequirements(a);
+    return *this;
 }
 // -------------------------------------------------------------------------------------------- //
 bool MuonSelector::isSignalMuon(const Muon* mu,
@@ -127,7 +182,7 @@ bool MuonSelector::isSignalMuon(const Muon* mu,
     //////////////////////////////
     if(m_doIPCut) {
         // all ana using unbiased IP
-        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG) return false;
+        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG_CUT) return false;
         if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
     }
     //////////////////////////////
@@ -187,8 +242,11 @@ float MuonSelector::muPtConeCorr(const Muon* mu,
     float ptcone = mu->ptcone30 - slope*nVtx;
     if(removeLeps){
         for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++) {
-            const Electrons* e = baseElectrons[iEl];
-            if(!ElectronSelector(m_systematic, m_analysis).isSemiSignalElectron(e)) continue;
+            const Electron* e = baseElectrons[iEl];
+            if(!ElectronSelector()
+                                .setSystematic(m_systematic)
+                                .setAnalysis(m_analysis)
+                                .isSemiSignalElectron(e)) continue;
             float dR = mu->DeltaR(*e);
             if(dR < 0.3) ptcone -= e->trackPt;
         }
@@ -209,7 +267,7 @@ bool MuonSelector::isSemiSignalMuon(const Muon* mu)
     // Impact parameter
     /////////////////////////////
     if(m_doIPCut) {
-        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG) return false;
+        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG_CUT) return false;
         if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
     }
     return true;
@@ -225,13 +283,16 @@ float MuonSelector::muEtConeCorr(const Muon* mu,
     float etcone = mu->etcone30 - k1*nVtx - k2*nVtx*nVtx;
     if(removeLeps){
         for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++){
-            const Electrons* e = baseElectrons[iEl];
-            if(!ElectronSelector(m_systematic, m_analysis).isSemiSignalElectron(e)) continue;
+            const Electron* e = baseElectrons[iEl];
+            if(!ElectronSelector()
+                                .setSystematic(m_systematic)
+                                .setAnalysis(m_analysis)
+                                .isSemiSignalElectron(e)) continue;
             float dR = mu->DeltaR(*e);
-            if(dR < 0.28) etcone -= e->cluseE / cosh(e->clusEta);
+            if(dR < 0.28) etcone -= e->clusE / cosh(e->clusEta);
         }
     }
     return etcone;
 }
             
-
+}; // namespace Susy

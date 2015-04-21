@@ -3,19 +3,21 @@
 #define SUSYNTUPLE_ELECTRONSELECTOR_H
 
 #include "SusyNtuple/SusyDefs.h"
-
-
-
+#include "SusyNtuple/SusyNtSys.h"
 
 
 namespace Susy {
     /// A class to select electrons
 
+    class Electron;
+    class Muon;
 
     class ElectronSelector
     {
         public:
-        ElectronSelector(const SusyNtSys& systematic, const AnalysisType& analysis);
+        ElectronSelector();
+        ElectronSelector& setSystematic(const NtSys::SusyNtSys& systematic);
+        ElectronSelector& setAnalysis(const AnalysisType& analysis);
         void buildRequirements(const AnalysisType& ana);
         bool isSignalElectron(const Electron* ele, const ElectronVector& baseElectrons,
                               const MuonVector& baseMuons, const unsigned int nVtx,
@@ -24,41 +26,41 @@ namespace Susy {
         float elPtConeCorr(const Electron* ele, const ElectronVector& baseElectrons,
                            const MuonVector& baseMuons, const unsigned int nVtx,
                            bool isMC, bool removeLepsFromIso);
-        float elEtConeCorr(const Electron* ele, const ElectronVector& baseElectrons,
+        float elEtTopoConeCorr(const Electron* ele, const ElectronVector& baseElectrons,
                            const MuonVector& baseMuons, const unsigned int nVtx,
                            bool isMC, bool removeLepsFromIso);
     
         
     
-        const float EL_MIN_PT;
-        const float EL_MAX_ETA;
-        const float EL_ISO_PT_THRS;
-        const float EL_PTCONE30_PT_CUT;
-        const float EL_TOPOCONE30_SLOPE_DATA_CUT;
-        const float EL_TOPOCONE30_SLOPE_MC_CUT;
-        const float EL_TOPOCONE30_PT_CUT;
-        const float EL_MAX_D0SIG_CUT;
-        const float EL_MAX_Z0_SINTHETA;
+        float EL_MIN_PT;
+        float EL_MAX_ETA;
+        float EL_ISO_PT_THRS;
+        float EL_PTCONE30_PT_CUT;
+        float EL_TOPOCONE30_SLOPE_DATA_CUT;
+        float EL_TOPOCONE30_SLOPE_MC_CUT;
+        float EL_TOPOCONE30_PT_CUT;
+        float EL_MAX_D0SIG_CUT;
+        float EL_MAX_Z0_SINTHETA;
     
     
     
         protected :
-        const SusyNtSys m_systematic;
-        const AnalysisType m_analysis;
-        const bool m_doIPCut;
-        const bool m_doPtconeCut;
-        const bool m_doElEtconeCut;
-        const bool m_doMuEtconeCut;
+        NtSys::SusyNtSys m_systematic;
+        AnalysisType m_analysis;
+        bool m_doIPCut;
+        bool m_doPtconeCut;
+        bool m_doElEtconeCut;
+        bool m_doMuEtconeCut;
 
         ///////////////////////////////
         // Available analyses
         ///////////////////////////////
-        const bool m_2lep;
-        const bool m_3lep;
-        const bool m_2lepWH;
+        bool m_2lep;
+        bool m_3lep;
+        bool m_2lepWH;
 
         // set verbose
-        const bool m_verbose;
+        bool m_verbose;
     
     }; // class
 

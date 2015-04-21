@@ -9,6 +9,8 @@
 #include "Mt2/mt2_bisect.h" 
 
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/ElectronSelector.h"
+#include "SusyNtuple/MuonSelector.h"
 
 #include <cassert>
 

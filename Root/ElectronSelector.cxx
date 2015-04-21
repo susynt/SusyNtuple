@@ -8,19 +8,25 @@
 
 using Susy::ElectronSelector;
 using Susy::Electron;
+using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;
 
+namespace Susy {
 
-
-void ElectronSelector::buildRequirements(const AnalysisType& a)
+void ElectronSelector::buildRequirements(const AnalysisType &a)
 {
     switch(a) {
     //////////////////////////////////////
     // 2L-ANALYSIS
     //////////////////////////////////////
-    case(Ana_2Lep) { 
+    case(Ana_2Lep) : { 
         m_2lep = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtconeCut = true;
+        m_doMuEtconeCut = false;
     
         // electrons
         EL_MIN_PT                       = 10.0;
@@ -37,8 +43,13 @@ void ElectronSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // 3L-ANALYSIS
     //////////////////////////////////////
-    case(Ana_3Lep) {
+    case(Ana_3Lep) : {
         m_3lep = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtconeCut = true;
+        m_doMuEtconeCut = false;
 
         // electrons
         EL_MIN_PT                       = 10.0;
@@ -55,8 +66,13 @@ void ElectronSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // WH-ANALYSIS
     //////////////////////////////////////
-    case(Ana_2LepWH) {
+    case(Ana_2LepWH) : {
         m_2lepWH = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtconeCut = true;
+        m_doMuEtconeCut = false;
 
         // electrons
         EL_MIN_PT                       = 10.0;
@@ -67,7 +83,6 @@ void ElectronSelector::buildRequirements(const AnalysisType& a)
         EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
         EL_TOPOCONE30_PT_CUT            = 0.13;
         EL_MAX_D0SIG_CUT                = 3.0; 
-        EL_MAX_D0
 
 
         break;
@@ -75,20 +90,38 @@ void ElectronSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
-    case(Ana_N) {
-        cout << "ElectronSelector::buildRequirements() : AnalysisType not supported. Exitting." << endl;
-        exit(1);
+    case(Ana_N) : {
+        cout << "ElectronSelector::buildRequirements() error: invalid analysis '" << a << "'" << endl;
+        cout << "               will apply default electron selection (Ana_2Lep)." << endl; 
+        m_analysis = Ana_2Lep;
+        m_2lep = true;
+
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtconeCut = true;
+        m_doMuEtconeCut = false;
+    
+        // electrons
+        EL_MIN_PT                       = 10.0;
+        EL_MAX_ETA                      = 2.47;
+        EL_ISO_PT_THRS                  = 60.0;
+        EL_PTCONE30_PT_CUT              = 0.16;
+        EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
+        EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
+        EL_TOPOCONE30_PT_CUT            = 0.18;
+        EL_MAX_D0SIG_CUT                = 5.0; 
+
+        break;
     }
 
-    }
+    } // end switch
 }
 // -------------------------------------------------------------------------------------------- //
 // Constructor
 // -------------------------------------------------------------------------------------------- //
-ElectronSelector::ElectronSelector(const SusyNtSys& systematic, 
-                                   const AnalysisType& analysis):
-    m_systematic(systematic),
-    m_analysis(analysis),
+ElectronSelector::ElectronSelector(): 
+    m_systematic(NtSys::NOM),
+    m_analysis(Ana_N),
     m_doIPCut(true),
     m_doPtconeCut(true),
     m_doElEtconeCut(true),
@@ -98,7 +131,19 @@ ElectronSelector::ElectronSelector(const SusyNtSys& systematic,
     m_2lepWH(false),
     m_verbose(false)
 {
-    buildRequirements(m_analysis);
+}
+// ---------------------------------------------------------
+ElectronSelector& ElectronSelector::setSystematic(const NtSys::SusyNtSys &s)
+{
+    m_systematic = s;
+    return *this;
+}
+// ---------------------------------------------------------
+ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
+{
+    m_analysis = a;
+    buildRequirements(a);
+    return *this;
 }
 // ---------------------------------------------------------
 bool ElectronSelector::isSignalElectron(const Electron* ele,
@@ -124,7 +169,7 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     // ptcone isolation
     /////////////////////////////
     if(m_doPtconeCut) {
-        float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso) 
+        float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso); 
         if(m_2lepWH){
             if(ptcone30/std::min(pt, EL_ISO_PT_THRS) >= EL_PTCONE30_PT_CUT) return false;
         }
@@ -140,7 +185,7 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
             if(etcone/std::min(pt,EL_ISO_PT_THRS) >= EL_TOPOCONE30_PT_CUT) return false;
         }
         else
-            if(etcone/pt >= EL_TOPOCONE30_PT_CUt) return false;
+            if(etcone/pt >= EL_TOPOCONE30_PT_CUT) return false;
     }
     return true;
 }
@@ -180,7 +225,10 @@ float ElectronSelector::elPtConeCorr(const Electron* ele,
         }
         for(unsigned int iMu = 0; iMu < baseMuons.size(); iMu++){
             const Muon* mu = baseMuons[iMu];
-            if(!MuonSelector(m_systematic, m_analysis).isSemiSignalMuon(mu)) continue;
+            if(!MuonSelector()
+                            .setSystematic(m_systematic)
+                            .setAnalysis(m_analysis)
+                            .isSemiSignalMuon(mu)) continue;
             float dR = ele->DeltaR(*mu);
             if(dR < 0.3) ptcone -= mu->idTrackPt;
         }
@@ -188,7 +236,7 @@ float ElectronSelector::elPtConeCorr(const Electron* ele,
     return ptcone;
 }
 /* --------------------------------------------------------------------------------------------- */
-float ElectronSelector::elEtConeCorr(const Electron* ele,
+float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
                                      const ElectronVector& baseElectrons,
                                      const MuonVector& baseMuons,
                                      unsigned int nVtx, bool isMC, bool removeLeps)
@@ -198,7 +246,7 @@ float ElectronSelector::elEtConeCorr(const Electron* ele,
     if(removeLeps) {
         for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++) {
             const Electron* e2 = baseElectrons[iEl];
-            if(e==e2) continue;
+            if(ele==e2) continue;
             if(!isSemiSignalElectron(e2)) continue;
             float dR = ele->DeltaR(*e2);
             if(dR < 0.28) etcone -= e2->clusE / cosh(e2->clusEta);
@@ -206,3 +254,5 @@ float ElectronSelector::elEtConeCorr(const Electron* ele,
     }
     return etcone;
 }
+
+}; // namespace Susy
