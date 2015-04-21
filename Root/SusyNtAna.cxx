@@ -9,7 +9,6 @@ using namespace Susy;
 // SusyNtAna Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtAna::SusyNtAna() : 
-        SusyNtTools(),
         nt(m_entry),
         m_entry(0),
         m_selectTaus(true),
@@ -211,28 +210,28 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   clearObjects();
 
   // Get the Baseline objets
-  getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
-                     m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
-                     sys, m_selectTaus);
+  m_nttools.getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
+                               m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
+                               sys, m_selectTaus);
 
   // Now grab Signal objects
   // New signal tau prescription, fill both ID levels at once
-  getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-                   m_signalElectrons, m_signalMuons, 
-                   m_mediumTaus, m_tightTaus, 
-                   m_signalJets, m_signalJets2Lep, 
-                   nt.evt()->nVtx, nt.evt()->isMC, 
-                   removeLepsFromIso, sys);
+  m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
+                             m_signalElectrons, m_signalMuons,
+                             m_mediumTaus, m_tightTaus,
+                             m_signalJets, m_signalJets2Lep,
+                             nt.evt()->nVtx, nt.evt()->isMC,
+                             removeLepsFromIso, sys);
   m_signalTaus = signalTauID==TauID_tight? m_tightTaus : m_mediumTaus;
 
   // Grab met
   SusyNtSys metSys = sys;
   if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
-  m_met = getMet(&nt, metSys);
+  m_met = m_nttools.getMet(&nt, metSys);
 
   // Build Lepton vectors
-  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
-  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
+  m_nttools.buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
+  m_nttools.buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
 
   // sort leptons by pt
   std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
@@ -245,9 +244,9 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
 /*--------------------------------------------------------------------------------*/
 int SusyNtAna::cleaningCutFlags()
 {
-  return SusyNtTools::cleaningCutFlags(nt.evt()->cutFlags[NtSys::NOM],
-                                       m_preMuons, m_baseMuons,
-                                       m_preJets, m_baseJets);
+  return m_nttools.cleaningCutFlags(nt.evt()->cutFlags[NtSys::NOM],
+                                    m_preMuons, m_baseMuons,
+                                    m_preJets, m_baseJets);
 }
 
 

@@ -8,10 +8,10 @@
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/MCWeighter.h"
-#include "SUSYTools/SUSYCrossSection.h"
-#include "JVFUncertaintyTool/JVFUncertaintyTool.h" //AT: not available in Base,2.0.14
+#include "SusyNtuple/JetSelector.h"
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/ElectronSelector.h"
+#include "SUSYTools/SUSYCrossSection.h"
 
 using namespace Susy;
 using namespace NtSys;
@@ -32,6 +32,7 @@ public:
         m_anaType = A;
         m_electronSelector.setAnalysis(A);
         m_muonSelector.setAnalysis(A);
+        m_jetSelector.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
 
@@ -115,9 +116,6 @@ public:
                      TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
     bool isSemiSignalElectron(const Susy::Electron* ele);
     bool isSemiSignalMuon(const Susy::Muon* mu);
-    bool isSignalJet(const Susy::Jet* jet, SusyNtSys sys = NtSys::NOM);
-    bool isSignalJet2Lep(const Susy::Jet* jet, SusyNtSys sys = NtSys::NOM);
-
 
     /// Build Lepton vector - we should probably sort them here
     void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo)
@@ -184,25 +182,25 @@ public:
     //
 
     /// No electron or jet in the LAr hole - shouldn't be used anymore
-    bool passLAr(int flag) { return true; }
+    static bool passLAr(int flag) { return true; }
 
     /// Pass Tile hot spot veto
-    bool passHotSpot(int flag) { return (flag & ECut_HotSpot); }
+    static bool passHotSpot(int flag) { return (flag & ECut_HotSpot); }
 
     /// Pass the Bad Jet requirement
-    bool passBadJet(int flag) { return (flag & ECut_BadJet); }
+    static bool passBadJet(int flag) { return (flag & ECut_BadJet); }
 
     /// Pass the Bad Muon requirement
-    bool passBadMuon(int flag) { return (flag & ECut_BadMuon); }
+    static bool passBadMuon(int flag) { return (flag & ECut_BadMuon); }
 
     /// No cosmic muons
-    bool passCosmic(int flag) { return (flag & ECut_Cosmic); }
+    static bool passCosmic(int flag) { return (flag & ECut_Cosmic); }
 
     /// Pass Smart Veto
-    bool passSmartVeto(int flag) { return (flag & ECut_SmartVeto); }
+    static bool passSmartVeto(int flag) { return (flag & ECut_SmartVeto); }
 
     /// Pass All the above, incase you don't care about cut flow
-    bool passAll(int flag)
+    static bool passAll(int flag)
     {
         int mask = ECut_HotSpot || ECut_BadJet || ECut_BadMuon || ECut_Cosmic || ECut_SmartVeto;
         return (flag & mask) == mask;
@@ -214,22 +212,22 @@ public:
     // NOTE: Filtering on by default!
 
     /// pass GRL
-    bool passGRL(int flag) { return (flag & ECut_GRL); }
+    static bool passGRL(int flag) { return (flag & ECut_GRL); }
 
     /// pass LArErr
-    bool passLarErr(int flag) { return (flag & ECut_LarErr); }
+    static bool passLarErr(int flag) { return (flag & ECut_LarErr); }
 
     /// pass Tile Err
-    bool passTileErr(int flag) { return (flag & ECut_TileErr); }
+    static bool passTileErr(int flag) { return (flag & ECut_TileErr); }
 
     /// Pass TTC veto
-    bool passTTCVeto(int flag) { return (flag & ECut_TTC); }
+    static bool passTTCVeto(int flag) { return (flag & ECut_TTC); }
 
     /// pass primary vertex
-    bool passGoodVtx(int flag) { return (flag & ECut_GoodVtx); }
+    static bool passGoodVtx(int flag) { return (flag & ECut_GoodVtx); }
 
     /// pass tile trip cut
-    bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
+    static bool passTileTripCut(int flag) { return (flag & ECut_TileTrip); }
 
     /// look at the MC truth record and determine whether SUSY propagators were involved
     static bool eventHasSusyPropagators(const std::vector< int > &pdgs,
@@ -251,11 +249,6 @@ public:
 
     /// Pass FEB dead region check
     bool passDeadRegions(const JetVector& preJets, const Susy::Met* met, int RunNumber, bool isMC);
-
-    /// To determine if there is baseline jets within bad FCAL region 
-    bool hasJetInBadFCAL(const JetVector& baseJets, uint run = 206248, bool isMC = false);
-    bool isBadFCALJet(const Susy::Jet* jet);
-
 
     /// Object selection control toggles
     /** Currently all are on by default except muon etcone */
@@ -323,28 +316,24 @@ public:
     static bool findBestW(uint& j1, uint& j2, const JetVector& jets);
 
     // B jets
-    static int numBJets(const JetVector& jets, float weight = MV1_80);
-    static bool hasBJet(const JetVector& jets, float weight = MV1_80);
-    static bool isBJet(const Susy::Jet* jet, float weight = MV1_80);
-    static JetVector getBJets(const JetVector& jets, float weight = MV1_80);
+    int numBJets(const JetVector& jets);
+    bool hasBJet(const JetVector& jets);
+    JetVector getBJets(const JetVector& jets);
 
     static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys = BTag_NOM);
 
-    // 2 Lepton jet methods and counters
-    static bool isCentralLightJet(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
-    static bool isCentralBJet(const Susy::Jet* jet);
-    static bool isForwardJet(const Susy::Jet* jet);
-
-    static int numberOfCLJets(const JetVector& jets, JVFUncertaintyTool* jvfTool, SusyNtSys sys, AnalysisType anaType);
-    static int numberOfCBJets(const JetVector& jets);
-    static int numberOfFJets(const JetVector& jets);
+    int numberOfCLJets(const JetVector& jets);
+    int numberOfCBJets(const JetVector& jets);
+    int numberOfFJets(const JetVector& jets);
     void getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb, int& Nf,
                              SusyNtSys sys, AnalysisType anaType);
 
     /// MET Rel
-    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets,
-                           bool useForward = false);
+    /**
+       Usually built without forward jets; filter jet collection if necessary.
+     */
+    static float getMetRel(const Susy::Met* met, const LeptonVector& leptons, const JetVector& jets);
 
     /// MT2
     static float getMT2(const LeptonVector& leptons, const Susy::Met* met);
@@ -414,6 +403,7 @@ public:
 
     ElectronSelector m_electronSelector;
     MuonSelector m_muonSelector;
+    JetSelector m_jetSelector; ///< select jets according to the current analysis settings
 
 protected:
 
@@ -426,13 +416,6 @@ protected:
     bool m_doElEtconeCut;               ///< etcone isolation cuts for electrons
     bool m_doMuEtconeCut;               ///< etcone isolation cuts for muons
     bool m_doIPCut;                     ///< impact parameter cuts
-
-    JVFUncertaintyTool* m_jvfTool;    ///< JVF tool
-private:
-    /// check whether this jet comes from the primary vertex; the JVF criterion can be applied only within some pt/eta range
-    static bool jetPassesJvfRequirement(const Susy::Jet* jet, JVFUncertaintyTool* jvfTool,
-                                        float maxPt, float maxEta, float nominalJvtThres,
-                                        SusyNtSys sys, AnalysisType anaType);
 };
 
 #endif
