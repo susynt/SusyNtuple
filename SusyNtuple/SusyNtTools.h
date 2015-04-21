@@ -9,8 +9,9 @@
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/MCWeighter.h"
 #include "SusyNtuple/JetSelector.h"
+#include "SusyNtuple/MuonSelector.h"
+#include "SusyNtuple/ElectronSelector.h"
 #include "SUSYTools/SUSYCrossSection.h"
-
 
 using namespace Susy;
 using namespace NtSys;
@@ -29,6 +30,8 @@ public:
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         m_anaType = A;
+        m_electronSelector.setAnalysis(A);
+        m_muonSelector.setAnalysis(A);
         m_jetSelector.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
@@ -398,6 +401,8 @@ public:
     /// Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
 
+    ElectronSelector m_electronSelector;
+    MuonSelector m_muonSelector;
     JetSelector m_jetSelector; ///< select jets according to the current analysis settings
 
 protected:
