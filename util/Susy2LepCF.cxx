@@ -6,6 +6,7 @@
 
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
+#include "SusyNtuple/string_utils.h"
 
 using namespace std;
 
@@ -64,7 +65,9 @@ int main(int argc, char** argv)
       cout<<"You must specify an input"<<endl;
       return 1;
   }
-
+  if(dbg)
+      cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
+      
   cout << "flags:" << endl;
   cout << "  sample  " << sample   << endl;
   cout << "  nEvt    " << nEvt     << endl;

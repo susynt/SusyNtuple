@@ -63,7 +63,7 @@ Susy2LepCutflow::Susy2LepCutflow() :
 
   //out.open("event.dump");
   
-  m_nttools.setAnaType(Ana_2Lep);
+  m_nttools.setAnaType(AnalysisType::Ana_2Lep);
 
 }
 

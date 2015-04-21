@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <type_traits> // underlying_type
 
 using Susy::JetSelector;
 using Susy::Jet;
@@ -25,7 +26,7 @@ JetSelector::JetSelector():
     m_min_jvf(0.0),
 */
     m_systematic(NtSys::NOM),
-    m_analysis(Ana_N),
+    m_analysis(AnalysisType::kUnknown),
     m_verbose(false)
 {
 }
@@ -40,11 +41,12 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 {
     m_analysis = a;
     switch(m_analysis){
-    case Ana_2Lep: /*\todo: set values*/ break;
-    case Ana_3Lep: /*\todo: set values*/ break;
-    case Ana_2LepWH: /*\todo: set values*/ break;
+    case AnalysisType::Ana_2Lep: /*\todo: set values*/ break;
+    case AnalysisType::Ana_3Lep: /*\todo: set values*/ break;
+    case AnalysisType::Ana_2LepWH: /*\todo: set values*/ break;
     default:
-        cout<<"JetSelector::setAnalysis error: invalid analysis '"<<a<<"'"<<endl
+        cout<<"JetSelector::setAnalysis error: invalid analysis"
+            <<" '"<<std::underlying_type<AnalysisType>::type(a)<<"'"<<endl
             <<"           will apply default jet selection"<<endl;
     }
     return *this;
@@ -62,7 +64,7 @@ bool JetSelector::isSignalJet(const Jet* jet)
   //float ptCut = m_anaType==Ana_2Lep? JET_SIGNAL_PT_CUT_2L : JET_SIGNAL_PT_CUT_3L;
     bool pass = false;
     if(jet) {
-        if(m_analysis==Ana_2Lep){
+        if(m_analysis==AnalysisType::Ana_2Lep){
             pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
         } else {
             float ptCut = JET_SIGNAL_PT_CUT_3L;
@@ -139,7 +141,7 @@ bool JetSelector::jetPassesJvfRequirement(const Jet* jet)
     float maxEta=JET_JVF_ETA;
     float nominalJvtThres=JET_JVF_CUT;
     float jvfThres(nominalJvtThres);
-    if(m_analysis == Ana_2Lep || m_analysis == Ana_2LepWH) {
+    if(m_analysis == AnalysisType::Ana_2Lep || m_analysis == AnalysisType::Ana_2LepWH) {
         nominalJvtThres = JET_JVF_CUT_2L;
         maxEta = JET_ETA_CUT_2L;
     }
@@ -152,7 +154,8 @@ bool JetSelector::jetPassesJvfRequirement(const Jet* jet)
             bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
             jvfThres = m_jvftool.getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
         }
-        bool acceptMinusOne(m_analysis==Ana_2Lep);  // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
+        // Ana_2Lep accepts jvf of -1 (corresponds to jet w/out tracks)
+        bool acceptMinusOne(m_analysis==AnalysisType::Ana_2Lep);
         bool jvfIsMinusOne(fabs(jet->jvf + 1.0) < 1e-3);
         if(applyJvf) {
             pass = (jet->jvf > jvfThres || (acceptMinusOne && jvfIsMinusOne));

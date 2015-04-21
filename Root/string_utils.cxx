@@ -39,6 +39,17 @@ std::string susy::utils::multipleSpaces2singleSpace(std::string str)
  return str;
 }
 //----------------------------------------------------------
+std::string susy::utils::commandLineArguments(int argc, char **argv)
+{
+    int iarg=0;
+    std::ostringstream oss;
+    while(iarg<argc){
+        oss<<" "<<argv[iarg];
+        iarg++;
+    }
+    return oss.str();
+}
+//----------------------------------------------------------
 std::string susy::utils::tab2space(std::string str)
 {
     std::replace(str.begin(), str.end(), '\t', ' ');

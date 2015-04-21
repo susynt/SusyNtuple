@@ -1,4 +1,6 @@
 #include "SusyNtuple/MCWeighter.h"
+
+#include "SusyNtuple/Event.h"
 #include "SusyNtuple/string_utils.h"
 #include "SusyNtuple/vec_utils.h"
 
@@ -156,8 +158,8 @@ void MCWeighter::dumpSumwMap() const
     SumwMap::const_iterator sumwMapIter;
     cout.precision(8);
     for (sumwMapIter = m_sumwMap.begin(); sumwMapIter != m_sumwMap.end(); sumwMapIter++) {
-        cout << "mcid: " << sumwMapIter->first.first
-            << " proc: " << sumwMapIter->first.second
+        cout << "mcid: " << sumwMapIter->first.dsid
+            << " proc: " << sumwMapIter->first.proc
             << " sumw: " << sumwMapIter->second
             << endl;
     }

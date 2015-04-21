@@ -23,6 +23,8 @@ typedef std::vector< std::string > vstring_t;
 std::string rmLeadingTrailingWhitespaces(const std::string &str);
 /// given str, return a copy where contiguous whitespaces have been replaced by single whitespaces
 std::string multipleSpaces2singleSpace(std::string str);
+/// return a string reproducting the command being executed 
+std::string commandLineArguments(int argc, char **argv);
 /// given str, return a copy where tabs have been replaced with whitespaces
 std::string tab2space(std::string str);
 /// whether str contains substr
