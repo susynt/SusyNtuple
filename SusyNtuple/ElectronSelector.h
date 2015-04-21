@@ -47,6 +47,7 @@ namespace Susy {
         protected :
         NtSys::SusyNtSys m_systematic;
         AnalysisType m_analysis;
+        bool m_removeLepsFromIso;
         bool m_doIPCut;
         bool m_doPtconeCut;
         bool m_doElEtconeCut;

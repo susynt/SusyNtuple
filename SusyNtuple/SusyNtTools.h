@@ -10,7 +10,8 @@
 #include "SusyNtuple/MCWeighter.h"
 #include "SUSYTools/SUSYCrossSection.h"
 #include "JVFUncertaintyTool/JVFUncertaintyTool.h" //AT: not available in Base,2.0.14
-
+#include "SusyNtuple/MuonSelector.h"
+#include "SusyNtuple/ElectronSelector.h"
 
 using namespace Susy;
 using namespace NtSys;
@@ -29,6 +30,8 @@ public:
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         m_anaType = A;
+        m_electronSelector.setAnalysis(A);
+        m_muonSelector.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << SusyNtAnalysisType[A] << std::endl;
     };
 
@@ -408,6 +411,9 @@ public:
 
     /// Sherpa sample check
     bool isSherpaSample(unsigned int mcID);
+
+    ElectronSelector m_electronSelector;
+    MuonSelector m_muonSelector;
 
 protected:
 

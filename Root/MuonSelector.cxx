@@ -23,6 +23,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     case(Ana_2Lep) : { 
         m_2lep  = true;
 
+        m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtConeCut = true;
@@ -52,6 +53,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     case(Ana_3Lep) : {
         m_3lep  = true;
 
+        m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtConeCut = true;
@@ -81,6 +83,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     case(Ana_2LepWH) : {
         m_2lepWH = true;
 
+        m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtConeCut = true;
@@ -113,6 +116,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         m_analysis = Ana_2Lep;
         m_2lep = true;
 
+        m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtConeCut = true;
