@@ -14,6 +14,7 @@
 #include <cstdlib> // atoi
 #include <iterator> // distance
 #include <sstream> // std::ostringstream
+#include <string> // string, stoi
 
 using namespace std;
 using namespace Susy;

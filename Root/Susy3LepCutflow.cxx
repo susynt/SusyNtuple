@@ -139,7 +139,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
 
   // Apply btag efficiency correction if selecting on b-jets
   bool applyBTagSF = m_vetoB;
-  float btagSF = applyBTagSF? bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
+  float btagSF = applyBTagSF? nttools().bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
 
   // Full event weight
   float fullWeight = w * lepSF * tauSF * btagSF;
@@ -204,15 +204,15 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& 
   int flag = cleaningCutFlags();
 
   // Cleaning cuts
-  if(!passHotSpot(flag)) return false;
+  if(!nttools().passHotSpot(flag)) return false;
   n_pass_hotSpot++;
-  if(!passBadJet(flag)) return false;
+  if(!nttools().passBadJet(flag)) return false;
   n_pass_badJet++;
-  if(!passBadMuon(flag)) return false;
+  if(!nttools().passBadMuon(flag)) return false;
   n_pass_badMuon++;
-  if(!passCosmic(flag)) return false;
+  if(!nttools().passCosmic(flag)) return false;
   n_pass_cosmic++;
-  if(!passDeadRegions(m_preJets, met, evt->run, evt->isMC)) return false;
+  if(!nttools().passDeadRegions(m_preJets, met, evt->run, evt->isMC)) return false;
   n_pass_feb++;
   if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
@@ -261,7 +261,7 @@ void Susy3LepCutflow::finalizeHistos()
 bool Susy3LepCutflow::passFCal()
 {
   const Event* evt = nt.evt();
-  if(hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
+  if(nttools().m_jetSelector.hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -289,7 +289,7 @@ bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passSFOSCut(const LeptonVector& leptons)
 {
-  bool sfos = hasSFOS(leptons);
+  bool sfos = nttools().hasSFOS(leptons);
   if(m_vetoSFOS   &&  sfos) return false;
   if(m_selectSFOS && !sfos) return false;
   return true;
@@ -304,7 +304,7 @@ bool Susy3LepCutflow::passMetCut(const Met* met)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passZCut(const LeptonVector& leptons)
 {
-  bool hasz = hasZ(leptons);
+  bool hasz = nttools().hasZ(leptons);
   if( m_vetoZ   &&  hasz ) return false;
   if( m_selectZ && !hasz ) return false;
   return true;
@@ -312,7 +312,7 @@ bool Susy3LepCutflow::passZCut(const LeptonVector& leptons)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passBJetCut( )
 {
-  bool hasB = hasBJet(m_signalJets);
+  bool hasB = nttools().hasBJet(m_signalJets);
   if( m_vetoB   &&  hasB ) return false;
   if( m_selectB && !hasB ) return false;
   return true;
@@ -324,10 +324,10 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
   if(m_mtMin > 0)
   {
     uint zl1, zl2;
-    if(findBestZ(zl1, zl2, leptons)){
+    if(nttools().findBestZ(zl1, zl2, leptons)){
       for(uint iL=0; iL<leptons.size(); iL++) {
         if(iL!=zl1 && iL!=zl2) {
-          if( Mt(leptons[iL],met) < m_mtMin ) return false;
+          if( nttools().Mt(leptons[iL],met) < m_mtMin ) return false;
         }
       }
     }
