@@ -3,6 +3,7 @@
 #define SUSYNTUPLE_JET_H
 
 #include "SusyNtuple/Particle.h"
+#include "SusyNtuple/SusyNtSys.h"
 
 namespace Susy
 {

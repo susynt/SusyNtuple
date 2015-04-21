@@ -3,8 +3,10 @@
 #define SUSYNTUPLE_EVENT_H
 
 #include "SusyNtuple/SusyNtSys.h"
+#include "SusyNtuple/SusyDefs.h" // DataStream
 
 #include "TBits.h"
+#include "TObject.h"
 
 namespace Susy
 {

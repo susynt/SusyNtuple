@@ -3,6 +3,7 @@
 #define SUSYNTUPLE_MET_H
 
 #include "TObject.h"
+#include "TLorentzVector.h"
 
 namespace Susy
 {

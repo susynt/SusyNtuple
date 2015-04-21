@@ -4,6 +4,8 @@
 
 #include "SusyNtuple/Lepton.h"
 
+#include "SusyNtuple/SusyNtSys.h"
+
 namespace Susy
 {
 /// Electron class

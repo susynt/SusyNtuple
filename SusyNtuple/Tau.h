@@ -2,8 +2,8 @@
 #ifndef SUSYNTUPLE_TAU_H
 #define SUSYNTUPLE_TAU_H
 
-
 #include "SusyNtuple/Particle.h"
+#include "SusyNtuple/SusyNtSys.h"
 
 namespace Susy
 {

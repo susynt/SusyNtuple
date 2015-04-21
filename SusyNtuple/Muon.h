@@ -2,8 +2,8 @@
 #ifndef SUSYNTUPLE_MUON_H
 #define SUSYNTUPLE_MUON_H
 
-
 #include "SusyNtuple/Lepton.h"
+#include "SusyNtuple/SusyNtSys.h"
 
 namespace Susy
 {
