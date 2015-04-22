@@ -69,9 +69,6 @@ typedef std::vector<Susy::Jet*>           JetVector;
 typedef std::vector<Susy::TruthParticle*> TruthParticleVector;
 typedef std::vector<Susy::TruthJet*>      TruthJetVector;
 
-typedef std::pair<unsigned int, int> SumwMapKey;
-typedef std::map<SumwMapKey, float> SumwMap;
-
 //-----------------------------------------------------------------------------------
 // Global enums
 //-----------------------------------------------------------------------------------
@@ -114,21 +111,6 @@ enum DataPeriod {
 enum McPeriod {
     McPeriod_AB = 0,
     McPeriod_Num
-};
-
-/// 2-lep or 3-lep flag
-enum AnalysisType {
-    Ana_2Lep = 0,
-    Ana_3Lep,
-    Ana_2LepWH,
-    Ana_N
-};
-
-// Human-readable names for enum SusyNtSys 
-const std::string SusyNtAnalysisType[Ana_N] = {
-    "Ana_2Lep",
-    "Ana_3Lep",
-    "Ana_2LepWH",
 };
 
 /// SUSY D3PD tag, for controlling which branch names to grab

@@ -20,7 +20,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     //////////////////////////////////////
     // 2L-ANALYSIS
     //////////////////////////////////////
-    case(Ana_2Lep) : { 
+    case(AnalysisType::Ana_2Lep) : { 
         m_2lep = true;
 
         m_removeLepsFromIso = false;
@@ -44,7 +44,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     //////////////////////////////////////
     // 3L-ANALYSIS
     //////////////////////////////////////
-    case(Ana_3Lep) : {
+    case(AnalysisType::Ana_3Lep) : {
         m_3lep = true;
 
         m_removeLepsFromIso = false;
@@ -68,7 +68,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     //////////////////////////////////////
     // WH-ANALYSIS
     //////////////////////////////////////
-    case(Ana_2LepWH) : {
+    case(AnalysisType::Ana_2LepWH) : {
         m_2lepWH = true;
 
         m_removeLepsFromIso = false;
@@ -93,10 +93,11 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
-    case(Ana_N) : {
-        cout << "ElectronSelector::buildRequirements() error: invalid analysis '" << a << "'" << endl;
+    case(AnalysisType::kUnknown) : {
+        cout << "ElectronSelector::buildRequirements() error: invalid analysis"
+             <<" '"<<std::underlying_type<AnalysisType>::type(a)<< "'" << endl;
         cout << "               will apply default electron selection (Ana_2Lep)." << endl; 
-        m_analysis = Ana_2Lep;
+        m_analysis = AnalysisType::Ana_2Lep;
         m_2lep = true;
 
         m_removeLepsFromIso = false;
@@ -125,7 +126,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
 // -------------------------------------------------------------------------------------------- //
 ElectronSelector::ElectronSelector(): 
     m_systematic(NtSys::NOM),
-    m_analysis(Ana_N),
+    m_analysis(AnalysisType::kUnknown),
     m_doIPCut(true),
     m_doPtconeCut(true),
     m_doElEtconeCut(true),

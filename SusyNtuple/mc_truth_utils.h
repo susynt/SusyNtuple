@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace susy{
+namespace Susy{
 namespace mc{
 
 typedef std::vector< int > vint_t;

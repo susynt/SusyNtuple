@@ -7,6 +7,7 @@
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/string_utils.h"
 
 using namespace std;
 
@@ -73,6 +74,8 @@ int main(int argc, char** argv)
       return 1;
   }
 
+  if(dbg)
+      cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
   cout << "flags:" << endl;
   cout << "  sample  " << sample   << endl;
   cout << "  sel     " << sel      << endl;

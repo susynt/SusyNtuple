@@ -51,7 +51,7 @@ ChainHelper::Status ChainHelper::addFileDir(TChain* chain, string fileDir)
 ChainHelper::Status ChainHelper::addInput(TChain* chain, const std::string &input, bool verbose)
 {
     Status status=GOOD;
-    using namespace susy::utils;
+    using namespace Susy::utils;
     if(contains(input, ",")){
         size_t num_added=0;
         std::vector< std::string > tokens = tokenizeString(input, ',');
@@ -80,16 +80,16 @@ ChainHelper::Status ChainHelper::addInput(TChain* chain, const std::string &inpu
 //----------------------------------------------------------
 bool ChainHelper::inputIsFile(const std::string &input)
 {
-    return susy::utils::contains(susy::utils::rmLeadingTrailingWhitespaces(input), ".root");
+    return Susy::utils::contains(Susy::utils::rmLeadingTrailingWhitespaces(input), ".root");
 }
 //----------------------------------------------------------
 bool ChainHelper::inputIsList(const std::string &input)
 {
-    return susy::utils::endswith(susy::utils::rmLeadingTrailingWhitespaces(input), ".txt");
+    return Susy::utils::endswith(Susy::utils::rmLeadingTrailingWhitespaces(input), ".txt");
 }
 //----------------------------------------------------------
 bool ChainHelper::inputIsDir(const std::string &input)
 {
-    return susy::utils::endswith(susy::utils::rmLeadingTrailingWhitespaces(input), "/");
+    return Susy::utils::endswith(Susy::utils::rmLeadingTrailingWhitespaces(input), "/");
 }
 //----------------------------------------------------------

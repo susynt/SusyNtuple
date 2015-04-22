@@ -61,7 +61,8 @@ def enum_from_header(filename, enumName) :
     file_data = ' '.join(line.split('//')[0].split('#')[0] for line in file_data.splitlines())
     file_data = ' '.join(re.split(r'\/\*.*?\*\/', file_data))
     # Look for enums: In the first { } block after the keyword "enum"
-    enums = [(text.split('{')[0].replace('enum','').strip(), text.split('{')[1].split('}')[0])
+    enums = [(text.split('{')[0].replace('enum','').replace('class','').strip(),
+              text.split('{')[1].split('}')[0])
              for text in re.split(r'\benum\b', file_data)[1:]]
     enum = dict()
     for enum_name, enum_keyvals in enums:
@@ -95,7 +96,8 @@ def import_SUSYDefs_enums():
             enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
                                                                   for k in dict_keys_sorted_by_value(e_vals)]))
             exec enum_expr in globals()
-    build_enums_from_file(['TauID', 'AnalysisType', 'BTagSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'))
+    build_enums_from_file(['TauID', 'BTagSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'))
+    build_enums_from_file(['AnalysisType'], os.path.join(rootcoredir(), 'include/SusyNtuple/AnalysisType.h'))
     build_enums_from_file(['SusyNtSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyNtSys.h'))
 
 import_SUSYDefs_enums()

@@ -2,11 +2,11 @@
 
 #include <algorithm>
 
-using namespace susy::mc;
-using susy::mc::IntermediateParentWalker;
+using namespace Susy::mc;
+using Susy::mc::IntermediateParentWalker;
 
 //----------------------------------
-std::string susy::mc::decayToString(const Hdecays &d)
+std::string Susy::mc::decayToString(const Hdecays &d)
 {
   switch(d) {
   case kPwAw :     return "WW";
@@ -55,7 +55,7 @@ void IntermediateParentWalker::walkUp()
         setIndexCurrentParticle(indexSelfParent());
 }
 //----------------------------------
-int susy::mc::determineParentPdg(const vint_t *pdgs, const vvint_t *parentsIndices,
+int Susy::mc::determineParentPdg(const vint_t *pdgs, const vvint_t *parentsIndices,
                                  const int &particleIndex)
 {
     IntermediateParentWalker ipw(pdgs, parentsIndices, particleIndex);

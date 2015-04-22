@@ -4,6 +4,7 @@
 
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
+#include "SusyNtuple/AnalysisType.h"
 
 
 namespace Susy {
