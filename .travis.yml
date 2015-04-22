@@ -52,26 +52,26 @@ install:
   - tar xzf SusyNtuple/data/SusyNt_dependencies.tgz
   - cd -
 
-  # setup RootCore
-  - cd ../RootCore
-  - echo "pwd is now `pwd`"
-  - ./configure
-  - cd ..
-  - source RootCore/scripts/setup.sh
-  - ./RootCore/scripts/find_packages.sh
-  - ./RootCore/scripts/compile.sh
-  - cd SusyNtuple/run
+#  # setup RootCore
+#  - cd ../RootCore
+#  - echo "pwd is now `pwd`"
+#  - ./configure
+#  - cd ..
+#  - source RootCore/scripts/setup.sh
+#  - ./RootCore/scripts/find_packages.sh
+#  - ./RootCore/scripts/compile.sh
+#  - cd SusyNtuple/run
 
 script:
   # Check if root and PyROOT work ok
   - time root -l -b -q
   - time python -c 'import ROOT; ROOT.TBrowser()'
 
-  # Now run the tests
-  # get an example test file
-  - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
-  # run the 2l cutflow
-  - Susy2LepCF -i mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
+#  # Now run the tests
+#  # get an example test file
+#  - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
+#  # run the 2l cutflow
+#  - Susy2LepCF -i mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
 after_success:
   # from SusyNtuple/run, go back to the base dir and run doxygen if necessary
   - cd ${TRAVIS_BUILD_DIR}
