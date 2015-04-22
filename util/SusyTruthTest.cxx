@@ -65,7 +65,7 @@ int main(int argc, char** argv)
   }
 
   if(dbg)
-      cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
+      cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
   cout << "flags:" << endl;
   cout << "  sample  " << sample   << endl;
   cout << "  nEvt    " << nEvt     << endl;

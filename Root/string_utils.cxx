@@ -15,10 +15,10 @@ using std::string;
 using std::cout;
 using std::endl;
 
-using namespace susy::utils;
+using namespace Susy::utils;
 
 //----------------------------------------------------------
-std::string susy::utils::rmLeadingTrailingWhitespaces(const std::string &str)
+std::string Susy::utils::rmLeadingTrailingWhitespaces(const std::string &str)
 {
   string result;
   size_t startpos = str.find_first_not_of(" \t");
@@ -32,14 +32,14 @@ std::string susy::utils::rmLeadingTrailingWhitespaces(const std::string &str)
 }
 //----------------------------------------------------------
 bool BothAreSpaces(char lhs, char rhs) { return (lhs == rhs) && (lhs == ' '); }
-std::string susy::utils::multipleSpaces2singleSpace(std::string str)
+std::string Susy::utils::multipleSpaces2singleSpace(std::string str)
 { // from http://stackoverflow.com/questions/8362094/replace-multiple-spaces-with-one-space-in-a-string
   std::string::iterator new_end = std::unique(str.begin(), str.end(), BothAreSpaces);
  str.erase(new_end, str.end());
  return str;
 }
 //----------------------------------------------------------
-std::string susy::utils::commandLineArguments(int argc, char **argv)
+std::string Susy::utils::commandLineArguments(int argc, char **argv)
 {
     int iarg=0;
     std::ostringstream oss;
@@ -50,24 +50,24 @@ std::string susy::utils::commandLineArguments(int argc, char **argv)
     return oss.str();
 }
 //----------------------------------------------------------
-std::string susy::utils::tab2space(std::string str)
+std::string Susy::utils::tab2space(std::string str)
 {
     std::replace(str.begin(), str.end(), '\t', ' ');
     return str;
 }
 //----------------------------------------------------------
-bool susy::utils::contains(const std::string &str, const std::string &substr)
+bool Susy::utils::contains(const std::string &str, const std::string &substr)
 {
   return (str.find(substr)!=std::string::npos);
 }
 //----------------------------------------------------------
 // http://stackoverflow.com/questions/874134/find-if-string-endswith-another-string-in-c
-bool susy::utils::endswith(const std::string &str, const std::string &ending) {
+bool Susy::utils::endswith(const std::string &str, const std::string &ending) {
     if(str.length()<ending.length()) return false;
     else return (0==str.compare(str.length() - ending.length(), ending.length(), ending));
 }
 //----------------------------------------------------------
-std::vector< std::string > susy::utils::tokenizeString(const std::string &inputString, char separator)
+std::vector< std::string > Susy::utils::tokenizeString(const std::string &inputString, char separator)
 {
   vector<string> tokens;
   std::istringstream buffer(string(multipleSpaces2singleSpace(tab2space(inputString))));
@@ -75,9 +75,9 @@ std::vector< std::string > susy::utils::tokenizeString(const std::string &inputS
   return tokens;
 }
 //----------------------------------------------------------
-double susy::utils::string2double(const std::string &s) { return strtod(s.c_str(), NULL); }
+double Susy::utils::string2double(const std::string &s) { return strtod(s.c_str(), NULL); }
 //----------------------------------------------------------
-double susy::utils::multiply(const std::string &str)
+double Susy::utils::multiply(const std::string &str)
 {
   if(!contains(str, "*")) return string2double(str);
   vector<string> tks(tokenizeString(str, '*'));
@@ -86,7 +86,7 @@ double susy::utils::multiply(const std::string &str)
   return std::accumulate(factors.begin(), factors.end(), 1.0, std::multiplies<double>());
 }
 //----------------------------------------------------------
-bool susy::utils::isInt(const std::string& s)
+bool Susy::utils::isInt(const std::string& s)
 {
   std::string rs(rmLeadingTrailingWhitespaces(s));
   if(rs.empty() || ((!isdigit(rs[0])) && (rs[0] != '-') && (rs[0] != '+'))) return false ;
@@ -95,7 +95,7 @@ bool susy::utils::isInt(const std::string& s)
   return (*p == 0) ;
 }
 //----------------------------------------------------------
-std::vector<std::string> susy::utils::filesFromDir(const std::string &dirname)
+std::vector<std::string> Susy::utils::filesFromDir(const std::string &dirname)
 {
 // from http://stackoverflow.com/questions/306533/how-do-i-get-a-list-of-files-in-a-directory-in-c
     vector<string> filenames;

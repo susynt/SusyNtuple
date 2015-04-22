@@ -6,10 +6,10 @@
 #include <iterator>
 #include <sstream>
 
-using namespace susy::utils;
+using namespace Susy::utils;
 
 //----------------------------------
-bool susy::utils::containsAnyOf(const vint_t &firstVec, const vint_t &subVec)
+bool Susy::utils::containsAnyOf(const vint_t &firstVec, const vint_t &subVec)
 {
     typedef std::set< int > sint;
     sint a(firstVec.begin(), firstVec.end());
@@ -21,21 +21,21 @@ bool susy::utils::containsAnyOf(const vint_t &firstVec, const vint_t &subVec)
     return it!=intersection.begin();
 }
 //----------------------------------
-std::string susy::utils::vecToString(const vint_t &vec)
+std::string Susy::utils::vecToString(const vint_t &vec)
 {
   std::stringstream ss;
   std::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(ss,", "));
   return ss.str();
 }
 //----------------------------------
-std::string susy::utils::vecVecToString(const vvint_t &vvec)
+std::string Susy::utils::vecVecToString(const vvint_t &vvec)
 {
   std::stringstream ss;
-  for(size_t i=0; i<vvec.size(); i++) ss<<"["<<susy::utils::vecToString(vvec[i])<<"], ";
+  for(size_t i=0; i<vvec.size(); i++) ss<<"["<<Susy::utils::vecToString(vvec[i])<<"], ";
   return ss.str();
 }
 //----------------------------------
-void susy::utils::removeDuplicates(vint_t &vec)
+void Susy::utils::removeDuplicates(vint_t &vec)
 {
     std::sort(vec.begin(), vec.end());
     vec.erase(std::unique(vec.begin(), vec.end()), vec.end());

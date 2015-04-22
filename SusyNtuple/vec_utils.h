@@ -15,7 +15,7 @@
 #include <vector>
 #include <algorithm> // find
 
-namespace susy{
+namespace Susy{
 namespace utils{
 
 typedef std::vector< int > vint_t;

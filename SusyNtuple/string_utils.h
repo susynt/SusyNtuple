@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace susy{
+namespace Susy{
 namespace utils{
 
 typedef std::vector< std::string > vstring_t;

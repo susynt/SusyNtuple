@@ -87,7 +87,7 @@ int main(int argc, char **argv)
   } // end if(optind<argc)
   
   if(verbose)
-      cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
+      cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
   cout<<"Using the following options:"<<endl
       <<"inputRootFname : "<<inputRootFname<<endl
       <<"sample         : "<<sampleName<<endl

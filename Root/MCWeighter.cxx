@@ -96,7 +96,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
         if(is_histogram){
             string histoName = obj->GetName();
             TH1F* cutflowHisto = static_cast<TH1F*>(obj);
-            bool is_proc_dep_histo = susy::utils::contains(histoName, proc_dep_histoprefix);
+            bool is_proc_dep_histo = Susy::utils::contains(histoName, proc_dep_histoprefix);
             bool is_proc_indep_histo = histoName==proc_indep_histoname;
             if(is_proc_indep_histo || is_proc_dep_histo){
                 int default_proc = 0;
@@ -389,9 +389,9 @@ size_t MCWeighter::parseAdditionalXsecFile(const std::string &input_filename, bo
 size_t MCWeighter::parseAdditionalXsecDirectory(const std::string &dir, bool verbose)
 {
     size_t nInitialElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
-    vector<string> filenames = susy::utils::filesFromDir(dir);
+    vector<string> filenames = Susy::utils::filesFromDir(dir);
     for (vector<string>::const_iterator fname = filenames.begin(); fname != filenames.end(); ++fname)
-        if (susy::utils::contains(*fname, ".txt"))
+        if (Susy::utils::contains(*fname, ".txt"))
             parseAdditionalXsecFile(*fname, verbose);
     size_t nFinalElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
     return nFinalElements - nInitialElements;
@@ -405,11 +405,11 @@ bool MCWeighter::isFormattedAsSusyCrossSection(std::string filename, bool verbos
 //----------------------------------------------------------
 bool isEmptyLine(const std::string &line)
 {
-    return susy::utils::rmLeadingTrailingWhitespaces(line).size() == 0;
+    return Susy::utils::rmLeadingTrailingWhitespaces(line).size() == 0;
 }
 bool isCommentLine(const std::string &line)
 {
-    string strippedLine(susy::utils::rmLeadingTrailingWhitespaces(line));
+    string strippedLine(Susy::utils::rmLeadingTrailingWhitespaces(line));
     return strippedLine.size() > 0 && strippedLine[0] == '#';
 }
 std::vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose)
@@ -458,9 +458,9 @@ bool MCWeighter::readDsidsFromSusyCrossSectionLine(const std::string &line, int 
 {
     bool valid_parse = false;
     const size_t nExpectedTokens = 6;
-    vector<string> tokens(susy::utils::tokenizeString(line, ' '));
+    vector<string> tokens(Susy::utils::tokenizeString(line, ' '));
     bool hasExpectedTokens(tokens.size() == nExpectedTokens);
-    bool firstTokenIsDsid(tokens.size() > 0 && susy::utils::isInt(tokens[0]));
+    bool firstTokenIsDsid(tokens.size() > 0 && Susy::utils::isInt(tokens[0]));
     bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
     if (isValidLine) {
         dsid = atoi(tokens[0].c_str());
@@ -483,7 +483,7 @@ bool MCWeighter::isSimplifiedModel(const unsigned int &dsid, bool verbose)
     bool is_known_dsid = false;
     // note: no need to propagate 'verbose' when parsing known files
     vector<int> know_dsids = MCWeighter::dsidsForKnownSimpliedModelSamples(false);
-    is_known_dsid = susy::utils::contains<int>(know_dsids, dsid);
+    is_known_dsid = Susy::utils::contains<int>(know_dsids, dsid);
     if (verbose)
         cout << "isSimplifiedModel('" << dsid << "'):" << " is_known_dsid " << (is_known_dsid ? "true" : "false") << endl;
     return is_known_dsid;
@@ -504,7 +504,7 @@ int MCWeighter::extractProcessFromCutflowHistoname(const std::string &histoName,
     cout<<"histoName '"<<histoName<<"', prefix '"<<prefix<<"'"<<endl;
     string procString = histoName.substr(prefix.size(), string::npos);
     cout<<"procString "<<procString<<endl;
-    if (!susy::utils::isInt(procString)) {
+    if (!Susy::utils::isInt(procString)) {
         cerr << "MCWeighter::extractProcessFromCutflowHistoname - ERROR"
              <<" cannot extract integer process from '"<<histoName<<"' using prefix '"<<prefix<<"'"
              <<endl;

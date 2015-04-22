@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 
     bool verbose(true);
     if(verbose)
-        cout<<"Being called as: "<<susy::utils::commandLineArguments(argc, argv)<<endl;
+        cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
     float epsilon = 0.01;
     Jet centralLightJet;
     centralLightJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()-epsilon, 0.1, 100.0);

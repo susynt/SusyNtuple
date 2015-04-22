@@ -26,8 +26,8 @@ class WhTruthExtractor {
   typedef std::vector< vint_t > vvint_t;
  public:
   WhTruthExtractor();
-  susy::mc::Hdecays update(const vint_t* pdg, const vvint_t *childIndex, const vvint_t *parentIndex);
-  susy::mc::Hdecays decay() const {return decay_;}
+  Susy::mc::Hdecays update(const vint_t* pdg, const vvint_t *childIndex, const vvint_t *parentIndex);
+  Susy::mc::Hdecays decay() const {return decay_;}
   void printStatus() const;
   //! indices of relevant particles (top, W, and their children) in a MC@NLO ttbar event
   /*! We might want to rename WhTruthExtractor to some generic truth extractor class.
@@ -43,18 +43,18 @@ class WhTruthExtractor {
   const vint_t pdgsPmuAmu_;
   const vint_t pdgsPtauAtau_;
  private:
-  susy::mc::vint_t findHiggsIndices(const vint_t &pdg);
+  Susy::mc::vint_t findHiggsIndices(const vint_t &pdg);
   void buildHiggsChildrenPgds(const vint_t &pdgs, const vvint_t &childIndices);
   void buildHiggsParentsPgds(const vint_t &pdgs, const vvint_t &parentIndices);
   bool isBoringHiggs(size_t iHiggs) const; //!< intermediate higgs have < 2 children or another higgs as child
   int firstInterestingHiggs() const; //!< internal index 1st interesting higgs; -1 if none
-  susy::mc::Hdecays decayType(size_t iHiggs) const; //!< classify the decay of the i^th higgs
+  Susy::mc::Hdecays decayType(size_t iHiggs) const; //!< classify the decay of the i^th higgs
   //! print table with all particles, mostly for development/debugging
   void printEvent(const vint_t &pdg, const vvint_t &childIndex, const vvint_t &parentIndex);
   vint_t hIndices_;
   vvint_t hParPdgs_;
   vvint_t hChiPdgs_;
   int interestingHiggs_;
-  susy::mc::Hdecays decay_;
+  Susy::mc::Hdecays decay_;
 }; // end WhTruthExtractor
 #endif
