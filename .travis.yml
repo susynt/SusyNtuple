@@ -1,5 +1,6 @@
 # from https://github.com/rootpy/rootpy/blob/master/.travis.yml
 # travis-ci.org build & test configuration
+
 language: python
 
 python:
@@ -7,6 +8,7 @@ python:
 #  - "3.2"
 
 before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
   - sudo apt-get install -qq  doxygen graphviz
 env:
@@ -19,6 +21,9 @@ env:
 
 
 install:
+  # pick g++ 4.8 to support c++11
+  - sudo apt-get install -qq g++-4.8
+  - export CXX="g++-4.8"
   # Check if we are running Python 2 or 3. This is needed for the apt-get package names
   - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PYTHON_SUFFIX="3"; fi
 
