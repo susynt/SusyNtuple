@@ -23,7 +23,8 @@ env:
 install:
   # pick g++ 4.8 to support c++11
   - sudo apt-get install -qq g++-4.8
-  - export CXX="g++-4.8"
+  # - export CXX="g++-4.8"
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
   # Check if we are running Python 2 or 3. This is needed for the apt-get package names
   - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PYTHON_SUFFIX="3"; fi
 
