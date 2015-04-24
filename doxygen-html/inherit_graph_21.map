@@ -1,7 +1,3 @@
 <map id="G" name="G">
-<area shape="rect" id="node1" href="$classSusyNtTools.html" title="A class of useful tools for working with SusyNt." alt="" coords="5,32,104,61"/>
-<area shape="rect" id="node3" href="$classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="152,32,245,61"/>
-<area shape="rect" id="node5" href="$classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="293,5,424,35"/>
-<area shape="rect" id="node9" href="$classSusy3LepCutflow.html" title="Three lepton cutflow." alt="" coords="293,59,424,88"/>
-<area shape="rect" id="node7" href="$classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="472,5,680,35"/>
+<area shape="rect" id="node1" href="$structSusy_1_1mc_1_1PdgGetter.html" title="given an index, provide the pdg" alt="" coords="7,5,159,35"/>
 </map>

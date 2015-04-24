@@ -1,5 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node7" href="$classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="5,237,213,267"/>
-<area shape="rect" id="node2" href="$classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="63,83,156,112"/>
-<area shape="rect" id="node4" href="$classSusyNtTools.html" title="A class of useful tools for working with SusyNt." alt="" coords="60,5,159,35"/>
+<area shape="rect" id="node5" href="$classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="5,160,213,189"/>
+<area shape="rect" id="node2" href="$classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="63,5,156,35"/>
 </map>

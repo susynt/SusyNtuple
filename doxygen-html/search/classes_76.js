@@ -5,6 +5,7 @@ var searchData=
   ['varhandle_3c_20std_3a_3avector_3c_20electron_20_3e_20_2a_20_3e',['VarHandle< std::vector< Electron > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],
   ['varhandle_3c_20std_3a_3avector_3c_20jet_20_3e_20_2a_20_3e',['VarHandle< std::vector< Jet > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],
   ['varhandle_3c_20std_3a_3avector_3c_20met_20_3e_20_2a_20_3e',['VarHandle< std::vector< Met > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],
+  ['varhandle_3c_20std_3a_3avector_3c_20mettrack_20_3e_20_2a_20_3e',['VarHandle< std::vector< MetTrack > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],
   ['varhandle_3c_20std_3a_3avector_3c_20muon_20_3e_20_2a_20_3e',['VarHandle< std::vector< Muon > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],
   ['varhandle_3c_20std_3a_3avector_3c_20photon_20_3e_20_2a_20_3e',['VarHandle< std::vector< Photon > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],
   ['varhandle_3c_20std_3a_3avector_3c_20tau_20_3e_20_2a_20_3e',['VarHandle< std::vector< Tau > * >',['../classD3PDReader_1_1VarHandle.html',1,'D3PDReader']]],

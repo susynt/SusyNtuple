@@ -1,16 +1,22 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classSusyNtTools.html" title="A class of useful tools for working with SusyNt." alt="" coords="763,193,861,223"/>
-<area shape="rect" id="node4" href="$classSusy_1_1SusyNtObject.html" title="An interface class for accessing SusNt objects." alt="" coords="739,247,885,276"/>
-<area shape="rect" id="node6" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Met \&gt; * \&gt;" alt="" coords="291,5,629,35"/>
-<area shape="rect" id="node8" href="$classD3PDReader_1_1VarHandleBase.html" title="Base class for the different kind of VarHandle specializations." alt="" coords="5,245,213,275"/>
-<area shape="rect" id="node10" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Jet \&gt; * \&gt;" alt="" coords="295,59,625,88"/>
-<area shape="rect" id="node13" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Muon \&gt; * \&gt;" alt="" coords="285,112,635,141"/>
-<area shape="rect" id="node16" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; Event * \&gt;" alt="" coords="333,165,587,195"/>
-<area shape="rect" id="node19" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthJet \&gt; * \&gt;" alt="" coords="279,219,641,248"/>
-<area shape="rect" id="node22" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthParticle \&gt; * \&gt;" alt="" coords="264,272,656,301"/>
-<area shape="rect" id="node25" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Photon \&gt; * \&gt;" alt="" coords="280,325,640,355"/>
-<area shape="rect" id="node28" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthMet \&gt; * \&gt;" alt="" coords="275,379,645,408"/>
-<area shape="rect" id="node31" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Electron \&gt; * \&gt;" alt="" coords="277,432,643,461"/>
-<area shape="rect" id="node34" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Tau \&gt; * \&gt;" alt="" coords="292,485,628,515"/>
-<area shape="rect" id="node39" href="$classSusy_1_1Met.html" title="Met class." alt="" coords="771,353,853,383"/>
+<area shape="rect" id="node2" href="$classSusy_1_1SusyNtObject.html" title="An interface class for accessing SusNt objects." alt="" coords="835,316,981,345"/>
+<area shape="rect" id="node4" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Met \&gt; * \&gt;" alt="" coords="291,21,629,51"/>
+<area shape="rect" id="node6" href="$classD3PDReader_1_1VarHandleBase.html" title="Base class for the different kind of VarHandle specializations." alt="" coords="5,288,213,317"/>
+<area shape="rect" id="node8" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Jet \&gt; * \&gt;" alt="" coords="295,75,625,104"/>
+<area shape="rect" id="node11" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Muon \&gt; * \&gt;" alt="" coords="285,128,635,157"/>
+<area shape="rect" id="node14" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; MetTrack \&gt; * \&gt;" alt="" coords="275,181,645,211"/>
+<area shape="rect" id="node17" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; Event * \&gt;" alt="" coords="333,235,587,264"/>
+<area shape="rect" id="node20" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthJet \&gt; * \&gt;" alt="" coords="279,288,641,317"/>
+<area shape="rect" id="node23" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthParticle \&gt; * \&gt;" alt="" coords="264,341,656,371"/>
+<area shape="rect" id="node26" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Photon \&gt; * \&gt;" alt="" coords="280,395,640,424"/>
+<area shape="rect" id="node29" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthMet \&gt; * \&gt;" alt="" coords="275,448,645,477"/>
+<area shape="rect" id="node32" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Electron \&gt; * \&gt;" alt="" coords="277,501,643,531"/>
+<area shape="rect" id="node35" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Tau \&gt; * \&gt;" alt="" coords="292,555,628,584"/>
+<area shape="rect" id="node38" href="$classSusy_1_1MetTrack.html" title="Susy::MetTrack" alt="" coords="851,581,965,611"/>
+<area shape="rect" id="node40" href="$classSusyNtTools.html" title="A class of useful tools for working with SusyNt." alt="" coords="859,635,957,664"/>
+<area shape="rect" id="node42" href="$classSusy_1_1ElectronSelector.html" title="Susy::ElectronSelector" alt="" coords="377,608,543,637"/>
+<area shape="rect" id="node44" href="$classSusy_1_1JetSelector.html" title="Susy::JetSelector" alt="" coords="396,661,524,691"/>
+<area shape="rect" id="node46" href="$classSusy_1_1MuonSelector.html" title="A class to select muons." alt="" coords="387,715,533,744"/>
+<area shape="rect" id="node48" href="$classMCWeighter.html" title="A class to handle the normalization of Monte Carlo." alt="" coords="860,688,956,717"/>
+<area shape="rect" id="node52" href="$classSusy_1_1Met.html" title="Met class." alt="" coords="867,795,949,824"/>
 </map>

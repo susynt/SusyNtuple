@@ -47,7 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -85,9 +85,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <!-- doxytag: class="ChainHelper" -->
-<p>A set of static methods to help build a TChain from input root files.  
- <a href="classChainHelper.html#details">More...</a></p>
-
 <p><code>#include &lt;<a class="el" href="ChainHelper_8h_source.html">ChainHelper.h</a>&gt;</code></p>
 
 <p><a href="classChainHelper-members.html">List of all members.</a></p>
@@ -100,21 +97,72 @@ Public Types</h2></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a978fa55f6b4b9d823ccf5d922a8fdee5"></a><!-- doxytag: member="ChainHelper::addFile" ref="a978fa55f6b4b9d823ccf5d922a8fdee5" args="(TChain *chain, std::string file)" -->
-static Status&#160;</td><td class="memItemRight" valign="bottom"><b>addFile</b> (TChain *chain, std::string file)</td></tr>
+static Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChainHelper.html#a978fa55f6b4b9d823ccf5d922a8fdee5">addFile</a> (TChain *chain, std::string file)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a file - not very useful (obsolete, use <a class="el" href="classChainHelper.html#a0c2e554e1183f1ba1f611d7b795a55fe" title="add generic input">addInput()</a> instead) <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a829f61d48060a6cc2338b98775faa22b"></a><!-- doxytag: member="ChainHelper::addFileList" ref="a829f61d48060a6cc2338b98775faa22b" args="(TChain *chain, std::string fileListName)" -->
-static Status&#160;</td><td class="memItemRight" valign="bottom"><b>addFileList</b> (TChain *chain, std::string fileListName)</td></tr>
+static Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChainHelper.html#a829f61d48060a6cc2338b98775faa22b">addFileList</a> (TChain *chain, std::string fileListName)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a fileList (obsolete, use <a class="el" href="classChainHelper.html#a0c2e554e1183f1ba1f611d7b795a55fe" title="add generic input">addInput()</a> instead) <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb8d54ff93ad4f5a109fc118832cab28"></a><!-- doxytag: member="ChainHelper::addFileDir" ref="abb8d54ff93ad4f5a109fc118832cab28" args="(TChain *chain, std::string fileDir)" -->
 static Status&#160;</td><td class="memItemRight" valign="bottom"><b>addFileDir</b> (TChain *chain, std::string fileDir)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static Status&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChainHelper.html#a0c2e554e1183f1ba1f611d7b795a55fe">addInput</a> (TChain *chain, const std::string &amp;input, bool verbose=false)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">add generic input  <a href="#a0c2e554e1183f1ba1f611d7b795a55fe"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a786e911c6d00a029057cb6956070fb71"></a><!-- doxytag: member="ChainHelper::inputIsFile" ref="a786e911c6d00a029057cb6956070fb71" args="(const std::string &amp;input)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChainHelper.html#a786e911c6d00a029057cb6956070fb71">inputIsFile</a> (const std::string &amp;input)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">input files are expected to have the '.root' extension <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6b6ad46960d41659721023bc83bf4c7e"></a><!-- doxytag: member="ChainHelper::inputIsList" ref="a6b6ad46960d41659721023bc83bf4c7e" args="(const std::string &amp;input)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChainHelper.html#a6b6ad46960d41659721023bc83bf4c7e">inputIsList</a> (const std::string &amp;input)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">input filelists are expected to have the '.txt' extension <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0ec93da4a565015f7b290320a238a8e7"></a><!-- doxytag: member="ChainHelper::inputIsDir" ref="a0ec93da4a565015f7b290320a238a8e7" args="(const std::string &amp;input)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classChainHelper.html#a0ec93da4a565015f7b290320a238a8e7">inputIsDir</a> (const std::string &amp;input)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">input directories are expected to end with '/' <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>A set of static methods to help build a TChain from input root files. </p>
-<p>The chain can be built easily by specifying</p>
+<div class="textblock"><p>Static helper methods to build a TChain from input root files</p>
+<p>The recommended method is <a class="el" href="classChainHelper.html#a0c2e554e1183f1ba1f611d7b795a55fe" title="add generic input">ChainHelper::addInput()</a>. The input can be one of the following</p>
 <ul>
 <li>single input root file</li>
 <li>input directory of root files</li>
-<li>a file with list of root files </li>
+<li>a file with list of root files</li>
+<li>comma-separated list of any of the above </li>
 </ul>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a0c2e554e1183f1ba1f611d7b795a55fe"></a><!-- doxytag: member="ChainHelper::addInput" ref="a0c2e554e1183f1ba1f611d7b795a55fe" args="(TChain *chain, const std::string &amp;input, bool verbose=false)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ChainHelper::Status <a class="el" href="classChainHelper.html#a0c2e554e1183f1ba1f611d7b795a55fe">ChainHelper::addInput</a> </td>
+          <td>(</td>
+          <td class="paramtype">TChain *&#160;</td>
+          <td class="paramname"><em>chain</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>verbose</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>add generic input </p>
+<p>Determine internally whether it's a file, filelist, or directory. Also accepts comma-separated list of inputs. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>SusyNtuple/<a class="el" href="ChainHelper_8h_source.html">ChainHelper.h</a></li>
 <li>Root/ChainHelper.cxx</li>
 </ul>
@@ -124,7 +172,7 @@ static Status&#160;</td><td class="memItemRight" valign="bottom"><b>addFileDir</
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

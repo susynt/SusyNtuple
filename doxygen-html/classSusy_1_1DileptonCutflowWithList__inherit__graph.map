@@ -1,5 +1,4 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="44,160,175,189"/>
-<area shape="rect" id="node4" href="$classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="63,83,156,112"/>
-<area shape="rect" id="node6" href="$classSusyNtTools.html" title="A class of useful tools for working with SusyNt." alt="" coords="60,5,159,35"/>
+<area shape="rect" id="node2" href="$classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="44,83,175,112"/>
+<area shape="rect" id="node4" href="$classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="63,5,156,35"/>
 </map>

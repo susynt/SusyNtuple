@@ -47,7 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -94,40 +94,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013 
 <a name="l00014"></a>00014 <span class="preprocessor">#include &lt;string&gt;</span>
 <a name="l00015"></a>00015 <span class="preprocessor">#include &lt;vector&gt;</span>
-<a name="l00016"></a>00016 
-<a name="l00017"></a>00017 <span class="keyword">namespace </span>susy{
-<a name="l00018"></a>00018 <span class="keyword">namespace </span>utils{
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 <span class="keyword">typedef</span> std::vector&lt; int &gt; vint_t;
-<a name="l00021"></a>00021 <span class="keyword">typedef</span> std::vector&lt; vint_t &gt; vvint_t;
-<a name="l00022"></a>00022 
-<a name="l00024"></a>00024 <span class="keywordtype">bool</span> containsAnyOf(<span class="keyword">const</span> vint_t &amp;firstVec, <span class="keyword">const</span> vint_t &amp;subVec);
-<a name="l00026"></a>00026 std::string vecToString(<span class="keyword">const</span> vint_t &amp;vec);
-<a name="l00028"></a>00028 std::string vecVecToString(<span class="keyword">const</span> vvint_t &amp;vvec);
-<a name="l00030"></a>00030 <span class="keywordtype">void</span> removeDuplicates(vint_t &amp;vec);
-<a name="l00031"></a>00031 
-<a name="l00033"></a>00033 <span class="keyword">template</span> &lt; <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>&gt; <span class="keyword">class </span>Container,
-<a name="l00034"></a>00034            <span class="keyword">typename</span> Predicate,
-<a name="l00035"></a>00035            <span class="keyword">typename</span> Allocator,
-<a name="l00036"></a>00036            <span class="keyword">typename</span> A
-<a name="l00037"></a>00037            &gt;
-<a name="l00038"></a>00038 Container&lt;A, Allocator&gt; filter(Container&lt;A, Allocator&gt; <span class="keyword">const</span> &amp; container, Predicate <span class="keyword">const</span> &amp; pred) {
-<a name="l00039"></a>00039   Container&lt;A, Allocator&gt; filtered(container);
-<a name="l00040"></a>00040   filtered.erase(remove_if(filtered.begin(), filtered.end(), pred), filtered.end());
-<a name="l00041"></a>00041   <span class="keywordflow">return</span> filtered;
-<a name="l00042"></a>00042 }
-<a name="l00043"></a>00043 
-<a name="l00044"></a>00044 
-<a name="l00045"></a>00045 } <span class="comment">// utils</span>
-<a name="l00046"></a>00046 } <span class="comment">// susy</span>
-<a name="l00047"></a>00047 <span class="preprocessor">#endif</span>
+<a name="l00016"></a>00016 <span class="preprocessor">#include &lt;algorithm&gt;</span> <span class="comment">// find</span>
+<a name="l00017"></a>00017 
+<a name="l00018"></a>00018 <span class="keyword">namespace </span>Susy{
+<a name="l00019"></a>00019 <span class="keyword">namespace </span>utils{
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021 <span class="keyword">typedef</span> std::vector&lt; int &gt; vint_t;
+<a name="l00022"></a>00022 <span class="keyword">typedef</span> std::vector&lt; vint_t &gt; vvint_t;
+<a name="l00023"></a>00023 
+<a name="l00025"></a>00025 <span class="keyword">template</span> &lt; <span class="keyword">class</span> T &gt;
+<a name="l00026"></a>00026 <span class="keywordtype">bool</span> contains(<span class="keyword">const</span> std::vector&lt;T&gt; &amp;v, <span class="keyword">const</span> T&amp; val) {
+<a name="l00027"></a>00027     <span class="keywordflow">return</span> std::find(v.begin(), v.end(), val)!=v.end();
+<a name="l00028"></a>00028 }
+<a name="l00030"></a>00030 <span class="keywordtype">bool</span> containsAnyOf(<span class="keyword">const</span> vint_t &amp;firstVec, <span class="keyword">const</span> vint_t &amp;subVec);
+<a name="l00032"></a>00032 std::string vecToString(<span class="keyword">const</span> vint_t &amp;vec);
+<a name="l00034"></a>00034 std::string vecVecToString(<span class="keyword">const</span> vvint_t &amp;vvec);
+<a name="l00036"></a>00036 <span class="keywordtype">void</span> removeDuplicates(vint_t &amp;vec);
+<a name="l00037"></a>00037 
+<a name="l00039"></a>00039 <span class="keyword">template</span> &lt; <span class="keyword">template</span> &lt;<span class="keyword">typename</span>, <span class="keyword">typename</span>&gt; <span class="keyword">class </span>Container,
+<a name="l00040"></a>00040            <span class="keyword">typename</span> Predicate,
+<a name="l00041"></a>00041            <span class="keyword">typename</span> Allocator,
+<a name="l00042"></a>00042            <span class="keyword">typename</span> A
+<a name="l00043"></a>00043            &gt;
+<a name="l00044"></a>00044 Container&lt;A, Allocator&gt; filter(Container&lt;A, Allocator&gt; <span class="keyword">const</span> &amp; container, Predicate <span class="keyword">const</span> &amp; pred) {
+<a name="l00045"></a>00045   Container&lt;A, Allocator&gt; filtered(container);
+<a name="l00046"></a>00046   filtered.erase(remove_if(filtered.begin(), filtered.end(), pred), filtered.end());
+<a name="l00047"></a>00047   <span class="keywordflow">return</span> filtered;
+<a name="l00048"></a>00048 }
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 } <span class="comment">// utils</span>
+<a name="l00052"></a>00052 } <span class="comment">// susy</span>
+<a name="l00053"></a>00053 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

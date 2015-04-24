@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['i_5f',['i_',['../structsusy_1_1mc_1_1IntermediateParentWalker.html#a3ebf8c9276c943f35ed879b390d5cc80',1,'susy::mc::IntermediateParentWalker']]],
+  ['i_5f',['i_',['../structSusy_1_1mc_1_1IntermediateParentWalker.html#a8a5001cd788200c38ae99e4b90edd549',1,'Susy::mc::IntermediateParentWalker']]],
   ['id_5fdn',['id_dn',['../classSusy_1_1Muon.html#aa5a9292005a3d74ec36db6cc30f28381',1,'Susy::Muon']]],
   ['id_5fup',['id_up',['../classSusy_1_1Muon.html#abc900d147fa64f8e6f168d16352ebfb2',1,'Susy::Muon']]],
   ['idtracketa',['idTrackEta',['../classSusy_1_1Muon.html#a301afaacce9b168f6ddb1fe6dc02cf9a',1,'Susy::Muon']]],
@@ -13,10 +13,12 @@ var searchData=
   ['isbadmuon',['isBadMuon',['../classSusy_1_1Muon.html#a78f859fe31370342bc5cf3a09af455d2',1,'Susy::Muon']]],
   ['isbadtightbch',['isBadTightBCH',['../classSusy_1_1Jet.html#ae6bb08da761eac86d496dc0838d1cb5f',1,'Susy::Jet']]],
   ['isbadveryloose',['isBadVeryLoose',['../classSusy_1_1Jet.html#ac661b7a6e1498af9f30c70e95fc6752c',1,'Susy::Jet']]],
+  ['isbaseline',['isBaseline',['../classSusy_1_1Lepton.html#ab2556e25250fb98422bd63d35515679b',1,'Susy::Lepton']]],
   ['ischargeflip',['isChargeFlip',['../classSusy_1_1Electron.html#a3e48c722b500fa2aaa36591ee066e8a0',1,'Susy::Electron']]],
   ['iscombined',['isCombined',['../classSusy_1_1Muon.html#aae34c971c8881c25295ca222ae660f24',1,'Susy::Muon']]],
   ['isconv',['isConv',['../classSusy_1_1Photon.html#af77eb908f7c4dda7d9a6922b107dc979',1,'Susy::Photon']]],
   ['iscosmic',['isCosmic',['../classSusy_1_1Muon.html#a477f633553178497544544e30f40d858',1,'Susy::Muon']]],
   ['ishottile',['isHotTile',['../classSusy_1_1Jet.html#abb7bc60838401767b5743e6f73af19b8',1,'Susy::Jet']]],
-  ['ismc',['isMC',['../classSusy_1_1Event.html#a26ed201a9a55911963aaa2facdf25c1e',1,'Susy::Event']]]
+  ['ismc',['isMC',['../classSusy_1_1Event.html#a26ed201a9a55911963aaa2facdf25c1e',1,'Susy::Event']]],
+  ['issignal',['isSignal',['../classSusy_1_1Lepton.html#a7dc994870591da74a200f170a9f7bb48',1,'Susy::Lepton']]]
 ];

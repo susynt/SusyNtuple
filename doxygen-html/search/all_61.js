@@ -1,6 +1,9 @@
 var searchData=
 [
   ['add',['Add',['../classD3PDReader_1_1VariableStats.html#ae1b691e2ac716cfc28e04b3e49e11d46',1,'D3PDReader::VariableStats::Add()'],['../classD3PDReader_1_1D3PDReadStats.html#ab93c4e2f0bff055b785b89928d693da7',1,'D3PDReader::D3PDReadStats::Add()']]],
+  ['addfile',['addFile',['../classChainHelper.html#a978fa55f6b4b9d823ccf5d922a8fdee5',1,'ChainHelper']]],
+  ['addfilelist',['addFileList',['../classChainHelper.html#a829f61d48060a6cc2338b98775faa22b',1,'ChainHelper']]],
+  ['addinput',['addInput',['../classChainHelper.html#a0c2e554e1183f1ba1f611d7b795a55fe',1,'ChainHelper']]],
   ['addtotreecache',['AddToTreeCache',['../classD3PDReader_1_1D3PDReadStats.html#a3d891eccf4522196dc273a1d66a96fc8',1,'D3PDReader::D3PDReadStats']]],
   ['addtotreecachebybytefrac',['AddToTreeCacheByByteFrac',['../classD3PDReader_1_1D3PDReadStats.html#ab6080d23f97e9985900f1a8df7f2f5b8',1,'D3PDReader::D3PDReadStats']]],
   ['addtotreecachebybytes',['AddToTreeCacheByBytes',['../classD3PDReader_1_1D3PDReadStats.html#aa14a68c231816e7a9d330ed2111575b6',1,'D3PDReader::D3PDReadStats']]],

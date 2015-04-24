@@ -1,8 +1,6 @@
 var searchData=
 [
   ['tau',['tau',['../classSusy_1_1SusyNtObject.html#a7ba16b6e7283a5655a9a1ec4cd6270de',1,'Susy::SusyNtObject']]],
-  ['tes_5fdn',['tes_dn',['../classSusy_1_1Tau.html#a8b6bb80479068cab252cea372f36509b',1,'Susy::Tau']]],
-  ['tes_5fup',['tes_up',['../classSusy_1_1Tau.html#a0bd7fd91e4cf24b3b4a735117bcb9b8a',1,'Susy::Tau']]],
   ['thetapv',['thetaPV',['../classSusy_1_1Muon.html#a4677eaf2cea2fd6382009bd33d2810a8',1,'Susy::Muon']]],
   ['tighteffsf',['tightEffSF',['../classSusy_1_1Tau.html#a35a46b920b87af87cb6843a8d86d6c79',1,'Susy::Tau']]],
   ['tightevetosf',['tightEVetoSF',['../classSusy_1_1Tau.html#a0b44e20aa8855a902a5d6addfda3c7c8',1,'Susy::Tau']]],

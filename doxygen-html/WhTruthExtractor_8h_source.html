@@ -47,7 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -94,8 +94,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00026"></a>00026   <span class="keyword">typedef</span> std::vector&lt; vint_t &gt; vvint_t;
 <a name="l00027"></a>00027  <span class="keyword">public</span>:
 <a name="l00028"></a>00028   <a class="code" href="classWhTruthExtractor.html" title="A class to extract from d3pd the truth information for simplifiedModel_wA_noslep_WH samples...">WhTruthExtractor</a>();
-<a name="l00029"></a>00029   susy::mc::Hdecays update(<span class="keyword">const</span> vint_t* pdg, <span class="keyword">const</span> vvint_t *childIndex, <span class="keyword">const</span> vvint_t *parentIndex);
-<a name="l00030"></a>00030   susy::mc::Hdecays decay()<span class="keyword"> const </span>{<span class="keywordflow">return</span> decay_;}
+<a name="l00029"></a>00029   Susy::mc::Hdecays update(<span class="keyword">const</span> vint_t* pdg, <span class="keyword">const</span> vvint_t *childIndex, <span class="keyword">const</span> vvint_t *parentIndex);
+<a name="l00030"></a>00030   Susy::mc::Hdecays decay()<span class="keyword"> const </span>{<span class="keywordflow">return</span> decay_;}
 <a name="l00031"></a>00031   <span class="keywordtype">void</span> printStatus() <span class="keyword">const</span>;
 <a name="l00033"></a>00033 
 <a name="l00037"></a>00037   <span class="keyword">static</span> vint_t <a class="code" href="classWhTruthExtractor.html#a6fe32006308ff680186278438b5c8f21" title="indices of relevant particles (top, W, and their children) in a MC ttbar event">ttbarMcAtNloParticles</a>(<span class="keyword">const</span> vint_t *pdgs,
@@ -107,19 +107,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00043"></a>00043   <span class="keyword">const</span> vint_t pdgsPmuAmu_;
 <a name="l00044"></a>00044   <span class="keyword">const</span> vint_t pdgsPtauAtau_;
 <a name="l00045"></a>00045  <span class="keyword">private</span>:
-<a name="l00046"></a>00046   susy::mc::vint_t findHiggsIndices(<span class="keyword">const</span> vint_t &amp;pdg);
+<a name="l00046"></a>00046   Susy::mc::vint_t findHiggsIndices(<span class="keyword">const</span> vint_t &amp;pdg);
 <a name="l00047"></a>00047   <span class="keywordtype">void</span> buildHiggsChildrenPgds(<span class="keyword">const</span> vint_t &amp;pdgs, <span class="keyword">const</span> vvint_t &amp;childIndices);
 <a name="l00048"></a>00048   <span class="keywordtype">void</span> buildHiggsParentsPgds(<span class="keyword">const</span> vint_t &amp;pdgs, <span class="keyword">const</span> vvint_t &amp;parentIndices);
 <a name="l00049"></a>00049   <span class="keywordtype">bool</span> isBoringHiggs(<span class="keywordtype">size_t</span> iHiggs) <span class="keyword">const</span>; 
 <a name="l00050"></a>00050   <span class="keywordtype">int</span> firstInterestingHiggs() <span class="keyword">const</span>; 
-<a name="l00051"></a>00051   susy::mc::Hdecays decayType(<span class="keywordtype">size_t</span> iHiggs) <span class="keyword">const</span>; 
+<a name="l00051"></a>00051   Susy::mc::Hdecays decayType(<span class="keywordtype">size_t</span> iHiggs) <span class="keyword">const</span>; 
 <a name="l00052"></a>00052 
 <a name="l00053"></a>00053   <span class="keywordtype">void</span> printEvent(<span class="keyword">const</span> vint_t &amp;pdg, <span class="keyword">const</span> vvint_t &amp;childIndex, <span class="keyword">const</span> vvint_t &amp;parentIndex);
 <a name="l00054"></a>00054   vint_t hIndices_;
 <a name="l00055"></a>00055   vvint_t hParPdgs_;
 <a name="l00056"></a>00056   vvint_t hChiPdgs_;
 <a name="l00057"></a>00057   <span class="keywordtype">int</span> interestingHiggs_;
-<a name="l00058"></a>00058   susy::mc::Hdecays decay_;
+<a name="l00058"></a>00058   Susy::mc::Hdecays decay_;
 <a name="l00059"></a>00059 }; <span class="comment">// end WhTruthExtractor</span>
 <a name="l00060"></a>00060 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
@@ -128,7 +128,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

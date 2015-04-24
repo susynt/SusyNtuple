@@ -9,5 +9,6 @@ var searchData=
   ['jetbdtsigmedium',['jetBDTSigMedium',['../classSusy_1_1Tau.html#a1eb8c62843654858f057ce98e839c006',1,'Susy::Tau']]],
   ['jetbdtsigtight',['jetBDTSigTight',['../classSusy_1_1Tau.html#aa874b8b1aadc2b7addf4cd84cc7d6cc7',1,'Susy::Tau']]],
   ['jfit_5fmass',['jfit_mass',['../classSusy_1_1Jet.html#a9560f198a291a9346bd0e94458a6090b',1,'Susy::Jet']]],
-  ['jvf',['jvf',['../classSusy_1_1Jet.html#a40cd0f9fc36233a8aa6d473f7ae6a8a3',1,'Susy::Jet']]]
+  ['jvf',['jvf',['../classSusy_1_1Jet.html#a40cd0f9fc36233a8aa6d473f7ae6a8a3',1,'Susy::Jet']]],
+  ['jvt',['jvt',['../classSusy_1_1Jet.html#a6f8faf59068f43db5991e08ee4e38eb8',1,'Susy::Jet']]]
 ];

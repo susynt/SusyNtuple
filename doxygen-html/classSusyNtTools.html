@@ -47,7 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -80,8 +80,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pro-attribs">Protected Attributes</a> &#124;
-<a href="#pro-static-attribs">Static Protected Attributes</a>  </div>
+<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a>  </div>
   <div class="headertitle">
 <div class="title">SusyNtTools Class Reference</div>  </div>
 </div><!--header-->
@@ -92,11 +92,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p><code>#include &lt;<a class="el" href="SusyNtTools_8h_source.html">SusyNtTools.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for SusyNtTools:</div>
+Collaboration diagram for SusyNtTools:</div>
 <div class="dyncontent">
-<div class="center"><img src="classSusyNtTools__inherit__graph.png" border="0" usemap="#SusyNtTools_inherit__map" alt="Inheritance graph"/></div>
-<map name="SusyNtTools_inherit__map" id="SusyNtTools_inherit__map">
-<area shape="rect" id="node3" href="classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="140,83,233,112"/><area shape="rect" id="node5" href="classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="44,160,175,189"/><area shape="rect" id="node9" href="classSusy3LepCutflow.html" title="Three lepton cutflow." alt="" coords="199,160,329,189"/><area shape="rect" id="node7" href="classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="5,237,213,267"/></map>
+<div class="center"><img src="classSusyNtTools__coll__graph.png" border="0" usemap="#SusyNtTools_coll__map" alt="Collaboration graph"/></div>
+<map name="SusyNtTools_coll__map" id="SusyNtTools_coll__map">
+<area shape="rect" id="node2" href="classSusy_1_1ElectronSelector.html" title="Susy::ElectronSelector" alt="" coords="5,5,171,35"/><area shape="rect" id="node4" href="classSusy_1_1JetSelector.html" title="Susy::JetSelector" alt="" coords="195,5,323,35"/><area shape="rect" id="node6" href="classSusy_1_1MuonSelector.html" title="A class to select muons." alt="" coords="347,5,493,35"/></map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 
 <p><a href="classSusyNtTools-members.html">List of all members.</a></p>
@@ -109,25 +109,19 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68cc1631bbeb1419afef9298da8c6ebc"></a><!-- doxytag: member="SusyNtTools::setAnaType" ref="a68cc1631bbeb1419afef9298da8c6ebc" args="(AnalysisType A, bool verbose=false)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a68cc1631bbeb1419afef9298da8c6ebc">setAnaType</a> (AnalysisType A, bool verbose=false)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set Analysis type to determine selection. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a286fd0ce84a0272c5f0e41d8bcb82c24"></a><!-- doxytag: member="SusyNtTools::configureBTagTool" ref="a286fd0ce84a0272c5f0e41d8bcb82c24" args="(std::string OP, float opVal, bool isJVF)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a286fd0ce84a0272c5f0e41d8bcb82c24">configureBTagTool</a> (std::string OP, float opVal, bool isJVF)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Configure the btag sf tool. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">virtual float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a77c0f8b8b056c62e491177b7885d8533">getEventWeight</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, float lumi=LUMI_A_L, bool useSumwMap=false, const SumwMap *sumwMap=0, bool useProcSumw=false, bool useSusyXsec=false, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get event weight - contains generator, pileup, xsec, and lumi weights.  <a href="#a77c0f8b8b056c62e491177b7885d8533"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab41fc5bcab944731040c5778978f3e20"></a><!-- doxytag: member="SusyNtTools::getPreElectrons" ref="ab41fc5bcab944731040c5778978f3e20" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys)" -->
 ElectronVector&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ab41fc5bcab944731040c5778978f3e20">getPreElectrons</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa298359073e297d752da880b4780cd66"></a><!-- doxytag: member="SusyNtTools::getPreMuons" ref="aa298359073e297d752da880b4780cd66" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys, bool n0150BugFix=false)" -->
-MuonVector&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aa298359073e297d752da880b4780cd66">getPreMuons</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys, bool n0150BugFix=false)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Bugfix for muon systematics in n0150. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ea7ba38c3aafaec9c85fcbbbe773ab1"></a><!-- doxytag: member="SusyNtTools::getPreMuons" ref="a5ea7ba38c3aafaec9c85fcbbbe773ab1" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys)" -->
+MuonVector&#160;</td><td class="memItemRight" valign="bottom"><b>getPreMuons</b> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab855e0ce721e1679bbbf5fa5b4e24c48"></a><!-- doxytag: member="SusyNtTools::getPreTaus" ref="ab855e0ce721e1679bbbf5fa5b4e24c48" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys)" -->
 TauVector&#160;</td><td class="memItemRight" valign="bottom"><b>getPreTaus</b> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abfe898c399cab7fbabb5e0ad6f7482b3"></a><!-- doxytag: member="SusyNtTools::getPreJets" ref="abfe898c399cab7fbabb5e0ad6f7482b3" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys)" -->
 JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getPreJets</b> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aa7f2fffa4d7929183651a010e87c7abf">getBaselineObjects</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, ElectronVector &amp;preElecs, MuonVector &amp;preMuons, JetVector &amp;preJets, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Baseline objects. Pre + overlap removal.  <a href="#aa7f2fffa4d7929183651a010e87c7abf"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa9667ac9a77eabfa0555b82d6573389b"></a><!-- doxytag: member="SusyNtTools::getBaselineObjects" ref="aa9667ac9a77eabfa0555b82d6573389b" args="(Susy::SusyNtObject *susyNt, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aa9667ac9a77eabfa0555b82d6573389b">getBaselineObjects</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a3e5f2a2f81072ba872b83544361b3584">getBaselineObjects</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, ElectronVector &amp;preElecs, MuonVector &amp;preMuons, JetVector &amp;preJets, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get Baseline objects. Pre + overlap removal.  <a href="#a3e5f2a2f81072ba872b83544361b3584"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8224731182ff7b1334fcca3f5c2022f"></a><!-- doxytag: member="SusyNtTools::getBaselineObjects" ref="ad8224731182ff7b1334fcca3f5c2022f" args="(Susy::SusyNtObject *susyNt, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ad8224731182ff7b1334fcca3f5c2022f">getBaselineObjects</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Second method only provides the baseline objects after OR. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7c85828320464fe0214678c22d03924"></a><!-- doxytag: member="SusyNtTools::getSignalElectrons" ref="af7c85828320464fe0214678c22d03924" args="(const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, uint nVtx, bool isMC, bool removeLepsFromIso=false)" -->
 ElectronVector&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#af7c85828320464fe0214678c22d03924">getSignalElectrons</a> (const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, uint nVtx, bool isMC, bool removeLepsFromIso=false)</td></tr>
@@ -138,18 +132,18 @@ MuonVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalMuons<
 PhotonVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalPhotons</b> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab751cff58bcea0abc217ef77586dff64"></a><!-- doxytag: member="SusyNtTools::getSignalTaus" ref="ab751cff58bcea0abc217ef77586dff64" args="(const TauVector &amp;baseTaus, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium)" -->
 TauVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalTaus</b> (const TauVector &amp;baseTaus, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad950d72962ca2cf5c64c2c0b9b4c2f77"></a><!-- doxytag: member="SusyNtTools::getSignalJets" ref="ad950d72962ca2cf5c64c2c0b9b4c2f77" args="(const JetVector &amp;baseJets, SusyNtSys sys=NtSys_NOM)" -->
-JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalJets</b> (const JetVector &amp;baseJets, SusyNtSys sys=NtSys_NOM)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8f7f77755c1925de900b0044ed6d9b4a"></a><!-- doxytag: member="SusyNtTools::getSignalJets2Lep" ref="a8f7f77755c1925de900b0044ed6d9b4a" args="(const JetVector &amp;baseJets, SusyNtSys sys=NtSys_NOM)" -->
-JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalJets2Lep</b> (const JetVector &amp;baseJets, SusyNtSys sys=NtSys_NOM)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb40c5f2c6f54ce34e1f1902aca42491"></a><!-- doxytag: member="SusyNtTools::getSignalObjects" ref="abb40c5f2c6f54ce34e1f1902aca42491" args="(const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;sigTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium, SusyNtSys sys=NtSys_NOM)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#abb40c5f2c6f54ce34e1f1902aca42491">getSignalObjects</a> (const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;sigTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium, SusyNtSys sys=NtSys_NOM)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a06a0f7ecc95db584e3d716b0ac986b27"></a><!-- doxytag: member="SusyNtTools::getSignalJets" ref="a06a0f7ecc95db584e3d716b0ac986b27" args="(const JetVector &amp;baseJets, SusyNtSys sys=NtSys::NOM)" -->
+JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalJets</b> (const JetVector &amp;baseJets, SusyNtSys sys=NtSys::NOM)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="add7ef7d3bf2c0c15e8e1af057ca536a5"></a><!-- doxytag: member="SusyNtTools::getSignalJets2Lep" ref="add7ef7d3bf2c0c15e8e1af057ca536a5" args="(const JetVector &amp;baseJets, SusyNtSys sys=NtSys::NOM)" -->
+JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalJets2Lep</b> (const JetVector &amp;baseJets, SusyNtSys sys=NtSys::NOM)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a89f0c3051dec67955dbf055add638286"></a><!-- doxytag: member="SusyNtTools::getSignalObjects" ref="a89f0c3051dec67955dbf055add638286" args="(const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;sigTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium, SusyNtSys sys=NtSys::NOM)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a89f0c3051dec67955dbf055add638286">getSignalObjects</a> (const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;sigTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium, SusyNtSys sys=NtSys::NOM)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the signal objects. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d5d8148441e3f0428a3914cc4f1d7da"></a><!-- doxytag: member="SusyNtTools::getSignalTaus" ref="a9d5d8148441e3f0428a3914cc4f1d7da" args="(const TauVector &amp;baseTaus, TauVector &amp;mediumTaus, TauVector &amp;tightTaus)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a9d5d8148441e3f0428a3914cc4f1d7da">getSignalTaus</a> (const TauVector &amp;baseTaus, TauVector &amp;mediumTaus, TauVector &amp;tightTaus)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">New signal tau prescription, fill both ID levels at once. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ce31b72b8730cb0b37e823c52b63063"></a><!-- doxytag: member="SusyNtTools::getSignalObjects" ref="a5ce31b72b8730cb0b37e823c52b63063" args="(const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;mediumTaus, TauVector &amp;tightTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, SusyNtSys sys=NtSys_NOM)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalObjects</b> (const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;mediumTaus, TauVector &amp;tightTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, SusyNtSys sys=NtSys_NOM)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc0d7abafb0b0a7807303f88759e63f8"></a><!-- doxytag: member="SusyNtTools::getSignalObjects" ref="afc0d7abafb0b0a7807303f88759e63f8" args="(const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;mediumTaus, TauVector &amp;tightTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, SusyNtSys sys=NtSys::NOM)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getSignalObjects</b> (const ElectronVector &amp;baseElecs, const MuonVector &amp;baseMuons, const TauVector &amp;baseTaus, const JetVector &amp;baseJets, ElectronVector &amp;sigElecs, MuonVector &amp;sigMuons, TauVector &amp;mediumTaus, TauVector &amp;tightTaus, JetVector &amp;sigJets, JetVector &amp;sigJets2Lep, uint nVtx, bool isMC, bool removeLepsFromIso=false, SusyNtSys sys=NtSys::NOM)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7aeb7a704937573ba7df29d9de3fa7e5"></a><!-- doxytag: member="SusyNtTools::isTauBDT" ref="a7aeb7a704937573ba7df29d9de3fa7e5" args="(const Susy::Tau *tau, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a7aeb7a704937573ba7df29d9de3fa7e5">isTauBDT</a> (const <a class="el" href="classSusy_1_1Tau.html">Susy::Tau</a> *tau, TauID tauJetID=TauID_medium, TauID tauEleID=TauID_loose, TauID tauMuoID=TauID_medium)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if selected object. <br/></td></tr>
@@ -167,10 +161,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSignalTau</b> (cons
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSemiSignalElectron</b> (const <a class="el" href="classSusy_1_1Electron.html">Susy::Electron</a> *ele)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a8769ce0795b6cccc322d28076e44fd"></a><!-- doxytag: member="SusyNtTools::isSemiSignalMuon" ref="a2a8769ce0795b6cccc322d28076e44fd" args="(const Susy::Muon *mu)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSemiSignalMuon</b> (const <a class="el" href="classSusy_1_1Muon.html">Susy::Muon</a> *mu)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31afe8ef4d58e2ac0b276ed327691d72"></a><!-- doxytag: member="SusyNtTools::isSignalJet" ref="a31afe8ef4d58e2ac0b276ed327691d72" args="(const Susy::Jet *jet, SusyNtSys sys=NtSys_NOM)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSignalJet</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet, SusyNtSys sys=NtSys_NOM)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8046ec4882dee4541f01fcb73db2ad7e"></a><!-- doxytag: member="SusyNtTools::isSignalJet2Lep" ref="a8046ec4882dee4541f01fcb73db2ad7e" args="(const Susy::Jet *jet, SusyNtSys sys=NtSys_NOM)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSignalJet2Lep</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet, SusyNtSys sys=NtSys_NOM)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4eda97670274d590ed97457b5a90c3a3"></a><!-- doxytag: member="SusyNtTools::buildLeptons" ref="a4eda97670274d590ed97457b5a90c3a3" args="(LeptonVector &amp;lep, ElectronVector &amp;ele, MuonVector &amp;muo)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a4eda97670274d590ed97457b5a90c3a3">buildLeptons</a> (LeptonVector &amp;lep, ElectronVector &amp;ele, MuonVector &amp;muo)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build Lepton vector - we should probably sort them here. <br/></td></tr>
@@ -186,6 +176,8 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>muEtConeCorr</b> (co
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a4887c47d0c08831a9ff7ca9152e18e"></a><!-- doxytag: member="SusyNtTools::getMet" ref="a7a4887c47d0c08831a9ff7ca9152e18e" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys)" -->
 <a class="el" href="classSusy_1_1Met.html">Susy::Met</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a7a4887c47d0c08831a9ff7ca9152e18e">getMet</a> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Met, for the appropriate systematic. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a35b6f2251795be7536434508f38b69"></a><!-- doxytag: member="SusyNtTools::getMetTrack" ref="a7a35b6f2251795be7536434508f38b69" args="(Susy::SusyNtObject *susyNt, SusyNtSys sys)" -->
+<a class="el" href="classSusy_1_1MetTrack.html">Susy::MetTrack</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getMetTrack</b> (<a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *susyNt, SusyNtSys sys)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abb9032006add0d926830ab51fda6ebe7"></a><!-- doxytag: member="SusyNtTools::performOverlap" ref="abb9032006add0d926830ab51fda6ebe7" args="(ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets)" -->
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#abb9032006add0d926830ab51fda6ebe7">performOverlap</a> (ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform all overlap on pre objects. <br/></td></tr>
@@ -220,45 +212,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeSFOSPair</b> (MuonVector &amp;muons, float MllCut)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9a2fedbfbe7541f984a41ad80eaeb7ab"></a><!-- doxytag: member="SusyNtTools::removeSFOSPair" ref="a9a2fedbfbe7541f984a41ad80eaeb7ab" args="(TauVector &amp;taus, float MllCut)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeSFOSPair</b> (TauVector &amp;taus, float MllCut)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7a1cba4f00a84ac0f93a1d83a63809c"></a><!-- doxytag: member="SusyNtTools::passLAr" ref="af7a1cba4f00a84ac0f93a1d83a63809c" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#af7a1cba4f00a84ac0f93a1d83a63809c">passLAr</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">No electron or jet in the LAr hole - shouldn't be used anymore. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2006f23f0fdfdd07f4a7e5fa535eda25"></a><!-- doxytag: member="SusyNtTools::passHotSpot" ref="a2006f23f0fdfdd07f4a7e5fa535eda25" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a2006f23f0fdfdd07f4a7e5fa535eda25">passHotSpot</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass Tile hot spot veto. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af0e1d5cc161d834a639c35c3b589440d"></a><!-- doxytag: member="SusyNtTools::passBadJet" ref="af0e1d5cc161d834a639c35c3b589440d" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#af0e1d5cc161d834a639c35c3b589440d">passBadJet</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass the Bad Jet requirement. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acec24c7a86fd783f24c94111a5fcbfcd"></a><!-- doxytag: member="SusyNtTools::passBadMuon" ref="acec24c7a86fd783f24c94111a5fcbfcd" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#acec24c7a86fd783f24c94111a5fcbfcd">passBadMuon</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass the Bad Muon requirement. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a78e9dc4d91e6e3d0810bbbac9fdec4c5"></a><!-- doxytag: member="SusyNtTools::passCosmic" ref="a78e9dc4d91e6e3d0810bbbac9fdec4c5" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a78e9dc4d91e6e3d0810bbbac9fdec4c5">passCosmic</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">No cosmic muons. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a99f39c97c3101a0e19452237acdd5c"></a><!-- doxytag: member="SusyNtTools::passSmartVeto" ref="a5a99f39c97c3101a0e19452237acdd5c" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a5a99f39c97c3101a0e19452237acdd5c">passSmartVeto</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass Smart Veto. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01b89791ad5c9c930d311659ff66ca50"></a><!-- doxytag: member="SusyNtTools::passAll" ref="a01b89791ad5c9c930d311659ff66ca50" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a01b89791ad5c9c930d311659ff66ca50">passAll</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass All the above, incase you don't care about cut flow. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6a50adad532b478201c2ce47b18bb3f5"></a><!-- doxytag: member="SusyNtTools::passGRL" ref="a6a50adad532b478201c2ce47b18bb3f5" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a6a50adad532b478201c2ce47b18bb3f5">passGRL</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass GRL <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a75d6e6b0f0f29416210a4c4e9ddbb423"></a><!-- doxytag: member="SusyNtTools::passLarErr" ref="a75d6e6b0f0f29416210a4c4e9ddbb423" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a75d6e6b0f0f29416210a4c4e9ddbb423">passLarErr</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass LArErr <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3fdca36b9d58bfeeb1bf31e6671e855b"></a><!-- doxytag: member="SusyNtTools::passTileErr" ref="a3fdca36b9d58bfeeb1bf31e6671e855b" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a3fdca36b9d58bfeeb1bf31e6671e855b">passTileErr</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass Tile Err <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af60b43d61fac026c112362dce1b98485"></a><!-- doxytag: member="SusyNtTools::passTTCVeto" ref="af60b43d61fac026c112362dce1b98485" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#af60b43d61fac026c112362dce1b98485">passTTCVeto</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass TTC veto. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a941e558c0e679484d2b8c1dcd98939"></a><!-- doxytag: member="SusyNtTools::passGoodVtx" ref="a4a941e558c0e679484d2b8c1dcd98939" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a4a941e558c0e679484d2b8c1dcd98939">passGoodVtx</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass primary vertex <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3d5d66fdadf7e70a8f661e860d615e4"></a><!-- doxytag: member="SusyNtTools::passTileTripCut" ref="ac3d5d66fdadf7e70a8f661e860d615e4" args="(int flag)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ac3d5d66fdadf7e70a8f661e860d615e4">passTileTripCut</a> (int flag)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass tile trip cut <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6525a2abcde93adfccc0f68afe3a1ad2"></a><!-- doxytag: member="SusyNtTools::cleaningCutFlags" ref="a6525a2abcde93adfccc0f68afe3a1ad2" args="(int ntCutFlag, const MuonVector &amp;preMuons, const MuonVector &amp;baseMuons, const JetVector &amp;preJets, const JetVector &amp;baseJets)" -->
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a6525a2abcde93adfccc0f68afe3a1ad2">cleaningCutFlags</a> (int ntCutFlag, const MuonVector &amp;preMuons, const MuonVector &amp;baseMuons, const JetVector &amp;preJets, const JetVector &amp;baseJets)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Object level cleaning cut methods. <br/></td></tr>
@@ -277,11 +230,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a922f4b10696123468bcc02a2fd3df45f"></a><!-- doxytag: member="SusyNtTools::passDeadRegions" ref="a922f4b10696123468bcc02a2fd3df45f" args="(const JetVector &amp;preJets, const Susy::Met *met, int RunNumber, bool isMC)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a922f4b10696123468bcc02a2fd3df45f">passDeadRegions</a> (const JetVector &amp;preJets, const <a class="el" href="classSusy_1_1Met.html">Susy::Met</a> *met, int RunNumber, bool isMC)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass FEB dead region check. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2efd0fece6f4bb874b36fbd46af6085"></a><!-- doxytag: member="SusyNtTools::hasJetInBadFCAL" ref="af2efd0fece6f4bb874b36fbd46af6085" args="(const JetVector &amp;baseJets, uint run=206248, bool isMC=false)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#af2efd0fece6f4bb874b36fbd46af6085">hasJetInBadFCAL</a> (const JetVector &amp;baseJets, uint run=206248, bool isMC=false)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">To determine if there is baseline jets within bad FCAL region. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6edd4c68e2706be6f81b5e89dc37e9a"></a><!-- doxytag: member="SusyNtTools::isBadFCALJet" ref="ac6edd4c68e2706be6f81b5e89dc37e9a" args="(const Susy::Jet *jet)" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBadFCALJet</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a1d7252e6c1b83ec8872288827e9322f3">setDoPtcone</a> (bool doPtcone=true)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Object selection control toggles.  <a href="#a1d7252e6c1b83ec8872288827e9322f3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8990ddabf9b4aa43b6e511ed8ad2244e"></a><!-- doxytag: member="SusyNtTools::setDoElEtcone" ref="a8990ddabf9b4aa43b6e511ed8ad2244e" args="(bool doElEtcone=true)" -->
@@ -290,8 +238,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setDoElEtcone</b> (bo
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setDoMuEtcone</b> (bool doMuEtcone=false)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a427f37b7acff1366cd60fc1cddfb0eed"></a><!-- doxytag: member="SusyNtTools::setDoIP" ref="a427f37b7acff1366cd60fc1cddfb0eed" args="(bool doIP=true)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setDoIP</b> (bool doIP=true)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc9524763d4a8e4e4aa7af9e355b65ee"></a><!-- doxytag: member="SusyNtTools::numBJets" ref="afc9524763d4a8e4e4aa7af9e355b65ee" args="(const JetVector &amp;jets)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>numBJets</b> (const JetVector &amp;jets)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92a0baebdf5ae6de35211d5ccad0149a"></a><!-- doxytag: member="SusyNtTools::hasBJet" ref="a92a0baebdf5ae6de35211d5ccad0149a" args="(const JetVector &amp;jets)" -->
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasBJet</b> (const JetVector &amp;jets)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74d36f9e56c15e2d91ca8101c8a94ed1"></a><!-- doxytag: member="SusyNtTools::getBJets" ref="a74d36f9e56c15e2d91ca8101c8a94ed1" args="(const JetVector &amp;jets)" -->
+JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getBJets</b> (const JetVector &amp;jets)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b5f5669b8d34a7d3e992cc5724ebbbd"></a><!-- doxytag: member="SusyNtTools::bTagSF" ref="a3b5f5669b8d34a7d3e992cc5724ebbbd" args="(const Susy::Event *, const JetVector &amp;jets, int mcID, BTagSys sys=BTag_NOM)" -->
 float&#160;</td><td class="memItemRight" valign="bottom"><b>bTagSF</b> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *, const JetVector &amp;jets, int mcID, BTagSys sys=BTag_NOM)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a01562795b760c073d12efa49d0d10130"></a><!-- doxytag: member="SusyNtTools::numberOfCLJets" ref="a01562795b760c073d12efa49d0d10130" args="(const JetVector &amp;jets)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfCLJets</b> (const JetVector &amp;jets)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fb9c0a6d8d5e8d4e27b90cdfa12338d"></a><!-- doxytag: member="SusyNtTools::numberOfCBJets" ref="a5fb9c0a6d8d5e8d4e27b90cdfa12338d" args="(const JetVector &amp;jets)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfCBJets</b> (const JetVector &amp;jets)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18dba8fb7d80ed8f15e328763f420ad9"></a><!-- doxytag: member="SusyNtTools::numberOfFJets" ref="a18dba8fb7d80ed8f15e328763f420ad9" args="(const JetVector &amp;jets)" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfFJets</b> (const JetVector &amp;jets)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a955c57db9a97daa9d596fd4bee5d7786"></a><!-- doxytag: member="SusyNtTools::getNumberOf2LepJets" ref="a955c57db9a97daa9d596fd4bee5d7786" args="(const JetVector &amp;jets, int &amp;Ncl, int &amp;Ncb, int &amp;Nf, SusyNtSys sys, AnalysisType anaType)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>getNumberOf2LepJets</b> (const JetVector &amp;jets, int &amp;Ncl, int &amp;Ncb, int &amp;Nf, SusyNtSys sys, AnalysisType anaType)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec6cdbb40e7e53a686b2d5b167b1ffae"></a><!-- doxytag: member="SusyNtTools::passTopTag" ref="aec6cdbb40e7e53a686b2d5b167b1ffae" args="(const LeptonVector &amp;leptons, const JetVector &amp;jets, const Susy::Met *met, int opt=0, float ptJetCut=0, float mEffCut=100)" -->
@@ -313,26 +273,50 @@ template&lt;class T &gt; </td></tr>
 <tr><td class="memTemplParams" colspan="2"><a class="anchor" id="add4f455a419aa18a0ad92993895c330a"></a><!-- doxytag: member="SusyNtTools::dumpObjects" ref="add4f455a419aa18a0ad92993895c330a" args="(const std::vector&lt; T * &gt; &amp;objects)" -->
 template&lt;class T &gt; </td></tr>
 <tr><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>dumpObjects</b> (const std::vector&lt; T * &gt; &amp;objects)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">SumwMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aceb0850b0416939b1366e5eb6a4b2170">buildSumwMap</a> (TChain *chain, bool isSimplifiedModel=false)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a map of MCID -&gt; sumw.  <a href="#aceb0850b0416939b1366e5eb6a4b2170"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aedb74f8a96b8c89c8e1215d73b4fe094"></a><!-- doxytag: member="SusyNtTools::isSherpaSample" ref="aedb74f8a96b8c89c8e1215d73b4fe094" args="(unsigned int mcID)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aedb74f8a96b8c89c8e1215d73b4fe094">isSherpaSample</a> (unsigned int mcID)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sherpa sample check. <br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68ff61a73a21eb909b2f407a46311e10"></a><!-- doxytag: member="SusyNtTools::getSumw" ref="a68ff61a73a21eb909b2f407a46311e10" args="(const Susy::Event *evt, const SumwMap *sumwMap, bool useSumwMap=true, bool useProcSumw=true)" -->
-static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a68ff61a73a21eb909b2f407a46311e10">getSumw</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, const SumwMap *sumwMap, bool useSumwMap=true, bool useProcSumw=true)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the sumw for this event. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b47bbd6a26a5d62933c1cb2dec58fab"></a><!-- doxytag: member="SusyNtTools::getCrossSection" ref="a1b47bbd6a26a5d62933c1cb2dec58fab" args="(const Susy::Event *evt)" -->
-static <br class="typebreak"/>
-SUSY::CrossSectionDB::Process&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a1b47bbd6a26a5d62933c1cb2dec58fab">getCrossSection</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the SUSYTools cross section info for this event. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb7964446b3b624653ae7301faaf77f3"></a><!-- doxytag: member="SusyNtTools::getXsecTimesEff" ref="acb7964446b3b624653ae7301faaf77f3" args="(const Susy::Event *evt, bool useSusyXsec=true, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM)" -->
-static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#acb7964446b3b624653ae7301faaf77f3">getXsecTimesEff</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, bool useSusyXsec=true, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the final cross section times efficiency for this event. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5bf63a5a73027b7b23f0352acfd1f83b"></a><!-- doxytag: member="SusyNtTools::getPileupWeight" ref="a5bf63a5a73027b7b23f0352acfd1f83b" args="(const Susy::Event *evt, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM)" -->
-static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a5bf63a5a73027b7b23f0352acfd1f83b">getPileupWeight</a> (const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *evt, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the pileup weight. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af79b0f547b1cf117784ffc2379c7d3e3"></a><!-- doxytag: member="SusyNtTools::passLAr" ref="af79b0f547b1cf117784ffc2379c7d3e3" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#af79b0f547b1cf117784ffc2379c7d3e3">passLAr</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">No electron or jet in the LAr hole - shouldn't be used anymore. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac07db20eaa0afa09b81d05e0d56dd321"></a><!-- doxytag: member="SusyNtTools::passHotSpot" ref="ac07db20eaa0afa09b81d05e0d56dd321" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ac07db20eaa0afa09b81d05e0d56dd321">passHotSpot</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass Tile hot spot veto. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c15dd64b8639d27dc16d314032e6d27"></a><!-- doxytag: member="SusyNtTools::passBadJet" ref="a8c15dd64b8639d27dc16d314032e6d27" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a8c15dd64b8639d27dc16d314032e6d27">passBadJet</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass the Bad Jet requirement. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb716b6a211c3212aab858441743e3b1"></a><!-- doxytag: member="SusyNtTools::passBadMuon" ref="adb716b6a211c3212aab858441743e3b1" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#adb716b6a211c3212aab858441743e3b1">passBadMuon</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass the Bad Muon requirement. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad214560b611222cd3944e7730281337c"></a><!-- doxytag: member="SusyNtTools::passCosmic" ref="ad214560b611222cd3944e7730281337c" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ad214560b611222cd3944e7730281337c">passCosmic</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">No cosmic muons. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe26f41225ab2db058c0fc71bd319d36"></a><!-- doxytag: member="SusyNtTools::passSmartVeto" ref="afe26f41225ab2db058c0fc71bd319d36" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#afe26f41225ab2db058c0fc71bd319d36">passSmartVeto</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass Smart Veto. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab80f67082139208dee983c10552e829e"></a><!-- doxytag: member="SusyNtTools::passAll" ref="ab80f67082139208dee983c10552e829e" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ab80f67082139208dee983c10552e829e">passAll</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass All the above, incase you don't care about cut flow. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac113ecaaefe88c04b06843e79dfeae64"></a><!-- doxytag: member="SusyNtTools::passGRL" ref="ac113ecaaefe88c04b06843e79dfeae64" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ac113ecaaefe88c04b06843e79dfeae64">passGRL</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass GRL <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a718dc04a4003aa7cb380f2a696fc8adc"></a><!-- doxytag: member="SusyNtTools::passLarErr" ref="a718dc04a4003aa7cb380f2a696fc8adc" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a718dc04a4003aa7cb380f2a696fc8adc">passLarErr</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass LArErr <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4e8c31715e0105c49e1321c33af30f0d"></a><!-- doxytag: member="SusyNtTools::passTileErr" ref="a4e8c31715e0105c49e1321c33af30f0d" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a4e8c31715e0105c49e1321c33af30f0d">passTileErr</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass Tile Err <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9e93296da7f503087ca60c8da99c69e1"></a><!-- doxytag: member="SusyNtTools::passTTCVeto" ref="a9e93296da7f503087ca60c8da99c69e1" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a9e93296da7f503087ca60c8da99c69e1">passTTCVeto</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Pass TTC veto. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3141cf3202ed7fa1cb7a93598d8d7d5a"></a><!-- doxytag: member="SusyNtTools::passGoodVtx" ref="a3141cf3202ed7fa1cb7a93598d8d7d5a" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a3141cf3202ed7fa1cb7a93598d8d7d5a">passGoodVtx</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass primary vertex <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa2043bd3a7aa74f6493801d33fd3b55a"></a><!-- doxytag: member="SusyNtTools::passTileTripCut" ref="aa2043bd3a7aa74f6493801d33fd3b55a" args="(int flag)" -->
+static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aa2043bd3a7aa74f6493801d33fd3b55a">passTileTripCut</a> (int flag)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">pass tile trip cut <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a7c13b3e95241ffbed95fb136fda71d"></a><!-- doxytag: member="SusyNtTools::eventHasSusyPropagators" ref="a4a7c13b3e95241ffbed95fb136fda71d" args="(const std::vector&lt; int &gt; &amp;pdgs, const std::vector&lt; std::vector&lt; int &gt; &gt; &amp;parentIndices)" -->
 static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a4a7c13b3e95241ffbed95fb136fda71d">eventHasSusyPropagators</a> (const std::vector&lt; int &gt; &amp;pdgs, const std::vector&lt; std::vector&lt; int &gt; &gt; &amp;parentIndices)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">look at the MC truth record and determine whether SUSY propagators were involved <br/></td></tr>
@@ -406,31 +390,10 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>findBestZ</b> 
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>findBestZ</b> (uint &amp;j1, uint &amp;j2, const JetVector &amp;jets)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63318415446e73bfa7d5011b81f3c760"></a><!-- doxytag: member="SusyNtTools::findBestW" ref="a63318415446e73bfa7d5011b81f3c760" args="(uint &amp;j1, uint &amp;j2, const JetVector &amp;jets)" -->
 static bool&#160;</td><td class="memItemRight" valign="bottom"><b>findBestW</b> (uint &amp;j1, uint &amp;j2, const JetVector &amp;jets)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab4257bb802be3138c67572aee2402c44"></a><!-- doxytag: member="SusyNtTools::numBJets" ref="ab4257bb802be3138c67572aee2402c44" args="(const JetVector &amp;jets, float weight=MV1_80)" -->
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>numBJets</b> (const JetVector &amp;jets, float weight=MV1_80)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a915db5ea2d03fd934ceb0f4725c0f0c7"></a><!-- doxytag: member="SusyNtTools::hasBJet" ref="a915db5ea2d03fd934ceb0f4725c0f0c7" args="(const JetVector &amp;jets, float weight=MV1_80)" -->
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasBJet</b> (const JetVector &amp;jets, float weight=MV1_80)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a07189558929382ecaf9a79e6126473cf"></a><!-- doxytag: member="SusyNtTools::isBJet" ref="a07189558929382ecaf9a79e6126473cf" args="(const Susy::Jet *jet, float weight=MV1_80)" -->
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isBJet</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet, float weight=MV1_80)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2321ed6c06cfe7c85d238cf79af6d6b"></a><!-- doxytag: member="SusyNtTools::getBJets" ref="af2321ed6c06cfe7c85d238cf79af6d6b" args="(const JetVector &amp;jets, float weight=MV1_80)" -->
-static JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getBJets</b> (const JetVector &amp;jets, float weight=MV1_80)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0fef105d2ff481c39ec1bb111c382a2"></a><!-- doxytag: member="SusyNtTools::getBTagSFJets2Lep" ref="ae0fef105d2ff481c39ec1bb111c382a2" args="(const JetVector &amp;baseJets)" -->
 static JetVector&#160;</td><td class="memItemRight" valign="bottom"><b>getBTagSFJets2Lep</b> (const JetVector &amp;baseJets)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3aad46d9ed0c3c07850e0bd54ac1b431"></a><!-- doxytag: member="SusyNtTools::isCentralLightJet" ref="a3aad46d9ed0c3c07850e0bd54ac1b431" args="(const Susy::Jet *jet, JVFUncertaintyTool *jvfTool, SusyNtSys sys, AnalysisType anaType)" -->
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCentralLightJet</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet, JVFUncertaintyTool *jvfTool, SusyNtSys sys, AnalysisType anaType)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8b354422421b65c2b605b81755aca206"></a><!-- doxytag: member="SusyNtTools::isCentralBJet" ref="a8b354422421b65c2b605b81755aca206" args="(const Susy::Jet *jet)" -->
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCentralBJet</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a55f5df8105a7d9d46f346da29716129a"></a><!-- doxytag: member="SusyNtTools::isForwardJet" ref="a55f5df8105a7d9d46f346da29716129a" args="(const Susy::Jet *jet)" -->
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isForwardJet</b> (const <a class="el" href="classSusy_1_1Jet.html">Susy::Jet</a> *jet)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab2baa54f252c2cb4ee24692b888f6bd"></a><!-- doxytag: member="SusyNtTools::numberOfCLJets" ref="aab2baa54f252c2cb4ee24692b888f6bd" args="(const JetVector &amp;jets, JVFUncertaintyTool *jvfTool, SusyNtSys sys, AnalysisType anaType)" -->
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfCLJets</b> (const JetVector &amp;jets, JVFUncertaintyTool *jvfTool, SusyNtSys sys, AnalysisType anaType)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fb9c0a6d8d5e8d4e27b90cdfa12338d"></a><!-- doxytag: member="SusyNtTools::numberOfCBJets" ref="a5fb9c0a6d8d5e8d4e27b90cdfa12338d" args="(const JetVector &amp;jets)" -->
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfCBJets</b> (const JetVector &amp;jets)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a18dba8fb7d80ed8f15e328763f420ad9"></a><!-- doxytag: member="SusyNtTools::numberOfFJets" ref="a18dba8fb7d80ed8f15e328763f420ad9" args="(const JetVector &amp;jets)" -->
-static int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfFJets</b> (const JetVector &amp;jets)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80373a226eb0ee9123960e3966fadc54"></a><!-- doxytag: member="SusyNtTools::getMetRel" ref="a80373a226eb0ee9123960e3966fadc54" args="(const Susy::Met *met, const LeptonVector &amp;leptons, const JetVector &amp;jets, bool useForward=false)" -->
-static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a80373a226eb0ee9123960e3966fadc54">getMetRel</a> (const <a class="el" href="classSusy_1_1Met.html">Susy::Met</a> *met, const LeptonVector &amp;leptons, const JetVector &amp;jets, bool useForward=false)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">MET Rel. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#aaacfc13898bc61cdb5d2907cbf44da67">getMetRel</a> (const <a class="el" href="classSusy_1_1Met.html">Susy::Met</a> *met, const LeptonVector &amp;leptons, const JetVector &amp;jets)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">MET Rel.  <a href="#aaacfc13898bc61cdb5d2907cbf44da67"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acb86cf50c0789e5fa578daef837e3c93"></a><!-- doxytag: member="SusyNtTools::getMT2" ref="acb86cf50c0789e5fa578daef837e3c93" args="(const LeptonVector &amp;leptons, const Susy::Met *met)" -->
 static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#acb86cf50c0789e5fa578daef837e3c93">getMT2</a> (const LeptonVector &amp;leptons, const <a class="el" href="classSusy_1_1Met.html">Susy::Met</a> *met)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">MT2. <br/></td></tr>
@@ -447,6 +410,15 @@ static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1bf65173170dc97aac7eb8e139f0d0e3"></a><!-- doxytag: member="SusyNtTools::getThrT" ref="a1bf65173170dc97aac7eb8e139f0d0e3" args="(const LeptonVector &amp;leptons)" -->
 static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a1bf65173170dc97aac7eb8e139f0d0e3">getThrT</a> (const LeptonVector &amp;leptons)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Transverse thrust. <br/></td></tr>
+<tr><td colspan="2"><h2><a name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58d180f03204679ca99da1fa864e3138"></a><!-- doxytag: member="SusyNtTools::m_electronSelector" ref="a58d180f03204679ca99da1fa864e3138" args="" -->
+<a class="el" href="classSusy_1_1ElectronSelector.html">ElectronSelector</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_electronSelector</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f46690ebb105799129e26fe60ca40a0"></a><!-- doxytag: member="SusyNtTools::m_muonSelector" ref="a4f46690ebb105799129e26fe60ca40a0" args="" -->
+<a class="el" href="classSusy_1_1MuonSelector.html">MuonSelector</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_muonSelector</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5f841aabe90949877643b8c05ea4d60e"></a><!-- doxytag: member="SusyNtTools::m_jetSelector" ref="a5f841aabe90949877643b8c05ea4d60e" args="" -->
+<a class="el" href="classSusy_1_1JetSelector.html">JetSelector</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a5f841aabe90949877643b8c05ea4d60e">m_jetSelector</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">select jets according to the current analysis settings <br/></td></tr>
 <tr><td colspan="2"><h2><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8087218677f34ea4f6d6f5113d3550d"></a><!-- doxytag: member="SusyNtTools::m_anaType" ref="af8087218677f34ea4f6d6f5113d3550d" args="" -->
@@ -464,54 +436,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a70e51ec6e4bd0a0d14bdc28840cf9a93"></a><!-- doxytag: member="SusyNtTools::m_doIPCut" ref="a70e51ec6e4bd0a0d14bdc28840cf9a93" args="" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a70e51ec6e4bd0a0d14bdc28840cf9a93">m_doIPCut</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">impact parameter cuts <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a59bdc80049d830262ddd40318496e6d6"></a><!-- doxytag: member="SusyNtTools::m_jvfTool" ref="a59bdc80049d830262ddd40318496e6d6" args="" -->
-JVFUncertaintyTool *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#a59bdc80049d830262ddd40318496e6d6">m_jvfTool</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">JVF tool. <br/></td></tr>
-<tr><td colspan="2"><h2><a name="pro-static-attribs"></a>
-Static Protected Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8a3dd1fa3379437838e30fd92608f8e"></a><!-- doxytag: member="SusyNtTools::m_btagTool" ref="ab8a3dd1fa3379437838e30fd92608f8e" args="" -->
-static BTagCalib *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSusyNtTools.html#ab8a3dd1fa3379437838e30fd92608f8e">m_btagTool</a> = NULL</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">BTag tool. <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A class of useful tools for working with SusyNt. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="aceb0850b0416939b1366e5eb6a4b2170"></a><!-- doxytag: member="SusyNtTools::buildSumwMap" ref="aceb0850b0416939b1366e5eb6a4b2170" args="(TChain *chain, bool isSimplifiedModel=false)" -->
+<a class="anchor" id="a3e5f2a2f81072ba872b83544361b3584"></a><!-- doxytag: member="SusyNtTools::getBaselineObjects" ref="a3e5f2a2f81072ba872b83544361b3584" args="(Susy::SusyNtObject *susyNt, ElectronVector &amp;preElecs, MuonVector &amp;preMuons, JetVector &amp;preJets, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SumwMap <a class="el" href="classSusyNtTools.html#aceb0850b0416939b1366e5eb6a4b2170">SusyNtTools::buildSumwMap</a> </td>
-          <td>(</td>
-          <td class="paramtype">TChain *&#160;</td>
-          <td class="paramname"><em>chain</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isSimplifiedModel</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Build a map of MCID -&gt; sumw. </p>
-<p>This method will loop over the input files associated with the TChain. The MCID in the first entry of the tree will be used, so one CANNOT use this if multiple datasets are combined into one SusyNt tree file! The generator weighted cutflow histograms will then be used to calculate the total sumw for each MCID. Each dataset used here must be complete, they CANNOT be spread out across multiple jobs. However, one can have more than one (complete) dataset in the chain. </p>
-
-</div>
-</div>
-<a class="anchor" id="aa7f2fffa4d7929183651a010e87c7abf"></a><!-- doxytag: member="SusyNtTools::getBaselineObjects" ref="aa7f2fffa4d7929183651a010e87c7abf" args="(Susy::SusyNtObject *susyNt, ElectronVector &amp;preElecs, MuonVector &amp;preMuons, JetVector &amp;preJets, ElectronVector &amp;elecs, MuonVector &amp;muons, TauVector &amp;taus, JetVector &amp;jets, SusyNtSys sys, bool selectTaus=false, bool n0150BugFix=false)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classSusyNtTools.html#aa7f2fffa4d7929183651a010e87c7abf">SusyNtTools::getBaselineObjects</a> </td>
+          <td class="memname">void <a class="el" href="classSusyNtTools.html#a3e5f2a2f81072ba872b83544361b3584">SusyNtTools::getBaselineObjects</a> </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classSusy_1_1SusyNtObject.html">Susy::SusyNtObject</a> *&#160;</td>
           <td class="paramname"><em>susyNt</em>, </td>
@@ -568,13 +502,7 @@ static BTagCalib *&#160;</td><td class="memItemRight" valign="bottom"><a class="
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>selectTaus</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>n0150BugFix</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>selectTaus</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -590,63 +518,39 @@ static BTagCalib *&#160;</td><td class="memItemRight" valign="bottom"><a class="
 
 </div>
 </div>
-<a class="anchor" id="a77c0f8b8b056c62e491177b7885d8533"></a><!-- doxytag: member="SusyNtTools::getEventWeight" ref="a77c0f8b8b056c62e491177b7885d8533" args="(const Susy::Event *evt, float lumi=LUMI_A_L, bool useSumwMap=false, const SumwMap *sumwMap=0, bool useProcSumw=false, bool useSusyXsec=false, MCWeighter::WeightSys sys=MCWeighter::Sys_NOM)" -->
+<a class="anchor" id="aaacfc13898bc61cdb5d2907cbf44da67"></a><!-- doxytag: member="SusyNtTools::getMetRel" ref="aaacfc13898bc61cdb5d2907cbf44da67" args="(const Susy::Met *met, const LeptonVector &amp;leptons, const JetVector &amp;jets)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">float <a class="el" href="classSusyNtTools.html#a77c0f8b8b056c62e491177b7885d8533">SusyNtTools::getEventWeight</a> </td>
+          <td class="memname">float <a class="el" href="classSusyNtTools.html#aaacfc13898bc61cdb5d2907cbf44da67">SusyNtTools::getMetRel</a> </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classSusy_1_1Event.html">Susy::Event</a> *&#160;</td>
-          <td class="paramname"><em>evt</em>, </td>
+          <td class="paramtype">const <a class="el" href="classSusy_1_1Met.html">Susy::Met</a> *&#160;</td>
+          <td class="paramname"><em>met</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">float&#160;</td>
-          <td class="paramname"><em>lumi</em> = <code>LUMI_A_L</code>, </td>
+          <td class="paramtype">const LeptonVector &amp;&#160;</td>
+          <td class="paramname"><em>leptons</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useSumwMap</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const SumwMap *&#160;</td>
-          <td class="paramname"><em>sumwMap</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useProcSumw</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>useSusyXsec</em> = <code>false</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">MCWeighter::WeightSys&#160;</td>
-          <td class="paramname"><em>sys</em> = <code>MCWeighter::Sys_NOM</code>&#160;</td>
+          <td class="paramtype">const JetVector &amp;&#160;</td>
+          <td class="paramname"><em>jets</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td><code> [virtual]</code></td>
+          <td></td><td><code> [static]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Get event weight - contains generator, pileup, xsec, and lumi weights. </p>
-<p>Now this machinery is in the <a class="el" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a> class Default weight uses full dataset, currently A-L Pileup weights correspond to same dataset. </p>
+<p>MET Rel. </p>
+<p>Usually built without forward jets; filter jet collection if necessary. </p>
 
 </div>
 </div>
@@ -734,7 +638,7 @@ static BTagCalib *&#160;</td><td class="memItemRight" valign="bottom"><a class="
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">

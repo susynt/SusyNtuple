@@ -47,7 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -86,113 +86,166 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00005"></a>00005 <span class="preprocessor">#include &quot;TString.h&quot;</span>
 <a name="l00006"></a>00006 
 <a name="l00007"></a>00007 <span class="preprocessor">#include &quot;SUSYTools/SUSYCrossSection.h&quot;</span>
-<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;SusyNtuple/SusyNt.h&quot;</span>
+<a name="l00008"></a>00008 <span class="preprocessor">#include &quot;SusyNtuple/SusyDefs.h&quot;</span>
 <a name="l00009"></a>00009 
 <a name="l00010"></a>00010 <span class="preprocessor">#include &lt;string&gt;</span>
-<a name="l00012"></a>00012 
-<a name="l00017"></a><a class="code" href="classMCWeighter.html">00017</a> <span class="keyword">class </span><a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>
-<a name="l00018"></a>00018 {
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020   <span class="keyword">public</span>:
-<a name="l00021"></a>00021 
-<a name="l00022"></a>00022     <span class="comment">//</span>
-<a name="l00023"></a>00023     <span class="comment">// Enums to control weighting options</span>
-<a name="l00024"></a>00024     <span class="comment">//</span>
-<a name="l00025"></a>00025 
-<a name="l00026"></a>00026     <span class="comment">// Sumw method</span>
-<a name="l00027"></a>00027     <span class="keyword">enum</span> SumwMethod
-<a name="l00028"></a>00028     {
-<a name="l00029"></a>00029       Sumw_NT = 0,      <span class="comment">// Use sumw stored in the ntuple</span>
-<a name="l00030"></a>00030       Sumw_MAP          <span class="comment">// Use SumwMap (recommended)</span>
-<a name="l00031"></a>00031       <span class="comment">//Sumw_FILE       // Use a text file for sumw (not supported)</span>
-<a name="l00032"></a>00032     };
-<a name="l00033"></a>00033 
-<a name="l00034"></a>00034     <span class="comment">// Xsec method</span>
-<a name="l00035"></a>00035     <span class="keyword">enum</span> XsecMethod
-<a name="l00036"></a>00036     {
-<a name="l00037"></a>00037       Xsec_NT = 0,      <span class="comment">// Use xsec stored in the ntuple</span>
-<a name="l00038"></a>00038       Xsec_ST           <span class="comment">// Use xsec from SUSYTools (recommended)</span>
-<a name="l00039"></a>00039     };
-<a name="l00040"></a>00040 
-<a name="l00041"></a>00041     <span class="comment">// Systematic</span>
-<a name="l00042"></a>00042     <span class="keyword">enum</span> WeightSys
-<a name="l00043"></a>00043     {
-<a name="l00044"></a>00044       Sys_NOM = 0,
-<a name="l00045"></a>00045       Sys_XSEC_UP,
-<a name="l00046"></a>00046       Sys_XSEC_DN,
-<a name="l00047"></a>00047       Sys_PILEUP_UP,
-<a name="l00048"></a>00048       Sys_PILEUP_DN,
-<a name="l00049"></a>00049       Sys_N
-<a name="l00050"></a>00050     };
+<a name="l00011"></a>00011 
+<a name="l00012"></a>00012 <span class="keyword">class </span>TH1F;
+<a name="l00013"></a>00013 <span class="keyword">namespace </span>Susy{ <span class="keyword">class </span>Event; }
+<a name="l00014"></a>00014 
+<a name="l00016"></a>00016 
+<a name="l00039"></a><a class="code" href="classMCWeighter.html">00039</a> <span class="keyword">class </span><a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>
+<a name="l00040"></a>00040 {
+<a name="l00041"></a>00041 
+<a name="l00042"></a>00042  <span class="keyword">public</span>:
+<a name="l00043"></a><a class="code" href="structMCWeighter_1_1SumwMapKey.html">00043</a>   <span class="keyword">struct </span><a class="code" href="structMCWeighter_1_1SumwMapKey.html">SumwMapKey</a> {
+<a name="l00044"></a>00044     <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> dsid;
+<a name="l00045"></a>00045     <span class="keywordtype">int</span> proc;
+<a name="l00046"></a>00046   <a class="code" href="structMCWeighter_1_1SumwMapKey.html">SumwMapKey</a>(): dsid(0), proc(0) {}
+<a name="l00047"></a>00047   <a class="code" href="structMCWeighter_1_1SumwMapKey.html">SumwMapKey</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> d, <span class="keywordtype">int</span> p): dsid(d), proc(p){}
+<a name="l00048"></a>00048   };
+<a name="l00049"></a>00049 
+<a name="l00050"></a>00050   <span class="keyword">public</span>:
 <a name="l00051"></a>00051 
-<a name="l00052"></a>00052     <span class="comment">//</span>
-<a name="l00053"></a>00053     <span class="comment">// Initialization and configuration</span>
-<a name="l00054"></a>00054     <span class="comment">//</span>
-<a name="l00055"></a>00055 
-<a name="l00056"></a>00056     <span class="comment">// Constructor and destructor</span>
-<a name="l00057"></a>00057     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>(TTree* tree,
-<a name="l00058"></a>00058                std::string xsecDir=<span class="stringliteral">&quot;$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/&quot;</span>);
-<a name="l00059"></a>00059     ~<a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>();
-<a name="l00060"></a>00060 
-<a name="l00062"></a>00062 
-<a name="l00071"></a>00071     <span class="keywordtype">void</span> <a class="code" href="classMCWeighter.html#a406e90f5582be900e439f30692ca5269" title="Build a map of MCID -&gt; sumw.">buildSumwMap</a>(TTree* tree);
-<a name="l00072"></a>00072     <span class="keywordtype">void</span> clearAndRebuildSumwMap(TTree* tree) { m_sumwMap.clear(); <a class="code" href="classMCWeighter.html#a406e90f5582be900e439f30692ca5269" title="Build a map of MCID -&gt; sumw.">buildSumwMap</a>(tree); }
-<a name="l00073"></a>00073     <span class="keywordtype">void</span> dumpSumwMap();
-<a name="l00074"></a>00074 
-<a name="l00076"></a><a class="code" href="classMCWeighter.html#af0130094914bc7dd165a61bcdcde6090">00076</a>     <span class="keywordtype">void</span> <a class="code" href="classMCWeighter.html#af0130094914bc7dd165a61bcdcde6090" title="Specify methods to retrieve sumw and xsec.">setUseProcSumw</a>(<span class="keywordtype">bool</span> useProcSumw=<span class="keyword">true</span>) { m_useProcSumw = useProcSumw; }
-<a name="l00077"></a>00077     <span class="keywordtype">void</span> setSumwMethod(SumwMethod opt=Sumw_MAP) { m_sumwMethod = opt; }
-<a name="l00078"></a>00078     <span class="keywordtype">void</span> setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
-<a name="l00079"></a>00079 
-<a name="l00081"></a>00081 
-<a name="l00083"></a>00083     <span class="keywordtype">float</span> <a class="code" href="classMCWeighter.html#a6dec6b6b68b445f45c0c014df70d5dc1" title="MC Weight includes generator, xsec, lumi, and pileup weights.">getMCWeight</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt, <span class="keywordtype">float</span> lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
-<a name="l00084"></a>00084     <span class="keywordtype">bool</span> sumwmapHasKey(SumwMapKey k);
-<a name="l00085"></a>00085 
-<a name="l00087"></a>00087     <span class="keywordtype">float</span> <a class="code" href="classMCWeighter.html#a6e44bd7f4f6d96f6560087cfe168af90" title="Get sumw for this event.">getSumw</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt);
-<a name="l00089"></a>00089     SUSY::CrossSectionDB::Process <a class="code" href="classMCWeighter.html#aed421e8fb4cd78abf48a289f9926ecca" title="Get cross section for this event.">getCrossSection</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt);
-<a name="l00090"></a>00090     <span class="keywordtype">float</span> getXsecTimesEff(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt, WeightSys sys=Sys_NOM);
-<a name="l00092"></a>00092     <span class="keywordtype">float</span> <a class="code" href="classMCWeighter.html#a9978be33f28230ebc53e52f9e5acd331" title="Get the pileup weight.">getPileupWeight</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt, WeightSys sys=Sys_NOM);
-<a name="l00094"></a>00094 
-<a name="l00097"></a>00097     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>&amp; <a class="code" href="classMCWeighter.html#a1355c8724ec2d7ec6f6722e7b26ca8c1" title="specify the bin used to compute sumw; requires you to call clearAndRebuildSumwMap.">setLabelBinCounter</a>(<span class="keyword">const</span> std::string &amp;v);
-<a name="l00099"></a>00099 
-<a name="l00103"></a>00103     <span class="keywordtype">size_t</span> <a class="code" href="classMCWeighter.html#a3435aa6505f35d6091c5aabbc95bdc52" title="read additional files containing more cross section values">parseAdditionalXsecFile</a>(<span class="keyword">const</span> std::string &amp;filename, <span class="keywordtype">bool</span> verbose);
-<a name="l00105"></a>00105     <span class="keywordtype">size_t</span> <a class="code" href="classMCWeighter.html#ab549959541d9afd071ba6231d02810b0" title="same as parseAdditionalXsecFile, but get any *.txt in a given directory">parseAdditionalXsecDirectory</a>(<span class="keyword">const</span> std::string &amp;dir, <span class="keywordtype">bool</span> verbose);
-<a name="l00107"></a>00107 
-<a name="l00111"></a><a class="code" href="classMCWeighter.html#a09a8f40fd327d325b988007e4cc6e5bf">00111</a>     <span class="keyword">static</span> std::string <a class="code" href="classMCWeighter.html#a09a8f40fd327d325b988007e4cc6e5bf" title="default counter used to compute the normalization">defaultLabelBinCounter</a>() { <span class="keywordflow">return</span> <span class="stringliteral">&quot;SusyProp Veto&quot;</span>; }
-<a name="l00113"></a>00113 
-<a name="l00121"></a>00121     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classMCWeighter.html#a261aaa064c91f711c24e1078cb4ef3b9" title="determine whether a given file is formatted following the CrossSectionDB format">isFormattedAsSusyCrossSection</a>(std::string filename, <span class="keywordtype">bool</span> verbose);
-<a name="l00123"></a>00123     <span class="keyword">static</span> std::vector&lt;int&gt; <a class="code" href="classMCWeighter.html#a76fcc78a03c034f40270c39a495b95cd" title="given a text file containing cross sections for CrossSectionDB, return the dsids">readDsidsFromSusyCrossSectionFile</a>(std::string filename, <span class="keywordtype">bool</span> verbose);
-<a name="l00124"></a>00124  <span class="keyword">private</span>:
-<a name="l00125"></a>00125     <span class="keywordtype">void</span> buildSumwMapFromTree(TTree* tree);
-<a name="l00126"></a>00126     <span class="keywordtype">void</span> buildSumwMapFromChain(TChain* chain);
-<a name="l00127"></a>00127 
-<a name="l00128"></a>00128     <span class="keywordtype">bool</span> m_useProcSumw;
-<a name="l00129"></a>00129 
-<a name="l00130"></a>00130     <span class="comment">// typedefs, for convenience</span>
-<a name="l00131"></a>00131     <span class="keyword">typedef</span> std::pair&lt;int, int&gt; intpair;
-<a name="l00132"></a>00132     <span class="keyword">typedef</span> std::map&lt;intpair, SUSY::CrossSectionDB::Process&gt; XSecMap;
-<a name="l00133"></a>00133 
-<a name="l00134"></a>00134     SumwMethod m_sumwMethod;
-<a name="l00135"></a>00135     XsecMethod m_xsecMethod;
-<a name="l00136"></a>00136 
-<a name="l00137"></a>00137     <span class="comment">// Map of (MCID, proc) -&gt; sumw</span>
-<a name="l00138"></a>00138     SumwMap m_sumwMap;
-<a name="l00139"></a>00139 
-<a name="l00141"></a>00141     SUSY::CrossSectionDB m_xsecDB;
-<a name="l00142"></a>00142     XSecMap m_xsecCache;
+<a name="l00052"></a>00052   <span class="comment">//typedef std::pair&lt;unsigned int, int&gt; SumwMapKey;</span>
+<a name="l00053"></a>00053 <span class="keyword">typedef</span> std::map&lt;SumwMapKey, float&gt; SumwMap;
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055     <span class="comment">//</span>
+<a name="l00056"></a>00056     <span class="comment">// Enums to control weighting options</span>
+<a name="l00057"></a>00057     <span class="comment">//</span>
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059     <span class="comment">// Sumw method</span>
+<a name="l00060"></a>00060     <span class="keyword">enum</span> SumwMethod
+<a name="l00061"></a>00061     {
+<a name="l00062"></a>00062       Sumw_NT = 0,      <span class="comment">// Use sumw stored in the ntuple</span>
+<a name="l00063"></a>00063       Sumw_MAP          <span class="comment">// Use SumwMap (recommended)</span>
+<a name="l00064"></a>00064       <span class="comment">//Sumw_FILE       // Use a text file for sumw (not supported)</span>
+<a name="l00065"></a>00065     };
+<a name="l00066"></a>00066 
+<a name="l00067"></a>00067     <span class="comment">// Xsec method</span>
+<a name="l00068"></a>00068     <span class="keyword">enum</span> XsecMethod
+<a name="l00069"></a>00069     {
+<a name="l00070"></a>00070       Xsec_NT = 0,      <span class="comment">// Use xsec stored in the ntuple</span>
+<a name="l00071"></a>00071       Xsec_ST           <span class="comment">// Use xsec from SUSYTools (recommended)</span>
+<a name="l00072"></a>00072     };
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074     <span class="comment">// Systematic</span>
+<a name="l00075"></a>00075     <span class="keyword">enum</span> WeightSys
+<a name="l00076"></a>00076     {
+<a name="l00077"></a>00077       Sys_NOM = 0,
+<a name="l00078"></a>00078       Sys_XSEC_UP,
+<a name="l00079"></a>00079       Sys_XSEC_DN,
+<a name="l00080"></a>00080       Sys_PILEUP_UP,
+<a name="l00081"></a>00081       Sys_PILEUP_DN,
+<a name="l00082"></a>00082       Sys_N
+<a name="l00083"></a>00083     };
+<a name="l00084"></a>00084 
+<a name="l00086"></a><a class="code" href="structMCWeighter_1_1ProcessValidator.html">00086</a>     <span class="keyword">struct </span><a class="code" href="structMCWeighter_1_1ProcessValidator.html" title="Helper to keep track of events with invalid process id.">ProcessValidator</a> {
+<a name="l00087"></a>00087     <a class="code" href="structMCWeighter_1_1ProcessValidator.html" title="Helper to keep track of events with invalid process id.">ProcessValidator</a>() : counts_total(0), counts_invalid(0), max_warnings(4), <a class="code" href="structMCWeighter_1_1ProcessValidator.html#ac58becb95575c7f55c58afd1bf0a1dcf" title="status from the current call to validate()">valid</a>(<span class="keyword">false</span>), <a class="code" href="structMCWeighter_1_1ProcessValidator.html#a25db2a7bf93b798034e001e718bb536f" title="procid from the last call to validate()">last</a>(0) {}
+<a name="l00088"></a>00088       <span class="keywordtype">size_t</span> counts_total;
+<a name="l00089"></a>00089       <span class="keywordtype">size_t</span> counts_invalid;
+<a name="l00090"></a>00090       <span class="keywordtype">size_t</span> max_warnings;
+<a name="l00091"></a>00091       <a class="code" href="structMCWeighter_1_1ProcessValidator.html" title="Helper to keep track of events with invalid process id.">ProcessValidator</a>&amp; zero_hack(<span class="keywordtype">int</span> &amp;value) { value = 0; <a class="code" href="structMCWeighter_1_1ProcessValidator.html#ac58becb95575c7f55c58afd1bf0a1dcf" title="status from the current call to validate()">valid</a> = <span class="keyword">true</span>; <span class="keywordflow">return</span> *<span class="keyword">this</span>; }
+<a name="l00095"></a>00095       <a class="code" href="structMCWeighter_1_1ProcessValidator.html" title="Helper to keep track of events with invalid process id.">ProcessValidator</a>&amp; <a class="code" href="structMCWeighter_1_1ProcessValidator.html#a4660fc341b9e10b8b5672200d5a670e9">validate</a>(<span class="keywordtype">int</span> &amp;value);
+<a name="l00096"></a><a class="code" href="structMCWeighter_1_1ProcessValidator.html#ac58becb95575c7f55c58afd1bf0a1dcf">00096</a>       <span class="keywordtype">bool</span> <a class="code" href="structMCWeighter_1_1ProcessValidator.html#ac58becb95575c7f55c58afd1bf0a1dcf" title="status from the current call to validate()">valid</a>; 
+<a name="l00097"></a><a class="code" href="structMCWeighter_1_1ProcessValidator.html#a25db2a7bf93b798034e001e718bb536f">00097</a>       <span class="keywordtype">int</span> <a class="code" href="structMCWeighter_1_1ProcessValidator.html#a25db2a7bf93b798034e001e718bb536f" title="procid from the last call to validate()">last</a>; 
+<a name="l00098"></a>00098       std::string summary() <span class="keyword">const</span>;
+<a name="l00100"></a>00100 
+<a name="l00106"></a>00106       <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="structMCWeighter_1_1ProcessValidator.html#a465e883b1f73ca5608f1f3b1bcf32fcb" title="convert our &#39;unknown&#39; value (-1) to the SUSYTools &#39;unknown&#39; value (0)">convertDefaultSusyNt2DefaultSusyTools</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> &amp;v);
+<a name="l00107"></a><a class="code" href="structMCWeighter_1_1ProcessValidator.html#af475198d476ca715dd9e33a24d222fea">00107</a>       <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="structMCWeighter_1_1ProcessValidator.html#af475198d476ca715dd9e33a24d222fea" title="see SusyNtMaker::selectEvent() (was -1 for old prod, then 0)">defaultSusyNt</a> = -1; 
+<a name="l00108"></a><a class="code" href="structMCWeighter_1_1ProcessValidator.html#a642751c10a3b145f98eb6cd686d47fe5">00108</a>       <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="structMCWeighter_1_1ProcessValidator.html#a642751c10a3b145f98eb6cd686d47fe5" title="see SUSYCrossSection.h: CrossSectionDB::Key c&#39;tor">defaultSusyTools</a> = 0; 
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110     };
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112     <span class="comment">//</span>
+<a name="l00113"></a>00113     <span class="comment">// Initialization and configuration</span>
+<a name="l00114"></a>00114     <span class="comment">//</span>
+<a name="l00115"></a>00115 
+<a name="l00116"></a>00116     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>();
+<a name="l00117"></a>00117 
+<a name="l00118"></a>00118     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>(TTree* tree,
+<a name="l00119"></a>00119                std::string xsecDir = <span class="stringliteral">&quot;$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/&quot;</span>);
+<a name="l00120"></a>00120 
+<a name="l00121"></a>00121     ~<a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>();
+<a name="l00122"></a>00122 
+<a name="l00124"></a>00124 
+<a name="l00133"></a>00133     <span class="keywordtype">void</span> <a class="code" href="classMCWeighter.html#a406e90f5582be900e439f30692ca5269" title="Build a map of MCID -&gt; sumw.">buildSumwMap</a>(TTree* tree);
+<a name="l00134"></a>00134     <span class="keywordtype">void</span> clearAndRebuildSumwMap(TTree* tree) { m_sumwMap.clear(); <a class="code" href="classMCWeighter.html#a406e90f5582be900e439f30692ca5269" title="Build a map of MCID -&gt; sumw.">buildSumwMap</a>(tree); }
+<a name="l00135"></a>00135     <span class="keywordtype">void</span> dumpSumwMap() <span class="keyword">const</span>;
+<a name="l00136"></a>00136     <span class="keywordtype">void</span> dumpXsecCache() <span class="keyword">const</span>;
+<a name="l00137"></a>00137     <span class="keywordtype">void</span> dumpXsecDb() <span class="keyword">const</span>;
+<a name="l00138"></a>00138 
+<a name="l00140"></a><a class="code" href="classMCWeighter.html#af0130094914bc7dd165a61bcdcde6090">00140</a>     <span class="keywordtype">void</span> <a class="code" href="classMCWeighter.html#af0130094914bc7dd165a61bcdcde6090" title="Specify methods to retrieve sumw and xsec.">setUseProcSumw</a>(<span class="keywordtype">bool</span> useProcSumw=<span class="keyword">true</span>) { m_useProcSumw = useProcSumw; }
+<a name="l00141"></a>00141     <span class="keywordtype">void</span> setSumwMethod(SumwMethod opt=Sumw_MAP) { m_sumwMethod = opt; }
+<a name="l00142"></a>00142     <span class="keywordtype">void</span> setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
 <a name="l00143"></a>00143 
-<a name="l00144"></a>00144     std::string m_labelBinCounter; 
-<a name="l00145"></a>00145     <span class="keywordtype">size_t</span> m_warningCounter;
-<a name="l00146"></a>00146 };
+<a name="l00145"></a>00145     <span class="keywordtype">float</span> <a class="code" href="classMCWeighter.html#a6dec6b6b68b445f45c0c014df70d5dc1" title="MC Weight includes generator, xsec, lumi, and pileup weights.">getMCWeight</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt, <span class="keywordtype">float</span> lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
+<a name="l00146"></a>00146     <span class="keywordtype">bool</span> sumwmapHasKey(SumwMapKey k);
 <a name="l00147"></a>00147 
-<a name="l00148"></a>00148 
-<a name="l00149"></a>00149 <span class="preprocessor">#endif</span>
+<a name="l00149"></a>00149     <span class="keywordtype">float</span> <a class="code" href="classMCWeighter.html#a6e44bd7f4f6d96f6560087cfe168af90" title="Get sumw for this event.">getSumw</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt);
+<a name="l00151"></a>00151     SUSY::CrossSectionDB::Process <a class="code" href="classMCWeighter.html#aed421e8fb4cd78abf48a289f9926ecca" title="Get cross section for this event.">getCrossSection</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt);
+<a name="l00152"></a>00152     <span class="keywordtype">float</span> getXsecTimesEff(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt, WeightSys sys=Sys_NOM);
+<a name="l00154"></a>00154     <span class="keywordtype">float</span> <a class="code" href="classMCWeighter.html#a9978be33f28230ebc53e52f9e5acd331" title="Get the pileup weight.">getPileupWeight</a>(<span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>* evt, WeightSys sys=Sys_NOM);
+<a name="l00156"></a>00156 
+<a name="l00160"></a>00160     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>&amp; <a class="code" href="classMCWeighter.html#a1355c8724ec2d7ec6f6722e7b26ca8c1" title="specify the bin used to compute sumw">setLabelBinCounter</a>(<span class="keyword">const</span> std::string &amp;v);
+<a name="l00162"></a>00162 
+<a name="l00166"></a>00166     <span class="keywordtype">size_t</span> <a class="code" href="classMCWeighter.html#a3435aa6505f35d6091c5aabbc95bdc52" title="read additional files containing more cross section values">parseAdditionalXsecFile</a>(<span class="keyword">const</span> std::string &amp;filename, <span class="keywordtype">bool</span> verbose);
+<a name="l00168"></a>00168     <span class="keywordtype">size_t</span> <a class="code" href="classMCWeighter.html#ab549959541d9afd071ba6231d02810b0" title="same as parseAdditionalXsecFile, but get any *.txt in a given directory">parseAdditionalXsecDirectory</a>(<span class="keyword">const</span> std::string &amp;dir, <span class="keywordtype">bool</span> verbose);
+<a name="l00170"></a>00170     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>&amp; <a class="code" href="classMCWeighter.html#ab72f163afc68a06d5dc81ddfa06b3df9" title="toggle m_allowInvalid option">setAllowInvalid</a>(<span class="keywordtype">bool</span> v);
+<a name="l00172"></a>00172     <a class="code" href="classMCWeighter.html" title="A class to handle the normalization of Monte Carlo.">MCWeighter</a>&amp; <a class="code" href="classMCWeighter.html#af191620eabb7236c3a8c011ef792901f" title="toggle m_verbose">setVerbose</a>(<span class="keywordtype">bool</span> v);
+<a name="l00174"></a>00174 
+<a name="l00179"></a>00179     <span class="keyword">static</span> std::string <a class="code" href="classMCWeighter.html#af9951f4b6bae9f495d6c39c01fd83aaf" title="counter used to compute the normalization">defaultLabelBinCounter</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> &amp;dsid, <span class="keywordtype">bool</span> verbose);
+<a name="l00181"></a>00181     <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classMCWeighter.html#a265eed406968f9b44801be9aba8bd5b4" title="print a warning if the histo doesn&#39;t have a bin with the given label">checkHistoHasBin</a>(<span class="keyword">const</span> TH1F &amp;histo, <span class="keyword">const</span> std::string &amp;binLabel);
+<a name="l00183"></a><a class="code" href="classMCWeighter.html#a2ec588bc19ab7918e8edea9331dc0808">00183</a>     <span class="keyword">static</span> std::string <a class="code" href="classMCWeighter.html#a2ec588bc19ab7918e8edea9331dc0808" title="default directory from which we read the xsec files for SUSY::CrossSectionDB">defaultXsecDir</a>() {
+<a name="l00184"></a>00184       <span class="keywordflow">return</span> std::string(<span class="stringliteral">&quot;$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/&quot;</span>);
+<a name="l00185"></a>00185     }
+<a name="l00187"></a>00187     <span class="keyword">static</span> std::vector&lt;std::string&gt; <a class="code" href="classMCWeighter.html#ac49d6e9eb4604b72ea44a105978628f1" title="a list of the xsec files containing known simplified models">xsecFilesForSimplifiedModels</a>();
+<a name="l00189"></a>00189     <span class="keyword">static</span> std::vector&lt;int&gt; <a class="code" href="classMCWeighter.html#ace4a52bfbc36ad5ac91a7eed2fce2e3c" title="a list of known SM dsids from xsecFilesForSimplifiedModels()">dsidsForKnownSimpliedModelSamples</a>(<span class="keywordtype">bool</span> verbose);
+<a name="l00191"></a>00191 
+<a name="l00199"></a>00199     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classMCWeighter.html#a261aaa064c91f711c24e1078cb4ef3b9" title="determine whether a given file is formatted following the CrossSectionDB format">isFormattedAsSusyCrossSection</a>(std::string filename, <span class="keywordtype">bool</span> verbose);
+<a name="l00201"></a>00201     <span class="keyword">static</span> std::vector&lt;int&gt; <a class="code" href="classMCWeighter.html#a76fcc78a03c034f40270c39a495b95cd" title="given a text file containing cross sections for CrossSectionDB, return the dsids">readDsidsFromSusyCrossSectionFile</a>(std::string filename, <span class="keywordtype">bool</span> verbose);
+<a name="l00203"></a>00203     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classMCWeighter.html#aa74db6ec2714b846ff361136313ba46b" title="given a line from a xsec file, parse the dsid; return false if cannot parse">readDsidsFromSusyCrossSectionLine</a>(<span class="keyword">const</span> std::string &amp;line, <span class="keywordtype">int</span> &amp;dsid, <span class="keywordtype">bool</span> verbose);
+<a name="l00205"></a>00205 
+<a name="l00211"></a>00211     <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="classMCWeighter.html#a8fd90b6d8152494bcef05b66f3cb40f3" title="guess from dsid whether this sample is a simplified model one">isSimplifiedModel</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> &amp;dsid, <span class="keywordtype">bool</span> verbose);
+<a name="l00213"></a>00213     <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="classSusy_1_1Event.html" title="Event class.">Susy::Event</a>&amp; <a class="code" href="classMCWeighter.html#a8806028803f5c04a0d753a365afd3224" title="read the first event from the tree (often used to retrieve sample parameters)">readFirstEvent</a>(TTree* tree);
+<a name="l00215"></a>00215     <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="classMCWeighter.html#a0b2b5a41159a50d5a855aa4ebac73f9d" title="extract &#39;XYZ&#39; from &#39;prefixXYZ&#39;">extractProcessFromCutflowHistoname</a>(<span class="keyword">const</span> std::string &amp;histoName, <span class="keyword">const</span> std::string &amp;prefix);
+<a name="l00216"></a>00216  <span class="keyword">private</span>:
+<a name="l00217"></a>00217     <span class="keywordtype">void</span> buildSumwMapFromTree(TTree* tree);
+<a name="l00218"></a>00218     <span class="keywordtype">void</span> buildSumwMapFromChain(TChain* chain);
+<a name="l00219"></a>00219 
+<a name="l00220"></a>00220     <span class="keywordtype">bool</span> m_useProcSumw;
+<a name="l00221"></a>00221 
+<a name="l00222"></a>00222     <span class="comment">// typedefs, for convenience</span>
+<a name="l00223"></a>00223     <span class="keyword">typedef</span> std::pair&lt;int, int&gt; intpair;
+<a name="l00224"></a>00224     <span class="keyword">typedef</span> std::map&lt;intpair, SUSY::CrossSectionDB::Process&gt; XSecMap;
+<a name="l00225"></a>00225 
+<a name="l00226"></a>00226     SumwMethod m_sumwMethod;
+<a name="l00227"></a>00227     XsecMethod m_xsecMethod;
+<a name="l00228"></a>00228 
+<a name="l00229"></a>00229     <span class="comment">// Map of (MCID, proc) -&gt; sumw</span>
+<a name="l00230"></a>00230     SumwMap m_sumwMap;
+<a name="l00231"></a>00231 
+<a name="l00233"></a>00233     SUSY::CrossSectionDB m_xsecDB;
+<a name="l00234"></a>00234     XSecMap m_xsecCache;
+<a name="l00235"></a>00235 
+<a name="l00236"></a>00236     std::string m_labelBinCounter; 
+<a name="l00237"></a>00237     <span class="keywordtype">size_t</span> m_warningCounter;
+<a name="l00238"></a>00238     <span class="keywordtype">bool</span> m_allowInvalid; 
+<a name="l00239"></a>00239     ProcessValidator m_procidValidator; 
+<a name="l00240"></a>00240     <span class="keywordtype">bool</span> m_verbose; 
+<a name="l00241"></a>00241 };
+<a name="l00242"></a>00242 
+<a name="l00244"></a>00244 <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator&lt;(<span class="keyword">const</span> <a class="code" href="structMCWeighter_1_1SumwMapKey.html">MCWeighter::SumwMapKey</a> &amp;a, <span class="keyword">const</span> <a class="code" href="structMCWeighter_1_1SumwMapKey.html">MCWeighter::SumwMapKey</a> &amp;b)
+<a name="l00245"></a>00245 { <span class="keywordflow">return</span> a.dsid&lt;b.dsid &amp;&amp; a.proc&lt;b.proc; }
+<a name="l00246"></a>00246 
+<a name="l00247"></a>00247 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerator</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
