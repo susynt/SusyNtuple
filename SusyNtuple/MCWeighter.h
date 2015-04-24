@@ -14,16 +14,16 @@ namespace Susy{ class Event; }
 
 /// A class to handle the normalization of Monte Carlo
 /**
-   A MC sample is normalized with the factor \f$\sigma * lumi / \Sum
+   A MC sample is normalized with the factor \f$\sigma * lumi / \sum
    w\f$ This factor multiplies the generator event weight and all the
    other factors (pileup, lepton efficiency, trigger scale factors
    etc.)  Some samples can include multiple processes. This class
-   holds a map of the \f$\Sum w\f$ values for each process. The
-   \f$\Sum w\f$ is computed from the cutflow histograms that are
+   holds a map of the \f$\sum w\f$ values for each process. The
+   \f$\sum w\f$ is computed from the cutflow histograms that are
    stored with the susyNt tree.
 
    The user can specify the bin whose contents are used to compute
-   \Sum w; otherwise defaultLabelBinCounter() will be used.
+   \sum w; otherwise defaultLabelBinCounter() will be used.
 
    Two types of histograms are considered:
    - for samples that contain only one process (most of them)
