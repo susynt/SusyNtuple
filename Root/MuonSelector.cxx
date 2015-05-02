@@ -36,7 +36,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_PTCONE30_SLOPE_DATA          = 0.01098;
         MU_PTCONE30_SLOPE_MC            = 0.00627;
         MU_PTCONE30_PT_CUT              = 0.12;
-        MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        //MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        MU_PTCONE30_PT_CUT              = 0.12;
         MU_ETCONE30_K1_DATA             = 0.0648;
         MU_ETCONE30_K2_DATA             = 0.00098;
         MU_ETCONE30_K1_MC               = 0.0692;
@@ -66,7 +67,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_PTCONE30_SLOPE_DATA          = 0.01098;
         MU_PTCONE30_SLOPE_MC            = 0.00627;
         MU_PTCONE30_PT_CUT              = 0.12;
-        MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        //MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        MU_PTCONE30_PT_CUT              = 0.12;
         MU_ETCONE30_K1_DATA             = 0.0648;
         MU_ETCONE30_K2_DATA             = 0.00098;
         MU_ETCONE30_K1_MC               = 0.0692;
@@ -96,7 +98,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_PTCONE30_SLOPE_DATA          = 0.01098;
         MU_PTCONE30_SLOPE_MC            = 0.00627;
         MU_PTCONE30_PT_CUT              = 0.12;
-        MU_PTCONE30ELSTYLE_PT_CUT       = 0.06;
+        //MU_PTCONE30ELSTYLE_PT_CUT       = 0.06;
+        MU_PTCONE30_PT_CUT              = 0.06;
         MU_ETCONE30_K1_DATA             = 0.0648;
         MU_ETCONE30_K2_DATA             = 0.00098;
         MU_ETCONE30_K1_MC               = 0.0692;
@@ -130,7 +133,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_PTCONE30_SLOPE_DATA          = 0.01098;
         MU_PTCONE30_SLOPE_MC            = 0.00627;
         MU_PTCONE30_PT_CUT              = 0.12;
-        MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        //MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        MU_PTCONE30_PT_CUT              = 0.12;
         MU_ETCONE30_K1_DATA             = 0.0648;
         MU_ETCONE30_K2_DATA             = 0.00098;
         MU_ETCONE30_K1_MC               = 0.0692;
@@ -226,14 +230,14 @@ bool MuonSelector::muPassPtIso(const Muon* mu,
         if(ptcone30/mu->Pt() >= MU_PTCONE30_PT_CUT) return false;
     }
     else if(m_2lepWH) {
-        float ptcone30 = mu->ptcone30ElStyle;
+        float ptcone30 = mu->ptcone30;
         float pt = mu->Pt();
-        if(ptcone30/std::min(pt, MU_ISO_PT_THRS) >= MU_PTCONE30ELSTYLE_PT_CUT) return false;
+        if(ptcone30/std::min(pt, MU_ISO_PT_THRS) >= MU_PTCONE30_PT_CUT) return false;
     }
     else {
-        float ptcone30 = mu->ptcone30ElStyle;
+        float ptcone30 = mu->ptcone30;
         float pt = mu->Pt();
-        if(ptcone30/pt >= MU_PTCONE30ELSTYLE_PT_CUT) return false;
+        if(ptcone30/pt >= MU_PTCONE30_PT_CUT) return false;
     }
     return true;
 }

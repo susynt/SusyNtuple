@@ -41,5 +41,8 @@ bool isUKLepton(int Origin, int Type, int mcMatchPdgId, bool isTau = false);
 ///** @brief Returns the type of fake: 0=prompt 1=conversion 2=HF 3=LF 4=unknown. */
 int fakeType(int Origin, int Type, int mcMatchPdgId, bool isTau = false);
 
+///** @brief Check if the electron is prompt */
+bool isPromptElectron(int type, int origin);
+
 
 #endif

@@ -160,7 +160,7 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     /////////////////////////////
     // Electron ID
     /////////////////////////////
-    if (!ele->tightPP) return false;
+    if (!ele->tightLLH) return false;
      
     /////////////////////////////
     // Impact parameter
@@ -200,7 +200,7 @@ bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
     /////////////////////////////
     // Electron ID
     /////////////////////////////
-    if(!ele->tightPP) return false;
+    if(!ele->tightLLH) return false;
 
     /////////////////////////////
     // Impact parameter
@@ -247,7 +247,7 @@ float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
                                      unsigned int nVtx, bool isMC, bool removeLeps)
 {
     float slope = isMC ? EL_TOPOCONE30_SLOPE_MC_CUT : EL_TOPOCONE30_SLOPE_DATA_CUT;
-    float etcone = ele->topoEtcone30Corr - slope*nVtx;
+    float etcone = ele->etconetopo30 - slope*nVtx;
     if(removeLeps) {
         for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++) {
             const Electron* e2 = baseElectrons[iEl];

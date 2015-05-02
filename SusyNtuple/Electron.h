@@ -24,35 +24,19 @@ public:
     float clusPhi;            ///< CaloCluster phi
     float trackPt;            ///< ID track pt
 
-    // isEM quality flags
-    bool mediumPP;            ///< isEM medium++
-    bool tightPP;             ///< isEM tight++
-    bool looseLLH;            ///< isEM looseLLH
-    bool mediumLLH;           ///< isEM mediumLLH
-    bool veryTightLLH;        ///< isEM veryTightLLH
+    //LLH quality flags
+    bool veryLooseLLH;        ///< veryLooseLLH
+    bool looseLLH;            ///< looseLLH
+    bool mediumLLH;           ///< mediumLLH
+    bool tightLLH;            ///< tightLLH
 
-    // New isolation variables, put them here for now
-    float etcone30Corr;       ///< Pt and ED corrected etcone iso //AT:2014-10-28: obsolete
-    float topoEtcone30Corr;   ///< Corrected topo clus based iso  //AT:2014-10-28: to rename topoEtcone30
+    //Without d0 cut
+    bool looseLLH_nod0;       ///< looseLLH
+    bool mediumLLH_nod0;      ///< mediumLLH
+    bool tightLLH_nod0;       ///< tightLLH
 
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
 
-    float effSF_LLH;              ///< Efficiency scale factor for LLH electron
-    float errEffSF_LLH;           ///< Uncertainty on the efficiency scale factor LLH electron
-
-    // Systematic scale factors
-    /*
-      float ees_z_up;           ///< Energy Scale Z + sigma
-      float ees_z_dn;           ///< Energy Scale Z - sigma
-      float ees_mat_up;         ///< Energy Scale Material + sigma
-      float ees_mat_dn;         ///< Energy Scale Material - sigma
-      float ees_ps_up;          ///< Energy Scale Presampler + sigma
-      float ees_ps_dn;          ///< Energy Scale Presampler - sigma
-      float ees_low_up;         ///< Energy Scale Low Pt + sigma
-      float ees_low_dn;         ///< Energy Scale Low Pt - sigma
-      float eer_up;             ///< Energy Reso. + sigma
-      float eer_dn;             ///< Energy Reso. - sigma
-    */
     //AT: This is insane >50!
     float res_all_dn;
     float res_all_up;
@@ -110,8 +94,6 @@ public:
     float scale_mom_dn;
     float scale_mom_up;
 
-
-
     // Polymorphism, baby!!
     bool isEle() const { return true;  }
     bool isMu()  const { return false; }
@@ -125,16 +107,10 @@ public:
     /// Clear vars
     void clear(){
       clusE = clusEta = clusPhi = trackPt = 0;
-      mediumPP = tightPP = false;
-      looseLLH= mediumLLH = veryTightLLH = false;
-      etcone30Corr = topoEtcone30Corr = 0;
+      veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
+      looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       isChargeFlip = false;
-      effSF_LLH = 1;
-      errEffSF_LLH = 0;
-      //	ees_z_up = ees_z_dn = ees_mat_up = ees_mat_dn = 0;
-      //ees_ps_up = ees_ps_dn = ees_low_up = ees_low_dn = 0;
-      //	eer_up = eer_dn = 0;
-
+      
       res_all_dn= res_all_up= res_matCalo_dn= res_matCalo_up=0;
       res_matCryo_dn= res_matCryo_up= res_matGap_dn= res_matGap_up=0;
       res_matId_dn= res_matId_up= res_nom= res_none=0;
@@ -149,8 +125,6 @@ public:
       scale_matId_up=scale_nom=scale_none=0;
       scale_ped_dn=scale_ped_up=scale_ps_dn=scale_ps_up=scale_s12_dn=scale_s12_up=0;
       scale_ZeeStat_dn=scale_ZeeStat_up=scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
-
-
 
       Lepton::clear();
     }

@@ -15,27 +15,14 @@ Electron::Electron(const Electron &rhs):
   clusEta(rhs.clusEta),
   clusPhi(rhs.clusPhi),
   trackPt(rhs.trackPt),
-  mediumPP(rhs.mediumPP),
-  tightPP(rhs.tightPP),
+  veryLooseLLH(rhs.veryLooseLLH),
   looseLLH(rhs.looseLLH),
   mediumLLH(rhs.mediumLLH),
-  veryTightLLH(rhs.veryTightLLH),
-  etcone30Corr(rhs.etcone30Corr),
-  topoEtcone30Corr(rhs.topoEtcone30Corr),
+  tightLLH(rhs.tightLLH),
+  looseLLH_nod0(rhs.looseLLH_nod0),
+  mediumLLH_nod0(rhs.mediumLLH_nod0),
+  tightLLH_nod0(rhs.tightLLH_nod0),
   isChargeFlip(rhs.isChargeFlip),
-  effSF_LLH(rhs.effSF_LLH),
-  errEffSF_LLH(rhs.errEffSF_LLH),
-  /*
-  ees_z_up(rhs.ees_z_up),
-  ees_z_dn(rhs.ees_z_dn),  
-  ees_mat_up(rhs.ees_mat_up),
-  ees_mat_dn(rhs.ees_mat_dn),
-  ees_ps_up(rhs.ees_ps_up),
-  ees_ps_dn(rhs. ees_ps_dn),
-  ees_low_up(rhs.ees_low_up),
-  ees_low_dn(rhs.ees_low_dn),
-  eer_up(rhs.eer_up),
-  eer_dn(rhs.eer_dn)*/
   res_all_dn(rhs.res_all_dn),
   res_all_up(rhs.res_all_up),
   res_matCalo_dn(rhs.res_matCalo_dn),
@@ -104,27 +91,15 @@ Electron& Electron::operator=(const Electron &rhs)
     clusEta = rhs.clusEta;
     clusPhi = rhs.clusPhi;
     trackPt = rhs.trackPt;
-    mediumPP = rhs.mediumPP;
-    tightPP = rhs.tightPP;
+    veryLooseLLH = rhs.veryLooseLLH;
     looseLLH = rhs.looseLLH;
     mediumLLH = rhs.mediumLLH;
-    veryTightLLH = rhs.veryTightLLH;
-    etcone30Corr = rhs.etcone30Corr;
-    topoEtcone30Corr = rhs.topoEtcone30Corr;
+    tightLLH = rhs.tightLLH;
+    looseLLH_nod0 = rhs.looseLLH_nod0;
+    mediumLLH_nod0 = rhs.mediumLLH_nod0;
+    tightLLH_nod0 = rhs.tightLLH_nod0;
     isChargeFlip = rhs.isChargeFlip;
-    effSF_LLH = rhs.effSF_LLH;
-    errEffSF_LLH = rhs.errEffSF_LLH;
-    /*
-    ees_z_up = rhs.ees_z_up;
-    ees_z_dn = rhs.ees_z_dn;  
-    ees_mat_up = rhs.ees_mat_up;
-    ees_mat_dn = rhs.ees_mat_dn;
-    ees_ps_up = rhs.ees_ps_up;
-    ees_ps_dn = rhs. ees_ps_dn;
-    ees_low_up = rhs.ees_low_up;
-    ees_low_dn = rhs.ees_low_dn;
-    eer_up = rhs.eer_up;
-    eer_dn = rhs.eer_dn;*/
+   
     res_all_dn = rhs.res_all_dn;
     res_all_up = res_all_up;
     res_matCalo_dn = rhs.res_matCalo_dn;
@@ -192,21 +167,7 @@ void Electron::setState(int sys)
   if(sys == NtSys::NOM) return;
   
   float sf = 0;
-  //if     ( sys == NtSys_EES_UP ) sf = ees_up;
-  //else if( sys == NtSys_EES_DN ) sf = ees_dn;
-  /*
-  if     ( sys == NtSys::EES_Z_UP   ) sf = ees_z_up;
-  else if( sys == NtSys::EES_Z_DN   ) sf = ees_z_dn;
-  else if( sys == NtSys::EES_MAT_UP ) sf = ees_mat_up;
-  else if( sys == NtSys::EES_MAT_DN ) sf = ees_mat_dn;
-  else if( sys == NtSys::EES_PS_UP  ) sf = ees_ps_up;
-  else if( sys == NtSys::EES_PS_DN  ) sf = ees_ps_dn;
-  else if( sys == NtSys::EES_LOW_UP ) sf = ees_low_up;
-  else if( sys == NtSys::EES_LOW_DN ) sf = ees_low_dn;
-  else if( sys == NtSys::EER_UP     ) sf = eer_up;
-  else if( sys == NtSys::EER_DN     ) sf = eer_dn;
-  */
-
+  
   if     ( sys == NtSys::EG_RESOLUTION_ALL_DN ) sf = res_all_dn;
   else if( sys == NtSys::EG_RESOLUTION_ALL_UP ) sf = res_all_up;
   else if( sys == NtSys::EG_RESOLUTION_MATERIALCALO_DN ) sf = res_matCalo_dn;
@@ -274,11 +235,8 @@ void Electron::print() const
   cout.precision(2);
   cout << fixed << "El : q " << setw(2) << q << " pt " << setw(6) << Pt() << " eta " << setw(5) << Eta() 
        << " phi " << setw(5) << Phi()
-       << " tight " << tightPP 
+       << " tight " << tightLLH 
        << " type " << mcType << " origin " << mcOrigin 
-       //<< " index " << idx 
-       // No way do we want to see this every time we print
-       //<< " ees_up " << ees_up << " ees_dn " << ees_dn << " eer_up " << eer_up << " eer_dn " << eer_dn
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);

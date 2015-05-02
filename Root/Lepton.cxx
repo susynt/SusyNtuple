@@ -12,8 +12,13 @@ Lepton::Lepton(const Lepton &rhs):
   isBaseline(rhs.isBaseline),
   isSignal(rhs.isSignal),
   etcone20(rhs.etcone20),
+  etcone30(rhs.etcone30),
+  etconetopo20(rhs.etconetopo20),
+  etconetopo30(rhs.etconetopo30),
   ptcone20(rhs.ptcone20),
   ptcone30(rhs.ptcone30),
+  ptvarcone20(rhs.ptvarcone20),
+  ptvarcone30(rhs.ptvarcone30),
   d0(rhs.d0),
   errD0(rhs.errD0),
   z0(rhs.z0),
@@ -39,8 +44,13 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     isBaseline = rhs.isBaseline;
     isSignal = rhs.isSignal;
     etcone20 = rhs.etcone20;
+    etcone30 = rhs.etcone30;
+    etconetopo20 = rhs.etconetopo20;
+    etconetopo30 = rhs.etconetopo30;
     ptcone20 = rhs.ptcone20;
     ptcone30 = rhs.ptcone30;
+    ptvarcone20  = rhs.ptvarcone20;
+    ptvarcone30  = rhs.ptvarcone30;
     d0 = rhs.d0;
     errD0 = rhs.errD0;
     z0 = rhs.z0;

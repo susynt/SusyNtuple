@@ -66,3 +66,13 @@ int fakeType(int Origin, int Type, int mcMatchPdgId, bool isTau)
   else if (!(Type == 0 && Origin == 0)) return LF; // Light Flavour
   else return UK; // Unknown
 }
+
+//____________________________________________________________________________//
+bool isPromptElectron(int type, int origin)
+{
+    return ((type==21 || type==1 || type==2 || type==3) && 
+            (origin==1 || origin==12 || origin==13 || 
+             origin==10 || origin==14 || origin==15 || 
+             origin==16 || origin==17 || origin==22 || 
+             origin==43 || origin==44)); // should we add those from leptonic tau decay?
+}

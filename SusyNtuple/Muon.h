@@ -22,25 +22,16 @@ public:
     float idTrackPt;          ///< ID track pt
     float idTrackEta;         ///< ID track eta
     float idTrackPhi;         ///< ID track phi
-    int idTrackQ;             ///< ID track charge
+    int   idTrackQ;           ///< ID track charge
+    float idTrackTheta;       ///< ID track theta //AT: redundant ?
+    float idTrackQoverP;      ///< ID track q/p
 
     float msTrackPt;          ///< MS track pt
     float msTrackEta;         ///< MS track eta
     float msTrackPhi;         ///< MS track phi
-    int msTrackQ;             ///< ID track charge
-
-    float thetaPV;            ///< Theta extrapolated to PV, by request.
-    float etcone30;           ///< etcone iso
-    float ptcone30ElStyle;    ///< ptcone with electron style tracks
-
-    // Variables for charge misid
-    // \TODO: Redundant variables?!
-    float id_theta;
-    float id_phi;
-    float id_qoverp;
-    float ms_theta;
-    float ms_phi;
-    float ms_qoverp;
+    int   msTrackQ;           ///< MS track charge
+    float msTrackTheta;       ///< MS track theta //AT: redundant ?
+    float msTrackQoverP;      ///< MS track q/p
 
     bool isBadMuon;           ///< Bad muon flag from SUSYTools
     bool isCosmic;            ///< Cosmic muon flag from SUSYTools
@@ -67,9 +58,8 @@ public:
       idTrackPt = idTrackEta = idTrackPhi = 0;
       msTrackPt = msTrackEta = msTrackPhi = 0;
       idTrackQ  = msTrackQ = 0;
-      thetaPV = etcone30 = ptcone30ElStyle = 0;
-      id_theta = id_phi = id_qoverp = 0;
-      ms_theta = ms_phi = ms_qoverp = 0;
+      idTrackTheta = idTrackQoverP = 0;
+      msTrackTheta = msTrackQoverP = 0;
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
 

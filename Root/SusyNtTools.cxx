@@ -358,6 +358,9 @@ Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiF
 
     return met;
 }
+/*--------------------------------------------------------------------------------*/
+// Get Track Met
+/*--------------------------------------------------------------------------------*/
 MetTrack* SusyNtTools::getMetTrack(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiForMetSys)
 {
     // Right now not being clever. Could maybe make sys index correspond to 
@@ -464,7 +467,9 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
                                    const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                    uint nVtx, bool isMC, bool removeLepsFromIso)
 {
-    if (!ele->tightPP) return false;
+/*
+  //AT OBSOLETE -- In ElectronSelector
+    if (!ele->tightLLH) return false;
 
     // Impact parameter
     if (m_doIPCut) {
@@ -497,8 +502,8 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
         else
             if (etcone / pt >= ELECTRON_TOPOCONE30_PT_CUT) return false;
     }
-
-    return true;
+*/
+    return false;
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -506,6 +511,8 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
                                const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                uint nVtx, bool isMC, bool removeLepsFromIso)
 {
+/*
+  //AT OBSOLETE -- In MuonSelector
     // Impact parameter
     if (m_doIPCut) {
         // All ana using unbiased IP
@@ -522,7 +529,7 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
             if (ptcone30 / mu->Pt() >= MUON_PTCONE30_PT_CUT) return false;
         }
         else {
-            float ptcone30 = mu->ptcone30ElStyle; // no corrections at the moment
+            float ptcone30 = mu->ptcone30; // no corrections at the moment. AT: default  ptcone in xAOD
             float pt = mu->Pt();
             if (m_anaType == AnalysisType::Ana_2LepWH) {
                 if (ptcone30 / std::min(pt, MUON_ISO_PT_THRS) >= MUON_PTCONE30ELSTYLE_PT_WH_CUT) return false;
@@ -542,8 +549,8 @@ bool SusyNtTools::isSignalMuon(const Muon* mu,
         float pt = mu->Pt();
         if (pt == 0.0 || (etcone30 / std::min(pt, MUON_ISO_PT_THRS) >= MUON_ETCONE30_PT_WH_CUT)) return false;
     }
-
-    return true;
+*/
+    return false;
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalTau(const Tau* tau, TauID tauJetID, TauID tauEleID, TauID tauMuoID)
@@ -554,23 +561,29 @@ bool SusyNtTools::isSignalTau(const Tau* tau, TauID tauJetID, TauID tauEleID, Ta
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
 {
-    if (!ele->tightPP) return false;
+    /*
+  //AT OBSOLETE -- In ElectronSelector
+    if (!ele->tightLLH) return false;
     // Impact parameter
     if (m_doIPCut) {
         if (fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;
         if (fabs(ele->z0SinTheta()) >= ELECTRON_Z0_SINTHETA_CUT) return false;
     }
-    return true;
+    */
+    return false;
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
 {
+    /*
+    //AT OBSOLETE -- In MuonSelector
     // Impact parameter
     if (m_doIPCut) {
         if (fabs(mu->d0Sig()) >= MUON_D0SIG_CUT) return false;
         if (fabs(mu->z0SinTheta()) >= MUON_Z0_SINTHETA_CUT) return false;
     }
-    return true;
+    */
+    return false;
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -580,6 +593,8 @@ float SusyNtTools::elPtConeCorr(const Electron* e,
                                 const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                 uint /*nVtx*/, bool /*isMC*/, bool removeLeps)
 {
+/*
+  //AT OBSOLETE -- In ElectronSelector
     float ptcone = e->ptcone30;
     if (removeLeps) {
         for (uint iEl = 0; iEl < baseElectrons.size(); iEl++) {
@@ -597,14 +612,18 @@ float SusyNtTools::elPtConeCorr(const Electron* e,
         }
     }
     return ptcone;
+*/
+    return -999;
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::elEtTopoConeCorr(const Electron* e,
                                     const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                     uint nVtx, bool isMC, bool removeLeps)
 {
+/*
+  //AT OBSOLETE -- In ElectronSelector
     float slope = isMC ? ELECTRON_TOPOCONE30_SLOPE_MC : ELECTRON_TOPOCONE30_SLOPE_DATA;
-    float etcone = e->topoEtcone30Corr - slope*nVtx;
+    float etcone = e->etconetopo30 - slope*nVtx;
     if (removeLeps) {
         for (uint iEl = 0; iEl < baseElectrons.size(); iEl++) {
             const Electron* e2 = baseElectrons[iEl];
@@ -615,12 +634,16 @@ float SusyNtTools::elEtTopoConeCorr(const Electron* e,
         }
     }
     return etcone;
+*/
+    return -999;
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::muPtConeCorr(const Muon* mu,
                                 const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                 uint nVtx, bool isMC, bool removeLeps)
 {
+/*
+  //AT OBSOLETE -- In MuonSelector
     float slope = isMC ? MUON_PTCONE30_SLOPE_MC : MUON_PTCONE30_SLOPE_DATA;
     float ptcone = mu->ptcone30 - slope*nVtx;
     if (removeLeps) {
@@ -639,12 +662,15 @@ float SusyNtTools::muPtConeCorr(const Muon* mu,
         }
     }
     return ptcone;
+*/
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::muEtConeCorr(const Muon* mu,
                                 const ElectronVector& baseElectrons, const MuonVector& baseMuons,
                                 uint nVtx, bool isMC, bool removeLeps)
 {
+/*
+  //AT OBSOLETE -- In MuonSelector
     float k1 = isMC ? MUON_ETCONE30_K1_MC : MUON_ETCONE30_K1_DATA;
     float k2 = isMC ? MUON_ETCONE30_K2_MC : MUON_ETCONE30_K2_DATA;
     float etcone = mu->etcone30 - k1*nVtx - k2*nVtx*nVtx;
@@ -657,6 +683,8 @@ float SusyNtTools::muEtConeCorr(const Muon* mu,
         }
     }
     return etcone;
+*/
+    return -999;
 }
 
 /*--------------------------------------------------------------------------------*/

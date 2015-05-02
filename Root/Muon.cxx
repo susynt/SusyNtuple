@@ -17,19 +17,14 @@ Muon::Muon(const Muon &rhs):
   idTrackEta(rhs.idTrackEta),
   idTrackPhi(rhs.idTrackPhi),
   idTrackQ(rhs.idTrackQ),
+  idTrackTheta(rhs.idTrackTheta),
+  idTrackQoverP(rhs.idTrackQoverP),
   msTrackPt(rhs.msTrackPt),
   msTrackEta(rhs.msTrackEta),
   msTrackPhi(rhs.msTrackPhi),
   msTrackQ(rhs.msTrackQ),
-  thetaPV(rhs.thetaPV),
-  etcone30(rhs.etcone30),
-  ptcone30ElStyle(rhs.ptcone30ElStyle),
-  id_theta(rhs.id_theta),
-  id_phi(rhs.id_phi),
-  id_qoverp(rhs.id_qoverp),
-  ms_theta(rhs.ms_theta),
-  ms_phi(rhs.ms_phi),
-  ms_qoverp(rhs.ms_qoverp),
+  msTrackTheta(rhs.msTrackTheta),
+  msTrackQoverP(rhs.msTrackQoverP),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
   ms_up(rhs.ms_up),
@@ -52,19 +47,14 @@ Muon& Muon::operator=(const Muon &rhs)
     idTrackEta = rhs.idTrackEta;
     idTrackPhi = rhs.idTrackPhi;
     idTrackQ = rhs.idTrackQ;
+    idTrackTheta = rhs.idTrackTheta;
+    idTrackQoverP = rhs.idTrackQoverP;
     msTrackPt = rhs.msTrackPt;
     msTrackEta = rhs.msTrackEta;
     msTrackPhi = rhs.msTrackPhi;
     msTrackQ = rhs.msTrackQ;
-    thetaPV = rhs.thetaPV;
-    etcone30 = rhs.etcone30;
-    ptcone30ElStyle = rhs.ptcone30ElStyle;
-    id_theta = rhs.id_theta;
-    id_phi = rhs.id_phi;
-    id_qoverp = rhs.id_qoverp;
-    ms_theta = rhs.ms_theta;
-    ms_phi = rhs.ms_phi;
-    ms_qoverp = rhs.ms_qoverp;
+    msTrackTheta = rhs.msTrackTheta;
+    msTrackQoverP = rhs.msTrackQoverP;
     isBadMuon = rhs.isBadMuon;
     isCosmic = rhs.isCosmic;
     ms_up = rhs.ms_up;
@@ -105,8 +95,6 @@ void Muon::print() const
        << " phi " << setw(5) << Phi()
        << " cb " << isCombined
        << " type " << mcType << " origin " << mcOrigin 
-       // No way do we want to see this every time we print
-       //<< " ms_up " << ms_up << " ms_dn " << ms_dn << " id_up " << id_up << " id_dn " << id_dn
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);
