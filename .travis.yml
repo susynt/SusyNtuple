@@ -10,7 +10,6 @@ python:
 before_install:
   - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
-  - sudo apt-get install -qq  doxygen graphviz
 env:
   global:
      secure: MZDZhrKlxAlBmWmQV/xCN5xdfkDTKYzKvuzYDR3kQjz6JCYnCG2O4PZ3w3jAhOW/xqe/4dD+Se1HQl79FXUy+fQN0AfkLgZFObabYOEYtNhYpDxhz7rwe6RH0pOB1Qvp/pj50FfZZSjc5hdpBfMOstVmD4UgTl+TKYd/eLP0hFU=
@@ -73,6 +72,7 @@ script:
 #  # run the 2l cutflow
 #  - Susy2LepCF -i mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
 after_success:
+  - sudo apt-get install -qq  doxygen graphviz
   # from SusyNtuple/run, go back to the base dir and run doxygen if necessary
   - cd ${TRAVIS_BUILD_DIR}
   - doc/run_doxygen.sh
