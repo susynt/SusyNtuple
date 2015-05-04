@@ -66,7 +66,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Muon, 7);
+    ClassDef(Muon, 8);
 };
 } // Susy
 #endif

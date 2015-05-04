@@ -80,7 +80,7 @@ public:
         etcone20 = etcone30
             = etconetopo20 = etconetopo30
             = ptcone20 = ptcone30 
-            = ptvarcone20 = ptvarcone30;
+            = ptvarcone20 = ptvarcone30 = 0;
         d0 = errD0 = z0 = errZ0 = 0;
         mcType = mcOrigin = 0;
         matched2TruthLepton = false;
@@ -92,7 +92,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 13);
+    ClassDef(Lepton, 14);
 };
 } // Susy
 #endif

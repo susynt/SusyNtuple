@@ -129,7 +129,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 6);
+    ClassDef(Electron, 7);
 };
 } //Susy
 #endif
