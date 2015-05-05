@@ -10,7 +10,7 @@
 namespace Susy {
 
     enum class eleID {
-        veryLooseLLH=0,
+        veryLooseLLH,
         looseLLH,
         mediumLLH,
         tightLLH,
