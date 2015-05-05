@@ -12,6 +12,7 @@
 #include "SusyNtuple/JetSelector.h"
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/ElectronSelector.h"
+#include "SusyNtuple/OverlapTools.h"
 #include "SUSYTools/SUSYCrossSection.h"
 
 using namespace Susy;
@@ -34,6 +35,7 @@ public:
         m_electronSelector.setAnalysis(A);
         m_muonSelector.setAnalysis(A);
         m_jetSelector.setAnalysis(A);
+        m_overlapTool.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
     };
 
@@ -145,7 +147,7 @@ public:
     // Methods for performing overlap removal
     //
 
-    /// Perform all overlap on pre objects
+/*    /// Perform all overlap on pre objects
     virtual void performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets);
 
     /// e-e overlap
@@ -173,7 +175,7 @@ public:
     /// t-j overlap
     void t_j_overlap(TauVector& taus, JetVector& jets, float minDr,
                      bool removeJets = true);
-
+*/
     /// Msfos cuts now applied along with overlap removal
     void removeSFOSPair(ElectronVector& elecs, float MllCut);
     void removeSFOSPair(MuonVector& muons, float MllCut);
@@ -406,6 +408,7 @@ public:
     ElectronSelector m_electronSelector;
     MuonSelector m_muonSelector;
     JetSelector m_jetSelector; ///< select jets according to the current analysis settings
+    OverlapTools m_overlapTool; ///< tool to perform the analysis' OR procedure
 
 protected:
 
