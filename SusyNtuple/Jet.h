@@ -23,6 +23,7 @@ public:
     float emfrac;             ///< EM fraction
     int truthLabel;           ///< Flavor truth label
     bool matchTruth;          ///< Matches truth jet
+    int nTracks;              ///< Number of tracks associated with jet
 
     // btagging
     float sv0;                ///< SV0 btag weight
@@ -71,7 +72,7 @@ public:
 
     // Clear vars
     void clear(){
-      jvf = jvt = truthLabel = 0;
+      jvf = jvt = truthLabel = nTracks = 0;
       matchTruth = false;
       detEta = 0;
       emfrac = 0;

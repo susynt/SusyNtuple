@@ -19,6 +19,7 @@ Jet::Jet(const Jet &rhs):
   emfrac(rhs.emfrac),
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
+  nTracks(rhs.nTracks),
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
@@ -62,6 +63,7 @@ Jet& Jet::operator=(const Jet &rhs)
     emfrac = rhs.emfrac;
     truthLabel = rhs.truthLabel;
     matchTruth = rhs.matchTruth;
+    nTracks = rhs.nTracks;
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
     mv1 = rhs.mv1;
