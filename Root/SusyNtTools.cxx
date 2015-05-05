@@ -659,6 +659,7 @@ float SusyNtTools::muPtConeCorr(const Muon* mu,
     }
     return ptcone;
 */
+    return -999;
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::muEtConeCorr(const Muon* mu,
