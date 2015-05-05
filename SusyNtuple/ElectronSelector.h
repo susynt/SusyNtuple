@@ -9,7 +9,7 @@
 
 namespace Susy {
 
-    enum class eleID {
+    enum class electronId {
         veryLooseLLH,
         looseLLH,
         mediumLLH,
@@ -98,7 +98,7 @@ namespace Susy {
         bool m_doElEtconeCut;
         bool m_doMuEtconeCut;
         
-        eleID m_eleID;    ///< electron quality requirement (selected from eleID enum)
+        electronId m_eleID;    ///< electron quality requirement (selected from eleID enum)
 
         ///////////////////////////////
         // Available analyses
