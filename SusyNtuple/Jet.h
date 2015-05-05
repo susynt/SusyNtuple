@@ -96,7 +96,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 13);
+    ClassDef(Jet, 14);
 };
 } // Susy
 #endif
