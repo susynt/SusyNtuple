@@ -68,7 +68,7 @@ public:
       sys = 0;
     }
 
-    ClassDef(Met, 4);
+    ClassDef(Met, 5);
 };
 } // Susy
 #endif
