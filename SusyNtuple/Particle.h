@@ -17,9 +17,6 @@ public:
     /** Assignment operator */
     Particle& operator=(const Particle &);
 
-    // Index in the D3PD; might not be necessary
-    unsigned int idx;
-
     // Nominal pt, eta, phi, m, by request
     float pt;
     float eta;
@@ -33,7 +30,6 @@ public:
 
     void clear() {
       TLorentzVector::Clear();
-      idx = 999;      // This is not a very good choice...
       pt = eta = phi = m = 0;
     }
 

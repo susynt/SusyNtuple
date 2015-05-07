@@ -18,7 +18,7 @@ public:
     Tau& operator=(const Tau &);
 
     int q;                    ///< Charge
-    int author;               ///< reconstruction author
+    int author;               ///< author
     int nTrack;               ///< number of tracks
     float eleBDT;             ///< electron BDT score
     float jetBDT;             ///< jet BDT score
