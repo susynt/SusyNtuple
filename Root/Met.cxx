@@ -15,32 +15,24 @@ Met::Met(const Met &rhs):
   Et(rhs.Et),
   phi(rhs.phi),
   sumet(rhs.sumet),
-  refEle(rhs.refEle),
-  refEle_etx(rhs.refEle_etx),
-  refEle_ety(rhs.refEle_ety),
+  refEle_et(rhs.refEle_et),
+  refEle_phi(rhs.refEle_phi),
   refEle_sumet(rhs.refEle_sumet),
-  refMuo(rhs.refMuo),
-  refMuo_etx(rhs.refMuo_etx),
-  refMuo_ety(rhs.refMuo_ety),
-  refMuo_sumet(rhs.refMuo_sumet),
-  refJet(rhs.refJet),
-  refJet_etx(rhs.refJet_etx),
-  refJet_ety(rhs.refJet_ety),
-  refJet_sumet(rhs.refJet_sumet),
-  softJet(rhs.softJet),
-  softJet_etx(rhs.softJet_etx),
-  softJet_ety(rhs.softJet_ety),
-  refGamma(rhs.refGamma),
-  refGamma_etx(rhs.refGamma_etx),
-  refGamma_ety(rhs.refGamma_ety),
+  refGamma_et(rhs.refGamma_et),
+  refGamma_phi(rhs.refGamma_phi),
   refGamma_sumet(rhs.refGamma_sumet),
-  refCell(rhs.refCell),
-  refCell_etx(rhs.refCell_etx),
-  refCell_ety(rhs.refCell_ety),
-  softTerm(rhs.softTerm),
-  softTerm_etx(rhs.softTerm_etx),
-  softTerm_ety(rhs.softTerm_ety),
+  refTau_et(rhs.refTau_et),
+  refTau_phi(rhs.refTau_phi),
+  refTau_sumet(rhs.refTau_sumet),
+  refJet_et(rhs.refJet_et),
+  refJet_phi(rhs.refJet_phi),
+  refJet_sumet(rhs.refJet_sumet),
+  softTerm_et(rhs.softTerm_et),
+  softTerm_phi(rhs.softTerm_phi),
   softTerm_sumet(rhs.softTerm_sumet),
+  refMuo_et(rhs.refMuo_et),
+  refMuo_phi(rhs.refMuo_phi),
+  refMuo_sumet(rhs.refMuo_sumet),
   sys(rhs.sys)
 {
 }
@@ -54,31 +46,24 @@ Met& Met::operator=(const Met &rhs)
     Et = rhs.Et; 
     phi = rhs.phi; 
     sumet = rhs.sumet;
-    refEle = rhs.refEle; 
-    refEle_etx = rhs.refEle_etx; 
-    refEle_ety = rhs.refEle_ety; 
+    refEle_et = rhs.refEle_et; 
+    refEle_phi = rhs.refEle_phi; 
     refEle_sumet = rhs.refEle_sumet; 
-    refMuo = rhs.refMuo; 
-    refMuo_etx = rhs.refMuo_etx; 
-    refMuo_ety = rhs.refMuo_ety; 
-    refMuo_sumet = rhs.refMuo_sumet; 
-    refJet = rhs.refJet; 
-    refJet_etx = rhs.refJet_etx; 
-    refJet_ety = rhs.refJet_ety; 
+    refGamma_et = rhs.refGamma_et; 
+    refGamma_phi = rhs.refGamma_phi; 
+    refGamma_sumet = rhs.refGamma_sumet;
+    refTau_et = rhs.refTau_et; 
+    refTau_phi = rhs.refTau_phi; 
+    refTau_sumet = rhs.refTau_sumet; 
+    refJet_et = rhs.refJet_et; 
+    refJet_phi = rhs.refJet_phi; 
     refJet_sumet = rhs.refJet_sumet; 
-    softJet = rhs.softJet; 
-    softJet_etx = rhs.softJet_etx; 
-    softJet_ety = rhs.softJet_ety; 
-    refGamma = rhs.refGamma; 
-    refGamma_etx = rhs.refGamma_etx; 
-    refGamma_ety = rhs.refGamma_ety; 
-    refGamma_sumet = rhs.refGamma_sumet; 
-    refCell = rhs.refCell; 
-    refCell_etx = rhs.refCell_etx; 
-    refCell_ety = rhs.refCell_ety; 
-    softTerm_etx = rhs.softTerm_etx;
-    softTerm_ety = rhs.softTerm_ety;
+    softTerm_et = rhs.softTerm_et;
+    softTerm_phi = rhs.softTerm_phi;
     softTerm_sumet = rhs.softTerm_sumet;
+    refMuo_et = rhs.refMuo_et; 
+    refMuo_phi = rhs.refMuo_phi; 
+    refMuo_sumet = rhs.refMuo_sumet; 
     sys = rhs.sys; 
   }
   return *this;
