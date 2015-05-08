@@ -60,10 +60,6 @@ public:
     std::vector<float> relativeNC;
     std::vector<float> singlePart;
 
-    // Jet-Met Weights
-    float met_wpx;
-    float met_wpy;
-
     // Shift energy for systematic
     void setState(int sys);
 
@@ -82,7 +78,6 @@ public:
       bch_corr_jet = bch_corr_cell = 0;
       isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;
       jer = jes_up = jes_dn = 0;
-      met_wpx = met_wpy = 0;
 
       bjes.resize(2,0.0);
       effNp.resize(6*2,0.0);
@@ -96,7 +91,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 14);
+    ClassDef(Jet, 15);
 };
 } // Susy
 #endif

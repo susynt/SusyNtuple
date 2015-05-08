@@ -45,9 +45,7 @@ Jet::Jet(const Jet &rhs):
   pileup(rhs.pileup),
   punchThrough(rhs.punchThrough),
   relativeNC(rhs.relativeNC),
-  singlePart(rhs.singlePart),
-  met_wpx(rhs.met_wpx),
-  met_wpy(rhs.met_wpy)
+  singlePart(rhs.singlePart)
 { 
 }
 /*--------------------------------------------------------------------------------*/
@@ -89,8 +87,6 @@ Jet& Jet::operator=(const Jet &rhs)
     punchThrough=rhs.punchThrough;
     relativeNC=rhs.relativeNC;
     singlePart=rhs.singlePart;
-    met_wpx = rhs.met_wpx;
-    met_wpy = rhs.met_wpy;
   }
   return *this;
 }
