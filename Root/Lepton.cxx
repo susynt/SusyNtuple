@@ -30,6 +30,10 @@ Lepton::Lepton(const Lepton &rhs):
   truthType(rhs.truthType),
   effSF(rhs.effSF),
   errEffSF(rhs.errEffSF),
+  errEffSF_uncor_up(rhs.errEffSF_uncor_up),
+  errEffSF_uncor_dn(rhs.errEffSF_uncor_dn),
+  errEffSF_cor_up(rhs.errEffSF_cor_up),
+  errEffSF_cor_dn(rhs.errEffSF_cor_dn),
   trigFlags(rhs.trigFlags)
 {
 }
