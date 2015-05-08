@@ -30,10 +30,12 @@ public:
     int eleBDTTight;          ///< ele BDT working point
     int muonVeto;             ///< muon veto flag
 
-    bool trueTau;             ///< trueTauAssocSmall_matched d3pd variable
+    bool trueTau;             ///< matched to true tau
 
+    int truthType;            ///< Tau truth classification 
+
+//obsolete -remove 
     bool matched2TruthLepton; ///< flag from RecoTruthMatch::Matched2TruthLepton
-    int truthType;            ///< RecoTauMatch::TauFakeType
     int detailedTruthType;    ///< RecoTauMatch::TauDetailedFakeType
 
     // Taus have a lot of SFs
@@ -49,13 +51,10 @@ public:
     float errMediumEVetoSF;   ///< Medium efficiency scale factor uncertainty
     float tightEVetoSF;       ///< Tight efficiency scale factor
     float errTightEVetoSF;    ///< Tight efficiency scale factor uncertainty
-    //float looseEleSF
-    //float effSF;            ///< Efficiency scale factor
-    //float errEffSF;         ///< Uncertainty on the efficiency scale factor
-
+ 
     // Systematic factors
-    float sme_total_up;             ///< tau energy scale + sigma
-    float sme_total_dn;             ///< tau energy scale - sigma
+    float sme_total_up;       ///< tau energy scale + sigma
+    float sme_total_dn;       ///< tau energy scale - sigma
 
     long long trigFlags;      ///< Bit word representing matched trigger chains
 
@@ -72,22 +71,21 @@ public:
     void print() const;
 
     void clear(){
-      author = nTrack = 0;
-      eleBDT = jetBDT = 0;
-      jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
-      eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
-      muonVeto = 0;
-      trueTau = false;
-      matched2TruthLepton = false;
-      truthType = detailedTruthType = -1;
-      //effSF = errEffSF = 0;
-      looseEffSF = mediumEffSF = tightEffSF = 1;
-      errLooseEffSF = errMediumEffSF = errTightEffSF = 0;
-      looseEVetoSF = mediumEVetoSF = tightEVetoSF = 1;
-      errLooseEVetoSF = errMediumEVetoSF = errTightEVetoSF = 0;
-      sme_total_up = sme_total_dn = 0;
-      trigFlags = 0;
-      Particle::clear();
+        q = author = nTrack = 0;
+        eleBDT = jetBDT = 0;
+        jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
+        eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
+        muonVeto = 0;
+        trueTau = false;
+        matched2TruthLepton = false;
+        truthType = detailedTruthType = -1;
+        looseEffSF = mediumEffSF = tightEffSF = 1;
+        errLooseEffSF = errMediumEffSF = errTightEffSF = 0;
+        looseEVetoSF = mediumEVetoSF = tightEVetoSF = 1;
+        errLooseEVetoSF = errMediumEVetoSF = errTightEVetoSF = 0;
+        sme_total_up = sme_total_dn = 0;
+        trigFlags = 0;
+        Particle::clear();
     }
 
     ClassDef(Tau, 7);
