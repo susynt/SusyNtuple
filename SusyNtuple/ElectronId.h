@@ -2,9 +2,11 @@
 #ifndef SUSY_ELECTRONID_H
 #define SUSY_ELECTRONID_H
 
+#include <string>
+
 namespace Susy
 {
-  enum eleID{
+enum ElectronId{
     TightLLH=0
     ,MediumLLH
     ,LooseLLH
@@ -12,22 +14,15 @@ namespace Susy
     ,TightLLH_nod0
     ,MediumLLH_nod0
     ,LooseLLH_nod0
-    ,eleIDInvalid
-  };
-//   static const eleID eleID_first() { return eleID::TightLLH; }
-//   static const eleID eleID_last() { return eleID::eleIDInvalid; }
+    ,ElectronIdInvalid
+};
+
+/// Human-readable names
+std::string ElectronId2str(const ElectronId &e);
+
+//   static const ElectronId ElectronId_first() { return ElectronId::TightLLH; }
+//   static const ElectronId ElectronId_last() { return ElectronId::ElectronIdInvalid; }
 //   /// assumes consecutive values without gaps
-// // static const size_t eleID_num_values = (1 + static_cast<size_t>(eleID_last()) - static_cast<size_t>(eleID_first()));
-// static const size_t eleID_num_values = 10;
-  const std::string eleIDNames[] = {
-    "TightLLH"
-    ,"MediumLLH"
-    ,"LooseLLH"
-    ,"VeryLooseLLH"
-    ,"TightLLH_nod0"
-    ,"MediumLLH_nod0"
-    ,"LooseLLH_nod0"
-    ,"eleIDInvalid"
-  };
+// // static const size_t ElectronId_num_values = (1 + static_cast<size_t>(ElectronId_last()) - static_cast<size_t>(ElectronId_first()));
 } // Susy
 #endif

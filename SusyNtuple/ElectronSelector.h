@@ -88,7 +88,7 @@ namespace Susy {
         bool m_doElEtconeCut;
         bool m_doMuEtconeCut;
         
-        eleID m_eleID;    ///< electron quality requirement (selected from eleID enum)
+        ElectronId m_eleId;    ///< electron quality requirement (selected from eleID enum)
 
         ///////////////////////////////
         // Available analyses
