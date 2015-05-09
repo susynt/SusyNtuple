@@ -5,26 +5,16 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
+#include "SusyNtuple/ElectronId.h"
 
 
 namespace Susy {
 
-    enum class electronId {
-        veryLooseLLH,
-        looseLLH,
-        mediumLLH,
-        tightLLH,
-        looseLLH_nod0,
-        mediumLLH_nod0,
-        tightLLH_nod0,
-        kUnknown
-    };
-
-    /// A class to select electrons
 
     class Electron;
     class Muon;
 
+    /// A class to select electrons
     class ElectronSelector
     {
         public:
@@ -98,7 +88,7 @@ namespace Susy {
         bool m_doElEtconeCut;
         bool m_doMuEtconeCut;
         
-        electronId m_eleID;    ///< electron quality requirement (selected from eleID enum)
+        eleID m_eleID;    ///< electron quality requirement (selected from eleID enum)
 
         ///////////////////////////////
         // Available analyses
