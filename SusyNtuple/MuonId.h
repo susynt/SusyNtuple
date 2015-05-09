@@ -6,24 +6,19 @@
 
 namespace Susy
 {
-  enum class muID{
+enum class MuonId{
     VeryLoose=0
     ,Loose
     ,Medium
     ,Tight
-    ,muIDInvalid
-  };
-  static const muID muID_first() { return muID::VeryLoose; }
-  static const muID muID_last() { return muID::muIDInvalid; }
-  /// assumes consecutive values without gaps
-  static const size_t muID_num_values() { return 1 + static_cast<size_t>(muID_last()) - static_cast<size_t>(muID_first());}
+    ,MuonIdInvalid
+    };
+// static const MuonId MuonId_first() { return MuonId::VeryLoose; }
+// static const MuonId MuonId_last() { return MuonId::MuonIdInvalid; }
+/* /// assumes consecutive values without gaps */
+/* static const size_t MuonId_num_values() { return 1 + static_cast<size_t>(MuonId_last()) - static_cast<size_t>(MuonId_first());} */
 
-  const std::string muIDNames[] = {
-    "VeryLoose"
-    ,"Loose"
-    ,"Medium"
-    ,"Tight"
-    ,"muIDInvalid"
-  };
+/// Human-readable names
+std::string MuonId2str(const MuonId &m);
 } // Susy
 #endif
