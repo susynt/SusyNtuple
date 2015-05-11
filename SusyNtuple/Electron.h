@@ -94,6 +94,12 @@ public:
     float scale_mom_dn;
     float scale_mom_up;
 
+    // Scale factor uncertainties
+    float errEffSF_uncorr_up;  ///< Uncertainty on the efficiency scale factor
+    float errEffSF_uncorr_dn;  ///< Uncertainty on the efficiency scale factor
+    float errEffSF_corr_up;    ///< Uncertainty on the efficiency scale factor
+    float errEffSF_corr_dn;    ///< Uncertainty on the efficiency scale factor
+
     // Polymorphism, baby!!
     bool isEle() const { return true;  }
     bool isMu()  const { return false; }
@@ -125,11 +131,12 @@ public:
       scale_matId_up=scale_nom=scale_none=0;
       scale_ped_dn=scale_ped_up=scale_ps_dn=scale_ps_up=scale_s12_dn=scale_s12_up=0;
       scale_ZeeStat_dn=scale_ZeeStat_up=scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
+      errEffSF_uncorr_up = errEffSF_uncorr_dn = errEffSF_corr_up = errEffSF_corr_dn = 0;
 
       Lepton::clear();
     }
 
-    ClassDef(Electron, 7);
+    ClassDef(Electron, 8);
 };
 } //Susy
 #endif

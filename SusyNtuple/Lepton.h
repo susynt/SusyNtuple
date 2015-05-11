@@ -46,11 +46,7 @@ public:
     int truthType;            ///< RecoTruthMatch::type
 
     float effSF;              ///< Efficiency scale factor  (for electron from LLH)
-    float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LLH)
-    float errEffSF_uncor_up;  ///< Uncertainty on the efficiency scale factor (for muon use stat.)
-    float errEffSF_uncor_dn;  ///< Uncertainty on the efficiency scale factor (for muon use stat.)
-    float errEffSF_cor_up;    ///< Uncertainty on the efficiency scale factor (for muon use syst.)
-    float errEffSF_cor_dn;    ///< Uncertainty on the efficiency scale factor (for muon use syst.)
+    //float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LLH)
 
     //unsigned int trigFlags; ///< Bit word representing matched trigger chains
     long long trigFlags;      ///< Bit word representing matched trigger chains
@@ -90,11 +86,7 @@ public:
         matched2TruthLepton = false;
         truthType = -1;
         effSF = 1;
-        errEffSF = 0;
-        errEffSF_uncor_up = 0;
-        errEffSF_uncor_dn = 0;
-        errEffSF_cor_up = 0;
-        errEffSF_cor_dn = 0;
+        //errEffSF = 0;
         trigFlags = 0;
         isBaseline = isSignal = false;
         Particle::clear();
