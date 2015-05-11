@@ -40,6 +40,7 @@ public:
     //AT: This is insane >50!
     float res_all_dn;
     float res_all_up;
+/*
     float res_matCalo_dn;
     float res_matCalo_up;
     float res_matCryo_dn;
@@ -56,8 +57,10 @@ public:
     float res_sampTerm_up;
     float res_z_dn;
     float res_z_up;
+*/
     float scale_all_dn;
     float scale_all_up;
+/*
     float scale_G4_dn;
     float scale_G4_up;
     float scale_L1_dn;
@@ -91,9 +94,15 @@ public:
     float scale_ZeeStat_up;
     float scale_ZeeSys_dn;
     float scale_ZeeSys_up;
+*/
+    float eff_corr_dn;
+    float eff_corr_up;
+    float eff_uncorr_dn;
+    float eff_uncorr_up;
+/*
     float scale_mom_dn;
     float scale_mom_up;
-
+*/
     // Polymorphism, baby!!
     bool isEle() const { return true;  }
     bool isMu()  const { return false; }
@@ -111,20 +120,33 @@ public:
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       isChargeFlip = false;
       
-      res_all_dn= res_all_up= res_matCalo_dn= res_matCalo_up=0;
+      res_all_dn= res_all_up= 0;
+      /*
+      res_matCalo_dn= res_matCalo_up=0;
       res_matCryo_dn= res_matCryo_up= res_matGap_dn= res_matGap_up=0;
       res_matId_dn= res_matId_up= res_nom= res_none=0;
       res_pileup_dn= res_pileup_up=0;
       res_sampTerm_dn=res_sampTerm_up= res_z_dn=res_z_up=0;
-      scale_all_dn=scale_all_up=scale_G4_dn=scale_G4_up=0;
+      */
+      scale_all_dn=scale_all_up=0;
+/*
+      scale_G4_dn=scale_G4_up=0;
       scale_L1_dn=scale_L1_up=scale_L2_dn=scale_L2_up=0;
-      scale_LArCalib_dn= scale_LArCalib_up=scale_LArECalib_dn=scale_LArECalib_up=0;
-      scale_LArEunconv_dn=scale_LArEunconv_up=scale_LArUnconv_dn=scale_LArUnconv_up=0;
+      scale_LArCalib_dn= scale_LArCalib_up=
+      scale_LArECalib_dn=scale_LArECalib_up=0;
+      scale_LArEunconv_dn=scale_LArEunconv_up=
+      scale_LArUnconv_dn=scale_LArUnconv_up=0;
       scale_last=0;
-      scale_matCalo_dn=scale_matCalo_up=scale_matCryo_dn=scale_matCryo_up=scale_matId_dn=0;
+      scale_matCalo_dn=scale_matCalo_up=
+      scale_matCryo_dn=scale_matCryo_up=scale_matId_dn=0;
       scale_matId_up=scale_nom=scale_none=0;
-      scale_ped_dn=scale_ped_up=scale_ps_dn=scale_ps_up=scale_s12_dn=scale_s12_up=0;
-      scale_ZeeStat_dn=scale_ZeeStat_up=scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
+      scale_ped_dn=scale_ped_up=scale_ps_dn=
+      scale_ps_up=scale_s12_dn=scale_s12_up=0;
+      scale_ZeeStat_dn=scale_ZeeStat_up=
+      scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
+*/
+      eff_corr_dn = eff_corr_up =0;
+      eff_uncorr_dn = eff_uncorr_up =0;
 
       Lepton::clear();
     }

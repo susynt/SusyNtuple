@@ -56,7 +56,7 @@ public:
     std::vector<float> flavor;
     std::vector<float> pileup;
     std::vector<float> punchThrough;
-    std::vector<float> relativeNC;
+    //std::vector<float> relativeNC;
     std::vector<float> singlePart;
 
     // Jet-Met Weights
@@ -89,7 +89,7 @@ public:
       flavor.resize(2*2,0.0);
       pileup.resize(4*2,0.0);
       punchThrough.resize(2,0.0);
-      relativeNC.resize(2,0.0);
+      //relativeNC.resize(2,0.0);
       singlePart.resize(2,0.0);
 
       Particle::clear();

@@ -43,7 +43,7 @@ Jet::Jet(const Jet &rhs):
   flavor(rhs.flavor),
   pileup(rhs.pileup),
   punchThrough(rhs.punchThrough),
-  relativeNC(rhs.relativeNC),
+  //relativeNC(rhs.relativeNC),
   singlePart(rhs.singlePart),
   met_wpx(rhs.met_wpx),
   met_wpy(rhs.met_wpy)
@@ -85,7 +85,7 @@ Jet& Jet::operator=(const Jet &rhs)
     flavor=rhs.flavor;
     pileup=rhs.pileup;
     punchThrough=rhs.punchThrough;
-    relativeNC=rhs.relativeNC;
+    //relativeNC=rhs.relativeNC;
     singlePart=rhs.singlePart;
     met_wpx = rhs.met_wpx;
     met_wpy = rhs.met_wpy;
@@ -134,8 +134,8 @@ void Jet::setState(int sys)
   else if( sys == NtSys::JET_Pileup_RhoTopology_UP) sf =  pileup[7];
   else if( sys == NtSys::JET_PunchThrough_MC12_DN) sf = punchThrough[0];
   else if( sys == NtSys::JET_PunchThrough_MC12_UP) sf = punchThrough[1];
-  else if( sys == NtSys::JET_RelativeNonClosure_MC12_DN) sf = relativeNC[0];
-  else if( sys == NtSys::JET_RelativeNonClosure_MC12_UP) sf = relativeNC[1];
+  //else if( sys == NtSys::JET_RelativeNonClosure_MC12_DN) sf = relativeNC[0];
+  //else if( sys == NtSys::JET_RelativeNonClosure_MC12_UP) sf = relativeNC[1];
   else if( sys == NtSys::JET_SingleParticle_HighPt_DN) sf = singlePart[0];
   else if( sys == NtSys::JET_SingleParticle_HighPt_UP) sf = singlePart[1];
   else return;

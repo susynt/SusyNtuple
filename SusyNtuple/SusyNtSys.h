@@ -11,6 +11,7 @@ enum SusyNtSys {
   NOM             // Central value
   ,EG_RESOLUTION_ALL_DN
   ,EG_RESOLUTION_ALL_UP
+  /*
   ,EG_RESOLUTION_LASTRESOLUTIONVARIATION
   ,EG_RESOLUTION_MATERIALCALO_DN
   ,EG_RESOLUTION_MATERIALCALO_UP
@@ -28,8 +29,10 @@ enum SusyNtSys {
   ,EG_RESOLUTION_SAMPLINGTERM_UP
   ,EG_RESOLUTION_ZSMEARING_DN
   ,EG_RESOLUTION_ZSMEARING_UP
+  */
   ,EG_SCALE_ALL_DN
   ,EG_SCALE_ALL_UP
+  /*
   ,EG_SCALE_G4_DN
   ,EG_SCALE_G4_UP
   ,EG_SCALE_L1GAIN_DN
@@ -63,12 +66,15 @@ enum SusyNtSys {
   ,EG_SCALE_ZEESTAT_UP
   ,EG_SCALE_ZEESYST_DN
   ,EG_SCALE_ZEESYST_UP
+  */
   ,EL_EFF_CorrUncertainty_DN
   ,EL_EFF_CorrUncertainty_UP
   ,EL_EFF_UncorrUncertainty_DN
   ,EL_EFF_UncorrUncertainty_UP
+  /*
   ,EL_SCALE_MOMENTUM_DN
   ,EL_SCALE_MOMENTUM_UP
+  */
   ,FT_Eigen_B_0_DN
   ,FT_Eigen_B_0_UP
   ,FT_Eigen_B_1_DN
@@ -154,10 +160,21 @@ enum SusyNtSys {
   ,JET_Pileup_RhoTopology_UP
   ,JET_PunchThrough_MC12_DN
   ,JET_PunchThrough_MC12_UP
+  /*
   ,JET_RelativeNonClosure_MC12_DN
   ,JET_RelativeNonClosure_MC12_UP
+  */
   ,JET_SingleParticle_HighPt_DN
   ,JET_SingleParticle_HighPt_UP
+  //NEW
+  ,MET_SoftCalo_Reso
+  ,MET_SoftCalo_ScaleDown
+  ,MET_SoftCalo_ScaleUp
+  ,MET_SoftTrk_ResoPara
+  ,MET_SoftTrk_ResoPerp
+  ,MET_SoftTrk_ScaleDown
+  ,MET_SoftTrk_ScaleUp
+  //END NEW
   ,MUONSFSTAT_DN
   ,MUONSFSTAT_UP
   ,MUONSFSYS_DN
@@ -168,6 +185,7 @@ enum SusyNtSys {
   ,MUONS_MS_UP
   ,MUONS_SCALE_DN
   ,MUONS_SCALE_UP
+  /*
   ,PH_SCALE_CONVEFFICIENCY_DN
   ,PH_SCALE_CONVEFFICIENCY_UP
   ,PH_SCALE_CONVFAKERATE_DN
@@ -178,6 +196,7 @@ enum SusyNtSys {
   ,PH_SCALE_LEAKAGECONV_UP
   ,PH_SCALE_LEAKAGEUNCONV_DN
   ,PH_SCALE_LEAKAGEUNCONV_UP
+  */
   ,TAUS_EFF_CONTJETID_STAT_DN
   ,TAUS_EFF_CONTJETID_STAT_UP
   ,TAUS_EFF_CONTJETID_SYST_DN
@@ -186,6 +205,7 @@ enum SusyNtSys {
   ,TAUS_SME_TOTAL_UP
   
   //AT:2014-11-06 OLD ONES - TO REMOVE/REPLACE
+  /*
   ,EES_LOW_UP           // Positive shift in electron energy scale (LOW)
   ,EES_LOW_DN         // Negative shift in electron energy scale (LOW)
   ,EES_MAT_UP           // Positive shift in electron energy scale (Mat)
@@ -207,14 +227,17 @@ enum SusyNtSys {
   ,SCALEST_UP          // Positive shift in MET soft term scale
   ,SCALEST_DN        // Negative shift in MET soft term scale
   ,RESOST             // MET soft term resolution 
+  */
   //Event weight systematics 
+
   ,TRIGSF_EL_UP    ///< Trigger Scale factor + error for el
   ,TRIGSF_EL_DN    ///< Trigger Scale factor - error for el
   ,TRIGSF_MU_UP    ///< Trigger Scale factor + error for mu
   ,TRIGSF_MU_DN    ///< Trigger Scale factor - error for mu
+  /*
   ,JVF_UP              // Positive shift in Jet Vertex Fraction
   ,JVF_DN            // Negative shift in Jet Vertex Fraction 
-
+  */
   /*
   ,ESFUP              // Positive shift in electron efficiency
   ,ESFDOWN            // Negative shift in electron efficiency
@@ -258,6 +281,7 @@ const std::string SusyNtSysNames[] = {
     "NOM"
     ,"EG_RESOLUTION_ALL_DN"
     ,"EG_RESOLUTION_ALL_UP"
+    /*
     ,"EG_RESOLUTION_LASTRESOLUTIONVARIATION"
     ,"EG_RESOLUTION_MATERIALCALO_DN"
     ,"EG_RESOLUTION_MATERIALCALO_UP"
@@ -275,8 +299,10 @@ const std::string SusyNtSysNames[] = {
     ,"EG_RESOLUTION_SAMPLINGTERM_UP"
     ,"EG_RESOLUTION_ZSMEARING_DN"
     ,"EG_RESOLUTION_ZSMEARING_UP"
+    */
     ,"EG_SCALE_ALL_DN"
     ,"EG_SCALE_ALL_UP"
+    /*
     ,"EG_SCALE_G4_DN"
     ,"EG_SCALE_G4_UP"
     ,"EG_SCALE_L1GAIN_DN"
@@ -310,12 +336,15 @@ const std::string SusyNtSysNames[] = {
     ,"EG_SCALE_ZEESTAT_UP"
     ,"EG_SCALE_ZEESYST_DN"
     ,"EG_SCALE_ZEESYST_UP"
+    */
     ,"EL_EFF_CorrUncertainty_DN"
     ,"EL_EFF_CorrUncertainty_UP"
     ,"EL_EFF_UncorrUncertainty_DN"
     ,"EL_EFF_UncorrUncertainty_UP"
+    /*
     ,"EL_SCALE_MOMENTUM_DN"
     ,"EL_SCALE_MOMENTUM_UP"
+    */
     ,"FT_Eigen_B_0_DN"
     ,"FT_Eigen_B_0_UP"
     ,"FT_Eigen_B_1_DN"
@@ -401,10 +430,19 @@ const std::string SusyNtSysNames[] = {
     ,"JET_Pileup_RhoTopology_UP"
     ,"JET_PunchThrough_MC12_DN"
     ,"JET_PunchThrough_MC12_UP"
+    /*
     ,"JET_RelativeNonClosure_MC12_DN"
     ,"JET_RelativeNonClosure_MC12_UP"
+    */
     ,"JET_SingleParticle_HighPt_DN"
     ,"JET_SingleParticle_HighPt_UP"
+    ,"MET_SoftCalo_Reso"
+    ,"MET_SoftCalo_ScaleDown"
+    ,"MET_SoftCalo_ScaleUp"
+    ,"MET_SoftTrk_ResoPara"
+    ,"MET_SoftTrk_ResoPerp"
+    ,"MET_SoftTrk_ScaleDown"
+    ,"MET_SoftTrk_ScaleUp"
     ,"MUONSFSTAT_DN"
     ,"MUONSFSTAT_UP"
     ,"MUONSFSYS_DN"
@@ -415,6 +453,7 @@ const std::string SusyNtSysNames[] = {
     ,"MUONS_MS_UP"
     ,"MUONS_SCALE_DN"
     ,"MUONS_SCALE_UP"
+    /*
     ,"PH_SCALE_CONVEFFICIENCY_DN"
     ,"PH_SCALE_CONVEFFICIENCY_UP"
     ,"PH_SCALE_CONVFAKERATE_DN"
@@ -425,6 +464,7 @@ const std::string SusyNtSysNames[] = {
     ,"PH_SCALE_LEAKAGECONV_UP"
     ,"PH_SCALE_LEAKAGEUNCONV_DN"
     ,"PH_SCALE_LEAKAGEUNCONV_UP"
+    */
     ,"TAUS_EFF_CONTJETID_STAT_DN"
     ,"TAUS_EFF_CONTJETID_STAT_UP"
     ,"TAUS_EFF_CONTJETID_SYST_DN"
@@ -433,6 +473,7 @@ const std::string SusyNtSysNames[] = {
     ,"TAUS_SME_TOTAL_UP"
         
     //Old ones
+    /*
     ,"EES_LOW_UP"
     ,"EES_LOW_DOWN"
     ,"EES_MAT_UP"
@@ -454,14 +495,15 @@ const std::string SusyNtSysNames[] = {
     ,"SCALEST_UP"
     ,"SCALEST_DOWN"
     ,"RESOST"
-
+    */
     ,"TRIGSF_EL_UP"
     ,"TRIGSF_EL_DN"
     ,"TRIGSF_MU_UP"
     ,"TRIGSF_MU_DN"
+    /*
     ,"JVF_UP"
     ,"JVF_DN"
-
+    */
     /*
     ,"ESFUP"
     ,"ESFDOWN"
