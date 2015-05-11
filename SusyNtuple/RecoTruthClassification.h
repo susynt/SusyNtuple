@@ -12,9 +12,11 @@
    CONV,
    HF,
    LF,
-   UK,
    ELEC,
-   MUON 
+   MUON,
+   QJET,
+   GJET,
+   UK
  };
 
 ///** @brief Checks if is a prompt lepton from W, Z, tau. */

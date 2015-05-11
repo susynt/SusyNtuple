@@ -13,7 +13,7 @@ using Susy::Particle;
 Tau::Tau(const Tau &rhs):
   //Lepton(rhs),
   Particle(rhs),
-  q(rhs.author),
+  q(rhs.q),
   author(rhs.author),
   nTrack(rhs.nTrack),
   eleBDT(rhs.eleBDT),
@@ -29,8 +29,6 @@ Tau::Tau(const Tau &rhs):
   matched2TruthLepton(rhs.matched2TruthLepton),
   truthType(rhs.truthType),
   detailedTruthType(rhs.detailedTruthType),
-  //effSF(rhs.effSF),
-  //errEffSF(rhs.errEffSF),
   looseEffSF(rhs.looseEffSF),
   errLooseEffSF(rhs.errLooseEffSF),
   mediumEffSF(rhs.mediumEffSF),
@@ -54,7 +52,6 @@ Tau::Tau(const Tau &rhs):
 Tau& Tau::operator=(const Tau &rhs)
 {
   if (this != &rhs) {
-    //Lepton::operator=(rhs);
     Particle::operator=(rhs);
     q = rhs.q;
     author = rhs.author; 
@@ -72,8 +69,6 @@ Tau& Tau::operator=(const Tau &rhs)
     matched2TruthLepton = rhs.matched2TruthLepton;
     truthType = rhs.truthType;
     detailedTruthType = rhs.detailedTruthType;
-    //effSF = rhs.effSF;
-    //errEffSF = rhs.errEffSF;
     looseEffSF = rhs.looseEffSF;
     errLooseEffSF = rhs.errLooseEffSF;
     mediumEffSF = rhs.mediumEffSF;

@@ -12,6 +12,7 @@
 #include "SusyNtuple/ElectronSelector.h"
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/JetSelector.h"
+#include "SusyNtuple/OverlapTools.h"
 
 #include <cassert>
 
@@ -51,7 +52,9 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
     jets = preJets;
 
     // Overlap removal
-    performOverlap(elecs, muons, taus, jets);
+    if(!m_overlapTool.doHarmonization()){
+        m_overlapTool.performOverlap(elecs, muons, taus, jets);
+    }
 
     // Remove MSFOS < 12 GeV
     removeSFOSPair(elecs, MLL_MIN);
@@ -72,7 +75,9 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
     //cout<<"Select Taus: "<<selectTaus<<" size: "<<taus.size()<<endl;
 
     // Now perform the overlap removals
-    performOverlap(elecs, muons, taus, jets);
+    if(!m_overlapTool.doHarmonization()){
+        m_overlapTool.performOverlap(elecs, muons, taus, jets);
+    }
 
     // Do SFOS removal for Mll < 12 
     removeSFOSPair(elecs, MLL_MIN);
@@ -95,6 +100,12 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
     sigTaus = getSignalTaus(baseTaus, tauJetID, tauEleID, tauMuoID);
     sigJets = getSignalJets(baseJets, sys);
     sigJets2Lep = getSignalJets2Lep(baseJets, sys);
+
+    if(m_overlapTool.doHarmonization()){
+        m_overlapTool.performOverlap(sigElecs, sigMuons, sigTaus, sigJets);
+    }
+
+
 }
 /*--------------------------------------------------------------------------------*/
 // New signal tau prescription, fill both ID levels at once!
@@ -113,6 +124,14 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
     sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 
     getSignalTaus(baseTaus, mediumTaus, tightTaus);
+
+
+    if(m_overlapTool.doHarmonization()){
+        // Taus not used if harmonized OR -- using tightTaus as dummy signature
+        m_overlapTool.performOverlap(sigElecs, sigMuons, tightTaus, sigJets);
+    }
+
+
 }
 /*--------------------------------------------------------------------------------*/
 // This method cannot be used anymore. 
@@ -141,29 +160,6 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
                    sigJets  = getSignalJets(jets);
                    sigJets2Lep = getSignalJets2Lep(jets);
                    }*/
-
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::performOverlap(ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets)
-{
-    // Remove electrons from electrons
-    e_e_overlap(elecs, E_E_DR);
-    // Remove jets from electrons
-    e_j_overlap(elecs, jets, J_E_DR, true);
-    // Remove taus from electrons
-    t_e_overlap(taus, elecs, T_E_DR);
-    // Remove taus from muons
-    t_m_overlap(taus, muons, T_M_DR);
-    // Remove electrons from jets
-    e_j_overlap(elecs, jets, E_J_DR, false);
-    // Remove muons from jets
-    m_j_overlap(muons, jets, M_J_DR);
-    // Remove electrons and muons that overlap
-    e_m_overlap(elecs, muons, E_M_DR);
-    // Remove muons from muons
-    m_m_overlap(muons, M_M_DR);
-    // Remove jets from taus
-    t_j_overlap(taus, jets, J_T_DR, true);
-}
 
 /*--------------------------------------------------------------------------------*/
 // Methods to grab the Baseline objects
@@ -663,6 +659,7 @@ float SusyNtTools::muPtConeCorr(const Muon* mu,
     }
     return ptcone;
 */
+    return -999;
 }
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::muEtConeCorr(const Muon* mu,
@@ -711,212 +708,6 @@ void SusyNtTools::getNumberOf2LepJets(const JetVector& jets, int& Ncl, int& Ncb,
         <<"use JetSelector after setting the 2l analysis type."<<endl;
     return;
 }
-/*--------------------------------------------------------------------------------*/
-// Overlap Methods
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::e_e_overlap(ElectronVector& elecs, float minDr)
-{
-    uint nEl = elecs.size();
-    if (nEl < 2) return;
-
-    // Find all possible pairings
-    static std::set<const Electron*> removeElecs;
-    removeElecs.clear();
-    for (uint iEl = 0; iEl < nEl; iEl++) {
-        const Electron* e1 = elecs[iEl];
-        for (uint jEl = iEl + 1; jEl < nEl; jEl++) {
-            const Electron* e2 = elecs[jEl];
-            if (e1->DeltaR(*e2) < minDr) {
-                if (e1->Pt() < e2->Pt()) {
-                    removeElecs.insert(e1);
-                    break;
-                }
-                else {
-                    removeElecs.insert(e2);
-                }
-            } // dR
-        } // e2 loop
-    } // e1 loop
-
-    // Remove electrons that overlap
-    for (int iEl = nEl - 1; iEl >= 0; iEl--) {
-        if (removeElecs.find(elecs[iEl]) != removeElecs.end()) {
-            elecs.erase(elecs.begin() + iEl);
-        }
-    }
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::e_j_overlap(ElectronVector& elecs, JetVector& jets, float minDr, bool removeJets)
-{
-    if (elecs.size() == 0 || jets.size() == 0) return;
-
-    for (int ie = elecs.size() - 1; ie >= 0; ie--) {
-        const Electron* e = elecs.at(ie);
-        for (int ij = jets.size() - 1; ij >= 0; ij--) {
-            const Jet* j = jets.at(ij);
-            if (e->DeltaR(*j) > minDr) continue;
-
-            if (removeJets) {
-                jets.erase(jets.begin() + ij);
-            }
-            else {
-                elecs.erase(elecs.begin() + ie);
-                break;
-            }
-        }// end loop over jets
-    }// end loop over electrons	  
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::m_j_overlap(MuonVector& muons, JetVector jets, float minDr)
-{
-    if (muons.size() == 0 || jets.size() == 0) return;
-
-    for (int im = muons.size() - 1; im >= 0; im--) {
-        const Muon* mu = muons.at(im);
-        for (int ij = jets.size() - 1; ij >= 0; ij--) {
-            const Jet* j = jets.at(ij);
-            if (mu->DeltaR(*j) > minDr) continue;
-
-            muons.erase(muons.begin() + im);
-            break;
-
-        }// end loop over jets
-    }// end loop over muons
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::e_m_overlap(ElectronVector& elecs, MuonVector& muons, float minDr)
-{
-    uint nEl = elecs.size();
-    uint nMu = muons.size();
-    if (nEl == 0 || nMu == 0) return;
-
-    // Electron muon overlap should be pretty rare,
-    // so we can take advantage of that and optimize
-    static std::set<const Electron*> removeElecs;
-    static std::set<const Muon*> removeMuons;
-    removeElecs.clear();
-    removeMuons.clear();
-
-    // In this case we will want to remove both the electron and the muon
-    for (uint iEl = 0; iEl < nEl; iEl++) {
-        const Electron* e = elecs[iEl];
-        for (uint iMu = 0; iMu < nMu; iMu++) {
-            const Muon* mu = muons[iMu];
-            if (e->DeltaR(*mu) < minDr) {
-                removeElecs.insert(e);
-                removeMuons.insert(mu);
-            }
-        }
-    }
-
-    // Remove those electrons flagged for removal
-    if (removeElecs.size()) {
-        for (int iEl = nEl - 1; iEl >= 0; iEl--) {
-            if (removeElecs.find(elecs[iEl]) != removeElecs.end()) {
-                elecs.erase(elecs.begin() + iEl);
-            }
-        }
-    }
-    // Remove those muons flagged for removal
-    if (removeMuons.size()) {
-        for (int iMu = nMu - 1; iMu >= 0; iMu--) {
-            if (removeMuons.find(muons[iMu]) != removeMuons.end()) {
-                muons.erase(muons.begin() + iMu);
-            }
-        }
-    }
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::m_m_overlap(MuonVector& muons, float minDr)
-{
-    uint nMu = muons.size();
-    if (nMu < 2) return;
-
-    // If 2 muons overlap, toss them both!
-    static std::set<const Muon*> removeMuons;
-    removeMuons.clear();
-    for (uint iMu = 0; iMu < nMu; iMu++) {
-        const Muon* mu1 = muons[iMu];
-        for (uint jMu = iMu + 1; jMu < nMu; jMu++) {
-            const Muon* mu2 = muons[jMu];
-            if (mu1->DeltaR(*mu2) < minDr) {
-                removeMuons.insert(mu1);
-                removeMuons.insert(mu2);
-            }
-        }
-    }
-    for (int iMu = nMu - 1; iMu >= 0; iMu--) {
-        const Muon* mu = muons[iMu];
-        if (removeMuons.find(mu) != removeMuons.end()) {
-            muons.erase(muons.begin() + iMu);
-        }
-    }
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::t_e_overlap(TauVector& taus, ElectronVector& elecs, float minDr)
-{
-    uint nTau = taus.size();
-    uint nEle = elecs.size();
-    if (nTau == 0 || nEle == 0) return;
-
-    for (int iTau = nTau - 1; iTau >= 0; iTau--) {
-        const Tau* tau = taus[iTau];
-        for (int iEl = nEle - 1; iEl >= 0; iEl--) {
-            const Electron* e = elecs[iEl];
-
-            if (tau->DeltaR(*e) < minDr) {
-                taus.erase(taus.begin() + iTau);
-                break;
-            }
-
-        }
-    }
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::t_m_overlap(TauVector& taus, MuonVector& muons, float minDr)
-{
-    uint nTau = taus.size();
-    uint nMuo = muons.size();
-    if (nTau == 0 || nMuo == 0) return;
-
-    for (int iTau = nTau - 1; iTau >= 0; iTau--) {
-        const Tau* tau = taus[iTau];
-        for (int iMu = nMuo - 1; iMu >= 0; iMu--) {
-            const Muon* mu = muons[iMu];
-
-            if (tau->DeltaR(*mu) < minDr) {
-                taus.erase(taus.begin() + iTau);
-                break;
-            }
-
-        }
-    }
-}
-/*--------------------------------------------------------------------------------*/
-void SusyNtTools::t_j_overlap(TauVector& taus, JetVector& jets, float minDr, bool removeJets)
-{
-    uint nTau = taus.size();
-    uint nJet = jets.size();
-    if (nTau == 0 || nJet == 0) return;
-
-    for (int iTau = nTau - 1; iTau >= 0; iTau--) {
-        const Tau* tau = taus.at(iTau);
-        for (int iJet = jets.size() - 1; iJet >= 0; iJet--) {
-            const Jet* jet = jets.at(iJet);
-
-            if (tau->DeltaR(*jet) < minDr) {
-                if (removeJets)
-                    jets.erase(jets.begin() + iJet);
-                else {
-                    taus.erase(taus.begin() + iTau);
-                    break;
-                }
-            }
-
-        } // end loop over jets
-    } // end loop over electrons	  
-}
-
 /*--------------------------------------------------------------------------------*/
 // Methods to handle signal region cuts
 /*--------------------------------------------------------------------------------*/

@@ -19,6 +19,7 @@ Jet::Jet(const Jet &rhs):
   emfrac(rhs.emfrac),
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
+  nTracks(rhs.nTracks),
   sv0(rhs.sv0),
   combNN(rhs.combNN),
   mv1(rhs.mv1),
@@ -43,10 +44,8 @@ Jet::Jet(const Jet &rhs):
   flavor(rhs.flavor),
   pileup(rhs.pileup),
   punchThrough(rhs.punchThrough),
-  //relativeNC(rhs.relativeNC),
-  singlePart(rhs.singlePart),
-  met_wpx(rhs.met_wpx),
-  met_wpy(rhs.met_wpy)
+  // relativeNC(rhs.relativeNC),
+  singlePart(rhs.singlePart)
 { 
 }
 /*--------------------------------------------------------------------------------*/
@@ -62,6 +61,7 @@ Jet& Jet::operator=(const Jet &rhs)
     emfrac = rhs.emfrac;
     truthLabel = rhs.truthLabel;
     matchTruth = rhs.matchTruth;
+    nTracks = rhs.nTracks;
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
     mv1 = rhs.mv1;
@@ -87,8 +87,6 @@ Jet& Jet::operator=(const Jet &rhs)
     punchThrough=rhs.punchThrough;
     //relativeNC=rhs.relativeNC;
     singlePart=rhs.singlePart;
-    met_wpx = rhs.met_wpx;
-    met_wpy = rhs.met_wpy;
   }
   return *this;
 }

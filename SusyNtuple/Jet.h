@@ -23,6 +23,7 @@ public:
     float emfrac;             ///< EM fraction
     int truthLabel;           ///< Flavor truth label
     bool matchTruth;          ///< Matches truth jet
+    int nTracks;              ///< Number of tracks associated with jet
 
     // btagging
     float sv0;                ///< SV0 btag weight
@@ -59,10 +60,6 @@ public:
     //std::vector<float> relativeNC;
     std::vector<float> singlePart;
 
-    // Jet-Met Weights
-    float met_wpx;
-    float met_wpy;
-
     // Shift energy for systematic
     void setState(int sys);
 
@@ -71,7 +68,7 @@ public:
 
     // Clear vars
     void clear(){
-      jvf = jvt = truthLabel = 0;
+      jvf = jvt = truthLabel = nTracks = 0;
       matchTruth = false;
       detEta = 0;
       emfrac = 0;
@@ -81,7 +78,6 @@ public:
       bch_corr_jet = bch_corr_cell = 0;
       isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;
       jer = jes_up = jes_dn = 0;
-      met_wpx = met_wpy = 0;
 
       bjes.resize(2,0.0);
       effNp.resize(6*2,0.0);
@@ -95,7 +91,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 13);
+    ClassDef(Jet, 15);
 };
 } // Susy
 #endif

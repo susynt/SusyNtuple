@@ -23,13 +23,15 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2Lep) : { 
         m_2lep = true;
 
+        m_eleId = ElectronId::TightLLH;
+
         m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtconeCut = true;
         m_doMuEtconeCut = false;
     
-        // electrons
+        // cuts
         EL_MIN_PT                       = 10.0;
         EL_MAX_ETA                      = 2.47;
         EL_ISO_PT_THRS                  = 60.0;
@@ -38,6 +40,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
         EL_TOPOCONE30_PT_CUT            = 0.18;
         EL_MAX_D0SIG_CUT                = 5.0; 
+        EL_MAX_Z0_SINTHETA              = 0.4;
 
         break;
     } 
@@ -47,13 +50,15 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_3Lep) : {
         m_3lep = true;
 
+        m_eleId = ElectronId::TightLLH;
+
         m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtconeCut = true;
         m_doMuEtconeCut = false;
 
-        // electrons
+        // cuts
         EL_MIN_PT                       = 10.0;
         EL_MAX_ETA                      = 2.47;
         EL_ISO_PT_THRS                  = 60.0;
@@ -62,6 +67,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
         EL_TOPOCONE30_PT_CUT            = 0.18;
         EL_MAX_D0SIG_CUT                = 5.0; 
+        EL_MAX_Z0_SINTHETA              = 0.4;
 
         break;
     }
@@ -71,13 +77,15 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2LepWH) : {
         m_2lepWH = true;
 
+        m_eleId = ElectronId::TightLLH;
+
         m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtconeCut = true;
         m_doMuEtconeCut = false;
 
-        // electrons
+        // cuts
         EL_MIN_PT                       = 10.0;
         EL_MAX_ETA                      = 2.47;
         EL_ISO_PT_THRS                  = 60.0;
@@ -86,6 +94,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
         EL_TOPOCONE30_PT_CUT            = 0.13;
         EL_MAX_D0SIG_CUT                = 3.0; 
+        EL_MAX_Z0_SINTHETA              = 0.4;
 
 
         break;
@@ -100,13 +109,15 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         m_analysis = AnalysisType::Ana_2Lep;
         m_2lep = true;
 
+        m_eleId = ElectronId::TightLLH;
+
         m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
         m_doElEtconeCut = true;
         m_doMuEtconeCut = false;
     
-        // electrons
+        // cuts
         EL_MIN_PT                       = 10.0;
         EL_MAX_ETA                      = 2.47;
         EL_ISO_PT_THRS                  = 60.0;
@@ -115,6 +126,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
         EL_TOPOCONE30_PT_CUT            = 0.18;
         EL_MAX_D0SIG_CUT                = 5.0; 
+        EL_MAX_Z0_SINTHETA              = 0.4;
 
         break;
     }
@@ -131,6 +143,7 @@ ElectronSelector::ElectronSelector():
     m_doPtconeCut(true),
     m_doElEtconeCut(true),
     m_doMuEtconeCut(false),
+    m_eleId(ElectronId::TightLLH),
     m_2lep(false),
     m_3lep(false),
     m_2lepWH(false),
@@ -160,7 +173,7 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     /////////////////////////////
     // Electron ID
     /////////////////////////////
-    if (!ele->tightLLH) return false;
+    if(!elecPassID(ele, true)) return false;
      
     /////////////////////////////
     // Impact parameter
@@ -200,7 +213,7 @@ bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
     /////////////////////////////
     // Electron ID
     /////////////////////////////
-    if(!ele->tightLLH) return false;
+    if(!elecPassID(ele, true)) return false;
 
     /////////////////////////////
     // Impact parameter
@@ -239,6 +252,24 @@ float ElectronSelector::elPtConeCorr(const Electron* ele,
         }
     }
     return ptcone;
+}
+/* --------------------------------------------------------------------------------------------- */ 
+bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
+{
+    if(signalQuality){
+        if     (m_eleId == ElectronId::MediumLLH)        return electron->mediumLLH;
+        else if(m_eleId == ElectronId::TightLLH)         return electron->tightLLH;
+        else if(m_eleId == ElectronId::MediumLLH_nod0)   return electron->mediumLLH_nod0;
+        else if(m_eleId == ElectronId::TightLLH_nod0)    return electron->tightLLH_nod0;
+        else {
+            cout << "ElectronSelector::elecPassID() error: (signal) ele ID requirement not set for analysis!" << endl;
+            cout << "        Will set to TightLLH." << endl;
+            return electron->tightLLH;
+        }
+    } 
+    else {
+        return true;
+    }
 }
 /* --------------------------------------------------------------------------------------------- */
 float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
