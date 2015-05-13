@@ -25,6 +25,10 @@ Muon::Muon(const Muon &rhs):
   msTrackQ(rhs.msTrackQ),
   msTrackTheta(rhs.msTrackTheta),
   msTrackQoverP(rhs.msTrackQoverP),
+  veryLoose(rhs.veryLoose),
+  loose(rhs.loose),
+  medium(rhs.medium),
+  tight(rhs.tight),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
   ms_up(rhs.ms_up),
@@ -59,6 +63,10 @@ Muon& Muon::operator=(const Muon &rhs)
     msTrackQ = rhs.msTrackQ;
     msTrackTheta = rhs.msTrackTheta;
     msTrackQoverP = rhs.msTrackQoverP;
+    veryLoose = rhs.veryLoose;
+    loose = rhs.loose;
+    medium = rhs.medium;
+    tight = rhs.tight;
     isBadMuon = rhs.isBadMuon;
     isCosmic = rhs.isCosmic;
     ms_up = rhs.ms_up;

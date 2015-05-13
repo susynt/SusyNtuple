@@ -33,6 +33,12 @@ public:
     float msTrackTheta;       ///< MS track theta //AT: redundant ?
     float msTrackQoverP;      ///< MS track q/p
 
+    // Muon quality flags
+    bool veryLoose;           ///< VeryLoose
+    bool loose;               ///< Loose
+    bool medium;              ///< Medium
+    bool tight;               ///< Tight
+
     bool isBadMuon;           ///< Bad muon flag from SUSYTools
     bool isCosmic;            ///< Cosmic muon flag from SUSYTools
 
