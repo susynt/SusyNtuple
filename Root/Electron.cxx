@@ -242,11 +242,6 @@ void Electron::setState(int sys)
   else if( sys == NtSys::EG_SCALE_ZEESYST_DN ) sf = scale_ZeeSys_dn;
   else if( sys == NtSys::EG_SCALE_ZEESYST_UP ) sf = scale_ZeeSys_up;
 */
-//AT CHECK IF WEIGH SYS -- IF SO REMOVE 
-  else if( sys == NtSys::EL_EFF_CorrUncertainty_DN )   sf = eff_corr_dn;
-  else if( sys == NtSys::EL_EFF_CorrUncertainty_UP )   sf = eff_corr_up;
-  else if( sys == NtSys::EL_EFF_UncorrUncertainty_DN ) sf = eff_uncorr_dn;
-  else if( sys == NtSys::EL_EFF_UncorrUncertainty_UP ) sf = eff_uncorr_up;
 
 /*
   else if( sys == NtSys::EL_SCALE_MOMENTUM_DN ) sf = scale_mom_dn;

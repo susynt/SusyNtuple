@@ -67,15 +67,15 @@ enum SusyNtSys {
   ,EG_SCALE_ZEESYST_DN
   ,EG_SCALE_ZEESYST_UP
   */
-  ,EL_EFF_CorrUncertainty_DN
-  ,EL_EFF_CorrUncertainty_UP
-  ,EL_EFF_UncorrUncertainty_DN
-  ,EL_EFF_UncorrUncertainty_UP
+  ,EL_EFF_CorrUncertainty_DN //weight
+  ,EL_EFF_CorrUncertainty_UP //weight
+  ,EL_EFF_UncorrUncertainty_DN //weight
+  ,EL_EFF_UncorrUncertainty_UP //weight
   /*
   ,EL_SCALE_MOMENTUM_DN
   ,EL_SCALE_MOMENTUM_UP
   */
-  ,FT_Eigen_B_0_DN
+  ,FT_Eigen_B_0_DN // All FT_ are weight
   ,FT_Eigen_B_0_UP
   ,FT_Eigen_B_1_DN
   ,FT_Eigen_B_1_UP
@@ -128,6 +128,14 @@ enum SusyNtSys {
   ,FT_Eigen_Light_9_DN
   ,FT_Eigen_Light_9_UP
   ,JER
+  //NEW
+  ,JET_GroupedNP_1_UP
+  ,JET_GroupedNP_1_DN
+  ,JET_GroupedNP_2_UP
+  ,JET_GroupedNP_2_DN
+  ,JET_GroupedNP_3_UP
+  ,JET_GroupedNP_3_DN
+  /*
   ,JET_BJES_Response_DN
   ,JET_BJES_Response_UP
   ,JET_EffectiveNP_1_DN
@@ -160,12 +168,11 @@ enum SusyNtSys {
   ,JET_Pileup_RhoTopology_UP
   ,JET_PunchThrough_MC12_DN
   ,JET_PunchThrough_MC12_UP
-  /*
-  ,JET_RelativeNonClosure_MC12_DN
-  ,JET_RelativeNonClosure_MC12_UP
-  */
-  ,JET_SingleParticle_HighPt_DN
+ ,JET_SingleParticle_HighPt_DN
   ,JET_SingleParticle_HighPt_UP
+  //,JET_RelativeNonClosure_MC12_DN
+  //,JET_RelativeNonClosure_MC12_UP
+  */
   //NEW
   ,MET_SoftCalo_Reso
   ,MET_SoftCalo_ScaleDown
@@ -175,10 +182,10 @@ enum SusyNtSys {
   ,MET_SoftTrk_ScaleDown
   ,MET_SoftTrk_ScaleUp
   //END NEW
-  ,MUONSFSTAT_DN
-  ,MUONSFSTAT_UP
-  ,MUONSFSYS_DN
-  ,MUONSFSYS_UP
+  ,MUONSFSTAT_DN  //weight
+  ,MUONSFSTAT_UP  //weight
+  ,MUONSFSYS_DN   //weight
+  ,MUONSFSYS_UP   //weight
   ,MUONS_ID_DN
   ,MUONS_ID_UP
   ,MUONS_MS_DN
@@ -197,84 +204,39 @@ enum SusyNtSys {
   ,PH_SCALE_LEAKAGEUNCONV_DN
   ,PH_SCALE_LEAKAGEUNCONV_UP
   */
-  ,TAUS_EFF_CONTJETID_STAT_DN
-  ,TAUS_EFF_CONTJETID_STAT_UP
-  ,TAUS_EFF_CONTJETID_SYST_DN
-  ,TAUS_EFF_CONTJETID_SYST_UP
+  ,TAUS_EFF_CONTJETID_STAT_DN  //weight
+  ,TAUS_EFF_CONTJETID_STAT_UP  //weight
+  ,TAUS_EFF_CONTJETID_SYST_DN  //weight
+  ,TAUS_EFF_CONTJETID_SYST_UP  //weight
   ,TAUS_SME_TOTAL_DN
   ,TAUS_SME_TOTAL_UP
   
-  //AT:2014-11-06 OLD ONES - TO REMOVE/REPLACE
-  /*
-  ,EES_LOW_UP           // Positive shift in electron energy scale (LOW)
-  ,EES_LOW_DN         // Negative shift in electron energy scale (LOW)
-  ,EES_MAT_UP           // Positive shift in electron energy scale (Mat)
-  ,EES_MAT_DN         // Negative shift in electron energy scale (Mat)
-  ,EES_PS_UP            // Positive shift in electron energy scale (PS)
-  ,EES_PS_DN          // Negative shift in electron energy scale (PS)
-  ,EES_Z_UP             // Positive shift in electron energy scale (Zee)
-  ,EES_Z_DN           // Negative shift in electron energy scale (Zee)
-  ,EER_UP              // Positive shift in electron energy resolution
-  ,EER_DN            // Negative shift in electron energy resolution
-  ,MS_UP              // Positive shift in muon energy scale
-  ,MS_DN            // Negative shift in muon energy scale
-  ,ID_UP              // Positive shift in muon ID resolution
-  ,ID_DN            // Negative shift in muon ID resolution
-  ,TES_UP              // Positive shift in TES variation 
-  ,TES_DN            // Negative shift in TES variation
-  ,JES_UP              // Positive Jet energy scale
-  ,JES_DN            // Negative Jet energy scale
-  ,SCALEST_UP          // Positive shift in MET soft term scale
-  ,SCALEST_DN        // Negative shift in MET soft term scale
-  ,RESOST             // MET soft term resolution 
-  */
-  //Event weight systematics 
-
+  //
+  //The systematic below are internal to SusyNt.
+  //
   ,TRIGSF_EL_UP    ///< Trigger Scale factor + error for el
   ,TRIGSF_EL_DN    ///< Trigger Scale factor - error for el
   ,TRIGSF_MU_UP    ///< Trigger Scale factor + error for mu
   ,TRIGSF_MU_DN    ///< Trigger Scale factor - error for mu
-  /*
-  ,JVF_UP              // Positive shift in Jet Vertex Fraction
-  ,JVF_DN            // Negative shift in Jet Vertex Fraction 
-  */
-  /*
-  ,ESFUP              // Positive shift in electron efficiency
-  ,ESFDOWN            // Negative shift in electron efficiency
-  ,MEFFUP             // Positive shift in muon efficiency
-  ,MEFFDOWN           // Negative shift in muon efficiency
-  ,ETRIGREWUP         // Positive shift in electron trigger weights
-  ,ETRIGREWDOWN       // Negative shift in electron trigger weights
-  ,MTRIGREWUP         // Positive shift in muon trigger weights
-  ,MTRIGREWDOWN       // Negative shift in muon trigger weights
-  ,TTRIGSFUP          // Positive shift in tau trigger scale factor                              
-  ,TTRIGSFDOWN        // Negative shift in tau trigger scale factor
-  ,BJETUP             // Positive shift in btag scale factor
-  ,BJETDOWN           // Negative shift in btag scale factor
-  ,CJETUP             // Positive shift in ctag scale factor
-  ,CJETDOWN           // Negative shift in ctag scale factor
-  ,BMISTAGUP          // Positive shift in ltag scale factor
-  ,BMISTAGDOWN        // Negative shift in ltag scale factor
-
-  ,PILEUPUP           // Positive shift for mu 
-  ,PILEUPDOWN         // Negative shift for mu
-  ,LUMI               // Uncertainty due to luminosity (no tree/weight needed for Limit setting)
  
-  //Others typically needed at the analysis level when filling HFT 
-  ,GEN                // Uncertainty due to generator (Alpgen versus Sherpa,...) and patronshower/hadronization (Herwig versus Pythia) (possibly includes PDF choice as well, i.e. CTEQ versus HERA,...) 
-  ,GENUP              // Positive shift due to generator parameter variations (ktfac, qfac, ptmin, Iqopt, scale); includes also shift in ISR/FSR
-  ,GENDOWN            // Negative shift due to generator parameter variations (ktfac, qfac, ptmin, Iqopt, scale) ;includes also shift in ISR/FSR
-  ,PDFERRUP           // Positive shift due to PDF errorset
-  ,PDFERRDOWN         // Negative shift due to PDF errorset
-  ,BKGMETHODUP        // Positive shift due to background estimation method (chargeflip, jetveto, fakeweights,...) 
-  ,BKGMETHODDOWN      // Negative shift due to background estimation method (chargeflip, jetveto, fakeweights,...) 
-  ,XSUP               // Positive shift in theoretical cross-section uncertainty
-  ,XSDOWN             // Negative shift in theoretical cross-section uncertainty
+  ,PILEUP_UP       ///< Positive shift for mu 
+  ,PILEUP_DN       ///< Negative shift for mu
+
+  ,GEN             ///< Uncertainty due to generator (Alpgen versus Sherpa,...) 
+                   ///< and patronshower/hadronization (Herwig versus Pythia) 
+                   ///< (possibly includes PDF choice as well, i.e. CTEQ versus HERA,...) 
+  ,GEN_UP          ///< Positive shift due to generator parameter variations 
+                   ///< (ktfac, qfac, ptmin, Iqopt, scale); includes also shift in ISR/FSR
+  ,GEN_DN          ///< Negative shift due to generator parameter variations 
+  ,PDF_UP          ///< Positive shift due to PDF errorset
+  ,PDF_DN          ///< Negative shift due to PDF errorset
+  ,BKGMETHOD_UP    ///< Positive shift due to background estimation method
+                   ///< (chargeflip, jetveto, fakeweights,...) 
+  ,BKGMETHOD_DN    ///< Negative shift due to background estimation method 
+  ,XS_UP           ///< Positive shift in theoretical cross-section uncertainty
+  ,XS_DN           ///< Negative shift in theoretical cross-section uncertainty
   
-  //Fake Syst.
-  ,FakeTauBGSyst      // Uncertainty on fake tau background estimation
-  */
-  ,SYSUNKNOWN
+  ,SYS_UNKNOWN
 };
  
 const std::string SusyNtSysNames[] = {
@@ -398,6 +360,13 @@ const std::string SusyNtSysNames[] = {
     ,"FT_Eigen_Light_9_DN"
     ,"FT_Eigen_Light_9_UP"
     ,"JER"
+    ,"JET_GroupedNP_1_UP"
+    ,"JET_GroupedNP_1_DN"
+    ,"JET_GroupedNP_2_UP"
+    ,"JET_GroupedNP_2_DN"
+    ,"JET_GroupedNP_3_UP"
+    ,"JET_GroupedNP_3_DN"
+    /*
     ,"JET_BJES_Response_DN"
     ,"JET_BJES_Response_UP"
     ,"JET_EffectiveNP_1_DN"
@@ -430,12 +399,11 @@ const std::string SusyNtSysNames[] = {
     ,"JET_Pileup_RhoTopology_UP"
     ,"JET_PunchThrough_MC12_DN"
     ,"JET_PunchThrough_MC12_UP"
-    /*
-    ,"JET_RelativeNonClosure_MC12_DN"
-    ,"JET_RelativeNonClosure_MC12_UP"
-    */
     ,"JET_SingleParticle_HighPt_DN"
     ,"JET_SingleParticle_HighPt_UP"
+    //,"JET_RelativeNonClosure_MC12_DN"
+    //,"JET_RelativeNonClosure_MC12_UP"
+    */
     ,"MET_SoftCalo_Reso"
     ,"MET_SoftCalo_ScaleDown"
     ,"MET_SoftCalo_ScaleUp"
@@ -472,73 +440,25 @@ const std::string SusyNtSysNames[] = {
     ,"TAUS_SME_TOTAL_DN"
     ,"TAUS_SME_TOTAL_UP"
         
-    //Old ones
-    /*
-    ,"EES_LOW_UP"
-    ,"EES_LOW_DOWN"
-    ,"EES_MAT_UP"
-    ,"EES_MAT_DOWN"
-    ,"EES_PS_UP"
-    ,"EES_PS_DOWN"
-    ,"EES_Z_UP"
-    ,"EES_Z_DOWN"
-    ,"EER_UP"
-    ,"EER_DOWN"
-    ,"MS_UP"
-    ,"MS_DOWN"
-    ,"ID_UP"
-    ,"ID_DOWN"
-    ,"TES_UP"
-    ,"TES_DOWN"
-    ,"JES_UP"
-    ,"JES_DOWN"
-    ,"SCALEST_UP"
-    ,"SCALEST_DOWN"
-    ,"RESOST"
-    */
+    //
+    //SusyNt specific systematics
+    //
     ,"TRIGSF_EL_UP"
     ,"TRIGSF_EL_DN"
     ,"TRIGSF_MU_UP"
     ,"TRIGSF_MU_DN"
-    /*
-    ,"JVF_UP"
-    ,"JVF_DN"
-    */
-    /*
-    ,"ESFUP"
-    ,"ESFDOWN"
-    ,"MEFFUP"
-    ,"MEFFDOWN"
-    ,"ETRIGREWUP"
-    ,"ETRIGREWDOWN"
-    ,"MTRIGREWUP"
-    ,"MTRIGREWDOWN"
-    ,"TTRIGSFUP"
-    ,"TTRIGSFDOWN"
-    ,"BJETUP"
-    ,"BJETDOWN"
-    ,"CJETUP"
-    ,"CJETDOWN"
-    ,"BMISTAGUP"
-    ,"BMISTAGDOWN"
-
-    ,"PILEUPUP"
-    ,"PILEUPDOWN"
-    ,"LUMI"
-
+    ,"PILEUP_UP"
+    ,"PILEUP_DN"
     ,"GEN"
-    ,"GENUP"
-    ,"GENDOWN"
-    ,"PDFERRUP"
-    ,"PDFERRDOWN"
-    ,"BKGMETHODUP"
-    ,"BKGMETHODDOWN"
-    ,"XSUP"
-    ,"XSDOWN"
-    
-    ,"FakeTauBGSyst"
-    */
-    ,"SYSUNKNOWN"
+    ,"GEN_UP"
+    ,"GEN_DN"
+    ,"PDF_UP"
+    ,"PDF_DN"
+    ,"BKGMETHOD_UP"
+    ,"BKGMETHOD_DN"
+    ,"XS_UP"
+    ,"XS_DN"
+    ,"SYS_UNKNOWN"
 };
 
 

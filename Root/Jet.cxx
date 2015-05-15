@@ -35,17 +35,19 @@ Jet::Jet(const Jet &rhs):
   isBadMediumBCH_up(rhs.isBadMediumBCH_up),
   isBadMediumBCH_dn(rhs.isBadMediumBCH_dn),
   isBadTightBCH(rhs.isBadTightBCH),
-  jes_up(rhs.jes_up),
-  jes_dn(rhs.jes_dn),
   jer(rhs.jer),
+  groupedNP(rhs.groupedNP),
+  FTSys(rhs.FTSys)
+  /*
   bjes(rhs.bjes),
   effNp(rhs.effNp),
   etaInter(rhs.etaInter),
   flavor(rhs.flavor),
   pileup(rhs.pileup),
   punchThrough(rhs.punchThrough),
-  // relativeNC(rhs.relativeNC),
   singlePart(rhs.singlePart)
+  // relativeNC(rhs.relativeNC),
+  */
 { 
 }
 /*--------------------------------------------------------------------------------*/
@@ -76,17 +78,19 @@ Jet& Jet::operator=(const Jet &rhs)
     isBadMediumBCH_up = rhs.isBadMediumBCH_up;
     isBadMediumBCH_dn = rhs.isBadMediumBCH_dn;
     isBadTightBCH = rhs.isBadTightBCH;
-    jes_up = rhs.jes_up;
-    jes_dn = rhs.jes_dn;
     jer = rhs.jer;
+    groupedNP = rhs.groupedNP;
+    FTSys = rhs.FTSys;
+    /*
     bjes=rhs.bjes;
     effNp=rhs.effNp;
     etaInter=rhs.etaInter;
     flavor=rhs.flavor;
     pileup=rhs.pileup;
     punchThrough=rhs.punchThrough;
-    //relativeNC=rhs.relativeNC;
     singlePart=rhs.singlePart;
+    //relativeNC=rhs.relativeNC;
+    */
   }
   return *this;
 }
@@ -100,6 +104,14 @@ void Jet::setState(int sys)
   
   float sf = 0;
   if     ( sys == NtSys::JER) sf = jer;
+  
+  else if( sys == NtSys::JET_GroupedNP_1_UP) sf = groupedNP[0];
+  else if( sys == NtSys::JET_GroupedNP_1_DN) sf = groupedNP[1];
+  else if( sys == NtSys::JET_GroupedNP_2_UP) sf = groupedNP[2];
+  else if( sys == NtSys::JET_GroupedNP_2_DN) sf = groupedNP[3];
+  else if( sys == NtSys::JET_GroupedNP_3_UP) sf = groupedNP[4];
+  else if( sys == NtSys::JET_GroupedNP_3_DN) sf = groupedNP[5];
+/*
   else if( sys == NtSys::JET_BJES_Response_DN) sf = bjes[0];
   else if( sys == NtSys::JET_BJES_Response_UP) sf = bjes[1];
   else if( sys == NtSys::JET_EffectiveNP_1_DN) sf = effNp[0];
@@ -136,10 +148,78 @@ void Jet::setState(int sys)
   //else if( sys == NtSys::JET_RelativeNonClosure_MC12_UP) sf = relativeNC[1];
   else if( sys == NtSys::JET_SingleParticle_HighPt_DN) sf = singlePart[0];
   else if( sys == NtSys::JET_SingleParticle_HighPt_UP) sf = singlePart[1];
+*/
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
 }
+/*--------------------------------------------------------------------------------*/
+// Falvor systematics
+/*--------------------------------------------------------------------------------*/
+float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
+{
+    float s= 1;
+    
+    if      ( sys == NtSys::FT_Eigen_B_0_DN) s = FTSys[0];
+    else if ( sys == NtSys::FT_Eigen_B_0_UP) s = FTSys[1];
+    else if ( sys == NtSys::FT_Eigen_B_1_DN) s = FTSys[2];
+    else if ( sys == NtSys::FT_Eigen_B_1_UP) s = FTSys[3];
+    else if ( sys == NtSys::FT_Eigen_B_2_DN) s = FTSys[4];
+    else if ( sys == NtSys::FT_Eigen_B_2_UP) s = FTSys[5];
+    else if ( sys == NtSys::FT_Eigen_B_3_DN) s = FTSys[6];
+    else if ( sys == NtSys::FT_Eigen_B_3_UP) s = FTSys[7];
+    else if ( sys == NtSys::FT_Eigen_B_4_DN) s = FTSys[8];
+    else if ( sys == NtSys::FT_Eigen_B_4_UP) s = FTSys[9];
+    else if ( sys == NtSys::FT_Eigen_B_5_DN) s = FTSys[10];
+    else if ( sys == NtSys::FT_Eigen_B_5_UP) s = FTSys[11];
+    else if ( sys == NtSys::FT_Eigen_B_6_DN) s = FTSys[12];
+    else if ( sys == NtSys::FT_Eigen_B_6_UP) s = FTSys[13];
+    else if ( sys == NtSys::FT_Eigen_B_7_DN) s = FTSys[14];   
+    else if ( sys == NtSys::FT_Eigen_B_7_UP) s = FTSys[15];
+    else if ( sys == NtSys::FT_Eigen_B_8_DN) s = FTSys[16];
+    else if ( sys == NtSys::FT_Eigen_B_8_UP) s = FTSys[17];
+    else if ( sys == NtSys::FT_Eigen_B_9_DN) s = FTSys[18];
+    else if ( sys == NtSys::FT_Eigen_B_9_UP) s = FTSys[19];
+
+    else if ( sys == NtSys::FT_Eigen_C_0_DN) s = FTSys[20];
+    else if ( sys == NtSys::FT_Eigen_C_0_UP) s = FTSys[21];
+    else if ( sys == NtSys::FT_Eigen_C_1_DN) s = FTSys[22];
+    else if ( sys == NtSys::FT_Eigen_C_1_UP) s = FTSys[23];
+    else if ( sys == NtSys::FT_Eigen_C_2_DN) s = FTSys[24];
+    else if ( sys == NtSys::FT_Eigen_C_2_UP) s = FTSys[25];
+    else if ( sys == NtSys::FT_Eigen_C_3_DN) s = FTSys[26];
+    else if ( sys == NtSys::FT_Eigen_C_3_UP) s = FTSys[27];
+
+    else if ( sys == NtSys::FT_Eigen_Light_0_DN) s = FTSys[28];
+    else if ( sys == NtSys::FT_Eigen_Light_0_UP) s = FTSys[29];
+    else if ( sys == NtSys::FT_Eigen_Light_1_DN) s = FTSys[30];
+    else if ( sys == NtSys::FT_Eigen_Light_1_UP) s = FTSys[31];
+    else if ( sys == NtSys::FT_Eigen_Light_2_DN) s = FTSys[32];
+    else if ( sys == NtSys::FT_Eigen_Light_2_UP) s = FTSys[33];
+    else if ( sys == NtSys::FT_Eigen_Light_3_DN) s = FTSys[34];
+    else if ( sys == NtSys::FT_Eigen_Light_3_UP) s = FTSys[35];
+    else if ( sys == NtSys::FT_Eigen_Light_4_DN) s = FTSys[36];
+    else if ( sys == NtSys::FT_Eigen_Light_4_UP) s = FTSys[37];
+    else if ( sys == NtSys::FT_Eigen_Light_5_DN) s = FTSys[38];
+    else if ( sys == NtSys::FT_Eigen_Light_5_UP) s = FTSys[39];
+    else if ( sys == NtSys::FT_Eigen_Light_6_DN) s = FTSys[40];
+    else if ( sys == NtSys::FT_Eigen_Light_6_UP) s = FTSys[41];
+    else if ( sys == NtSys::FT_Eigen_Light_7_DN) s = FTSys[42];
+    else if ( sys == NtSys::FT_Eigen_Light_7_UP) s = FTSys[43];
+    else if ( sys == NtSys::FT_Eigen_Light_8_DN) s = FTSys[44];
+    else if ( sys == NtSys::FT_Eigen_Light_8_UP) s = FTSys[45];
+    else if ( sys == NtSys::FT_Eigen_Light_9_DN) s = FTSys[46];
+    else if ( sys == NtSys::FT_Eigen_Light_9_UP) s = FTSys[47];
+    else if ( sys == NtSys::FT_Eigen_Light_10_DN) s = FTSys[48];
+    else if ( sys == NtSys::FT_Eigen_Light_10_UP) s = FTSys[49];
+    else if ( sys == NtSys::FT_Eigen_Light_11_DN) s = FTSys[50];
+    else if ( sys == NtSys::FT_Eigen_Light_11_UP) s = FTSys[51];
+
+    return s;
+
+}
+
+
 /*--------------------------------------------------------------------------------*/
 // Jet print
 /*--------------------------------------------------------------------------------*/
