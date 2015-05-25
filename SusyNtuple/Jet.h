@@ -26,6 +26,8 @@ public:
     int nTracks;              ///< Number of tracks associated with jet
 
     // btagging
+    bool bjet;                ///< Is b-jet a la SUSYTools (70% w.p.)
+    float effscalefact;       ///< B-tag SF a la SUSYTools (70% w.p.)  
     float sv0;                ///< SV0 btag weight
     float combNN;             ///< JetFitterCombNN btag weight
     float mv1;                ///< MV1 btag weight
@@ -67,6 +69,7 @@ public:
 
     // Return flavor tag systematics
     float getFTSys(Susy::NtSys::SusyNtSys sys);
+    void  setFTSys(Susy::NtSys::SusyNtSys sys, double scale);
 
     // Print method
     void print() const;
@@ -75,6 +78,8 @@ public:
     void clear(){
       jvf = jvt = truthLabel = nTracks = 0;
       matchTruth = false;
+      bjet = false;
+      effscalefact = 0.;
       detEta = 0;
       emfrac = 0;
       sv0 = combNN = mv1 = sv1plusip3d = 0;
@@ -102,7 +107,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 16);
+    ClassDef(Jet, 17);
 };
 } // Susy
 #endif

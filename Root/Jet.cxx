@@ -19,6 +19,8 @@ Jet::Jet(const Jet &rhs):
   emfrac(rhs.emfrac),
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
+  bjet(rhs.bjet),
+  effscalefact(rhs.effscalefact),
   nTracks(rhs.nTracks),
   sv0(rhs.sv0),
   combNN(rhs.combNN),
@@ -63,6 +65,8 @@ Jet& Jet::operator=(const Jet &rhs)
     emfrac = rhs.emfrac;
     truthLabel = rhs.truthLabel;
     matchTruth = rhs.matchTruth;
+    bjet = rhs.bjet;
+    effscalefact = rhs.effscalefact;
     nTracks = rhs.nTracks;
     sv0 = rhs.sv0;
     combNN = rhs.combNN;
@@ -154,7 +158,7 @@ void Jet::setState(int sys)
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
 }
 /*--------------------------------------------------------------------------------*/
-// Falvor systematics
+// Flavor systematics
 /*--------------------------------------------------------------------------------*/
 float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
 {
@@ -217,6 +221,66 @@ float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
 
     return s;
 
+}
+
+void Jet::setFTSys(Susy::NtSys::SusyNtSys sys, double scale=1.)
+{
+    if      ( sys == NtSys::FT_Eigen_B_0_DN) FTSys[0] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_0_UP) FTSys[1] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_1_DN) FTSys[2] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_1_UP) FTSys[3] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_2_DN) FTSys[4] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_2_UP) FTSys[5] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_3_DN) FTSys[6] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_3_UP) FTSys[7] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_4_DN) FTSys[8] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_4_UP) FTSys[9] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_5_DN) FTSys[10] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_5_UP) FTSys[11] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_6_DN) FTSys[12] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_6_UP) FTSys[13] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_7_DN) FTSys[14] = scale;   
+    else if ( sys == NtSys::FT_Eigen_B_7_UP) FTSys[15] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_8_DN) FTSys[16] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_8_UP) FTSys[17] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_9_DN) FTSys[18] = scale;
+    else if ( sys == NtSys::FT_Eigen_B_9_UP) FTSys[19] = scale;
+
+    else if ( sys == NtSys::FT_Eigen_C_0_DN) FTSys[20] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_0_UP) FTSys[21] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_1_DN) FTSys[22] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_1_UP) FTSys[23] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_2_DN) FTSys[24] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_2_UP) FTSys[25] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_3_DN) FTSys[26] = scale;
+    else if ( sys == NtSys::FT_Eigen_C_3_UP) FTSys[27] = scale;
+
+    else if ( sys == NtSys::FT_Eigen_Light_0_DN) FTSys[28] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_0_UP) FTSys[29] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_1_DN) FTSys[30] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_1_UP) FTSys[31] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_2_DN) FTSys[32] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_2_UP) FTSys[33] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_3_DN) FTSys[34] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_3_UP) FTSys[35] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_4_DN) FTSys[36] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_4_UP) FTSys[37] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_5_DN) FTSys[38] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_5_UP) FTSys[39] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_6_DN) FTSys[40] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_6_UP) FTSys[41] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_7_DN) FTSys[42] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_7_UP) FTSys[43] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_8_DN) FTSys[44] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_8_UP) FTSys[45] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_9_DN) FTSys[46] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_9_UP) FTSys[47] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_10_DN) FTSys[48] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_10_UP) FTSys[49] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_11_DN) FTSys[50] = scale;
+    else if ( sys == NtSys::FT_Eigen_Light_11_UP) FTSys[51] = scale;
+
+    return;
 }
 
 
