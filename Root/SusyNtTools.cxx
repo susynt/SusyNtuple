@@ -234,7 +234,8 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, 
     ElectronVector sigElecs;
     for (uint ie = 0; ie < baseElecs.size(); ++ie) {
         Electron* e = baseElecs.at(ie);
-        if (isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
+        if (m_electronSelector.isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){ 
+      //  if (isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
             sigElecs.push_back(e);
         }
     }
@@ -248,7 +249,8 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const Electr
     MuonVector sigMuons;
     for (uint im = 0; im < baseMuons.size(); ++im) {
         Muon* mu = baseMuons.at(im);
-        if (isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
+        if (m_muonSelector.isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){
+      //  if (isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
             sigMuons.push_back(mu);
         }
     }
