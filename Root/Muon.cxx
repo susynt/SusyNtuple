@@ -36,7 +36,11 @@ Muon::Muon(const Muon &rhs):
   id_up(rhs.id_up),
   id_dn(rhs.id_dn),
   scale_up(rhs.scale_up),
-  scale_dn(rhs.scale_dn)
+  scale_dn(rhs.scale_dn),
+  errEffSF_stat_up(rhs.errEffSF_stat_up),
+  errEffSF_stat_dn(rhs.errEffSF_stat_dn),
+  errEffSF_syst_up(rhs.errEffSF_syst_up),
+  errEffSF_syst_dn(rhs.errEffSF_syst_dn)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -71,6 +75,10 @@ Muon& Muon::operator=(const Muon &rhs)
     id_dn = rhs.id_dn;
     scale_up = rhs.scale_up;
     scale_dn = rhs.scale_dn;
+    errEffSF_stat_up = rhs.errEffSF_stat_up;
+    errEffSF_stat_dn = rhs.errEffSF_stat_dn;
+    errEffSF_syst_up = rhs.errEffSF_syst_up;
+    errEffSF_syst_dn = rhs.errEffSF_syst_dn;
   }
   return *this;
 }

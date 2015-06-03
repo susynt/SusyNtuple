@@ -46,7 +46,7 @@ public:
     int truthType;            ///< RecoTruthMatch::type
 
     float effSF;              ///< Efficiency scale factor  (for electron from LLH)
-    float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LLH)
+    //float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LLH)
 
     //unsigned int trigFlags; ///< Bit word representing matched trigger chains
     long long trigFlags;      ///< Bit word representing matched trigger chains
@@ -86,13 +86,13 @@ public:
         matched2TruthLepton = false;
         truthType = -1;
         effSF = 1;
-        errEffSF = 0;
+        //errEffSF = 0;
         trigFlags = 0;
         isBaseline = isSignal = false;
         Particle::clear();
     }
 
-    ClassDef(Lepton, 14);
+    ClassDef(Lepton, 15);
 };
 } // Susy
 #endif

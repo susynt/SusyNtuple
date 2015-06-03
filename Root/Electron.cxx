@@ -77,7 +77,11 @@ Electron::Electron(const Electron &rhs):
   scale_ZeeSys_dn(rhs.scale_ZeeSys_dn),
   scale_ZeeSys_up(rhs.scale_ZeeSys_up),
   scale_mom_dn(rhs.scale_mom_dn),
-  scale_mom_up(rhs.scale_mom_up)
+  scale_mom_up(rhs.scale_mom_up),
+  errEffSF_uncorr_up(rhs.errEffSF_uncorr_up),
+  errEffSF_uncorr_dn(rhs.errEffSF_uncorr_dn),
+  errEffSF_corr_up(rhs.errEffSF_corr_up),
+  errEffSF_corr_dn(rhs.errEffSF_corr_dn)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -155,6 +159,11 @@ Electron& Electron::operator=(const Electron &rhs)
     scale_ZeeSys_up = rhs.scale_ZeeSys_up;
     scale_mom_dn = rhs.scale_mom_dn;
     scale_mom_up = rhs.scale_mom_up;
+
+    errEffSF_uncorr_up = rhs.errEffSF_uncorr_up;
+    errEffSF_uncorr_dn = rhs.errEffSF_uncorr_dn;
+    errEffSF_corr_up = rhs.errEffSF_corr_up;
+    errEffSF_corr_dn = rhs.errEffSF_corr_dn;
   }
   return *this;
 }

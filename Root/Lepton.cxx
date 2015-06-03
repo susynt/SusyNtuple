@@ -29,7 +29,7 @@ Lepton::Lepton(const Lepton &rhs):
   //truthMatchType(rhs.truthMatchType),
   truthType(rhs.truthType),
   effSF(rhs.effSF),
-  errEffSF(rhs.errEffSF),
+  //errEffSF(rhs.errEffSF),
   trigFlags(rhs.trigFlags)
 {
 }
@@ -61,7 +61,7 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     //truthMatchType = rhs.truthMatchType;
     truthType = rhs.truthType;
     effSF = rhs.effSF;
-    errEffSF = rhs.errEffSF;
+    //errEffSF = rhs.errEffSF;
     trigFlags = rhs.trigFlags;
   }
   return *this;
