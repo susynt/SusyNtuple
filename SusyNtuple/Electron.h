@@ -35,6 +35,13 @@ public:
     bool mediumLLH_nod0;      ///< mediumLLH
     bool tightLLH_nod0;       ///< tightLLH
 
+    // isolation flags
+    bool isoGradientLoose;    ///< GradientLoose WP from IsolationSelectionTool
+    bool isoGradient;         ///< Gradient WP from IsolationSelectionTool
+    bool isoVeryLoose;        ///< VeryLoose WP from IsolationSelectionTool
+    bool isoLoose;            ///< Loose WP from IsolationSelectionTool
+    bool isoTight;            ///< Tight WP from IsolationSelectionTool
+
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
 
     //AT: This is insane >50!
@@ -109,6 +116,7 @@ public:
       clusE = clusEta = clusPhi = trackPt = 0;
       veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
+      isoGradientLoose = isoGradient = isoVeryLoose = isoLoose = isoTight = false;
       isChargeFlip = false;
       
       res_all_dn= res_all_up= res_matCalo_dn= res_matCalo_up=0;
@@ -129,7 +137,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 7);
+    ClassDef(Electron, 8);
 };
 } //Susy
 #endif
