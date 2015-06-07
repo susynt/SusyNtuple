@@ -23,8 +23,10 @@ Electron::Electron(const Electron &rhs):
   mediumLLH_nod0(rhs.mediumLLH_nod0),
   tightLLH_nod0(rhs.tightLLH_nod0),
   isChargeFlip(rhs.isChargeFlip),
+
   res_all_dn(rhs.res_all_dn),
   res_all_up(rhs.res_all_up),
+/*
   res_matCalo_dn(rhs.res_matCalo_dn),
   res_matCalo_up(rhs.res_matCalo_up),
   res_matCryo_dn(rhs.res_matCryo_dn),
@@ -41,8 +43,10 @@ Electron::Electron(const Electron &rhs):
   res_sampTerm_up(rhs.res_sampTerm_up),
   res_z_dn(rhs.res_z_dn),
   res_z_up(rhs.res_z_up),
+*/
   scale_all_dn(rhs.scale_all_dn),
   scale_all_up(rhs.scale_all_up),
+/*
   scale_G4_dn(rhs.scale_G4_dn),
   scale_G4_up(rhs.scale_G4_up),
   scale_L1_dn(rhs.scale_L1_dn),
@@ -78,6 +82,11 @@ Electron::Electron(const Electron &rhs):
   scale_ZeeSys_up(rhs.scale_ZeeSys_up),
   scale_mom_dn(rhs.scale_mom_dn),
   scale_mom_up(rhs.scale_mom_up)
+*/
+  eff_corr_dn(rhs.eff_corr_dn),
+  eff_corr_up(rhs.eff_corr_up),
+  eff_uncorr_dn(rhs.eff_uncorr_dn),
+  eff_uncorr_up(rhs.eff_uncorr_up)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -102,6 +111,7 @@ Electron& Electron::operator=(const Electron &rhs)
    
     res_all_dn = rhs.res_all_dn;
     res_all_up = res_all_up;
+/*
     res_matCalo_dn = rhs.res_matCalo_dn;
     res_matCalo_up = rhs.res_matCalo_up;
     res_matCryo_dn = rhs.res_matCryo_dn;
@@ -118,8 +128,10 @@ Electron& Electron::operator=(const Electron &rhs)
     res_sampTerm_up = rhs.res_sampTerm_up;
     res_z_dn = rhs.res_z_dn;
     res_z_up = rhs.res_z_up;
+*/
     scale_all_dn = rhs.scale_all_dn;
     scale_all_up = rhs.scale_all_up;
+/*
     scale_G4_dn = rhs.scale_G4_dn;
     scale_G4_up = rhs.scale_G4_up;
     scale_L1_dn = rhs.scale_L1_dn;
@@ -155,6 +167,11 @@ Electron& Electron::operator=(const Electron &rhs)
     scale_ZeeSys_up = rhs.scale_ZeeSys_up;
     scale_mom_dn = rhs.scale_mom_dn;
     scale_mom_up = rhs.scale_mom_up;
+*/
+    eff_corr_dn = rhs.eff_corr_dn;
+    eff_corr_up = rhs.eff_corr_up;
+    eff_uncorr_dn = rhs.eff_uncorr_dn;
+    eff_uncorr_up = rhs.eff_uncorr_up;
   }
   return *this;
 }
@@ -170,6 +187,7 @@ void Electron::setState(int sys)
   
   if     ( sys == NtSys::EG_RESOLUTION_ALL_DN ) sf = res_all_dn;
   else if( sys == NtSys::EG_RESOLUTION_ALL_UP ) sf = res_all_up;
+/*
   else if( sys == NtSys::EG_RESOLUTION_MATERIALCALO_DN ) sf = res_matCalo_dn;
   else if( sys == NtSys::EG_RESOLUTION_MATERIALCALO_UP ) sf = res_matCalo_up;
   else if( sys == NtSys::EG_RESOLUTION_MATERIALCRYO_DN ) sf = res_matCryo_dn;
@@ -186,8 +204,10 @@ void Electron::setState(int sys)
   else if( sys == NtSys::EG_RESOLUTION_SAMPLINGTERM_UP ) sf = res_sampTerm_up;
   else if( sys == NtSys::EG_RESOLUTION_ZSMEARING_DN ) sf = res_z_dn;
   else if( sys == NtSys::EG_RESOLUTION_ZSMEARING_UP ) sf = res_z_up;
+*/
   else if( sys == NtSys::EG_SCALE_ALL_DN ) sf = scale_all_dn;
   else if( sys == NtSys::EG_SCALE_ALL_UP ) sf = scale_all_up;
+/*
   else if( sys == NtSys::EG_SCALE_G4_DN ) sf = scale_G4_dn;
   else if( sys == NtSys::EG_SCALE_G4_UP ) sf = scale_G4_up;
   else if( sys == NtSys::EG_SCALE_L1GAIN_DN ) sf = scale_L1_dn;
@@ -221,8 +241,12 @@ void Electron::setState(int sys)
   else if( sys == NtSys::EG_SCALE_ZEESTAT_UP ) sf = scale_ZeeStat_up;
   else if( sys == NtSys::EG_SCALE_ZEESYST_DN ) sf = scale_ZeeSys_dn;
   else if( sys == NtSys::EG_SCALE_ZEESYST_UP ) sf = scale_ZeeSys_up;
+*/
+
+/*
   else if( sys == NtSys::EL_SCALE_MOMENTUM_DN ) sf = scale_mom_dn;
   else if( sys == NtSys::EL_SCALE_MOMENTUM_UP ) sf = scale_mom_up;
+*/
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());

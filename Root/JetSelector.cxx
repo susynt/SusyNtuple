@@ -149,7 +149,9 @@ bool JetSelector::jetPassesJvfRequirement(const Jet* jet)
     if(jet) {
         float pt(jet->Pt()), eta(jet->detEta);
         bool applyJvf(pt < maxPt && fabs(eta) < maxEta);
-        bool jvfUp(m_systematic == NtSys::JVF_UP), jvfDown(m_systematic == NtSys::JVF_DN);
+        //bool jvfUp(m_systematic == NtSys::JVF_UP), jvfDown(m_systematic == NtSys::JVF_DN);
+        //AT 05-09-15 JVF obsolete run-2
+        bool jvfUp=false, jvfDown=false;
         if(jvfUp || jvfDown) {
             bool isPileUp = false; // Twiki [add link here] says to treat all jets as hardscatter
             jvfThres = m_jvftool.getJVFcut(nominalJvtThres, isPileUp, pt, eta, jvfUp);
