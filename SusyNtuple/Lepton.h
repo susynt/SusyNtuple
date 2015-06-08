@@ -4,13 +4,19 @@
 
 #include "SusyNtuple/Particle.h"
 
+#include "TBits.h"
+
 namespace Susy
 {
 /// Lepton class, common to electrons and muons
 class Lepton : public Particle
 {
 public:
-    Lepton(){ clear(); }
+    Lepton() :
+        trigBits(m_nTriggerBits)
+        {
+            clear();
+        }
     virtual ~Lepton(){};
     /** Copy constructor */
     Lepton(const Lepton &);
@@ -50,6 +56,8 @@ public:
 
     //unsigned int trigFlags; ///< Bit word representing matched trigger chains
     long long trigFlags;      ///< Bit word representing matched trigger chains
+    TBits   trigBits;         ///< TBits to store matched trigger chains
+    static const size_t m_nTriggerBits=64;
 
     /// Methods to return impact parameter variables
     /** Note that these are not absolute valued! */
@@ -92,7 +100,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 14);
+    ClassDef(Lepton, 15);
 };
 } // Susy
 #endif
