@@ -181,7 +181,7 @@ typedef std::map<SumwMapKey, float> SumwMap;
     static void checkHistoHasBin(const TH1F &histo, const std::string &binLabel);
     /// default directory from which we read the xsec files for SUSY::CrossSectionDB
     static std::string defaultXsecDir() {
-      return std::string("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
+      return std::string("$ROOTCOREBIN/data/SUSYTools/mc14_13TeV/");
     }
     /// a list of the xsec files containing known simplified models
     static std::vector<std::string> xsecFilesForSimplifiedModels();
