@@ -15,9 +15,13 @@ Susy2LepCutflow::Susy2LepCutflow() :
 	m_ET(ET_Unknown)
 {
   n_readin       = 0;
+  n_pass_grl     = 0;
   n_pass_LAr     = 0;
+  n_pass_tileErr = 0;
+  n_pass_ttc     = 0;
   n_pass_BadJet  = 0;
   n_pass_BadMuon = 0;
+  n_pass_goodVtx = 0;
   n_pass_Cosmic  = 0;
 
   // The rest are channel specific.
@@ -74,9 +78,12 @@ void Susy2LepCutflow::Begin(TTree* /*tree*/)
 {
   SusyNtAna::Begin(0);
   if(m_dbg) cout << "Susy2LepCutflow::Begin" << endl;
-  string period = "Moriond";
-  bool useReweightUtils = false;
-  m_trigObj = new DilTrigLogic(period, useReweightUtils);
+  //string period = "Moriond";
+  //bool useReweightUtils = false;
+  //m_trigObj = new DilTrigLogic(period, useReweightUtils);
+
+  // initialize the general trigger tool (SusyNtuple/Trigger)
+  m_ntTrig = new Trigger(m_input_chain, true);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -148,25 +155,46 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   // I have deleted Steve's so that I can build the
   // analysis up as I progress
   //int flag = nt.evt()->evtFlag[NtSys_NOM];
-  int flag = nt.evt()->cutFlags[NtSys::NOM];
+  int flags = nt.evt()->cutFlags[NtSys::NOM];
 
-  if( !SusyNtTools::passLAr(flag) )              return false;
-  n_pass_LAr++;
-  if( !SusyNtTools::passBadJet(flag) )           return false;
-  n_pass_BadJet++;
-  if( !SusyNtTools::passBadMuon(flag) )          return false;
-  n_pass_BadMuon++;
-  if( !SusyNtTools::passCosmic(flag) )           return false;
-  n_pass_Cosmic++;
-  if(!passNBaseLepCut(baseLeps))    return false;
+  // for now, check the cleaning cut flags directly -- will want to check
+  // the implementation on the SusyNtTools side of things
+
+  // grl
+  if( !(flags & ECut_GRL) )                     return false;
+    n_pass_grl++;
+  // lar
+  if( !(flags & ECut_LarErr) )                  return false;
+    n_pass_LAr++;
+  // tile error
+  if( !(flags & ECut_TileErr) )                 return false;
+    n_pass_tileErr++;
+  // ttc veto
+  if( !(flags & ECut_TTC) )                     return false;
+    n_pass_ttc++;
+  // bad muon
+  if( !(flags & ECut_BadMuon) )                 return false;
+    n_pass_BadMuon++;
+  // jet cleaning
+  if( !(flags & ECut_BadJet) )                  return false;
+    n_pass_BadJet++;
+  // good vertex
+  if( !(flags & ECut_GoodVtx) )                 return false;
+    n_pass_goodVtx++;
+  // cosmic muon veto
+  if( !(flags & ECut_Cosmic) )                  return false;
+    n_pass_Cosmic++;
+
+  if(!passNBaseLepCut(baseLeps))                return false;
   
   // Get Event Type to continue cutflow
   m_ET = getDiLepEvtType(baseLeps);
+  if(m_ET == ET_me) m_ET = ET_em;
   
-  if( !passTrigger(baseLeps, m_met) )     return false;  
+  if( !passTrigger(baseLeps, m_met) )           return false;  
   n_pass_flavor[m_ET]++;
-  if( !passNLepCut(leptons) )       return false;
-  if( !passMll(leptons) )           return false;
+  if( !passNLepCut(leptons) )                   return false;
+  if( !passMll(leptons) )                       return false;
 
   return true;
 }
@@ -339,14 +367,76 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons, const Met* met)
     return true;
   }
 
-  //int run         = nt.evt()->run;
-  //DataStream strm = nt.evt()->stream;
-  //if( m_trigObj->passDilTrig(leptons, run, strm) ){
-  if( m_trigObj->passDilTrig(leptons, met->Et, nt.evt()) ){
+  // this is basic example of using the SusyNtuple/Trigger class 
+  // --> check that any of the single lepton triggers fired
+  //     and make sure that all leptons are matched to a fired trigger
+  
+  // currently (as of June 8 2015) stored lepton triggers
+  std::vector<std::string> single_ele = { "e5_etcut",          "e5_lhtight",            "e9_etcut",           "e9_lhtight",
+                                          "e14_etcut",         "e20_medium",            "e24_medium1_iloose", "e24_loose1",
+                                          "e24_tight_iloose",  "e25_lhvloose_L1EM15",   "e26_tight_iloose",
+                                          "e28_tight1_iloose", "e30_etcut_L1EM15",      "e40_etcut_L1EM15",   "e60_medium",
+                                          "e60_loose1",        "e60_medium1",           "e60_lhmedium"
+                                        };
+  std::vector<std::string> di_ele     = { "2e12_loose1",       "2e12_loose_L12EM10VH",  "2e17_loose1",        "2e17_lhloose" };
+  std::vector<std::string> single_muo = { "mu4",  "mu6",          "mu10", "mu14", "mu18", 
+                                          "mu20", "mu22",         "mu24", "mu24_imedium",
+                                          "mu26", "mu26_imedium", "mu50", "mu60_0eta105_msonly"
+                                        };
+  std::vector<std::string> di_muo     = { "2mu4", "2mu6", "2mu10", "2mu14", "mu24_mu8noL1",
+                                          "mu14_iloose_mu14", "mu20_imedium_mu8noL1", "mu20_iloose_mu8noL1"
+                                        };
+  std::vector<std::string> el_mu      = { "e17_loose_mu14", "e17_medium_mu12" };
+
+  std::vector<std::string> lepton_triggers = single_ele;
+  lepton_triggers.insert(lepton_triggers.end(), di_ele.begin(), di_ele.end());
+  lepton_triggers.insert(lepton_triggers.end(), single_muo.begin(), single_muo.end());
+  lepton_triggers.insert(lepton_triggers.end(), di_muo.begin(), di_muo.end());
+  lepton_triggers.insert(lepton_triggers.end(), el_mu.begin(), el_mu.end());
+
+  std::vector<std::string> single_lep_triggers = single_ele;
+  single_lep_triggers.insert(single_lep_triggers.end(), single_muo.begin(), single_muo.end());
+
+  //////////////////////////////////////////////////////
+  // check if any single lepton trigger has been fired
+  //////////////////////////////////////////////////////
+  bool trig_has_fired = false;
+  std::vector<std::string> fired_triggers;
+  for(unsigned int iTrig = 0; iTrig < single_lep_triggers.size(); iTrig++){
+    std::string trig = "HLT_" + single_lep_triggers[iTrig];
+    if(m_ntTrig->passTrigger(nt.evt()->trigBits, trig)) { 
+        trig_has_fired = true;
+        fired_triggers.push_back(trig);
+    }
+  }
+  //////////////////////////////////////////////////////
+  // check to make sure that both leptons are matched 
+  // to a fired trigger
+  //////////////////////////////////////////////////////
+  bool lep_1_ismatched = false;
+  bool lep_2_ismatched = false;
+  for(unsigned int iLep = 0; iLep < leptons.size(); iLep++) {
+    Susy::Lepton* lep = leptons.at(iLep);
+    for(unsigned int iTrig = 0; iTrig < fired_triggers.size(); iTrig++){
+        std::string trig = fired_triggers[iTrig];
+        if(m_ntTrig->passTrigger(lep->trigBits, trig) && iLep==0) lep_1_ismatched = true;
+        if(m_ntTrig->passTrigger(lep->trigBits, trig) && iLep==1) lep_2_ismatched = true;
+    }
+  }
+  if(trig_has_fired && lep_1_ismatched && lep_2_ismatched) {
     n_pass_trig[m_ET]++;
     return true;
   }
-  return false;
+  else { return false; }
+
+  ////int run         = nt.evt()->run;
+  ////DataStream strm = nt.evt()->stream;
+  ////if( m_trigObj->passDilTrig(leptons, run, strm) ){
+  //if( m_trigObj->passDilTrig(leptons, met->Et, nt.evt()) ){
+  //  n_pass_trig[m_ET]++;
+  //  return true;
+  //}
+  //return false;
 }
 /*--------------------------------------------------------------------------------*/
 bool Susy2LepCutflow::sameFlavor(const LeptonVector& leptons)
@@ -392,7 +482,7 @@ bool Susy2LepCutflow::passJetVeto(const JetVector& jets)
   bool failjet = false;
   for(uint i=0; i<jets.size(); ++i){
     const Jet* jet = jets.at(i);
-    if( jet->Pt() < 30         ) continue;
+    if( jet->Pt() < 20         ) continue;
     if( fabs(jet->Eta()) > 2.5 ) continue;
     if( jet->jvf < 0.75        ) continue;
     failjet = true;
@@ -456,12 +546,16 @@ bool Susy2LepCutflow::passMT2(const LeptonVector& leptons, const Met* met, float
 void Susy2LepCutflow::dumpEventCounters()
 {
   cout << endl;
-  cout << "Susy2LepCutflow event counters"    << endl;
-  cout << "read in:       " << n_readin       << endl;
-  cout << "pass LAr:      " << n_pass_LAr     << endl;
-  cout << "pass BadJet:   " << n_pass_BadJet  << endl;
-  cout << "pass BadMu:    " << n_pass_BadMuon << endl;
-  cout << "pass Cosmic:   " << n_pass_Cosmic  << endl;
+  cout << "Susy2LepCutflow event counters"     << endl;
+  cout << "read in        :" << n_readin       << endl;
+  cout << "pass GRL       :" << n_pass_grl     << endl;
+  cout << "pass LAr       :" << n_pass_LAr     << endl;
+  cout << "pass tile err  :" << n_pass_tileErr << endl;
+  cout << "pass ttc veto  :" << n_pass_ttc     << endl;
+  cout << "pass BadMu     :" << n_pass_BadMuon << endl;
+  cout << "pass BadJet    :" << n_pass_BadJet  << endl;
+  cout << "pass primVtx   :" << n_pass_goodVtx << endl;
+  cout << "pass Cosmic    :" << n_pass_Cosmic  << endl;
 
   string v_ET[ET_N] = {"ee","mm","em","Unknown"};
   for(int i=0; i<ET_N; ++i){
