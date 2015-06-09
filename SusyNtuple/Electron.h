@@ -23,6 +23,7 @@ public:
     float clusEta;            ///< CaloCluster eta
     float clusPhi;            ///< CaloCluster phi
     float trackPt;            ///< ID track pt
+    float trackEta;           ///< ID track eta
 
     //LLH quality flags
     bool veryLooseLLH;        ///< veryLooseLLH
@@ -113,7 +114,7 @@ public:
 
     /// Clear vars
     void clear(){
-      clusE = clusEta = clusPhi = trackPt = 0;
+      clusE = clusEta = clusPhi = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       isoGradientLoose = isoGradient = isoVeryLoose = isoLoose = isoTight = false;
@@ -137,7 +138,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 8);
+    ClassDef(Electron, 9);
 };
 } //Susy
 #endif
