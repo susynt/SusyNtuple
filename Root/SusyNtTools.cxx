@@ -52,7 +52,7 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
     jets = preJets;
 
     // Overlap removal
-    if(!m_overlapTool.doHarmonization()){
+    if(!m_overlapTool.useSignalLeptons()){
         m_overlapTool.performOverlap(elecs, muons, taus, jets);
     }
 
@@ -75,7 +75,7 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
     //cout<<"Select Taus: "<<selectTaus<<" size: "<<taus.size()<<endl;
 
     // Now perform the overlap removals
-    if(!m_overlapTool.doHarmonization()){
+    if(!m_overlapTool.useSignalLeptons()){
         m_overlapTool.performOverlap(elecs, muons, taus, jets);
     }
 
@@ -99,9 +99,9 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
     sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
     sigTaus = getSignalTaus(baseTaus, tauJetID, tauEleID, tauMuoID);
     sigJets = getSignalJets(baseJets, sys);
-    sigJets2Lep = getSignalJets2Lep(baseJets, sys);
+//    sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 
-    if(m_overlapTool.doHarmonization()){
+    if(m_overlapTool.useSignalLeptons()){
         m_overlapTool.performOverlap(sigElecs, sigMuons, sigTaus, sigJets);
     }
 
@@ -121,12 +121,12 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVe
     sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso);
     sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC, removeLepsFromIso);
     sigJets = getSignalJets(baseJets, sys);
-    sigJets2Lep = getSignalJets2Lep(baseJets, sys);
+//    sigJets2Lep = getSignalJets2Lep(baseJets, sys);
 
     getSignalTaus(baseTaus, mediumTaus, tightTaus);
 
 
-    if(m_overlapTool.doHarmonization()){
+    if(m_overlapTool.useSignalLeptons()){
         // Taus not used if harmonized OR -- using tightTaus as dummy signature
         m_overlapTool.performOverlap(sigElecs, sigMuons, tightTaus, sigJets);
     }
