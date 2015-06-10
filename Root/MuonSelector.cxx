@@ -195,11 +195,6 @@ bool MuonSelector::isSignalMuon(const Muon* mu,
                                 const unsigned int nVtx, bool isMC,
                                 bool removeLepsFromIso)
 {
-    bool ourSignal = (muPassIsolation(mu) && (fabs(mu->d0Sig()) < 3.) && (fabs(mu->z0SinTheta())<0.4) && (mu->medium) && (mu->Pt() > 10));
- //   cout << "mu  signal? " << (mu->isSignal ? "yes" : "no") << "  ourSig? " << (ourSignal ? "yes" : "no") << endl; //<< "  med? " << (mu->medium ? "yes" : "no") << "  iso?: " << (muPassIsolation(mu) ? "yes" : "no") << "  d0sig: " << fabs(mu->d0Sig()) << "  z0SinTheta: " << fabs(mu->z0SinTheta()) << "  pt: " << mu->Pt() << endl;
-
-    if( (mu->isSignal) && !ourSignal) cout << "mu contradiction!" << endl;
-    if( !(mu->isSignal) && ourSignal) cout << "mu contradiction!" << endl;
 
     //////////////////////////////
     // Isolation
