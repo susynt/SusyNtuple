@@ -6,6 +6,7 @@
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/ElectronId.h"
+#include "SusyNtuple/Isolation.h"
 
 
 namespace Susy {
@@ -49,6 +50,11 @@ namespace Susy {
         */
         bool elecPassID(const Electron* ele, bool signalQuality);
         /**
+            Check whether the input electron "ele" passes a given isolation quality
+            set by IsolationSelectionTool. 
+        */
+        bool elecPassIsolation(const Electron* ele);
+        /**
             Return ptcone30 for input electron "ele". If removeLeptsFromIso=True
             removes any light-lepton pT contribution to the dR=0.3 cone 
             surrounding "ele" if the light-lepton is "semiSignal".
@@ -89,6 +95,7 @@ namespace Susy {
         bool m_doMuEtconeCut;
         
         ElectronId m_eleId;    ///< electron quality requirement (selected from eleID enum)
+        Isolation m_sigIso;    ///< electron isolation qualiy for signal electrons (c.f. SusyNtuple/Isolation.h)
 
         ///////////////////////////////
         // Available analyses

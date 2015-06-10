@@ -176,10 +176,11 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
         //////////////////////////
         // Following SUSYTools
         //////////////////////////
+    
         if(!e->looseLLH)                continue;
         if(e->Eta() > ELECTRON_ETA_CUT) continue;
         if(e->Pt() < ELECTRON_PT_CUT)   continue;
-        
+
         // Save
         elecs.push_back(e);
     }
@@ -196,6 +197,7 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
         //////////////////////////
         // Following SUSYTools
         //////////////////////////
+    
         if(!mu->medium)              continue;
         if(mu->Eta() > MUON_ETA_CUT) continue;
         if(mu->Pt() < MUON_PT_CUT)   continue;

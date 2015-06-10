@@ -23,6 +23,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     case(AnalysisType::Ana_2Lep) : { 
         m_2lep  = true;
 
+        m_sigIso = Isolation::GradientLoose;
+
         m_removeLepsFromIso = false;
         m_doIPCut = true;
         m_doPtconeCut = true;
@@ -44,7 +46,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.12;
         MU_MAX_D0SIG_CUT                = 3.0;
-        MU_MAX_Z0_SINTHETA              = 1.0;
+        MU_MAX_Z0_SINTHETA              = 0.4;
 
         break;
     } 
@@ -53,6 +55,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     case(AnalysisType::Ana_3Lep) : {
         m_3lep  = true;
+
+        m_sigIso = Isolation::Tight;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -75,7 +79,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.12;
         MU_MAX_D0SIG_CUT                = 3.0;
-        MU_MAX_Z0_SINTHETA              = 1.0;
+        MU_MAX_Z0_SINTHETA              = 0.4;
 
         break;
     }
@@ -84,6 +88,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
     //////////////////////////////////////
     case(AnalysisType::Ana_2LepWH) : {
         m_2lepWH = true;
+
+        m_sigIso = Isolation::Tight;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -106,7 +112,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.14;
         MU_MAX_D0SIG_CUT                = 3.0;
-        MU_MAX_Z0_SINTHETA              = 1.0;
+        MU_MAX_Z0_SINTHETA              = 0.4;
 
         break;
     }
@@ -119,6 +125,8 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         cout << "              will apply default muon selection (Ana_2Lep)." << endl;
         m_analysis = AnalysisType::Ana_2Lep;
         m_2lep = true;
+    
+        m_sigIso = Isolation::Tight;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -141,7 +149,7 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
         MU_ETCONE30_K2_MC               = 0.00076;
         MU_ETCONE30_PT_CUT              = 0.12;
         MU_MAX_D0SIG_CUT                = 3.0;
-        MU_MAX_Z0_SINTHETA              = 1.0;
+        MU_MAX_Z0_SINTHETA              = 0.4;
 
         break;
 
@@ -160,6 +168,7 @@ MuonSelector::MuonSelector() :
     m_doPtconeCut(true),
     m_doElEtConeCut(true),
     m_doMuEtconeCut(false),
+    m_sigIso(Isolation::IsolationInvalid),
     m_2lep(false),
     m_3lep(false),
     m_2lepWH(false),
@@ -186,38 +195,80 @@ bool MuonSelector::isSignalMuon(const Muon* mu,
                                 const unsigned int nVtx, bool isMC,
                                 bool removeLepsFromIso)
 {
+    bool ourSignal = (muPassIsolation(mu) && (fabs(mu->d0Sig()) < 3.) && (fabs(mu->z0SinTheta())<0.4) && (mu->medium) && (mu->Pt() > 10));
+ //   cout << "mu  signal? " << (mu->isSignal ? "yes" : "no") << "  ourSig? " << (ourSignal ? "yes" : "no") << endl; //<< "  med? " << (mu->medium ? "yes" : "no") << "  iso?: " << (muPassIsolation(mu) ? "yes" : "no") << "  d0sig: " << fabs(mu->d0Sig()) << "  z0SinTheta: " << fabs(mu->z0SinTheta()) << "  pt: " << mu->Pt() << endl;
+
+    if( (mu->isSignal) && !ourSignal) cout << "mu contradiction!" << endl;
+    if( !(mu->isSignal) && ourSignal) cout << "mu contradiction!" << endl;
+
+    //////////////////////////////
+    // Isolation
+    // (IsolationSelectionTool)
+    //////////////////////////////
+    if(!muPassIsolation(mu)) return false;
+
     //////////////////////////////
     // Impact parameter
     //////////////////////////////
-    if(m_doIPCut) {
-        // all ana using unbiased IP
-        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG_CUT) return false;
+    if (m_doIPCut) {
+        if(fabs(mu->d0Sig() >= MU_MAX_D0SIG_CUT))        return false;
         if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
     }
+
     //////////////////////////////
-    // ptcone isolation cut 
-    // with pileup correction
+    // mu pt
     //////////////////////////////
-    if(m_doPtconeCut) { // true by default
-        if(!muPassPtIso(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso)) return false;
-    }
-    //////////////////////////////
-    // etcone isolation
-    //////////////////////////////
-    // TODO: danny -- These selections seem ~wrong --> Can you have m_doMuEtconeCut AND Ana_2LepWH??
-    if(m_doMuEtconeCut) {
-        float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        if(etcone30/mu->Pt() >= MU_ETCONE30_PT_CUT) return false;
-    }
-    else if (m_2lepWH) {
-        float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        float pt = mu->Pt();
-        if(pt==0.0 || (etcone30/std::min(pt, MU_ISO_PT_THRS) >= MU_ETCONE30_PT_CUT)) return false;
-    }
+    if(mu->Pt() < 10) return false;
+    
+
+
+//    old:
+//    //////////////////////////////
+//    // Impact parameter
+//    //////////////////////////////
+//    if(m_doIPCut) {
+//        // all ana using unbiased IP
+//        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG_CUT) return false;
+//        if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
+//    }
+//    //////////////////////////////
+//    // ptcone isolation cut 
+//    // with pileup correction
+//    //////////////////////////////
+//    if(m_doPtconeCut) { // true by default
+//        if(!muPassPtIso(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso)) return false;
+//    }
+//    //////////////////////////////
+//    // etcone isolation
+//    //////////////////////////////
+//    // TODO: danny -- These selections seem ~wrong --> Can you have m_doMuEtconeCut AND Ana_2LepWH??
+//    if(m_doMuEtconeCut) {
+//        float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+//        if(etcone30/mu->Pt() >= MU_ETCONE30_PT_CUT) return false;
+//    }
+//    else if (m_2lepWH) {
+//        float etcone30 = muEtConeCorr(mu, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+//        float pt = mu->Pt();
+//        if(pt==0.0 || (etcone30/std::min(pt, MU_ISO_PT_THRS) >= MU_ETCONE30_PT_CUT)) return false;
+//    }
 
     return true;
 }
 
+// -------------------------------------------------------------------------------------------- //
+bool MuonSelector::muPassIsolation(const Muon* mu)
+{
+    if     (m_sigIso == Isolation::GradientLoose) return mu->isoGradientLoose;
+    else if(m_sigIso == Isolation::Gradient) return mu->isoGradient;
+    else if(m_sigIso == Isolation::VeryLoose) return mu->isoVeryLoose;
+    else if(m_sigIso == Isolation::Loose) return mu->isoLoose;
+    else if(m_sigIso == Isolation::Tight) return mu->isoTight;
+    else {
+        cout << "MuonSelector::muPassIsolation error: isolation requirement for muons not set to signal-level isolation (Loose or Tight)" << endl;
+        cout << "MuonSelector::muPassIsolation error: >>> Exiting." << endl;
+        exit(1);
+    }
+}
 // -------------------------------------------------------------------------------------------- //
 bool MuonSelector::muPassPtIso(const Muon* mu,
                                const ElectronVector& baseElectrons,
