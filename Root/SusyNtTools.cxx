@@ -173,13 +173,16 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
         Electron* e = &susyNt->ele()->at(ie);
         e->setState(sys);
 
-        // Apply any additional Selection
-        if (e->Pt() < ELECTRON_PT_CUT) continue;
-
+        //////////////////////////
+        // Following SUSYTools
+        //////////////////////////
+        if(!e->looseLLH)                continue;
+        if(e->Eta() > ELECTRON_ETA_CUT) continue;
+        if(e->Pt() < ELECTRON_PT_CUT)   continue;
+        
         // Save
         elecs.push_back(e);
     }
-
     return elecs;
 }
 /*--------------------------------------------------------------------------------*/
@@ -190,12 +193,16 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
         Muon* mu = &susyNt->muo()->at(im);
         mu->setState(sys);
 
-        // Apply any additional selection
-        if (mu->Pt() < MUON_PT_CUT) continue;
+        //////////////////////////
+        // Following SUSYTools
+        //////////////////////////
+        if(!mu->medium)              continue;
+        if(mu->Eta() > MUON_ETA_CUT) continue;
+        if(mu->Pt() < MUON_PT_CUT)   continue;
 
+        // Save
         muons.push_back(mu);
     }
-
     return muons;
 }
 /*--------------------------------------------------------------------------------*/
@@ -239,7 +246,6 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, 
             sigElecs.push_back(e);
         }
     }
-
     return sigElecs;
 }
 /*--------------------------------------------------------------------------------*/
@@ -254,7 +260,6 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const Electr
             sigMuons.push_back(mu);
         }
     }
-
     return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
