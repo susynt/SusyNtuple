@@ -74,12 +74,19 @@ typedef std::vector<Susy::TruthJet*>      TruthJetVector;
 //-----------------------------------------------------------------------------------
 
 /// Data stream
+//enum DataStream {
+//    Stream_Unknown = 0,
+//    Stream_MC,
+//    Stream_Muons,
+//    Stream_Egamma,
+//    Stream_JetTauEtmiss,
+//    Stream_N
+//};
+
 enum DataStream {
     Stream_Unknown = 0,
     Stream_MC,
-    Stream_Muons,
-    Stream_Egamma,
-    Stream_JetTauEtmiss,
+    Stream_PhysicsMain,
     Stream_N
 };
 
