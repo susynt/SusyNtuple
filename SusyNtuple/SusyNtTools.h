@@ -38,6 +38,7 @@ public:
         m_overlapTool.setAnalysis(A);
         if (verbose) std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
     };
+    AnalysisType getAnaType() { return m_anaType; }
 
     //
     // Methods to grab objects based on systematic shift desired
