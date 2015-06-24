@@ -131,7 +131,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   // New approach, using MCWeighter
   const Event* evt = nt.evt();
   MCWeighter::WeightSys wSys = MCWeighter::Sys_NOM;
-  float w = SusyNtAna::mcWeighter().getMCWeight(evt, LUMI_A_L, wSys);
+  float w = SusyNtAna::mcWeighter().getMCWeight(evt, LUMI_A_A3, wSys);
 
   // Lepton efficiency correction
   float lepSF = getLeptonSF(m_signalLeptons);

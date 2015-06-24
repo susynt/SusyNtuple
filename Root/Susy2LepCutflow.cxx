@@ -191,7 +191,7 @@ bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVecto
   m_ET = getDiLepEvtType(baseLeps);
   if(m_ET == ET_me) m_ET = ET_em;
   
-  if( !passTrigger(baseLeps, m_met) )           return false;  
+  //if( !passTrigger(baseLeps, m_met) )           return false;  
   n_pass_flavor[m_ET]++;
   if( !passNLepCut(leptons) )                   return false;
   if( !passMll(leptons) )                       return false;
