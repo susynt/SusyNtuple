@@ -34,13 +34,19 @@ namespace Susy {
 
 const float MZ = 91.2;
 
-const float LUMI_A_B3 = 1037.;
-const float LUMI_A_B14 = 5835.;
-const float LUMI_A_D7 = 9632.86;
-const float LUMI_A_D = 10454.;
-const float LUMI_A_E = 13021.8;
+// Run 2 Luminosities [pb-1]
+// see data15_13TeV : https://atlas-tagservices.cern.ch/tagservices/RunBrowser/runBrowserReport/rBR_Period_Report.php
+const float LUMI_A_A3 = 1.28; ///< "all good" luminosity for periods A1-A3
+const float LUMI_A_A4 = 8.33; ///< "all good" luminosity for periods A1-A4
 
-const float LUMI_A_L = 20339.8; // 20690.4;
+// Run 1 Luminosities
+//const float LUMI_A_B3 = 1037.;
+//const float LUMI_A_B14 = 5835.;
+//const float LUMI_A_D7 = 9632.86;
+//const float LUMI_A_D = 10454.;
+//const float LUMI_A_E = 13021.8;
+//
+//const float LUMI_A_L = 20339.8; // 20690.4;
 
 //-----------------------------------------------------------------------------------
 // Convenience typedefs
@@ -74,9 +80,19 @@ typedef std::vector<Susy::TruthJet*>      TruthJetVector;
 //-----------------------------------------------------------------------------------
 
 /// Data stream
+//enum DataStream {
+//    Stream_Unknown = 0,
+//    Stream_MC,
+//    Stream_Muons,
+//    Stream_Egamma,
+//    Stream_JetTauEtmiss,
+//    Stream_N
+//};
+
 enum DataStream {
     Stream_Unknown = 0,
     Stream_MC,
+    Stream_PhysicsMain,
     Stream_Muons,
     Stream_Egamma,
     Stream_JetTauEtmiss,

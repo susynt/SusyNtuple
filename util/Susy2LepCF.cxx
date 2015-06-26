@@ -86,6 +86,7 @@ int main(int argc, char** argv)
   Susy2LepCutflow* susyAna = new Susy2LepCutflow();
   susyAna->setDebug(dbg);
   susyAna->setSampleName(sample);
+  susyAna->setChain(chain); // propagate the TChain to the analysis
 
   // Run the job
   if(nEvt<0) nEvt = nEntries;

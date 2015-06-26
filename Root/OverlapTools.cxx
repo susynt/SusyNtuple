@@ -18,7 +18,9 @@ namespace Susy {
 // Constructor
 // ------------------------------------------------------------------------------ //
 OverlapTools::OverlapTools() :
-    m_doHarmonization(false),
+    m_useSignalLeptons(false),
+    m_useIsoLeptons(false),
+    m_doBjetOR(false),
     m_verbose(false)
 {
 }
@@ -32,7 +34,9 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
     case(AnalysisType::Ana_2Lep) : 
     case(AnalysisType::Ana_3Lep) : 
     case(AnalysisType::Ana_2LepWH) : {
-        m_doHarmonization = false;
+        m_useSignalLeptons = false;
+        m_useIsoLeptons    = false;
+        m_doBjetOR         = false;
         break;
     }
     ///////////////////////////////////
@@ -47,19 +51,17 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
              << " '"<<std::underlying_type<AnalysisType>::type(a)<< "'" << endl;
         cout << "               will applay default overlap procedure (Run-1)." << endl;
 #warning We should set the defaullt selections ffor tools to be a consistent AnaType
-        m_doHarmonization = false;
+        m_useSignalLeptons = false;
+        m_useIsoLeptons    = false;
+        m_doBjetOR         = false;
         break;
     }
     } // switch
 
-    if(m_doHarmonization) cout << "OverlapTools::setAnalysis(): Using harmonized overlap procedure." << endl;
-
+    cout << "OverlapTools    using signal leptons    :" << (m_useSignalLeptons ? "True" : "False") << endl;
+    cout << "OverlapTools    using isolated leptons  :" << (m_useIsoLeptons ? "True" : "False") << endl;
+    cout << "OverlapTools    doing b-jet OR procedure:" << (m_doBjetOR ? "True" : "False") << endl;
     return *this;
-}
-// ------------------------------------------------------------------------------ //
-bool OverlapTools::doHarmonization()
-{
-    return m_doHarmonization;
 }
 // ------------------------------------------------------------------------------ //
 // Main overlap removal function
@@ -68,10 +70,26 @@ bool OverlapTools::doHarmonization()
 void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                                     TauVector& taus, JetVector& jets)
 {
-
-    /** Following the prescription descibed in:
-    https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr1913TeV#Overlap_Removals
+    /** Following the rel20/13TeV prescription described in:
+    https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Overlap_Removals
     */
+
+    ///////////////////////////////////////////
+    // If using isolated leptons in OR, remove
+    // the non-isolated leptons
+    // --> using GradientLoose WP for isolation
+    //     (this is default in SUSYTools)
+    ///////////////////////////////////////////
+    if(useIsolatedLeptons()){
+        for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
+            const Electron* e = electrons.at(iEl);
+            if(!e->isoGradientLoose) { electrons.erase(electrons.begin() + iEl); continue; }
+        }
+        for(int iMu=muons.size()-1; iMu>=0; iMu--) {
+            const Muon* m = muons.at(iMu);
+            if(!m->isoGradientLoose) { muons.erase(muons.begin() + iMu); continue; }
+        }
+    }
 
     ///////////////////////////////////////////
     // Remove jets overlapping with electrons
@@ -139,15 +157,33 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
 ///////////////////////////////////////////
 void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
 {
+    /////////////////////////
+    // update
+    /////////////////////////
     if(electrons.size()==0 || jets.size()==0) return;
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--){
+    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
         const Electron* e = electrons.at(iEl);
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
+            // if doing BjetOR procedure, ignore bjets
+            // --> the "loose" bjet criteria used in SUSYTools is 
+            //     that the jet is a bjet if MV2c20 > -0.5517
+            if(doBjetOR() && (j->mv2c20 > -0.5517)) continue; 
             if(e->DeltaR(*j) > J_E_DR) continue;
-            jets.erase(jets.begin()+iJ);
+            jets.erase(jets.begin() + iJ);
         } // iJ
     } // iEl
+        
+
+   // if(electrons.size()==0 || jets.size()==0) return;
+   // for(int iEl=electrons.size()-1; iEl>=0; iEl--){
+   //     const Electron* e = electrons.at(iEl);
+   //     for(int iJ=jets.size()-1; iJ>=0; iJ--){
+   //         const Jet* j = jets.at(iJ);
+   //         if(e->DeltaR(*j) > J_E_DR) continue;
+   //         jets.erase(jets.begin()+iJ);
+   //     } // iJ
+   // } // iEl
 }
 ////////////////////////////////////////////
 // Remove electrons overlapping with jets
@@ -172,36 +208,57 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets)
 ////////////////////////////////////////////
 void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets)
 {
-    // Harmonized: Keep muon, remove jet if jet has less than 3 tracks
-    //             else keep jet and remove muon
-    // Non-harmonized: Keep jet, remove muon
+    /////////////////////////
+    // update
+    /////////////////////////
     if(muons.size()==0 || jets.size()==0) return;
-    if(!m_doHarmonization){
-        for(int iMu=muons.size()-1; iMu>=0; iMu--){
-            const Muon* mu = muons.at(iMu);
-            for(int iJ=jets.size()-1; iJ>=0; iJ--){
-                const Jet* j = jets.at(iJ);
-                if(mu->DeltaR(*j) > M_J_DR) continue;
-                muons.erase(muons.begin()+iMu);
-                break; // move to next muon since iMu no longer exists!
-            } // iJ
-        } // iMu
-    } // !doHarm
-    else if(m_doHarmonization){
-        for(int iMu=muons.size()-1; iMu>=0; iMu--){
-            const Muon* mu = muons.at(iMu);
-            for(int iJ=jets.size()-1; iJ>=0; iJ--){
-                const Jet* j = jets.at(iJ);
-                if(mu->DeltaR(*j) > M_J_DR) continue;
-                int jet_nTrk = jets.at(iJ)->nTracks;
-                if(jet_nTrk<3) jets.erase(jets.begin()+iJ);
-                else{
-                    muons.erase(muons.begin()+iMu);
-                    break; // move to next muon since iMu no longer exists!
-                }
-            } // iJ
-        } // iMu
-    } // doHarm
+    for(int iMu=muons.size()-1; iMu>=0; iMu--){
+        const Muon* mu = muons.at(iMu);
+        for(int iJ=jets.size()-1; iJ>=0; iJ--){
+            const Jet* j = jets.at(iJ);
+            int jet_nTrk = j->nTracks;
+            if(mu->DeltaR(*j) > M_J_DR) continue;
+            if(jet_nTrk < 3) {
+                jets.erase(jets.begin() + iJ);
+            }
+            else {
+                muons.erase(muons.begin() + iMu);
+                break;
+            }
+        } // iJ
+    } // iMu
+                 
+
+   // // Harmonized: Keep muon, remove jet if jet has less than 3 tracks
+   // //             else keep jet and remove muon
+   // // Non-harmonized: Keep jet, remove muon
+   // if(muons.size()==0 || jets.size()==0) return;
+   // if(!m_doHarmonization){
+   //     for(int iMu=muons.size()-1; iMu>=0; iMu--){
+   //         const Muon* mu = muons.at(iMu);
+   //         for(int iJ=jets.size()-1; iJ>=0; iJ--){
+   //             const Jet* j = jets.at(iJ);
+   //             if(mu->DeltaR(*j) > M_J_DR) continue;
+   //             muons.erase(muons.begin()+iMu);
+   //             break; // move to next muon since iMu no longer exists!
+   //         } // iJ
+   //     } // iMu
+   // } // !doHarm
+   // else if(m_doHarmonization){
+   //     for(int iMu=muons.size()-1; iMu>=0; iMu--){
+   //         const Muon* mu = muons.at(iMu);
+   //         for(int iJ=jets.size()-1; iJ>=0; iJ--){
+   //             const Jet* j = jets.at(iJ);
+   //             if(mu->DeltaR(*j) > M_J_DR) continue;
+   //             int jet_nTrk = jets.at(iJ)->nTracks;
+   //             if(jet_nTrk<3) jets.erase(jets.begin()+iJ);
+   //             else{
+   //                 muons.erase(muons.begin()+iMu);
+   //                 break; // move to next muon since iMu no longer exists!
+   //             }
+   //         } // iJ
+   //     } // iMu
+   // } // doHarm
 }
 
 ////////////////////////////////////////////

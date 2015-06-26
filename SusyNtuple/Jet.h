@@ -31,6 +31,7 @@ public:
     float sv0;                ///< SV0 btag weight
     float combNN;             ///< JetFitterCombNN btag weight
     float mv1;                ///< MV1 btag weight
+    float mv2c20;             ///< MV2c20 btag weight
     float sv1plusip3d;        ///< SV1plusIP3D btag weight
     float jfit_mass;          ///< secondary vtx mass (dev DG Aug13, will remove when done)
     float sv0p_mass;          ///< ???
@@ -82,7 +83,7 @@ public:
       effscalefact = 0.;
       detEta = 0;
       emfrac = 0;
-      sv0 = combNN = mv1 = sv1plusip3d = 0;
+      sv0 = combNN = mv1 = sv1plusip3d = mv2c20 = 0;
       jfit_mass = sv0p_mass = svp_mass = 0;
       isBadVeryLoose = isHotTile = false;
       bch_corr_jet = bch_corr_cell = 0;

@@ -5,6 +5,7 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
+#include "SusyNtuple/Isolation.h"
 
 
 namespace Susy {
@@ -34,6 +35,11 @@ namespace Susy {
         bool isSignalMuon(const Muon* mu, const ElectronVector& baseElectrons,
                           const MuonVector& baseMuons, const unsigned int nVtx,
                           bool isMC, bool removeLepsFromIso);
+        /**
+            Check whether the input muon "mu" passes a given isolation quality
+            set by IsolationSelectionTool (parameter m_sigIso below).
+        */
+        bool muPassIsolation(const Muon* mu);
         /**
             Check whether the input muon "mu" passes the analysis' ptcone30/pt
             isolation requirement.
@@ -88,6 +94,8 @@ namespace Susy {
         bool m_doPtconeCut;
         bool m_doElEtConeCut;
         bool m_doMuEtconeCut;
+
+        Isolation m_sigIso;     ///< muon isolation quality for signal muons (c.f. SusyNtuple/Isolation.h)
 
         //////////////////////////////
         // Available analyses

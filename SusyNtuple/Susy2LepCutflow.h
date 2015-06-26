@@ -6,11 +6,13 @@
 
 // Root Packages
 #include "TTree.h"
+#include "TChain.h"
 
-// Susy Common
+// SusyNtuple
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/DilTrigLogic.h"
 #include "SusyNtuple/SusyNtTools.h"
+#include "SusyNtuple/Trigger.h"
 
 #include <fstream>
 
@@ -28,6 +30,9 @@ class Susy2LepCutflow : public SusyNtAna
     virtual ~Susy2LepCutflow(){};
 
     ofstream out;
+
+    // Propagate the input TChain
+    void setChain(TChain* chain) { m_input_chain = chain; }
 
     // Begin is called before looping on entries
     virtual void    Begin(TTree *tree);
@@ -79,7 +84,10 @@ class Susy2LepCutflow : public SusyNtAna
 
   protected:
 
+    TChain*             m_input_chain;  // input chain being processed
+
     DilTrigLogic*       m_trigObj;      // My trigger logic class
+    Trigger*            m_ntTrig;       // Trigger class object for testing trigger bits
 
     // Cut variables
     uint                m_nLepMin;      // min leptons
@@ -90,9 +98,13 @@ class Susy2LepCutflow : public SusyNtAna
 
     // Event counters
     uint                n_readin;
+    uint                n_pass_grl;
     uint                n_pass_LAr;
+    uint                n_pass_tileErr;
+    uint                n_pass_ttc;
     uint                n_pass_BadJet;
     uint                n_pass_BadMuon;
+    uint                n_pass_goodVtx;
     uint                n_pass_Cosmic;
     uint                n_pass_flavor[ET_N];
     uint                n_pass_nLep[ET_N];

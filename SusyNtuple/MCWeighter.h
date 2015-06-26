@@ -142,7 +142,7 @@ typedef std::map<SumwMapKey, float> SumwMap;
     void setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
 
     /// MC Weight includes generator, xsec, lumi, and pileup weights
-    float getMCWeight(const Susy::Event* evt, float lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
+    float getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3, WeightSys sys=Sys_NOM);
     bool sumwmapHasKey(SumwMapKey k);
 
     /// Get sumw for this event
@@ -181,7 +181,7 @@ typedef std::map<SumwMapKey, float> SumwMap;
     static void checkHistoHasBin(const TH1F &histo, const std::string &binLabel);
     /// default directory from which we read the xsec files for SUSY::CrossSectionDB
     static std::string defaultXsecDir() {
-      return std::string("$ROOTCOREBIN/data/SUSYTools/mc12_8TeV/");
+      return std::string("$ROOTCOREBIN/data/SUSYTools/mc15_13TeV/");
     }
     /// a list of the xsec files containing known simplified models
     static std::vector<std::string> xsecFilesForSimplifiedModels();

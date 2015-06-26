@@ -23,7 +23,8 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2Lep) : { 
         m_2lep = true;
 
-        m_eleId = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLLH;
+        m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -50,7 +51,8 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_3Lep) : {
         m_3lep = true;
 
-        m_eleId = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLLH;
+        m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -77,7 +79,8 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2LepWH) : {
         m_2lepWH = true;
 
-        m_eleId = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLLH;
+        m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -109,7 +112,8 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         m_analysis = AnalysisType::Ana_2Lep;
         m_2lep = true;
 
-        m_eleId = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLLH;
+        m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
         m_doIPCut = true;
@@ -144,6 +148,7 @@ ElectronSelector::ElectronSelector():
     m_doElEtconeCut(true),
     m_doMuEtconeCut(false),
     m_eleId(ElectronId::TightLLH),
+    m_sigIso(Isolation::IsolationInvalid),
     m_2lep(false),
     m_3lep(false),
     m_2lepWH(false),
@@ -170,6 +175,7 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
                                         const unsigned int nVtx, bool isMC,
                                         bool removeLepsFromIso)
 {
+
     /////////////////////////////
     // Electron ID
     /////////////////////////////
@@ -179,32 +185,46 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     // Impact parameter
     /////////////////////////////
     if (m_doIPCut) {
-        if(fabs(ele->d0Sig()) >= EL_MAX_D0SIG_CUT) return false;
+        if(fabs(ele->d0Sig())      >= EL_MAX_D0SIG_CUT)   return false;
         if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
     }
-    float pt = ele->Pt();
+    
     /////////////////////////////
-    // ptcone isolation
+    // isolation now uses
+    // isolation tool
     /////////////////////////////
-    if(m_doPtconeCut) {
-        float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso); 
-        if(m_2lepWH){
-            if(ptcone30/std::min(pt, EL_ISO_PT_THRS) >= EL_PTCONE30_PT_CUT) return false;
-        }
-        else 
-            if (ptcone30/pt >= EL_PTCONE30_PT_CUT) return false;
-    }
+    if(!elecPassIsolation(ele)) return false;
+
     /////////////////////////////
-    // topo etcone isolation
+    // ele pt
     /////////////////////////////
-    if(m_doElEtconeCut) { // true by default
-        float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-        if(m_2lepWH){
-            if(etcone/std::min(pt,EL_ISO_PT_THRS) >= EL_TOPOCONE30_PT_CUT) return false;
-        }
-        else
-            if(etcone/pt >= EL_TOPOCONE30_PT_CUT) return false;
-    }
+    if(ele->Pt() < 10) return false;
+
+    
+    
+    // old:
+    ///////////////////////////////
+    //// ptcone isolation
+    ///////////////////////////////
+    //if(m_doPtconeCut) {
+    //    float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso); 
+    //    if(m_2lepWH){
+    //        if(ptcone30/std::min(pt, EL_ISO_PT_THRS) >= EL_PTCONE30_PT_CUT) return false;
+    //    }
+    //    else 
+    //        if (ptcone30/pt >= EL_PTCONE30_PT_CUT) return false;
+    //}
+    ///////////////////////////////
+    //// topo etcone isolation
+    ///////////////////////////////
+    //if(m_doElEtconeCut) { // true by default
+    //    float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
+    //    if(m_2lepWH){
+    //        if(etcone/std::min(pt,EL_ISO_PT_THRS) >= EL_TOPOCONE30_PT_CUT) return false;
+    //    }
+    //    else
+    //        if(etcone/pt >= EL_TOPOCONE30_PT_CUT) return false;
+    //}
     return true;
 }
 /* --------------------------------------------------------------------------------------------- */ 
@@ -258,6 +278,7 @@ bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
 {
     if(signalQuality){
         if     (m_eleId == ElectronId::MediumLLH)        return electron->mediumLLH;
+        else if(m_eleId == ElectronId::LooseLLH)         return electron->looseLLH;
         else if(m_eleId == ElectronId::TightLLH)         return electron->tightLLH;
         else if(m_eleId == ElectronId::MediumLLH_nod0)   return electron->mediumLLH_nod0;
         else if(m_eleId == ElectronId::TightLLH_nod0)    return electron->tightLLH_nod0;
@@ -270,6 +291,20 @@ bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
     else {
         return true;
     }
+}
+/* --------------------------------------------------------------------------------------------- */ 
+bool ElectronSelector::elecPassIsolation(const Electron* ele)
+{
+    if     (m_sigIso == Isolation::GradientLoose) return ele->isoGradientLoose;
+    else if(m_sigIso == Isolation::Gradient)    return ele->isoGradient;
+    else if(m_sigIso == Isolation::VeryLoose) return ele->isoVeryLoose;
+    else if(m_sigIso == Isolation::Loose) return ele->isoLoose;
+    else if(m_sigIso == Isolation::Tight) return ele->isoTight; 
+    else {
+        cout << "ElectronSelector::elecPassIsolation error: isolation requirement for electrons not set to signal-level isolation (Loose or Tight)" << endl;
+        cout << "ElectronSelector::elecPassIsolation error: >>> Exiting." << endl;
+        exit(1);
+    } 
 }
 /* --------------------------------------------------------------------------------------------- */
 float ElectronSelector::elEtTopoConeCorr(const Electron* ele,

@@ -29,7 +29,9 @@ namespace Susy {
             signal objects (Run-2) in the code where the object-selection
             is taking place.
         */
-        bool doHarmonization();
+        bool useSignalLeptons() { return m_useSignalLeptons; }
+        bool useIsolatedLeptons() { return m_useIsoLeptons; }
+        bool doBjetOR() { return m_doBjetOR; }
 
         /// main overlap removal function
         void performOverlap(ElectronVector& electrons, MuonVector& muons,
@@ -59,7 +61,9 @@ namespace Susy {
     protected :
         /** This flag sets whether to perform the Run-2 overlap removal procedure.
             If true the Run-2 procedure is used. */
-        bool m_doHarmonization;
+        bool m_useSignalLeptons;
+        bool m_useIsoLeptons;
+        bool m_doBjetOR;
         bool m_verbose;
 
         
