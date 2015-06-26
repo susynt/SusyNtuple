@@ -54,7 +54,8 @@ public:
     float refMuo_sumet;       ///< Ref muon term sumet
    
     // I'm not a big fan of the way this is setup, would like to improve it someday
-    int sys;                  ///< Met stored in vector for each sys shift, this identifies met for specific shift
+    int sys;                  ///< Met stored in vector for each sys shift, 
+                              ///<this identifies met for specific shift in SusyNtSys
 
     /// print vars
     void print() const;

@@ -26,8 +26,8 @@ Tau::Tau(const Tau &rhs):
   eleBDTTight(rhs.eleBDTTight),
   muonVeto(rhs.muonVeto),
   trueTau(rhs.trueTau),
-  matched2TruthLepton(rhs.matched2TruthLepton),
   truthType(rhs.truthType),
+  matched2TruthLepton(rhs.matched2TruthLepton),
   detailedTruthType(rhs.detailedTruthType),
   looseEffSF(rhs.looseEffSF),
   errLooseEffSF(rhs.errLooseEffSF),
@@ -66,8 +66,8 @@ Tau& Tau::operator=(const Tau &rhs)
     eleBDTTight = rhs.eleBDTTight;
     muonVeto = rhs.muonVeto;
     trueTau = rhs.trueTau;
-    matched2TruthLepton = rhs.matched2TruthLepton;
     truthType = rhs.truthType;
+    matched2TruthLepton = rhs.matched2TruthLepton;
     detailedTruthType = rhs.detailedTruthType;
     looseEffSF = rhs.looseEffSF;
     errLooseEffSF = rhs.errLooseEffSF;

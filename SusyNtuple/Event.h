@@ -67,7 +67,7 @@ public:
     //int evtFlag[NtSys_N];
 
     /// Event cleaning cut flags. The bits are defined in SusyDefs as EventCleaningCuts
-    unsigned int cutFlags[NtSys::SYSUNKNOWN];
+    unsigned int cutFlags[NtSys::SYS_UNKNOWN];
 
     // Reweighting and scaling
     float wPileup;            ///< pileup weight for full dataset
