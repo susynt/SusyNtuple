@@ -22,14 +22,9 @@ Jet::Jet(const Jet &rhs):
   bjet(rhs.bjet),
   effscalefact(rhs.effscalefact),
   nTracks(rhs.nTracks),
-  sv0(rhs.sv0),
-  combNN(rhs.combNN),
   mv1(rhs.mv1),
   mv2c20(rhs.mv2c20),
   sv1plusip3d(rhs.sv1plusip3d),
-  jfit_mass(rhs.jfit_mass),
-  sv0p_mass(rhs.sv0p_mass),
-  svp_mass (rhs.svp_mass ),
   isBadVeryLoose(rhs.isBadVeryLoose),
   isHotTile(rhs.isHotTile),
   bch_corr_jet(rhs.bch_corr_jet),
@@ -69,13 +64,8 @@ Jet& Jet::operator=(const Jet &rhs)
     bjet = rhs.bjet;
     effscalefact = rhs.effscalefact;
     nTracks = rhs.nTracks;
-    sv0 = rhs.sv0;
-    combNN = rhs.combNN;
     mv1 = rhs.mv1;
     mv2c20 = rhs.mv2c20;
-    jfit_mass = rhs.jfit_mass;
-    sv0p_mass = rhs.sv0p_mass;
-    svp_mass  = rhs.svp_mass ;
     isBadVeryLoose = rhs.isBadVeryLoose;
     isHotTile = rhs.isHotTile;
     bch_corr_jet = rhs.bch_corr_jet;

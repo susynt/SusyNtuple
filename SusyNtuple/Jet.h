@@ -28,14 +28,9 @@ public:
     // btagging
     bool bjet;                ///< Is b-jet a la SUSYTools (70% w.p.)
     float effscalefact;       ///< B-tag SF a la SUSYTools (70% w.p.)  
-    float sv0;                ///< SV0 btag weight
-    float combNN;             ///< JetFitterCombNN btag weight
     float mv1;                ///< MV1 btag weight
     float mv2c20;             ///< MV2c20 btag weight
     float sv1plusip3d;        ///< SV1plusIP3D btag weight
-    float jfit_mass;          ///< secondary vtx mass (dev DG Aug13, will remove when done)
-    float sv0p_mass;          ///< ???
-    float svp_mass;           ///< ???
 
     // Flags/variables for cleaning
     bool isBadVeryLoose;      ///< bad jet flag computed with SUSYTools
@@ -83,8 +78,7 @@ public:
       effscalefact = 0.;
       detEta = 0;
       emfrac = 0;
-      sv0 = combNN = mv1 = sv1plusip3d = mv2c20 = 0;
-      jfit_mass = sv0p_mass = svp_mass = 0;
+      mv1 = sv1plusip3d = mv2c20 = 0;
       isBadVeryLoose = isHotTile = false;
       bch_corr_jet = bch_corr_cell = 0;
       isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;
@@ -108,7 +102,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 17);
+    ClassDef(Jet, 18);
 };
 } // Susy
 #endif
