@@ -30,8 +30,6 @@ public:
 
     //Iso var -- same fer ele & mu
     //Etcone to be drop later in run-2
-    float etcone20;           ///< etcone iso
-    float etcone30;           ///< etcone iso
     float etconetopo20;       ///< etconetopo iso
     float etconetopo30;       ///< etconetopo iso
     float ptcone20;           ///< ptcone iso
@@ -86,8 +84,7 @@ public:
     /// Clear vars
     void clear(){
         q = 0;
-        etcone20 = etcone30
-            = etconetopo20 = etconetopo30
+        etconetopo20 = etconetopo30
             = ptcone20 = ptcone30 
             = ptvarcone20 = ptvarcone30 = 0;
         d0 = errD0 = d0sigBSCorr = z0 = errZ0 = 0;
@@ -101,7 +98,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 16);
+    ClassDef(Lepton, 17);
 };
 } // Susy
 #endif
