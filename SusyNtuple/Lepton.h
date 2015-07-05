@@ -42,6 +42,7 @@ public:
 
     float d0;                 ///< d0 extrapolated to PV
     float errD0;              ///< Uncertainty on d0
+    float d0sigBSCorr;        ///< beam spot corrected d0Sig
     float z0;                 ///< z0 extrapolated to PV
     float errZ0;              ///< Uncertainty on z0
 
@@ -89,7 +90,7 @@ public:
             = etconetopo20 = etconetopo30
             = ptcone20 = ptcone30 
             = ptvarcone20 = ptvarcone30 = 0;
-        d0 = errD0 = z0 = errZ0 = 0;
+        d0 = errD0 = d0sigBSCorr = z0 = errZ0 = 0;
         mcType = mcOrigin = 0;
         matched2TruthLepton = false;
         truthType = -1;
@@ -100,7 +101,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 15);
+    ClassDef(Lepton, 16);
 };
 } // Susy
 #endif

@@ -21,6 +21,7 @@ Lepton::Lepton(const Lepton &rhs):
   ptvarcone30(rhs.ptvarcone30),
   d0(rhs.d0),
   errD0(rhs.errD0),
+  d0sigBSCorr(rhs.d0sigBSCorr),
   z0(rhs.z0),
   errZ0(rhs.errZ0),
   mcType(rhs.mcType),
@@ -54,6 +55,7 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     ptvarcone30  = rhs.ptvarcone30;
     d0 = rhs.d0;
     errD0 = rhs.errD0;
+    d0sigBSCorr = rhs.d0sigBSCorr;
     z0 = rhs.z0;
     errZ0 = rhs.errZ0;
     mcType = rhs.mcType;
