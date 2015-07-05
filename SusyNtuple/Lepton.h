@@ -53,8 +53,6 @@ public:
     float effSF;              ///< Efficiency scale factor  (for electron from LLH)
     float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LLH)
 
-    //unsigned int trigFlags; ///< Bit word representing matched trigger chains
-    long long trigFlags;      ///< Bit word representing matched trigger chains
     TBits   trigBits;         ///< TBits to store matched trigger chains
     static const size_t m_nTriggerBits=64;
 
@@ -65,12 +63,6 @@ public:
     }
     float z0SinTheta() const {
       return z0 * sin(Theta());
-    }
-
-    /// Trigger matching
-    /** Provide the trigger chain via bit mask, e.g. TRIG_mu18 */
-    bool matchTrig(unsigned int mask) const {
-      return (trigFlags & mask) == mask;
     }
 
     // Polymorphism, baby!!
@@ -93,12 +85,11 @@ public:
         truthType = -1;
         effSF = 1;
         errEffSF = 0;
-        trigFlags = 0;
         isBaseline = isSignal = false;
         Particle::clear();
     }
 
-    ClassDef(Lepton, 17);
+    ClassDef(Lepton, 18);
 };
 } // Susy
 #endif
