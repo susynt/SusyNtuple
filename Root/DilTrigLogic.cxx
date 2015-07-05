@@ -1,6 +1,13 @@
 // Trigger methods to handle Susy Dilepton trigger logic
 
+// dantrim July 5 2015 :: commenting out all of this since it is obsolete and
+// relies on old way of storing trigger bits using long long int
+
+#ifdef FOO
+
 #include "SusyNtuple/DilTrigLogic.h"
+
+
 
 /*--------------------------------------------------------------------------------*/
 // Constructor
@@ -412,4 +419,4 @@ void DilTrigLogic::debugFlag(uint flag){
   cout << "\tEF_mu18_tight_e7_medium1    " << (flag & TRIG_mu18_tight_e7_medium1)    << endl;
   cout << "\tEF_2mu8_EFxe40wMu_tclcw     " << (flag & TRIG_2mu8_EFxe40wMu_tclcw)     << endl;
 }
-
+#endif

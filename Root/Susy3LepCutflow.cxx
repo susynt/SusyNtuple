@@ -12,7 +12,6 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 Susy3LepCutflow::Susy3LepCutflow() :
         m_sel(""),
-        m_trigObj(0),
         m_nBaseLepMin(3),
         m_nBaseLepMax(3),
         m_nLepMin(3),
@@ -73,9 +72,6 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
     abort();
   }
 
-  // Trigger logic
-  m_trigObj = new TrilTrigLogic();
-  m_trigObj->loadTriggerMaps();
 
   // Book histograms
   //bookHistos();
@@ -283,7 +279,7 @@ bool Susy3LepCutflow::passNTauCut(const TauVector& taus)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons) 
 {
-  if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
+  //if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/

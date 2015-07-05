@@ -1,3 +1,5 @@
+#ifdef FOO // dantrim July 5 :: this class is obsolete, hide it from compiler
+
 #ifndef DilTrigLogic_h
 #define DilTrigLogic_h
 
@@ -110,3 +112,5 @@ class DilTrigLogic
 };
 
 #endif
+
+#endif 

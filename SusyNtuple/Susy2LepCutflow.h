@@ -10,7 +10,6 @@
 
 // SusyNtuple
 #include "SusyNtuple/SusyNtAna.h"
-#include "SusyNtuple/DilTrigLogic.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/Trigger.h"
 
@@ -28,8 +27,6 @@ class Susy2LepCutflow : public SusyNtAna
 
     Susy2LepCutflow();
     virtual ~Susy2LepCutflow(){};
-
-    ofstream out;
 
     // Propagate the input TChain
     void setChain(TChain* chain) { m_input_chain = chain; }
@@ -86,7 +83,6 @@ class Susy2LepCutflow : public SusyNtAna
 
     TChain*             m_input_chain;  // input chain being processed
 
-    DilTrigLogic*       m_trigObj;      // My trigger logic class
     Trigger*            m_ntTrig;       // Trigger class object for testing trigger bits
 
     // Cut variables

@@ -1,3 +1,5 @@
+#ifdef FOO // dantrim July 5 2015 :: this class is obsolete, hide it from compiler
+
 #ifndef SusyNtuple_TrilTrigLogic_h
 #define SusyNtuple_TrilTrigLogic_h
 
@@ -61,5 +63,7 @@ class TrilTrigLogic
     int                 m_dbg;          ///< Debug flag
 
 };
+
+#endif
 
 #endif

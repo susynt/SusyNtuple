@@ -8,7 +8,6 @@
 // Susy Common
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/SusyNtTools.h"
-#include "SusyNtuple/TrilTrigLogic.h"
 
 #include <fstream>
 
@@ -85,7 +84,6 @@ class Susy3LepCutflow : public SusyNtAna
 
     std::string         m_sel;          // event selection string
 
-    TrilTrigLogic*      m_trigObj;      // My trigger logic class
 
     // Cut variables
     uint                m_nBaseLepMin;  // min base leptons
