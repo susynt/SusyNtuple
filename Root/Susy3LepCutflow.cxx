@@ -105,7 +105,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   {
     cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
-         << " event " << setw(7) << nt.evt()->event << " ****" << endl;
+         << " event " << setw(7) << nt.evt()->eventNumber << " ****" << endl;
   }
 
   //
@@ -232,7 +232,7 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& 
   n_pass_mt++;
 
   if(m_writeOut){
-    out << nt.evt()->run << " " << nt.evt()->event << endl;
+    out << nt.evt()->run << " " << nt.evt()->eventNumber << endl;
   }
 
   return true;
@@ -390,7 +390,7 @@ void Susy3LepCutflow::dumpEventCounters()
 bool Susy3LepCutflow::debugEvent()
 {
   //uint run = nt.evt()->run;
-  //uint evt = nt.evt()->event;
+  //uint evt = nt.evt()->eventNumber;
   //if(run==191139 && evt==140644832) return true;
   //if(run==180164&&evt==24769) return true;
   return false;

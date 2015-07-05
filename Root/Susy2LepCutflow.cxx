@@ -108,7 +108,7 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   {
     cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
-         << " event " << setw(7) << nt.evt()->event << " ****" << endl;
+         << " event " << setw(7) << nt.evt()->eventNumber << " ****" << endl;
   }
 
   // select signal objects
@@ -604,7 +604,7 @@ void Susy2LepCutflow::dumpEventCounters()
 bool Susy2LepCutflow::debugEvent()
 {
   uint run = nt.evt()->run;
-  uint evt = nt.evt()->event;
+  uint evt = nt.evt()->eventNumber;
   //if(run==191139 && evt==140644832) return true;
   //if(run==180164&&evt==24769) return true;
   //if(run==189751 && evt==7934) return true;

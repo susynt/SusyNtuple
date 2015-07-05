@@ -11,7 +11,7 @@ void Event::print() const
 {
   cout << "Run " << run;
   if(isMC) cout << " MCID " << mcChannel;
-  cout << " Event " << event;
+  cout << " Event " << eventNumber;
   if(isMC) cout << " proc " << susyFinalState;
   cout << " Stream " << streamName(stream) 
        << " w " << w << endl;

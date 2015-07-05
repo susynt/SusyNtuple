@@ -65,11 +65,11 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   {
     cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
-         << " event " << setw(7) << nt.evt()->event << " ****" << endl;
+         << " event " << setw(7) << nt.evt()->eventNumber << " ****" << endl;
   }
 
   //Debug this event - check if should be processed
-  if(m_dbgEvt && !processThisEvent(nt.evt()->run, nt.evt()->event)) return kFALSE;
+  if(m_dbgEvt && !processThisEvent(nt.evt()->run, nt.evt()->eventNumber)) return kFALSE;
 
   // Dump variables from the tree for testing
   if(m_dbg){
@@ -82,7 +82,7 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   
   //Check Duplicate run:event
   if(!nt.evt()->isMC && checkDuplicate()){
-    if(isDuplicate(nt.evt()->run, nt.evt()->event))  return kFALSE;
+    if(isDuplicate(nt.evt()->run, nt.evt()->eventNumber))  return kFALSE;
   }
 
   // select baseline and signal objects

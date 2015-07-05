@@ -22,9 +22,8 @@ public:
         }
     virtual ~Event(){};
 
-    unsigned int run;         ///< run number
-    unsigned int event;       ///< event number
-    inline unsigned int eventNumber() const { return event; } ///< alias for event; TTree::Draw doesn't like event.event
+    unsigned int run;   ///< run number
+    unsigned int eventNumber; ///< event number
     unsigned int lb;          ///< lumi block number
     DataStream stream;        ///< DataStream enum, defined in SusyDefs.h
 
@@ -98,7 +97,7 @@ public:
 
     /// Clear vars
     void clear(){
-      run = event = lb = 0;
+      run = eventNumber = lb = 0;
       stream = Stream_Unknown;
       isMC = false;
       mcChannel = w = 0;
@@ -119,7 +118,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 29);
+    ClassDef(Event, 30);
   };
 } // Susy
 #endif
