@@ -297,7 +297,7 @@ bool ElectronSelector::elecPassIsolation(const Electron* ele)
 {
     if     (m_sigIso == Isolation::GradientLoose) return ele->isoGradientLoose;
     else if(m_sigIso == Isolation::Gradient)    return ele->isoGradient;
-    else if(m_sigIso == Isolation::VeryLoose) return ele->isoVeryLoose;
+    else if(m_sigIso == Isolation::LooseTrackOnly) return ele->isoLooseTrackOnly;
     else if(m_sigIso == Isolation::Loose) return ele->isoLoose;
     else if(m_sigIso == Isolation::Tight) return ele->isoTight; 
     else {

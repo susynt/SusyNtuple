@@ -31,7 +31,7 @@ Muon::Muon(const Muon &rhs):
   tight(rhs.tight),
   isoGradientLoose(rhs.isoGradientLoose),
   isoGradient(rhs.isoGradient),
-  isoVeryLoose(rhs.isoVeryLoose),
+  isoLooseTrackOnly(rhs.isoLooseTrackOnly),
   isoLoose(rhs.isoLoose),
   isoTight(rhs.isoTight),
   isBadMuon(rhs.isBadMuon),
@@ -70,7 +70,7 @@ Muon& Muon::operator=(const Muon &rhs)
     tight = rhs.tight;
     isoGradientLoose = rhs.isoGradientLoose;
     isoGradient = rhs.isoGradient;
-    isoVeryLoose = rhs.isoVeryLoose;
+    isoLooseTrackOnly = rhs.isoLooseTrackOnly;
     isoLoose = rhs.isoLoose;
     isoTight = rhs.isoTight;
     isBadMuon = rhs.isBadMuon;

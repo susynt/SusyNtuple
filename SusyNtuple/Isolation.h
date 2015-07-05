@@ -8,7 +8,7 @@ namespace Susy
 enum Isolation{
     GradientLoose=0
     ,Gradient
-    ,VeryLoose
+    ,LooseTrackOnly
     ,Loose
     ,Tight
     ,IsolationInvalid

@@ -39,7 +39,7 @@ public:
     // isolation flags
     bool isoGradientLoose;    ///< GradientLoose WP from IsolationSelectionTool
     bool isoGradient;         ///< Gradient WP from IsolationSelectionTool
-    bool isoVeryLoose;        ///< VeryLoose WP from IsolationSelectionTool
+    bool isoLooseTrackOnly;        ///< VeryLoose WP from IsolationSelectionTool
     bool isoLoose;            ///< Loose WP from IsolationSelectionTool
     bool isoTight;            ///< Tight WP from IsolationSelectionTool
 
@@ -126,7 +126,7 @@ public:
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
-      isoGradientLoose = isoGradient = isoVeryLoose = isoLoose = isoTight = false;
+      isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoTight = false;
       isChargeFlip = false;
       
       res_all_dn= res_all_up= 0;
@@ -160,7 +160,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 9);
+    ClassDef(Electron, 10);
 };
 } //Susy
 #endif

@@ -255,7 +255,7 @@ bool MuonSelector::muPassIsolation(const Muon* mu)
 {
     if     (m_sigIso == Isolation::GradientLoose) return mu->isoGradientLoose;
     else if(m_sigIso == Isolation::Gradient) return mu->isoGradient;
-    else if(m_sigIso == Isolation::VeryLoose) return mu->isoVeryLoose;
+    else if(m_sigIso == Isolation::LooseTrackOnly) return mu->isoLooseTrackOnly;
     else if(m_sigIso == Isolation::Loose) return mu->isoLoose;
     else if(m_sigIso == Isolation::Tight) return mu->isoTight;
     else {

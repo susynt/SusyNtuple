@@ -10,7 +10,7 @@ std::string Isolation2str(const Isolation &iso)
     switch(iso){
         case Isolation::GradientLoose           : s = "GradientLoose"   ; break;
         case Isolation::Gradient                : s = "Gradient"        ; break;
-        case Isolation::VeryLoose               : s = "VeryLoose"       ; break;
+        case Isolation::LooseTrackOnly          : s = "LooseTrackOnly"  ; break;
         case Isolation::Loose                   : s = "Loose"           ; break;
         case Isolation::Tight                   : s = "Tight"           ; break;
         case Isolation::IsolationInvalid        : s = "IsolationInvalid"; break;
