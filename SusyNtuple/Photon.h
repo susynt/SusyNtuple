@@ -26,6 +26,13 @@ public:
     float clusPhi;            ///< CaloCluster phi
     bool  OQ;                 ///< GoodOQ
 
+    // Isolation flags
+    bool isoGradientLoose;  ///< GradientLoose WP from IsolationSelectionTool
+    bool isoGradient;   ///< Gradient WP from IsolationSelectionTool
+    bool isoLooseTrackOnly; ///< LooseTrackOnly WP from IsolationSelectionTool
+    bool isoLoose;  ///< Loose WP from IsolationSelectionTool
+    bool isoTight;  ///< Tight WP from IsolationSelectionTool
+
     float topoEtcone40;
 
     // Systematics - not current supported??
@@ -45,11 +52,12 @@ public:
       tight = false;
       clusE = clusEta = clusPhi = 0;
       OQ = false;
+      isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoTight = false;
       topoEtcone40=0;
       Particle::clear();
     };
 
-    ClassDef(Photon, 2);
+    ClassDef(Photon, 3);
 };
 } // Susy
 #endif

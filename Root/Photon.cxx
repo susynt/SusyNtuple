@@ -12,6 +12,11 @@ Photon::Photon(const Photon &rhs):
   clusEta(rhs.clusEta),
   clusPhi(rhs.clusPhi),
   OQ(rhs.OQ),
+  isoGradientLoose(rhs.isoGradientLoose),
+  isoGradient(rhs.isoGradient),
+  isoLooseTrackOnly(rhs.isoLooseTrackOnly),
+  isoLoose(rhs.isoLoose),
+  isoTight(rhs.isoTight),
   topoEtcone40(rhs.topoEtcone40)
 {
 }
@@ -28,6 +33,11 @@ Photon& Photon::operator=(const Photon &rhs)
     clusEta = rhs.clusEta;
     clusPhi = rhs.clusPhi;
     OQ = rhs.OQ;
+    isoGradientLoose = rhs.isoGradientLoose;
+    isoGradient = rhs.isoGradient;
+    isoLooseTrackOnly = rhs.isoLooseTrackOnly;
+    isoLoose = rhs.isoLoose;
+    isoTight = rhs.isoTight;
     topoEtcone40 = rhs.topoEtcone40;
   }
   return *this;
