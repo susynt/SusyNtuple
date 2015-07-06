@@ -15,4 +15,6 @@ void Event::print() const
   if(isMC) cout << " proc " << susyFinalState;
   cout << " Stream " << streamName(stream) 
        << " w " << w << endl;
+  cout << " Initial (pre-derivation) number of events processed: " << initialNumberOfEvents;
+  cout << "    sumw: " << sumOfEventWeights << "   sumw2: " << sumOfEventWeightsSquared << endl;
 }

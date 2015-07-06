@@ -30,6 +30,9 @@ public:
     bool isMC;                ///< is MC flag
     unsigned int mcChannel;   ///< MC channel ID number (mc run number)
     float w;                  ///< MC generator weight
+    uint64_t initialNumberOfEvents;  ///< initial number of events processed before any xAOD skimming (before derivation process)
+    double sumOfEventWeights;        ///< sum of MC event weights before any xAOD skimming (before derivation process)
+    double sumOfEventWeightsSquared; ///< sum of MC event weights squared before any xAOD skimming (before derivation process)
 
     unsigned int larError;    ///< LAr error flag
 
@@ -101,6 +104,7 @@ public:
       stream = Stream_Unknown;
       isMC = false;
       mcChannel = w = 0;
+      initialNumberOfEvents = sumOfEventWeights = sumOfEventWeightsSquared = 0;
       larError = 0;
       nVtx = avgMu = trigFlags = 0;
       hfor = -1;
@@ -118,7 +122,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 30);
+    ClassDef(Event, 31);
   };
 } // Susy
 #endif
