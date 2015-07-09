@@ -177,7 +177,7 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
         // Following SUSYTools
         //////////////////////////
     
-        if(!e->looseLLH)                continue;
+        if(!e->looseLH)                continue;
         if(e->Eta() > ELECTRON_ETA_CUT) continue;
         if(e->Pt() < ELECTRON_PT_CUT)   continue;
 
@@ -474,7 +474,7 @@ bool SusyNtTools::isSignalElectron(const Electron* ele,
 {
 /*
   //AT OBSOLETE -- In ElectronSelector
-    if (!ele->tightLLH) return false;
+    if (!ele->tightLH) return false;
 
     // Impact parameter
     if (m_doIPCut) {
@@ -568,7 +568,7 @@ bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
 {
     /*
   //AT OBSOLETE -- In ElectronSelector
-    if (!ele->tightLLH) return false;
+    if (!ele->tightLH) return false;
     // Impact parameter
     if (m_doIPCut) {
         if (fabs(ele->d0Sig()) >= ELECTRON_D0SIG_CUT) return false;

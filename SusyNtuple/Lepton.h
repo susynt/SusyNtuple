@@ -50,8 +50,8 @@ public:
     bool matched2TruthLepton; ///< flag from RecoTruthMatch::Matched2TruthLepton
     int truthType;            ///< RecoTruthMatch::type
 
-    float effSF;              ///< Efficiency scale factor  (for electron from LLH)
-    float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LLH)
+    float effSF;              ///< Efficiency scale factor  (for electron from LH)
+    float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LH)
 
     TBits   trigBits;         ///< TBits to store matched trigger chains
     static const size_t m_nTriggerBits=64;

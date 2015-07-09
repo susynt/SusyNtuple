@@ -45,8 +45,8 @@ namespace Susy {
             If "signalQuality" is set true, will check against the analysis'
             signal electron quality requirement. If set false, this will 
             check against the analysis' baseline electron quality requirement.
-            Possible IDs: veryLooseLLH, looseLLH, mediumLLH, tightLLH,
-                          looseLLH_nod0, mediumLLH_nod0, tightLLH_nod0
+            Possible IDs: veryLooseLH, looseLH, mediumLH, tightLH,
+                          looseLH_nod0, mediumLH_nod0, tightLH_nod0
         */
         bool elecPassID(const Electron* ele, bool signalQuality);
         /**

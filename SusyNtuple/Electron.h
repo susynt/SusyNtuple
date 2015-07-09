@@ -25,16 +25,16 @@ public:
     float trackPt;            ///< ID track pt
     float trackEta;           ///< ID track eta
 
-    //LLH quality flags
-    bool veryLooseLLH;        ///< veryLooseLLH
-    bool looseLLH;            ///< looseLLH
-    bool mediumLLH;           ///< mediumLLH
-    bool tightLLH;            ///< tightLLH
+    //LH quality flags
+    bool veryLooseLH;        ///< veryLooseLH
+    bool looseLH;            ///< looseLH
+    bool mediumLH;           ///< mediumLH
+    bool tightLH;            ///< tightLH
 
     //Without d0 cut
-    bool looseLLH_nod0;       ///< looseLLH
-    bool mediumLLH_nod0;      ///< mediumLLH
-    bool tightLLH_nod0;       ///< tightLLH
+    bool looseLH_nod0;       ///< looseLH
+    bool mediumLH_nod0;      ///< mediumLH
+    bool tightLH_nod0;       ///< tightLH
 
     // isolation flags
     bool isoGradientLoose;    ///< GradientLoose WP from IsolationSelectionTool
@@ -124,8 +124,8 @@ public:
     /// Clear vars
     void clear(){
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
-      veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
-      looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
+      veryLooseLH = looseLH= mediumLH = tightLH = false;
+      looseLH_nod0= mediumLH_nod0 = tightLH_nod0 = false;
       isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoTight = false;
       isChargeFlip = false;
       
@@ -160,7 +160,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 10);
+    ClassDef(Electron, 11);
 };
 } //Susy
 #endif

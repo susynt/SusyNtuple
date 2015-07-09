@@ -23,7 +23,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2Lep) : { 
         m_2lep = true;
 
-        m_eleId  = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
@@ -51,7 +51,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_3Lep) : {
         m_3lep = true;
 
-        m_eleId  = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
@@ -79,7 +79,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2LepWH) : {
         m_2lepWH = true;
 
-        m_eleId  = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
@@ -112,7 +112,7 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         m_analysis = AnalysisType::Ana_2Lep;
         m_2lep = true;
 
-        m_eleId  = ElectronId::TightLLH;
+        m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
         m_removeLepsFromIso = false;
@@ -147,7 +147,7 @@ ElectronSelector::ElectronSelector():
     m_doPtconeCut(true),
     m_doElEtconeCut(true),
     m_doMuEtconeCut(false),
-    m_eleId(ElectronId::TightLLH),
+    m_eleId(ElectronId::TightLH),
     m_sigIso(Isolation::IsolationInvalid),
     m_2lep(false),
     m_3lep(false),
@@ -277,15 +277,15 @@ float ElectronSelector::elPtConeCorr(const Electron* ele,
 bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
 {
     if(signalQuality){
-        if     (m_eleId == ElectronId::MediumLLH)        return electron->mediumLLH;
-        else if(m_eleId == ElectronId::LooseLLH)         return electron->looseLLH;
-        else if(m_eleId == ElectronId::TightLLH)         return electron->tightLLH;
-        else if(m_eleId == ElectronId::MediumLLH_nod0)   return electron->mediumLLH_nod0;
-        else if(m_eleId == ElectronId::TightLLH_nod0)    return electron->tightLLH_nod0;
+        if     (m_eleId == ElectronId::MediumLH)        return electron->mediumLH;
+        else if(m_eleId == ElectronId::LooseLH)         return electron->looseLH;
+        else if(m_eleId == ElectronId::TightLH)         return electron->tightLH;
+        else if(m_eleId == ElectronId::MediumLH_nod0)   return electron->mediumLH_nod0;
+        else if(m_eleId == ElectronId::TightLH_nod0)    return electron->tightLH_nod0;
         else {
             cout << "ElectronSelector::elecPassID() error: (signal) ele ID requirement not set for analysis!" << endl;
-            cout << "        Will set to TightLLH." << endl;
-            return electron->tightLLH;
+            cout << "        Will set to TightLH." << endl;
+            return electron->tightLH;
         }
     } 
     else {

@@ -16,13 +16,13 @@ Electron::Electron(const Electron &rhs):
   clusPhi(rhs.clusPhi),
   trackPt(rhs.trackPt),
   trackEta(rhs.trackEta),
-  veryLooseLLH(rhs.veryLooseLLH),
-  looseLLH(rhs.looseLLH),
-  mediumLLH(rhs.mediumLLH),
-  tightLLH(rhs.tightLLH),
-  looseLLH_nod0(rhs.looseLLH_nod0),
-  mediumLLH_nod0(rhs.mediumLLH_nod0),
-  tightLLH_nod0(rhs.tightLLH_nod0),
+  veryLooseLH(rhs.veryLooseLH),
+  looseLH(rhs.looseLH),
+  mediumLH(rhs.mediumLH),
+  tightLH(rhs.tightLH),
+  looseLH_nod0(rhs.looseLH_nod0),
+  mediumLH_nod0(rhs.mediumLH_nod0),
+  tightLH_nod0(rhs.tightLH_nod0),
   isoGradientLoose(rhs.isoGradientLoose),
   isoGradient(rhs.isoGradient),
   isoLooseTrackOnly(rhs.isoLooseTrackOnly),
@@ -107,13 +107,13 @@ Electron& Electron::operator=(const Electron &rhs)
     clusPhi = rhs.clusPhi;
     trackPt = rhs.trackPt;
     trackEta = rhs.trackEta;
-    veryLooseLLH = rhs.veryLooseLLH;
-    looseLLH = rhs.looseLLH;
-    mediumLLH = rhs.mediumLLH;
-    tightLLH = rhs.tightLLH;
-    looseLLH_nod0 = rhs.looseLLH_nod0;
-    mediumLLH_nod0 = rhs.mediumLLH_nod0;
-    tightLLH_nod0 = rhs.tightLLH_nod0;
+    veryLooseLH = rhs.veryLooseLH;
+    looseLH = rhs.looseLH;
+    mediumLH = rhs.mediumLH;
+    tightLH = rhs.tightLH;
+    looseLH_nod0 = rhs.looseLH_nod0;
+    mediumLH_nod0 = rhs.mediumLH_nod0;
+    tightLH_nod0 = rhs.tightLH_nod0;
     isChargeFlip = rhs.isChargeFlip;
     isoGradientLoose = rhs.isoGradientLoose;
     isoGradient = rhs.isoGradient;
@@ -271,7 +271,7 @@ void Electron::print() const
   cout.precision(2);
   cout << fixed << "El : q " << setw(2) << q << " pt " << setw(6) << Pt() << " eta " << setw(5) << Eta() 
        << " phi " << setw(5) << Phi()
-       << " tight " << tightLLH 
+       << " tight " << tightLH 
        << " type " << mcType << " origin " << mcOrigin 
        << endl;
   cout.precision(6);
