@@ -230,7 +230,8 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   //AT 05-09-15 JVF obsolete run-2
   //if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
   m_met = m_nttools.getMet(&nt, metSys);
-  m_metTrack = m_nttools.getMetTrack(&nt, metSys);
+#warning SusyNtAna    not filling track met
+//  m_metTrack = m_nttools.getMetTrack(&nt, metSys);
   // Build Lepton vectors
   m_nttools.buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
   m_nttools.buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
