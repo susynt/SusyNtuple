@@ -212,7 +212,8 @@ float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys)
     float weight = 1.0;
     size_t maxNwarnings = 100;
     if (evt->isMC) {
-        float sumw = getSumw(evt);
+        //float sumw = getSumw(evt);
+        double sumw = evt->sumOfEventWeights; // now stored using CutBookKeeper
         float xsec = getXsecTimesEff(evt, sys);
         float pupw = getPileupWeight(evt, sys);
         if (sumw) {
