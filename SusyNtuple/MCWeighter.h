@@ -146,6 +146,7 @@ typedef std::map<SumwMapKey, float> SumwMap;
     bool sumwmapHasKey(SumwMapKey k);
 
     /// Get sumw for this event
+    float total_sumw; 
     float getSumw(const Susy::Event* evt);
     /// Get cross section for this event
     SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
