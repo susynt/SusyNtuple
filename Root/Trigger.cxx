@@ -107,7 +107,88 @@ const std::vector<std::string> triggers_run1 = {
 // Run 2
 ////////////
 const std::vector<std::string> triggers_run2 = {
-    // DC14
+
+    // Trigger list last update:
+    //     dantrim July 30 2015
+
+    ////////////////////////////
+    // MUON
+    ////////////////////////////
+
+    // muon trig
+    "HLT_mu26_imedium",
+    "HLT_mu24_imedium",
+    "HLT_mu24_iloose_L1MU15",
+    "HLT_mu20_iloose_L1MU15",
+    "HLT_mu50",
+    "HLT_mu60_0eta105_msonly",
+
+    // dimuon trig
+    "HLT_2mu14",
+    "HLT_2mu10",
+    "HLT_mu24_mu8noL1",
+    "HLT_mu22_mu8noL1",
+    "HLT_mu20_mu8noL1",
+    "HLT_mu18_mu8noL1",
+
+    ////////////////////////////
+    // ELECTRON
+    ////////////////////////////
+
+    // electronTrigCut
+    "HLT_e26_tight_iloose",
+    "HLT_e60_medium",
+    "HLT_e24_tight_iloose",
+    "HLT_e24_medium_iloose_L1EM20VH",
+    "HLT_e24_medium_iloose_L1EM18VH",
+
+    // electronTrigLH
+    "HLT_e26_lhtight_iloose",
+    "HLT_e60_lhmedium",
+    "HLT_e24_lhtight_iloose",
+    "HLT_e24_lhmedium_iloose_L1EM20VH",
+    "HLT_e24_lhmedium_iloose_L1EM18VH",
+
+    // dielectronTrigCut
+    "HLT_2e17_loose",
+    "HLT_2e15_loose_L12EM13VH",
+    "HLT_2e12_loose_L12EM10VH",
+
+    // dielectronTrigLH
+    "HLT_2e17_lhloose",
+    "HLT_2e15_lhloose_L12EM13VH",
+    "HLT_2e12_lhloose_L12EM10VH",
+
+    ////////////////////////////
+    // ELE/MUON
+    ////////////////////////////
+
+    // elemuonTrigCut
+    "HLT_e17_loose_mu14",
+    "HLT_e7_medium_mu24",
+    "HLT_e26_medium_L1EM22VHI_mu8noL1",
+    "HLT_e24_medium_L1EM20VHI_mu8noL1",
+
+    // elemuonTrigLH
+    "HLT_e17_lhloose_mu14",
+    "HLT_e7_lhmedium_mu24",
+    "HLT_e26_lhmedium_L1EM22VHI_mu8noL1",
+    "HLT_e24_lhmedium_L1EM20VHI_mu8noL1",
+
+    ////////////////////////////
+    // MET
+    ////////////////////////////
+
+    "HLT_xe35",
+    "HLT_xe35_pueta",
+    "HLT_xe50",
+    "HLT_xe50_pueta",
+    "HLT_xe70",
+    "HLT_xe70_pueta",
+    "HLT_xe100",
+    "HLT_xe100_pueta"
+
+/*    // DC14
     // electron triggers
     "HLT_e5_etcut",
     "HLT_e5_lhtight",
@@ -190,6 +271,7 @@ const std::vector<std::string> triggers_run2 = {
     // jet triggers
     "HLT_j400",
     "HLT_3j175"
+*/
 };
 
 std::vector<std::string> getTrigNames(string set)
