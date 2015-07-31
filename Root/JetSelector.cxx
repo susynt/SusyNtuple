@@ -89,8 +89,11 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
     if(jet) {
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->detEta) < JET_ETA_CUT_2L
-                && jet->mv1 < MV1_80
-                && JetSelector::jetPassesJvfRequirement(jet));
+                && !jet->bjet); // Need JVT, ASM 30/7/2015
+                /// < a la Run-I
+                //&& jet->mv1 < MV1_80
+                //&& JetSelector::jetPassesJvfRequirement(jet));
+                /// < a la Run-I
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -99,9 +102,12 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isCentralBJet(const Jet* jet)
 {
-  if(jet->Pt() < JET_PT_B20_CUT) return false;
+  if(jet->Pt() < JET_PT_B20_CUT        ) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
-  if(jet->mv1 < MV1_80) return false;
+  if(!jet->bjet                        ) return false; // Pt-Eta cuts are rather redundant, ASM 30/7/2015
+  /// < a la Run-I
+  //if(jet->mv1 < MV1_80) return false;
+  /// < a la Run-I
 
   return true;
 }
@@ -109,8 +115,8 @@ bool JetSelector::isCentralBJet(const Jet* jet)
 bool JetSelector::isForwardJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
-  if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false;
-  if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
+  if(fabs(jet->detEta) < JET_ETA_CUT_2L ) return false;
+  if(fabs(jet->detEta) > JET_ETA_MAX_CUT) return false;
   return true;
 }
 //----------------------------------------------------------
