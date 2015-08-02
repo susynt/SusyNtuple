@@ -142,7 +142,7 @@ public:
 
     /// Get the Met, for the appropriate systematic
     Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
-    Susy::MetTrack* getMetTrack(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
+    Susy::TrackMet* getTrackMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
 
     //
     // Methods for performing overlap removal

@@ -366,13 +366,13 @@ Met* SusyNtTools::getMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiF
 /*--------------------------------------------------------------------------------*/
 // Get Track Met
 /*--------------------------------------------------------------------------------*/
-MetTrack* SusyNtTools::getMetTrack(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiForMetSys)
+TrackMet* SusyNtTools::getTrackMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool useNomPhiForMetSys)
 {
     // Right now not being clever. Could maybe make sys index correspond to 
     // index on the array.
 
-    MetTrack* metTrack = NULL;
-    vector<MetTrack>* metTrackTmp = susyNt->mtk();
+    TrackMet* metTrack = NULL;
+    vector<TrackMet>* metTrackTmp = susyNt->tkm();
     for (uint i = 0; i < metTrackTmp->size(); i++)
     {
         if (metTrackTmp->at(i).sys == sys)
