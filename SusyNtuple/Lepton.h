@@ -51,7 +51,7 @@ public:
     int truthType;            ///< RecoTruthMatch::type
 
     float effSF;              ///< Efficiency scale factor  (for electron from LH)
-    float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LH)
+    //float errEffSF;           ///< Uncertainty on the efficiency scale factor (for electron from LH)
 
     TBits   trigBits;         ///< TBits to store matched trigger chains
     static const size_t m_nTriggerBits=64;
@@ -84,12 +84,12 @@ public:
         matched2TruthLepton = false;
         truthType = -1;
         effSF = 1;
-        errEffSF = 0;
+        //errEffSF = 0;
         isBaseline = isSignal = false;
         Particle::clear();
     }
 
-    ClassDef(Lepton, 18);
+    ClassDef(Lepton, 19);
 };
 } // Susy
 #endif

@@ -57,6 +57,12 @@ public:
     float scale_up;           ///< SCALE Pt + sigma
     float scale_dn;           ///< SCALE Pt - sigma
 
+    // SF uncertainties
+    float errEffSF_stat_up;   ///< Uncertainty on the efficiency SF
+    float errEffSF_stat_dn;   ///< Uncertainty on the efficiecny SF  
+    float errEffSF_syst_up;   ///< Uncertainty on the efficiecny SF
+    float errEffSF_syst_dn;   ///< Uncertainty on the efficiecny SF
+
     // Polymorphism, baby!!
     bool isEle() const { return false; }
     bool isMu()  const { return true; }
@@ -75,11 +81,12 @@ public:
       msTrackTheta = msTrackQoverP = 0;
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
+      errEffSF_stat_up = errEffSF_stat_dn = errEffSF_syst_up = errEffSF_syst_dn = 0.;
 
       Lepton::clear();
     }
 
-    ClassDef(Muon, 11);
+    ClassDef(Muon, 12);
 };
 } // Susy
 #endif
