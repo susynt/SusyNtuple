@@ -103,10 +103,14 @@ public:
     float scale_ZeeSys_dn;
     float scale_ZeeSys_up;
 */
-    float eff_corr_dn;
-    float eff_corr_up;
-    float eff_uncorr_dn;
-    float eff_uncorr_up;
+  //  float eff_corr_dn;
+  //  float eff_corr_up;
+  //  float eff_uncorr_dn;
+  //  float eff_uncorr_up;
+    float errEffSF_id_corr_up;
+    float errEffSF_id_corr_dn;
+    float errEffSF_reco_corr_up;
+    float errEffSF_reco_corr_dn;
 /*
     float scale_mom_dn;
     float scale_mom_up;
@@ -154,13 +158,15 @@ public:
       scale_ZeeStat_dn=scale_ZeeStat_up=
       scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
 */
-      eff_corr_dn = eff_corr_up =0;
-      eff_uncorr_dn = eff_uncorr_up =0;
+     // eff_corr_dn = eff_corr_up =0;
+     // eff_uncorr_dn = eff_uncorr_up =0;
+     errEffSF_id_corr_up = errEffSF_id_corr_dn = 0.;
+     errEffSF_reco_corr_up = errEffSF_reco_corr_dn = 0.;
 
       Lepton::clear();
     }
 
-    ClassDef(Electron, 11);
+    ClassDef(Electron, 12);
 };
 } //Susy
 #endif

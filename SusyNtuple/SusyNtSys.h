@@ -67,10 +67,15 @@ enum SusyNtSys {
   ,EG_SCALE_ZEESYST_DN
   ,EG_SCALE_ZEESYST_UP
   */
-  ,EL_EFF_CorrUncertainty_DN //weight
-  ,EL_EFF_CorrUncertainty_UP //weight
-  ,EL_EFF_UncorrUncertainty_DN //weight
-  ,EL_EFF_UncorrUncertainty_UP //weight
+// dantrim : replacing these 4 for the ID/RECO verions August 2 2015
+//  ,EL_EFF_CorrUncertainty_DN //weight
+//  ,EL_EFF_CorrUncertainty_UP //weight
+//  ,EL_EFF_UncorrUncertainty_DN //weight
+//  ,EL_EFF_UncorrUncertainty_UP //weight
+  ,EL_EFF_ID_TotalCorrUncertainty_UP  // weight
+  ,EL_EFF_ID_TotalCorrUncertainty_DN  // weight
+  ,EL_EFF_Reco_TotalCorrUncertainty_UP  // weight
+  ,EL_EFF_Reco_TotalCorrUncertainty_DN  // weight
   /*
   ,EL_SCALE_MOMENTUM_DN
   ,EL_SCALE_MOMENTUM_UP
