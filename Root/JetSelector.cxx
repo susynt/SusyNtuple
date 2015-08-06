@@ -68,10 +68,9 @@ bool JetSelector::isSignalJet(const Jet* jet)
             pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
         } else {
             float ptCut = JET_SIGNAL_PT_CUT_3L;
-            bool passJVT = (jet->jvt > 0.64 || fabs(jet->detEta) < 2.4 || jet->Pt() > 50.);
             pass = (jet->Pt() > ptCut
                     && fabs(jet->Eta()) < JET_ETA_CUT
-                    && passJVT);
+                    && jetPassesJvtRequirement(jet));
         }
     }
     return pass;
@@ -88,10 +87,9 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
     // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
     if(jet) {
-        bool passJVT = (jet->jvt > 0.64 || fabs(jet->detEta) < 2.4 || jet->Pt() > 50.);
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->detEta) < JET_ETA_CUT_2L
-                && passJVT 
+                && jetPassesJvtRequirement(jet) 
                 && !jet->bjet);
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
@@ -103,9 +101,8 @@ bool JetSelector::isCentralBJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_B20_CUT        ) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
+  if(!jetPassesJvtRequirement(jet)     ) return false; // JVT is needed 06/8/2015
   if(!jet->bjet                        ) return false; // Pt-Eta cuts are rather redundant, ASM 30/7/2015
-  bool passJVT = (jet->jvt > 0.64 || fabs(jet->detEta) < 2.4 || jet->Pt() > 50.);
-  if(!passJVT                          ) return false; // JVT is needed 06/8/2015
 
   return true;
 }
@@ -137,6 +134,11 @@ bool JetSelector::isBadFCALJet(const Jet* jet)
      jet->Phi() < BAD_FCAL_PHIHIGH)
     return true;
   return false;
+}
+//----------------------------------------------------------
+bool JetSelector::jetPassesJvtRequirement(const Jet* jet)
+{
+  return (jet->jvt > 0.64 || fabs(jet->detEta) > 2.4 || jet->Pt() > 50.);
 }
 //----------------------------------------------------------
 bool JetSelector::jetPassesJvfRequirement(const Jet* jet)
@@ -183,7 +185,8 @@ size_t JetSelector::count_CL_jets(const JetVector &jets)
 //----------------------------------------------------------
 size_t JetSelector::count_CB_jets(const JetVector &jets)
 {
-    return std::count_if(jets.begin(), jets.end(), JetSelector::isCentralBJet);
+    return std::count_if(jets.begin(), jets.end(), 
+                         std::bind1st(std::mem_fun(&JetSelector::isCentralBJet), this));
 }
 //----------------------------------------------------------
 size_t JetSelector::count_F_jets(const JetVector &jets)

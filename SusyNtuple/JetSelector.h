@@ -62,7 +62,7 @@ public:
     bool isSignalJet(const Jet* jet);
     bool isSignalJet2Lep(const Jet* jet);
     bool isCentralLightJet(const Jet* jet);
-    static bool isCentralBJet(const Jet* jet);
+    bool isCentralBJet(const Jet* jet);
     static bool isForwardJet(const Jet* jet);
     bool isBadFCALJet(const Jet* jet);
     bool hasJetInBadFCAL(const JetVector& baseJets, uint run, bool isMC);
@@ -73,11 +73,12 @@ public:
 
     // The jet-vertex-fraction requirement: usually applied to low-pt central jets
     bool jetPassesJvfRequirement(const Jet* jet);
+    bool jetPassesJvtRequirement(const Jet* jet);
 
     /// count central light jets \todo const (depends on jvf tool interface)
     size_t count_CL_jets(const JetVector &jets) /*const*/;
     /// count central b-tagged jets \todo const
-    static size_t count_CB_jets(const JetVector &jets) /*const*/;
+    size_t count_CB_jets(const JetVector &jets) /*const*/;
     /// count forward jets \todo const
     static size_t count_F_jets(const JetVector &jets) /*const*/;
 
