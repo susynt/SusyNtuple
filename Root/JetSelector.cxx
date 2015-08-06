@@ -70,7 +70,7 @@ bool JetSelector::isSignalJet(const Jet* jet)
             float ptCut = JET_SIGNAL_PT_CUT_3L;
             pass = (jet->Pt() > ptCut
                     && fabs(jet->Eta()) < JET_ETA_CUT
-                    && jetPassesJvfRequirement(jet));
+                    && jetPassesJvtRequirement(jet));
         }
     }
     return pass;
@@ -89,8 +89,8 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
     if(jet) {
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->detEta) < JET_ETA_CUT_2L
-                && jet->mv1 < MV1_80
-                && JetSelector::jetPassesJvfRequirement(jet));
+                && jetPassesJvtRequirement(jet) 
+                && !jet->bjet);
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -99,9 +99,10 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isCentralBJet(const Jet* jet)
 {
-  if(jet->Pt() < JET_PT_B20_CUT) return false;
+  if(jet->Pt() < JET_PT_B20_CUT        ) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
-  if(jet->mv1 < MV1_80) return false;
+  if(!jetPassesJvtRequirement(jet)     ) return false; // JVT is needed 06/8/2015
+  if(!jet->bjet                        ) return false; // Pt-Eta cuts are rather redundant, ASM 30/7/2015
 
   return true;
 }
@@ -109,8 +110,8 @@ bool JetSelector::isCentralBJet(const Jet* jet)
 bool JetSelector::isForwardJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_F30_CUT         ) return false;
-  if(fabs(jet->detEta) < JET_ETA_CUT_2L  ) return false;
-  if(fabs(jet->detEta) > JET_ETA_MAX_CUT ) return false;
+  if(fabs(jet->detEta) < JET_ETA_CUT_2L ) return false;
+  if(fabs(jet->detEta) > JET_ETA_MAX_CUT) return false;
   return true;
 }
 //----------------------------------------------------------
@@ -133,6 +134,11 @@ bool JetSelector::isBadFCALJet(const Jet* jet)
      jet->Phi() < BAD_FCAL_PHIHIGH)
     return true;
   return false;
+}
+//----------------------------------------------------------
+bool JetSelector::jetPassesJvtRequirement(const Jet* jet)
+{
+  return (jet->jvt > 0.64 || fabs(jet->detEta) > 2.4 || jet->Pt() > 50.);
 }
 //----------------------------------------------------------
 bool JetSelector::jetPassesJvfRequirement(const Jet* jet)
@@ -179,7 +185,8 @@ size_t JetSelector::count_CL_jets(const JetVector &jets)
 //----------------------------------------------------------
 size_t JetSelector::count_CB_jets(const JetVector &jets)
 {
-    return std::count_if(jets.begin(), jets.end(), JetSelector::isCentralBJet);
+    return std::count_if(jets.begin(), jets.end(), 
+                         std::bind1st(std::mem_fun(&JetSelector::isCentralBJet), this));
 }
 //----------------------------------------------------------
 size_t JetSelector::count_F_jets(const JetVector &jets)
