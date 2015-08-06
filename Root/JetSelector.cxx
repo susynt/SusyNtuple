@@ -68,9 +68,10 @@ bool JetSelector::isSignalJet(const Jet* jet)
             pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
         } else {
             float ptCut = JET_SIGNAL_PT_CUT_3L;
+            bool passJVT = (jet->jvt > 0.64 || fabs(jet->detEta) < 2.4 || jet->Pt() > 50.);
             pass = (jet->Pt() > ptCut
                     && fabs(jet->Eta()) < JET_ETA_CUT
-                    && jetPassesJvfRequirement(jet));
+                    && passJVT);
         }
     }
     return pass;
