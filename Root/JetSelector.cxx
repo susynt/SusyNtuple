@@ -87,13 +87,11 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
     // This function is mostly used by the 2L analyses. Needs to be reorganized...
     bool pass = false;
     if(jet) {
+        bool passJVT = (jet->jvt > 0.64 || fabs(jet->detEta) < 2.4 || jet->Pt() > 50.);
         pass = (jet->Pt() > JET_PT_L20_CUT
                 && fabs(jet->detEta) < JET_ETA_CUT_2L
-                && !jet->bjet); // Need JVT, ASM 30/7/2015
-                /// < a la Run-I
-                //&& jet->mv1 < MV1_80
-                //&& JetSelector::jetPassesJvfRequirement(jet));
-                /// < a la Run-I
+                && passJVT 
+                && !jet->bjet);
     } else {
         cout << "isCentralLightJet: invalid jet(" << jet << "), return " << pass << endl;
     }
@@ -105,9 +103,8 @@ bool JetSelector::isCentralBJet(const Jet* jet)
   if(jet->Pt() < JET_PT_B20_CUT        ) return false;
   if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
   if(!jet->bjet                        ) return false; // Pt-Eta cuts are rather redundant, ASM 30/7/2015
-  /// < a la Run-I
-  //if(jet->mv1 < MV1_80) return false;
-  /// < a la Run-I
+  bool passJVT = (jet->jvt > 0.64 || fabs(jet->detEta) < 2.4 || jet->Pt() > 50.);
+  if(!passJVT                          ) return false; // JVT is needed 06/8/2015
 
   return true;
 }
