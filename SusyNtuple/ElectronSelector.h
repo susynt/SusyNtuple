@@ -27,6 +27,11 @@ namespace Susy {
             IP, and isolation requirements for electrons.
         */
         void buildRequirements(const AnalysisType& ana);
+
+        /**
+            Input electron "ele" is required to pass ID quality flags,
+        */
+        bool isBaselineElectron(const Electron* ele);
         /**
             Input electron "ele" is required to pass ID quality flags,
             impact parameter cuts, and isolation cuts.
@@ -83,19 +88,24 @@ namespace Susy {
         float EL_MAX_D0SIG_CUT;                 ///< maximum allowed d0sig
         float EL_MAX_Z0_SINTHETA;               ///< maximum allowed z0sinTheta
     
-    
+        float EL_MIN_CRACK_ETA;                 ///< minium crack eta
+        float EL_MAX_CRACK_ETA;                 ///< maximum crack eta
+
+        float EL_MAX_BASELINE_ETA;                 ///< maximum crack eta
     
         protected :
         NtSys::SusyNtSys m_systematic;
         AnalysisType m_analysis;
-        bool m_removeLepsFromIso;  
+        bool m_removeLepsFromIso; 
+        bool m_vetoCrackRegion; 
         bool m_doIPCut;
         bool m_doPtconeCut;
         bool m_doElEtconeCut;
         bool m_doMuEtconeCut;
         
-        ElectronId m_eleId;    ///< electron quality requirement (selected from eleID enum)
-        Isolation m_sigIso;    ///< electron isolation qualiy for signal electrons (c.f. SusyNtuple/Isolation.h)
+        ElectronId m_eleBaseId;    ///< electron quality requirement (selected from eleID enum)
+        ElectronId m_eleId;        ///< electron quality requirement (selected from eleID enum)
+        Isolation m_sigIso;        ///< electron isolation qualiy for signal electrons (c.f. SusyNtuple/Isolation.h)
 
         ///////////////////////////////
         // Available analyses
@@ -103,6 +113,7 @@ namespace Susy {
         bool m_2lep;    ///< flag for 2L analysis
         bool m_3lep;    ///< flag for 3L analysis
         bool m_2lepWH;  ///< flag for 2L WH analysis
+        bool m_SS3L;    ///< flag for the strong SS3L analysis 
 
         // set verbose
         bool m_verbose;

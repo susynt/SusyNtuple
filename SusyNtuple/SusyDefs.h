@@ -465,14 +465,14 @@ stringvector getTrigChains();
 // into 2L and 3L separately, but that leads to duplications
 
 // Pt
-const float ELECTRON_PT_CUT = 10; // GeV
+//const float ELECTRON_PT_CUT = 10; // GeV
 const float MUON_PT_CUT = 10; // GeV
 const float TAU_PT_CUT = 20; // GeV
 
 const float MLL_MIN = 12;
 
 // Eta
-const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
+//const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
 const float MUON_ETA_CUT = 2.4;  // Currently applied in SusyNtMaker
 
 // Signal Requirements

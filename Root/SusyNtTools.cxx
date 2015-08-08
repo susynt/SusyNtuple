@@ -177,12 +177,13 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
         // Following SUSYTools
         //////////////////////////
     
-        if(!e->looseLH)                continue;
-        if(e->Eta() > ELECTRON_ETA_CUT) continue;
-        if(e->Pt() < ELECTRON_PT_CUT)   continue;
+        //if(!e->looseLH)                continue;
+        //if(e->Eta() > ELECTRON_ETA_CUT) continue;
+        //if(e->Pt() < ELECTRON_PT_CUT)   continue;
 
-        // Save
-        elecs.push_back(e);
+        if (m_electronSelector.isBaselineElectron(e)){ 
+            elecs.push_back(e);
+        }
     }
     return elecs;
 }
@@ -198,12 +199,15 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
         // Following SUSYTools
         //////////////////////////
     
-        if(!mu->medium)              continue;
-        if(mu->Eta() > MUON_ETA_CUT) continue;
-        if(mu->Pt() < MUON_PT_CUT)   continue;
+        //if(!mu->medium)              continue;
+        //if(mu->Eta() > MUON_ETA_CUT) continue;
+        //if(mu->Pt() < MUON_PT_CUT)   continue;
 
         // Save
-        muons.push_back(mu);
+        if (m_muonSelector.isBaselineMuon(mu)){ 
+            muons.push_back(mu);
+        }
+
     }
     return muons;
 }

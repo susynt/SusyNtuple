@@ -66,7 +66,9 @@ namespace Susy {
         bool m_doBjetOR;
         bool m_verbose;
 
+        AnalysisType m_anaType;
         
+
         ////////////////////////////////
         // Cuts for overlap
         ////////////////////////////////

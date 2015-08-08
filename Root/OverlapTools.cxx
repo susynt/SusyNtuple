@@ -27,6 +27,8 @@ OverlapTools::OverlapTools() :
 // ------------------------------------------------------------------------------ //
 OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
 {
+    m_anaType = a;
+
     switch(a) {
     ///////////////////////////////////
     // Contrarian analyses
@@ -37,6 +39,13 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
         m_useSignalLeptons = false;
         m_useIsoLeptons    = false;
         m_doBjetOR         = false;
+        break;
+    }
+    case(AnalysisType::Ana_SS3L) :{
+        M_J_DR  = 0.2; //if nTrk(jet)<3: remove jet else remove mu
+        m_useSignalLeptons = false;
+        m_useIsoLeptons    = false;
+        m_doBjetOR         = true; //always
         break;
     }
     ///////////////////////////////////
@@ -168,9 +177,18 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
             // if doing BjetOR procedure, ignore bjets
             // --> the "loose" bjet criteria used in SUSYTools is 
             //     that the jet is a bjet if MV2c20 > -0.5517
-            if(doBjetOR() && (j->mv2c20 > -0.5517)) continue; 
-            if(e->DeltaR(*j) > J_E_DR) continue;
-            jets.erase(jets.begin() + iJ);
+            if(m_anaType==AnalysisType::Ana_SS3L){
+                if(e->DeltaR(*j) < J_E_DR){
+                    if(j->mv2c20 > -0.5517) electrons.erase(electrons.begin()+iEl);
+                    else                    jets.erase(jets.begin() + iJ);
+                    break;
+                }
+            }
+            else{
+                if(doBjetOR() && (j->mv2c20 > -0.5517)) continue; 
+                if(e->DeltaR(*j) > J_E_DR) continue;
+                jets.erase(jets.begin() + iJ);
+            }
         } // iJ
     } // iEl
         
@@ -220,6 +238,7 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets)
             if(mu->DeltaR(*j) > M_J_DR) continue;
             if(jet_nTrk < 3) {
                 jets.erase(jets.begin() + iJ);
+                //AT: Don't we need a break here ???
             }
             else {
                 muons.erase(muons.begin() + iMu);

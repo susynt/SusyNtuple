@@ -116,6 +116,39 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
 
         break;
     }
+   //////////////////////////////////////
+    // 2L-ANALYSIS
+    //////////////////////////////////////
+    case(AnalysisType::Ana_SS3L) : { 
+        m_SS3L  = true;
+
+        m_sigIso = Isolation::GradientLoose;
+
+        //m_removeLepsFromIso = false;
+        m_doIPCut = true;
+        //m_doPtconeCut = true;
+        //m_doElEtConeCut = true;
+        //m_doMuEtconeCut = false;        
+
+        // muons
+        MU_MIN_PT                       = 10.0;
+        MU_MAX_ETA                      = 2.5;
+        //MU_ISO_PT_THRS                  = 60.0;
+        //MU_PTCONE30_SLOPE_DATA          = 0.01098;
+        //MU_PTCONE30_SLOPE_MC            = 0.00627;
+        //MU_PTCONE30_PT_CUT              = 0.12;
+        //MU_PTCONE30ELSTYLE_PT_CUT       = 0.12;
+        //MU_PTCONE30_PT_CUT              = 0.12;
+        //MU_ETCONE30_K1_DATA             = 0.0648;
+        //MU_ETCONE30_K2_DATA             = 0.00098;
+        //MU_ETCONE30_K1_MC               = 0.0692;
+        //MU_ETCONE30_K2_MC               = 0.00076;
+        //MU_ETCONE30_PT_CUT              = 0.12;
+        MU_MAX_D0SIG_CUT                = 3.0;
+        MU_MAX_Z0_SINTHETA              = 0.5;
+
+        break;
+    } 
     //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
@@ -189,6 +222,15 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType &a)
     return *this;
 }
 // -------------------------------------------------------------------------------------------- //
+bool MuonSelector::isBaselineMuon(const Muon* mu)
+{
+    if(!mu->medium)                  return false;
+    if(mu->Pt() < MU_MIN_PT)         return false;
+    if(fabs(mu->Eta()) > MU_MAX_ETA) return false;
+
+    return true;
+}
+// -------------------------------------------------------------------------------------------- //
 bool MuonSelector::isSignalMuon(const Muon* mu,
                                 const ElectronVector& baseElectrons,
                                 const MuonVector& baseMuons,
@@ -206,7 +248,7 @@ bool MuonSelector::isSignalMuon(const Muon* mu,
     // Impact parameter
     //////////////////////////////
     if (m_doIPCut) {
-        if(fabs(mu->d0Sig() >= MU_MAX_D0SIG_CUT))        return false;
+        if(fabs(mu->d0sigBSCorr) >= MU_MAX_D0SIG_CUT)        return false;
         if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
     }
 
@@ -239,7 +281,7 @@ bool MuonSelector::isSemiSignalMuon(const Muon* mu)
     // Impact parameter
     /////////////////////////////
     if(m_doIPCut) {
-        if(fabs(mu->d0Sig()) >= MU_MAX_D0SIG_CUT) return false;
+        if(fabs(mu->d0sigBSCorr) >= MU_MAX_D0SIG_CUT) return false;
         if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
     }
     return true;

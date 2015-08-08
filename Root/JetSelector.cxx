@@ -44,6 +44,7 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
     case AnalysisType::Ana_2Lep: /*\todo: set values*/ break;
     case AnalysisType::Ana_3Lep: /*\todo: set values*/ break;
     case AnalysisType::Ana_2LepWH: /*\todo: set values*/ break;
+    case AnalysisType::Ana_SS3L: /*\todo: set values*/ break;
     default:
         cout<<"JetSelector::setAnalysis error: invalid analysis"
             <<" '"<<std::underlying_type<AnalysisType>::type(a)<<"'"<<endl
@@ -66,10 +67,16 @@ bool JetSelector::isSignalJet(const Jet* jet)
     if(jet) {
         if(m_analysis==AnalysisType::Ana_2Lep){
             pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
-        } else {
+        } 
+        else {
             float ptCut = JET_SIGNAL_PT_CUT_3L;
+            float etaCut = JET_ETA_CUT;
+            if(m_analysis==AnalysisType::Ana_SS3L){
+                ptCut = JET_SIGNAL_PT_CUT_SS3L;
+                etaCut = JET_ETA_CUT_SS3L;
+            }
             pass = (jet->Pt() > ptCut
-                    && fabs(jet->Eta()) < JET_ETA_CUT
+                    && fabs(jet->Eta()) < etaCut
                     && jetPassesJvtRequirement(jet));
         }
     }
@@ -100,7 +107,11 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
 bool JetSelector::isCentralBJet(const Jet* jet)
 {
   if(jet->Pt() < JET_PT_B20_CUT        ) return false;
-  if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
+  if(m_analysis==AnalysisType::Ana_SS3L){
+      if(fabs(jet->detEta) > JET_ETA_CUT) return false;
+  }else{
+      if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
+  }
   if(!jetPassesJvtRequirement(jet)     ) return false; // JVT is needed 06/8/2015
   if(!jet->bjet                        ) return false; // Pt-Eta cuts are rather redundant, ASM 30/7/2015
 

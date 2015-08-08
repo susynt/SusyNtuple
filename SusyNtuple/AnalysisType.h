@@ -11,6 +11,7 @@ enum class AnalysisType {
     Ana_2Lep,  ///< Dilepton electroweak
     Ana_3Lep,  ///< trilepton electroweak
     Ana_2LepWH, ///< C1N2 in WH samesign+jets
+        Ana_SS3L,   ///< Strong SS3L analysis 
     kUnknown
 };
 /// Human-readable names

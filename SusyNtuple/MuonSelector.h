@@ -28,6 +28,11 @@ namespace Susy {
             IP, and isolation requirements for muons.
         */
         void buildRequirements(const AnalysisType& ana);
+
+        /**
+            Input muon "mu" is required to pass baseline selection
+        */
+        bool isBaselineMuon(const Muon* mu);
         /**
             Input muon "mu" is required to pass impact parameter and
             isolation cuts.
@@ -103,6 +108,7 @@ namespace Susy {
         bool m_2lep;
         bool m_3lep;
         bool m_2lepWH;
+        bool m_SS3L;
 
         // set verbose
         bool m_verbose;

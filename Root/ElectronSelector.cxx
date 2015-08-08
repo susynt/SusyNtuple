@@ -103,6 +103,41 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         break;
     }
     //////////////////////////////////////
+    // SS3L-ANALYSIS
+    //////////////////////////////////////
+    case(AnalysisType::Ana_SS3L) : { 
+        m_SS3L = true;
+
+        //basline
+        m_eleBaseId              = ElectronId::LooseLH;
+        m_vetoCrackRegion        = true;
+
+        m_eleId  = ElectronId::TightLH;
+        m_sigIso = Isolation::GradientLoose;
+
+        m_removeLepsFromIso = false;
+        m_doIPCut = true;
+        //m_doPtconeCut = true;
+        //m_doElEtconeCut = true;
+        //m_doMuEtconeCut = false;
+    
+        // cuts
+        EL_MAX_BASELINE_ETA             = 2.47;
+        EL_MIN_CRACK_ETA                = 1.37;
+        EL_MAX_CRACK_ETA                = 1.52;
+        EL_MIN_PT                       = 10.0;
+        EL_MAX_ETA                      = 2.0;
+        //EL_ISO_PT_THRS                  = 60.0;
+        //EL_PTCONE30_PT_CUT              = 0.16;
+        //EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
+        //EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
+        //EL_TOPOCONE30_PT_CUT            = 0.18;
+        EL_MAX_D0SIG_CUT                = 5.0; 
+        EL_MAX_Z0_SINTHETA              = 0.5;
+
+        break;
+    } 
+    //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
     case(AnalysisType::kUnknown) : {
@@ -143,15 +178,18 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
 ElectronSelector::ElectronSelector(): 
     m_systematic(NtSys::NOM),
     m_analysis(AnalysisType::kUnknown),
-    m_doIPCut(true),
-    m_doPtconeCut(true),
-    m_doElEtconeCut(true),
+    m_vetoCrackRegion(false),
+    m_doIPCut(false),
+    m_doPtconeCut(false),
+    m_doElEtconeCut(false),
     m_doMuEtconeCut(false),
-    m_eleId(ElectronId::TightLH),
+    m_eleBaseId(ElectronId::LooseLH),
+    m_eleId(ElectronId::TightLH),   
     m_sigIso(Isolation::IsolationInvalid),
     m_2lep(false),
     m_3lep(false),
     m_2lepWH(false),
+    m_SS3L(false),
     m_verbose(false)
 {
 }
@@ -169,6 +207,29 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
     return *this;
 }
 // ---------------------------------------------------------
+bool ElectronSelector::isBaselineElectron(const Electron* ele)
+{
+    /////////////////////////////
+    // Electron ID
+    /////////////////////////////
+    if(!elecPassID(ele, false)) return false;
+
+    if(fabs(ele->clusEta) > EL_MAX_BASELINE_ETA) return false;
+    if(ele->Pt() < EL_MIN_PT)                    return false;
+       
+    if(m_vetoCrackRegion){
+        if(fabs(ele->clusEta)> EL_MIN_CRACK_ETA &&
+           fabs(ele->clusEta)< EL_MAX_CRACK_ETA) return false;
+    }
+    
+    if (m_doIPCut) {
+        if(fabs(ele->d0sigBSCorr)  >= EL_MAX_D0SIG_CUT)   return false;
+    }
+    
+    return true;
+
+}
+// ---------------------------------------------------------
 bool ElectronSelector::isSignalElectron(const Electron* ele,
                                         const ElectronVector& baseElectrons,
                                         const MuonVector& baseMuons,
@@ -182,10 +243,16 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     if(!elecPassID(ele, true)) return false;
      
     /////////////////////////////
+    // Eta
+    /////////////////////////////
+    if(fabs(ele->Eta()) > EL_MAX_ETA ) return false;
+    
+
+    /////////////////////////////
     // Impact parameter
     /////////////////////////////
     if (m_doIPCut) {
-        if(fabs(ele->d0Sig())      >= EL_MAX_D0SIG_CUT)   return false;
+        if(fabs(ele->d0sigBSCorr)      >= EL_MAX_D0SIG_CUT)   return false;
         if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
     }
     
@@ -239,7 +306,7 @@ bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
     // Impact parameter
     /////////////////////////////
     if(m_doIPCut) {
-        if(fabs(ele->d0Sig()) >= EL_MAX_D0SIG_CUT) return false;
+        if(fabs(ele->d0sigBSCorr) >= EL_MAX_D0SIG_CUT) return false;
         if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
     }
     return true;
@@ -276,21 +343,21 @@ float ElectronSelector::elPtConeCorr(const Electron* ele,
 /* --------------------------------------------------------------------------------------------- */ 
 bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
 {
-    if(signalQuality){
-        if     (m_eleId == ElectronId::MediumLH)        return electron->mediumLH;
-        else if(m_eleId == ElectronId::LooseLH)         return electron->looseLH;
-        else if(m_eleId == ElectronId::TightLH)         return electron->tightLH;
-        else if(m_eleId == ElectronId::MediumLH_nod0)   return electron->mediumLH_nod0;
-        else if(m_eleId == ElectronId::TightLH_nod0)    return electron->tightLH_nod0;
-        else {
-            cout << "ElectronSelector::elecPassID() error: (signal) ele ID requirement not set for analysis!" << endl;
-            cout << "        Will set to TightLH." << endl;
-            return electron->tightLH;
-        }
-    } 
+    ElectronId id = signalQuality ? m_eleId : m_eleBaseId;
+
+    if     (id == ElectronId::MediumLH)        return electron->mediumLH;
+    else if(id == ElectronId::LooseLH)         return electron->looseLH;
+    else if(id == ElectronId::TightLH)         return electron->tightLH;
+    else if(id == ElectronId::MediumLH_nod0)   return electron->mediumLH_nod0;
+    else if(id == ElectronId::TightLH_nod0)    return electron->tightLH_nod0;
     else {
-        return true;
+        cout << "ElectronSelector::elecPassID() error: (signal) ele ID requirement not set for analysis!" << endl;
+        cout << "        Will set to TightLH." << endl;
+        return electron->tightLH;
     }
+    
+    return false;
+
 }
 /* --------------------------------------------------------------------------------------------- */ 
 bool ElectronSelector::elecPassIsolation(const Electron* ele)

@@ -90,6 +90,7 @@ public:
     static constexpr float JET_PT_CUT = 20; // GeV
     static constexpr float JET_SIGNAL_PT_CUT_3L = 20; // GeV
     static constexpr float JET_SIGNAL_PT_CUT_2L = 30; // GeV
+    static constexpr float JET_SIGNAL_PT_CUT_SS3L = 20; // GeV
     static constexpr float JET_ETA_CUT = 2.5;
     static constexpr float JET_JVF_CUT = 0.5;
     static constexpr float JET_JVF_CUT_2L = 0.0;
@@ -101,6 +102,7 @@ public:
     static constexpr float JET_PT_F30_CUT = 30;
     static constexpr float JET_ETA_MAX_CUT = 4.5;
     static constexpr float JET_ETA_CUT_2L = 2.4;
+    static constexpr float JET_ETA_CUT_SS3L = 2.8;
 
 private:
     JVFUncertaintyTool m_jvftool; ///< jvf tool (note weird design --> weird const-ness)
