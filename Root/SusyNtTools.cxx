@@ -913,7 +913,19 @@ bool SusyNtTools::passDeadRegions(const JetVector& preJets, const Met* met, int 
 
     return true;
 }
-
+/*--------------------------------------------------------------------------------*/
+// Lepton Counting 
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasNLeptonsPtThreshold(const LeptonVector& leps, int nLepCut, float ptCut)
+{
+    int nPass=0;
+    for (uint i = 0; i < leps.size(); i++) {
+        if(leps.at(i)->Pt() < ptCut) continue;
+        nPass++;
+    }
+    if(nPass >= nLepCut) return true;
+    return false;
+}
 /*--------------------------------------------------------------------------------*/
 // Lepton flavor methods (moved from SusyDefs)
 /*--------------------------------------------------------------------------------*/
@@ -1017,6 +1029,28 @@ bool SusyNtTools::hasOS(const TauVector& taus)
     }
     return false;
 }
+
+/*--------------------------------------------------------------------------------*/
+// Select SS lepton pair with highest pt
+/*--------------------------------------------------------------------------------*/
+LeptonVector SusyNtTools::getSSLeptonPair(const LeptonVector& leps)
+{
+    //AT: Assuming leps is already pT sorted.
+    LeptonVector ssPair;
+    uint nLep = leps.size();
+    for (uint i = 0; i < nLep; i++) {
+        for (uint j = i + 1; j < nLep; j++) {
+            if(!isSameFlav(leps.at(i),leps.at(j))) continue;
+            ssPair.clear();
+            ssPair.push_back(leps.at(i));
+            ssPair.push_back(leps.at(j));
+            break;
+        }
+    }
+    
+    return ssPair;
+}
+
 
 /*--------------------------------------------------------------------------------*/
 // Mass calculation methods (moved from SusyDefs)

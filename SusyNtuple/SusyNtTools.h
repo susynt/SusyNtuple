@@ -268,6 +268,10 @@ public:
     // Moving global functions from SusyDefs here
     //
 
+    //Count leptons passing pt threshold 
+    static bool hasNLeptonsPtThreshold(const LeptonVector& leps, int nLepCut=2, float ptCut=20.);
+
+
     // Lepton flavor checks
     static bool isSameFlav(const Susy::Lepton* l1, const Susy::Lepton* l2);
     static bool isOppSign(const Susy::Lepton* l1, const Susy::Lepton* l2);
@@ -282,6 +286,9 @@ public:
     static bool hasOS(const LeptonVector& leps);
     static bool hasSS(const LeptonVector& leps);
     static bool hasOS(const TauVector& taus);
+
+    LeptonVector getSSLeptonPair(const LeptonVector& leps);
+
 
     // Mass calculation methods
     static float Mll(const Susy::Particle* l1, const Susy::Particle* l2);
