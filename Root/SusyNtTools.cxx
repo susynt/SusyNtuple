@@ -1040,7 +1040,7 @@ LeptonVector SusyNtTools::getSSLeptonPair(const LeptonVector& leps)
     uint nLep = leps.size();
     for (uint i = 0; i < nLep; i++) {
         for (uint j = i + 1; j < nLep; j++) {
-            if(!isSameFlav(leps.at(i),leps.at(j))) continue;
+            if(isOppSign(leps.at(i),leps.at(j))) continue;
             ssPair.clear();
             ssPair.push_back(leps.at(i));
             ssPair.push_back(leps.at(j));
