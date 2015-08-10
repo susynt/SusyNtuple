@@ -11,152 +11,34 @@ using Susy::Jet;
 using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;
+using std::string;
 
 namespace Susy {
-//----------------------------------------------------------
-void JetSelector::buildRequirements(const AnalysisType &a)
-{
-    switch(a) {
-    ////////////////////////////////////
-    // 2L-ANALYSIS
-    ////////////////////////////////////
-    case(AnalysisType::Ana_2Lep) : {
-        m_2lep = true;
-
-        // pt
-        JET_PT_CUT          = 20.;
-        JET_SIGNAL_PT_CUT   = 30.;
-        JET_PT_L25_CUT      = 25.;
-        JET_PT_L20_CUT      = 20.;
-        JET_PT_B20_CUT      = 20.;
-        JET_PT_F30_CUT      = 30.;
-
-        // eta
-        JET_ETA_CUT         = 2.4;
-        JET_ETA_MAX_CUT     = 4.5;
-
-        // JVT requirements
-        JET_JVT_CUT         = 0.64;
-        JET_JVT_ETA_CUT     = 2.4;
-        JET_JVT_PT_CUT      = 50.;
-
-        break;
-    }
-    ////////////////////////////////////
-    // 3L-ANALYSIS
-    ////////////////////////////////////
-    case(AnalysisType::Ana_3Lep) : {
-        m_3lep = true;
-
-        // pt
-        JET_PT_CUT          = 20.;
-        JET_SIGNAL_PT_CUT   = 20.;
-        JET_PT_L25_CUT      = 25.;
-        JET_PT_L20_CUT      = 20.;
-        JET_PT_B20_CUT      = 20.;
-        JET_PT_F30_CUT      = 30.;
-
-        // eta
-        JET_ETA_CUT         = 2.4;
-        JET_ETA_MAX_CUT     = 4.5;
-
-        // JVT requirements
-        JET_JVT_CUT         = 0.64;
-        JET_JVT_ETA_CUT     = 2.4;
-        JET_JVT_PT_CUT      = 50.;
-
-        break;
-    }
-    ////////////////////////////////////
-    // WH-ANALYSIS
-    ////////////////////////////////////
-    case(AnalysisType::Ana_2LepWH) : {
-        m_2lepWH = true;
-
-        // pt
-        JET_PT_CUT          = 20.;
-        JET_SIGNAL_PT_CUT   = 30.;
-        JET_PT_L25_CUT      = 25.;
-        JET_PT_L20_CUT      = 20.;
-        JET_PT_B20_CUT      = 20.;
-        JET_PT_F30_CUT      = 30.;
-
-        // eta
-        JET_ETA_CUT         = 2.4;
-        JET_ETA_MAX_CUT     = 4.5;
-
-        // JVT requirements
-        JET_JVT_CUT         = 0.64;
-        JET_JVT_ETA_CUT     = 2.4;
-        JET_JVT_PT_CUT      = 50.;
-
-        break;
-    }
-    ////////////////////////////////////
-    // SS3L-ANALYSIS
-    ////////////////////////////////////
-    case(AnalysisType::Ana_SS3L) : {
-        m_SS3L = true;
-
-        // pt
-        JET_PT_CUT          = 20.;
-        JET_SIGNAL_PT_CUT   = 20.;
-        JET_PT_L25_CUT      = 25.;
-        JET_PT_L20_CUT      = 20.;
-        JET_PT_B20_CUT      = 20.;
-        JET_PT_F30_CUT      = 30.;
-
-        // eta
-        JET_ETA_CUT         = 2.8;
-        JET_ETA_MAX_CUT     = 4.5;
-
-        // JVT requirements
-        JET_JVT_CUT         = 0.64;
-        JET_JVT_ETA_CUT     = 2.4;
-        JET_JVT_PT_CUT      = 50.;
-
-        break;
-    }
-    ////////////////////////////////////
-    // Gone fishin'
-    ////////////////////////////////////
-    case(AnalysisType::kUnknown) : {
-        cout << "JetSelector::buildRequirements() error: invalid analysis"
-             << " '" << std::underlying_type<AnalysisType>::type(a)<<"'" << endl;
-        cout << "                 will apply default jet selection (Ana_2Lep)." << endl;
-        m_analysis = AnalysisType::Ana_2Lep;
-        m_2lep = true;
-
-        // pt
-        JET_PT_CUT          = 20.;
-        JET_SIGNAL_PT_CUT   = 30.;
-        JET_PT_L25_CUT      = 25.;
-        JET_PT_L20_CUT      = 20.;
-        JET_PT_B20_CUT      = 20.;
-        JET_PT_F30_CUT      = 30.;
-
-        // eta
-        JET_ETA_CUT         = 2.4;
-        JET_ETA_MAX_CUT     = 4.5;
-
-        // JVT requirements
-        JET_JVT_CUT         = 0.64;
-        JET_JVT_ETA_CUT     = 2.4;
-        JET_JVT_PT_CUT      = 50.;
-
-        break;
-    }
-
-    } // end switch
-
-    cout << "JetSelector    Configured jet selection for AnalysisType " << AnalysisType2str(m_analysis) << endl;
-
-}
-
 // ---------------------------------------------------------------------------- //
 //   Constructor
 // ---------------------------------------------------------------------------- //
 JetSelector::JetSelector() :
+    ///////////////////////////////
+    // default selection
+    ///////////////////////////////
+    JET_MIN_PT_BASELINE(20.0), // GeV
+    JET_MIN_PT_SIGNAL(30.0), // GeV
+    JET_MIN_PT_L25(25.0), // GeV
+    JET_MIN_PT_L20(20.0), // GeV
+    JET_MIN_PT_B20(20.0), // GeV
+    JET_MIN_PT_F30(30.0), // GeV
+    JET_MAX_ETA(2.4),
+    JET_MAX_ETA_FORWARD(4.5),
+    JET_JVT_CUT(0.64),
+    JET_JVT_ETA_CUT(2.4),
+    JET_JVT_PT_CUT(50.0), // GeV
+    JET_MV2C20_85(-0.7887),
+    JET_MV2C20_80(-0.5911),
+    JET_MV2C20_77(-0.4434),
+    JET_MV2C20_70(-0.0436),
+    JET_MV2C20_60(0.4496),
+    JET_MV2C20_OR(JET_MV2C20_80),
+    ///////////////////////////////
     m_systematic(NtSys::NOM),
     m_analysis(AnalysisType::kUnknown),
     m_2lep(false),
@@ -167,16 +49,84 @@ JetSelector::JetSelector() :
 {
 }
 //----------------------------------------------------------
-JetSelector& JetSelector::setSystematic(const NtSys::SusyNtSys &s)
-{
-    m_systematic = s;
-    return *this;
-}
-//----------------------------------------------------------
 JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 {
     m_analysis = a;
-    buildRequirements(a);
+
+    ////////////////////////////////////
+    // Set analysis-specific cuts
+    ////////////////////////////////////
+    switch(a) {
+    ////////////////////////////////////
+    // 2L-ANALYSIS
+    ////////////////////////////////////
+    case(AnalysisType::Ana_2Lep) : {
+        m_2lep = true;
+
+        // use defaults
+        JET_MIN_PT_SIGNAL = 20.;
+
+        break;
+    }
+    ////////////////////////////////////
+    // 3L-ANALYSIS
+    ////////////////////////////////////
+    case(AnalysisType::Ana_3Lep) : {
+        m_3lep = true;
+
+        // pt
+        JET_MIN_PT_SIGNAL   = 20.;
+        
+        break;
+    }
+    ////////////////////////////////////
+    // WH-ANALYSIS
+    ////////////////////////////////////
+    case(AnalysisType::Ana_2LepWH) : {
+        m_2lepWH = true;
+
+        // use defaults
+
+        break;
+    }
+    ////////////////////////////////////
+    // SS3L-ANALYSIS
+    ////////////////////////////////////
+    case(AnalysisType::Ana_SS3L) : {
+        m_SS3L = true;
+
+        // pt
+        JET_MIN_PT_SIGNAL   = 20.;
+
+        // eta
+        JET_MAX_ETA         = 2.8;
+
+        break;
+    }
+    ////////////////////////////////////
+    // Gone fishin'
+    ////////////////////////////////////
+    case(AnalysisType::kUnknown) : {
+        string error = "JetSelector::setAnalysis error: ";
+        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
+        cout << error << "Check that setAnalysisType is called properly for JetSelector" << endl;
+        cout << error << "for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+
+    } // end switch
+
+    if(m_verbose)
+        cout << "JetSelector    Configured jet selection for AnalysisType " << AnalysisType2str(m_analysis) << endl;
+
+    return *this;
+}
+
+//----------------------------------------------------------
+JetSelector& JetSelector::setSystematic(const NtSys::SusyNtSys &s)
+{
+    m_systematic = s;
     return *this;
 }
 //----------------------------------------------------------
@@ -188,28 +138,10 @@ bool JetSelector::isSignalJet(const Jet* jet)
             pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
         }
         else if(m_3lep || m_SS3L) {
-            pass = ((jet->Pt() > JET_SIGNAL_PT_CUT)
-                     && (fabs(jet->Eta()) < JET_ETA_CUT)
+            pass = ((jet->Pt() > JET_MIN_PT_SIGNAL)
+                     && (fabs(jet->Eta()) < JET_MAX_ETA)
                      && jetPassesJvtRequirement(jet));
         }
-
-    /*
-        if(m_analysis==AnalysisType::Ana_2Lep){
-            pass = (isCentralLightJet(jet) || isCentralBJet(jet) || isForwardJet(jet));
-        } 
-        else {
-            float ptCut = JET_SIGNAL_PT_CUT_3L;
-            float etaCut = JET_ETA_CUT;
-            if(m_analysis==AnalysisType::Ana_SS3L){
-                ptCut = JET_SIGNAL_PT_CUT_SS3L;
-                etaCut = JET_ETA_CUT_SS3L;
-            }
-            pass = (jet->Pt() > ptCut
-                    && fabs(jet->Eta()) < etaCut
-                    && jetPassesJvtRequirement(jet));
-        }
-    */
-
     } // if(jet)
 
     return pass;
@@ -217,17 +149,39 @@ bool JetSelector::isSignalJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isCentralLightJet(const Jet* jet)
 {
-    // This function is mostly used by the 2L analyses. Needs to be reorganized...
-    bool pass = false;
-    if(jet) {
-        pass = (jet->Pt() > JET_PT_L20_CUT
-                && fabs(jet->detEta) < JET_ETA_CUT
-                && jetPassesJvtRequirement(jet) 
-                && !jet->bjet);
-    } else {
-        cout << "JetSelector::isCentralLightJet    provided invalid jet(" << jet << "), return " << pass << endl;
-    }
-    return pass;
+    //////////////////////////////
+    // pt requirement
+    //////////////////////////////
+    if(jet->Pt() < JET_MIN_PT_L20)       return false;
+
+    //////////////////////////////
+    // detector eta requirement
+    //////////////////////////////
+    if(fabs(jet->detEta) > JET_MAX_ETA)  return false;
+
+    //////////////////////////////
+    // JVT requirement
+    //////////////////////////////
+    if(!jetPassesJvtRequirement(jet))    return false;
+
+    //////////////////////////////
+    // MV2c20 requirement
+    //   (a la SUSYTools)
+    //////////////////////////////
+    if(jet->bjet)                        return false;
+
+    return true;
+
+//    bool pass = false;
+//    if(jet) {
+//        pass = (jet->Pt() > JET_MIN_PT_L20
+//                && fabs(jet->detEta) < JET_MAX_ETA
+//                && jetPassesJvtRequirement(jet) 
+//                && !jet->bjet);
+//    } else {
+//        cout << "JetSelector::isCentralLightJet    provided invalid jet(" << jet << "), return " << pass << endl;
+//    }
+//    return pass;
 }
 //----------------------------------------------------------
 bool JetSelector::isCentralBJet(const Jet* jet)
@@ -235,12 +189,12 @@ bool JetSelector::isCentralBJet(const Jet* jet)
     //////////////////////////////
     // pt requirement
     //////////////////////////////
-    if(jet->Pt() < JET_PT_B20_CUT)            return false;
+    if(jet->Pt() < JET_MIN_PT_B20)            return false;
  
     //////////////////////////////
     // detector eta requirement
     //////////////////////////////
-    if(fabs(jet->detEta) > JET_ETA_CUT)       return false;
+    if(fabs(jet->detEta) > JET_MAX_ETA)       return false;
 
     //////////////////////////////
     // JVT requirement
@@ -253,16 +207,6 @@ bool JetSelector::isCentralBJet(const Jet* jet)
     //////////////////////////////
     if(!jet->bjet)                            return false;
 
-/*
-  if(m_analysis==AnalysisType::Ana_SS3L){
-      if(fabs(jet->detEta) > JET_ETA_CUT) return false;
-  }else{
-      if(fabs(jet->detEta) > JET_ETA_CUT_2L) return false;
-  }
-  if(!jetPassesJvtRequirement(jet)     ) return false; // JVT is needed 06/8/2015
-  if(!jet->bjet                        ) return false; // Pt-Eta cuts are rather redundant, ASM 30/7/2015
-*/
-
     return true;
 }
 //----------------------------------------------------------
@@ -271,17 +215,17 @@ bool JetSelector::isForwardJet(const Jet* jet)
     //////////////////////////////
     // pt requirement
     //////////////////////////////
-    if(jet->Pt() < JET_PT_F30_CUT)            return false;
+    if(jet->Pt() < JET_MIN_PT_F30)            return false;
 
     //////////////////////////////
     // jet in forward direction?
     //////////////////////////////
-    if(fabs(jet->detEta) < JET_ETA_CUT)       return false;
+    if(fabs(jet->detEta) < JET_MAX_ETA)       return false;
 
     //////////////////////////////
     // jet eta below the max?
     //////////////////////////////
-    if(fabs(jet->detEta) > JET_ETA_MAX_CUT)   return false;
+    if(fabs(jet->detEta) > JET_MAX_ETA_FORWARD)   return false;
 
     return true;
 }
