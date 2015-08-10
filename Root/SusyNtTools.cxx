@@ -42,14 +42,14 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
     // Preselection
     preElecs = getPreElectrons(susyNt, sys);
     preMuons = getPreMuons(susyNt, sys);
-    preJets = getPreJets(susyNt, sys);
+    preJets  = getPreJets(susyNt, sys);
     if (selectTaus) taus = getPreTaus(susyNt, sys);
     else taus.clear();
 
     // Baseline objects
-    elecs = preElecs;
-    muons = preMuons;
-    jets = preJets;
+    elecs = getBaselineElectrons(preElecs);
+    muons = getBaselineMuons(preMuons);
+    jets  = getBaselineJets(preJets);
 
     // Overlap removal
     if(!m_overlapTool.useSignalLeptons()){
@@ -72,7 +72,10 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
     if (selectTaus) taus = getPreTaus(susyNt, sys);
     else taus.clear();
 
-    //cout<<"Select Taus: "<<selectTaus<<" size: "<<taus.size()<<endl;
+    // Baseline objects
+    elecs = getBaselineElectrons(elecs);
+    muons = getBaselineMuons(muons);
+    jets  = getBaselineJets(jets);
 
     // Now perform the overlap removals
     if(!m_overlapTool.useSignalLeptons()){
@@ -180,11 +183,24 @@ ElectronVector SusyNtTools::getPreElectrons(SusyNtObject* susyNt, SusyNtSys sys)
         //if(!e->looseLH)                continue;
         //if(e->Eta() > ELECTRON_ETA_CUT) continue;
         //if(e->Pt() < ELECTRON_PT_CUT)   continue;
-
-        if (m_electronSelector.isBaselineElectron(e)){ 
+        elecs.push_back(e);
+     //   if (m_electronSelector.isPreElectron(e)) {
+     //       elecs.push_back(e);
+     //   }
+    }
+    return elecs;
+}
+/*--------------------------------------------------------------------------------*/
+ElectronVector SusyNtTools::getBaselineElectrons(const ElectronVector& preElecs)
+{
+    ElectronVector elecs;
+    for (uint ie = 0; ie < preElecs.size(); ++ie) {
+        Electron* e = preElecs.at(ie);
+        if(m_electronSelector.isBaselineElectron(e)){
             elecs.push_back(e);
         }
-    }
+    } // ie
+
     return elecs;
 }
 /*--------------------------------------------------------------------------------*/
@@ -204,12 +220,25 @@ MuonVector SusyNtTools::getPreMuons(SusyNtObject* susyNt, SusyNtSys sys)
         //if(mu->Pt() < MUON_PT_CUT)   continue;
 
         // Save
-        if (m_muonSelector.isBaselineMuon(mu)){ 
-            muons.push_back(mu);
-        }
+        muons.push_back(mu);
+       // if (m_muonSelector.isBaselineMuon(mu)){ 
+       //     muons.push_back(mu);
+       // }
 
     }
     return muons;
+}
+/*--------------------------------------------------------------------------------*/
+MuonVector SusyNtTools::getBaselineMuons(const MuonVector& preMuons)
+{
+    MuonVector baseMuons;
+    for (uint im = 0; im < preMuons.size(); ++im) {
+        Muon* mu = preMuons.at(im);
+        if(m_muonSelector.isBaselineMuon(mu)){
+            baseMuons.push_back(mu);
+        }
+    } // im
+    return baseMuons;
 }
 /*--------------------------------------------------------------------------------*/
 TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
@@ -231,14 +260,22 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
     for (uint ij = 0; ij < susyNt->jet()->size(); ++ij) {
         Jet* j = &susyNt->jet()->at(ij);
         j->setState(sys);
-        if (j->Pt() < m_jetSelector.JET_PT_CUT) continue;
-        //if (j->Pt() < JetSelector::defaultMinPt()) continue;
         jets.push_back(j);
     }
 
     return jets;
 }
-
+/*--------------------------------------------------------------------------------*/
+JetVector SusyNtTools::getBaselineJets(const JetVector& preJets)
+{
+    JetVector baseJets;
+    for (uint ij = 0; ij < preJets.size(); ++ij) {
+        Jet* j = preJets.at(ij);
+        if(j->Pt() < m_jetSelector.JET_MIN_PT_BASELINE) continue;
+        baseJets.push_back(j);
+    } // ij
+    return baseJets;
+}
 /*--------------------------------------------------------------------------------*/
 // Get Signal objects
 /*--------------------------------------------------------------------------------*/
@@ -248,8 +285,7 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs, 
     ElectronVector sigElecs;
     for (uint ie = 0; ie < baseElecs.size(); ++ie) {
         Electron* e = baseElecs.at(ie);
-        if (m_electronSelector.isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){ 
-      //  if (isSignalElectron(e, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
+        if (m_electronSelector.isSignalElectron(e)){ 
             sigElecs.push_back(e);
         }
     }
@@ -262,8 +298,7 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons, const Electr
     MuonVector sigMuons;
     for (uint im = 0; im < baseMuons.size(); ++im) {
         Muon* mu = baseMuons.at(im);
-        if (m_muonSelector.isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)){
-      //  if (isSignalMuon(mu, baseElecs, baseMuons, nVtx, isMC, removeLepsFromIso)) {
+        if (m_muonSelector.isSignalMuon(mu)){
             sigMuons.push_back(mu);
         }
     }
