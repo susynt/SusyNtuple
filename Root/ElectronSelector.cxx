@@ -11,11 +11,50 @@ using Susy::Electron;
 using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;
+using std::string;
 
 namespace Susy {
-
-void ElectronSelector::buildRequirements(const AnalysisType &a)
+// -------------------------------------------------------------------------------------------- //
+// Constructor
+// -------------------------------------------------------------------------------------------- //
+ElectronSelector::ElectronSelector() :
+    //////////////////////////
+    // default selection
+    //////////////////////////
+    EL_MIN_PT_BASELINE(10.0),
+    EL_MIN_PT_SIGNAL(10.0),
+    EL_MAX_ETA_BASELINE(2.47),
+    EL_MAX_ETA_SIGNAL(2.47),
+    EL_ISO_PT_THRS(60.0),
+    EL_PTCONE30_PT_CUT(0.16),
+    EL_TOPOCONE30_PT_CUT(0.18),
+    EL_MAX_D0SIG(5.0),
+    EL_MAX_Z0_SINTHETA(0.4),
+    EL_MIN_CRACK_ETA(1.37),
+    EL_MAX_CRACK_ETA(1.52),
+    //////////////////////////
+    m_systematic(NtSys::NOM),
+    m_analysis(AnalysisType::kUnknown),
+    m_vetoCrackRegion(false),
+    m_doIPCut(false),
+    m_eleBaseId(ElectronId::ElectronIdInvalid),
+    m_eleId(ElectronId::ElectronIdInvalid),   
+    m_sigIso(Isolation::IsolationInvalid),
+    m_2lep(false),
+    m_3lep(false),
+    m_2lepWH(false),
+    m_SS3L(false),
+    m_verbose(false)
 {
+}
+// -------------------------------------------------------------------------------------------- //
+ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
+{
+    m_analysis = a;
+
+    //////////////////////////////////////
+    // Set analysis-specific cuts
+    //////////////////////////////////////
     switch(a) {
     //////////////////////////////////////
     // 2L-ANALYSIS
@@ -23,25 +62,13 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2Lep) : { 
         m_2lep = true;
 
+        // baseline
+        m_eleBaseId = ElectronId::LooseLH;
+        // signal
         m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
-        m_removeLepsFromIso = false;
-        m_doIPCut = true;
-        m_doPtconeCut = true;
-        m_doElEtconeCut = true;
-        m_doMuEtconeCut = false;
-    
-        // cuts
-        EL_MIN_PT                       = 10.0;
-        EL_MAX_ETA                      = 2.47;
-        EL_ISO_PT_THRS                  = 60.0;
-        EL_PTCONE30_PT_CUT              = 0.16;
-        EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
-        EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
-        EL_TOPOCONE30_PT_CUT            = 0.18;
-        EL_MAX_D0SIG_CUT                = 5.0; 
-        EL_MAX_Z0_SINTHETA              = 0.4;
+        m_doIPCut           = true;
 
         break;
     } 
@@ -51,25 +78,13 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_3Lep) : {
         m_3lep = true;
 
+        //baseline
+        m_eleBaseId = ElectronId::LooseLH;
+        // signal
         m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
-        m_removeLepsFromIso = false;
-        m_doIPCut = true;
-        m_doPtconeCut = true;
-        m_doElEtconeCut = true;
-        m_doMuEtconeCut = false;
-
-        // cuts
-        EL_MIN_PT                       = 10.0;
-        EL_MAX_ETA                      = 2.47;
-        EL_ISO_PT_THRS                  = 60.0;
-        EL_PTCONE30_PT_CUT              = 0.16;
-        EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
-        EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
-        EL_TOPOCONE30_PT_CUT            = 0.18;
-        EL_MAX_D0SIG_CUT                = 5.0; 
-        EL_MAX_Z0_SINTHETA              = 0.4;
+        m_doIPCut           = true;
 
         break;
     }
@@ -79,26 +94,18 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     case(AnalysisType::Ana_2LepWH) : {
         m_2lepWH = true;
 
+        // baseline
+        m_eleBaseId = ElectronId::LooseLH;
+        // signal
         m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
 
-        m_removeLepsFromIso = false;
-        m_doIPCut = true;
-        m_doPtconeCut = true;
-        m_doElEtconeCut = true;
-        m_doMuEtconeCut = false;
+        m_doIPCut           = true;
 
         // cuts
-        EL_MIN_PT                       = 10.0;
-        EL_MAX_ETA                      = 2.47;
-        EL_ISO_PT_THRS                  = 60.0;
         EL_PTCONE30_PT_CUT              = 0.07;
-        EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
-        EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
         EL_TOPOCONE30_PT_CUT            = 0.13;
-        EL_MAX_D0SIG_CUT                = 3.0; 
-        EL_MAX_Z0_SINTHETA              = 0.4;
-
+        EL_MAX_D0SIG                    = 3.0; 
 
         break;
     }
@@ -111,28 +118,14 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
         //basline
         m_eleBaseId              = ElectronId::LooseLH;
         m_vetoCrackRegion        = true;
-
+        // signal
         m_eleId  = ElectronId::TightLH;
         m_sigIso = Isolation::GradientLoose;
-
-        m_removeLepsFromIso = false;
+        
         m_doIPCut = true;
-        //m_doPtconeCut = true;
-        //m_doElEtconeCut = true;
-        //m_doMuEtconeCut = false;
-    
+
         // cuts
-        EL_MAX_BASELINE_ETA             = 2.47;
-        EL_MIN_CRACK_ETA                = 1.37;
-        EL_MAX_CRACK_ETA                = 1.52;
-        EL_MIN_PT                       = 10.0;
-        EL_MAX_ETA                      = 2.0;
-        //EL_ISO_PT_THRS                  = 60.0;
-        //EL_PTCONE30_PT_CUT              = 0.16;
-        //EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
-        //EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
-        //EL_TOPOCONE30_PT_CUT            = 0.18;
-        EL_MAX_D0SIG_CUT                = 5.0; 
+        EL_MAX_ETA_SIGNAL               = 2.0;
         EL_MAX_Z0_SINTHETA              = 0.5;
 
         break;
@@ -141,69 +134,43 @@ void ElectronSelector::buildRequirements(const AnalysisType &a)
     // Gone fishin'
     //////////////////////////////////////
     case(AnalysisType::kUnknown) : {
-        cout << "ElectronSelector::buildRequirements() error: invalid analysis"
-             <<" '"<<std::underlying_type<AnalysisType>::type(a)<< "'" << endl;
-        cout << "               will apply default electron selection (Ana_2Lep)." << endl; 
-        m_analysis = AnalysisType::Ana_2Lep;
-        m_2lep = true;
-
-        m_eleId  = ElectronId::TightLH;
-        m_sigIso = Isolation::GradientLoose;
-
-        m_removeLepsFromIso = false;
-        m_doIPCut = true;
-        m_doPtconeCut = true;
-        m_doElEtconeCut = true;
-        m_doMuEtconeCut = false;
-    
-        // cuts
-        EL_MIN_PT                       = 10.0;
-        EL_MAX_ETA                      = 2.47;
-        EL_ISO_PT_THRS                  = 60.0;
-        EL_PTCONE30_PT_CUT              = 0.16;
-        EL_TOPOCONE30_SLOPE_DATA_CUT    = 0.02015;
-        EL_TOPOCONE30_SLOPE_MC_CUT      = 0.01794;
-        EL_TOPOCONE30_PT_CUT            = 0.18;
-        EL_MAX_D0SIG_CUT                = 5.0; 
-        EL_MAX_Z0_SINTHETA              = 0.4;
-
-        break;
+        string error = "ElectronSelector::setAnalysis error: ";
+        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
+        cout << error << "Check that setAnalysisType is called properly for ElectronSelector" << endl;
+        cout << error << "for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
     }
 
     } // end switch
-}
-// -------------------------------------------------------------------------------------------- //
-// Constructor
-// -------------------------------------------------------------------------------------------- //
-ElectronSelector::ElectronSelector(): 
-    m_systematic(NtSys::NOM),
-    m_analysis(AnalysisType::kUnknown),
-    m_vetoCrackRegion(false),
-    m_doIPCut(false),
-    m_doPtconeCut(false),
-    m_doElEtconeCut(false),
-    m_doMuEtconeCut(false),
-    m_eleBaseId(ElectronId::LooseLH),
-    m_eleId(ElectronId::TightLH),   
-    m_sigIso(Isolation::IsolationInvalid),
-    m_2lep(false),
-    m_3lep(false),
-    m_2lepWH(false),
-    m_SS3L(false),
-    m_verbose(false)
-{
+
+    // check that the ele Id's have been set
+    if(m_eleId == ElectronId::ElectronIdInvalid || m_eleBaseId == ElectronId::ElectronIdInvalid) {
+        string error = "ElectronSelector::setAnalysis error: "; 
+        cout << error << "Baseline and/or signal electron ID requirements are not set." << endl;
+        cout << error << "Baseline ID = " << ElectronId2str(m_eleBaseId) 
+                                                       << " Signal ID = " << ElectronId2str(m_eleId) << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+    // check that the ele signal isolation has been set
+    if(m_sigIso == Isolation::IsolationInvalid) {
+        string error = "ElectronSelector::setAnalysis error: ";
+        cout << error << "Signal electron isolation requirement is not set." << endl;
+        cout << error << "Electron isolation = " << Isolation2str(m_sigIso) << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+
+    if (m_verbose)
+        cout << "ElectronSelector    Configured electron selection for AnalysisType " << AnalysisType2str(m_analysis) << endl;
+    
+    return *this;
 }
 // ---------------------------------------------------------
 ElectronSelector& ElectronSelector::setSystematic(const NtSys::SusyNtSys &s)
 {
     m_systematic = s;
-    return *this;
-}
-// ---------------------------------------------------------
-ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
-{
-    m_analysis = a;
-    buildRequirements(a);
     return *this;
 }
 // ---------------------------------------------------------
@@ -214,27 +181,29 @@ bool ElectronSelector::isBaselineElectron(const Electron* ele)
     /////////////////////////////
     if(!elecPassID(ele, false)) return false;
 
-    if(fabs(ele->clusEta) > EL_MAX_BASELINE_ETA) return false;
-    if(ele->Pt() < EL_MIN_PT)                    return false;
+    //////////////////////////
+    // eta/pT
+    //////////////////////////
+    if(fabs(ele->clusEta) > EL_MAX_ETA_BASELINE) return false;
+    if(ele->Pt() < EL_MIN_PT_BASELINE) return false;
        
+    //////////////////////////
+    // veto detector
+    //////////////////////////
     if(m_vetoCrackRegion){
         if(fabs(ele->clusEta)> EL_MIN_CRACK_ETA &&
            fabs(ele->clusEta)< EL_MAX_CRACK_ETA) return false;
     }
     
-    if (m_doIPCut) {
-        if(fabs(ele->d0sigBSCorr)  >= EL_MAX_D0SIG_CUT)   return false;
+    if (m_doIPCut && m_SS3L) {
+        if(fabs(ele->d0sigBSCorr)  >= EL_MAX_D0SIG)   return false;
     }
     
     return true;
 
 }
 // ---------------------------------------------------------
-bool ElectronSelector::isSignalElectron(const Electron* ele,
-                                        const ElectronVector& baseElectrons,
-                                        const MuonVector& baseMuons,
-                                        const unsigned int nVtx, bool isMC,
-                                        bool removeLepsFromIso)
+bool ElectronSelector::isSignalElectron(const Electron* ele)
 {
 
     /////////////////////////////
@@ -245,14 +214,14 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     /////////////////////////////
     // Eta
     /////////////////////////////
-    if(fabs(ele->Eta()) > EL_MAX_ETA ) return false;
+    if(fabs(ele->Eta()) > EL_MAX_ETA_SIGNAL ) return false;
     
 
     /////////////////////////////
     // Impact parameter
     /////////////////////////////
     if (m_doIPCut) {
-        if(fabs(ele->d0sigBSCorr)      >= EL_MAX_D0SIG_CUT)   return false;
+        if(fabs(ele->d0sigBSCorr)      >= EL_MAX_D0SIG)   return false;
         if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
     }
     
@@ -265,33 +234,8 @@ bool ElectronSelector::isSignalElectron(const Electron* ele,
     /////////////////////////////
     // ele pt
     /////////////////////////////
-    if(ele->Pt() < 10) return false;
-
+    if(ele->Pt() < EL_MIN_PT_SIGNAL) return false;
     
-    
-    // old:
-    ///////////////////////////////
-    //// ptcone isolation
-    ///////////////////////////////
-    //if(m_doPtconeCut) {
-    //    float ptcone30 = elPtConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso); 
-    //    if(m_2lepWH){
-    //        if(ptcone30/std::min(pt, EL_ISO_PT_THRS) >= EL_PTCONE30_PT_CUT) return false;
-    //    }
-    //    else 
-    //        if (ptcone30/pt >= EL_PTCONE30_PT_CUT) return false;
-    //}
-    ///////////////////////////////
-    //// topo etcone isolation
-    ///////////////////////////////
-    //if(m_doElEtconeCut) { // true by default
-    //    float etcone = elEtTopoConeCorr(ele, baseElectrons, baseMuons, nVtx, isMC, removeLepsFromIso);
-    //    if(m_2lepWH){
-    //        if(etcone/std::min(pt,EL_ISO_PT_THRS) >= EL_TOPOCONE30_PT_CUT) return false;
-    //    }
-    //    else
-    //        if(etcone/pt >= EL_TOPOCONE30_PT_CUT) return false;
-    //}
     return true;
 }
 /* --------------------------------------------------------------------------------------------- */ 
@@ -306,39 +250,10 @@ bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
     // Impact parameter
     /////////////////////////////
     if(m_doIPCut) {
-        if(fabs(ele->d0sigBSCorr) >= EL_MAX_D0SIG_CUT) return false;
+        if(fabs(ele->d0sigBSCorr) >= EL_MAX_D0SIG) return false;
         if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
     }
     return true;
-}
-/* --------------------------------------------------------------------------------------------- */ 
-// Isolation
-/* --------------------------------------------------------------------------------------------- */
-float ElectronSelector::elPtConeCorr(const Electron* ele,
-                                     const ElectronVector& baseElectrons,
-                                     const MuonVector& baseMuons,
-                                     unsigned int nVtx, bool isMC, bool removeLeps)
-{
-    float ptcone = ele->ptcone30;
-    if(removeLeps) {
-        for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++){
-            const Electron* e = baseElectrons[iEl];
-            if(ele == e) continue;
-            if(!isSemiSignalElectron(e)) continue;
-            float dR = ele->DeltaR(*e);
-            if(dR < 0.3) ptcone -= e->trackPt;
-        }
-        for(unsigned int iMu = 0; iMu < baseMuons.size(); iMu++){
-            const Muon* mu = baseMuons[iMu];
-            if(!MuonSelector()
-                            .setSystematic(m_systematic)
-                            .setAnalysis(m_analysis)
-                            .isSemiSignalMuon(mu)) continue;
-            float dR = ele->DeltaR(*mu);
-            if(dR < 0.3) ptcone -= mu->idTrackPt;
-        }
-    }
-    return ptcone;
 }
 /* --------------------------------------------------------------------------------------------- */ 
 bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
@@ -374,23 +289,49 @@ bool ElectronSelector::elecPassIsolation(const Electron* ele)
     } 
 }
 /* --------------------------------------------------------------------------------------------- */
-float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
-                                     const ElectronVector& baseElectrons,
-                                     const MuonVector& baseMuons,
-                                     unsigned int nVtx, bool isMC, bool removeLeps)
-{
-    float slope = isMC ? EL_TOPOCONE30_SLOPE_MC_CUT : EL_TOPOCONE30_SLOPE_DATA_CUT;
-    float etcone = ele->etconetopo30 - slope*nVtx;
-    if(removeLeps) {
-        for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++) {
-            const Electron* e2 = baseElectrons[iEl];
-            if(ele==e2) continue;
-            if(!isSemiSignalElectron(e2)) continue;
-            float dR = ele->DeltaR(*e2);
-            if(dR < 0.28) etcone -= e2->clusE / cosh(e2->clusEta);
-        }
-    }
-    return etcone;
-}
+//float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
+//                                     const ElectronVector& baseElectrons,
+//                                     const MuonVector& baseMuons,
+//                                     unsigned int nVtx, bool isMC, bool removeLeps)
+//{
+//    float slope = isMC ? EL_TOPOCONE30_SLOPE_MC_CUT : EL_TOPOCONE30_SLOPE_DATA_CUT;
+//    float etcone = ele->etconetopo30 - slope*nVtx;
+//    if(removeLeps) {
+//        for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++) {
+//            const Electron* e2 = baseElectrons[iEl];
+//            if(ele==e2) continue;
+//            if(!isSemiSignalElectron(e2)) continue;
+//            float dR = ele->DeltaR(*e2);
+//            if(dR < 0.28) etcone -= e2->clusE / cosh(e2->clusEta);
+//        }
+//    }
+//    return etcone;
+//}
+//float ElectronSelector::elPtConeCorr(const Electron* ele,
+//                                     const ElectronVector& baseElectrons,
+//                                     const MuonVector& baseMuons,
+//                                     unsigned int nVtx, bool isMC, bool removeLeps)
+//{
+//    float ptcone = ele->ptcone30;
+//    if(removeLeps) {
+//        for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++){
+//            const Electron* e = baseElectrons[iEl];
+//            if(ele == e) continue;
+//            if(!isSemiSignalElectron(e)) continue;
+//            float dR = ele->DeltaR(*e);
+//            if(dR < 0.3) ptcone -= e->trackPt;
+//        }
+//        for(unsigned int iMu = 0; iMu < baseMuons.size(); iMu++){
+//            const Muon* mu = baseMuons[iMu];
+//            if(!MuonSelector()
+//                            .setSystematic(m_systematic)
+//                            .setAnalysis(m_analysis)
+//                            .isSemiSignalMuon(mu)) continue;
+//            float dR = ele->DeltaR(*mu);
+//            if(dR < 0.3) ptcone -= mu->idTrackPt;
+//        }
+//    }
+//    return ptcone;
+//}
 
 }; // namespace Susy
