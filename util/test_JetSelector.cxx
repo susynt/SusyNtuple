@@ -17,14 +17,14 @@ int main(int argc, char **argv)
     bool verbose(true);
     if(verbose)
         cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
-    float epsilon = 0.01;
+//    float epsilon = 0.01;
     Jet centralLightJet;
-    centralLightJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()-epsilon, 0.1, 100.0);
+//    centralLightJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()-epsilon, 0.1, 100.0);
     centralLightJet.detEta = centralLightJet.Eta();
     Jet centralBJet(centralLightJet);
-    centralBJet.mv1 = JetSelector::defaultBtagMinValue()+epsilon;
+//    centralBJet.mv1 = JetSelector::defaultBtagMinValue()+epsilon;
     Jet forwardJet(centralLightJet);
-    forwardJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()+epsilon, 0.1, 100.0);
+//    forwardJet.SetPtEtaPhiE(100.0, JetSelector::defaultCentralEtaMax()+epsilon, 0.1, 100.0);
 
 
     JetSelector selector = JetSelector().setAnalysis(AnalysisType::Ana_2Lep).setVerbose(verbose);

@@ -17,6 +17,11 @@ Lepton::Lepton(const Lepton &rhs):
   ptcone30(rhs.ptcone30),
   ptvarcone20(rhs.ptvarcone20),
   ptvarcone30(rhs.ptvarcone30),
+  isoGradientLoose(rhs.isoGradientLoose),
+  isoGradient(rhs.isoGradient),
+  isoLooseTrackOnly(rhs.isoLooseTrackOnly),
+  isoLoose(rhs.isoLoose),
+  isoTight(rhs.isoTight),
   d0(rhs.d0),
   errD0(rhs.errD0),
   d0sigBSCorr(rhs.d0sigBSCorr),
@@ -48,6 +53,11 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     ptcone30 = rhs.ptcone30;
     ptvarcone20  = rhs.ptvarcone20;
     ptvarcone30  = rhs.ptvarcone30;
+    isoGradientLoose = rhs.isoGradientLoose;
+    isoGradient = rhs.isoGradient;
+    isoLooseTrackOnly = rhs.isoLooseTrackOnly;
+    isoLoose = rhs.isoLoose;
+    isoTight = rhs.isoTight;
     d0 = rhs.d0;
     errD0 = rhs.errD0;
     d0sigBSCorr = rhs.d0sigBSCorr;

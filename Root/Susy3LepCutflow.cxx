@@ -254,12 +254,12 @@ void Susy3LepCutflow::finalizeHistos()
 /*--------------------------------------------------------------------------------*/
 // Analysis cuts
 /*--------------------------------------------------------------------------------*/
-bool Susy3LepCutflow::passFCal()
-{
-  const Event* evt = nt.evt();
-  if(nttools().m_jetSelector.hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
-  return true;
-}
+//bool Susy3LepCutflow::passFCal()
+//{
+//  const Event* evt = nt.evt();
+//  if(nttools().m_jetSelector.hasJetInBadFCAL(m_baseJets, evt->run, evt->isMC)) return false;
+//  return true;
+//}
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passNLepCut(const LeptonVector& leptons)
 {

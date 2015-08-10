@@ -22,13 +22,12 @@ namespace Susy {
         MuonSelector();
         MuonSelector& setSystematic(const NtSys::SusyNtSys& systematic);
         MuonSelector& setAnalysis(const AnalysisType& analysis);
-
         /**
-            Given the AnalysisType set in "setAnalysis", sets the kinematic, 
-            IP, and isolation requirements for muons.
+            Method to retrieve the isolation requirement for signal muons.
+            This is helpful for other tools that need to know how the
+            the muons are configured.
         */
-        void buildRequirements(const AnalysisType& ana);
-
+        Isolation signalIsolation() { return m_sigIso; } 
         /**
             Input muon "mu" is required to pass baseline selection
         */
@@ -37,9 +36,7 @@ namespace Susy {
             Input muon "mu" is required to pass impact parameter and
             isolation cuts.
         */
-        bool isSignalMuon(const Muon* mu, const ElectronVector& baseElectrons,
-                          const MuonVector& baseMuons, const unsigned int nVtx,
-                          bool isMC, bool removeLepsFromIso);
+        bool isSignalMuon(const Muon* mu);
         /**
             Check whether the input muon "mu" passes a given isolation quality
             set by IsolationSelectionTool (parameter m_sigIso below).
@@ -73,9 +70,15 @@ namespace Susy {
                            const MuonVector& baseMuons, const unsigned int nVtx,
                            bool isMC, bool removeLepsFromIso);
 
-
-        float MU_MIN_PT;                    ///< minimum allowed muon pT
-        float MU_MAX_ETA;                   ///< maximum allowed muon eta
+        //////////////////////////////////////
+        // Analysis Selections
+        //////////////////////////////////////
+        // pT/eta
+        float MU_MIN_PT_BASELINE;           ///< minimum allowed pT for baseline muons (GeV)
+        float MU_MIN_PT_SIGNAL;             ///< minimum allowed pT for signal muons (GeV)
+        float MU_MAX_ETA_BASELINE;          ///< maximum allowed eta for baseline muons
+        float MU_MAX_ETA_SIGNAL;            ///< maximum allowed eta for signal muons
+        // isolation
         float MU_ISO_PT_THRS;               ///< muon iso pt threshold (can 2lepWH analyzer comment?)
         float MU_PTCONE30_SLOPE_DATA;       ///< pile-up correction term for ptcone30 (data)
         float MU_PTCONE30_SLOPE_MC;         ///< pile-up correction term for ptcone30 (MC)
@@ -86,19 +89,15 @@ namespace Susy {
         float MU_ETCONE30_K1_MC;            ///< "1st-order" pile-up correction term for etcone30 (MC)
         float MU_ETCONE30_K2_MC;            ///< "2nd-order" pile-up correction term for etcone30 (MC)
         float MU_ETCONE30_PT_CUT;           ///< maximum allowed etcone30/pt
-        float MU_MAX_D0SIG_CUT;             ///< maximum allowed d0sig
+        // IP
+        float MU_MAX_D0SIG    ;             ///< maximum allowed d0sig
         float MU_MAX_Z0_SINTHETA;           ///< maximum allowed z0sinTheta
-    
-    
-    
+
+ 
         protected :
         NtSys::SusyNtSys m_systematic;
         AnalysisType m_analysis; // TODO : decide: bools or ana type? easier to check bools
-        bool m_removeLepsFromIso;
         bool m_doIPCut;
-        bool m_doPtconeCut;
-        bool m_doElEtConeCut;
-        bool m_doMuEtconeCut;
 
         Isolation m_sigIso;     ///< muon isolation quality for signal muons (c.f. SusyNtuple/Isolation.h)
 

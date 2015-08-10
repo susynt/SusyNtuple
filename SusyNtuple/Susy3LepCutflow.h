@@ -53,7 +53,7 @@ class Susy3LepCutflow : public SusyNtAna
     void finalizeHistos();
 		     
     // Cut methods
-    bool passFCal();
+//    bool passFCal();
     bool passNLepCut(const LeptonVector& leptons);
     bool passNTauCut(const TauVector& taus);
     bool passTrigger(const LeptonVector& leptons);

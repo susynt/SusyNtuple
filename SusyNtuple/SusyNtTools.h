@@ -32,11 +32,31 @@ public:
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         m_anaType = A;
+        ////////////////////////////
+        // ElectronSelector
+        ////////////////////////////
         m_electronSelector.setAnalysis(A);
+        ////////////////////////////
+        // MuonSelector
+        ////////////////////////////
         m_muonSelector.setAnalysis(A);
+        ////////////////////////////
+        // JetSelector
+        ////////////////////////////
         m_jetSelector.setAnalysis(A);
+        ////////////////////////////
+        // OverlapTool
+        ////////////////////////////
+        // propagate isolation requirements
+        m_overlapTool.setElectronIsolation(m_electronSelector.signalIsolation());
+        m_overlapTool.setMuonIsolation(m_muonSelector.signalIsolation());
+        // propagate OR loose b-tag WP
+        m_overlapTool.setORBtagEff(m_jetSelector.overlapRemovalBtagEffWP());
+        // now setAnalysis
         m_overlapTool.setAnalysis(A);
-        if (verbose) std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
+
+        // this should be in the logs no matter what
+        std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
     };
     AnalysisType getAnaType() { return m_anaType; }
 
@@ -44,11 +64,17 @@ public:
     // Methods to grab objects based on systematic shift desired
     //
 
-    /// 'Pre' Objects. Keep same naming convention as I saw in SusyD3PDAna
+    /// 'Pre' objects - before full baseline requirements are applied, raw objects stored in SusyNt.
+    /// Note: In these methods the object systematics are applied.
     ElectronVector getPreElectrons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     TauVector      getPreTaus(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+
+    /// Apply Baseline selection to the 'Pre' objects
+    ElectronVector getBaselineElectrons(const ElectronVector& preElectrons);
+    MuonVector     getBaselineMuons(const MuonVector& preMuons);
+    JetVector      getBaselineJets(const JetVector& preJets);
 
     /// Get Baseline objects. Pre + overlap removal.
     /** First method provides the pre-selected objects before OR and baseline objects after OR. */
@@ -70,7 +96,7 @@ public:
     TauVector      getSignalTaus(const TauVector& baseTaus, TauID tauJetID = TauID_medium,
                                  TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
     JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
-    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
+//    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
 
     /// Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
@@ -332,7 +358,7 @@ public:
     bool hasBJet(const JetVector& jets);
     JetVector getBJets(const JetVector& jets);
 
-    static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
+//    static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys = BTag_NOM);
 
     int numberOfCLJets(const JetVector& jets);

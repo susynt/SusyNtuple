@@ -39,13 +39,6 @@ public:
     bool medium;              ///< Medium
     bool tight;               ///< Tight
 
-    // Isolation flags
-    bool isoGradientLoose;    ///< GradientLoose WP from IsolationSelectionTool
-    bool isoGradient;         ///< Gradient WP from IsolationSelectionTool
-    bool isoLooseTrackOnly;   ///< LooseTrackOnly WP from IsolationSelectionTool
-    bool isoLoose;            ///< Loose WP from IsolationSelectionTool
-    bool isoTight;            ///< Tight WP from IsolationSelectionTool
-
     bool isBadMuon;           ///< Bad muon flag from SUSYTools
     bool isCosmic;            ///< Cosmic muon flag from SUSYTools
 
@@ -86,7 +79,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Muon, 12);
+    ClassDef(Muon, 13);
 };
 } // Susy
 #endif

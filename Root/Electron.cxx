@@ -23,11 +23,6 @@ Electron::Electron(const Electron &rhs):
   looseLH_nod0(rhs.looseLH_nod0),
   mediumLH_nod0(rhs.mediumLH_nod0),
   tightLH_nod0(rhs.tightLH_nod0),
-  isoGradientLoose(rhs.isoGradientLoose),
-  isoGradient(rhs.isoGradient),
-  isoLooseTrackOnly(rhs.isoLooseTrackOnly),
-  isoLoose(rhs.isoLoose),
-  isoTight(rhs.isoTight),
   isChargeFlip(rhs.isChargeFlip),
 
   res_all_dn(rhs.res_all_dn),
@@ -119,11 +114,6 @@ Electron& Electron::operator=(const Electron &rhs)
     mediumLH_nod0 = rhs.mediumLH_nod0;
     tightLH_nod0 = rhs.tightLH_nod0;
     isChargeFlip = rhs.isChargeFlip;
-    isoGradientLoose = rhs.isoGradientLoose;
-    isoGradient = rhs.isoGradient;
-    isoLooseTrackOnly = rhs.isoLooseTrackOnly;
-    isoLoose = rhs.isoLoose;
-    isoTight = rhs.isoTight;
    
     res_all_dn = rhs.res_all_dn;
     res_all_up = res_all_up;

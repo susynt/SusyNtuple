@@ -23,11 +23,11 @@ namespace Susy {
         ElectronSelector& setSystematic(const NtSys::SusyNtSys& systematic);
         ElectronSelector& setAnalysis(const AnalysisType& analysis);
         /**
-            Given the AnalysisType set in "setAnalysis", sets the kinematic,
-            IP, and isolation requirements for electrons.
+            Method to retrieve the isolation requirement for signal electrons.
+            This is helpful for other tools that need to know how the
+            electrons are defined.
         */
-        void buildRequirements(const AnalysisType& ana);
-
+        Isolation signalIsolation() { return m_sigIso; }
         /**
             Input electron "ele" is required to pass ID quality flags,
         */
@@ -36,9 +36,7 @@ namespace Susy {
             Input electron "ele" is required to pass ID quality flags,
             impact parameter cuts, and isolation cuts.
         */
-        bool isSignalElectron(const Electron* ele, const ElectronVector& baseElectrons,
-                              const MuonVector& baseMuons, const unsigned int nVtx,
-                              bool isMC, bool removeLepsFromIso);
+        bool isSignalElectron(const Electron* ele);
         /**
             Input electron "ele" is required only to pass ID quality 
             and impact parameter cuts.
@@ -77,31 +75,31 @@ namespace Susy {
                            bool isMC, bool removeLepsFromIso);
     
         
-    
-        float EL_MIN_PT;                        ///< minimum allowed electron pT
-        float EL_MAX_ETA;                       ///< maximum allowed electron eta
-        float EL_ISO_PT_THRS;                   ///< electron iso pt threshold ? (can 2lepWH analyzer comment?)
-        float EL_PTCONE30_PT_CUT;               ///< maximum allowed ptcone30/pt 
-        float EL_TOPOCONE30_SLOPE_DATA_CUT;     ///< pile-up correction term for topoetcone30 (data)
-        float EL_TOPOCONE30_SLOPE_MC_CUT;       ///< pile-up correction term for topoetcone30 (MC)
-        float EL_TOPOCONE30_PT_CUT;             ///< maximum allowed etconetopo30/pt 
-        float EL_MAX_D0SIG_CUT;                 ///< maximum allowed d0sig
-        float EL_MAX_Z0_SINTHETA;               ///< maximum allowed z0sinTheta
-    
-        float EL_MIN_CRACK_ETA;                 ///< minium crack eta
-        float EL_MAX_CRACK_ETA;                 ///< maximum crack eta
+        /////////////////////////////////////////
+        // Analysis Selections 
+        /////////////////////////////////////////
+        // pT/eta
+        float EL_MIN_PT_BASELINE;       ///< minimum allowed pT for baseline electrons (GeV)
+        float EL_MIN_PT_SIGNAL;         ///< minimum allowed pT for signal electrons (GeV)
+        float EL_MAX_ETA_BASELINE;      ///< maximum allowed eta for baseline electrons
+        float EL_MAX_ETA_SIGNAL;        ///< maximum allowed eta for signal electrons
+        // Isolation
+        float EL_ISO_PT_THRS;
+        float EL_PTCONE30_PT_CUT;       ///< maximum allowed ptcone30/pt 
+        float EL_TOPOCONE30_PT_CUT;     ///< maximum allowed etconetopo30/pt 
+        // IP
+        float EL_MAX_D0SIG;         ///< maximum allowed d0sig
+        float EL_MAX_Z0_SINTHETA;       ///< maximum allowed z0sinTheta
+        // places you don't want to hang around
+        float EL_MIN_CRACK_ETA;         ///< minium crack eta
+        float EL_MAX_CRACK_ETA;         ///< maximum crack eta
 
-        float EL_MAX_BASELINE_ETA;                 ///< maximum crack eta
-    
+ 
         protected :
         NtSys::SusyNtSys m_systematic;
         AnalysisType m_analysis;
-        bool m_removeLepsFromIso; 
         bool m_vetoCrackRegion; 
         bool m_doIPCut;
-        bool m_doPtconeCut;
-        bool m_doElEtconeCut;
-        bool m_doMuEtconeCut;
         
         ElectronId m_eleBaseId;    ///< electron quality requirement (selected from eleID enum)
         ElectronId m_eleId;        ///< electron quality requirement (selected from eleID enum)

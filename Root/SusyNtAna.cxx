@@ -210,7 +210,7 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
   // Empty the object vectors
   clearObjects();
 
-  // Get the Baseline objets
+  // Get the Pre-Selection and Baseline objets
   m_nttools.getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
                                m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
                                sys, m_selectTaus);
