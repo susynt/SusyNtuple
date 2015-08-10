@@ -22,7 +22,12 @@ namespace Susy {
         MuonSelector();
         MuonSelector& setSystematic(const NtSys::SusyNtSys& systematic);
         MuonSelector& setAnalysis(const AnalysisType& analysis);
-
+        /**
+            Method to retrieve the isolation requirement for signal muons.
+            This is helpful for other tools that need to know how the
+            the muons are configured.
+        */
+        Isolation signalIsolation() { return m_sigIso; } 
         /**
             Given the AnalysisType set in "setAnalysis", sets the kinematic, 
             IP, and isolation requirements for muons.

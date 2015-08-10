@@ -23,6 +23,12 @@ namespace Susy {
         ElectronSelector& setSystematic(const NtSys::SusyNtSys& systematic);
         ElectronSelector& setAnalysis(const AnalysisType& analysis);
         /**
+            Method to retrieve the isolation requirement for signal electrons.
+            This is helpful for other tools that need to know how the
+            electrons are defined.
+        */
+        Isolation signalIsolation() { return m_sigIso; }
+        /**
             Given the AnalysisType set in "setAnalysis", sets the kinematic,
             IP, and isolation requirements for electrons.
         */
