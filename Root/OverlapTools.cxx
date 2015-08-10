@@ -20,6 +20,8 @@ namespace Susy {
 OverlapTools::OverlapTools() :
     m_useSignalLeptons(false),
     m_useIsoLeptons(false),
+    m_electronIsolation(Isolation::IsolationInvalid),
+    m_muonIsolation(Isolation::IsolationInvalid),
     m_doBjetOR(false),
     m_verbose(false)
 {
@@ -49,17 +51,12 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
         break;
     }
     ///////////////////////////////////
-    // Analyses using harmonized OR
-    ///////////////////////////////////
-    // None yet!
-    ///////////////////////////////////
     // Too far, set default to Run-I
     ///////////////////////////////////
     case(AnalysisType::kUnknown) : {
         cout << "OverlapTools::setAnalysis() error: invalid analysis"
              << " '"<<std::underlying_type<AnalysisType>::type(a)<< "'" << endl;
-        cout << "               will applay default overlap procedure (Run-1)." << endl;
-#warning We should set the defaullt selections ffor tools to be a consistent AnaType
+        cout << "               will applay default overlap procedure." << endl;
         m_useSignalLeptons = false;
         m_useIsoLeptons    = false;
         m_doBjetOR         = false;
@@ -92,11 +89,13 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
     if(useIsolatedLeptons()){
         for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
             const Electron* e = electrons.at(iEl);
-            if(!e->isoGradientLoose) { electrons.erase(electrons.begin() + iEl); continue; }
+            if(!leptonPassesIsolation(e, true)) { electrons.erase(electrons.begin()+iEl); continue; }
+            //if(!e->isoGradientLoose) { electrons.erase(electrons.begin() + iEl); continue; }
         }
         for(int iMu=muons.size()-1; iMu>=0; iMu--) {
             const Muon* m = muons.at(iMu);
-            if(!m->isoGradientLoose) { muons.erase(muons.begin() + iMu); continue; }
+            if(!leptonPassesIsolation(m, false)) { muons.erase(muons.begin()+iMu); continue; }
+            //if(!m->isoGradientLoose) { muons.erase(muons.begin() + iMu); continue; }
         }
     }
 
@@ -156,6 +155,22 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
 
 }
 
+bool OverlapTools::leptonPassesIsolation(const Lepton* lep, bool isEle)
+{
+    Isolation iso = isEle ? m_electronIsolation : m_muonIsolation;
+
+    if      (iso == Isolation::GradientLoose)   return lep->isoGradientLoose;
+    else if (iso == Isolation::Gradient)        return lep->isoGradient;
+    else if (iso == Isolation::LooseTrackOnly)  return lep->isoLooseTrackOnly;
+    else if (iso == Isolation::Loose)           return lep->isoLoose;
+    else if (iso == Isolation::Tight)           return lep->isoTight;
+    else {
+        cout << "OverlapTools::leptonPassesIsolation error: isolation requirement for leptons not set." << endl;
+        cout << "OverlapTools::leptonPassesIsolation error:   >>> Exiting." << endl;
+        exit(1);
+    }
+}
+
 // ------------------------------------------------------------------------------ //
 // Components of Overlap Removal
 // -----------------------------------------------------------------------------  //
@@ -174,34 +189,41 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
         const Electron* e = electrons.at(iEl);
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
-            // if doing BjetOR procedure, ignore bjets
-            // --> the "loose" bjet criteria used in SUSYTools is 
-            //     that the jet is a bjet if MV2c20 > -0.5517
-            if(m_anaType==AnalysisType::Ana_SS3L){
+            // if doing BjetOR procedure:
+            //  > if dR between electron and jet < J_E_DR:
+            //          --> if bjet: keep the jet, remove electron
+            //          --> if not bjet: remove the jet, keep the electron
+            // if not doing BjetOR procedure:
+            //  > if dR between electron and jet < J_E_DR:
+            //          --> remove the jet and keep the electron
+            if(doBjetOR()){
                 if(e->DeltaR(*j) < J_E_DR){
-                    if(j->mv2c20 > -0.5517) electrons.erase(electrons.begin()+iEl);
-                    else                    jets.erase(jets.begin() + iJ);
-                    break;
-                }
-            }
-            else{
-                if(doBjetOR() && (j->mv2c20 > -0.5517)) continue; 
-                if(e->DeltaR(*j) > J_E_DR) continue;
-                jets.erase(jets.begin() + iJ);
-            }
+                    if(j->mv2c20 > -0.5517) {
+                        electrons.erase(electrons.begin()+iEl);
+                        break; // loop electron no longer exists
+                    } else { jets.erase(jets.begin()+iJ); }
+                } // dR match
+            } // doBjetOR
+            else {
+                if(e->DeltaR(*j) < J_E_DR) { jets.erase(jets.begin()+iJ); }
+            } // not doBjetOR
         } // iJ
     } // iEl
-        
 
-   // if(electrons.size()==0 || jets.size()==0) return;
-   // for(int iEl=electrons.size()-1; iEl>=0; iEl--){
-   //     const Electron* e = electrons.at(iEl);
-   //     for(int iJ=jets.size()-1; iJ>=0; iJ--){
-   //         const Jet* j = jets.at(iJ);
-   //         if(e->DeltaR(*j) > J_E_DR) continue;
-   //         jets.erase(jets.begin()+iJ);
-   //     } // iJ
-   // } // iEl
+  //          if(m_anaType==AnalysisType::Ana_SS3L){
+  //              if(e->DeltaR(*j) < J_E_DR){
+  //                  if(j->mv2c20 > -0.5517) electrons.erase(electrons.begin()+iEl);
+  //                  else                    jets.erase(jets.begin() + iJ);
+  //                  break;
+  //              }
+  //          }
+  //          else{
+  //              if(doBjetOR() && (j->mv2c20 > -0.5517)) continue; 
+  //              if(e->DeltaR(*j) > J_E_DR) continue;
+  //              jets.erase(jets.begin() + iJ);
+  //          }
+  //      } // iJ
+  //  } // iEl
 }
 ////////////////////////////////////////////
 // Remove electrons overlapping with jets
@@ -246,38 +268,6 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets)
             }
         } // iJ
     } // iMu
-                 
-
-   // // Harmonized: Keep muon, remove jet if jet has less than 3 tracks
-   // //             else keep jet and remove muon
-   // // Non-harmonized: Keep jet, remove muon
-   // if(muons.size()==0 || jets.size()==0) return;
-   // if(!m_doHarmonization){
-   //     for(int iMu=muons.size()-1; iMu>=0; iMu--){
-   //         const Muon* mu = muons.at(iMu);
-   //         for(int iJ=jets.size()-1; iJ>=0; iJ--){
-   //             const Jet* j = jets.at(iJ);
-   //             if(mu->DeltaR(*j) > M_J_DR) continue;
-   //             muons.erase(muons.begin()+iMu);
-   //             break; // move to next muon since iMu no longer exists!
-   //         } // iJ
-   //     } // iMu
-   // } // !doHarm
-   // else if(m_doHarmonization){
-   //     for(int iMu=muons.size()-1; iMu>=0; iMu--){
-   //         const Muon* mu = muons.at(iMu);
-   //         for(int iJ=jets.size()-1; iJ>=0; iJ--){
-   //             const Jet* j = jets.at(iJ);
-   //             if(mu->DeltaR(*j) > M_J_DR) continue;
-   //             int jet_nTrk = jets.at(iJ)->nTracks;
-   //             if(jet_nTrk<3) jets.erase(jets.begin()+iJ);
-   //             else{
-   //                 muons.erase(muons.begin()+iMu);
-   //                 break; // move to next muon since iMu no longer exists!
-   //             }
-   //         } // iJ
-   //     } // iMu
-   // } // doHarm
 }
 
 ////////////////////////////////////////////
@@ -440,27 +430,17 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets)
     int nTau=taus.size();
     int nJet=jets.size();
     if(nTau==0 || nJet==0) return;
-    for(int iTau=nTau-1; iTau>=0; iTau--){
-        const Tau* tau = taus.at(iTau);
-        for(int iJet=nJet-1; iJet>=0; iJet--){
-            const Jet* jet=jets.at(iJet);
-            // dantrim Apr 21 : previously, by default, we removed the jet over the tau --> do we want to have the option of removing the tau over the jet?
-            if(tau->DeltaR(*jet) < J_T_DR) {
-                jets.erase(jets.begin()+iJet); 
+    for(int iJet=nJet-1; iJet>=0; iJet--){
+        const Jet* jet = jets.at(iJet);
+        for(int iTau=nTau-1; iTau>=0; iTau--){
+            const Tau* tau = taus.at(iTau);
+            if(tau->DeltaR(*jet) < J_T_DR){
+                jets.erase(jets.begin()+iJet);
+                break; // loop jet doesn't exist anymore!
             } // dR match
-        } // iJet
-    } // iTau
+        } // iTau
+    } // iJet
 }
-
-/*
- if(tau->DeltaR(*jet) < J_T_DR) {
-    if(removeJets) jets.erase(jets.begin()+iJet);
- else {
-    taus.erase(taus.begin()+iTau_;
-    break;
-  }
-*/
-
 
 
 }; // namespace Susy

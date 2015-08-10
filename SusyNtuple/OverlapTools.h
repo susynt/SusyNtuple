@@ -4,6 +4,7 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/AnalysisType.h"
+#include "SusyNtuple/Isolation.h"
 
 namespace Susy {
 
@@ -31,6 +32,9 @@ namespace Susy {
         */
         bool useSignalLeptons() { return m_useSignalLeptons; }
         bool useIsolatedLeptons() { return m_useIsoLeptons; }
+        void setElectronIsolation( Isolation eleIso ) { m_electronIsolation = eleIso; }
+        void setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; }
+        bool leptonPassesIsolation(const Lepton* lep, bool isEle);
         bool doBjetOR() { return m_doBjetOR; }
 
         /// main overlap removal function
@@ -63,6 +67,8 @@ namespace Susy {
             If true the Run-2 procedure is used. */
         bool m_useSignalLeptons;
         bool m_useIsoLeptons;
+        Isolation m_electronIsolation;
+        Isolation m_muonIsolation;
         bool m_doBjetOR;
         bool m_verbose;
 
@@ -76,7 +82,7 @@ namespace Susy {
         float J_E_DR  =0.2;  ///< dR cone for performing jet-electron overlap (remove jet)
         float T_E_DR  =0.2;  ///< dR cone for performing tau-electron overlap (remove tau)
         float T_M_DR  =0.2;  ///< dR cone for performing tau-muon overlap (remove tau)
-        float J_T_DR  =0.2;  ///< dR cone for performing jet-muon overlap (remove jet)
+        float J_T_DR  =0.2;  ///< dR cone for performing jet-tau overlap (remove jet)
         float E_J_DR  =0.4;  ///< dR cone for performing electron-jet overlap (remove electron)
         float M_J_DR  =0.4;  ///< dR cone for performing muon-jet overlap (remove muon)
         float E_M_DR  =0.01; ///< dR cone for performing electron-muon overlap (remove both the electron AND muon)
