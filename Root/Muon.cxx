@@ -29,11 +29,6 @@ Muon::Muon(const Muon &rhs):
   loose(rhs.loose),
   medium(rhs.medium),
   tight(rhs.tight),
-  isoGradientLoose(rhs.isoGradientLoose),
-  isoGradient(rhs.isoGradient),
-  isoLooseTrackOnly(rhs.isoLooseTrackOnly),
-  isoLoose(rhs.isoLoose),
-  isoTight(rhs.isoTight),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
   ms_up(rhs.ms_up),
@@ -72,11 +67,6 @@ Muon& Muon::operator=(const Muon &rhs)
     loose = rhs.loose;
     medium = rhs.medium;
     tight = rhs.tight;
-    isoGradientLoose = rhs.isoGradientLoose;
-    isoGradient = rhs.isoGradient;
-    isoLooseTrackOnly = rhs.isoLooseTrackOnly;
-    isoLoose = rhs.isoLoose;
-    isoTight = rhs.isoTight;
     isBadMuon = rhs.isBadMuon;
     isCosmic = rhs.isCosmic;
     ms_up = rhs.ms_up;
