@@ -32,10 +32,29 @@ public:
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         m_anaType = A;
+        ////////////////////////////
+        // ElectronSelector
+        ////////////////////////////
         m_electronSelector.setAnalysis(A);
+
+        ////////////////////////////
+        // MuonSelector
+        ////////////////////////////
         m_muonSelector.setAnalysis(A);
+
+        ////////////////////////////
+        // JetSelector
+        ////////////////////////////
         m_jetSelector.setAnalysis(A);
+
+        ////////////////////////////
+        // OverlapTool
+        ////////////////////////////
         m_overlapTool.setAnalysis(A);
+        // propagate isolation requirements
+        m_overlapTool.setElectronIsolation(m_electronSelector.signalIsolation());
+        m_overlapTool.setMuonIsolation(m_muonSelector.signalIsolation());
+
         if (verbose) std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
     };
     AnalysisType getAnaType() { return m_anaType; }
@@ -70,7 +89,7 @@ public:
     TauVector      getSignalTaus(const TauVector& baseTaus, TauID tauJetID = TauID_medium,
                                  TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
     JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
-    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
+//    JetVector      getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
 
     /// Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
@@ -332,7 +351,7 @@ public:
     bool hasBJet(const JetVector& jets);
     JetVector getBJets(const JetVector& jets);
 
-    static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
+//    static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
     float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys = BTag_NOM);
 
     int numberOfCLJets(const JetVector& jets);

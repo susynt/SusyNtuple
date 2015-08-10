@@ -231,7 +231,8 @@ JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
     for (uint ij = 0; ij < susyNt->jet()->size(); ++ij) {
         Jet* j = &susyNt->jet()->at(ij);
         j->setState(sys);
-        if (j->Pt() < JetSelector::defaultMinPt()) continue;
+        if (j->Pt() < m_jetSelector.JET_PT_CUT) continue;
+        //if (j->Pt() < JetSelector::defaultMinPt()) continue;
         jets.push_back(j);
     }
 
@@ -308,17 +309,17 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets, SusyNtSys sys)
     return sigJets;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys)
-{
-    JetVector sigJets;
-    for(uint ij=0; ij<baseJets.size(); ++ij){
-        Jet* j = baseJets.at(ij);
-        if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet2Lep(j)){
-            sigJets.push_back(j);
-        }
-    }
-    return sigJets;
-}
+//JetVector SusyNtTools::getSignalJets2Lep(const JetVector& baseJets, SusyNtSys sys)
+//{
+//    JetVector sigJets;
+//    for(uint ij=0; ij<baseJets.size(); ++ij){
+//        Jet* j = baseJets.at(ij);
+//        if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet2Lep(j)){
+//            sigJets.push_back(j);
+//        }
+//    }
+//    return sigJets;
+//}
 /*--------------------------------------------------------------------------------*/
 PhotonVector SusyNtTools::getSignalPhotons(SusyNtObject* susyNt)
 {
@@ -1329,18 +1330,18 @@ JetVector SusyNtTools::getBJets(const JetVector& jets)
     return bJets;
 }
 /*--------------------------------------------------------------------------------*/
-JetVector SusyNtTools::getBTagSFJets2Lep(const JetVector& baseJets)
-{
-    cout<<"SusyNtTools::getBTagSFJets2Lep: obsolete, use jet selector instead"<<endl;
-    JetVector bTagSFJets;
-    for (uint i = 0; i<baseJets.size(); i++) {
-        Jet* jet = baseJets[i];
-        if (jet->Pt() > JetSelector::JET_PT_B20_CUT && fabs(jet->detEta) < JetSelector::JET_ETA_CUT_2L) {
-            bTagSFJets.push_back(jet);
-        }
-    }
-    return bTagSFJets;
-}
+//JetVector SusyNtTools::getBTagSFJets2Lep(const JetVector& baseJets)
+//{
+//    cout<<"SusyNtTools::getBTagSFJets2Lep: obsolete, use jet selector instead"<<endl;
+//    JetVector bTagSFJets;
+//    for (uint i = 0; i<baseJets.size(); i++) {
+//        Jet* jet = baseJets[i];
+//        if (jet->Pt() > JetSelector::JET_PT_B20_CUT && fabs(jet->detEta) < JetSelector::JET_ETA_CUT_2L) {
+//            bTagSFJets.push_back(jet);
+//        }
+//    }
+//    return bTagSFJets;
+//}
 /*--------------------------------------------------------------------------------*/
 float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
 {
