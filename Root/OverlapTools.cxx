@@ -9,6 +9,7 @@ using Susy::Electron;
 using Susy::Muon;
 using std::cout;
 using std::endl;
+using std::string;
 
 
 namespace Susy {
@@ -18,10 +19,12 @@ namespace Susy {
 // Constructor
 // ------------------------------------------------------------------------------ //
 OverlapTools::OverlapTools() :
+    m_analysis(AnalysisType::kUnknown),
     m_useSignalLeptons(false),
     m_useIsoLeptons(false),
     m_electronIsolation(Isolation::IsolationInvalid),
     m_muonIsolation(Isolation::IsolationInvalid),
+    m_mv2c20_ORcut(-999),
     m_doBjetOR(false),
     m_verbose(false)
 {
@@ -29,8 +32,11 @@ OverlapTools::OverlapTools() :
 // ------------------------------------------------------------------------------ //
 OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
 {
-    m_anaType = a;
+    m_analysis = a;
 
+    ////////////////////////////////////////
+    // Set analysis-specific OR procedures
+    ////////////////////////////////////////
     switch(a) {
     ///////////////////////////////////
     // Contrarian analyses
@@ -54,19 +60,50 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
     // Too far, set default to Run-I
     ///////////////////////////////////
     case(AnalysisType::kUnknown) : {
-        cout << "OverlapTools::setAnalysis() error: invalid analysis"
-             << " '"<<std::underlying_type<AnalysisType>::type(a)<< "'" << endl;
-        cout << "               will applay default overlap procedure." << endl;
-        m_useSignalLeptons = false;
-        m_useIsoLeptons    = false;
-        m_doBjetOR         = false;
-        break;
+        string error = "OverlapTools::setAnalysis error: ";
+        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
+        cout << error << "Check that setAnalysisType is called properly for OverlapTools" << endl;
+        cout << error << "for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
     }
     } // switch
 
-    cout << "OverlapTools    using signal leptons    :" << (m_useSignalLeptons ? "True" : "False") << endl;
-    cout << "OverlapTools    using isolated leptons  :" << (m_useIsoLeptons ? "True" : "False") << endl;
-    cout << "OverlapTools    doing b-jet OR procedure:" << (m_doBjetOR ? "True" : "False") << endl;
+    // check that ele/muon isolation has been set if we are using isolated leptons
+    if(useIsolatedLeptons() && (m_electronIsolation==Isolation::IsolationInvalid || m_muonIsolation==Isolation::IsolationInvalid)) {
+        string error = "OverlapTools::setAnalysis error: ";
+        cout << error << "You have configured the overlap removal to use isolated leptons but" << endl;
+        cout << error << "have not set the electron and/or muon isolation qualities:" << endl;
+        cout << error << " > Electron isolation = " << Isolation2str(m_electronIsolation) << endl;
+        cout << error << " > Muon isolation = " << Isolation2str(m_muonIsolation) << endl;
+        cout << error << "You must use the 'setElectronIsolation' and 'setMuonIsolation' methods of" << endl;
+        cout << error << "OverlapTools to set these values prior to calling 'setAnalysis'." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1); 
+    }
+
+    // check that the b-tag WP has been set if we are using the b-jet OR procedure
+    if(doBjetOR() && (m_mv2c20_ORcut==-999)) {
+        string error = "OverlapTools::setAnalysis error: ";
+        cout << error << "You have configured the overlap removal to use the b-jet OR procedure but" << endl;
+        cout << error << "have not set the b-tag WP (MV2C20 score) to use." << endl;
+        cout << error << "You must use the 'setORBtagEff' methods of OverlapTools to set this value" << endl;
+        cout << error << "prior to calling 'setAnalysis'." << endl;
+        cout << error << "The recommended MV2C20 cut value is provided by the JetSelector method" << endl;
+        cout << error << "'overlapRemovalBtagEffWP()'." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+
+    cout << "OverlapTools    Configured overlap removal procedure for AnalysisType " << AnalysisType2str(m_analysis) << endl;
+    cout << "OverlapTools     > using signal leptons    : " << (m_useSignalLeptons ? "True" : "False") << endl;
+    cout << "OverlapTools     > using isolated leptons  : " << (m_useIsoLeptons ? "True" : "False");
+    if(m_useIsoLeptons && m_verbose) cout << " (with electron isolation: " << Isolation2str(m_electronIsolation) << " and muon isolation: " << Isolation2str(m_muonIsolation) << ")" << endl;
+    else { cout << endl; }
+    cout << "OverlapTools     > doing b-jet OR procedure: " << (m_doBjetOR ? "True" : "False");
+    if(m_doBjetOR && m_verbose) cout << " (with MV2C20 cut: " << m_mv2c20_ORcut << ")" << endl;
+    else { cout << endl; }
+
     return *this;
 }
 // ------------------------------------------------------------------------------ //
@@ -210,20 +247,6 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
         } // iJ
     } // iEl
 
-  //          if(m_anaType==AnalysisType::Ana_SS3L){
-  //              if(e->DeltaR(*j) < J_E_DR){
-  //                  if(j->mv2c20 > -0.5517) electrons.erase(electrons.begin()+iEl);
-  //                  else                    jets.erase(jets.begin() + iJ);
-  //                  break;
-  //              }
-  //          }
-  //          else{
-  //              if(doBjetOR() && (j->mv2c20 > -0.5517)) continue; 
-  //              if(e->DeltaR(*j) > J_E_DR) continue;
-  //              jets.erase(jets.begin() + iJ);
-  //          }
-  //      } // iJ
-  //  } // iEl
 }
 ////////////////////////////////////////////
 // Remove electrons overlapping with jets

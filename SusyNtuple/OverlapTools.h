@@ -34,6 +34,7 @@ namespace Susy {
         bool useIsolatedLeptons() { return m_useIsoLeptons; }
         void setElectronIsolation( Isolation eleIso ) { m_electronIsolation = eleIso; }
         void setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; }
+        void setORBtagEff( float mv2c20_score ) { m_mv2c20_ORcut = mv2c20_score; }
         bool leptonPassesIsolation(const Lepton* lep, bool isEle);
         bool doBjetOR() { return m_doBjetOR; }
 
@@ -63,16 +64,15 @@ namespace Susy {
 
 
     protected :
-        /** This flag sets whether to perform the Run-2 overlap removal procedure.
-            If true the Run-2 procedure is used. */
+        AnalysisType m_analysis;
         bool m_useSignalLeptons;
         bool m_useIsoLeptons;
         Isolation m_electronIsolation;
         Isolation m_muonIsolation;
+        float m_mv2c20_ORcut;
         bool m_doBjetOR;
         bool m_verbose;
 
-        AnalysisType m_anaType;
         
 
         ////////////////////////////////
