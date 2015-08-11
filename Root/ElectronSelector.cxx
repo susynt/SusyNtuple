@@ -289,49 +289,5 @@ bool ElectronSelector::elecPassIsolation(const Electron* ele)
     } 
 }
 /* --------------------------------------------------------------------------------------------- */
-//float ElectronSelector::elEtTopoConeCorr(const Electron* ele,
-//                                     const ElectronVector& baseElectrons,
-//                                     const MuonVector& baseMuons,
-//                                     unsigned int nVtx, bool isMC, bool removeLeps)
-//{
-//    float slope = isMC ? EL_TOPOCONE30_SLOPE_MC_CUT : EL_TOPOCONE30_SLOPE_DATA_CUT;
-//    float etcone = ele->etconetopo30 - slope*nVtx;
-//    if(removeLeps) {
-//        for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++) {
-//            const Electron* e2 = baseElectrons[iEl];
-//            if(ele==e2) continue;
-//            if(!isSemiSignalElectron(e2)) continue;
-//            float dR = ele->DeltaR(*e2);
-//            if(dR < 0.28) etcone -= e2->clusE / cosh(e2->clusEta);
-//        }
-//    }
-//    return etcone;
-//}
-//float ElectronSelector::elPtConeCorr(const Electron* ele,
-//                                     const ElectronVector& baseElectrons,
-//                                     const MuonVector& baseMuons,
-//                                     unsigned int nVtx, bool isMC, bool removeLeps)
-//{
-//    float ptcone = ele->ptcone30;
-//    if(removeLeps) {
-//        for(unsigned int iEl = 0; iEl < baseElectrons.size(); iEl++){
-//            const Electron* e = baseElectrons[iEl];
-//            if(ele == e) continue;
-//            if(!isSemiSignalElectron(e)) continue;
-//            float dR = ele->DeltaR(*e);
-//            if(dR < 0.3) ptcone -= e->trackPt;
-//        }
-//        for(unsigned int iMu = 0; iMu < baseMuons.size(); iMu++){
-//            const Muon* mu = baseMuons[iMu];
-//            if(!MuonSelector()
-//                            .setSystematic(m_systematic)
-//                            .setAnalysis(m_analysis)
-//                            .isSemiSignalMuon(mu)) continue;
-//            float dR = ele->DeltaR(*mu);
-//            if(dR < 0.3) ptcone -= mu->idTrackPt;
-//        }
-//    }
-//    return ptcone;
-//}
 
 }; // namespace Susy

@@ -57,23 +57,6 @@ namespace Susy {
             set by IsolationSelectionTool. 
         */
         bool elecPassIsolation(const Electron* ele);
-        /**
-            Return ptcone30 for input electron "ele". If removeLeptsFromIso=True
-            removes any light-lepton pT contribution to the dR=0.3 cone 
-            surrounding "ele" if the light-lepton is "semiSignal".
-        */
-        float elPtConeCorr(const Electron* ele, const ElectronVector& baseElectrons,
-                           const MuonVector& baseMuons, const unsigned int nVtx,
-                           bool isMC, bool removeLepsFromIso);
-        /**
-            Return the pile-up corrected etconetopo30 of the input electron "ele". 
-            If removeLepsFromIso=True, removes any "semiSignal" electron contribution 
-            to the dR=0.28 cone around "ele".
-        */
-        float elEtTopoConeCorr(const Electron* ele, const ElectronVector& baseElectrons,
-                           const MuonVector& baseMuons, const unsigned int nVtx,
-                           bool isMC, bool removeLepsFromIso);
-    
         
         /////////////////////////////////////////
         // Analysis Selections 

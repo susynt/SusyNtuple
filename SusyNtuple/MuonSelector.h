@@ -43,32 +43,9 @@ namespace Susy {
         */
         bool muPassIsolation(const Muon* mu);
         /**
-            Check whether the input muon "mu" passes the analysis' ptcone30/pt
-            isolation requirement.
-        */
-        bool muPassPtIso(const Muon* mu, const ElectronVector& baseElectrons,
-                         const MuonVector& baseMuons, const unsigned int nVtx,
-                         bool isMC, bool removeLepsFromIso);
-        /**
-            Return ptcone30 for the input muon "mu". If removeLepsFromIso=True
-            removes any light-lepton contribution to the dR=0.3 cone surrounding
-            "mu" if the light-lepton is "semiSignal".
-        */
-        float muPtConeCorr(const Muon* mu, const ElectronVector& baseElectrons,
-                           const MuonVector& baseMuons, const unsigned int nVtx,
-                           bool isMC, bool removeLepsFromIso);
-        /**
             Input muon "mu" is required only to pass impact parameter cuts
         */
         bool isSemiSignalMuon(const Muon* mu);
-        /**
-            Return the pile-up corrected etcone30 of the input muon "mu".
-            If removeLepsFromIso=True, removes any "semiSignal" electron
-            contribution to the dR=0.28 cone around "mu".
-        */
-        float muEtConeCorr(const Muon* mu, const ElectronVector& baseElectrons,
-                           const MuonVector& baseMuons, const unsigned int nVtx,
-                           bool isMC, bool removeLepsFromIso);
 
         //////////////////////////////////////
         // Analysis Selections
