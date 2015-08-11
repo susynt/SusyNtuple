@@ -33,6 +33,7 @@ namespace Susy {
 //-----------------------------------------------------------------------------------
 
 const float MZ = 91.2;
+const float MW = 80.4;
 
 // Run 2 Luminosities [pb-1]
 // see data15_13TeV : https://atlas-tagservices.cern.ch/tagservices/RunBrowser/runBrowserReport/rBR_Period_Report.php
