@@ -246,9 +246,10 @@ void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso,
 /*--------------------------------------------------------------------------------*/
 int SusyNtAna::cleaningCutFlags()
 {
-  return m_nttools.cleaningCutFlags(nt.evt()->cutFlags[NtSys::NOM],
-                                    m_preMuons, m_baseMuons,
-                                    m_preJets, m_baseJets);
+  return nt.evt()->cutFlags[NtSys::NOM];
+  //return m_nttools.cleaningCutFlags(nt.evt()->cutFlags[NtSys::NOM],
+  //                                  m_preMuons, m_baseMuons,
+  //                                  m_preJets, m_baseJets);
 }
 
 

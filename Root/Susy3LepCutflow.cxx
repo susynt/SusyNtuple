@@ -3,6 +3,7 @@
 #include "TCanvas.h"
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
+#include "SusyNtuple/SusyKin.h"
 
 using namespace std;
 using namespace Susy;
@@ -30,11 +31,14 @@ Susy3LepCutflow::Susy3LepCutflow() :
         m_writeOut(false)
 {
   n_readin        = 0;
-  n_pass_hotSpot  = 0;
-  n_pass_badJet   = 0;
+  n_pass_grl      = 0;
+  n_pass_lar      = 0;
+  n_pass_tile     = 0;
+  n_pass_ttc      = 0;
   n_pass_badMuon  = 0;
+  n_pass_badJet   = 0;
+  n_pass_goodVtx  = 0;
   n_pass_cosmic   = 0;
-  n_pass_feb      = 0;
   n_pass_nLep     = 0;
   n_pass_nTau     = 0;
   n_pass_trig     = 0;
@@ -196,20 +200,25 @@ void Susy3LepCutflow::bookHistos()
 bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& taus, 
                                   const JetVector& jets, const Met* met)
 {
-  const Event* evt = nt.evt();
   int flag = cleaningCutFlags();
 
   // Cleaning cuts
-  if(!nttools().passHotSpot(flag)) return false;
-  n_pass_hotSpot++;
-  if(!nttools().passBadJet(flag)) return false;
-  n_pass_badJet++;
-  if(!nttools().passBadMuon(flag)) return false;
+  if( !SusyKin::passGRL(flag) ) return false;
+  n_pass_grl++;
+  if( !SusyKin::passLArErr(flag) ) return false;
+  n_pass_lar++;
+  if( !SusyKin::passTileErr(flag) ) return false;
+  n_pass_tile++;
+  if( !SusyKin::passTTCVeto(flag) ) return false;
+  n_pass_ttc++;
+  if( !SusyKin::passBadMuon(flag) ) return false;
   n_pass_badMuon++;
-  if(!nttools().passCosmic(flag)) return false;
+  if( !SusyKin::passJetCleaning(flag) ) return false;
+  n_pass_badJet++;
+  if( !SusyKin::passGoodVtx(flag) ) return false;
+  n_pass_goodVtx++;
+  if( !SusyKin::passCosmicVeto(flag) ) return false;
   n_pass_cosmic++;
-  if(!nttools().passDeadRegions(m_preJets, met, evt->run, evt->isMC)) return false;
-  n_pass_feb++;
   if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
   if(!passNTauCut(taus)) return false;
@@ -285,7 +294,7 @@ bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passSFOSCut(const LeptonVector& leptons)
 {
-  bool sfos = nttools().hasSFOS(leptons);
+  bool sfos = SusyKin::hasSFOS(leptons);
   if(m_vetoSFOS   &&  sfos) return false;
   if(m_selectSFOS && !sfos) return false;
   return true;
@@ -300,7 +309,7 @@ bool Susy3LepCutflow::passMetCut(const Met* met)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passZCut(const LeptonVector& leptons)
 {
-  bool hasz = nttools().hasZ(leptons);
+  bool hasz = SusyKin::hasZ(leptons);
   if( m_vetoZ   &&  hasz ) return false;
   if( m_selectZ && !hasz ) return false;
   return true;
@@ -320,10 +329,10 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
   if(m_mtMin > 0)
   {
     uint zl1, zl2;
-    if(nttools().findBestZ(zl1, zl2, leptons)){
+    if(SusyKin::findBestZ(zl1, zl2, leptons)){
       for(uint iL=0; iL<leptons.size(); iL++) {
         if(iL!=zl1 && iL!=zl2) {
-          if( nttools().Mt(leptons[iL],met) < m_mtMin ) return false;
+          if( SusyKin::Mt(leptons[iL],met) < m_mtMin ) return false;
         }
       }
     }
@@ -364,10 +373,14 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << endl;
   cout << "Susy3LepCutflow event counters"    << endl;
   cout << "read in     :  " << n_readin        << endl;
-  cout << "pass HotSpot:  " << n_pass_hotSpot  << endl;
+  cout << "pass GRL    :  " << n_pass_grl      << endl;
+  cout << "pass LArErr :  " << n_pass_lar      << endl;
+  cout << "pass TileErr:  " << n_pass_tile     << endl;
+  cout << "pass TTCVeto:  " << n_pass_ttc      << endl;
+  cout << "pass BadMuon:  " << n_pass_badMuon  << endl;
   cout << "pass BadJet :  " << n_pass_badJet   << endl;
-  cout << "pass BadMu  :  " << n_pass_badMuon  << endl;
-  cout << "pass Cosmic :  " << n_pass_cosmic   << endl;
+  cout << "pass PrimVtx:  " << n_pass_goodVtx  << endl;
+  cout << "pass cosmic :  " << n_pass_cosmic   << endl;
   cout << "pass nLep   :  " << n_pass_nLep     << endl;
   cout << "pass trig   :  " << n_pass_trig     << endl;
   cout << "pass sfos   :  " << n_pass_sfos     << endl;

@@ -1,6 +1,7 @@
 #include <iomanip>
 #include "TCanvas.h"
 #include "SusyNtuple/Susy2LepCutflow.h"
+#include "SusyNtuple/SusyKin.h"
 
 using namespace std;
 using namespace Susy;
@@ -257,7 +258,7 @@ bool Susy2LepCutflow::passSR3(const LeptonVector& leptons, const JetVector& jets
   n_pass_SR3bjv[m_ET]++;
 
   // Veto top-tag events 
-  if( !m_nttools.passTopTag(leptons,jets,met) )    return false;
+  if( !SusyKin::passTopTag(leptons,jets,met) )    return false;
   n_pass_SR3mct[m_ET]++;
 
   // MetRel > 50
@@ -522,7 +523,7 @@ bool Susy2LepCutflow::passZVeto(const LeptonVector& leptons, float Zlow, float Z
 bool Susy2LepCutflow::passMETRel(const Met *met, const LeptonVector& leptons, 
 				 const JetVector& jets, float metMax){
   
-  if( m_nttools.getMetRel(met,leptons,jets) < metMax ) return false;
+  if( SusyKin::getMetRel(met,leptons,jets) < metMax ) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
@@ -533,7 +534,7 @@ bool Susy2LepCutflow::passdPhi(TLorentzVector v0, TLorentzVector v1, float cut)
 /*--------------------------------------------------------------------------------*/
 bool Susy2LepCutflow::passMT2(const LeptonVector& leptons, const Met* met, float cut)
 {
-  float mT2 = m_nttools.getMT2(leptons, met);
+  float mT2 = SusyKin::getMT2(leptons, met);
   return (mT2 > cut);
 }
 
