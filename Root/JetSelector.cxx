@@ -172,16 +172,6 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
 
     return true;
 
-//    bool pass = false;
-//    if(jet) {
-//        pass = (jet->Pt() > JET_MIN_PT_L20
-//                && fabs(jet->detEta) < JET_MAX_ETA
-//                && jetPassesJvtRequirement(jet) 
-//                && !jet->bjet);
-//    } else {
-//        cout << "JetSelector::isCentralLightJet    provided invalid jet(" << jet << "), return " << pass << endl;
-//    }
-//    return pass;
 }
 //----------------------------------------------------------
 bool JetSelector::isCentralBJet(const Jet* jet)
@@ -327,4 +317,4 @@ size_t JetSelector::count_F_jets(const JetVector &jets)
 //}
 ////----------------------------------------------------------
 
-} // Susy
+} // Susy namespace
