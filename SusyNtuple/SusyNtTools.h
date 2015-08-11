@@ -28,6 +28,8 @@ public:
     {
     };
 
+    void setMSFOSRemoval(AnalysisType A);
+
     /// Set Analysis type to determine selection
     void setAnaType(AnalysisType A, bool verbose = false)
     {
@@ -54,6 +56,9 @@ public:
         m_overlapTool.setORBtagEff(m_jetSelector.overlapRemovalBtagEffWP());
         // now setAnalysis
         m_overlapTool.setAnalysis(A);
+
+        // set whether to perform MSFOS removal on baseline objects
+        setMSFOSRemoval(A);
 
         // this should be in the logs no matter what
         std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;

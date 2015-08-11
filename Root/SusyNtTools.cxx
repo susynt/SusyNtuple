@@ -25,16 +25,36 @@ using namespace Susy;
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() :
-m_anaType(AnalysisType::Ana_3Lep),
-m_doPtconeCut(true),
-m_doElEtconeCut(true),
-m_doMuEtconeCut(false),
-m_doIPCut(true)
+m_anaType(AnalysisType::kUnknown),
+m_doMSFOS(false)
 {
 }
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods
 /*--------------------------------------------------------------------------------*/
+void SusyNtTools::setMSFOSRemoval(AnalysisType A)
+{
+    switch(A) {
+    case(AnalysisType::Ana_2Lep) :
+    case(AnalysisType::Ana_3Lep) :
+    case(AnalysisType::Ana_2LepWH) : {
+        m_doMSFOS = true;
+        break;
+    }
+    case(AnalysisType::Ana_SS3L) : {
+        m_doMSFOS = false;
+        break;
+    }
+    case(AnalysisType::kUnknown) : {
+        string error = "SusyNtTools::setMSFOSRemoval error: ";
+        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
+        cout << error << "Check that 'setAnalysisType' is called properly before calling this method." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+    } // switch
+}
+    
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
                                      ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
                                      ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets,
@@ -58,8 +78,10 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
     }
 
     // Remove MSFOS < 12 GeV
-    removeSFOSPair(elecs, MLL_MIN);
-    removeSFOSPair(muons, MLL_MIN);
+    if(m_doMSFOS) {
+        SusyKin::removeSFOSPair(elecs, MLL_MIN);
+        SusyKin::removeSFOSPair(muons, MLL_MIN);
+    }
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
@@ -84,10 +106,12 @@ void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs
     }
 
     // Do SFOS removal for Mll < 12 
-    removeSFOSPair(elecs, MLL_MIN);
-    removeSFOSPair(muons, MLL_MIN);
-    // TODO: revisit this??
-    //removeSFOSPair(taus, MLL_MIN);
+    if(m_doMSFOS) {
+        SusyKin::removeSFOSPair(elecs, MLL_MIN);
+        SusyKin::removeSFOSPair(muons, MLL_MIN);
+        // TODO: revisit this??
+        //removeSFOSPair(taus, MLL_MIN);
+    }
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
