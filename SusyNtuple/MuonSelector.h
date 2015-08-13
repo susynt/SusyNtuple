@@ -47,6 +47,8 @@ namespace Susy {
         */
         bool isSemiSignalMuon(const Muon* mu);
 
+        void check();
+
         //////////////////////////////////////
         // Analysis Selections
         //////////////////////////////////////

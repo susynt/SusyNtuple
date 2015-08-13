@@ -89,6 +89,8 @@ class Jet;
 
             float overlapRemovalBtagEffWP() { return JET_MV2C20_OR; }
 
+            void check();
+
             ////////////////////////////////////
             // Analysis Selections 
             ////////////////////////////////////

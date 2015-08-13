@@ -32,27 +32,31 @@ m_doMSFOS(false)
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods
 /*--------------------------------------------------------------------------------*/
-void SusyNtTools::setMSFOSRemoval(AnalysisType A)
+void SusyNtTools::setSFOSRemoval(AnalysisType a)
 {
-    switch(A) {
-    case(AnalysisType::Ana_2Lep) :
-    case(AnalysisType::Ana_3Lep) :
-    case(AnalysisType::Ana_2LepWH) : {
-        m_doMSFOS = true;
-        break;
-    }
-    case(AnalysisType::Ana_SS3L) : {
-        m_doMSFOS = false;
-        break;
-    }
-    case(AnalysisType::kUnknown) : {
-        string error = "SusyNtTools::setMSFOSRemoval error: ";
-        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
-        cout << error << "Check that 'setAnalysisType' is called properly before calling this method." << endl;
+    if(a == AnalysisType::Ana_2Lep ||
+       a == AnalysisType::Ana_3Lep ||
+       a == AnalysisType::Ana_2LepWH ) { m_doMSFOS = true; }
+
+    else if( a == AnalysisType::Ana_SS3L ) { m_doMSFOS = false; }
+
+    else if( a == AnalysisType::kUnknown ) {
+        string error = "SusyNtTools::setSFOSRemoval error: ";
+        cout << error << "The AnalysisType has not been set for SusyNtTools. Check that you properly call" << endl;
+        cout << error << "'setAnaType' for SusyNtTools for your analysis." << endl;
         cout << error << ">>> Exiting." << endl;
         exit(1);
     }
-    } // switch
+
+    else {
+        string error = "SusyNtTools::setSFOSRemoval error: ";
+        cout << error << "SusyNtTools is not configured for the AnalysisType (" << AnalysisType2str(a) << ") provided in" << endl;
+        cout << error << "'setAnaTypee'! Be sure that your AnalyssiType is provided for in SusyNtuple/AnalysisTyp.eh" << endl;
+        cout << error << "and that you provide the necessary requirements for your analysis in 'setAnaType'." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+
 }
     
 void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
@@ -335,7 +339,8 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets, SusyNtSys sys)
     JetVector sigJets;
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
-        if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet(j)){
+        if(m_jetSelector.isSignalJet(j)) {
+        //if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet(j)){
             sigJets.push_back(j);
         }
     }
@@ -510,7 +515,7 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numBJets(const JetVector& jets)
 {
-    return m_jetSelector.JetSelector::count_CB_jets(jets);
+    return m_jetSelector.count_CB_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasBJet(const JetVector& jets)

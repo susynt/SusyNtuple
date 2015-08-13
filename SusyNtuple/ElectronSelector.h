@@ -57,6 +57,8 @@ namespace Susy {
             set by IsolationSelectionTool. 
         */
         bool elecPassIsolation(const Electron* ele);
+
+        void check();
         
         /////////////////////////////////////////
         // Analysis Selections 

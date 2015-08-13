@@ -50,16 +50,15 @@ ElectronSelector::ElectronSelector() :
 // -------------------------------------------------------------------------------------------- //
 ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
 {
-    m_analysis = a;
 
     //////////////////////////////////////
     // Set analysis-specific cuts
     //////////////////////////////////////
-    switch(a) {
+
     //////////////////////////////////////
     // 2L-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_2Lep) : { 
+    if( a == AnalysisType::Ana_2Lep ) {
         m_2lep = true;
 
         // baseline
@@ -69,13 +68,11 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
         m_sigIso = Isolation::GradientLoose;
 
         m_doIPCut           = true;
-
-        break;
     } 
     //////////////////////////////////////
     // 3L-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_3Lep) : {
+    else if( a == AnalysisType::Ana_3Lep ) {
         m_3lep = true;
 
         //baseline
@@ -86,12 +83,11 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
 
         m_doIPCut           = true;
 
-        break;
     }
     //////////////////////////////////////
     // WH-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_2LepWH) : {
+    else if( a == AnalysisType::Ana_2LepWH ) {
         m_2lepWH = true;
 
         // baseline
@@ -107,12 +103,11 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
         EL_TOPOCONE30_PT_CUT            = 0.13;
         EL_MAX_D0SIG                    = 3.0; 
 
-        break;
     }
     //////////////////////////////////////
     // SS3L-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_SS3L) : { 
+    else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L = true;
 
         //basline
@@ -128,21 +123,30 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
         EL_MAX_ETA_SIGNAL               = 2.0;
         EL_MAX_Z0_SINTHETA              = 0.5;
 
-        break;
     } 
+    //////////////////////////////////////
+    // Didn't set AnalysisType
+    //////////////////////////////////////
+    else if( a == AnalysisType::kUnknown ) {
+        string error = "ElectronSelector::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for ElectronSelector. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for ElectronSelector for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
     //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
-    case(AnalysisType::kUnknown) : {
+    else {
         string error = "ElectronSelector::setAnalysis error: ";
-        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
-        cout << error << "Check that setAnalysisType is called properly for ElectronSelector" << endl;
-        cout << error << "for your analysis." << endl;
+        cout << error << "ElectronSelector is not configured for the AnalysisType (" << AnalysisType2str(a) << ")  provided in " << endl;
+        cout << error << "'setAnalysis'! Be sure that your AnalysisType is provided for in SusyNtuple/AnalysisType.h" << endl;
+        cout << error << "and that you provide the necessary requirements for your analysis in 'setAnalysis'." << endl;
         cout << error << ">>> Exiting." << endl;
         exit(1);
     }
 
-    } // end switch
+    m_analysis = a;
 
     // check that the ele Id's have been set
     if(m_eleId == ElectronId::ElectronIdInvalid || m_eleBaseId == ElectronId::ElectronIdInvalid) {
@@ -176,6 +180,8 @@ ElectronSelector& ElectronSelector::setSystematic(const NtSys::SusyNtSys &s)
 // ---------------------------------------------------------
 bool ElectronSelector::isBaselineElectron(const Electron* ele)
 {
+    ElectronSelector::check();
+
     /////////////////////////////
     // Electron ID
     /////////////////////////////
@@ -205,6 +211,7 @@ bool ElectronSelector::isBaselineElectron(const Electron* ele)
 // ---------------------------------------------------------
 bool ElectronSelector::isSignalElectron(const Electron* ele)
 {
+    ElectronSelector::check();
 
     /////////////////////////////
     // Electron ID
@@ -241,6 +248,8 @@ bool ElectronSelector::isSignalElectron(const Electron* ele)
 /* --------------------------------------------------------------------------------------------- */ 
 bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
 {
+    ElectronSelector::check();
+
     /////////////////////////////
     // Electron ID
     /////////////////////////////
@@ -287,6 +296,18 @@ bool ElectronSelector::elecPassIsolation(const Electron* ele)
         cout << "ElectronSelector::elecPassIsolation error: >>> Exiting." << endl;
         exit(1);
     } 
+}
+/* --------------------------------------------------------------------------------------------- */
+void ElectronSelector::check()
+{
+    if(m_analysis == AnalysisType::kUnknown) {
+        string error = "ElectronSelector::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for ElectronSelector. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for ElectronSelector for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+    return;
 }
 /* --------------------------------------------------------------------------------------------- */
 

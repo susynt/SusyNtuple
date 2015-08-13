@@ -51,42 +51,37 @@ MuonSelector::MuonSelector() :
 // -------------------------------------------------------------------------------------------- //
 MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
 {
-    m_analysis = a;
 
     //////////////////////////////////////
     // Set analysis-specific cuts
     //////////////////////////////////////
-    switch(a) {
+
     //////////////////////////////////////
     // 2L-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_2Lep) : { 
+    if( a == AnalysisType::Ana_2Lep ) {
         m_2lep  = true;
 
         // signal
         m_sigIso = Isolation::GradientLoose;
 
         m_doIPCut           = true;
-
-        break;
     } 
     //////////////////////////////////////
     // 3L-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_3Lep) : {
+    else if( a == AnalysisType::Ana_3Lep ) {
         m_3lep  = true;
 
         // signal
         m_sigIso = Isolation::Tight;
 
         m_doIPCut           = true;
-
-        break;
     }
     //////////////////////////////////////
     // WH-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_2LepWH) : {
+    else if( a == AnalysisType::Ana_2LepWH ) {
         m_2lepWH = true;
 
         // signal
@@ -97,13 +92,11 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
         // muons
         MU_PTCONE30_PT_CUT = 0.06;
         MU_ETCONE30_PT_CUT = 0.14;
-
-        break;
     }
    //////////////////////////////////////
     // 2L-ANALYSIS
     //////////////////////////////////////
-    case(AnalysisType::Ana_SS3L) : { 
+    else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L  = true;
 
         m_sigIso = Isolation::GradientLoose;
@@ -114,22 +107,31 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
         MU_MAX_ETA_BASELINE  = 2.5;
         MU_MAX_ETA_SIGNAL    = 2.5;
         MU_MAX_Z0_SINTHETA   = 0.5;
-
-        break;
     } 
     //////////////////////////////////////
-    // Gone fishin'
+    // Didn't set AnalysisType
     //////////////////////////////////////
-    case(AnalysisType::kUnknown) : {
-        string error = "MuonSelector::buildRequirements error: ";
-        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
-        cout << error << "Check that setAnalysisType is called properly for MuonSelector" << endl;
-        cout << error << "for your analysis." <<endl;
+    else if( a == AnalysisType::kUnknown ) {
+        string error  = "MuonSelector::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for MuonSelector. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for MuonSelector for your analysis." << endl;
         cout << error << ">>> Exiting." << endl;
         exit(1);
     }
-    } // end switch
+    //////////////////////////////////////
+    // Gone fishin'
+    //////////////////////////////////////
+    else {
+        string error = "MuonSelector::setAnalysis error: ";
+        cout << error << "MuonSelector is not configured for the AnalysisType (" << AnalysisType2str(a) << ") provided in" << endl;
+        cout << error << "'setAnalysis'! Be sure that your AnalysisType is provided for in SusyNtuple/AnalysisType.h" << endl;
+        cout << error << "and that you provide the necessary requirements for your analysis in 'setAnalysis'." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
 
+    m_analysis = a;
+    
     // check the muon signal isolation has been set
     if(m_sigIso == Isolation::IsolationInvalid) {
         string error = "MuonSelector::buildRequirements error: ";
@@ -154,6 +156,8 @@ MuonSelector& MuonSelector::setSystematic(const NtSys::SusyNtSys &s)
 // -------------------------------------------------------------------------------------------- //
 bool MuonSelector::isBaselineMuon(const Muon* mu)
 {
+    MuonSelector::check();
+
     if(!mu->medium)                    return false;
     if(mu->Pt() < MU_MIN_PT_BASELINE)  return false;
     if(fabs(mu->Eta()) > MU_MAX_ETA_BASELINE)   return false;
@@ -163,6 +167,7 @@ bool MuonSelector::isBaselineMuon(const Muon* mu)
 // -------------------------------------------------------------------------------------------- //
 bool MuonSelector::isSignalMuon(const Muon* mu)
 {
+    MuonSelector::check();
 
     //////////////////////////////
     // Isolation
@@ -185,7 +190,18 @@ bool MuonSelector::isSignalMuon(const Muon* mu)
 
     return true;
 }
-
+// -------------------------------------------------------------------------------------------- //
+bool MuonSelector::isSemiSignalMuon(const Muon* mu)
+{
+    /////////////////////////////
+    // Impact parameter
+    /////////////////////////////
+    if(m_doIPCut) {
+        if(fabs(mu->d0sigBSCorr) >= MU_MAX_D0SIG) return false;
+        if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
+    }
+    return true;
+}
 // -------------------------------------------------------------------------------------------- //
 bool MuonSelector::muPassIsolation(const Muon* mu)
 {
@@ -201,15 +217,15 @@ bool MuonSelector::muPassIsolation(const Muon* mu)
     }
 }
 // -------------------------------------------------------------------------------------------- //
-bool MuonSelector::isSemiSignalMuon(const Muon* mu)
+void MuonSelector::check()
 {
-    /////////////////////////////
-    // Impact parameter
-    /////////////////////////////
-    if(m_doIPCut) {
-        if(fabs(mu->d0sigBSCorr) >= MU_MAX_D0SIG) return false;
-        if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
+    if(m_analysis == AnalysisType::kUnknown) {
+        string error  = "MuonSelector::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for MuonSelector. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for MuonSelector for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
     }
-    return true;
+    return;
 }
 }; // namespace Susy

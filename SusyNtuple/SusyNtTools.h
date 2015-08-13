@@ -28,12 +28,11 @@ public:
     {
     };
 
-    void setMSFOSRemoval(AnalysisType A);
+    void setSFOSRemoval(AnalysisType A);
 
     /// Set Analysis type to determine selection
     void setAnaType(AnalysisType A, bool verbose = false)
     {
-        m_anaType = A;
         ////////////////////////////
         // ElectronSelector
         ////////////////////////////
@@ -57,11 +56,14 @@ public:
         // now setAnalysis
         m_overlapTool.setAnalysis(A);
 
-        // set whether to perform MSFOS removal on baseline objects
-        setMSFOSRemoval(A);
+        // set whether to perform SFOS removal on baseline objects
+        setSFOSRemoval(A);
 
         // this should be in the logs no matter what
         std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
+
+        // now that the tools are configured set this variable
+        m_anaType = A;
     };
     AnalysisType getAnaType() { return m_anaType; }
 

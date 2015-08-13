@@ -61,6 +61,8 @@ namespace Susy {
         /// remove jets overlapping with taus
         void j_t_overlap(TauVector& taus, JetVector& jets);
 
+        void check();
+
 
 
     protected :

@@ -51,48 +51,41 @@ JetSelector::JetSelector() :
 //----------------------------------------------------------
 JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 {
-    m_analysis = a;
 
     ////////////////////////////////////
     // Set analysis-specific cuts
     ////////////////////////////////////
-    switch(a) {
+    
     ////////////////////////////////////
     // 2L-ANALYSIS
     ////////////////////////////////////
-    case(AnalysisType::Ana_2Lep) : {
+    if( a == AnalysisType::Ana_2Lep ) {
         m_2lep = true;
 
         // use defaults
         JET_MIN_PT_SIGNAL = 20.;
-
-        break;
     }
     ////////////////////////////////////
     // 3L-ANALYSIS
     ////////////////////////////////////
-    case(AnalysisType::Ana_3Lep) : {
+    else if( a == AnalysisType::Ana_3Lep ) {
         m_3lep = true;
 
         // pt
         JET_MIN_PT_SIGNAL   = 20.;
-        
-        break;
     }
     ////////////////////////////////////
     // WH-ANALYSIS
     ////////////////////////////////////
-    case(AnalysisType::Ana_2LepWH) : {
+    else if( a == AnalysisType::Ana_2LepWH ) {
         m_2lepWH = true;
 
         // use defaults
-
-        break;
     }
     ////////////////////////////////////
     // SS3L-ANALYSIS
     ////////////////////////////////////
-    case(AnalysisType::Ana_SS3L) : {
+    else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L = true;
 
         // pt
@@ -100,22 +93,30 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 
         // eta
         JET_MAX_ETA         = 2.8;
-
-        break;
+    }
+    ////////////////////////////////////
+    // Didn't set AnalysisType
+    ////////////////////////////////////
+    else if( a == AnalysisType::kUnknown ) {
+        string error = "JetSelector::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for JetSelector. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for JetSelector for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
     }
     ////////////////////////////////////
     // Gone fishin'
     ////////////////////////////////////
-    case(AnalysisType::kUnknown) : {
+    else {
         string error = "JetSelector::setAnalysis error: ";
-        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
-        cout << error << "Check that setAnalysisType is called properly for JetSelector" << endl;
-        cout << error << "for your analysis." << endl;
+        cout << error << "JetSelector is not configured for the AnalysisType (" << AnalysisType2str(a) << ") provided in" << endl;
+        cout << error << "'setAnalysis'! Be sure that your AnalysisType is provided for in SusyNtuple/AnalysisType.h" << endl;
+        cout << error << "and that you provide the necessary requirements for your analysis in 'setAnalysis'." << endl;
         cout << error << ">>> Exiting." << endl;
         exit(1);
     }
 
-    } // end switch
+    m_analysis = a;
 
     if(m_verbose)
         cout << "JetSelector    Configured jet selection for AnalysisType " << AnalysisType2str(m_analysis) << endl;
@@ -132,6 +133,8 @@ JetSelector& JetSelector::setSystematic(const NtSys::SusyNtSys &s)
 //----------------------------------------------------------
 bool JetSelector::isSignalJet(const Jet* jet)
 {
+    JetSelector::check();
+
     bool pass = false;
     if(jet) {
         if(m_2lep || m_2lepWH) {
@@ -149,6 +152,8 @@ bool JetSelector::isSignalJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isCentralLightJet(const Jet* jet)
 {
+    JetSelector::check();
+
     //////////////////////////////
     // pt requirement
     //////////////////////////////
@@ -176,6 +181,8 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isCentralBJet(const Jet* jet)
 {
+    JetSelector::check();
+
     //////////////////////////////
     // pt requirement
     //////////////////////////////
@@ -202,6 +209,8 @@ bool JetSelector::isCentralBJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isForwardJet(const Jet* jet)
 {
+    JetSelector::check();
+
     //////////////////////////////
     // pt requirement
     //////////////////////////////
@@ -222,6 +231,8 @@ bool JetSelector::isForwardJet(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::jetPassesJvtRequirement(const Jet* jet)
 {
+    JetSelector::check();
+
     return ((jet->jvt > JET_JVT_CUT)
                 || (fabs(jet->detEta) > JET_JVT_ETA_CUT)
                 || (jet->Pt() > JET_JVT_PT_CUT));
@@ -229,20 +240,38 @@ bool JetSelector::jetPassesJvtRequirement(const Jet* jet)
 //----------------------------------------------------------
 size_t JetSelector::count_CL_jets(const JetVector &jets)
 {
+    JetSelector::check();
+
     return std::count_if(jets.begin(), jets.end(),
                          std::bind1st(std::mem_fun(&JetSelector::isCentralLightJet), this));
 }
 //----------------------------------------------------------
 size_t JetSelector::count_CB_jets(const JetVector &jets)
 {
+    JetSelector::check();
+
     return std::count_if(jets.begin(), jets.end(), 
                          std::bind1st(std::mem_fun(&JetSelector::isCentralBJet), this));
 }
 //----------------------------------------------------------
 size_t JetSelector::count_F_jets(const JetVector &jets)
 {
+    JetSelector::check();
+
     return std::count_if(jets.begin(), jets.end(),
                             std::bind1st(std::mem_fun(&JetSelector::isForwardJet), this));
+}
+//----------------------------------------------------------
+void JetSelector::check()
+{
+    if(m_analysis == AnalysisType::kUnknown) {
+        string error = "JetSelector::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for JetSelector. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for JetSelector for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+    return;
 }
 //----------------------------------------------------------
 // no longer using JVF

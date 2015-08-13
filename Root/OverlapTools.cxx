@@ -32,42 +32,54 @@ OverlapTools::OverlapTools() :
 // ------------------------------------------------------------------------------ //
 OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
 {
-    m_analysis = a;
 
     ////////////////////////////////////////
     // Set analysis-specific OR procedures
     ////////////////////////////////////////
-    switch(a) {
+    
     ///////////////////////////////////
     // Contrarian analyses
     ///////////////////////////////////
-    case(AnalysisType::Ana_2Lep) : 
-    case(AnalysisType::Ana_3Lep) : 
-    case(AnalysisType::Ana_2LepWH) : {
+    if( a == AnalysisType::Ana_2Lep ||
+        a == AnalysisType::Ana_3Lep ||
+        a == AnalysisType::Ana_2LepWH ) {
         m_useSignalLeptons = false;
         m_useIsoLeptons    = false;
         m_doBjetOR         = false;
-        break;
     }
-    case(AnalysisType::Ana_SS3L) :{
-        M_J_DR  = 0.2; //if nTrk(jet)<3: remove jet else remove mu
+    ///////////////////////////////////
+    // SS3L-ANALYSIS
+    ///////////////////////////////////
+    else if ( a == AnalysisType::Ana_SS3L ) {
+        // change muon-jet dr
+        M_J_DR = 0.2;
         m_useSignalLeptons = false;
         m_useIsoLeptons    = false;
-        m_doBjetOR         = true; //always
-        break;
+        m_doBjetOR         = true;
     }
     ///////////////////////////////////
-    // Too far, set default to Run-I
+    // Didn't set AnalysisType
     ///////////////////////////////////
-    case(AnalysisType::kUnknown) : {
+    else if ( a == AnalysisType::kUnknown ) {
         string error = "OverlapTools::setAnalysis error: ";
-        cout << error << "Invalid AnalysisType (" << AnalysisType2str(AnalysisType::kUnknown) << ")" << endl;
-        cout << error << "Check that setAnalysisType is called properly for OverlapTools" << endl;
-        cout << error << "for your analysis." << endl;
+        cout << error << "The AnalysisType has not been set for OverlapTools. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for OverlapTools for your analysis." << endl;
         cout << error << ">>> Exiting." << endl;
         exit(1);
     }
-    } // switch
+    ///////////////////////////////////
+    // Gone fishin'
+    ///////////////////////////////////
+    else {
+        string error = "OverlapTools::setAnalysis error: ";
+        cout << error << "OverlapTools is not configured for the AnalysisType (" << AnalysisType2str(a) << ") provided in " << endl;
+        cout << error << "'setAnalysis'! Be sure that your AnalysisType is provided for in SusyNtuple/AnalysisType.h" << endl;
+        cout << error << "and that you provide the necessary requirements for your analysis in 'setAnalysis'." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+    
+    m_analysis = a;
 
     // check that ele/muon isolation has been set if we are using isolated leptons
     if(useIsolatedLeptons() && (m_electronIsolation==Isolation::IsolationInvalid || m_muonIsolation==Isolation::IsolationInvalid)) {
@@ -113,6 +125,8 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
 void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                                     TauVector& taus, JetVector& jets)
 {
+    OverlapTools::check();
+
     /** Following the rel20/13TeV prescription described in:
     https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Overlap_Removals
     */
@@ -194,6 +208,8 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
 
 bool OverlapTools::leptonPassesIsolation(const Lepton* lep, bool isEle)
 {
+    OverlapTools::check();
+
     Isolation iso = isEle ? m_electronIsolation : m_muonIsolation;
 
     if      (iso == Isolation::GradientLoose)   return lep->isoGradientLoose;
@@ -465,5 +481,17 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets)
     } // iJet
 }
 
+// ------------------------------------------------------------------------------ //
+void OverlapTools::check()
+{
+    if(m_analysis == AnalysisType::kUnknown) {
+        string error = "OverlapTools::setAnalysis error: ";
+        cout << error << "The AnalysisType has not been set for OverlapTools. Check that you properly call" << endl;
+        cout << error << "'setAnalysis' for OverlapTools for your analysis." << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
+    return;
+}
 
 }; // namespace Susy
