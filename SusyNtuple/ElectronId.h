@@ -6,7 +6,8 @@
 
 namespace Susy
 {
-enum ElectronId{
+
+enum ElectronId {
     TightLH=0
     ,MediumLH
     ,LooseLH
@@ -24,5 +25,6 @@ std::string ElectronId2str(const ElectronId &e);
 //   static const ElectronId ElectronId_last() { return ElectronId::ElectronIdInvalid; }
 //   /// assumes consecutive values without gaps
 // // static const size_t ElectronId_num_values = (1 + static_cast<size_t>(ElectronId_last()) - static_cast<size_t>(ElectronId_first()));
+
 } // Susy
 #endif
