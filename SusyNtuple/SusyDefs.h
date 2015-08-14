@@ -131,15 +131,6 @@ enum D3PDTag {
     D3PD_N
 };
 
-/// Tau ID enum
-enum TauID {
-    TauID_none = 0,
-    TauID_loose,
-    TauID_medium,
-    TauID_tight,
-    TauID_N
-};
-
 /*
 /// Enum for systematic checks
 enum SusyNtSys
@@ -310,151 +301,151 @@ DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
 // Trigger flags
 //-----------------------------------------------------------------------------------
 
-/// Trigger enums
-/** try to respect backwards compatibility by adding to the end */
-enum TrigBit {
-    // 2012 triggers
-    BIT_e7_medium1 = 0,
-    BIT_e12Tvh_loose1,
-    BIT_e12Tvh_medium1,
-    BIT_e24vh_medium1,
-    BIT_e24vhi_medium1,
-    BIT_2e12Tvh_loose1,
-    BIT_e24vh_medium1_e7_medium1,
-
-    BIT_mu8,
-    BIT_mu13,
-    BIT_mu18_tight,
-    BIT_mu24i_tight,
-    BIT_2mu13,
-    BIT_mu18_tight_mu8_EFFS,
-
-    BIT_e12Tvh_medium1_mu8,
-    BIT_mu18_tight_e7_medium1,
-
-    // Photon Triggers
-    BIT_g20_loose,
-    BIT_g40_loose,
-    BIT_g60_loose,
-    BIT_g80_loose,
-    BIT_g100_loose,
-    BIT_g120_loose,
-
-    // Tau triggers
-    BIT_tau20_medium1,
-    BIT_tau20Ti_medium1,
-    BIT_tau29Ti_medium1,
-    BIT_tau29Ti_medium1_tau20Ti_medium1,
-    BIT_tau20Ti_medium1_e18vh_medium1,
-    BIT_tau20_medium1_mu15,
-
-    // Missing trigger flags for lep-tau matching
-    BIT_e18vh_medium1,
-    BIT_mu15,
-
-    // MissingEt trigger
-    BIT_2mu8_EFxe40wMu_tclcw,
-
-    // Triggers requested for ISR analysis
-
-    // 3L triggers
-    BIT_mu6,
-    BIT_2mu6,
-    BIT_e18vh_medium1_2e7T_medium1,
-    BIT_3mu6,
-    BIT_mu18_tight_2mu4_EFFS,
-    BIT_2e7T_medium1_mu6,
-    BIT_e7T_medium1_2mu6,
-    // MET
-    BIT_xe80_tclcw_loose,
-    // Jet + MET
-    BIT_j110_a4tchad_xe90_tclcw_loose,
-    BIT_j80_a4tchad_xe100_tclcw_loose,
-    BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10,
-
-    // More triggers requested for ISR analysis
-    BIT_mu4T,
-    BIT_mu24,
-    BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose,
-    BIT_2mu4T_xe60_tclcw,
-    BIT_2mu8_EFxe40_tclcw,
-    BIT_e24vh_medium1_EFxe35_tclcw,
-    BIT_mu24_j65_a4tchad_EFxe40_tclcw,
-    BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw,
-
-    N_TRIG
-};
-
+///// Trigger enums
+///** try to respect backwards compatibility by adding to the end */
+//enum TrigBit {
+//    // 2012 triggers
+//    BIT_e7_medium1 = 0,
+//    BIT_e12Tvh_loose1,
+//    BIT_e12Tvh_medium1,
+//    BIT_e24vh_medium1,
+//    BIT_e24vhi_medium1,
+//    BIT_2e12Tvh_loose1,
+//    BIT_e24vh_medium1_e7_medium1,
 //
-// Trigger bit masks - could in principle represent multiple chains at once
+//    BIT_mu8,
+//    BIT_mu13,
+//    BIT_mu18_tight,
+//    BIT_mu24i_tight,
+//    BIT_2mu13,
+//    BIT_mu18_tight_mu8_EFFS,
 //
-
-// 2012 Trigger bit masks
-const long long TRIG_e7_medium1 = 1LL << BIT_e7_medium1;
-const long long TRIG_2e12Tvh_loose1 = 1LL << BIT_2e12Tvh_loose1;
-const long long TRIG_e12Tvh_medium1 = 1LL << BIT_e12Tvh_medium1;
-const long long TRIG_e24vh_medium1 = 1LL << BIT_e24vh_medium1;
-const long long TRIG_e24vhi_medium1 = 1LL << BIT_e24vhi_medium1;
-const long long TRIG_e24vh_medium1_e7_medium1 = 1LL << BIT_e24vh_medium1_e7_medium1;
-const long long TRIG_e12Tvh_loose1 = 1LL << BIT_e12Tvh_loose1;
-
-const long long TRIG_mu8 = 1LL << BIT_mu8;
-const long long TRIG_mu13 = 1LL << BIT_mu13;
-const long long TRIG_mu18_tight = 1LL << BIT_mu18_tight;
-const long long TRIG_mu24i_tight = 1LL << BIT_mu24i_tight;
-const long long TRIG_2mu13 = 1LL << BIT_2mu13;
-const long long TRIG_mu18_tight_mu8_EFFS = 1LL << BIT_mu18_tight_mu8_EFFS;
-
-const long long TRIG_e12Tvh_medium1_mu8 = 1LL << BIT_e12Tvh_medium1_mu8;
-const long long TRIG_mu18_tight_e7_medium1 = 1LL << BIT_mu18_tight_e7_medium1;
-
-// Photon Trigger bit masks
-const long long TRIG_g20_loose = 1LL << BIT_g20_loose;
-const long long TRIG_g40_loose = 1LL << BIT_g40_loose;
-const long long TRIG_g60_loose = 1LL << BIT_g60_loose;
-const long long TRIG_g80_loose = 1LL << BIT_g80_loose;
-const long long TRIG_g100_loose = 1LL << BIT_g100_loose;
-const long long TRIG_g120_loose = 1LL << BIT_g120_loose;
-
-// Tau trigger bit masks
-const long long TRIG_tau20_medium1 = 1LL << BIT_tau20_medium1;
-const long long TRIG_tau20Ti_medium1 = 1LL << BIT_tau20Ti_medium1;
-const long long TRIG_tau29Ti_medium1 = 1LL << BIT_tau29Ti_medium1;
-const long long TRIG_tau29Ti_medium1_tau20Ti_medium1 = 1LL << BIT_tau29Ti_medium1_tau20Ti_medium1;
-const long long TRIG_tau20Ti_medium1_e18vh_medium1 = 1LL << BIT_tau20Ti_medium1_e18vh_medium1;
-const long long TRIG_tau20_medium1_mu15 = 1LL << BIT_tau20_medium1_mu15;
-
-// Missing trigger flags for lep-tau matching
-const long long TRIG_e18vh_medium1 = 1LL << BIT_e18vh_medium1;
-const long long TRIG_mu15 = 1LL << BIT_mu15;
-
-// Missing ET trigger(s)
-const long long TRIG_2mu8_EFxe40wMu_tclcw = 1LL << BIT_2mu8_EFxe40wMu_tclcw;
-
-// Triggers requested for ISR analysis
-const long long TRIG_mu6 = 1LL << BIT_mu6;
-const long long TRIG_2mu6 = 1LL << BIT_2mu6;
-const long long TRIG_e18vh_medium1_2e7T_medium1 = 1LL << BIT_e18vh_medium1_2e7T_medium1;
-const long long TRIG_3mu6 = 1LL << BIT_3mu6;
-const long long TRIG_mu18_tight_2mu4_EFFS = 1LL << BIT_mu18_tight_2mu4_EFFS;
-const long long TRIG_2e7T_medium1_mu6 = 1LL << BIT_2e7T_medium1_mu6;
-const long long TRIG_e7T_medium1_2mu6 = 1LL << BIT_e7T_medium1_2mu6;
-const long long TRIG_xe80_tclcw_loose = 1LL << BIT_xe80_tclcw_loose;
-const long long TRIG_j110_a4tchad_xe90_tclcw_loose = 1LL << BIT_j110_a4tchad_xe90_tclcw_loose;
-const long long TRIG_j80_a4tchad_xe100_tclcw_loose = 1LL << BIT_j80_a4tchad_xe100_tclcw_loose;
-const long long TRIG_j80_a4tchad_xe70_tclcw_dphi2j45xe10 = 1LL << BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10;
-
-const long long TRIG_mu4T = 1LL << BIT_mu4T;
-const long long TRIG_mu24 = 1LL << BIT_mu24;
-const long long TRIG_mu4T_j65_a4tchad_xe70_tclcw_veryloose = 1LL << BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose;
-const long long TRIG_2mu4T_xe60_tclcw = 1LL << BIT_2mu4T_xe60_tclcw;
-const long long TRIG_2mu8_EFxe40_tclcw = 1LL << BIT_2mu8_EFxe40_tclcw;
-const long long TRIG_e24vh_medium1_EFxe35_tclcw = 1LL << BIT_e24vh_medium1_EFxe35_tclcw;
-const long long TRIG_mu24_j65_a4tchad_EFxe40_tclcw = 1LL << BIT_mu24_j65_a4tchad_EFxe40_tclcw;
-const long long TRIG_mu24_j65_a4tchad_EFxe40wMu_tclcw = 1LL << BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw;
-
-/// Trigger chain names, for convenience
-stringvector getTrigChains();
+//    BIT_e12Tvh_medium1_mu8,
+//    BIT_mu18_tight_e7_medium1,
+//
+//    // Photon Triggers
+//    BIT_g20_loose,
+//    BIT_g40_loose,
+//    BIT_g60_loose,
+//    BIT_g80_loose,
+//    BIT_g100_loose,
+//    BIT_g120_loose,
+//
+//    // Tau triggers
+//    BIT_tau20_medium1,
+//    BIT_tau20Ti_medium1,
+//    BIT_tau29Ti_medium1,
+//    BIT_tau29Ti_medium1_tau20Ti_medium1,
+//    BIT_tau20Ti_medium1_e18vh_medium1,
+//    BIT_tau20_medium1_mu15,
+//
+//    // Missing trigger flags for lep-tau matching
+//    BIT_e18vh_medium1,
+//    BIT_mu15,
+//
+//    // MissingEt trigger
+//    BIT_2mu8_EFxe40wMu_tclcw,
+//
+//    // Triggers requested for ISR analysis
+//
+//    // 3L triggers
+//    BIT_mu6,
+//    BIT_2mu6,
+//    BIT_e18vh_medium1_2e7T_medium1,
+//    BIT_3mu6,
+//    BIT_mu18_tight_2mu4_EFFS,
+//    BIT_2e7T_medium1_mu6,
+//    BIT_e7T_medium1_2mu6,
+//    // MET
+//    BIT_xe80_tclcw_loose,
+//    // Jet + MET
+//    BIT_j110_a4tchad_xe90_tclcw_loose,
+//    BIT_j80_a4tchad_xe100_tclcw_loose,
+//    BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10,
+//
+//    // More triggers requested for ISR analysis
+//    BIT_mu4T,
+//    BIT_mu24,
+//    BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose,
+//    BIT_2mu4T_xe60_tclcw,
+//    BIT_2mu8_EFxe40_tclcw,
+//    BIT_e24vh_medium1_EFxe35_tclcw,
+//    BIT_mu24_j65_a4tchad_EFxe40_tclcw,
+//    BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw,
+//
+//    N_TRIG
+//};
+//
+////
+//// Trigger bit masks - could in principle represent multiple chains at once
+////
+//
+//// 2012 Trigger bit masks
+//const long long TRIG_e7_medium1 = 1LL << BIT_e7_medium1;
+//const long long TRIG_2e12Tvh_loose1 = 1LL << BIT_2e12Tvh_loose1;
+//const long long TRIG_e12Tvh_medium1 = 1LL << BIT_e12Tvh_medium1;
+//const long long TRIG_e24vh_medium1 = 1LL << BIT_e24vh_medium1;
+//const long long TRIG_e24vhi_medium1 = 1LL << BIT_e24vhi_medium1;
+//const long long TRIG_e24vh_medium1_e7_medium1 = 1LL << BIT_e24vh_medium1_e7_medium1;
+//const long long TRIG_e12Tvh_loose1 = 1LL << BIT_e12Tvh_loose1;
+//
+//const long long TRIG_mu8 = 1LL << BIT_mu8;
+//const long long TRIG_mu13 = 1LL << BIT_mu13;
+//const long long TRIG_mu18_tight = 1LL << BIT_mu18_tight;
+//const long long TRIG_mu24i_tight = 1LL << BIT_mu24i_tight;
+//const long long TRIG_2mu13 = 1LL << BIT_2mu13;
+//const long long TRIG_mu18_tight_mu8_EFFS = 1LL << BIT_mu18_tight_mu8_EFFS;
+//
+//const long long TRIG_e12Tvh_medium1_mu8 = 1LL << BIT_e12Tvh_medium1_mu8;
+//const long long TRIG_mu18_tight_e7_medium1 = 1LL << BIT_mu18_tight_e7_medium1;
+//
+//// Photon Trigger bit masks
+//const long long TRIG_g20_loose = 1LL << BIT_g20_loose;
+//const long long TRIG_g40_loose = 1LL << BIT_g40_loose;
+//const long long TRIG_g60_loose = 1LL << BIT_g60_loose;
+//const long long TRIG_g80_loose = 1LL << BIT_g80_loose;
+//const long long TRIG_g100_loose = 1LL << BIT_g100_loose;
+//const long long TRIG_g120_loose = 1LL << BIT_g120_loose;
+//
+//// Tau trigger bit masks
+//const long long TRIG_tau20_medium1 = 1LL << BIT_tau20_medium1;
+//const long long TRIG_tau20Ti_medium1 = 1LL << BIT_tau20Ti_medium1;
+//const long long TRIG_tau29Ti_medium1 = 1LL << BIT_tau29Ti_medium1;
+//const long long TRIG_tau29Ti_medium1_tau20Ti_medium1 = 1LL << BIT_tau29Ti_medium1_tau20Ti_medium1;
+//const long long TRIG_tau20Ti_medium1_e18vh_medium1 = 1LL << BIT_tau20Ti_medium1_e18vh_medium1;
+//const long long TRIG_tau20_medium1_mu15 = 1LL << BIT_tau20_medium1_mu15;
+//
+//// Missing trigger flags for lep-tau matching
+//const long long TRIG_e18vh_medium1 = 1LL << BIT_e18vh_medium1;
+//const long long TRIG_mu15 = 1LL << BIT_mu15;
+//
+//// Missing ET trigger(s)
+//const long long TRIG_2mu8_EFxe40wMu_tclcw = 1LL << BIT_2mu8_EFxe40wMu_tclcw;
+//
+//// Triggers requested for ISR analysis
+//const long long TRIG_mu6 = 1LL << BIT_mu6;
+//const long long TRIG_2mu6 = 1LL << BIT_2mu6;
+//const long long TRIG_e18vh_medium1_2e7T_medium1 = 1LL << BIT_e18vh_medium1_2e7T_medium1;
+//const long long TRIG_3mu6 = 1LL << BIT_3mu6;
+//const long long TRIG_mu18_tight_2mu4_EFFS = 1LL << BIT_mu18_tight_2mu4_EFFS;
+//const long long TRIG_2e7T_medium1_mu6 = 1LL << BIT_2e7T_medium1_mu6;
+//const long long TRIG_e7T_medium1_2mu6 = 1LL << BIT_e7T_medium1_2mu6;
+//const long long TRIG_xe80_tclcw_loose = 1LL << BIT_xe80_tclcw_loose;
+//const long long TRIG_j110_a4tchad_xe90_tclcw_loose = 1LL << BIT_j110_a4tchad_xe90_tclcw_loose;
+//const long long TRIG_j80_a4tchad_xe100_tclcw_loose = 1LL << BIT_j80_a4tchad_xe100_tclcw_loose;
+//const long long TRIG_j80_a4tchad_xe70_tclcw_dphi2j45xe10 = 1LL << BIT_j80_a4tchad_xe70_tclcw_dphi2j45xe10;
+//
+//const long long TRIG_mu4T = 1LL << BIT_mu4T;
+//const long long TRIG_mu24 = 1LL << BIT_mu24;
+//const long long TRIG_mu4T_j65_a4tchad_xe70_tclcw_veryloose = 1LL << BIT_mu4T_j65_a4tchad_xe70_tclcw_veryloose;
+//const long long TRIG_2mu4T_xe60_tclcw = 1LL << BIT_2mu4T_xe60_tclcw;
+//const long long TRIG_2mu8_EFxe40_tclcw = 1LL << BIT_2mu8_EFxe40_tclcw;
+//const long long TRIG_e24vh_medium1_EFxe35_tclcw = 1LL << BIT_e24vh_medium1_EFxe35_tclcw;
+//const long long TRIG_mu24_j65_a4tchad_EFxe40_tclcw = 1LL << BIT_mu24_j65_a4tchad_EFxe40_tclcw;
+//const long long TRIG_mu24_j65_a4tchad_EFxe40wMu_tclcw = 1LL << BIT_mu24_j65_a4tchad_EFxe40wMu_tclcw;
+//
+///// Trigger chain names, for convenience
+//stringvector getTrigChains();
 
 
 //-----------------------------------------------------------------------------------
@@ -468,7 +459,7 @@ stringvector getTrigChains();
 // Pt
 //const float ELECTRON_PT_CUT = 10; // GeV
 const float MUON_PT_CUT = 10; // GeV
-const float TAU_PT_CUT = 20; // GeV
+//const float TAU_PT_CUT = 20; // GeV
 
 const float MLL_MIN = 12;
 
