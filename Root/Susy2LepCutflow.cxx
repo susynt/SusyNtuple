@@ -10,6 +10,8 @@ using namespace Susy;
 // Susy2LepCutflow Constructor
 /*--------------------------------------------------------------------------------*/
 Susy2LepCutflow::Susy2LepCutflow() :
+        m_input_chain(0),
+        m_ntTrig(0),
         m_nLepMin(2),
         m_nLepMax(2),
         m_cutNBaseLep(true),
@@ -81,8 +83,8 @@ void Susy2LepCutflow::Begin(TTree* /*tree*/)
   //bool useReweightUtils = false;
   //m_trigObj = new DilTrigLogic(period, useReweightUtils);
 
-  // initialize the general trigger tool (SusyNtuple/Trigger)
-  m_ntTrig = new Trigger(m_input_chain, true);
+  // initialize the general trigger tool (SusyNtuple/TriggerTools)
+  m_ntTrig = new TriggerTools(m_input_chain, true);
 }
 
 /*--------------------------------------------------------------------------------*/
