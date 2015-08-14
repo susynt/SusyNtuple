@@ -11,7 +11,7 @@
 // SusyNtuple
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/SusyNtTools.h"
-#include "SusyNtuple/Trigger.h"
+#include "SusyNtuple/TriggerTools.h"
 
 #include <fstream>
 
@@ -83,7 +83,7 @@ class Susy2LepCutflow : public SusyNtAna
 
     TChain*             m_input_chain;  // input chain being processed
 
-    Trigger*            m_ntTrig;       // Trigger class object for testing trigger bits
+    TriggerTools*       m_ntTrig;       // Trigger class object for testing trigger bits
 
     // Cut variables
     uint                m_nLepMin;      // min leptons

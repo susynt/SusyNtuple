@@ -122,7 +122,7 @@ void SusyNtAna::loadEventList()
     addRunEvent(m_eventList, run, event);
     nEvtDbg++;
   }
-  std::cout << " >>> Debuging " << nEvtDbg << " events " << std::endl;
+  std::cout << " >>> Debugging " << nEvtDbg << " events " << std::endl;
 }
 /*--------------------------------------------------------------------------------*/
 // Process selected events only
@@ -185,61 +185,133 @@ bool SusyNtAna::isDuplicate(unsigned int run, unsigned int event){
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::clearObjects()
 {
+  // pre objects
+  m_preElectrons.clear();
+  m_preMuons.clear();
+  m_preTaus.clear();
+  m_preJets.clear();
+  m_preLeptons.clear();
+
+  // baseline objects
   m_baseElectrons.clear();
   m_baseMuons.clear();
   m_baseTaus.clear();
-  m_baseLeptons.clear();
   m_baseJets.clear();
+  m_baseLeptons.clear();
+
+  // signal objects
   m_signalElectrons.clear();
   m_signalMuons.clear();
-  m_signalLeptons.clear();
   m_signalTaus.clear();
   m_signalJets.clear();
-  m_signalJets2Lep.clear();
-  m_mediumTaus.clear();
-  m_tightTaus.clear();
+  m_signalLeptons.clear();
+
+  // met
   m_met = NULL;
   m_trackMet = NULL;
+
+  //////////////////
+  // old:
+  //m_baseElectrons.clear();
+  //m_baseMuons.clear();
+  //m_baseTaus.clear();
+  //m_baseLeptons.clear();
+  //m_baseJets.clear();
+  //m_signalElectrons.clear();
+  //m_signalMuons.clear();
+  //m_signalLeptons.clear();
+  //m_signalTaus.clear();
+  //m_signalJets.clear();
+  //m_signalJets2Lep.clear();
+  //m_mediumTaus.clear();
+  //m_tightTaus.clear();
+  //m_met = NULL;
+  //m_trackMet = NULL;
+  // old
+  //////////////////
 }
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, 
-                              TauID signalTauID)
+void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
 {
+  ///////////////////////////////////////
   // Empty the object vectors
+  ///////////////////////////////////////
   clearObjects();
 
-  // Get the Pre-Selection and Baseline objets
-  m_nttools.getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
-                               m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
-                               sys, m_selectTaus);
+  ///////////////////////////////////////
+  // Get the Pre-Selection.
+  // Systematic variation applied here.
+  ///////////////////////////////////////
+  m_nttools.getPreObjects(&nt, sys, m_preElectrons, m_preMuons, m_preJets, m_preTaus);
 
-  // Now grab Signal objects
-  // New signal tau prescription, fill both ID levels at once
-  m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-                             m_signalElectrons, m_signalMuons,
-                             m_mediumTaus, m_tightTaus,
-                             m_signalJets, m_signalJets2Lep,
-                             nt.evt()->nVtx, nt.evt()->isMC,
-                             removeLepsFromIso, sys);
-  m_signalTaus = signalTauID==TauID_tight? m_tightTaus : m_mediumTaus;
+  ///////////////////////////////////////
+  // Get the Baseline Objects
+  ///////////////////////////////////////
+  m_nttools.getBaselineObjects(m_preElectrons, m_preMuons, m_preJets, m_preTaus,
+                               m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus);
+  ///////////////////////////////////////
+  // do OR for baseline
+  ///////////////////////////////////////
+  if(!m_nttools.m_overlapTool.useSignalLeptons()) {
+    m_nttools.m_overlapTool.performOverlap(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets);
+  }
+  ///////////////////////////////////////
+  // SFOS removal
+  ///////////////////////////////////////
+  if(m_nttools.doSFOSRemoval()){
+    m_nttools.removeSFOSPairs(m_baseElectrons, m_baseMuons);
+  }
 
+  ///////////////////////////////////////
+  // Get the Signal Objects
+  ///////////////////////////////////////
+  m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus,
+                              m_signalElectrons, m_signalMuons, m_signalJets, m_signalTaus, signalTauID);
+  ///////////////////////////////////////
+  // do OR for signal
+  ///////////////////////////////////////
+  if(m_nttools.m_overlapTool.useSignalLeptons()) {
+    m_nttools.m_overlapTool.performOverlap(m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets);
+  }
+
+  ///////////////////////////////////////
+  // Build Lepton vectors
+  ///////////////////////////////////////
+  m_nttools.buildLeptons(m_preLeptons, m_preElectrons, m_preMuons);
+  m_nttools.buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
+  m_nttools.buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
+
+  ///////////////////////////////////////
   // Grab met
+  ///////////////////////////////////////
   SusyNtSys metSys = sys;
   //AT 05-09-15 JVF obsolete run-2
   //if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
   m_met = m_nttools.getMet(&nt, metSys);
   m_trackMet = m_nttools.getTrackMet(&nt, metSys);
-  // Build Lepton vectors
-  m_nttools.buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
-  m_nttools.buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
 
-  // sort leptons by pt
-  std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
-  std::sort(m_signalLeptons.begin(), m_signalLeptons.end(), comparePt);
-  std::sort(m_signalJets.begin(), m_signalJets.end(), comparePt);
-  std::sort(m_signalJets2Lep.begin(), m_signalJets2Lep.end(), comparePt);
+ //////////////////////////////////////////////////////////////////////////////////
+ //// old:
+ // m_nttools.getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
+ //                              m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
+ //                              sys, m_selectTaus);
+
+ // // Now grab Signal objects
+ // // New signal tau prescription, fill both ID levels at once
+ // m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
+ //                            m_signalElectrons, m_signalMuons,
+ //                            m_mediumTaus, m_tightTaus,
+ //                            m_signalJets, m_signalJets2Lep,
+ //                            nt.evt()->nVtx, nt.evt()->isMC, sys);
+ // m_signalTaus = m_nttools.m_tauSelector.signalTauId() == TauId::Tight ? m_tightTaus : m_mediumTaus;
+ // //m_signalTaus = signalTauID == TauId::Tight ? m_tightTaus : m_mediumTaus;
+
+ // // old
+ // ////////////////////////////////////////////////////////////////////////////////
+
+
 }
 /*--------------------------------------------------------------------------------*/
 // Get on-the-fly cleaning cut flags. Select objects first!

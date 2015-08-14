@@ -1,9 +1,10 @@
 #ifndef SusyNtuple_SusyNtTools_h
 #define SusyNtuple_SusyNtTools_h
 
-
+// std
 #include <iostream>
 
+// SusyNtuple
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/SusyNt.h"
@@ -13,6 +14,10 @@
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/ElectronSelector.h"
 #include "SusyNtuple/OverlapTools.h"
+#include "SusyNtuple/TauSelector.h"
+#include "SusyNtuple/TauId.h"
+
+// SUSYTools
 #include "SUSYTools/SUSYCrossSection.h"
 
 using namespace Susy;
@@ -29,6 +34,8 @@ public:
     };
 
     void setSFOSRemoval(AnalysisType A);
+    bool doSFOSRemoval() { return m_doSFOS; }
+    void removeSFOSPairs(ElectronVector& baseElectrons, MuonVector& baseMuons);
 
     /// Set Analysis type to determine selection
     void setAnaType(AnalysisType A, bool verbose = false)
@@ -41,6 +48,10 @@ public:
         // MuonSelector
         ////////////////////////////
         m_muonSelector.setAnalysis(A);
+        ////////////////////////////
+        // TauSelector
+        ////////////////////////////
+        m_tauSelector.setAnalysis(A);
         ////////////////////////////
         // JetSelector
         ////////////////////////////
@@ -81,7 +92,25 @@ public:
     /// Apply Baseline selection to the 'Pre' objects
     ElectronVector getBaselineElectrons(const ElectronVector& preElectrons);
     MuonVector     getBaselineMuons(const MuonVector& preMuons);
+    TauVector      getBaselineTaus(const TauVector& preTaus);
     JetVector      getBaselineJets(const JetVector& preJets);
+
+    /// Get 'Pre' Objects. These are the objects ase they are in the SusyNt.
+    /// The systematic variations are applied here.
+    void getPreObjects(Susy::SusyNtObject* susyNt, SusyNtSys sys,
+                                                   ElectronVector& preElectrons,
+                                                   MuonVector& preMuons,
+                                                   JetVector& preJets,
+                                                   TauVector& preTaus);
+
+    /// Get Baseline objects
+    void getBaselineObjects(const ElectronVector& preElectrons, const MuonVector& preMuons, const JetVector& preJets, const TauVector& preTaus,
+                            ElectronVector& baseElectrons, MuonVector& baseMuons, JetVector& baseJets, TauVector& baseTaus);
+    /// Get Signal Objects
+    void getSignalObjects(const ElectronVector& baseElectrons, const MuonVector& baseMuons, const JetVector& baseJets, const TauVector& baseTaus,
+                            ElectronVector& signalElectrons, MuonVector& signalMuons, JetVector& signalJets, TauVector& signalTaus, TauId& sigTauId);
+
+
 
     /// Get Baseline objects. Pre + overlap removal.
     /** First method provides the pre-selected objects before OR and baseline objects after OR. */
@@ -95,30 +124,28 @@ public:
                             SusyNtSys sys, bool selectTaus = false);
 
     /// Signal objects
-    ElectronVector getSignalElectrons(const ElectronVector& baseElecs, const MuonVector& baseMuons,
-                                      uint nVtx, bool isMC, bool removeLepsFromIso = false);
-    MuonVector     getSignalMuons(const MuonVector& baseMuons, const ElectronVector& baseElecs,
-                                  uint nVtx, bool isMC, bool removeLepsFromIso = false);
+    ElectronVector getSignalElectrons(const ElectronVector& baseElecs);
+    MuonVector     getSignalMuons(const MuonVector& baseMuons);
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
-    TauVector      getSignalTaus(const TauVector& baseTaus, TauID tauJetID = TauID_medium,
-                                 TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
-    JetVector      getSignalJets(const JetVector& baseJets, SusyNtSys sys = NtSys::NOM);
+    TauVector      getSignalTaus(const TauVector& baseTaus, TauId tauJetID = TauId::Medium,
+                                 TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
+    JetVector      getSignalJets(const JetVector& baseJets);
 
     /// Get the signal objects
     void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
                           const TauVector& baseTaus, const JetVector& baseJets,
                           ElectronVector& sigElecs, MuonVector& sigMuons,
                           TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
-                          uint nVtx, bool isMC, bool removeLepsFromIso = false,
-                          TauID tauJetID = TauID_medium, TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium,
+                          uint nVtx, bool isMC,
+                          TauId tauJetID = TauId::Medium, TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium,
                           SusyNtSys sys = NtSys::NOM);
     // This method cannot be used anymore because it doesn't provide the baseline objects after OR.
     // Analyzers need these baseline objects for cleaning cuts.
     //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs,
     //                      MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets,
     //                      JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC,
-    //                      bool selectTaus=false, bool removeLepsFromIso=false,
-    //                      TauID tauID=TauID_medium);
+    //                      bool selectTaus=false,
+    //                      TauId tauID=TauId::Medium);
 
     /// New signal tau prescription, fill both ID levels at once
     // These will replace the methods above
@@ -128,35 +155,28 @@ public:
                           ElectronVector& sigElecs, MuonVector& sigMuons,
                           TauVector& mediumTaus, TauVector& tightTaus,
                           JetVector& sigJets, JetVector& sigJets2Lep,
-                          uint nVtx, bool isMC, bool removeLepsFromIso = false,
-                          SusyNtSys sys = NtSys::NOM);
+                          uint nVtx, bool isMC, SusyNtSys sys = NtSys::NOM);
 
     /// Check if selected object
-    bool isTauBDT(const Susy::Tau* tau, TauID tauJetID = TauID_medium,
-                  TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
+    bool isTauBDT(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
+                  TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
     // TODO: add new selection methods for light leptons and jets
     //bool isSelectLepton()
-    //virtual bool isSelectTau(const Susy::Tau* tau, TauID id=TauID_medium);
-    virtual bool isSelectTau(const Susy::Tau* tau, TauID tauJetID = TauID_medium,
-                             TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
+    //virtual bool isSelectTau(const Susy::Tau* tau, TauId id=TauId::Medium);
+    //virtual bool isSelectTau(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
+    //                         TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
 
     /// Check if signal object
     bool isSignalLepton(const Susy::Lepton* l);
     bool isSignalElectron(const Susy::Electron* e);
     bool isSignalMuon(const Susy::Muon* m);
-    bool isSignalTau(const Susy::Tau* tau, TauID tauJetID = TauID_medium,
-                     TauID tauEleID = TauID_loose, TauID tauMuoID = TauID_medium);
+    bool isSignalTau(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
+                     TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
     bool isSemiSignalElectron(const Susy::Electron* ele);
     bool isSemiSignalMuon(const Susy::Muon* mu);
 
-    /// Build Lepton vector - we should probably sort them here
-    void buildLeptons(LeptonVector &lep, ElectronVector& ele, MuonVector& muo)
-    {
-        for (uint ie = 0; ie < ele.size(); ie++)
-            lep.push_back(ele[ie]);
-        for (uint im = 0; im < muo.size(); im++)
-            lep.push_back(muo[im]);
-    };
+    /// Build lepton vector, sort by pT
+    void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
 
     /// Get the Met, for the appropriate systematic
     Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
@@ -203,13 +223,14 @@ public:
     /////////////////////////////////////////////
     ElectronSelector m_electronSelector;
     MuonSelector m_muonSelector;
-    JetSelector m_jetSelector; ///< select jets according to the current analysis settings
-    OverlapTools m_overlapTool; ///< tool to perform the analysis' OR procedure
+    TauSelector  m_tauSelector;
+    JetSelector m_jetSelector;              ///< select jets according to the current analysis settings
+    OverlapTools m_overlapTool;             ///< tool to perform the analysis' OR procedure
 
 protected:
 
     AnalysisType m_anaType;             ///< Analysis type. currently 2-lep or 3-lep
-    bool m_doMSFOS;                     ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
+    bool m_doSFOS;                     ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
 
 };
 

@@ -13,6 +13,7 @@
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/MCWeighter.h"
 #include "SusyNtuple/SusyNtSys.h"
+#include "SusyNtuple/TauId.h"
 
 #include <fstream>
 #include <map>
@@ -70,8 +71,7 @@ class SusyNtAna : public TSelector
     // Object selection
     void clearObjects();
     void selectObjects(Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM,
-                       bool removeLepsFromIso=false, 
-                       TauID signalTauID=TauID_medium);
+                       TauId signalTauID=TauId::Medium);
 
     // Cleaning cuts
     int cleaningCutFlags();
@@ -158,7 +158,9 @@ class SusyNtAna : public TSelector
 
     ElectronVector      m_preElectrons;         ///< selected electrons before OR
     MuonVector          m_preMuons;             ///< selected muons before OR
+    LeptonVector        m_preLeptons;       
     JetVector           m_preJets;              ///< selected jets before OR
+    TauVector           m_preTaus;
 
     ElectronVector      m_baseElectrons;        ///< baseline electrons
     MuonVector          m_baseMuons;            ///< baseline muons
