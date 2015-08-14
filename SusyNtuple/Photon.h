@@ -27,11 +27,9 @@ public:
     bool  OQ;                 ///< GoodOQ
 
     // Isolation flags
-    bool isoGradientLoose;  ///< GradientLoose WP from IsolationSelectionTool
-    bool isoGradient;   ///< Gradient WP from IsolationSelectionTool
-    bool isoLooseTrackOnly; ///< LooseTrackOnly WP from IsolationSelectionTool
-    bool isoLoose;  ///< Loose WP from IsolationSelectionTool
-    bool isoTight;  ///< Tight WP from IsolationSelectionTool
+    bool isoCone40CaloOnly; ///< Cone40CaloOnly WP
+    bool isoCone40;         ///< Cone40 WP
+    bool isoCone20;         ///< Cone20 WP
 
     float topoEtcone40;
 
@@ -52,12 +50,12 @@ public:
       tight = false;
       clusE = clusEta = clusPhi = 0;
       OQ = false;
-      isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoTight = false;
+      isoCone40CaloOnly = isoCone40 = isoCone20 = false;
       topoEtcone40=0;
       Particle::clear();
     };
 
-    ClassDef(Photon, 3);
+    ClassDef(Photon, 4);
 };
 } // Susy
 #endif

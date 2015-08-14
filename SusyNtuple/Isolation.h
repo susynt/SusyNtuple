@@ -11,6 +11,9 @@ enum Isolation{
     ,LooseTrackOnly
     ,Loose
     ,Tight
+    ,Cone40CaloOnly
+    ,Cone40
+    ,Cone20
     ,IsolationInvalid
 };
 
