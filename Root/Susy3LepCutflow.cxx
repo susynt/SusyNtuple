@@ -4,6 +4,7 @@
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/SusyKin.h"
+#include "SusyNtuple/TauId.h"
 
 using namespace std;
 using namespace Susy;
@@ -113,9 +114,9 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   //
 
   SusyNtSys ntSys = NtSys::NOM;
-  bool subtractLepsFromIso = false;
-  TauID tauID = TauID_medium;
-  selectObjects(ntSys, subtractLepsFromIso, tauID);
+  TauId tauID = TauId::Medium;
+  //TauID tauID = TauID_medium;
+  selectObjects(ntSys, tauID);
 
   //
   // Event selection
