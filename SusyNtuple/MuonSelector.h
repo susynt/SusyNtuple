@@ -6,6 +6,7 @@
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/Isolation.h"
+#include "SusyNtuple/MuonId.h"
 
 
 namespace Susy {
@@ -28,6 +29,11 @@ namespace Susy {
             the muons are configured.
         */
         Isolation signalIsolation() { return m_sigIso; } 
+        /**
+            Check that the input muon "mu" passes the quality
+            level required for the analysis.
+        */
+        bool muPassQuality(const Muon* mu, bool signalQuality);
         /**
             Input muon "mu" is required to pass baseline selection
         */
@@ -78,6 +84,9 @@ namespace Susy {
         AnalysisType m_analysis; // TODO : decide: bools or ana type? easier to check bools
         bool m_doIPCut;
 
+        MuonId m_muBaseId;      ///< muon ID quality requirement for baseline muons
+        MuonId m_muId;          ///< muon ID quality requirement for signal muons
+
         Isolation m_sigIso;     ///< muon isolation quality for signal muons (c.f. SusyNtuple/Isolation.h)
 
         //////////////////////////////
@@ -87,6 +96,7 @@ namespace Susy {
         bool m_3lep;
         bool m_2lepWH;
         bool m_SS3L;
+        bool m_stop2l;
 
         // set verbose
         bool m_verbose;

@@ -8,10 +8,11 @@ namespace Susy
 {
 /// 2-lep or 3-lep flag
 enum class AnalysisType {
-    Ana_2Lep,  ///< Dilepton electroweak
-    Ana_3Lep,  ///< trilepton electroweak
-    Ana_2LepWH, ///< C1N2 in WH samesign+jets
-    Ana_SS3L,   ///< Strong SS3L analysis 
+    Ana_2Lep,       ///< Dilepton electroweak
+    Ana_3Lep,       ///< trilepton electroweak
+    Ana_2LepWH,     ///< C1N2 in WH samesign+jets
+    Ana_SS3L,       ///< Strong SS3L analysis 
+    Ana_Stop2L,     ///< Direct stop to two lepton analysis
     kUnknown
 };
 /// Human-readable names

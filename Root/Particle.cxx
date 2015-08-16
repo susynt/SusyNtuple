@@ -28,3 +28,16 @@ Particle& Particle::operator=(const Particle &rhs)
   }
   return *this;
 }
+
+float Particle::DeltaRy(const Particle &rhs) const
+{
+
+    float thisRap = this->Rapidity();
+    float thisPhi = this->Phi();
+    float rhsRap = rhs.Rapidity();
+    float rhsPhi = rhs.Phi();
+
+    float dphi = TVector2::Phi_mpi_pi(thisPhi-rhsPhi);
+    float drap = thisRap-rhsRap;
+    return TMath::Sqrt(dphi*dphi + drap*drap);
+}

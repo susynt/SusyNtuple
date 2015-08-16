@@ -40,9 +40,10 @@ OverlapTools& OverlapTools::setAnalysis(const AnalysisType& a)
     ///////////////////////////////////
     // Contrarian analyses
     ///////////////////////////////////
-    if( a == AnalysisType::Ana_2Lep ||
-        a == AnalysisType::Ana_3Lep ||
-        a == AnalysisType::Ana_2LepWH ) {
+    if( a == AnalysisType::Ana_2Lep   ||
+        a == AnalysisType::Ana_3Lep   ||
+        a == AnalysisType::Ana_2LepWH ||
+        a == AnalysisType::Ana_Stop2L ) {
         m_useSignalLeptons = false;
         m_useIsoLeptons    = false;
         m_doBjetOR         = false;
@@ -250,7 +251,7 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
             //  > if dR between electron and jet < J_E_DR:
             //          --> remove the jet and keep the electron
             if(doBjetOR()){
-                if(e->DeltaR(*j) < J_E_DR){
+                if(e->DeltaRy(*j) < J_E_DR){
                     if(j->mv2c20 > -0.5517) {
                         electrons.erase(electrons.begin()+iEl);
                         break; // loop electron no longer exists
@@ -258,7 +259,7 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
                 } // dR match
             } // doBjetOR
             else {
-                if(e->DeltaR(*j) < J_E_DR) { jets.erase(jets.begin()+iJ); }
+                if(e->DeltaRy(*j) < J_E_DR) { jets.erase(jets.begin()+iJ); }
             } // not doBjetOR
         } // iJ
     } // iEl
@@ -273,11 +274,16 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets)
     if(electrons.size()==0 || jets.size()==0) return;
     for(int iEl=electrons.size()-1; iEl>=0; iEl--){
         const Electron* e = electrons.at(iEl);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
+        for(uint iJ=0; iJ<jets.size(); iJ++){
+       // for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
-            if(e->DeltaR(*j) > E_J_DR) continue;
-            electrons.erase(electrons.begin()+iEl);
-            break; // move to next electron since iEl no longer exists!
+            if(e->DeltaRy(*j)<E_J_DR) {
+                electrons.erase(electrons.begin()+iEl);
+                break;
+            }
+        //    if(e->DeltaRy(*j) > E_J_DR) continue;
+        //    electrons.erase(electrons.begin()+iEl);
+        //    break; // move to next electron since iEl no longer exists!
         } // iJ
     } // iEl
 }
@@ -296,7 +302,7 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets)
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             int jet_nTrk = j->nTracks;
-            if(mu->DeltaR(*j) > M_J_DR) continue;
+            if(mu->DeltaRy(*j) > M_J_DR) continue;
             if(jet_nTrk < 3) {
                 jets.erase(jets.begin() + iJ);
                 //AT: Don't we need a break here ???
@@ -329,7 +335,7 @@ void OverlapTools::e_m_overlap(ElectronVector& electrons, MuonVector& muons)
         const Electron* e = electrons.at(iEl);
         for(int iMu=0; iMu<nMu; iMu++){
             const Muon* mu = muons.at(iMu);
-            if(e->DeltaR(*mu) < E_M_DR){
+            if(e->DeltaRy(*mu) < E_M_DR){
                 electronsToRemove.insert(e);
                 muonsToRemove.insert(mu);
             } // dR match
@@ -372,7 +378,7 @@ void OverlapTools::e_e_overlap(ElectronVector& electrons)
         const Electron* ei = electrons.at(iEl);
         for(int jEl=iEl+1; jEl<nEl; jEl++){
             const Electron* ej = electrons.at(jEl);
-            if(ei->DeltaR(*ej) < E_E_DR){
+            if(ei->DeltaRy(*ej) < E_E_DR){
                 if(ei->Pt() < ej->Pt()){
                     electronsToRemove.insert(ei);
                     break; // ei no longer exists for looping!
@@ -406,7 +412,7 @@ void OverlapTools::m_m_overlap(MuonVector& muons)
         const Muon* imu = muons.at(iMu);
         for(int jMu=iMu+1; jMu<nMu; jMu++){
             const Muon* jmu = muons.at(jMu);
-            if(imu->DeltaR(*jmu) < M_M_DR){
+            if(imu->DeltaRy(*jmu) < M_M_DR){
                 muonsToRemove.insert(imu);
                 muonsToRemove.insert(jmu);
             } // if OR
@@ -433,7 +439,7 @@ void OverlapTools::t_e_overlap(TauVector& taus, ElectronVector& electrons)
         const Tau* tau = taus.at(iTau);
         for(int iEl=nEle-1; iEl>=0; iEl--){
             const Electron* e = electrons.at(iEl);
-            if(tau->DeltaR(*e) < T_E_DR){
+            if(tau->DeltaRy(*e) < T_E_DR){
                 taus.erase(taus.begin()+iTau);
                 break; // loop tau doesn't exist anymore!
             } // dR match
@@ -453,7 +459,7 @@ void OverlapTools::t_m_overlap(TauVector& taus, MuonVector& muons)
         const Tau* tau = taus.at(iTau);
         for(int iMu=nMuo-1; iMu>=0; iMu--){
             const Muon* mu = muons.at(iMu);
-            if(tau->DeltaR(*mu) < T_M_DR){
+            if(tau->DeltaRy(*mu) < T_M_DR){
                 taus.erase(taus.begin()+iTau);
                 break; // loop tau doesn't exist anymore!
             } // dR match
@@ -473,13 +479,14 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets)
         const Jet* jet = jets.at(iJet);
         for(int iTau=nTau-1; iTau>=0; iTau--){
             const Tau* tau = taus.at(iTau);
-            if(tau->DeltaR(*jet) < J_T_DR){
+            if(tau->DeltaRy(*jet) < J_T_DR){
                 jets.erase(jets.begin()+iJet);
                 break; // loop jet doesn't exist anymore!
             } // dR match
         } // iTau
     } // iJet
 }
+
 
 // ------------------------------------------------------------------------------ //
 void OverlapTools::check()

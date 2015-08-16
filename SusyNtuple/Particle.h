@@ -23,6 +23,7 @@ public:
     float phi;
     float m;
     void resetTLV(){ this->SetPtEtaPhiM(pt,eta,phi,m); };
+    float DeltaRy(const Particle& p1) const;
 
     /// Systematic-shifted state for particles.
     /** Base class method simply resets */
@@ -44,7 +45,7 @@ public:
       return Pt() < other.Pt();
     }
 
-    ClassDef(Particle, 1);
+    ClassDef(Particle, 2);
   };
 } // Susy
 #endif

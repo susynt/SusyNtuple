@@ -44,6 +44,7 @@ ElectronSelector::ElectronSelector() :
     m_3lep(false),
     m_2lepWH(false),
     m_SS3L(false),
+    m_stop2l(false),
     m_verbose(false)
 {
 }
@@ -124,6 +125,22 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
         EL_MAX_Z0_SINTHETA              = 0.5;
 
     } 
+    //////////////////////////////////////
+    // Stop2L-Analysis
+    //////////////////////////////////////
+    else if( a == AnalysisType::Ana_Stop2L ) {
+        m_stop2l = true;
+
+        //baseline
+        m_eleBaseId         = ElectronId::LooseLH;
+        //signal
+        m_eleId             = ElectronId::MediumLH;
+        m_sigIso            = Isolation::GradientLoose;
+        m_doIPCut           = true;
+
+        //cuts
+        EL_MAX_Z0_SINTHETA  = 0.5;
+    }
     //////////////////////////////////////
     // Didn't set AnalysisType
     //////////////////////////////////////

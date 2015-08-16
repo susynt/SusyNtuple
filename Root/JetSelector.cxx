@@ -45,6 +45,7 @@ JetSelector::JetSelector() :
     m_3lep(false),
     m_2lepWH(false),
     m_SS3L(false),
+    m_stop2l(false),
     m_verbose(false)
 {
 }
@@ -93,6 +94,18 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
 
         // eta
         JET_MAX_ETA         = 2.8;
+    }
+    ////////////////////////////////////
+    // Stop2L-ANALYSIS
+    ////////////////////////////////////
+    else if( a == AnalysisType::Ana_Stop2L ) {
+        m_stop2l = true;
+
+        //pt
+        JET_MIN_PT_SIGNAL = 20.;
+
+        //eta
+        JET_MAX_ETA = 2.8;
     }
     ////////////////////////////////////
     // Didn't set AnalysisType

@@ -41,6 +41,8 @@ MuonSelector::MuonSelector() :
     m_systematic(NtSys::NOM),
     m_analysis(AnalysisType::kUnknown),
     m_doIPCut(true),
+    m_muBaseId(MuonId::MuonIdInvalid),
+    m_muId(MuonId::MuonIdInvalid),
     m_sigIso(Isolation::IsolationInvalid),
     m_2lep(false),
     m_3lep(false),
@@ -62,9 +64,12 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
     if( a == AnalysisType::Ana_2Lep ) {
         m_2lep  = true;
 
-        // signal
-        m_sigIso = Isolation::GradientLoose;
+        //baseline
+        m_muBaseId = MuonId::Medium;
 
+        //signal
+        m_muId = MuonId::Medium;
+        m_sigIso = Isolation::GradientLoose;
         m_doIPCut           = true;
     } 
     //////////////////////////////////////
@@ -73,9 +78,11 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
     else if( a == AnalysisType::Ana_3Lep ) {
         m_3lep  = true;
 
-        // signal
+        //baseline
+        m_muBaseId = MuonId::Medium;
+        //signal
+        m_muId = MuonId::Medium;
         m_sigIso = Isolation::Tight;
-
         m_doIPCut           = true;
     }
     //////////////////////////////////////
@@ -84,9 +91,12 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
     else if( a == AnalysisType::Ana_2LepWH ) {
         m_2lepWH = true;
 
-        // signal
-        m_sigIso = Isolation::Tight;
+        //baseline
+        m_muBaseId = MuonId::Medium;
 
+        //signal
+        m_muId = MuonId::Medium;
+        m_sigIso = Isolation::Tight;
         m_doIPCut           = true;
 
         // muons
@@ -94,13 +104,17 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
         MU_ETCONE30_PT_CUT = 0.14;
     }
    //////////////////////////////////////
-    // 2L-ANALYSIS
+    // SS3L-ANALYSIS
     //////////////////////////////////////
     else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L  = true;
 
-        m_sigIso = Isolation::GradientLoose;
+        //baseline
+        m_muBaseId = MuonId::Medium;
 
+        //signal
+        m_muId = MuonId::Medium;
+        m_sigIso = Isolation::GradientLoose;
         m_doIPCut = true;
 
         // muons
@@ -108,6 +122,24 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
         MU_MAX_ETA_SIGNAL    = 2.5;
         MU_MAX_Z0_SINTHETA   = 0.5;
     } 
+    //////////////////////////////////////
+    // Stop2L-ANALYSIS
+    //////////////////////////////////////
+    else if( a == AnalysisType::Ana_Stop2L ) {
+        m_stop2l = true;
+
+        //baseline
+        m_muBaseId = MuonId::Loose;
+
+        //signal
+        m_muId = MuonId::Loose;
+        m_sigIso = Isolation::GradientLoose;
+        m_doIPCut = true;
+
+        //cuts
+        MU_MAX_Z0_SINTHETA = 0.5;
+    }
+
     //////////////////////////////////////
     // Didn't set AnalysisType
     //////////////////////////////////////
@@ -131,10 +163,20 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
     }
 
     m_analysis = a;
+
+    // check that the muon ID qualities are set
+    if(m_muBaseId == MuonId::MuonIdInvalid || m_muId == MuonId::MuonIdInvalid) {
+        string error = "MuonSelector::setAnalysis error: ";
+        cout << error << "Muon ID quality is not set." << endl;
+        cout << error << "Muon baseline ID quality = " << MuonId2str(m_muBaseId) << endl;
+        cout << error << "Muon signal ID quality   = " << MuonId2str(m_muId) << endl;
+        cout << error << ">>> Exiting." << endl;
+        exit(1);
+    }
     
     // check the muon signal isolation has been set
     if(m_sigIso == Isolation::IsolationInvalid) {
-        string error = "MuonSelector::buildRequirements error: ";
+        string error = "MuonSelector::setAnalysis error: ";
         cout << error << "Signal muon isolation requirement is not set." << endl;
         cout << error << "Muon isolation = " << Isolation2str(m_sigIso) << endl;
         cout << error << ">>> Exiting." << endl;
@@ -158,7 +200,8 @@ bool MuonSelector::isBaselineMuon(const Muon* mu)
 {
     MuonSelector::check();
 
-    if(!mu->medium)                    return false;
+   // if(!mu->medium)                    return false;
+    if(!muPassQuality(mu, false))      return false;
     if(mu->Pt() < MU_MIN_PT_BASELINE)  return false;
     if(fabs(mu->Eta()) > MU_MAX_ETA_BASELINE)   return false;
 
@@ -168,6 +211,8 @@ bool MuonSelector::isBaselineMuon(const Muon* mu)
 bool MuonSelector::isSignalMuon(const Muon* mu)
 {
     MuonSelector::check();
+
+    if(!muPassQuality(mu, true)) return false;
 
     //////////////////////////////
     // Isolation
@@ -201,6 +246,22 @@ bool MuonSelector::isSemiSignalMuon(const Muon* mu)
         if(fabs(mu->z0SinTheta()) >= MU_MAX_Z0_SINTHETA) return false;
     }
     return true;
+}
+// -------------------------------------------------------------------------------------------- //
+bool MuonSelector::muPassQuality(const Muon* mu, bool signalQuality)
+{
+    MuonId id = signalQuality ? m_muId : m_muBaseId;
+
+    if     (id == MuonId::VeryLoose)    return mu->veryLoose;
+    else if(id == MuonId::Loose)        return mu->loose;
+    else if(id == MuonId::Medium)       return mu->medium;
+    else if(id == MuonId::Tight)        return mu->tight;
+    else {
+        cout << "MuonSelector::muPassQuality error: MuonId requirement for muons not set for " << (signalQuality ? "signal" : "baseline") << "-level muons." << endl;
+        cout << "MuonSelector::muPassQuality error: >>> Exiting." << endl;
+        exit(1);
+    }
+
 }
 // -------------------------------------------------------------------------------------------- //
 bool MuonSelector::muPassIsolation(const Muon* mu)

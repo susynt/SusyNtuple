@@ -36,6 +36,7 @@ TauSelector::TauSelector() :
     m_3lep(false),
     m_2lepWH(false),
     m_SS3L(false),
+    m_stop2l(false),
     m_verbose(false)
 {
 }
@@ -103,6 +104,23 @@ TauSelector& TauSelector::setAnalysis(const AnalysisType &a)
     //////////////////////////////////////
     else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L = true;
+
+        m_signalTauId = TauId::Medium;
+
+        m_tauEleBaseId = TauId::Loose;
+        m_tauJetBaseId = TauId::Medium;
+        m_tauMuoBaseId = TauId::Medium;
+
+        m_tauEleId = TauId::Loose;
+        m_tauJetId = TauId::Medium;
+        m_tauMuoId = TauId::Medium;
+
+    }
+    //////////////////////////////////////
+    // STOP2L-ANALYSIS
+    //////////////////////////////////////
+    else if( a == AnalysisType::Ana_Stop2L ) {
+        m_stop2l = true;
 
         m_signalTauId = TauId::Medium;
 

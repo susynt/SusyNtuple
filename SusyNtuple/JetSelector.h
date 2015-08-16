@@ -127,6 +127,7 @@ class Jet;
             bool m_3lep;    ///< flag for 3L analysis
             bool m_2lepWH;  ///< flag for 2L WH analysis
             bool m_SS3L;    ///< flag for the strong SS3L analysis
+            bool m_stop2l;  ///< flag for the stop to two lepton analysis
     
             bool m_verbose; ///< toggle verbose messages
 
