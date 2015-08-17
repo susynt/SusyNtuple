@@ -39,6 +39,9 @@ class Susy2LepCutflow : public SusyNtAna
     // Main event loop function
     virtual Bool_t  Process(Long64_t entry);
 
+    // Event cleaning cuts
+    bool passEventCleaning(int cutflags, const MuonVector& preMuons, const MuonVector& baseMuons,
+                                const JetVector& baseJets);
     // Full event selection. Specify which leptons to use.
     bool selectEvent(const LeptonVector& leptons, const LeptonVector& baseLeptons);
 		     

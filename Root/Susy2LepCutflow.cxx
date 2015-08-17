@@ -94,7 +94,7 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
 {
   // Communicate tree entry number to SusyNtObject
   GetEntry(entry);
-  clearObjects();
+  SusyNtAna::clearObjects();
   m_ET = ET_Unknown;
   n_readin++;
 
@@ -113,11 +113,14 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   }
 
   // select signal objects
-  selectObjects();
+  SusyNtAna::selectObjects();
   //dumpBaselineObjects();
   //dumpSignalObjects();
 
-  // Check Event
+  // Check that the event passes event cleaning cuts
+  int flags = nt.evt()->cutFlags[NtSys::NOM];
+  if(!passEventCleaning(flags, m_preMuons, m_baseMuons, m_baseJets)) return false;
+  // Check that the event passes basic object selection
   if(!selectEvent(m_signalLeptons, m_baseLeptons)) return false;
 
   // Count SS and OS
@@ -149,43 +152,47 @@ void Susy2LepCutflow::Terminate()
 /*--------------------------------------------------------------------------------*/
 // Full event selection
 /*--------------------------------------------------------------------------------*/
-bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVector& baseLeps)
+bool Susy2LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons, const MuonVector& baseMuons,
+                                                const JetVector& baseJets)
 {
-  
-  // In this method place all event selection cuts.
-  // I have deleted Steve's so that I can build the
-  // analysis up as I progress
-  //int flag = nt.evt()->evtFlag[NtSys_NOM];
-  int flags = nt.evt()->cutFlags[NtSys::NOM];
-
-  // for now, check the cleaning cut flags directly -- will want to check
-  // the implementation on the SusyNtTools side of things
-
   // grl
-  if( !(flags & ECut_GRL) )                     return false;
+  if( !m_nttools.passGRL(flags) )               return false;
     n_pass_grl++;
-  // lar
-  if( !(flags & ECut_LarErr) )                  return false;
+  // noisy lar
+  if( !m_nttools.passLarErr(flags) )            return false;
     n_pass_LAr++;
   // tile error
-  if( !(flags & ECut_TileErr) )                 return false;
+  if( !m_nttools.passTileErr(flags) )           return false;
     n_pass_tileErr++;
   // ttc veto
-  if( !(flags & ECut_TTC) )                     return false;
+  if( !m_nttools.passTTC(flags) )               return false;
     n_pass_ttc++;
-  // bad muon
-  if( !(flags & ECut_BadMuon) )                 return false;
-    n_pass_BadMuon++;
-  // jet cleaning
-  if( !(flags & ECut_BadJet) )                  return false;
-    n_pass_BadJet++;
-  // good vertex
-  if( !(flags & ECut_GoodVtx) )                 return false;
+  // event has primary vertex
+  if( !m_nttools.passGoodVtx(flags) )           return false;
     n_pass_goodVtx++;
-  // cosmic muon veto
-  if( !(flags & ECut_Cosmic) )                  return false;
-    n_pass_Cosmic++;
 
+  //////////////////////////////////////////////////////////
+  // These cuts depend on the analysis' defition of baseline
+  // muons (c.f. SusyNtuple/MuonSelector) and the specified 
+  // overlap removal procedure (c.f. SusyNtuple/OverlapTools)
+  // so cannot be stored as EventFlags when wrting SusyNt
+
+  // veto events with "bad" muons
+  if( !m_nttools.passBadMuon(preMuons) )      return false;
+    n_pass_BadMuon++;
+  // veto events with cosmic muons
+  if( !m_nttools.passCosmicMuon(baseMuons) )  return false;
+    n_pass_Cosmic++;
+  // veto events with "bad" jets
+  if( !m_nttools.passJetCleaning(baseJets) )  return false;
+    n_pass_BadJet++;
+
+  return true;
+
+}
+/*--------------------------------------------------------------------------------*/
+bool Susy2LepCutflow::selectEvent(const LeptonVector& leptons, const LeptonVector& baseLeps)
+{
   if(!passNBaseLepCut(baseLeps))                return false;
   
   // Get Event Type to continue cutflow
@@ -552,10 +559,10 @@ void Susy2LepCutflow::dumpEventCounters()
   cout << "pass LAr       :" << n_pass_LAr     << endl;
   cout << "pass tile err  :" << n_pass_tileErr << endl;
   cout << "pass ttc veto  :" << n_pass_ttc     << endl;
-  cout << "pass BadMu     :" << n_pass_BadMuon << endl;
-  cout << "pass BadJet    :" << n_pass_BadJet  << endl;
   cout << "pass primVtx   :" << n_pass_goodVtx << endl;
+  cout << "pass BadMu     :" << n_pass_BadMuon << endl;
   cout << "pass Cosmic    :" << n_pass_Cosmic  << endl;
+  cout << "pass BadJet    :" << n_pass_BadJet  << endl;
 
   string v_ET[ET_N] = {"ee","mm","em","Unknown"};
   for(int i=0; i<ET_N; ++i){

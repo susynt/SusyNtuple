@@ -30,6 +30,61 @@ m_doSFOS(false)
 {
 }
 /*--------------------------------------------------------------------------------*/
+// Event selection methods
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::passGRL(int flags)
+{
+    return (flags & ECut_GRL);
+}
+bool SusyNtTools::passLarErr(int flags)
+{
+    return (flags & ECut_LarErr);
+}
+bool SusyNtTools::passTileErr(int flags)
+{
+    return (flags & ECut_TileErr);
+}
+bool SusyNtTools::passTTC(int flags)
+{
+    return (flags & ECut_TTC);
+}
+bool SusyNtTools::passGoodVtx(int flags)
+{
+    return (flags & ECut_GoodVtx);
+}
+bool SusyNtTools::passBadMuon(const MuonVector& preMuons)
+{
+    // get the baseline muons prior to OR
+    MuonVector baseMuons = SusyNtTools::getBaselineMuons(preMuons); 
+    // now check whether any of the baseline muons is bad 
+    bool pass_badMuon = true;
+    for(uint imu=0; imu<baseMuons.size(); imu++){
+        if(baseMuons[imu]->isBadMuon){ pass_badMuon = false; break; }
+    } // imu
+    return pass_badMuon;
+}
+bool SusyNtTools::passCosmicMuon(const MuonVector& baseMuons)
+{
+    // You must pass this function the baseline muons
+    // that have already undergone overlap removal!!
+    bool pass_cosmicMuon = true;
+    for(uint imu=0; imu<baseMuons.size(); imu++){
+        if(baseMuons[imu]->isCosmic){ pass_cosmicMuon = false; break; }
+    } // imu
+    return pass_cosmicMuon;
+}
+bool SusyNtTools::passJetCleaning(const JetVector& baseJets)
+{
+    // You must pass this function the 'Pre-Jets', i.e.
+    // the jets prior to baseline selection and overlap
+    // removal
+    bool pass_jetCleaning = true;
+    for(uint ijet=0; ijet<baseJets.size(); ijet++){
+        if(baseJets[ijet]->isBadVeryLoose){ pass_jetCleaning = false; break; }
+    } // ijet
+    return pass_jetCleaning;
+}
+/*--------------------------------------------------------------------------------*/
 // Full object selection methods
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::setSFOSRemoval(AnalysisType a)
@@ -38,7 +93,7 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
        a == AnalysisType::Ana_3Lep ||
        a == AnalysisType::Ana_2LepWH ) { m_doSFOS = true; }
 
-    else if( a == AnalysisType::Ana_SS3L ) { m_doSFOS = false; }
+    else if( a == AnalysisType::Ana_SS3L )   { m_doSFOS = false; }
     else if( a == AnalysisType::Ana_Stop2L ) { m_doSFOS = false; }
 
     else if( a == AnalysisType::kUnknown ) {

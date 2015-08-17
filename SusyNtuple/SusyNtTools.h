@@ -79,6 +79,21 @@ public:
     AnalysisType getAnaType() { return m_anaType; }
 
     //
+    // Methods to perform event selection
+    //
+    bool passGRL(int flags);
+    bool passLarErr(int flags);
+    bool passTileErr(int flags);
+    bool passTTC(int flags);
+    bool passGoodVtx(int flags);
+    bool passBadMuon(const MuonVector* preMuons) { return SusyNtTools::passBadMuon(*preMuons); }
+    bool passBadMuon(const MuonVector& preMuons);
+    bool passCosmicMuon(const MuonVector* baseMuons) { return SusyNtTools::passCosmicMuon(*baseMuons); }
+    bool passCosmicMuon(const MuonVector& baseMuons);
+    bool passJetCleaning(const JetVector* preJets) { return SusyNtTools::passJetCleaning(*preJets); }
+    bool passJetCleaning(const JetVector& preJets);
+
+    //
     // Methods to grab objects based on systematic shift desired
     //
 

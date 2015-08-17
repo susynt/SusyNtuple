@@ -41,6 +41,9 @@ class Susy3LepCutflow : public SusyNtAna
     // Book histograms
     void bookHistos();
 
+    // Event cleaning cuts
+    bool passEventCleaning(int cutflags, const MuonVector& preMuons,
+                const MuonVector& baseMuons, const JetVector& baseJets);
     // Full event selection. Specify which leptons to use.
     bool selectEvent(const LeptonVector& leptons, const TauVector& taus, 
                      const JetVector& jets, const Susy::Met* met);

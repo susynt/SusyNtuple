@@ -281,9 +281,9 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets)
                 electrons.erase(electrons.begin()+iEl);
                 break;
             }
-        //    if(e->DeltaRy(*j) > E_J_DR) continue;
-        //    electrons.erase(electrons.begin()+iEl);
-        //    break; // move to next electron since iEl no longer exists!
+            if(e->DeltaRy(*j) > E_J_DR) continue;
+            electrons.erase(electrons.begin()+iEl);
+            break; // move to next electron since iEl no longer exists!
         } // iJ
     } // iEl
 }
@@ -305,7 +305,6 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets)
             if(mu->DeltaRy(*j) > M_J_DR) continue;
             if(jet_nTrk < 3) {
                 jets.erase(jets.begin() + iJ);
-                //AT: Don't we need a break here ???
             }
             else {
                 muons.erase(muons.begin() + iMu);

@@ -97,7 +97,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
 {
   // Communicate tree entry number to SusyNtObject
   GetEntry(entry);
-  clearObjects();
+  SusyNtAna::clearObjects();
   n_readin++;
 
   // Chain entry not the same as tree entry
@@ -116,12 +116,16 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   SusyNtSys ntSys = NtSys::NOM;
   TauId tauID = TauId::Medium;
   //TauID tauID = TauID_medium;
-  selectObjects(ntSys, tauID);
+  SusyNtAna::selectObjects(ntSys, tauID);
 
   //
   // Event selection
   //
 
+  // Check that the event passes event cleaning cuts
+  int flags = nt.evt()->cutFlags[NtSys::NOM];
+  if(!passEventCleaning(flags, m_preMuons, m_baseMuons, m_baseJets)) return false;
+  // Check that the event passes object selection
   if(!selectEvent(m_signalLeptons, m_signalTaus, m_signalJets, m_met)) return false;
 
   //
@@ -198,28 +202,46 @@ void Susy3LepCutflow::bookHistos()
 /*--------------------------------------------------------------------------------*/
 // Full event selection
 /*--------------------------------------------------------------------------------*/
+bool Susy3LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons,
+                        const MuonVector& baseMuons, const JetVector& baseJets)
+{
+    // grl
+    if( !m_nttools.passGRL(flags) )                  return false;
+        n_pass_grl++;
+    // noisy lar
+    if( !m_nttools.passLarErr(flags) )               return false;
+        n_pass_lar++;
+    if( !m_nttools.passTileErr(flags) )              return false;
+        n_pass_tile++;
+    if( !m_nttools.passTTC(flags) )                  return false;
+        n_pass_ttc++;
+    if( !m_nttools.passGoodVtx(flags) )              return false;
+        n_pass_goodVtx++;
+
+    //////////////////////////////////////////////////////
+    // These cuts depend on the analysis' definition of
+    // baseline muons (c.f. SusyNtuple/MuonSelector)
+    // and the specified overlap removal procedure
+    // (c.f. SusyNtuple/OverlapTools) and so cannot be
+    // stored as EventFlags when writing SusyNt
+
+    // veto events with "bad" muons
+    if( !m_nttools.passBadMuon(preMuons) )           return false;
+        n_pass_badMuon++;
+    // veto events with cosmic muons
+    if( !m_nttools.passCosmicMuon(baseMuons) )       return false;
+        n_pass_cosmic++;
+    // veto events with "bad" jets
+    if( !m_nttools.passJetCleaning(baseJets) )       return false;
+        n_pass_badJet++;
+
+    return true;
+}
+/*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& taus, 
                                   const JetVector& jets, const Met* met)
 {
-  int flag = cleaningCutFlags();
 
-  // Cleaning cuts
-  if( !SusyKin::passGRL(flag) ) return false;
-  n_pass_grl++;
-  if( !SusyKin::passLArErr(flag) ) return false;
-  n_pass_lar++;
-  if( !SusyKin::passTileErr(flag) ) return false;
-  n_pass_tile++;
-  if( !SusyKin::passTTCVeto(flag) ) return false;
-  n_pass_ttc++;
-  if( !SusyKin::passBadMuon(flag) ) return false;
-  n_pass_badMuon++;
-  if( !SusyKin::passJetCleaning(flag) ) return false;
-  n_pass_badJet++;
-  if( !SusyKin::passGoodVtx(flag) ) return false;
-  n_pass_goodVtx++;
-  if( !SusyKin::passCosmicVeto(flag) ) return false;
-  n_pass_cosmic++;
   if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
   if(!passNTauCut(taus)) return false;
@@ -378,10 +400,10 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << "pass LArErr :  " << n_pass_lar      << endl;
   cout << "pass TileErr:  " << n_pass_tile     << endl;
   cout << "pass TTCVeto:  " << n_pass_ttc      << endl;
-  cout << "pass BadMuon:  " << n_pass_badMuon  << endl;
-  cout << "pass BadJet :  " << n_pass_badJet   << endl;
   cout << "pass PrimVtx:  " << n_pass_goodVtx  << endl;
+  cout << "pass BadMuon:  " << n_pass_badMuon  << endl;
   cout << "pass cosmic :  " << n_pass_cosmic   << endl;
+  cout << "pass BadJet :  " << n_pass_badJet   << endl;
   cout << "pass nLep   :  " << n_pass_nLep     << endl;
   cout << "pass trig   :  " << n_pass_trig     << endl;
   cout << "pass sfos   :  " << n_pass_sfos     << endl;
