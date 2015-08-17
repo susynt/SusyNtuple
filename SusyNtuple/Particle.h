@@ -23,7 +23,12 @@ public:
     float phi;
     float m;
     void resetTLV(){ this->SetPtEtaPhiM(pt,eta,phi,m); };
-    float DeltaRy(const Particle& p1) const;
+
+    /**
+        Method to return the Rapidity-based DeltaR between
+        this Particle and a second Particle p1
+    */
+    double DeltaRy(const Particle& p1) const;
 
     /// Systematic-shifted state for particles.
     /** Base class method simply resets */
