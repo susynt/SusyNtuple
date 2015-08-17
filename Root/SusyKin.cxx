@@ -16,19 +16,6 @@ namespace SusyKin {
 /* ------------------------------------------------------------------------------- */
 
 //////////////////////////////////////////////////////////////////
-// Event-level cleaning cut methods
-//////////////////////////////////////////////////////////////////
-bool passGRL(int flags)         { return (flags & ECut_GRL);     }
-bool passLArErr(int flags)      { return (flags & ECut_LarErr);  }
-bool passTileErr(int flags)     { return (flags & ECut_TileErr); }
-bool passTTCVeto(int flags)     { return (flags & ECut_TTC);     }
-bool passBadMuon(int flags)     { return (flags & ECut_BadMuon); }
-bool passJetCleaning(int flags) { return (flags & ECut_BadJet);  }
-bool passGoodVtx(int flags)     { return (flags & ECut_GoodVtx); }
-bool passCosmicVeto(int flags)  { return (flags & ECut_Cosmic);  }
-
-
-//////////////////////////////////////////////////////////////////
 // SUSY-ness
 //////////////////////////////////////////////////////////////////
 bool eventHasSusyPropagators(const std::vector<int>& pdgs,
