@@ -144,6 +144,17 @@ JetSelector& JetSelector::setSystematic(const NtSys::SusyNtSys &s)
     return *this;
 }
 //----------------------------------------------------------
+bool JetSelector::isBaselineJet(const Jet* jet)
+{
+    if(m_2lep || m_2lepWH || m_3lep) {
+        return (jet->Pt() > JET_MIN_PT_BASELINE);
+    } else {
+        bool passEta = (jet->Eta() < JET_MAX_ETA);
+        bool passPt  = (jet->Pt() > JET_MIN_PT_BASELINE);
+        return (passEta && passPt);
+    }
+}
+//----------------------------------------------------------
 bool JetSelector::isSignalJet(const Jet* jet)
 {
     JetSelector::check();

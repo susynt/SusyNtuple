@@ -411,8 +411,9 @@ JetVector SusyNtTools::getBaselineJets(const JetVector& preJets)
     JetVector baseJets;
     for (uint ij = 0; ij < preJets.size(); ++ij) {
         Jet* j = preJets.at(ij);
-        if(j->Pt() < m_jetSelector.JET_MIN_PT_BASELINE) continue;
-        baseJets.push_back(j);
+        if(m_jetSelector.isBaselineJet(j)) {
+            baseJets.push_back(j);
+        }
     } // ij
     // sort by pT 
     std::sort(baseJets.begin(), baseJets.end(), comparePt);
