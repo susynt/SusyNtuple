@@ -6,8 +6,6 @@
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
 
-#include "JVFUncertaintyTool/JVFUncertaintyTool.h"
-
 namespace Susy {
 ///  A class to select jets
 /**
@@ -36,15 +34,6 @@ class Jet;
                This is where all the thresholds are set.
              */
             JetSelector& setAnalysis(const AnalysisType&);
-            /// if you don't want to use the default tool
-            /**
-               Used for example when you are dealing with non-standard jet
-               collections, see JVFUncertaintyTool default constructor.
-             */
-        //    JetSelector& setJvfTool(const JVFUncertaintyTool &t);
-        //    static float defaultMinPt() { return JET_PT_CUT; }
-        //    static float defaultCentralEtaMax() { return 0.0; }; ///< \todo
-        //    static float defaultBtagMinValue() { return 0.0; }; ///< \todo
         /*
           \todo: these will be used internally when refactoring
         
@@ -85,8 +74,6 @@ class Jet;
         
         //    float m_min_pt; ///< do not consider jets with pt below this value
         //    float m_max_eta; ///< do not consider jets with eta above this value
-        //    float m_min_jvf; ///< below this jvf value a jet is not JVF-confirmed
-        //    float m_max_jvf_eta; ///< above this eta we cannot apply the JVF requirement
 
             float overlapRemovalBtagEffWP() { return JET_MV2C20_OR; }
 
@@ -117,7 +104,6 @@ class Jet;
             float JET_MV2C20_OR;        ///< fixed cut b-tag efficiency WP used in b-jet OR procedure
     
         private:
-            JVFUncertaintyTool m_jvftool; ///< jvf tool (note weird design --> weird const-ness)
             NtSys::SusyNtSys m_systematic; ///< current syst variation
             AnalysisType m_analysis; ///< analysis
     

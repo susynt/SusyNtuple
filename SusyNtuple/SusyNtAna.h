@@ -5,10 +5,6 @@
 #include "TTree.h"
 #include "TStopwatch.h"
 
-#include "ReweightUtils/APWeightEntry.h"
-#include "ReweightUtils/APReweightND.h"
-#include "ReweightUtils/APEvtWeight.h"
-
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/MCWeighter.h"

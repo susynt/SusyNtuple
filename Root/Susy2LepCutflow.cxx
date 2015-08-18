@@ -79,9 +79,6 @@ void Susy2LepCutflow::Begin(TTree* /*tree*/)
 {
   SusyNtAna::Begin(0);
   if(m_dbg) cout << "Susy2LepCutflow::Begin" << endl;
-  //string period = "Moriond";
-  //bool useReweightUtils = false;
-  //m_trigObj = new DilTrigLogic(period, useReweightUtils);
 
   // initialize the general trigger tool (SusyNtuple/TriggerTools)
   m_ntTrig = new TriggerTools(m_input_chain, true);
