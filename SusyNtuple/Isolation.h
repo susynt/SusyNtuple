@@ -5,7 +5,7 @@
 
 namespace Susy
 {
-enum Isolation{
+enum class Isolation{
     GradientLoose=0
     ,Gradient
     ,LooseTrackOnly

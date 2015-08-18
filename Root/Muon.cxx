@@ -37,6 +37,7 @@ Muon::Muon(const Muon &rhs):
   id_dn(rhs.id_dn),
   scale_up(rhs.scale_up),
   scale_dn(rhs.scale_dn),
+  muoEffSF(rhs.muoEffSF),
   errEffSF_stat_up(rhs.errEffSF_stat_up),
   errEffSF_stat_dn(rhs.errEffSF_stat_dn),
   errEffSF_syst_up(rhs.errEffSF_syst_up),
@@ -75,6 +76,7 @@ Muon& Muon::operator=(const Muon &rhs)
     id_dn = rhs.id_dn;
     scale_up = rhs.scale_up;
     scale_dn = rhs.scale_dn;
+    muoEffSF = rhs.muoEffSF;
     errEffSF_stat_up = rhs.errEffSF_stat_up;
     errEffSF_stat_dn = rhs.errEffSF_stat_dn;
     errEffSF_syst_up = rhs.errEffSF_syst_up;

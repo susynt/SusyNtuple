@@ -2,9 +2,13 @@
 #ifndef SUSYNTUPLE_ELECTRON_H
 #define SUSYNTUPLE_ELECTRON_H
 
-#include "SusyNtuple/Lepton.h"
+// std
+#include <vector>
 
+// SusyNtuple
+#include "SusyNtuple/Lepton.h"
 #include "SusyNtuple/SusyNtSys.h"
+#include "SusyNtuple/ElectronId.h"
 
 namespace Susy
 {
@@ -35,6 +39,9 @@ public:
     bool looseLH_nod0;       ///< looseLH
     bool mediumLH_nod0;      ///< mediumLH
     bool tightLH_nod0;       ///< tightLH
+
+    // efficiency SF per electron LH WP
+    std::vector<float> eleEffSF;
 
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
 
@@ -100,10 +107,10 @@ public:
   //  float eff_corr_up;
   //  float eff_uncorr_dn;
   //  float eff_uncorr_up;
-    float errEffSF_id_corr_up;
-    float errEffSF_id_corr_dn;
-    float errEffSF_reco_corr_up;
-    float errEffSF_reco_corr_dn;
+    std::vector<float> errEffSF_id_corr_up;
+    std::vector<float> errEffSF_id_corr_dn;
+    std::vector<float> errEffSF_reco_corr_up;
+    std::vector<float> errEffSF_reco_corr_dn;
 /*
     float scale_mom_dn;
     float scale_mom_up;
@@ -152,13 +159,16 @@ public:
 */
      // eff_corr_dn = eff_corr_up =0;
      // eff_uncorr_dn = eff_uncorr_up =0;
-     errEffSF_id_corr_up = errEffSF_id_corr_dn = 0.;
-     errEffSF_reco_corr_up = errEffSF_reco_corr_dn = 0.;
+     eleEffSF.assign(ElectronId::ElectronIdInvalid, 1);
+     errEffSF_id_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_id_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_reco_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_reco_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
 
       Lepton::clear();
     }
 
-    ClassDef(Electron, 13);
+    ClassDef(Electron, 14);
 };
 } //Susy
 #endif

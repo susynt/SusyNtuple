@@ -4,6 +4,9 @@
 
 #include "SusyNtuple/Lepton.h"
 #include "SusyNtuple/SusyNtSys.h"
+#include "SusyNtuple/MuonId.h"
+
+#include <vector>
 
 namespace Susy
 {
@@ -39,6 +42,9 @@ public:
     bool medium;              ///< Medium
     bool tight;               ///< Tight
 
+    // efficiency SF per muon quality WP
+    std::vector<float> muoEffSF;
+
     bool isBadMuon;           ///< Bad muon flag from SUSYTools
     bool isCosmic;            ///< Cosmic muon flag from SUSYTools
 
@@ -51,10 +57,10 @@ public:
     float scale_dn;           ///< SCALE Pt - sigma
 
     // SF uncertainties
-    float errEffSF_stat_up;   ///< Uncertainty on the efficiency SF
-    float errEffSF_stat_dn;   ///< Uncertainty on the efficiecny SF  
-    float errEffSF_syst_up;   ///< Uncertainty on the efficiecny SF
-    float errEffSF_syst_dn;   ///< Uncertainty on the efficiecny SF
+    std::vector<float> errEffSF_stat_up;
+    std::vector<float> errEffSF_stat_dn;
+    std::vector<float> errEffSF_syst_up;
+    std::vector<float> errEffSF_syst_dn;
 
     // Polymorphism, baby!!
     bool isEle() const { return false; }
@@ -72,14 +78,21 @@ public:
       idTrackQ  = msTrackQ = 0;
       idTrackTheta = idTrackQoverP = 0;
       msTrackTheta = msTrackQoverP = 0;
+      veryLoose = loose = medium = tight = false;
+
+      muoEffSF.assign(MuonId::MuonIdInvalid, 1);
+      errEffSF_stat_up.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_stat_dn.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_syst_up.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_syst_dn.assign(MuonId::MuonIdInvalid, 0);
+
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
-      errEffSF_stat_up = errEffSF_stat_dn = errEffSF_syst_up = errEffSF_syst_dn = 0.;
 
       Lepton::clear();
     }
 
-    ClassDef(Muon, 13);
+    ClassDef(Muon, 14);
 };
 } // Susy
 #endif

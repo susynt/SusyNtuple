@@ -6,7 +6,7 @@
 
 namespace Susy
 {
-enum class MuonId{
+enum MuonId{
     VeryLoose=0
     ,Loose
     ,Medium

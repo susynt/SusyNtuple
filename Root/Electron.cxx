@@ -23,6 +23,7 @@ Electron::Electron(const Electron &rhs):
   looseLH_nod0(rhs.looseLH_nod0),
   mediumLH_nod0(rhs.mediumLH_nod0),
   tightLH_nod0(rhs.tightLH_nod0),
+  eleEffSF(rhs.eleEffSF),
   isChargeFlip(rhs.isChargeFlip),
 
   res_all_dn(rhs.res_all_dn),
@@ -113,6 +114,7 @@ Electron& Electron::operator=(const Electron &rhs)
     looseLH_nod0 = rhs.looseLH_nod0;
     mediumLH_nod0 = rhs.mediumLH_nod0;
     tightLH_nod0 = rhs.tightLH_nod0;
+    eleEffSF = rhs.eleEffSF;
     isChargeFlip = rhs.isChargeFlip;
    
     res_all_dn = rhs.res_all_dn;
