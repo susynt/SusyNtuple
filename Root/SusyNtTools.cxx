@@ -13,7 +13,7 @@
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/JetSelector.h"
 #include "SusyNtuple/OverlapTools.h"
-#include "SusyNtuple/SusyKin.h"
+#include "SusyNtuple/KinematicTools.h"
 
 #include <cassert>
 
@@ -182,8 +182,8 @@ void SusyNtTools::buildLeptons(LeptonVector& leptons, const ElectronVector& elec
 //
 //    // Remove MSFOS < 12 GeV
 //    if(m_doSFOS) {
-//        SusyKin::removeSFOSPair(elecs, MLL_MIN);
-//        SusyKin::removeSFOSPair(muons, MLL_MIN);
+//        kin::removeSFOSPair(elecs, MLL_MIN);
+//        kin::removeSFOSPair(muons, MLL_MIN);
 //    }
 //}
 ///*--------------------------------------------------------------------------------*/
@@ -210,8 +210,8 @@ void SusyNtTools::buildLeptons(LeptonVector& leptons, const ElectronVector& elec
 //
 //    // Do SFOS removal for Mll < 12 
 //    if(m_doSFOS) {
-//        SusyKin::removeSFOSPair(elecs, MLL_MIN);
-//        SusyKin::removeSFOSPair(muons, MLL_MIN);
+//        kin::removeSFOSPair(elecs, MLL_MIN);
+//        kin::removeSFOSPair(muons, MLL_MIN);
 //        // TODO: revisit this??
 //        //removeSFOSPair(taus, MLL_MIN);
 //    }
@@ -219,8 +219,8 @@ void SusyNtTools::buildLeptons(LeptonVector& leptons, const ElectronVector& elec
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::removeSFOSPairs(ElectronVector& electrons, MuonVector& muons)
 {
-    SusyKin::removeSFOSPair(electrons, MLL_MIN);
-    SusyKin::removeSFOSPair(muons, MLL_MIN);
+    kin::removeSFOSPair(electrons, MLL_MIN);
+    kin::removeSFOSPair(muons, MLL_MIN);
 }
 ///*--------------------------------------------------------------------------------*/
 //void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,

@@ -3,7 +3,7 @@
 #include "TCanvas.h"
 #include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
-#include "SusyNtuple/SusyKin.h"
+#include "SusyNtuple/KinematicTools.h"
 #include "SusyNtuple/TauId.h"
 
 using namespace std;
@@ -317,7 +317,7 @@ bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passSFOSCut(const LeptonVector& leptons)
 {
-  bool sfos = SusyKin::hasSFOS(leptons);
+  bool sfos = kin::hasSFOS(leptons);
   if(m_vetoSFOS   &&  sfos) return false;
   if(m_selectSFOS && !sfos) return false;
   return true;
@@ -332,7 +332,7 @@ bool Susy3LepCutflow::passMetCut(const Met* met)
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passZCut(const LeptonVector& leptons)
 {
-  bool hasz = SusyKin::hasZ(leptons);
+  bool hasz = kin::hasZ(leptons);
   if( m_vetoZ   &&  hasz ) return false;
   if( m_selectZ && !hasz ) return false;
   return true;
@@ -352,10 +352,10 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
   if(m_mtMin > 0)
   {
     uint zl1, zl2;
-    if(SusyKin::findBestZ(zl1, zl2, leptons)){
+    if(kin::findBestZ(zl1, zl2, leptons)){
       for(uint iL=0; iL<leptons.size(); iL++) {
         if(iL!=zl1 && iL!=zl2) {
-          if( SusyKin::Mt(leptons[iL],met) < m_mtMin ) return false;
+          if( kin::Mt(leptons[iL],met) < m_mtMin ) return false;
         }
       }
     }
