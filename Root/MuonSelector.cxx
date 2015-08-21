@@ -116,6 +116,24 @@ void MuonSelector::buildRequirements(const AnalysisType& a)
 
         break;
     }
+    case(AnalysisType::Ana_SS3L) : {
+        // TODO DG-2015-08-21 check that baseline is xAOD::Muon::Medium
+        m_sigIso = Isolation::GradientLoose;
+
+        m_removeLepsFromIso = false;
+        m_doIPCut = true;
+        m_doPtconeCut = true;
+        m_doElEtConeCut = true;
+        m_doMuEtconeCut = false;
+
+        // muons
+        MU_MIN_PT                       = 10.0;
+        MU_MAX_ETA                      = 2.5;
+        MU_MAX_D0SIG_CUT                = 3.0;
+        MU_MAX_Z0_SINTHETA              = 0.5;
+
+        break;
+    }
     //////////////////////////////////////
     // Gone fishin'
     //////////////////////////////////////
@@ -227,8 +245,10 @@ bool MuonSelector::muPassIsolation(const Muon* mu)
     else if(m_sigIso == Isolation::Loose) return mu->isoLoose;
     else if(m_sigIso == Isolation::Tight) return mu->isoTight;
     else {
-        cout << "MuonSelector::muPassIsolation error: isolation requirement for muons not set to signal-level isolation (Loose or Tight)" << endl;
-        cout << "MuonSelector::muPassIsolation error: >>> Exiting." << endl;
+        cout<<"MuonSelector::muPassIsolation error: isolation requirement for muons"
+            <<" not set to signal-level isolation (Loose or Tight)"<<endl
+            <<" Current 'm_sigIso': '"<<Isolation2str(m_sigIso)<<"'"<<endl
+            <<" MuonSelector::muPassIsolation error: >>> Exiting."<<endl;
         exit(1);
     }
 }
