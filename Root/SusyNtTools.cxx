@@ -506,7 +506,6 @@ float SusyNtTools::leptonEffSF(const LeptonVector& leps)
 {
     float sf = 1.0;
     for(uint i=0; i< leps.size(); i++){
-        std::cout << "lep[" << i << "] sf = " << SusyNtTools::leptonEffSF(leps[i]) << std::endl;
         sf *= SusyNtTools::leptonEffSF(leps[i]);
     } // i
     return sf;
