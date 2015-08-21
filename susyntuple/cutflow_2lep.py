@@ -7,22 +7,26 @@
 
 import glob
 import os
+import sys
 import utils
 r = utils.import_root()
 from cutflow import SkipEvent, Cutflow
 
 def main():
+    if len(sys.argv)<2:
+        print "Usage: %s input_dir [samplename]" % sys.argv[0]
+        return
+
     utils.load_packages()
     utils.generate_dicts()
     utils.import_SUSYDefs_enums()
 
-    sample_name = 'mc14_13TeV.110401.PowhegPythia_P2012_ttbar_nonallhad'
-    # input_dir = '/var/tmp/susynt_dev/data/ntup_susy/'
-    # #input_dir = '/var/tmp/susynt_dev/data/ntup_common/'
-    # input_files = glob.glob(os.path.join(input_dir, '*.root*'))
-    input_files = ['./susyNt.root']
+    verbose = True
+    input_dir   = sys.argv[1] if len(sys.argv)>1 else './'
+    sample_name = sys.argv[2] if len(sys.argv)>2 else 'mc14_13TeV.110401.PowhegPythia_P2012_ttbar_nonallhad'
+
     chain = r.TChain('susyNt')
-    for f in input_files : chain.Add(f)
+    r.ChainHelper.addInput(chain, input_dir, verbose)
     num_entries = chain.GetEntries()
     num_entries_to_process = num_entries if num_entries<1e4 else int(1e4)
     print "About to loop on %d entries"%num_entries_to_process
@@ -30,12 +34,13 @@ def main():
 
 def run_with_chain(tree, n_max_entries=-1):
     nttool = r.SusyNtTools()
+    nttool.setAnaType(utils.AnalysisType.Ana_2Lep)
     m_entry = r.Long(-1)
     ntevent = r.Susy.SusyNtObject(m_entry)
     ntevent.ReadFrom(tree)
     isSimplifiedModel = False
     period, useRewUtils = 'Moriond', False
-    trig_logic = r.DilTrigLogic(period, useRewUtils)
+    # trig_logic = r.DilTrigLogic(period, useRewUtils)
     n_entries_to_print = 4
     sys = utils.SusyNtSys.NOM
     tauId = utils.TauID
@@ -44,14 +49,14 @@ def run_with_chain(tree, n_max_entries=-1):
     for iEntry, entry in enumerate(tree):
         m_entry = iEntry
         if n_max_entries>0 and m_entry >= n_max_entries : break
-        if iEntry < n_entries_to_print : print 'run ', ntevent.evt().run,' event ',ntevent.evt().event
+        if iEntry < n_entries_to_print : print 'run ', ntevent.evt().run,' event ',ntevent.evt().eventNumber
         pre_elecs  = nttool.getPreElectrons(ntevent, sys)
         pre_muons  = nttool.getPreMuons(ntevent, sys)
         pre_taus   = nttool.getPreTaus(ntevent, sys)
         pre_jets   = nttool.getPreJets(ntevent, sys)
-        nttool.performOverlap(pre_elecs, pre_muons, pre_taus, pre_jets)
-        nttool.removeSFOSPair(pre_elecs, 12.0)
-        nttool.removeSFOSPair(pre_muons, 12.0)
+        # nttool.performOverlap(pre_elecs, pre_muons, pre_taus, pre_jets)
+        # nttool.removeSFOSPair(pre_elecs, 12.0)
+        # nttool.removeSFOSPair(pre_muons, 12.0)
         rmLepsFromIso = False
         n_vertices = ntevent.evt().nVtx
         is_mc = ntevent.evt().isMC
@@ -59,7 +64,7 @@ def run_with_chain(tree, n_max_entries=-1):
         sig_muons = nttool.getSignalMuons(pre_muons, pre_elecs, n_vertices, is_mc, rmLepsFromIso)
         sig_taus = nttool.getSignalTaus(pre_taus, tauJetId, tauEleId, tauMuoId)
         sig_jets = nttool.getSignalJets(pre_jets, sys)
-        sig_jets2l = nttool.getSignalJets2Lep(pre_jets, sys)
+        # sig_jets2l = nttool.getSignalJets2Lep(pre_jets, sys)
         met = nttool.getMet(ntevent, sys)
         pre_lep, sig_lep = r.LeptonVector(), r.LeptonVector()
         nttool.buildLeptons(pre_lep, pre_elecs, pre_muons)
@@ -79,7 +84,7 @@ def run_with_chain(tree, n_max_entries=-1):
             cutflow.cut_if(not nttool.passBadMuon(event_flag), 'bad_mu')
             cutflow.cut_if(not nttool.passCosmic(event_flag), 'cosmic')
             cutflow.cut_if(not pre_lep.size()==2, '2lep')
-            cutflow.cut_if(not trig_logic.passDilTrig(pre_lep, met.Et, ntevent.evt()), 'trigger')
+            # cutflow.cut_if(not trig_logic.passDilTrig(pre_lep, met.Et, ntevent.evt()), 'trigger')
             cutflow.cut_if(not mll(pre_lep)>20.0, 'mll20')
         except SkipEvent:
             continue
