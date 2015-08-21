@@ -315,6 +315,33 @@ bool ElectronSelector::elecPassIsolation(const Electron* ele)
     } 
 }
 /* --------------------------------------------------------------------------------------------- */
+float ElectronSelector::effSF(const Electron& ele)
+{
+    ElectronSelector::check();
+    // return the EffSF for the corresponding (signal) EL ID WP
+    return ele.eleEffSF[m_eleId]; 
+}
+/* --------------------------------------------------------------------------------------------- */
+float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
+{
+    ElectronSelector::check();
+    // return the error on the electron SF associated with systematic sys
+    float err = 0.0;
+    if(sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_UP) {
+        err = ele.errEffSF_id_corr_up[m_eleId];
+    }
+    else if(sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_DN) {
+        err = ele.errEffSF_id_corr_dn[m_eleId];
+    }
+    else if(sys == NtSys::EL_EFF_Reco_TotalCorrUncertainty_UP) {
+        err = ele.errEffSF_reco_corr_up[m_eleId];
+    } 
+    else if(sys == NtSys::EL_EFF_Reco_TotalCorrUncertainty_DN) {
+        err = ele.errEffSF_reco_corr_dn[m_eleId];
+    }
+    return err;
+}
+/* --------------------------------------------------------------------------------------------- */
 void ElectronSelector::check()
 {
     if(m_analysis == AnalysisType::kUnknown) {

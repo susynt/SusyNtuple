@@ -57,6 +57,17 @@ namespace Susy {
             set by IsolationSelectionTool. 
         */
         bool elecPassIsolation(const Electron* ele);
+        /**
+            Get the input electron "ele"'s nominal efficicncy SF
+        */
+        float effSF(const Electron* ele) { return effSF(*ele); }
+        float effSF(const Electron& ele);
+        /**
+            Get the error on the input electron "ele"'s efficiency for
+            the requested systematic
+        */
+        float errEffSF(const Electron* ele, const NtSys::SusyNtSys sys) { return errEffSF(*ele, sys); }
+        float errEffSF(const Electron& ele, const NtSys::SusyNtSys sys);
 
         void check();
         

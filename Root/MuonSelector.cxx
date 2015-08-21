@@ -278,6 +278,33 @@ bool MuonSelector::muPassIsolation(const Muon* mu)
     }
 }
 // -------------------------------------------------------------------------------------------- //
+float MuonSelector::effSF(const Muon& mu)
+{
+    MuonSelector::check();
+    // return the EffSF for the corresponding (signal) muon quality
+    return mu.muoEffSF[m_muId];
+}
+// -------------------------------------------------------------------------------------------- //
+float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
+{
+    MuonSelector::check();
+    // return the error on the muon SF associated with systematc sys
+    float err = 0.0;
+    if(sys == NtSys::MUONSFSTAT_UP) {
+        err = mu.errEffSF_stat_up[m_muId];
+    }
+    else if(sys == NtSys::MUONSFSTAT_DN) {
+        err = mu.errEffSF_stat_dn[m_muId];
+    }
+    else if(sys == NtSys::MUONSFSYS_UP) {
+        err = mu.errEffSF_syst_up[m_muId];
+    }
+    else if(sys == NtSys::MUONSFSYS_DN) {
+        err = mu.errEffSF_syst_dn[m_muId];
+    }
+    return err;
+}
+// -------------------------------------------------------------------------------------------- //
 void MuonSelector::check()
 {
     if(m_analysis == AnalysisType::kUnknown) {

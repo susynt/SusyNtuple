@@ -155,150 +155,12 @@ void SusyNtTools::buildLeptons(LeptonVector& leptons, const ElectronVector& elec
     std::sort(leptons.begin(), leptons.end(), comparePt);
 }
 
-
-
-///*--------------------------------------------------------------------------------*/
-//void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt,
-//                                     ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
-//                                     ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets,
-//                                     SusyNtSys sys, bool selectTaus)
-//{
-//    // Preselection
-//    preElecs = getPreElectrons(susyNt, sys);
-//    preMuons = getPreMuons(susyNt, sys);
-//    preJets  = getPreJets(susyNt, sys);
-//    if (selectTaus) taus = getPreTaus(susyNt, sys);
-//    else taus.clear();
-//
-//    // Baseline objects
-//    elecs = getBaselineElectrons(preElecs);
-//    muons = getBaselineMuons(preMuons);
-//    jets  = getBaselineJets(preJets);
-//
-//    // Overlap removal
-//    if(!m_overlapTool.useSignalLeptons()){
-//        m_overlapTool.performOverlap(elecs, muons, taus, jets);
-//    }
-//
-//    // Remove MSFOS < 12 GeV
-//    if(m_doSFOS) {
-//        kin::removeSFOSPair(elecs, MLL_MIN);
-//        kin::removeSFOSPair(muons, MLL_MIN);
-//    }
-//}
-///*--------------------------------------------------------------------------------*/
-//void SusyNtTools::getBaselineObjects(SusyNtObject* susyNt, ElectronVector& elecs,
-//                                     MuonVector& muons, TauVector& taus, JetVector& jets,
-//                                     SusyNtSys sys, bool selectTaus)
-//{
-//    // Get all objects
-//    elecs = getPreElectrons(susyNt, sys);
-//    muons = getPreMuons(susyNt, sys);
-//    jets  = getPreJets(susyNt, sys);
-//    if (selectTaus) taus = getPreTaus(susyNt, sys);
-//    else taus.clear();
-//
-//    // Baseline objects
-//    elecs = getBaselineElectrons(elecs);
-//    muons = getBaselineMuons(muons);
-//    jets  = getBaselineJets(jets);
-//
-//    // Now perform the overlap removals
-//    if(!m_overlapTool.useSignalLeptons()){
-//        m_overlapTool.performOverlap(elecs, muons, taus, jets);
-//    }
-//
-//    // Do SFOS removal for Mll < 12 
-//    if(m_doSFOS) {
-//        kin::removeSFOSPair(elecs, MLL_MIN);
-//        kin::removeSFOSPair(muons, MLL_MIN);
-//        // TODO: revisit this??
-//        //removeSFOSPair(taus, MLL_MIN);
-//    }
-//}
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::removeSFOSPairs(ElectronVector& electrons, MuonVector& muons)
 {
     kin::removeSFOSPair(electrons, MLL_MIN);
     kin::removeSFOSPair(muons, MLL_MIN);
 }
-///*--------------------------------------------------------------------------------*/
-//void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
-//                                   const TauVector& baseTaus, const JetVector& baseJets,
-//                                   ElectronVector& sigElecs, MuonVector& sigMuons,
-//                                   TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
-//                                   uint nVtx, bool isMC,
-//                                   TauId tauJetID, TauId tauEleID, TauId tauMuoID,
-//                                   SusyNtSys sys)
-//{
-//    // Set signal objects
-//    sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC);
-//    sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC);
-//    sigTaus  = getSignalTaus(baseTaus, tauJetID, tauEleID, tauMuoID);
-//    sigJets  = getSignalJets(baseJets, sys);
-//
-//    if(m_overlapTool.useSignalLeptons()){
-//        m_overlapTool.performOverlap(sigElecs, sigMuons, sigTaus, sigJets);
-//    }
-//
-//
-//}
-///*--------------------------------------------------------------------------------*/
-//// New signal tau prescription, fill both ID levels at once!
-//void SusyNtTools::getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
-//                                   const TauVector& baseTaus, const JetVector& baseJets,
-//                                   ElectronVector& sigElecs, MuonVector& sigMuons,
-//                                   TauVector& mediumTaus, TauVector& tightTaus,
-//                                   JetVector& sigJets, JetVector& sigJets2Lep,
-//                                   uint nVtx, bool isMC,
-//                                   SusyNtSys sys)
-//{
-//    // Set signal objects
-//    sigElecs = getSignalElectrons(baseElecs, baseMuons, nVtx, isMC);
-//    sigMuons = getSignalMuons(baseMuons, baseElecs, nVtx, isMC);
-//    sigJets  = getSignalJets(baseJets, sys);
-//
-//    getSignalTaus(baseTaus, mediumTaus, tightTaus);
-//
-//
-//    if(m_overlapTool.useSignalLeptons()){
-//        if(m_tauSelector.signalTauId() == TauId::Tight) {
-//            m_overlapTool.performOverlap(sigElecs, sigMuons, tightTaus, sigJets);
-//        }
-//        else {
-//            m_overlapTool.performOverlap(sigElecs, sigMuons, mediumTaus, sigJets);
-//        }
-//    }
-//
-//
-//}
-/*--------------------------------------------------------------------------------*/
-// This method cannot be used anymore. 
-// Analyzers must store the baseline objects for cleaning cuts!
-/*--------------------------------------------------------------------------------*/
-/*void SusyNtTools::getSignalObjects(SusyNtObject* susyNt, ElectronVector& sigElecs,
-                   MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets,
-                   JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC,
-                   bool selectTaus, TauId tauID)
-                   {
-                   // Temporary vectors for baseline objects
-                   ElectronVector elecs = getPreElectrons(susyNt, sys);
-                   MuonVector     muons = getPreMuons(susyNt, sys);
-                   JetVector      jets  = getPreJets(susyNt, sys);
-
-                   TauVector      taus;
-                   if(selectTaus) taus = getPreTaus(susyNt, sys);
-
-                   // Perform overlap removal
-                   performOverlap(elecs, muons, taus, jets);
-
-                   // Now set the signal objects
-                   sigElecs = getSignalElectrons(elecs, muons, nVtx, isMC);
-                   sigMuons = getSignalMuons(muons, elecs, nVtx, isMC);
-                   sigTaus  = getSignalTaus(taus, tauID);
-                   sigJets  = getSignalJets(jets);
-                   sigJets2Lep = getSignalJets2Lep(jets);
-                   }*/
 
 /*--------------------------------------------------------------------------------*/
 // Methods to grab the Baseline objects
@@ -464,47 +326,10 @@ TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauId tauJetID, 
         }
     } // iTau
 
-        /////////////
-        // old:
- //       if (isSignalTau(tau, tauJetID, tauEleID, tauMuoID)) {
- //           sigTaus.push_back(tau);
- //       }
- //   }
-
     // sort by pT 
     std::sort(sigTaus.begin(), sigTaus.end(), comparePt);
 
     return sigTaus;
-}
-/*--------------------------------------------------------------------------------*/
-// New signal tau prescription, fill both ID levels at once!
-void SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus)
-{
-    for (uint iTau = 0; iTau < baseTaus.size(); iTau++) {
-        Tau* tau = baseTaus[iTau];
-        // For now, tight taus are defined as all tight criteria
-        if(m_tauSelector.isSignalTau(tau, TauId::Tight, TauId::Tight, TauId::Tight)) {
-            tightTaus.push_back(tau);
-            mediumTaus.push_back(tau);
-        }
-        else if(m_tauSelector.isSignalTau(tau, TauId::Medium, TauId::Loose, TauId::Medium)) {
-            mediumTaus.push_back(tau);
-        }
-    } // iTau
-
-    // sort by pT
-    std::sort(tightTaus.begin(), tightTaus.end(), comparePt);
-    std::sort(mediumTaus.begin(), mediumTaus.end(), comparePt);
-
-  //      //////////
-  //      // old:
-  //      if (isSignalTau(tau, TauId::Tight, TauId::Tight, TauId::Tight)) {
-  //          tightTaus.push_back(tau);
-  //          mediumTaus.push_back(tau);
-  //      }
-  //      // For now, medium taus use loose ele BDT
-  //      else if (isSignalTau(tau, TauId::Medium, TauId::Loose, TauId::Medium)) mediumTaus.push_back(tau);
-  //  }
 }
 /*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
@@ -513,7 +338,6 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
         if(m_jetSelector.isSignalJet(j)) {
-        //if(JetSelector().setSystematic(sys).setAnalysis(m_anaType).isSignalJet(j)){
             sigJets.push_back(j);
         }
     }
@@ -584,22 +408,8 @@ TrackMet* SusyNtTools::getTrackMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool 
 }
 
 /*--------------------------------------------------------------------------------*/
-// Method for applying tau BDT selection only
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isTauBDT(const Tau* tau, TauId tauJetID, TauId tauEleID, TauId tauMuoID)
-{
-    return m_tauSelector.isTauBDT(tau, tauJetID, tauEleID, tauMuoID);
-}
-/*--------------------------------------------------------------------------------*/
 // Check if lepton is selected
 /*--------------------------------------------------------------------------------*/
-//bool SusyNtTools::isSelectTau(const Tau* tau, TauId tauJetID, TauId tauEleID, TauId tauMuoID)
-//{
-//    // At the moment, we only apply pt and BDT here.
-//    // TODO: Make the pt cut configurable
-//    if (tau->Pt() < TAU_PT_CUT) return false;
-//    return isTauBDT(tau, tauJetID, tauEleID, tauMuoID);
-//}
 
 /*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
@@ -672,10 +482,53 @@ JetVector SusyNtTools::getBJets(const JetVector& jets)
     }
     return bJets;
 }
+
 /*--------------------------------------------------------------------------------*/
-float SusyNtTools::bTagSF(const Event* evt, const JetVector& jets, int mcID, BTagSys sys)
+// Methods to grab object SF
+/*--------------------------------------------------------------------------------*/
+
+////////////////////////////
+// b-Tag efficiency SF
+////////////////////////////
+float SusyNtTools::bTagSF(const JetVector& jets)
 {
-    return 1.0;
-    if (!evt->isMC) return 1;
+    float sf = 1.0;
+    for(uint ij = 0; ij < jets.size(); ij++){
+        sf *= jets[ij]->effscalefact;
+    } // ij
+    return sf;
 }
 
+////////////////////////////
+// Lepton efficiency SF
+////////////////////////////
+float SusyNtTools::leptonEffSF(const LeptonVector& leps)
+{
+    float sf = 1.0;
+    for(uint i=0; i< leps.size(); i++){
+        std::cout << "lep[" << i << "] sf = " << SusyNtTools::leptonEffSF(leps[i]) << std::endl;
+        sf *= SusyNtTools::leptonEffSF(leps[i]);
+    } // i
+    return sf;
+}
+
+float SusyNtTools::leptonEffSF(const Lepton& lep)
+{
+    float sf = 1.0;
+    if(lep.isEle()){
+        sf = m_electronSelector.effSF((Electron&)lep);
+    } else {
+        sf = m_muonSelector.effSF((Muon&)lep);
+    }
+    return sf;
+}
+float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys)
+{
+    float errSF = 0.0;
+    if(lep.isEle()){
+        errSF = m_electronSelector.errEffSF((Electron&)lep, sys);
+    } else {
+        errSF = m_muonSelector.errEffSF((Muon&)lep, sys);
+    }
+    return errSF;
+}

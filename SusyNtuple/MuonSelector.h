@@ -52,6 +52,17 @@ namespace Susy {
             Input muon "mu" is required only to pass impact parameter cuts
         */
         bool isSemiSignalMuon(const Muon* mu);
+        /**
+            Get the input muon "mu"'s nominal efficiency SF
+        */
+        float effSF(const Muon* mu) { return effSF(*mu); }
+        float effSF(const Muon& mu);
+        /**
+            Get the error on the input muon "mu"'/s efficiency SF
+            for the requested systematic
+        */
+        float errEffSF(const Muon* mu, const NtSys::SusyNtSys sys) { return errEffSF(*mu, sys); }
+        float errEffSF(const Muon& mu, const NtSys::SusyNtSys sys);
 
         void check();
 

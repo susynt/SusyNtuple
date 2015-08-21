@@ -139,12 +139,12 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   float w = SusyNtAna::mcWeighter().getMCWeight(evt, LUMI_A_A3, wSys);
 
   // Lepton efficiency correction
-  float lepSF = getLeptonSF(m_signalLeptons);
+  float lepSF = nttools().leptonEffSF(m_signalLeptons);
   float tauSF = getTauSF(m_signalTaus);
 
   // Apply btag efficiency correction if selecting on b-jets
-  bool applyBTagSF = m_vetoB;
-  float btagSF = applyBTagSF? nttools().bTagSF(evt, m_signalJets, evt->mcChannel) : 1;
+  bool applyBTagSF = (m_vetoB && evt->isMC);
+  float btagSF = applyBTagSF ? nttools().bTagSF(m_signalJets) : 1;
 
   // Full event weight
   float fullWeight = w * lepSF * tauSF * btagSF;
@@ -206,16 +206,16 @@ bool Susy3LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons,
                         const MuonVector& baseMuons, const JetVector& baseJets)
 {
     // grl
-    if( !m_nttools.passGRL(flags) )                  return false;
+    if( !nttools().passGRL(flags) )                  return false;
         n_pass_grl++;
     // noisy lar
-    if( !m_nttools.passLarErr(flags) )               return false;
+    if( !nttools().passLarErr(flags) )               return false;
         n_pass_lar++;
-    if( !m_nttools.passTileErr(flags) )              return false;
+    if( !nttools().passTileErr(flags) )              return false;
         n_pass_tile++;
-    if( !m_nttools.passTTC(flags) )                  return false;
+    if( !nttools().passTTC(flags) )                  return false;
         n_pass_ttc++;
-    if( !m_nttools.passGoodVtx(flags) )              return false;
+    if( !nttools().passGoodVtx(flags) )              return false;
         n_pass_goodVtx++;
 
     //////////////////////////////////////////////////////
@@ -226,13 +226,13 @@ bool Susy3LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons,
     // stored as EventFlags when writing SusyNt
 
     // veto events with "bad" muons
-    if( !m_nttools.passBadMuon(preMuons) )           return false;
+    if( !nttools().passBadMuon(preMuons) )           return false;
         n_pass_badMuon++;
     // veto events with cosmic muons
-    if( !m_nttools.passCosmicMuon(baseMuons) )       return false;
+    if( !nttools().passCosmicMuon(baseMuons) )       return false;
         n_pass_cosmic++;
     // veto events with "bad" jets
-    if( !m_nttools.passJetCleaning(baseJets) )       return false;
+    if( !nttools().passJetCleaning(baseJets) )       return false;
         n_pass_badJet++;
 
     return true;
@@ -363,18 +363,6 @@ bool Susy3LepCutflow::passMtCut(const LeptonVector& leptons, const Met* met)
   return true;
 }
 
-/*--------------------------------------------------------------------------------*/
-// Lepton efficiency scale factor
-/*--------------------------------------------------------------------------------*/
-float Susy3LepCutflow::getLeptonSF(const LeptonVector& leptons)
-{
-  float sf = 1.;
-  for(uint i=0; i<leptons.size(); i++){
-    const Lepton* lep = leptons[i];
-    sf *= lep->effSF;
-  }
-  return sf;
-}
 /*--------------------------------------------------------------------------------*/
 // Tau efficiency scale factor
 /*--------------------------------------------------------------------------------*/

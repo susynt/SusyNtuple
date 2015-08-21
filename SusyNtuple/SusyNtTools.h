@@ -36,8 +36,11 @@ public:
     void setSFOSRemoval(AnalysisType A);
     bool doSFOSRemoval() { return m_doSFOS; }
     void removeSFOSPairs(ElectronVector& baseElectrons, MuonVector& baseMuons);
-
-    /// Set Analysis type to determine selection
+    
+    ///////////////////////////////////////////
+    // Set AnalysisType to determine
+    // selections
+    ///////////////////////////////////////////
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         ////////////////////////////
@@ -111,7 +114,8 @@ public:
     JetVector      getBaselineJets(const JetVector& preJets);
 
     /// Get 'Pre' Objects. These are the objects ase they are in the SusyNt.
-    /// The systematic variations are applied here.
+    /// The systematic variations are applied here and then propagated to baseline
+    /// and signal objects.
     void getPreObjects(Susy::SusyNtObject* susyNt, SusyNtSys sys,
                                                    ElectronVector& preElectrons,
                                                    MuonVector& preMuons,
@@ -126,18 +130,6 @@ public:
                             ElectronVector& signalElectrons, MuonVector& signalMuons, JetVector& signalJets, TauVector& signalTaus, TauId& sigTauId);
 
 
-
-    /// Get Baseline objects. Pre + overlap removal.
-    /** First method provides the pre-selected objects before OR and baseline objects after OR. */
-    void getBaselineObjects(Susy::SusyNtObject* susyNt,
-                            ElectronVector& preElecs, MuonVector& preMuons, JetVector& preJets,
-                            ElectronVector& elecs, MuonVector& muons, TauVector& taus, JetVector& jets,
-                            SusyNtSys sys, bool selectTaus = false);
-    /// Second method only provides the baseline objects after OR.
-    void getBaselineObjects(Susy::SusyNtObject* susyNt, ElectronVector& elecs,
-                            MuonVector& muons, TauVector& taus, JetVector& jets,
-                            SusyNtSys sys, bool selectTaus = false);
-
     /// Signal objects
     ElectronVector getSignalElectrons(const ElectronVector& baseElecs);
     MuonVector     getSignalMuons(const MuonVector& baseMuons);
@@ -145,41 +137,6 @@ public:
     TauVector      getSignalTaus(const TauVector& baseTaus, TauId tauJetID = TauId::Medium,
                                  TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
     JetVector      getSignalJets(const JetVector& baseJets);
-
-    /// Get the signal objects
-    void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
-                          const TauVector& baseTaus, const JetVector& baseJets,
-                          ElectronVector& sigElecs, MuonVector& sigMuons,
-                          TauVector& sigTaus, JetVector& sigJets, JetVector& sigJets2Lep,
-                          uint nVtx, bool isMC,
-                          TauId tauJetID = TauId::Medium, TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium,
-                          SusyNtSys sys = NtSys::NOM);
-    // This method cannot be used anymore because it doesn't provide the baseline objects after OR.
-    // Analyzers need these baseline objects for cleaning cuts.
-    //void getSignalObjects(Susy::SusyNtObject* susyNt, ElectronVector& sigElecs,
-    //                      MuonVector& sigMuons, TauVector& sigTaus, JetVector& sigJets,
-    //                      JetVector& sigJets2Lep, SusyNtSys sys, uint nVtx, bool isMC,
-    //                      bool selectTaus=false,
-    //                      TauId tauID=TauId::Medium);
-
-    /// New signal tau prescription, fill both ID levels at once
-    // These will replace the methods above
-    void getSignalTaus(const TauVector& baseTaus, TauVector& mediumTaus, TauVector& tightTaus);
-    void getSignalObjects(const ElectronVector& baseElecs, const MuonVector& baseMuons,
-                          const TauVector& baseTaus, const JetVector& baseJets,
-                          ElectronVector& sigElecs, MuonVector& sigMuons,
-                          TauVector& mediumTaus, TauVector& tightTaus,
-                          JetVector& sigJets, JetVector& sigJets2Lep,
-                          uint nVtx, bool isMC, SusyNtSys sys = NtSys::NOM);
-
-    /// Check if selected object
-    bool isTauBDT(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
-                  TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
-    // TODO: add new selection methods for light leptons and jets
-    //bool isSelectLepton()
-    //virtual bool isSelectTau(const Susy::Tau* tau, TauId id=TauId::Medium);
-    //virtual bool isSelectTau(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
-    //                         TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
 
     /// Check if signal object
     bool isSignalLepton(const Susy::Lepton* l);
@@ -194,8 +151,8 @@ public:
     void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
 
     /// Get the Met, for the appropriate systematic
-    Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
-    Susy::TrackMet* getTrackMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);//, bool useNomPhiForMetSys = true);
+    Susy::Met* getMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    Susy::TrackMet* getTrackMet(Susy::SusyNtObject* susyNt, SusyNtSys sys);
 
     //
     // Methods to get useful quantities for event, leptons, or jets
@@ -206,12 +163,28 @@ public:
     bool hasBJet(const JetVector& jets);
     JetVector getBJets(const JetVector& jets);
 
-//    static JetVector getBTagSFJets2Lep(const JetVector& baseJets);
-    float bTagSF(const Susy::Event*, const JetVector& jets, int mcID, BTagSys sys = BTag_NOM);
 
     int numberOfCLJets(const JetVector& jets);
     int numberOfCBJets(const JetVector& jets);
     int numberOfFJets(const JetVector& jets);
+
+    ///////////////////////////////////////////
+    // Methods to grab obect SF
+    ///////////////////////////////////////////
+
+    /// Method to get the nominal b-Tag efficiency scale-factor for the collection of jets
+    float bTagSF(const JetVector& jets);
+   
+    /// Method to get the nominal lepton efficiency scale-factor for the collection of leptons
+    float leptonEffSF(const LeptonVector& leps);
+ 
+    /// Method to get the nominal lepton scale-factor
+    float leptonEffSF(const Lepton* lep) { return leptonEffSF(*lep); }
+    float leptonEffSF(const Lepton& lep);
+
+    /// Method to get the error on the lepton scale-factor for systematic sys
+    float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
+    float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
 
     //
     // Object printing
@@ -244,8 +217,8 @@ public:
 
 protected:
 
-    AnalysisType m_anaType;             ///< Analysis type. currently 2-lep or 3-lep
-    bool m_doSFOS;                     ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
+    AnalysisType m_anaType;    ///< Analysis type. currently 2-lep or 3-lep
+    bool m_doSFOS;             ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
 
 };
 
