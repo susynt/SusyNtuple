@@ -37,10 +37,10 @@ public:
     bool doSFOSRemoval() { return m_doSFOS; }
     void removeSFOSPairs(ElectronVector& baseElectrons, MuonVector& baseMuons);
     
-    ///////////////////////////////////////////
-    // Set AnalysisType to determine
-    // selections
-    ///////////////////////////////////////////
+    /**
+        Set AnalysisType to determine object selections
+        and overlap procedure
+    */
     void setAnaType(AnalysisType A, bool verbose = false)
     {
         ////////////////////////////
