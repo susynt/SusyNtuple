@@ -320,16 +320,18 @@ std::vector<std::string> getTrigNames(string set)
 // Constructor                                 //
 // ------------------------------------------- //
 Trigger::Trigger(TChain* input_chain, bool dbg) :
+    m_dbg(dbg),
     m_trigHisto(NULL)
 {
-    cout << " ------------------ " << endl;
-    cout << "Initializing Trigger" << endl;
-    cout << " ------------------ " << endl;
+    if(m_dbg)
+        cout << " ------------------ " << endl
+             << "Initializing Trigger" << endl
+             << " ------------------ " << endl;
     m_trigHisto = static_cast<TH1F*>(input_chain->GetFile()->Get("trig"));
     m_triggerMap.clear();
     buildTriggerMap();
-    cout << " ------------------ " << endl;
-    m_dbg = dbg;
+    if(m_dbg)
+        cout << " ------------------ " << endl;
 }
 // ------------------------------------------- //
 // Build trigger-map 
