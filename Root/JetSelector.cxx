@@ -44,9 +44,11 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
     case AnalysisType::Ana_2Lep: /*\todo: set values*/ break;
     case AnalysisType::Ana_3Lep: /*\todo: set values*/ break;
     case AnalysisType::Ana_2LepWH: /*\todo: set values*/ break;
+    case AnalysisType::Ana_SS3L: /*\todo: set values*/ break;
     default:
         cout<<"JetSelector::setAnalysis error: invalid analysis"
-            <<" '"<<std::underlying_type<AnalysisType>::type(a)<<"'"<<endl
+            <<" '"<<std::underlying_type<AnalysisType>::type(a)<<"'"
+            <<" ("<<AnalysisType2str(a)<<")"
             <<"           will apply default jet selection"<<endl;
     }
     return *this;
