@@ -82,6 +82,15 @@ public:
     AnalysisType getAnaType() { return m_anaType; }
 
     //
+    // Methods to return the tools
+    //
+    ElectronSelector&   getElectronSelector()   { return m_electronSelector; }
+    MuonSelector&       getMuonSelector()       { return m_muonSelector; }
+    TauSelector&        getTauSelector()        { return m_tauSelector; }
+    JetSelector&        getJetSelector()        { return m_jetSelector; }
+    OverlapTools&       getOverlapTools()       { return m_overlapTool; }
+
+    //
     // Methods to perform event selection
     //
     bool passGRL(int flags);

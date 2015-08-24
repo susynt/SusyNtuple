@@ -18,6 +18,8 @@ namespace Susy {
 //   Constructor
 // ---------------------------------------------------------------------------- //
 JetSelector::JetSelector() :
+    // benchmark MV2c20 tagger cuts: https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c20_tagger_AntiKt4EMTopoJets
+
     ///////////////////////////////
     // default selection
     ///////////////////////////////
@@ -172,6 +174,31 @@ bool JetSelector::isSignalJet(const Jet* jet)
     } // if(jet)
 
     return pass;
+}
+//----------------------------------------------------------
+bool JetSelector::isBJet(const Jet* jet)
+{
+    ///////////////////////////////
+    // pT requirement
+    ///////////////////////////////
+    if(jet->Pt() < 20.0)    return false;
+
+    ///////////////////////////////
+    // eta requirement
+    ///////////////////////////////
+    if(fabs(jet->Eta()) > 2.5) return false;
+
+    ///////////////////////////////
+    // jvt requirement
+    ///////////////////////////////
+    if(!jetPassesJvtRequirement(jet)) return false;
+
+    ///////////////////////////////
+    // mv2c20 cut
+    ///////////////////////////////
+    if(jet->mv2c20 < JET_MV2C20_77) return false;
+
+    return true;
 }
 //----------------------------------------------------------
 bool JetSelector::isCentralLightJet(const Jet* jet)

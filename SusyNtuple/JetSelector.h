@@ -50,6 +50,7 @@ class Jet;
             // - make them const
             bool isBaselineJet(const Jet* jet);
             bool isSignalJet(const Jet* jet);
+            bool isBJet(const Jet* jet);
         //    bool isSignalJet2Lep(const Jet* jet);
             bool isCentralLightJet(const Jet* jet);
             bool isCentralBJet(const Jet* jet);
