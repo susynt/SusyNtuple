@@ -322,19 +322,26 @@ std::vector<std::string> getTrigNames(string set)
 TriggerTools::TriggerTools(TChain* input_chain, bool dbg) :
     m_trigHisto(NULL)
 {
-    cout << " ------------------ " << endl;
-    cout << "Initializing Trigger" << endl;
-    cout << " ------------------ " << endl;
-    if(!input_chain) {
-        cout << "TriggerTools::TriggerTools ERROR    Cannot initialize TriggerTools! Input TChain is null pointer: " << input_chain << " !" << endl;
-        cout << "TriggerTools::TriggerTools ERROR    >>> Exiting." << endl;
+    m_dbg = dbg;
+    if(m_dbg)
+        cout<<" ------------------ "<<endl
+            <<"Initializing Trigger"<<endl
+            <<" ------------------ "<<endl;
+    TFile *f = input_chain ? input_chain->GetFile() : nullptr;
+    TH1F *h = f ? static_cast<TH1F*>(f->Get("trig")) : nullptr;
+    if(h) {
+        m_trigHisto = h;
+        m_triggerMap.clear();
+        buildTriggerMap();
+    } else {
+        cout<<"TriggerTools::TriggerTools ERROR Cannot initialize TriggerTools!"
+            <<" Missing one of the inputs:"
+            <<" chain "<<input_chain<<" file "<<f<<" histo "<<h<< endl
+            <<" Exiting."<<endl;
         exit(1);
     }
-    m_trigHisto = static_cast<TH1F*>(input_chain->GetFile()->Get("trig"));
-    m_triggerMap.clear();
-    buildTriggerMap();
-    cout << " ------------------ " << endl;
-    m_dbg = dbg;
+    if(m_dbg)
+        cout<<" ------------------ "<<endl;
 }
 // ------------------------------------------- //
 // Build trigger-map 
