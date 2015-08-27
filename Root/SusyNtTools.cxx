@@ -161,7 +161,12 @@ void SusyNtTools::removeSFOSPairs(ElectronVector& electrons, MuonVector& muons)
     kin::removeSFOSPair(electrons, MLL_MIN);
     kin::removeSFOSPair(muons, MLL_MIN);
 }
-
+//----------------------------------------------------------
+bool SusyNtTools::initTriggerTool(const std::string &anyInputFilename)
+{
+    return m_triggerTool.init(anyInputFilename);
+}
+//----------------------------------------------------------
 /*--------------------------------------------------------------------------------*/
 // Methods to grab the Baseline objects
 /*--------------------------------------------------------------------------------*/

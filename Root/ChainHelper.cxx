@@ -1,5 +1,8 @@
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/string_utils.h"
+#include "TObjArray.h"
+#include "TChainElement.h"
+
 #include <iostream>
 
 using namespace std;
@@ -76,6 +79,23 @@ ChainHelper::Status ChainHelper::addInput(TChain* chain, const std::string &inpu
         status = BAD;
     }
     return status;
+}
+//----------------------------------------------------------
+std::string ChainHelper::firstFile(const std::string &input, bool verbose)
+{
+    string filename;
+    string defaultTreename = "susyNt";
+    TChain dummyChain(defaultTreename.c_str());
+    if(addInput(&dummyChain, input, verbose)==GOOD) {
+        TIter next(dummyChain.GetListOfFiles());
+        if(TChainElement *chEl = static_cast<TChainElement*>(next())) {
+            filename = chEl->GetTitle();
+        }
+    } else {
+        if(verbose)
+            cout<<"ChainHelper::firstFile(): invalid input, cannot provide first file"<<endl;
+    }
+    return filename;
 }
 //----------------------------------------------------------
 bool ChainHelper::inputIsFile(const std::string &input)

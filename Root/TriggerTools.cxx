@@ -6,16 +6,17 @@
 // date  : April 6 2015                        //
 // ------------------------------------------- //
 
-
-#include <map>
+#include "SusyNtuple/TriggerTools.h"
 
 #include "TH1F.h"
 #include "TFile.h"
 #include "TChain.h"
+
+#include <algorithm>
 #include <iostream>
-
-
-#include "SusyNtuple/TriggerTools.h"
+#include <map>
+#include <string>
+#include <vector>
 
 using namespace std;
 
@@ -319,29 +320,40 @@ std::vector<std::string> getTrigNames(string set)
 // ------------------------------------------- //
 // Constructor                                 //
 // ------------------------------------------- //
-TriggerTools::TriggerTools(TChain* input_chain, bool dbg) :
-    m_trigHisto(NULL)
+TriggerTools::TriggerTools(bool dbg) :
+    m_dbg(dbg)
 {
-    m_dbg = dbg;
+}
+
+//----------------------------------------------------------
+bool TriggerTools::init(const std::string &filename)
+{
+    bool success=false;
     if(m_dbg)
         cout<<" ------------------ "<<endl
             <<"Initializing Trigger"<<endl
             <<" ------------------ "<<endl;
-    TFile *f = input_chain ? input_chain->GetFile() : nullptr;
-    TH1F *h = f ? static_cast<TH1F*>(f->Get("trig")) : nullptr;
+    TString nameTriggerHistogram("trig");
+    TFile *f = TFile::Open(filename.c_str());
+    TH1F *h = f ? static_cast<TH1F*>(f->Get(nameTriggerHistogram)) : nullptr;
     if(h) {
-        m_trigHisto = h;
         m_triggerMap.clear();
-        buildTriggerMap();
+        buildTriggerMap(h);
+        success = true;
     } else {
         cout<<"TriggerTools::TriggerTools ERROR Cannot initialize TriggerTools!"
             <<" Missing one of the inputs:"
-            <<" chain "<<input_chain<<" file "<<f<<" histo "<<h<< endl
+            <<" filename "<<filename<<" file "<<f<<" histo "<<h<< endl
             <<" Exiting."<<endl;
         exit(1);
     }
     if(m_dbg)
         cout<<" ------------------ "<<endl;
+    if(f){
+        f->Close();
+        f->Delete();
+    }
+    return success;
 }
 // ------------------------------------------- //
 // Build trigger-map 
@@ -349,11 +361,10 @@ TriggerTools::TriggerTools(TChain* input_chain, bool dbg) :
 // BinLabels <---> trigger name
 // BinNumber <---> trigger bit number
 
-//void Trigger::buildTriggerMap(TChain* susyNt, bool dbg)
-void TriggerTools::buildTriggerMap()
+void TriggerTools::buildTriggerMap(const TH1* trigHisto)
 {
-    for(int trigBin = 1; trigBin < m_trigHisto->GetNbinsX(); trigBin++) {
-        string triggerChainName = m_trigHisto->GetXaxis()->GetBinLabel(trigBin);
+    for(int trigBin = 1; trigBin < trigHisto->GetNbinsX(); trigBin++) {
+        string triggerChainName = trigHisto->GetXaxis()->GetBinLabel(trigBin);
         m_triggerMap[triggerChainName] = trigBin-1;
         
         if(m_dbg) {
@@ -384,22 +395,16 @@ bool TriggerTools::passTrigger(TBits& triggerbits, std::string triggerName)
 // ------------------------------------------- //
 void TriggerTools::dumpTriggerInfo()
 {
-   
-    // remember: bit is stored as (bin # - 1) 
-    cout << " // ---------------------------------- // " << endl;
-    cout << "    Available triggers                    " << endl;
-    cout << "    Name : Bit                            " << endl;
-    for(int trigBin = 1; trigBin < m_trigHisto->GetNbinsX(); trigBin++) {
-        string triggerChainName = m_trigHisto->GetXaxis()->GetBinLabel(trigBin);
-        cout << "    " << m_trigHisto->GetXaxis()->GetBinLabel(trigBin) << " : " << trigBin-1 << endl;
+    // print them sorted by value, not by key (default for map)
+    typedef std::pair<std::string, int> sint_t;
+    vector<sint_t> sortedTrigs(m_triggerMap.begin(), m_triggerMap.end());
+    std::sort(sortedTrigs.begin(), sortedTrigs.end(),
+              [](const sint_t &a, const sint_t &b) -> bool { return a.second < b.second; });
+    cout<<" // ---------------------------------- // "<<endl;
+    cout<<"    Available triggers                    "<<endl;
+    cout<<"    Name : Bit                            "<<endl;
+    for(const sint_t &t : sortedTrigs) {
+        cout<<"    "<<t.first<<" : "<<t.second<<endl;
     }
-    cout << " // ---------------------------------- // " << endl;
+    cout<<" // ---------------------------------- // "<<endl;
 }
-        
-    
-    
-
-
-
-
-

@@ -87,7 +87,7 @@ int main(int argc, char** argv)
   susyAna->setDebug(dbg);
   susyAna->setSampleName(sample);
   susyAna->setChain(chain); // propagate the TChain to the analysis
-
+  susyAna->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
   // Run the job
   if(nEvt<0) nEvt = nEntries;
   cout << endl;

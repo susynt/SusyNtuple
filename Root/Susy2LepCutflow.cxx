@@ -81,7 +81,7 @@ void Susy2LepCutflow::Begin(TTree* /*tree*/)
   if(m_dbg) cout << "Susy2LepCutflow::Begin" << endl;
 
   // initialize the general trigger tool (SusyNtuple/TriggerTools)
-  m_ntTrig = new TriggerTools(m_input_chain, true);
+  m_ntTrig = new TriggerTools(m_dbg);
 }
 
 /*--------------------------------------------------------------------------------*/
