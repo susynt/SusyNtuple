@@ -376,10 +376,13 @@ void TriggerTools::buildTriggerMap(const TH1* trigHisto)
 // ------------------------------------------- //
 // Test whether a given trigger has fired
 // ------------------------------------------- //
-bool TriggerTools::passTrigger(TBits& triggerbits, std::string triggerName)
+bool TriggerTools::passTrigger(const TBits& triggerbits, const std::string &triggerName) const
+// bool TriggerTools::passTrigger(TBits& triggerbits, std::string triggerName)
 {
-    if(m_triggerMap.find(triggerName)!=m_triggerMap.end()){
-        return triggerbits.TestBitNumber(m_triggerMap[triggerName]);
+    bool pass = false;
+    auto nameBit = m_triggerMap.find(triggerName);
+    if(nameBit!=m_triggerMap.end()){
+        pass = triggerbits.TestBitNumber(nameBit->second);
     }
     else {
         std::cout << "Trigger " << triggerName << " not available!!" << std::endl;
@@ -387,13 +390,14 @@ bool TriggerTools::passTrigger(TBits& triggerbits, std::string triggerName)
         dumpTriggerInfo();
         exit(1);
     }
+    return pass;
 }
 
 // ------------------------------------------- //
 // Dump information about what triggers are
 // stored in the SusyNt
 // ------------------------------------------- //
-void TriggerTools::dumpTriggerInfo()
+void TriggerTools::dumpTriggerInfo() const
 {
     // print them sorted by value, not by key (default for map)
     typedef std::pair<std::string, int> sint_t;

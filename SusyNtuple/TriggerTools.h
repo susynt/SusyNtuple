@@ -35,10 +35,10 @@ public :
 
     // Method to test whether a given trigger is passed
   //  bool passTrigger(std::map<std::string, int> trigMap, std::string triggerName);
-    bool passTrigger(TBits& triggerbits, std::string triggerName);
+    bool passTrigger(const TBits& triggerbits, const std::string &triggerName) const;
 
     // Method to dump the trigger information stored
-    void dumpTriggerInfo();
+    void dumpTriggerInfo() const;
 
     /* /// name of the first file in the  */
     /* static std::string firstFilename(const TChain* chain); */
