@@ -117,7 +117,7 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
         m_muId               = MuonId::Medium;
         m_sigIso             = Isolation::GradientLoose;
         m_doIPCut            = true;
-        MU_MIN_PT_SIGNAL     = 10.0
+        MU_MIN_PT_SIGNAL     = 10.0;
         MU_MAX_ETA_SIGNAL    = 2.5;
         MU_MAX_D0SIG         = 3.0;
         MU_MAX_Z0_SINTHETA   = 0.5;
