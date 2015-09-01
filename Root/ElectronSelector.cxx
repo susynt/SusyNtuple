@@ -105,26 +105,27 @@ ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
         EL_MAX_D0SIG                    = 3.0; 
 
     }
-    //////////////////////////////////////
+    ////////////////////////////////////
     // SS3L-ANALYSIS
-    //////////////////////////////////////
+    // values from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
+    ////////////////////////////////////
     else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L = true;
-
-        //basline
-        m_eleBaseId              = ElectronId::LooseLH;
-        m_vetoCrackRegion        = true;
+        // baseline
+        m_eleBaseId         = ElectronId::LooseLH;
+        EL_MIN_PT_BASELINE  = 10.0;
+        EL_MAX_ETA_BASELINE = 2.47;
+        EL_MAX_D0SIG        = 5.0;
+        m_vetoCrackRegion   = true;
+        EL_MIN_CRACK_ETA    = 1.37;
+        EL_MAX_CRACK_ETA    = 1.52;
         // signal
-        m_eleId  = ElectronId::TightLH;
-        m_sigIso = Isolation::GradientLoose;
-        
-        m_doIPCut = true;
-
-        // cuts
-        EL_MAX_ETA_SIGNAL               = 2.0;
-        EL_MAX_Z0_SINTHETA              = 0.5;
-
-    } 
+        m_eleId             = ElectronId::TightLH;
+        EL_MAX_ETA_SIGNAL   = 2.0;
+        m_sigIso            = Isolation::GradientLoose;
+        EL_MAX_Z0_SINTHETA  = 0.5;
+        m_doIPCut           = true; // DG-2015-09-01 not sure about this
+    }
     //////////////////////////////////////
     // Stop2L-Analysis
     //////////////////////////////////////

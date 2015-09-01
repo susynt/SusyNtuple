@@ -87,15 +87,22 @@ JetSelector& JetSelector::setAnalysis(const AnalysisType &a)
     }
     ////////////////////////////////////
     // SS3L-ANALYSIS
+    // values from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
     ////////////////////////////////////
     else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L = true;
-
-        // pt
-        JET_MIN_PT_SIGNAL   = 20.;
-
-        // eta
+        JET_MIN_PT_BASELINE = 20.0;
+        JET_MIN_PT_SIGNAL   = 20.0;
         JET_MAX_ETA         = 2.8;
+        // jvt
+        JET_JVT_CUT         = 0.64;
+        JET_JVT_ETA_CUT     = 2.4;
+        JET_JVT_PT_CUT      = 50.0;
+        // bjet
+        JET_MIN_PT_B20      = 20.0;
+        JET_MV2C20_80       = -0.5911;
+        JET_MV2C20_70       = -0.0436;
+        JET_MV2C20_OR       = JET_MV2C20_80;
     }
     ////////////////////////////////////
     // Stop2L-ANALYSIS
@@ -151,7 +158,7 @@ bool JetSelector::isBaselineJet(const Jet* jet)
     if(m_2lep || m_2lepWH || m_3lep) {
         return (jet->Pt() > JET_MIN_PT_BASELINE);
     } else {
-        bool passEta = (jet->Eta() < JET_MAX_ETA);
+        bool passEta = (fabs(jet->Eta()) < JET_MAX_ETA);
         bool passPt  = (jet->Pt() > JET_MIN_PT_BASELINE);
         return (passEta && passPt);
     }

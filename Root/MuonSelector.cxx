@@ -103,24 +103,26 @@ MuonSelector& MuonSelector::setAnalysis(const AnalysisType& a)
         MU_PTCONE30_PT_CUT = 0.06;
         MU_ETCONE30_PT_CUT = 0.14;
     }
-   //////////////////////////////////////
+    //////////////////////////////////////
     // SS3L-ANALYSIS
+    // values from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
     //////////////////////////////////////
     else if( a == AnalysisType::Ana_SS3L ) {
         m_SS3L  = true;
-
         //baseline
-        m_muBaseId = MuonId::Medium;
-
-        //signal
-        m_muId = MuonId::Medium;
-        m_sigIso = Isolation::GradientLoose;
-        m_doIPCut = true;
-
-        // muons
+        m_muBaseId           = MuonId::Medium;
+        MU_MIN_PT_BASELINE   = 10.0;
         MU_MAX_ETA_BASELINE  = 2.5;
+        //signal
+        m_muId               = MuonId::Medium;
+        m_sigIso             = Isolation::GradientLoose;
+        m_doIPCut            = true;
+        MU_MIN_PT_SIGNAL     = 10.0
         MU_MAX_ETA_SIGNAL    = 2.5;
+        MU_MAX_D0SIG         = 3.0;
         MU_MAX_Z0_SINTHETA   = 0.5;
+
+    //////////////////////////////////
     } 
     //////////////////////////////////////
     // Stop2L-ANALYSIS
