@@ -25,10 +25,45 @@ using namespace Susy;
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() :
-m_anaType(AnalysisType::kUnknown),
-m_doSFOS(false)
+    m_jetSelector(nullptr),
+    m_anaType(AnalysisType::kUnknown),
+    m_doSFOS(false)
 {
 }
+//----------------------------------------------------------
+SusyNtTools::~SusyNtTools()
+{
+    if(m_jetSelector) {
+        delete m_jetSelector;
+        m_jetSelector = nullptr;
+    }
+}
+//----------------------------------------------------------
+void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
+{
+    m_electronSelector.setAnalysis(a);
+    m_muonSelector.setAnalysis(a);
+    m_tauSelector.setAnalysis(a);
+    if(m_jetSelector) delete m_jetSelector;
+    m_jetSelector = JetSelector::build(a, verbose);
+    // OverlapTool
+    // propagate isolation requirements
+    m_overlapTool.setElectronIsolation(m_electronSelector.signalIsolation());
+    m_overlapTool.setMuonIsolation(m_muonSelector.signalIsolation());
+    // propagate OR loose b-tag WP
+    m_overlapTool.setORBtagEff(jetSelector().overlapRemovalBtagEffWP());
+    // now setAnalysis
+    m_overlapTool.setAnalysis(a);
+
+    // set whether to perform SFOS removal on baseline objects
+    setSFOSRemoval(a);
+
+    // this should be in the logs no matter what
+    cout << ">>> Setting analysis type to " << AnalysisType2str(a) << std::endl;
+    // now that the tools are configured set this variable
+    m_anaType = a;
+}
+//----------------------------------------------------------
 /*--------------------------------------------------------------------------------*/
 // Event selection methods
 /*--------------------------------------------------------------------------------*/
@@ -278,7 +313,7 @@ JetVector SusyNtTools::getBaselineJets(const JetVector& preJets)
     JetVector baseJets;
     for (uint ij = 0; ij < preJets.size(); ++ij) {
         Jet* j = preJets.at(ij);
-        if(m_jetSelector.isBaselineJet(j)) {
+        if(jetSelector().isBaselineJet(j)) {
             baseJets.push_back(j);
         }
     } // ij
@@ -342,7 +377,7 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
     JetVector sigJets;
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
-        if(m_jetSelector.isSignalJet(j)) {
+        if(jetSelector().isSignalJet(j)) {
             sigJets.push_back(j);
         }
     }
@@ -455,22 +490,22 @@ bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets)
 {
-    return m_jetSelector.count_CL_jets(jets);
+    return jetSelector().count_CL_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCBJets(const JetVector& jets)
 {
-    return m_jetSelector.count_CB_jets(jets);
+    return jetSelector().count_CB_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfFJets(const JetVector& jets)
 {
-    return m_jetSelector.count_F_jets(jets);
+    return jetSelector().count_F_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numBJets(const JetVector& jets)
 {
-    return m_jetSelector.count_CB_jets(jets);
+    return jetSelector().count_CB_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasBJet(const JetVector& jets)
@@ -482,7 +517,7 @@ JetVector SusyNtTools::getBJets(const JetVector& jets)
 {
     JetVector bJets;
     for(auto jet : jets) {
-        if (m_jetSelector.isCentralBJet(jet))
+        if (jetSelector().isCentralBJet(jet))
             bJets.push_back(jet);
     }
     return bJets;

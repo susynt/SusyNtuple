@@ -30,9 +30,7 @@ public:
 
     /// Constructor and destructor
     SusyNtTools();
-    virtual ~SusyNtTools()
-    {
-    };
+    virtual ~SusyNtTools();
 
     void setSFOSRemoval(AnalysisType A);
     bool doSFOSRemoval() { return m_doSFOS; }
@@ -42,44 +40,7 @@ public:
         Set AnalysisType to determine object selections
         and overlap procedure
     */
-    void setAnaType(AnalysisType A, bool verbose = false)
-    {
-        ////////////////////////////
-        // ElectronSelector
-        ////////////////////////////
-        m_electronSelector.setAnalysis(A);
-        ////////////////////////////
-        // MuonSelector
-        ////////////////////////////
-        m_muonSelector.setAnalysis(A);
-        ////////////////////////////
-        // TauSelector
-        ////////////////////////////
-        m_tauSelector.setAnalysis(A);
-        ////////////////////////////
-        // JetSelector
-        ////////////////////////////
-        m_jetSelector.setAnalysis(A);
-        ////////////////////////////
-        // OverlapTool
-        ////////////////////////////
-        // propagate isolation requirements
-        m_overlapTool.setElectronIsolation(m_electronSelector.signalIsolation());
-        m_overlapTool.setMuonIsolation(m_muonSelector.signalIsolation());
-        // propagate OR loose b-tag WP
-        m_overlapTool.setORBtagEff(m_jetSelector.overlapRemovalBtagEffWP());
-        // now setAnalysis
-        m_overlapTool.setAnalysis(A);
-
-        // set whether to perform SFOS removal on baseline objects
-        setSFOSRemoval(A);
-
-        // this should be in the logs no matter what
-        std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
-
-        // now that the tools are configured set this variable
-        m_anaType = A;
-    };
+    void setAnaType(AnalysisType A, bool verbose = false);
     AnalysisType getAnaType() { return m_anaType; }
 
     /// initialize the trigger tool; return success
@@ -94,12 +55,12 @@ public:
     //
     // Methods to return the tools
     //
-    ElectronSelector&   getElectronSelector()   { return m_electronSelector; }
-    MuonSelector&       getMuonSelector()       { return m_muonSelector; }
-    TauSelector&        getTauSelector()        { return m_tauSelector; }
-    JetSelector&        getJetSelector()        { return m_jetSelector; }
-    OverlapTools&       getOverlapTools()       { return m_overlapTool; }
-    TriggerTools&       triggerTool()           { return m_triggerTool; }
+    ElectronSelector&   electronSelector()   { return m_electronSelector; }
+    MuonSelector&       muonSelector()       { return m_muonSelector; }
+    TauSelector&        tauSelector()        { return m_tauSelector; }
+    JetSelector&        jetSelector()        { return *m_jetSelector; }
+    OverlapTools&       overlapTool()        { return m_overlapTool; }
+    TriggerTools&       triggerTool()        { return m_triggerTool; }
 
     //
     // Methods to perform event selection
@@ -226,13 +187,13 @@ public:
         }
     }
 
-    /////////////////////////////////////////////
+    // protected:
+    # warning make protected
     // Object Selectors and Tools
-    /////////////////////////////////////////////
     ElectronSelector m_electronSelector;
     MuonSelector m_muonSelector;
     TauSelector  m_tauSelector;
-    JetSelector m_jetSelector;              ///< select jets according to the current analysis settings
+    JetSelector* m_jetSelector;              ///< select jets according to the current analysis settings
     OverlapTools m_overlapTool;             ///< tool to perform the analysis' OR procedure
     TriggerTools m_triggerTool;  ///< tool to access the trigger information
 
