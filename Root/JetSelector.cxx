@@ -61,7 +61,7 @@ bool JetSelector::isBJet(const Jet* jet)
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
             (jet->mv2c20      > -0.4434) && // 77% eff
-            (jetPassesJvtRequirement(jet)));
+            (passJvt(jet)));
 }
 //----------------------------------------------------------
 bool JetSelector::isCentralLightJet(const Jet* jet)
@@ -70,7 +70,7 @@ bool JetSelector::isCentralLightJet(const Jet* jet)
     if(jet) {
         pass = (jet->Pt()         > 20.0 &&
                 fabs(jet->detEta) <  2.4 &&
-                jetPassesJvtRequirement(jet) &&
+                passJvt(jet) &&
                 !isBJet(jet));
     }
     return pass;
@@ -82,7 +82,7 @@ bool JetSelector::isCentralBJet(const Jet* jet)
     if(jet) {
         pass = (jet->Pt()         > 20.0 &&
                 fabs(jet->detEta) <  2.4 &&
-                jetPassesJvtRequirement(jet) &&
+                passJvt(jet) &&
                 isBJet(jet));
     }
     return pass;
@@ -103,7 +103,7 @@ bool JetSelector::isForwardJet(const Jet* jet)
   Threshold as recommended at
   https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Jets
 */
-bool JetSelector::jetPassesJvtRequirement(const Jet* jet)
+bool JetSelector::passJvt(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
@@ -182,19 +182,6 @@ bool JetSelector_ss3l::isBJet(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_ss3l::passJvt(const Jet* jet)
-{
-    bool pass = false;
-    if(jet) {
-        if(jet->Pt()<50.0 &&
-           fabs(jet->Eta())<2.4 &&
-           jet->jvt < 0.64)
-            pass = false;
-        else pass = true;
-    }
-    return pass;
-}
-//----------------------------------------------------------
 // begin JetSelector_Stop2L
 // TODO Danny please check values
 //----------------------------------------------------------
@@ -214,7 +201,7 @@ bool JetSelector_Stop2L::isSignalJet(const Jet* jet)
     if(jet) {
         pass =((jet->Pt()        > 20.0) &&
                (fabs(jet->Eta()) >  2.8) &&
-               jetPassesJvtRequirement(jet));
+               passJvt(jet));
     }
     return pass;
 }

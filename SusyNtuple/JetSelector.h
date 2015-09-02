@@ -78,7 +78,7 @@ public:
     virtual bool isCentralBJet(const Jet* jet);
     virtual bool isForwardJet(const Jet* jet);
     /// The jet-vertex-fraction requirement: usually applied to low-pt central jets
-    virtual bool jetPassesJvtRequirement(const Jet* jet); // TODO rename to passJvt
+    virtual bool passJvt(const Jet* jet);
 
     virtual bool isBaselineJet(const Jet* jet); ///< often analsysi-dependent
     virtual bool isSignalJet(const Jet* jet); ///< often analsysi-dependent
@@ -131,7 +131,6 @@ class JetSelector_ss3l : public JetSelector
     virtual bool isBaselineJet(const Jet* jet);
     virtual bool isSignalJet(const Jet* jet);
     virtual bool isBJet(const Jet* jet);
-    virtual bool passJvt(const Jet* jet);
 };
 
 // TODO Danny add ref wiki
