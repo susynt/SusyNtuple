@@ -46,5 +46,7 @@ int main(int argc, char **argv)
     // \todo test jfv, test analysis-specific cuts
     cout<<"JetSelector: "<<(passAll ? "passed all tests" : "failed some test")<<endl;
 
+    delete selector;
+
     return passAll;
 }
