@@ -69,10 +69,6 @@ public:
     virtual ~JetSelector() {}; ///< dtor (for now we don't have anything to delete)
     JetSelector& setSystematic(const NtSys::SusyNtSys&); ///< set syst (needed for example for jvt)
     /// whether the jet is b-tagged
-    /**
-       Default values (AntiKt4EMTopoJets) for MV2c20 from
-       https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c20_tagger_AntiKt4EMTopoJets
-    */
     virtual bool isBJet(const Jet* jet);
     virtual bool isCentralLightJet(const Jet* jet);
     virtual bool isCentralBJet(const Jet* jet);
@@ -85,7 +81,6 @@ public:
 
     bool verbose() const { return m_verbose; }
     JetSelector& setVerbose(bool v) { m_verbose = v; return *this; }
-
     /// count central light jets \todo const (depends on jvf tool interface)
     virtual size_t count_CL_jets(const JetVector &jets) /*const*/;
     /// count central b-tagged jets \todo const
@@ -93,12 +88,23 @@ public:
     /// count forward jets \todo const
     virtual size_t count_F_jets(const JetVector &jets) /*const*/;
 
-    /// For the overlap removal: a different b-tag threshold is used
+    //@{
     /**
-       80% eff see
+       b-tag operating points for AntiKt4EMTopoJets with MV2c20.
+       See
+       https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c20_tagger_AntiKt4EMTopoJets
+    */
+    static float mv2c20_70efficiency() { return -0.0436; } ///< threshold for 70% efficiency
+    static float mv2c20_77efficiency() { return -0.4434; } ///< threshold for 77% efficiency
+    static float mv2c20_80efficiency() { return -0.5911; } ///< threshold for 80% efficiency
+
+    /// b-tag operating point used for the overlap removal.
+    /**
+       See
        https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#b_tagging
      */
-    static float overlapRemovalBtagEffWP() { return -0.5911; }
+    static float overlapRemovalBtagEffWP() { return mv2c20_80efficiency(); }
+    //@}
 private:
     NtSys::SusyNtSys m_systematic; ///< current syst variation
     bool m_verbose; ///< toggle verbose messages

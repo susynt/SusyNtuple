@@ -1,5 +1,6 @@
 #include "SusyNtuple/OverlapTools.h"
 #include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/JetSelector.h"
 
 #include <set>
 #include <iostream>
@@ -252,7 +253,7 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets)
             //          --> remove the jet and keep the electron
             if(doBjetOR()){
                 if(e->DeltaRy(*j) < J_E_DR){
-                    if(j->mv2c20 > -0.5517) {
+                    if(j->mv2c20 > JetSelector::mv2c20_80efficiency()) {
                         electrons.erase(electrons.begin()+iEl);
                         break; // loop electron no longer exists
                     } else { jets.erase(jets.begin()+iJ); }

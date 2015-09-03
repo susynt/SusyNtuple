@@ -60,7 +60,7 @@ bool JetSelector::isBJet(const Jet* jet)
 {
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
-            (jet->mv2c20      > -0.4434) && // 77% eff
+            (jet->mv2c20      > mv2c20_77efficiency()) &&
             (passJvt(jet)));
 }
 //----------------------------------------------------------
@@ -177,7 +177,7 @@ bool JetSelector_ss3l::isBJet(const Jet* jet)
         pass = (jet->Pt()        > 20.0    &&
                 fabs(jet->Eta()) <  2.4    &&
                 passJvt(jet)               &&
-                jet->mv2c20      > -0.0436 ); // 70% eff
+                jet->mv2c20      > mv2c20_70efficiency());
     }
     return pass;
 }
