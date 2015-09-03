@@ -132,7 +132,7 @@ class JetSelector_2LepWH : public JetSelector
 };
 
 /// implements https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
-class JetSelector_ss3l : public JetSelector
+class JetSelector_SS3L : public JetSelector
 {
     virtual bool isBaselineJet(const Jet* jet);
     virtual bool isSignalJet(const Jet* jet);

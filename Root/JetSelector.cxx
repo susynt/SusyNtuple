@@ -22,7 +22,7 @@ JetSelector* JetSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_2Lep   : selector = new JetSelector_2Lep(); break;
     case AnalysisType::Ana_3Lep   : selector = new JetSelector_3Lep(); break;
     case AnalysisType::Ana_2LepWH : selector = new JetSelector_2LepWH(); break;
-    case AnalysisType::Ana_SS3L   : selector = new JetSelector_ss3l(); break;
+    case AnalysisType::Ana_SS3L   : selector = new JetSelector_SS3L(); break;
     case AnalysisType::Ana_Stop2L : selector = new JetSelector_Stop2L(); break;
     default:
         cout<<"JetSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
@@ -146,9 +146,9 @@ size_t JetSelector::count_F_jets(const JetVector &jets)
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin JetSelector_ss3l
+// begin JetSelector_SS3L
 //----------------------------------------------------------
-bool JetSelector_ss3l::isBaselineJet(const Jet* jet)
+bool JetSelector_SS3L::isBaselineJet(const Jet* jet)
 {
     bool pass = false;
     if(jet){
@@ -158,7 +158,7 @@ bool JetSelector_ss3l::isBaselineJet(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_ss3l::isSignalJet(const Jet* jet)
+bool JetSelector_SS3L::isSignalJet(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
@@ -170,7 +170,7 @@ bool JetSelector_ss3l::isSignalJet(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_ss3l::isBJet(const Jet* jet)
+bool JetSelector_SS3L::isBJet(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
