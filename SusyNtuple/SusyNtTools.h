@@ -56,7 +56,7 @@ public:
     // Methods to return the tools
     //
     ElectronSelector&   electronSelector()   { return m_electronSelector; }
-    MuonSelector&       muonSelector()       { return m_muonSelector; }
+    MuonSelector&       muonSelector()       { return *m_muonSelector; }
     TauSelector&        tauSelector()        { return m_tauSelector; }
     JetSelector&        jetSelector()        { return *m_jetSelector; }
     OverlapTools&       overlapTool()        { return m_overlapTool; }
@@ -126,7 +126,6 @@ public:
     bool isSignalTau(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
                      TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
     bool isSemiSignalElectron(const Susy::Electron* ele);
-    bool isSemiSignalMuon(const Susy::Muon* mu);
 
     /// Build lepton vector, sort by pT
     void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
@@ -191,7 +190,7 @@ public:
     # warning make protected
     // Object Selectors and Tools
     ElectronSelector m_electronSelector;
-    MuonSelector m_muonSelector;
+    MuonSelector* m_muonSelector;              ///< select muons according to the current analysis settings
     TauSelector  m_tauSelector;
     JetSelector* m_jetSelector;              ///< select jets according to the current analysis settings
     OverlapTools m_overlapTool;             ///< tool to perform the analysis' OR procedure

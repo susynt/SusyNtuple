@@ -25,6 +25,7 @@ using namespace Susy;
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() :
+    m_muonSelector(nullptr),
     m_jetSelector(nullptr),
     m_anaType(AnalysisType::kUnknown),
     m_doSFOS(false)
@@ -33,23 +34,22 @@ SusyNtTools::SusyNtTools() :
 //----------------------------------------------------------
 SusyNtTools::~SusyNtTools()
 {
-    if(m_jetSelector) {
-        delete m_jetSelector;
-        m_jetSelector = nullptr;
-    }
+    if(m_jetSelector) { delete m_jetSelector; m_jetSelector = nullptr; }
+    if(m_muonSelector) { delete m_muonSelector; m_muonSelector = nullptr; }
 }
 //----------------------------------------------------------
 void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
 {
     m_electronSelector.setAnalysis(a);
-    m_muonSelector.setAnalysis(a);
+    if(m_muonSelector) delete m_muonSelector;
+    m_muonSelector = MuonSelector::build(a, verbose);
     m_tauSelector.setAnalysis(a);
     if(m_jetSelector) delete m_jetSelector;
     m_jetSelector = JetSelector::build(a, verbose);
     // OverlapTool
     // propagate isolation requirements
     m_overlapTool.setElectronIsolation(m_electronSelector.signalIsolation());
-    m_overlapTool.setMuonIsolation(m_muonSelector.signalIsolation());
+    m_overlapTool.setMuonIsolation(muonSelector().signalMuonIsolation());
     // propagate OR loose b-tag WP
     m_overlapTool.setORBtagEff(jetSelector().overlapRemovalBtagEffWP());
     // now setAnalysis
@@ -255,7 +255,7 @@ MuonVector SusyNtTools::getBaselineMuons(const MuonVector& preMuons)
     MuonVector baseMuons;
     for (uint im = 0; im < preMuons.size(); ++im) {
         Muon* mu = preMuons.at(im);
-        if(m_muonSelector.isBaselineMuon(mu)){
+        if(muonSelector().isBaselineMuon(mu)){
             baseMuons.push_back(mu);
         }
     } // im
@@ -345,7 +345,7 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons)
     MuonVector sigMuons;
     for (uint im = 0; im < baseMuons.size(); ++im) {
         Muon* mu = baseMuons.at(im);
-        if (m_muonSelector.isSignalMuon(mu)){
+        if (muonSelector().isSignalMuon(mu)){
             sigMuons.push_back(mu);
         }
     }
@@ -457,7 +457,7 @@ TrackMet* SusyNtTools::getTrackMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool 
 bool SusyNtTools::isSignalLepton(const Lepton* l)
 {
     if(l->isEle()) return m_electronSelector.isSignalElectron((Electron*)l);
-    else           return m_muonSelector.isSignalMuon((Muon*)l);
+    else           return muonSelector().isSignalMuon((Muon*)l);
 };
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalElectron(const Electron* e)
@@ -467,7 +467,7 @@ bool SusyNtTools::isSignalElectron(const Electron* e)
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignalMuon(const Muon* m)
 {
-    return m_muonSelector.isSignalMuon(m);
+    return muonSelector().isSignalMuon(m);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -481,12 +481,6 @@ bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
 {
     return m_electronSelector.isSemiSignalElectron(ele);
 }
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
-{
-    return m_muonSelector.isSemiSignalMuon(mu);
-}
-
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets)
 {
@@ -557,7 +551,7 @@ float SusyNtTools::leptonEffSF(const Lepton& lep)
     if(lep.isEle()){
         sf = m_electronSelector.effSF((Electron&)lep);
     } else {
-        sf = m_muonSelector.effSF((Muon&)lep);
+        sf = muonSelector().effSF((Muon&)lep);
     }
     return sf;
 }
@@ -567,7 +561,7 @@ float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sy
     if(lep.isEle()){
         errSF = m_electronSelector.errEffSF((Electron&)lep, sys);
     } else {
-        errSF = m_muonSelector.errEffSF((Muon&)lep, sys);
+        errSF = muonSelector().errEffSF((Muon&)lep, sys);
     }
     return errSF;
 }
