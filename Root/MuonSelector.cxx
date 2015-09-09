@@ -1,13 +1,10 @@
 #include "SusyNtuple/MuonSelector.h"
-#include "SusyNtuple/ElectronSelector.h"
-#include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/Muon.h"
 
 #include <algorithm>
 #include <cassert>
 #include <iostream>
 
-using Susy::MuonSelector;
-using Susy::Muon;
 using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;

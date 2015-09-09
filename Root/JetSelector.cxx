@@ -1,13 +1,11 @@
 #include "SusyNtuple/JetSelector.h"
-#include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/Jet.h"
 
 #include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <type_traits> // underlying_type
 
-using Susy::JetSelector;
-using Susy::Jet;
 using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;

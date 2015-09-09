@@ -2,7 +2,6 @@
 #ifndef SUSYNTUPLE_MUONSELECTOR_H
 #define SUSYNTUPLE_MUONSELECTOR_H
 
-#include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/Isolation.h"
@@ -11,18 +10,17 @@
 
 namespace Susy {
 
-class Electron;
 class Muon;
 
 /// A class to select muons
 /**
-   The generic JetSelector implements the generic definitions from
+   The generic MuonSelector implements the generic definitions from
    https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Muons
 
    Analysis-dependent criteria should be implemented in your
    analysis-specific class inheriting from MuonSelector.
 
-   The analysis-specific selector should be generated with MuonsSelector::build().
+   The analysis-specific selector should be instantiated with MuonsSelector::build().
 
    For details on the design and implementation of this class, see the
    documentation for JetSelector.
@@ -50,9 +48,6 @@ public :
     /// whether mu is close enough to the primary vertex
     virtual bool passIpCut(const Muon* mu);
     /// nominal efficiency scale factor of mu
-    /**
-       \param id required quality of the (signal) muon
-     */
     virtual float effSF(const Muon& mu);
     /// wraps effSF() above
     virtual float effSF(const Muon* mu) { return effSF(*mu); }
@@ -63,7 +58,7 @@ public :
                            const NtSys::SusyNtSys sys)
         { return errEffSF(*mu, sys); }
     /// isolation required for signal muon
-    Isolation signalMuonIsolation() { return m_signalIsolation; }
+    Isolation signalMuonIsolation() const { return m_signalIsolation; }
     /// set signal isolation
     /**
        Note: the value you set here should match whatever you have in
@@ -71,7 +66,7 @@ public :
      */
     MuonSelector& setSignalMuonIsolation(const Isolation &v) { m_signalIsolation = v; return *this; }
     /// id of signal muon, used to determine err SF
-    MuonId signalMuonId() { return m_signalId; }
+    MuonId signalMuonId() const { return m_signalId; }
     /**
        Note: the value you set here should match whatever you have in
        _your_ (overriding) implementation of isSignalMuon()
@@ -86,6 +81,11 @@ protected :
 
 }; // end MuonSelector
 
+//----------------------------------------------------------
+//
+// End generic selector, begin analysis-specific ones
+//
+//----------------------------------------------------------
 
 /// implements muon selection for ATL-COM-PHYS-2013-911
 class MuonSelector_2Lep : public MuonSelector
@@ -112,7 +112,7 @@ class MuonSelector_SS3L : public MuonSelector
     virtual bool isSignalMuon(const Muon* mu);
 };
 
-// TODO Danny add ref wiki
+/// implements Muon selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class MuonSelector_Stop2L : public MuonSelector
 {
     virtual bool passIpCut(const Muon* mu);

@@ -112,10 +112,10 @@ void SusyNtAna::Terminate()
 /*--------------------------------------------------------------------------------*/
 // Load Event list of run/event to process. Use to debug events
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::loadEventList()
+void SusyNtAna::loadEventList(const std::string filename)
 {
   int run, event;
-  FILE* eventsFile=fopen("debugEvents.txt","r");
+  FILE* eventsFile=fopen(filename.c_str(),"r");
   int nEvtDbg=0;
   while(fscanf(eventsFile,"%i %i \n",&run, &event) != EOF){
     cout << "Adding run-event " << run << " " << event << endl; 

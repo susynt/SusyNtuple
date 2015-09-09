@@ -2,9 +2,9 @@
 #ifndef SUSY_JETSELECTOR_H
 #define SUSY_JETSELECTOR_H
 
-#include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
+#include "SusyNtuple/SusyDefs.h" // JetVector
 
 namespace Susy {
 
@@ -18,7 +18,7 @@ class Jet;
    Analysis-dependent criteria should be implemented in your
    analysis-specific class inheriting from JetSelector.
 
-   The analysis-specific selector should be generated with JetSelector::build().
+   The analysis-specific selector should be instantiated with JetSelector::build().
 
    Please avoid having thresholds as input parameters of the selection
    functions (including default arguments). Prefer explicit values in
@@ -117,21 +117,21 @@ private:
 //
 //----------------------------------------------------------
 
-/// implements ATL-COM-PHYS-2013-911
+/// implements jet selection from ATL-COM-PHYS-2013-911
 class JetSelector_2Lep : public JetSelector
 {
 };
-/// implements ATL-COM-PHYS-2013-888
+/// implements jet selection from ATL-COM-PHYS-2013-888
 class JetSelector_3Lep : public JetSelector
 {
 };
 
-/// implements ATL-COM-PHYS-2014-221
+/// implements jet selection from ATL-COM-PHYS-2014-221
 class JetSelector_2LepWH : public JetSelector
 {
 };
 
-/// implements https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
+/// implements jet selection from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class JetSelector_SS3L : public JetSelector
 {
     virtual bool isBaselineJet(const Jet* jet);
@@ -139,7 +139,7 @@ class JetSelector_SS3L : public JetSelector
     virtual bool isBJet(const Jet* jet);
 };
 
-// TODO Danny add ref wiki
+/// implements jet selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class JetSelector_Stop2L : public JetSelector
 {
     virtual bool isBaselineJet(const Jet* jet);
