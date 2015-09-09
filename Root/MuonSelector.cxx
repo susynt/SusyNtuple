@@ -18,28 +18,28 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
     switch(a) {
     case AnalysisType::Ana_2Lep   :
         s = new MuonSelector_2Lep();
-        s->setSignalMuonId(MuonId::Medium);
-        s->setSignalMuonIsolation(Isolation::GradientLoose);
+        s->setSignalId(MuonId::Medium);
+        s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_3Lep   :
         s = new MuonSelector_3Lep();
-        s->setSignalMuonId(MuonId::Medium);
-        s->setSignalMuonIsolation(Isolation::Tight);
+        s->setSignalId(MuonId::Medium);
+        s->setSignalIsolation(Isolation::Tight);
         break;
     case AnalysisType::Ana_2LepWH :
         s = new MuonSelector_2LepWH();
-        s->setSignalMuonId(MuonId::Medium);
-        s->setSignalMuonIsolation(Isolation::Tight);
+        s->setSignalId(MuonId::Medium);
+        s->setSignalIsolation(Isolation::Tight);
         break;
     case AnalysisType::Ana_SS3L   :
         s = new MuonSelector_SS3L();
-        s->setSignalMuonId(MuonId::Medium);
-        s->setSignalMuonIsolation(Isolation::GradientLoose);
+        s->setSignalId(MuonId::Medium);
+        s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_Stop2L :
         s = new MuonSelector_Stop2L();
-        s->setSignalMuonId(MuonId::Loose);
-        s->setSignalMuonIsolation(Isolation::GradientLoose);
+        s->setSignalId(MuonId::Loose);
+        s->setSignalIsolation(Isolation::GradientLoose);
         break;
     default:
         cout<<"MuonSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"

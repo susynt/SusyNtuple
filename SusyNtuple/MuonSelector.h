@@ -58,20 +58,20 @@ public :
                            const NtSys::SusyNtSys sys)
         { return errEffSF(*mu, sys); }
     /// isolation required for signal muon
-    Isolation signalMuonIsolation() const { return m_signalIsolation; }
+    Isolation signalIsolation() const { return m_signalIsolation; }
     /// set signal isolation
     /**
        Note: the value you set here should match whatever you have in
        _your_ (overriding) implementation of isSignalMuon()
      */
-    MuonSelector& setSignalMuonIsolation(const Isolation &v) { m_signalIsolation = v; return *this; }
+    MuonSelector& setSignalIsolation(const Isolation &v) { m_signalIsolation = v; return *this; }
     /// id of signal muon, used to determine err SF
-    MuonId signalMuonId() const { return m_signalId; }
+    MuonId signalId() const { return m_signalId; }
     /**
        Note: the value you set here should match whatever you have in
        _your_ (overriding) implementation of isSignalMuon()
      */
-    MuonSelector& setSignalMuonId(const MuonId &v) { m_signalId = v; return *this; }
+    MuonSelector& setSignalId(const MuonId &v) { m_signalId = v; return *this; }
     bool verbose() { return m_verbose; }
     MuonSelector& setVerbose(const bool &v) { m_verbose = v; return *this; }
 protected :

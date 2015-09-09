@@ -52,7 +52,7 @@ void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
     // OverlapTool
     // propagate isolation requirements
     m_overlapTool.setElectronIsolation(electronSelector().signalIsolation());
-    m_overlapTool.setMuonIsolation(muonSelector().signalMuonIsolation());
+    m_overlapTool.setMuonIsolation(muonSelector().signalIsolation());
     // propagate OR loose b-tag WP
     m_overlapTool.setORBtagEff(jetSelector().overlapRemovalBtagEffWP());
     // now setAnalysis
