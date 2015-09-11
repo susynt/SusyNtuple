@@ -57,7 +57,7 @@ public:
     //
     ElectronSelector&   electronSelector()   { return *m_electronSelector; }
     MuonSelector&       muonSelector()       { return *m_muonSelector; }
-    TauSelector&        tauSelector()        { return m_tauSelector; }
+    TauSelector&        tauSelector()        { return *m_tauSelector; }
     JetSelector&        jetSelector()        { return *m_jetSelector; }
     OverlapTools&       overlapTool()        { return m_overlapTool; }
     TriggerTools&       triggerTool()        { return m_triggerTool; }
@@ -115,16 +115,14 @@ public:
     ElectronVector getSignalElectrons(const ElectronVector& baseElecs);
     MuonVector     getSignalMuons(const MuonVector& baseMuons);
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
-    TauVector      getSignalTaus(const TauVector& baseTaus, TauId tauJetID = TauId::Medium,
-                                 TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
+    TauVector      getSignalTaus(const TauVector& baseTaus);
     JetVector      getSignalJets(const JetVector& baseJets);
 
     /// Check if signal object
     bool isSignalLepton(const Susy::Lepton* l);
     bool isSignalElectron(const Susy::Electron* e);
     bool isSignalMuon(const Susy::Muon* m);
-    bool isSignalTau(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
-                     TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
+    bool isSignalTau(const Susy::Tau* tau);
 
     /// Build lepton vector, sort by pT
     void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
@@ -189,7 +187,7 @@ public:
     // Object Selectors and Tools
     ElectronSelector* m_electronSelector; ///< select electrons according to the current analysis settings
     MuonSelector* m_muonSelector;         ///< select muons according to the current analysis settings
-    TauSelector  m_tauSelector;
+    TauSelector*  m_tauSelector;          ///< select taus according to the current analysis settings
     JetSelector* m_jetSelector;           ///< select jets according to the current analysis settings
     OverlapTools m_overlapTool;           ///< tool to perform the analysis' OR procedure
     TriggerTools m_triggerTool;  ///< tool to access the trigger information

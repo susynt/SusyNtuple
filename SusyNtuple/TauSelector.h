@@ -1,72 +1,95 @@
+// -*- c++ -*-
 #ifndef SUSYNTUPLE_TAUSELECTOR_H
 #define SUSYNTUPLE_TAUSELECTOR_H
 
-#include "SusyNtuple/SusyDefs.h"
-#include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
-#include "SusyNtuple/TauId.h"
-
 
 namespace Susy {
 
-    class Tau;
+class Tau;
 
-    /// A class to select taus
-    class TauSelector
-    {
-        public:
-        TauSelector();
-        TauSelector& setSystematic(const NtSys::SusyNtSys& systematic);
-        TauSelector& setAnalysis(const AnalysisType& analysis);
+/// A class to select tau
+/**
+   The generic TauSelector implements the generic definitions from
+   https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Taus
 
-        bool isBaselineTau(const Tau* tau);
-        bool isBaselineTau(const Tau& tau);
+   Analysis-dependent criteria should be implemented in your
+   analysis-specific class inheriting from TauSelector.
 
-        bool isSignalTau(const Tau* tau, const TauId& jetId, const TauId& eleId, const TauId& muoId);
-        bool isSignalTau(const Tau& tau, const TauId& jetId, const TauId& eleId, const TauId& muoId);
+   The analysis-specific selector should be instantiated with TauSelector::build().
 
-        bool isTauBDT(const Tau*, const TauId& jetId, const TauId& eleId, const TauId& muoId);
-        bool isTauBDT(const Tau&, const TauId& jetId, const TauId& eleId, const TauId& muoId);
-        bool tauPassBDT(const Tau&, bool isSignal);
+   For details on the design and implementation of this class, see the
+   documentation for JetSelector.
 
-        TauId signalTauId() { return m_signalTauId; }
+   davide.gerbaudo@gmail.com, Sep 2015
+*/
+class TauSelector
+{
+public:
+    /// provide analysis-specific selector (or vanilla one if analysis is unknown)
+    /**
+       The user owns the selector (i.e. should use std::shared_ptr
+       or delete it when done with it).
+    */
+    static TauSelector* build(const AnalysisType &a, bool verbose);
+    TauSelector(); ///< Default ctor
+    virtual ~TauSelector() {}; ///< dtor (for now we don't have anything to delete)
 
+    /// whether tau passes the signal criteria
+    /**
+       Usually pt+bdt
+    */
+    virtual bool isBaselineTau(const Tau& tau);
+    /// wraps above
+    bool isBaselineTau(const Tau* tau) { return isBaselineTau(*tau); }
+    /// whether tau passes the signal criteria
+    /**
+       Usually baseline + bdt
+    */
+    virtual bool isSignalTau(const Tau& tau);
+    /// wraps above
+    virtual bool isSignalTau(const Tau* tau) { return isSignalTau(*tau); }
+    /// \todo document
+    virtual bool passBdtBaseline(const Tau&);
+    /// \todo document
+    virtual bool passBdtSignal(const Tau&);
 
-        void check();
+protected :
+    /// whether it should be verbose
+    bool m_verbose;
 
-        //////////////////////////////////////
-        // Analysis Selections
-        //////////////////////////////////////
-        float TAU_MIN_PT_BASELINE;          ///< minimum allowed pT for baseline taus (GeV)
-        float TAU_MIN_PT_SIGNAL;            ///< minimum allowed pT for signal taus (GeV)
+}; // TauSelector
 
-        protected :
-        NtSys::SusyNtSys m_systematic;
-        AnalysisType m_analysis;
+//----------------------------------------------------------
+//
+// End generic selector, begin analysis-specific ones
+//
+//----------------------------------------------------------
 
-        TauId m_signalTauId; ///< Toggle for which set of Taus to use as "signal" taus
+/// implements tau selection for ATL-COM-PHYS-2013-911
+class TauSelector_2Lep : public TauSelector
+{
+};
 
-        TauId m_tauEleBaseId;
-        TauId m_tauJetBaseId;
-        TauId m_tauMuoBaseId;
+/// implements tau selection for ATL-COM-PHYS-2013-888
+class TauSelector_3Lep : public TauSelector
+{
+};
 
-        TauId m_tauEleId;
-        TauId m_tauJetId;
-        TauId m_tauMuoId;
+/// implements tau selection for ATL-COM-PHYS-2014-221
+class TauSelector_2LepWH : public TauSelector
+{
+};
 
-        //////////////////////////////////////
-        // Available Analyses
-        //////////////////////////////////////
-        bool m_2lep;        ///< flag for 2L analysis
-        bool m_3lep;        ///< flag for 3L analysis
-        bool m_2lepWH;      ///< flag for 2L WH analysis
-        bool m_SS3L;        ///< flag for the strong SS3L analysis
-        bool m_stop2l;      ///< flag for the stop to two lepton analysis
+/// implements tau selection from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
+class TauSelector_SS3L : public TauSelector
+{
+};
 
-        // set verbose
-        bool m_verbose;
-
-    }; // class
+/// implements tau selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
+class TauSelector_Stop2L : public TauSelector
+{
+};
 
 } // namespace Susy
 #endif

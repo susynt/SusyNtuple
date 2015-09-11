@@ -44,11 +44,15 @@ void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
 {
     if(m_electronSelector) delete m_electronSelector;
     m_electronSelector = ElectronSelector::build(a, verbose);
+
     if(m_muonSelector) delete m_muonSelector;
     m_muonSelector = MuonSelector::build(a, verbose);
-    m_tauSelector.setAnalysis(a);
     if(m_jetSelector) delete m_jetSelector;
     m_jetSelector = JetSelector::build(a, verbose);
+
+    if(m_tauSelector) delete m_tauSelector;
+    m_tauSelector = TauSelector::build(a, verbose);
+
     // OverlapTool
     // propagate isolation requirements
     m_overlapTool.setElectronIsolation(electronSelector().signalIsolation());
@@ -177,7 +181,7 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElectrons, const Mu
 {
     signalElectrons = getSignalElectrons(baseElectrons);
     signalMuons     = getSignalMuons(baseMuons);
-    signalTaus      = getSignalTaus(baseTaus, sigTauId, sigTauId, sigTauId); // jetBDT, eleBDT, muoBDT
+    signalTaus      = getSignalTaus(baseTaus);
     signalJets      = getSignalJets(baseJets);
 }
 /*--------------------------------------------------------------------------------*/
@@ -273,7 +277,7 @@ TauVector SusyNtTools::getBaselineTaus(const TauVector& preTaus)
     TauVector baseTaus;
     for (uint iTau = 0; iTau < preTaus.size(); iTau++) {
         Tau* tau = preTaus.at(iTau);
-        if(m_tauSelector.isBaselineTau(tau)){
+        if(tauSelector().isBaselineTau(tau)){
             baseTaus.push_back(tau);
         }
     } // iTau
@@ -358,13 +362,13 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons)
     return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
-TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauId tauJetID, TauId tauEleID, TauId tauMuoID)
+TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus)
 {
     TauVector sigTaus;
     for (uint iTau = 0; iTau < baseTaus.size(); iTau++) {
         Tau* tau = baseTaus[iTau];
 
-        if(m_tauSelector.isSignalTau(tau, tauJetID, tauEleID, tauMuoID)) {
+        if(tauSelector().isSignalTau(tau)) {
             sigTaus.push_back(tau);
         }
     } // iTau
@@ -474,10 +478,10 @@ bool SusyNtTools::isSignalMuon(const Muon* m)
 }
 
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalTau(const Tau* tau, TauId tauJetID, TauId tauEleID, TauId tauMuoID)
+bool SusyNtTools::isSignalTau(const Tau* tau)
 {
     // At the moment, signal taus only use additional BDT selection
-    return m_tauSelector.isSignalTau(tau, tauJetID, tauEleID, tauMuoID);
+    return tauSelector().isSignalTau(tau);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets)
