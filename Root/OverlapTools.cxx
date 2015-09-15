@@ -114,9 +114,10 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets, doubl
     // default procedure:
     //  > if dR between electron and jet < J_E_DR:
     //          --> remove the jet and keep the electron
-    for(size_t iEl=electrons.size()-1; iEl>=0; iEl--) {
+    if(electrons.size()==0 || jets.size()==0) return;
+    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
         const Electron* e = electrons.at(iEl);
-        for(size_t iJ=jets.size()-1; iJ>=0; iJ--){
+        for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             if(e->DeltaRy(*j) < dR) {
                 jets.erase(jets.begin()+iJ);
@@ -128,7 +129,8 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets, doubl
 //----------------------------------------------------------
 void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
-    for(size_t iEl=electrons.size()-1; iEl>=0; iEl--){
+    if(electrons.size()==0 || jets.size()==0) return;
+    for(int iEl=electrons.size()-1; iEl>=0; iEl--){
         const Electron* e = electrons.at(iEl);
         for(size_t iJ=0; iJ<jets.size(); iJ++){
             const Jet* j = jets.at(iJ);
@@ -142,9 +144,10 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets, doubl
 //----------------------------------------------------------
 void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets, double dR)
 {
-    for(size_t iMu=muons.size()-1; iMu>=0; iMu--){
+    if(muons.size()==0 || jets.size()==0) return;
+    for(int iMu=muons.size()-1; iMu>=0; iMu--){
         const Muon* mu = muons.at(iMu);
-        for(size_t iJ=jets.size()-1; iJ>=0; iJ--){
+        for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             int jet_nTrk = j->nTracks;
             if(mu->DeltaRy(*j) > dR) continue;
@@ -163,12 +166,12 @@ void OverlapTools::e_m_overlap(ElectronVector& electrons, MuonVector& muons, dou
 {
     int nEl = electrons.size();
     int nMu = muons.size();
+    if(nEl==0 || nMu==0) return;
 
     static std::set<const Electron*> electronsToRemove;
     static std::set<const Muon*> muonsToRemove;
     electronsToRemove.clear();
     muonsToRemove.clear();
-
     for(int iEl=0; iEl<nEl; iEl++){
         const Electron* e = electrons.at(iEl);
         for(int iMu=0; iMu<nMu; iMu++){
@@ -313,7 +316,7 @@ void OverlapTools_SS3L::performOverlap(ElectronVector& electrons, MuonVector& mu
 {
     j_e_overlap(electrons, jets, 0.2);
     e_j_overlap(electrons, jets, 0.4);
-    m_j_overlap(muons, jets, 0.2); // default 0.2
+    m_j_overlap(muons, jets, 0.2); // default 0.4
     e_m_overlap(electrons, muons, 0.01);
     e_e_overlap(electrons, 0.05);
 }
@@ -324,9 +327,10 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
     //  > if electron close to jet:
     //       --> if bjet: keep the jet, remove electron
     //       --> if not bjet: remove the jet, keep the electron
-    for(size_t iEl=electrons.size()-1; iEl>=0; iEl--) {
+    if(electrons.size()==0 || jets.size()==0) return;
+    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
         const Electron* e = electrons.at(iEl);
-        for(size_t iJ=jets.size()-1; iJ>=0; iJ--){
+        for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             if(e->DeltaRy(*j) < 0.2){ // was J_E_DR
                 bool isBjet = (j->mv2c20 > JetSelector::mv2c20_80efficiency());

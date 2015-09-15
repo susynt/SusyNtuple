@@ -27,6 +27,7 @@ using namespace Susy;
 SusyNtTools::SusyNtTools() :
     m_electronSelector(nullptr),
     m_muonSelector(nullptr),
+    m_tauSelector(nullptr),
     m_jetSelector(nullptr),
     m_overlapTool(nullptr),
     m_anaType(AnalysisType::kUnknown),
