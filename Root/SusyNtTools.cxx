@@ -28,6 +28,7 @@ SusyNtTools::SusyNtTools() :
     m_electronSelector(nullptr),
     m_muonSelector(nullptr),
     m_jetSelector(nullptr),
+    m_overlapTool(nullptr),
     m_anaType(AnalysisType::kUnknown),
     m_doSFOS(false)
 {
@@ -38,6 +39,7 @@ SusyNtTools::~SusyNtTools()
     if(m_electronSelector) { delete m_electronSelector; m_electronSelector = nullptr; }
     if(m_muonSelector) { delete m_muonSelector; m_muonSelector = nullptr; }
     if(m_jetSelector) { delete m_jetSelector; m_jetSelector = nullptr; }
+    if(m_overlapTool) {delete m_overlapTool; m_overlapTool = nullptr; }
 }
 //----------------------------------------------------------
 void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
@@ -53,14 +55,11 @@ void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
     if(m_tauSelector) delete m_tauSelector;
     m_tauSelector = TauSelector::build(a, verbose);
 
-    // OverlapTool
-    // propagate isolation requirements
-    m_overlapTool.setElectronIsolation(electronSelector().signalIsolation());
-    m_overlapTool.setMuonIsolation(muonSelector().signalIsolation());
-    // propagate OR loose b-tag WP
-    m_overlapTool.setORBtagEff(jetSelector().overlapRemovalBtagEffWP());
-    // now setAnalysis
-    m_overlapTool.setAnalysis(a);
+    if(m_overlapTool) delete m_overlapTool;
+    m_overlapTool = OverlapTools::build(a, verbose);
+    // propagate isolation requirements, needed only for removeNonisolatedLeptons()
+    m_overlapTool->setElectronIsolation(electronSelector().signalIsolation());
+    m_overlapTool->setMuonIsolation(muonSelector().signalIsolation());
 
     // set whether to perform SFOS removal on baseline objects
     setSFOSRemoval(a);

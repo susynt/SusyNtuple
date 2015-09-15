@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SUSYNTUPLE_OVERLAPTOOLS_H
 #define SUSYNTUPLE_OVERLAPTOOLS_H
 
@@ -8,96 +9,104 @@
 
 namespace Susy {
 
-    /// A class to  perform the overlap removal
-    
+/// A class to  perform the overlap removal
+/**
+   The generic OverlapTools implements the generic definitions from
+   https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Overlap_Removals
 
-    class OverlapTools
-    {
-    public :
-        OverlapTools();
-        /// call this to use the Run-2 overlap procedure
-        /**
-            Set the analysis type. Controls whether to use the
-            harmonized OR and any potential analysis-specific
-            OR procedure.
-        */
-        OverlapTools& setAnalysis(const AnalysisType& a);
-        /// check whether running Run-2 procedure
-        /**
-            Calling this returns a boolean, m_doHarmonization, which
-            is set true depending on AnalysisType. Call 'doHarmonization'
-            when deciding to perform OR on baseline objects (Run-1) or 
-            signal objects (Run-2) in the code where the object-selection
-            is taking place.
-        */
-        bool useSignalLeptons() { return m_useSignalLeptons; }
-        bool useIsolatedLeptons() { return m_useIsoLeptons; }
-        void setElectronIsolation( Isolation eleIso ) { m_electronIsolation = eleIso; }
-        void setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; }
-        void setORBtagEff( float mv2c20_score ) { m_mv2c20_ORcut = mv2c20_score; }
-        bool leptonPassesIsolation(const Lepton* lep, bool isEle);
-        bool doBjetOR() { return m_doBjetOR; }
+   Analysis-dependent criteria should be implemented in your
+   analysis-specific class inheriting from Overlap_Removals.
 
-        /// main overlap removal function
-        void performOverlap(ElectronVector& electrons, MuonVector& muons,
-                            TauVector& taus, JetVector& jets);
-        /// remove jets from electrons
-        void j_e_overlap(ElectronVector& electrons, JetVector& jets);
-        /// remove electrons from jets
-        void e_j_overlap(ElectronVector& electrons, JetVector& jets);
-        /// remove muons from jets
-        void m_j_overlap(MuonVector& muons, JetVector& jets);
-        /// remove electrons and muons that overlap with each-other
-        void e_m_overlap(ElectronVector& electrons, MuonVector& muons);
-        /// remove (sub-lead) electron from (lead) electron
-        void e_e_overlap(ElectronVector& electrons);
+   The analysis-specific tool should be instantiated with Overlap_Removals::build().
 
-        /// remove (pairs) overlapping muons
-        void m_m_overlap(MuonVector& muons);
-        /// remove taus overlapping with electrons
-        void t_e_overlap(TauVector& taus, ElectronVector& electrons);
-        /// remove taus overlapping with muons
-        void t_m_overlap(TauVector& taus, MuonVector& muons);
-        /// remove jets overlapping with taus
-        void j_t_overlap(TauVector& taus, JetVector& jets);
+   For details on the design and implementation of this class, see the
+   documentation for JetSelector.
 
-        void check();
+   daniel.joseph.antrim@cern.ch
+   davide.gerbaudo@gmail.com, Sep 2015
+*/
+class OverlapTools
+{
+public :
+    /// provide analysis-specific OR tool (or vanilla one if analysis is unknown)
+    /**
+       The user owns the selector (i.e. should use std::shared_ptr
+       or delete it when done with it).
+    */
+    static OverlapTools* build(const AnalysisType &a, bool verbose);
+    OverlapTools(); ///< Default ctor
+    virtual ~OverlapTools(){};  ///< dtor (for now we don't have anything to delete)
+    // main overlap removal function, performs all removals
+    /**
+       includes several of the member functions below.
+    */
+    virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
+                                TauVector& taus, JetVector& jets);
+    virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove jet from electron
+    virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove electron from jet
+    virtual void m_j_overlap(MuonVector& muons, JetVector& jets, double dR); ///< remove muon from jet
+    virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons, double dR); ///< remove electron from muon
+    virtual void e_e_overlap(ElectronVector& electrons, double dR); ///< remove electron from electron
+    virtual void m_m_overlap(MuonVector& muons, double dR); ///< remove muon from muon
+    virtual void t_e_overlap(TauVector& taus, ElectronVector& electrons, double dR); ///< remove tau from electron
+    virtual void t_m_overlap(TauVector& taus, MuonVector& muons, double dR); ///< remove tau from muon
+    virtual void j_t_overlap(TauVector& taus, JetVector& jets, double dR); ///< remove jet from tau
+    /// remove non-isolated leptons from the input collections
+    /**
+       Some analyses might want to perform the overlap removal using
+       isolated leptons only. In this case, they need to call this
+       function within performOverlap() before calling all the
+       a_b_overlap() functions. They also need to call
+       setElectronIsolation() and setMuonIsolation() beforehand, with
+       the values that can be retrieved from the ElectronSelector and
+       MuonSelector.
+     */
+    virtual void removeNonisolatedLeptons(ElectronVector& electrons, MuonVector& muons);
+    /// electron isolation used in leptonPassesIsolation()
+    OverlapTools& setElectronIsolation( Isolation eleIso ) { m_electronIsolation = eleIso; return *this; }
+    /// muon isolation used in leptonPassesIsolation()
+    OverlapTools& setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; return *this; }
+    /// used within removeNonisolatedLeptons()
+    bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
 
+protected :
+    Isolation m_electronIsolation;
+    Isolation m_muonIsolation;
+    bool m_verbose;
+}; // class OverlapTools
 
+//----------------------------------------------------------
+//
+// End generic selector, begin analysis-specific ones
+//
+//----------------------------------------------------------
 
-    protected :
-        AnalysisType m_analysis;
-        bool m_useSignalLeptons;
-        bool m_useIsoLeptons;
-        Isolation m_electronIsolation;
-        Isolation m_muonIsolation;
-        float m_mv2c20_ORcut;
-        bool m_doBjetOR;
-        bool m_verbose;
+/// implements OR procedure from ATL-COM-PHYS-2013-911
+class OverlapTools_2Lep : public OverlapTools
+{
+};
+/// implements OR procedure from ATL-COM-PHYS-2013-888
+class OverlapTools_3Lep : public OverlapTools
+{
+};
 
-        
+/// implements OR procedure from ATL-COM-PHYS-2014-221
+class OverlapTools_2LepWH : public OverlapTools
+{
+};
 
-        ////////////////////////////////
-        // Cuts for overlap
-        ////////////////////////////////
-        float E_E_DR  =0.05; ///< dR cone for performing e-e overlap (remove sub-leading electron)
-        float J_E_DR  =0.2;  ///< dR cone for performing jet-electron overlap (remove jet)
-        float T_E_DR  =0.2;  ///< dR cone for performing tau-electron overlap (remove tau)
-        float T_M_DR  =0.2;  ///< dR cone for performing tau-muon overlap (remove tau)
-        float J_T_DR  =0.2;  ///< dR cone for performing jet-tau overlap (remove jet)
-        float E_J_DR  =0.4;  ///< dR cone for performing electron-jet overlap (remove electron)
-        float M_J_DR  =0.4;  ///< dR cone for performing muon-jet overlap (remove muon)
-        float E_M_DR  =0.01; ///< dR cone for performing electron-muon overlap (remove both the electron AND muon)
-        float M_M_DR  =0.05; ///< dR cone for performing muon-muon overlap (remove both muons)
-        
-    
+/// implements OR procedure from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
+class OverlapTools_SS3L: public OverlapTools {
+    virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
+                                TauVector& taus, JetVector& jets);
+    /// different from OverlapTools::j_e_overlap() : performs BjetOR
+    virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR);
+};
 
-
-
-
-    }; // class OverlapTools
-
-
+/// implements OR procedure from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
+class OverlapTools_Stop2L : public OverlapTools
+{
+};
 
 
 

@@ -72,8 +72,8 @@ public :
        _your_ (overriding) implementation of isSignal()
      */
     MuonSelector& setSignalId(const MuonId &v) { m_signalId = v; return *this; }
-    bool verbose() { return m_verbose; }
     MuonSelector& setVerbose(const bool &v) { m_verbose = v; return *this; }
+    bool verbose() const { return m_verbose; }
 protected :
     MuonId m_signalId; ///< required quality of the signal muon
     Isolation m_signalIsolation; ///< required to propagate to OverlapTools

@@ -59,7 +59,7 @@ public:
     MuonSelector&       muonSelector()       { return *m_muonSelector; }
     TauSelector&        tauSelector()        { return *m_tauSelector; }
     JetSelector&        jetSelector()        { return *m_jetSelector; }
-    OverlapTools&       overlapTool()        { return m_overlapTool; }
+    OverlapTools&       overlapTool()        { return *m_overlapTool; }
     TriggerTools&       triggerTool()        { return m_triggerTool; }
 
     //
@@ -189,7 +189,7 @@ public:
     MuonSelector* m_muonSelector;         ///< select muons according to the current analysis settings
     TauSelector*  m_tauSelector;          ///< select taus according to the current analysis settings
     JetSelector* m_jetSelector;           ///< select jets according to the current analysis settings
-    OverlapTools m_overlapTool;           ///< tool to perform the analysis' OR procedure
+    OverlapTools* m_overlapTool;          ///< tool to perform the analysis' OR procedure
     TriggerTools m_triggerTool;  ///< tool to access the trigger information
 
 protected:
