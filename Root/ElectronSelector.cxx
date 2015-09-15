@@ -58,7 +58,7 @@ ElectronSelector::ElectronSelector() :
 {
 }
 //---------------------------------------------------------
-bool ElectronSelector::isBaselineElectron(const Electron* el)
+bool ElectronSelector::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
@@ -69,7 +69,7 @@ bool ElectronSelector::isBaselineElectron(const Electron* el)
     return pass;
 }
 //----------------------------------------------------------
-bool ElectronSelector::isSignalElectron(const Electron* el)
+bool ElectronSelector::isSignal(const Electron* el)
 {
     bool pass = false;
     if(el) {
@@ -140,7 +140,7 @@ bool ElectronSelector_2LepWH::passIpCut(const Electron &el)
 //----------------------------------------------------------
 // begin ElectronSelector_SS3L
 //----------------------------------------------------------
-bool ElectronSelector_SS3L::isBaselineElectron(const Electron* el)
+bool ElectronSelector_SS3L::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
@@ -153,13 +153,13 @@ bool ElectronSelector_SS3L::isBaselineElectron(const Electron* el)
     return pass;
 }
 //----------------------------------------------------------
-bool ElectronSelector_SS3L::isSignalElectron(const Electron* el)
+bool ElectronSelector_SS3L::isSignal(const Electron* el)
 {
     bool pass = false;
     if(el) {
         bool isIsolated = ((el->ptvarcone20/el->Pt()  < 0.06) &&
                            (el->etconetopo20/el->Pt() < 0.06) );
-        pass = (isBaselineElectron(el) &&
+        pass = (isBaseline(el) &&
                 isIsolated &&
                 el->tightLH &&
                 std::abs(el->trackEta)     <  2.0 &&
@@ -179,11 +179,11 @@ bool ElectronSelector_Stop2L::passIpCut(const Electron &el)
 
 }
 //----------------------------------------------------------
-bool ElectronSelector_Stop2L::isSignalElectron(const Electron* el)
+bool ElectronSelector_Stop2L::isSignal(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (isBaselineElectron(el) &&
+        pass = (isBaseline(el) &&
                 el->mediumLH &&
                 el->isoGradientLoose &&
                 passIpCut(*el));

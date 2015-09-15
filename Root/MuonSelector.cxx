@@ -56,7 +56,7 @@ MuonSelector::MuonSelector():
 {
 }
 //----------------------------------------------------------
-bool MuonSelector::isBaselineMuon(const Muon* mu)
+bool MuonSelector::isBaseline(const Muon* mu)
 {
     // works for Ana_2Lep, Ana_3Lep, Ana_2LepWH
     bool pass = false;
@@ -68,7 +68,7 @@ bool MuonSelector::isBaselineMuon(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-bool MuonSelector::isSignalMuon(const Muon* mu)
+bool MuonSelector::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
@@ -119,11 +119,11 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
 //----------------------------------------------------------
 // begin MuonSelector_3Lep
 //----------------------------------------------------------
-bool MuonSelector_3Lep::isSignalMuon(const Muon* mu)
+bool MuonSelector_3Lep::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (isBaselineMuon(mu) &&
+        pass = (isBaseline(mu) &&
                 mu->isoTight &&
                 passIpCut(mu));
     }
@@ -133,11 +133,11 @@ bool MuonSelector_3Lep::isSignalMuon(const Muon* mu)
 //----------------------------------------------------------
 // begin MuonSelector_ss3l
 //----------------------------------------------------------
-bool MuonSelector_2LepWH::isSignalMuon(const Muon* mu)
+bool MuonSelector_2LepWH::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (isBaselineMuon(mu) &&
+        pass = (isBaseline(mu) &&
                 mu->ptvarcone30/mu->Pt() < 0.06 && // note: isBaselineMuon guarantees pt>0
                 mu->etconetopo30/mu->Pt() < 0.14 && // was etcone?
                 passIpCut(mu));
@@ -157,7 +157,7 @@ bool MuonSelector_SS3L::passIpCut(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-bool MuonSelector_SS3L::isBaselineMuon(const Muon* mu)
+bool MuonSelector_SS3L::isBaseline(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
@@ -168,11 +168,11 @@ bool MuonSelector_SS3L::isBaselineMuon(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-bool MuonSelector_SS3L::isSignalMuon(const Muon* mu)
+bool MuonSelector_SS3L::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (isBaselineMuon(mu) &&
+        pass = (isBaseline(mu) &&
                 mu->ptvarcone30/mu->Pt() < 0.06 && // note: isBaselineMuon guarantees pt>0
                 passIpCut(mu));
     }
@@ -192,7 +192,7 @@ bool MuonSelector_Stop2L::passIpCut(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-bool MuonSelector_Stop2L::isBaselineMuon(const Muon* mu)
+bool MuonSelector_Stop2L::isBaseline(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
@@ -203,12 +203,12 @@ bool MuonSelector_Stop2L::isBaselineMuon(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-bool MuonSelector_Stop2L::isSignalMuon(const Muon* mu)
+bool MuonSelector_Stop2L::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
         pass = (mu->Pt() > 10.0 &&
-                isBaselineMuon(mu) &&
+                isBaseline(mu) &&
                 mu->isoGradientLoose &&
                 passIpCut(mu));
     }

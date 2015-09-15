@@ -39,12 +39,12 @@ public :
     static MuonSelector* build(const AnalysisType &a, bool verbose);
     MuonSelector();  ///< Default ctor
     virtual ~MuonSelector() {}; ///< dtor (for now we don't have anything to delete)
-    virtual bool isBaselineMuon(const Muon* mu); ///< whether mu passes the baseline criteria
+    virtual bool isBaseline(const Muon* mu); ///< whether mu passes the baseline criteria
     /// whether mu passes the signal criteria
     /**
        Usually baseline + impact parameter + isolation.
     */
-    virtual bool isSignalMuon(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
     /// whether mu is close enough to the primary vertex
     virtual bool passIpCut(const Muon* mu);
     /// nominal efficiency scale factor of mu
@@ -62,14 +62,14 @@ public :
     /// set signal isolation
     /**
        Note: the value you set here should match whatever you have in
-       _your_ (overriding) implementation of isSignalMuon()
+       _your_ (overriding) implementation of isSignal()
      */
     MuonSelector& setSignalIsolation(const Isolation &v) { m_signalIsolation = v; return *this; }
     /// id of signal muon, used to determine err SF
     MuonId signalId() const { return m_signalId; }
     /**
        Note: the value you set here should match whatever you have in
-       _your_ (overriding) implementation of isSignalMuon()
+       _your_ (overriding) implementation of isSignal()
      */
     MuonSelector& setSignalId(const MuonId &v) { m_signalId = v; return *this; }
     bool verbose() { return m_verbose; }
@@ -95,29 +95,29 @@ class MuonSelector_2Lep : public MuonSelector
 /// implements muon selection for ATL-COM-PHYS-2013-888
 class MuonSelector_3Lep : public MuonSelector
 {
-    virtual bool isSignalMuon(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
 };
 
 /// implements muon selection for ATL-COM-PHYS-2014-221
 class MuonSelector_2LepWH : public MuonSelector
 {
-    virtual bool isSignalMuon(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
 };
 
 /// implements https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class MuonSelector_SS3L : public MuonSelector
 {
     virtual bool passIpCut(const Muon* mu);
-    virtual bool isBaselineMuon(const Muon* mu);
-    virtual bool isSignalMuon(const Muon* mu);
+    virtual bool isBaseline(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
 };
 
 /// implements Muon selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class MuonSelector_Stop2L : public MuonSelector
 {
     virtual bool passIpCut(const Muon* mu);
-    virtual bool isBaselineMuon(const Muon* mu);
-    virtual bool isSignalMuon(const Muon* mu);
+    virtual bool isBaseline(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
 };
 
 } // end namespace

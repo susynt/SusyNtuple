@@ -33,7 +33,7 @@ TauSelector::TauSelector():
 {
 }
 //----------------------------------------------------------
-bool TauSelector::isBaselineTau(const Tau& tau)
+bool TauSelector::isBaseline(const Tau& tau)
 {
     // \todo update with Run2 recommendations
     // DG-2015-09-22
@@ -44,9 +44,9 @@ bool TauSelector::isBaselineTau(const Tau& tau)
             passBdtBaseline(tau));
 }
 //----------------------------------------------------------
-bool TauSelector::isSignalTau(const Tau& tau)
+bool TauSelector::isSignal(const Tau& tau)
 {
-    return (isBaselineTau(tau) &&
+    return (isBaseline(tau) &&
             passBdtSignal(tau) );
 }
 //----------------------------------------------------------

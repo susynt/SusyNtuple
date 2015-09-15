@@ -69,15 +69,15 @@ public:
     virtual ~JetSelector() {}; ///< dtor (for now we don't have anything to delete)
     JetSelector& setSystematic(const NtSys::SusyNtSys&); ///< set syst (needed for example for jvt)
     /// whether the jet is b-tagged
-    virtual bool isBJet(const Jet* jet);
-    virtual bool isCentralLightJet(const Jet* jet);
-    virtual bool isCentralBJet(const Jet* jet);
-    virtual bool isForwardJet(const Jet* jet);
+    virtual bool isB(const Jet* jet);
+    virtual bool isCentralLight(const Jet* jet);
+    virtual bool isCentralB(const Jet* jet);
+    virtual bool isForward(const Jet* jet);
     /// The jet-vertex-fraction requirement: usually applied to low-pt central jets
     virtual bool passJvt(const Jet* jet);
 
-    virtual bool isBaselineJet(const Jet* jet); ///< often analsysi-dependent
-    virtual bool isSignalJet(const Jet* jet); ///< often analsysi-dependent
+    virtual bool isBaseline(const Jet* jet); ///< often analsysi-dependent
+    virtual bool isSignal(const Jet* jet); ///< often analsysi-dependent
 
     bool verbose() const { return m_verbose; }
     JetSelector& setVerbose(bool v) { m_verbose = v; return *this; }
@@ -134,16 +134,16 @@ class JetSelector_2LepWH : public JetSelector
 /// implements jet selection from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class JetSelector_SS3L : public JetSelector
 {
-    virtual bool isBaselineJet(const Jet* jet);
-    virtual bool isSignalJet(const Jet* jet);
-    virtual bool isBJet(const Jet* jet);
+    virtual bool isBaseline(const Jet* jet);
+    virtual bool isSignal(const Jet* jet);
+    virtual bool isB(const Jet* jet);
 };
 
 /// implements jet selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class JetSelector_Stop2L : public JetSelector
 {
-    virtual bool isBaselineJet(const Jet* jet);
-    virtual bool isSignalJet(const Jet* jet);
+    virtual bool isBaseline(const Jet* jet);
+    virtual bool isSignal(const Jet* jet);
 };
 
 } // Susy

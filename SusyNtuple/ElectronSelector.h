@@ -39,12 +39,12 @@ public:
     /**
        Usually ID + pt + eta + d0sig
      */
-    virtual bool isBaselineElectron(const Electron* el);
+    virtual bool isBaseline(const Electron* el);
     /// whether el passes the signal criteria
     /**
        Usually baseline + impact parameter + isolation.
     */
-    virtual bool isSignalElectron(const Electron* el);
+    virtual bool isSignal(const Electron* el);
 
     virtual bool passIpCut(const Electron &el);
     virtual bool outsideCrackRegion(const Electron &el);
@@ -114,15 +114,15 @@ class ElectronSelector_2LepWH : public ElectronSelector
 /// implements electron selection from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class ElectronSelector_SS3L : public ElectronSelector
 {
-    virtual bool isBaselineElectron(const Electron* el);
-    virtual bool isSignalElectron(const Electron* el);
+    virtual bool isBaseline(const Electron* el);
+    virtual bool isSignal(const Electron* el);
 };
 
 /// implements electron selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class ElectronSelector_Stop2L : public ElectronSelector
 {
     virtual bool passIpCut(const Electron  &el);
-    virtual bool isSignalElectron(const Electron* el);
+    virtual bool isSignal(const Electron* el);
 };
 
 } // Susy

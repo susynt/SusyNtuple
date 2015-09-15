@@ -42,19 +42,19 @@ JetSelector& JetSelector::setSystematic(const NtSys::SusyNtSys &s)
     return *this;
 }
 //----------------------------------------------------------
-bool JetSelector::isBaselineJet(const Jet* jet)
+bool JetSelector::isBaseline(const Jet* jet)
 {
     return (jet->Pt() > 20.0);
 }
 //----------------------------------------------------------
-bool JetSelector::isSignalJet(const Jet* jet)
+bool JetSelector::isSignal(const Jet* jet)
 {
-    return (isCentralLightJet(jet) ||
-            isCentralBJet(jet) ||
-            isForwardJet(jet));
+    return (isCentralLight(jet) ||
+            isCentralB(jet) ||
+            isForward(jet));
 }
 //----------------------------------------------------------
-bool JetSelector::isBJet(const Jet* jet)
+bool JetSelector::isB(const Jet* jet)
 {
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
@@ -62,31 +62,31 @@ bool JetSelector::isBJet(const Jet* jet)
             (passJvt(jet)));
 }
 //----------------------------------------------------------
-bool JetSelector::isCentralLightJet(const Jet* jet)
+bool JetSelector::isCentralLight(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
         pass = (jet->Pt()         > 20.0 &&
                 fabs(jet->detEta) <  2.4 &&
                 passJvt(jet) &&
-                !isBJet(jet));
+                !isB(jet));
     }
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector::isCentralBJet(const Jet* jet)
+bool JetSelector::isCentralB(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
         pass = (jet->Pt()         > 20.0 &&
                 fabs(jet->detEta) <  2.4 &&
                 passJvt(jet) &&
-                isBJet(jet));
+                isB(jet));
     }
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector::isForwardJet(const Jet* jet)
+bool JetSelector::isForward(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
@@ -115,19 +115,19 @@ bool JetSelector::passJvt(const Jet* jet)
 size_t JetSelector::count_CL_jets(const JetVector &jets)
 {
     return std::count_if(jets.begin(), jets.end(),
-                         std::bind1st(std::mem_fun(&JetSelector::isCentralLightJet), this));
+                         std::bind1st(std::mem_fun(&JetSelector::isCentralLight), this));
 }
 //----------------------------------------------------------
 size_t JetSelector::count_CB_jets(const JetVector &jets)
 {
     return std::count_if(jets.begin(), jets.end(),
-                         std::bind1st(std::mem_fun(&JetSelector::isCentralBJet), this));
+                         std::bind1st(std::mem_fun(&JetSelector::isCentralB), this));
 }
 //----------------------------------------------------------
 size_t JetSelector::count_F_jets(const JetVector &jets)
 {
     return std::count_if(jets.begin(), jets.end(),
-                            std::bind1st(std::mem_fun(&JetSelector::isForwardJet), this));
+                            std::bind1st(std::mem_fun(&JetSelector::isForward), this));
 }
 //----------------------------------------------------------
 
@@ -146,7 +146,7 @@ size_t JetSelector::count_F_jets(const JetVector &jets)
 //----------------------------------------------------------
 // begin JetSelector_SS3L
 //----------------------------------------------------------
-bool JetSelector_SS3L::isBaselineJet(const Jet* jet)
+bool JetSelector_SS3L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet){
@@ -156,11 +156,11 @@ bool JetSelector_SS3L::isBaselineJet(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_SS3L::isSignalJet(const Jet* jet)
+bool JetSelector_SS3L::isSignal(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (isBaselineJet(jet) &&
+        pass = (isBaseline(jet) &&
                 jet->Pt()        > 20.0 &&
                 fabs(jet->Eta()) <  2.8 &&
                 passJvt(jet)            );
@@ -168,7 +168,7 @@ bool JetSelector_SS3L::isSignalJet(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_SS3L::isBJet(const Jet* jet)
+bool JetSelector_SS3L::isB(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
@@ -183,7 +183,7 @@ bool JetSelector_SS3L::isBJet(const Jet* jet)
 // begin JetSelector_Stop2L
 // TODO Danny please check values
 //----------------------------------------------------------
-bool JetSelector_Stop2L::isBaselineJet(const Jet* jet)
+bool JetSelector_Stop2L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
@@ -193,7 +193,7 @@ bool JetSelector_Stop2L::isBaselineJet(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_Stop2L::isSignalJet(const Jet* jet)
+bool JetSelector_Stop2L::isSignal(const Jet* jet)
 {
     bool pass = false;
     if(jet) {

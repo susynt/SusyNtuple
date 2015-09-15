@@ -39,16 +39,16 @@ public:
     /**
        Usually pt+bdt
     */
-    virtual bool isBaselineTau(const Tau& tau);
+    virtual bool isBaseline(const Tau& tau);
     /// wraps above
-    bool isBaselineTau(const Tau* tau) { return isBaselineTau(*tau); }
+    bool isBaseline(const Tau* tau) { return isBaseline(*tau); }
     /// whether tau passes the signal criteria
     /**
        Usually baseline + bdt
     */
-    virtual bool isSignalTau(const Tau& tau);
+    virtual bool isSignal(const Tau& tau);
     /// wraps above
-    virtual bool isSignalTau(const Tau* tau) { return isSignalTau(*tau); }
+    virtual bool isSignal(const Tau* tau) { return isSignal(*tau); }
     /// \todo document
     virtual bool passBdtBaseline(const Tau&);
     /// \todo document

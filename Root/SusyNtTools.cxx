@@ -233,7 +233,7 @@ ElectronVector SusyNtTools::getBaselineElectrons(const ElectronVector& preElecs)
     ElectronVector elecs;
     for (uint ie = 0; ie < preElecs.size(); ++ie) {
         Electron* e = preElecs.at(ie);
-        if(electronSelector().isBaselineElectron(e)){
+        if(electronSelector().isBaseline(e)){
             elecs.push_back(e);
         }
     } // ie
@@ -262,7 +262,7 @@ MuonVector SusyNtTools::getBaselineMuons(const MuonVector& preMuons)
     MuonVector baseMuons;
     for (uint im = 0; im < preMuons.size(); ++im) {
         Muon* mu = preMuons.at(im);
-        if(muonSelector().isBaselineMuon(mu)){
+        if(muonSelector().isBaseline(mu)){
             baseMuons.push_back(mu);
         }
     } // im
@@ -277,7 +277,7 @@ TauVector SusyNtTools::getBaselineTaus(const TauVector& preTaus)
     TauVector baseTaus;
     for (uint iTau = 0; iTau < preTaus.size(); iTau++) {
         Tau* tau = preTaus.at(iTau);
-        if(tauSelector().isBaselineTau(tau)){
+        if(tauSelector().isBaseline(tau)){
             baseTaus.push_back(tau);
         }
     } // iTau
@@ -320,7 +320,7 @@ JetVector SusyNtTools::getBaselineJets(const JetVector& preJets)
     JetVector baseJets;
     for (uint ij = 0; ij < preJets.size(); ++ij) {
         Jet* j = preJets.at(ij);
-        if(jetSelector().isBaselineJet(j)) {
+        if(jetSelector().isBaseline(j)) {
             baseJets.push_back(j);
         }
     } // ij
@@ -337,7 +337,7 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs)
     ElectronVector sigElecs;
     for (uint ie = 0; ie < baseElecs.size(); ++ie) {
         Electron* e = baseElecs.at(ie);
-        if (electronSelector().isSignalElectron(e)){
+        if (electronSelector().isSignal(e)){
             sigElecs.push_back(e);
         }
     }
@@ -352,7 +352,7 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons)
     MuonVector sigMuons;
     for (uint im = 0; im < baseMuons.size(); ++im) {
         Muon* mu = baseMuons.at(im);
-        if (muonSelector().isSignalMuon(mu)){
+        if (muonSelector().isSignal(mu)){
             sigMuons.push_back(mu);
         }
     }
@@ -368,7 +368,7 @@ TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus)
     for (uint iTau = 0; iTau < baseTaus.size(); iTau++) {
         Tau* tau = baseTaus[iTau];
 
-        if(tauSelector().isSignalTau(tau)) {
+        if(tauSelector().isSignal(tau)) {
             sigTaus.push_back(tau);
         }
     } // iTau
@@ -384,7 +384,7 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
     JetVector sigJets;
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
-        if(jetSelector().isSignalJet(j)) {
+        if(jetSelector().isSignal(j)) {
             sigJets.push_back(j);
         }
     }
@@ -461,27 +461,26 @@ TrackMet* SusyNtTools::getTrackMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool 
 /*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalLepton(const Lepton* l)
+bool SusyNtTools::isSignal(const Lepton* l)
 {
-    if(l->isEle()) return electronSelector().isSignalElectron((Electron*)l);
-    else           return muonSelector().isSignalMuon((Muon*)l);
+    if(l->isEle()) return electronSelector().isSignal((Electron*)l);
+    else           return muonSelector().isSignal((Muon*)l);
 };
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalElectron(const Electron* e)
+bool SusyNtTools::isSignal(const Electron* e)
 {
-    return electronSelector().isSignalElectron(e);
+    return electronSelector().isSignal(e);
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalMuon(const Muon* m)
+bool SusyNtTools::isSignal(const Muon* m)
 {
-    return muonSelector().isSignalMuon(m);
+    return muonSelector().isSignal(m);
 }
 
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalTau(const Tau* tau)
+bool SusyNtTools::isSignal(const Tau* tau)
 {
-    // At the moment, signal taus only use additional BDT selection
-    return tauSelector().isSignalTau(tau);
+    return tauSelector().isSignal(tau);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets)
@@ -513,7 +512,7 @@ JetVector SusyNtTools::getBJets(const JetVector& jets)
 {
     JetVector bJets;
     for(auto jet : jets) {
-        if (jetSelector().isCentralBJet(jet))
+        if (jetSelector().isCentralB(jet))
             bJets.push_back(jet);
     }
     return bJets;

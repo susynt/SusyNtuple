@@ -119,10 +119,10 @@ public:
     JetVector      getSignalJets(const JetVector& baseJets);
 
     /// Check if signal object
-    bool isSignalLepton(const Susy::Lepton* l);
-    bool isSignalElectron(const Susy::Electron* e);
-    bool isSignalMuon(const Susy::Muon* m);
-    bool isSignalTau(const Susy::Tau* tau);
+    bool isSignal(const Susy::Lepton* l);
+    bool isSignal(const Susy::Electron* e);
+    bool isSignal(const Susy::Muon* m);
+    bool isSignal(const Susy::Tau* tau);
 
     /// Build lepton vector, sort by pT
     void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
