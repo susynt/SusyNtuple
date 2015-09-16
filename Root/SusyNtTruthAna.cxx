@@ -57,7 +57,7 @@ Bool_t SusyNtTruthAna::Process(Long64_t entry)
   {
     cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
-         << " event " << setw(7) << nt.evt()->event << " ****" << endl;
+         << " eventNumber " << setw(7) << nt.evt()->eventNumber << " ****" << endl;
   }
 
   // Dump variables from the tree for testing

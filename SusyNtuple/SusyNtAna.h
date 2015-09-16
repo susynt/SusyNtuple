@@ -5,13 +5,11 @@
 #include "TTree.h"
 #include "TStopwatch.h"
 
-#include "ReweightUtils/APWeightEntry.h"
-#include "ReweightUtils/APReweightND.h"
-#include "ReweightUtils/APEvtWeight.h"
-
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyNtTools.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/SusyNtSys.h"
+#include "SusyNtuple/TauId.h"
 
 #include <fstream>
 #include <map>
@@ -23,7 +21,7 @@ typedef std::map< unsigned int, std::set<unsigned int>* > RunEventMap;
 
 
 ///    SusyNtAna - base class for analyzing SusyNt
-class SusyNtAna : public TSelector, public SusyNtTools
+class SusyNtAna : public TSelector
 {
 
   public:
@@ -34,7 +32,10 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     /// SusyNt object, access to the SusyNt variables
     Susy::SusyNtObject nt;
-
+    /// helper tools and functions
+    SusyNtTools m_nttools;
+    inline void setAnaType(AnalysisType v){ m_nttools.setAnaType(v); }
+    /*const*/ SusyNtTools& nttools() /*const*/ { return m_nttools; } // DG should be const
 
     //
     // TSelector methods
@@ -65,8 +66,8 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     // Object selection
     void clearObjects();
-    void selectObjects(SusyNtSys sys = NtSys_NOM, bool removeLepsFromIso=false, 
-                       TauID signalTauID=TauID_medium, bool n0150BugFix = false);
+    void selectObjects(Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM,
+                       TauId signalTauID=TauId::Medium);
 
     // Cleaning cuts
     int cleaningCutFlags();
@@ -88,7 +89,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     void setPrintFreq(int freq) { m_printFreq = freq; }
 
     /// Debug level
-    void setDebug(int dbg) { m_dbg = dbg; }
+    void setDebug(int dbg) { m_dbg = dbg; m_mcWeighter.setVerbose(dbg); }
     int dbg() { return m_dbg; }
 
     void toggleCheckDuplicates(bool b=true) { m_duplicate = b; }
@@ -96,7 +97,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     
     void setEvtDebug() { m_dbgEvt = true; }
     bool dbgEvt() const { return m_dbgEvt; }
-    void loadEventList();
+    void loadEventList(const std::string filename="debugEvents.txt");
     bool processThisEvent(unsigned int run, unsigned int event);
     bool checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event);
     bool checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event);
@@ -153,7 +154,9 @@ class SusyNtAna : public TSelector, public SusyNtTools
 
     ElectronVector      m_preElectrons;         ///< selected electrons before OR
     MuonVector          m_preMuons;             ///< selected muons before OR
+    LeptonVector        m_preLeptons;       
     JetVector           m_preJets;              ///< selected jets before OR
+    TauVector           m_preTaus;
 
     ElectronVector      m_baseElectrons;        ///< baseline electrons
     MuonVector          m_baseMuons;            ///< baseline muons
@@ -173,6 +176,7 @@ class SusyNtAna : public TSelector, public SusyNtTools
     TauVector           m_tightTaus;            ///< taus with tight ID
 
     const Susy::Met*    m_met;                  ///< Met
+    const Susy::TrackMet*    m_trackMet;        ///< TrackMet
 
     /// Timer
     TStopwatch          m_timer;

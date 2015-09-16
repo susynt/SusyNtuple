@@ -6,9 +6,10 @@
 import operator
 import os
 import re
+import subprocess
 
 def rootcoredir():
-    return os.environ['ROOTCOREDIR']
+    return os.environ['ROOTCOREBIN']
 
 def import_root():
     import ROOT as r
@@ -18,21 +19,13 @@ def import_root():
 
 r = import_root()
 def load_packages():
-    "Equivalent to RootCore's load_packages.C"
-    rootcoredir = os.environ['ROOTCOREBIN']
-    r.gSystem.AddIncludePath('-I"'+rootcoredir+'/include"')
-    for l in open(os.path.join(rootcoredir, 'preload')):
-        r.gSystem.Load(l.strip())
-    for l in open(os.path.join(rootcoredir, 'load')):
-        r.gSystem.Load('lib%s'%l.strip())
-    # r.gROOT.LoadMacro(rootcoredir+'/scripts/load_packages.C+')
-    # r.load_packages()
+    "Just following the instructions at https://twiki.cern.ch/twiki/bin/viewauth/AtlasComputing/RootCore"
+    r.gROOT.ProcessLine(".x ${ROOTCOREDIR}/scripts/load_packages.C")
 
 def generate_dicts():
     'generate missing dicts to access SusyNtuple objects'
     wd = os.getcwd()
     cpp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../run/tmp_cpp/')
-    print 'cpp_dir ',cpp_dir
     r.gSystem.ChangeDirectory(cpp_dir)
     dict_macro = 'linkdef.cxx'
     r.gROOT.LoadMacro(dict_macro+'+')
@@ -68,7 +61,8 @@ def enum_from_header(filename, enumName) :
     file_data = ' '.join(line.split('//')[0].split('#')[0] for line in file_data.splitlines())
     file_data = ' '.join(re.split(r'\/\*.*?\*\/', file_data))
     # Look for enums: In the first { } block after the keyword "enum"
-    enums = [(text.split('{')[0].replace('enum','').strip(), text.split('{')[1].split('}')[0])
+    enums = [(text.split('{')[0].replace('enum','').replace('class','').strip(),
+              text.split('{')[1].split('}')[0])
              for text in re.split(r'\benum\b', file_data)[1:]]
     enum = dict()
     for enum_name, enum_keyvals in enums:
@@ -95,11 +89,17 @@ def import_SUSYDefs_enums():
     utils.TauID.TauID_loose
     """
     enums = ['TauID', 'AnalysisType', 'SusyNtSys', 'BTagSys']
-    for e_name in enums:
-        e_vals = enum_from_header(os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'), e_name)
-        enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
-                                                              for k in dict_keys_sorted_by_value(e_vals)]))
-        exec enum_expr in globals()
+    def build_enums_from_file(enum_names=[], filename=''):
+        for e_name in enum_names:
+            e_vals = enum_from_header(filename, e_name)
+            if not e_vals : continue
+            enum_expr = "class %s:\n\t%s\n"%(e_name, '\n\t'.join(["%s = %d"%(k, e_vals[k])
+                                                                  for k in dict_keys_sorted_by_value(e_vals)]))
+            exec enum_expr in globals()
+    build_enums_from_file(['TauID', 'BTagSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyDefs.h'))
+    build_enums_from_file(['AnalysisType'], os.path.join(rootcoredir(), 'include/SusyNtuple/AnalysisType.h'))
+    build_enums_from_file(['SusyNtSys'], os.path.join(rootcoredir(), 'include/SusyNtuple/SusyNtSys.h'))
+
 import_SUSYDefs_enums()
 
 def mkdir_if_needed(dirname) :
@@ -109,3 +109,13 @@ def is_valid_output_dir(dirname):
     return os.path.isdir(dirname)
 def commonPrefix(lst) : return os.path.commonprefix(lst)
 def commonSuffix(lst) : return os.path.commonprefix([l[::-1] for l in lst])[::-1]
+
+def getCommandOutput(command, cwd=None):
+    "lifted from supy (https://github.com/elaird/supy/blob/master/utils/io.py)"
+    p = subprocess.Popen(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE, cwd = cwd)
+    stdout,stderr = p.communicate()
+    return {"stdout":stdout, "stderr":stderr, "returncode":p.returncode}
+
+def first(listOrDict) :
+    lod = listOrDict
+    return lod.itervalues().next() if type(lod) is dict else lod[0] if lod else None

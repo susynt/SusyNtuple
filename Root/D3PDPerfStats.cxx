@@ -218,7 +218,7 @@ namespace D3PDReader {
       return;
    }
 
-   void D3PDPerfStats::FileUnzipEvent( ::TFile* file, ::Long64_t pos, ::Double_t start,
+   void D3PDPerfStats::UnzipEvent( ::TObject* tree, ::Long64_t pos, ::Double_t start,
                                        ::Int_t complen, ::Int_t objlen ) {
 
       // Do the calculation without delay:
@@ -226,7 +226,7 @@ namespace D3PDReader {
       const ::Double_t dtime = tnow - start;
 
       // Do nothing if we're not running:
-      if( ( ! fRunning ) || ( file != fFile ) ) return;
+      if( ( ! fRunning ) || ( tree != fTree ) ) return;
 
       // Just accumulate the zipping time statistics:
       fStats.SetUnzipTime( fStats.GetUnzipTime() + dtime );
@@ -235,7 +235,8 @@ namespace D3PDReader {
 #if ROOT_VERSION_CODE > ROOT_VERSION( 5, 28, 0 )
       // Forward the call if possible:
       if( fOtherPerfStats ) {
-         fOtherPerfStats->FileUnzipEvent( file, pos, start, complen, objlen );
+         // fOtherPerfStats->FileUnzipEvent( file, pos, start, complen, objlen );
+         fOtherPerfStats->UnzipEvent( tree, pos, start, complen, objlen );
       }
 #endif // ROOT_VERSION...
 

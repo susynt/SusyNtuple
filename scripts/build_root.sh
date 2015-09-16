@@ -24,14 +24,14 @@ sudo apt-get install \
 mkdir /tmp/build_root
 mkdir /tmp/install_root
 cd /tmp/build_root/
-wget  ftp://root.cern.ch/root/root_v5.34.18.source.tar.gz
-tar xzf root_v5.34.18.source.tar.gz 
-mv root root_v5.34.18
-cd root_v5.34.18/
+wget  ftp://root.cern.ch/root/root_v5.34.22.source.tar.gz
+tar xzf root_v5.34.22.source.tar.gz
+mv root root_v5.34.22
+cd root_v5.34.22/
 export ROOTSYS=/tmp/install_root/
 ./configure linuxx8664gcc --enable-explicitlink --enable-soversion --enable-minuit2 --enable-python --enable-roofit --enable-xml --enable-tmva --disable-xrootd --fail-on-missing
 make
 
 # package
 make dist
-ls -lh /tmp/build_root/root_v5.34.18.linuxx8664gcc-gcc-4.6.tar.gz
+ls -lh /tmp/build_root/root_v5.34.22.linuxx8664gcc-gcc-4.6.tar.gz

@@ -1,3 +1,5 @@
+#ifdef FOO
+
 #include "THnSparse.h"
 
 #include "SusyNtuple/TrilTrigLogic.h"
@@ -230,3 +232,4 @@ float TrilTrigLogic::getTriggerWeight(const LeptonVector& leptons, const Event* 
   return 1;
 } 
 
+#endif

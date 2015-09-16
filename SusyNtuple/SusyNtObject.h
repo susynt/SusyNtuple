@@ -1,7 +1,8 @@
-#ifndef SusyCommon_SusyNtInterface_h
-#define SusyCommon_SusyNtInterface_h
+#ifndef SusyCommon_SusyNtObject_h
+#define SusyCommon_SusyNtObject_h
 
 #include "TTree.h"
+#include <vector>
 
 #include "SusyNtuple/VarHandle.h"
 #include "SusyNtuple/SusyNt.h"
@@ -48,6 +49,8 @@ namespace Susy
       D3PDReader::VarHandle< std::vector<Tau>* >        tau;
       /// Met variables
       D3PDReader::VarHandle< std::vector<Met>* >        met;  
+      /// TrackMet variables
+      D3PDReader::VarHandle< std::vector<TrackMet>* >   tkm;
       /// TruthParticle variables
       D3PDReader::VarHandle< std::vector<TruthParticle>* > tpr;
       /// TruthJet variables
@@ -55,7 +58,7 @@ namespace Susy
       /// TruthMet variables
       D3PDReader::VarHandle< std::vector<TruthMet>* >   tmt;
 
-      ClassDef(SusyNtObject, 3);
+      ClassDef(SusyNtObject, 5);
 
     protected:
 

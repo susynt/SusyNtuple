@@ -1,8 +1,10 @@
 #include <vector>
 
+#include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/SusyNtObject.h"
 #include "SusyNtuple/SusyDefs.h"
+
 
 #include "SusyNtuple/D3PDReadStats.h"
 #include "SusyNtuple/D3PDPerfStats.h"
@@ -13,9 +15,8 @@
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
-//#include "SusyNtuple/BTagCalib.h"
 
-#ifdef __CINT__
+#ifdef __CLING__
 
 #pragma link off all globals;
 #pragma link off all classes;
@@ -46,6 +47,7 @@
 #pragma link C++ class Susy::Photon+;
 #pragma link C++ class Susy::Jet+;
 #pragma link C++ class Susy::Met+;
+#pragma link C++ class Susy::TrackMet+;
 #pragma link C++ class Susy::Event+;
 #pragma link C++ class Susy::TruthParticle+;
 #pragma link C++ class Susy::TruthJet+;
@@ -60,6 +62,7 @@
 #pragma link C++ class std::vector< Susy::Photon >+;
 #pragma link C++ class std::vector< Susy::Jet >+;
 #pragma link C++ class std::vector< Susy::Met >+;
+#pragma link C++ class std::vector< Susy::TrackMet >+;
 #pragma link C++ class std::vector< Susy::TruthParticle >+;
 #pragma link C++ class std::vector< Susy::TruthJet >+;
 #pragma link C++ class std::vector< Susy::TruthMet >+;
@@ -67,8 +70,5 @@
 //Tools //optional to have this here ?
 #pragma link C++ class SusyNtTools+;
 #pragma link C++ class ChainHelper+;
-
-#pragma link C++ enum SusyNtSys+;
-#pragma link C++ enum BTagSys+;
 
 #endif

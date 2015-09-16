@@ -6,8 +6,8 @@ PACKAGE          = SusyNtuple
 PACKAGE_PRELOAD  = Graf Gpad Hist Physics Tree
 PACKAGE_CXXFLAGS = 
 PACKAGE_LDFLAGS  = $(shell root-config --libs --glibs)
-PACKAGE_BINFLAGS = -lCintex -lReflex -lPyROOT -lXMLParser -lEG 
-PACKAGE_DEP      = SUSYTools ReweightUtils Mt2 CalibrationDataInterface DGTriggerReweight JVFUncertaintyTool
+PACKAGE_BINFLAGS = -lPyROOT -lXMLParser -lEG
+PACKAGE_DEP	  	 = SUSYTools Mt2
 PACKAGE_NOOPT    = 0
 
 include $(ROOTCOREDIR)/Makefile-common

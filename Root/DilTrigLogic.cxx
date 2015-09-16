@@ -1,6 +1,13 @@
 // Trigger methods to handle Susy Dilepton trigger logic
 
+// dantrim July 5 2015 :: commenting out all of this since it is obsolete and
+// relies on old way of storing trigger bits using long long int
+
+#ifdef FOO
+
 #include "SusyNtuple/DilTrigLogic.h"
+
+
 
 /*--------------------------------------------------------------------------------*/
 // Constructor
@@ -321,8 +328,8 @@ double DilTrigLogic::getTriggerWeightEE(LeptonVector leptons, SusyNtSys sys)
   }
 
   int trigSys = 0; 
-  if(sys == NtSys_TRIGSF_EL_UP)      trigSys = 1;
-  else if(sys == NtSys_TRIGSF_EL_DN) trigSys = -1;
+  if(sys == NtSys::TRIGSF_EL_UP)      trigSys = 1;
+  else if(sys == NtSys::TRIGSF_EL_DN) trigSys = -1;
 
   double pt0  = leptons[0]->Pt() * 1000.;
   double eta0 = leptons[0]->Eta();
@@ -344,8 +351,8 @@ double DilTrigLogic::getTriggerWeightMM(LeptonVector leptons, float met,
   }
 
   int trigSys = 0;
-  if(sys == NtSys_TRIGSF_MU_UP)      trigSys = 1;
-  else if(sys == NtSys_TRIGSF_MU_DN) trigSys = -1; 
+  if(sys == NtSys::TRIGSF_MU_UP)      trigSys = 1;
+  else if(sys == NtSys::TRIGSF_MU_DN) trigSys = -1; 
 
   double pt0  = leptons[0]->Pt() * 1000.;
   double eta0 = leptons[0]->Eta();
@@ -371,10 +378,10 @@ double DilTrigLogic::getTriggerWeightEM(LeptonVector leptons, int NPV, SusyNtSys
   }
 
   int trigSys = 0;
-  if(sys == NtSys_TRIGSF_EL_UP)      trigSys = 1;
-  else if(sys == NtSys_TRIGSF_EL_DN) trigSys = -1;
-  else if(sys == NtSys_TRIGSF_MU_UP) trigSys = 2;
-  else if(sys == NtSys_TRIGSF_MU_DN) trigSys = -2;
+  if(sys == NtSys::TRIGSF_EL_UP)      trigSys = 1;
+  else if(sys == NtSys::TRIGSF_EL_DN) trigSys = -1;
+  else if(sys == NtSys::TRIGSF_MU_UP) trigSys = 2;
+  else if(sys == NtSys::TRIGSF_MU_DN) trigSys = -2;
 
   bool isElec0 = leptons[0]->isEle();
 
@@ -412,4 +419,4 @@ void DilTrigLogic::debugFlag(uint flag){
   cout << "\tEF_mu18_tight_e7_medium1    " << (flag & TRIG_mu18_tight_e7_medium1)    << endl;
   cout << "\tEF_2mu8_EFxe40wMu_tclcw     " << (flag & TRIG_2mu8_EFxe40wMu_tclcw)     << endl;
 }
-
+#endif

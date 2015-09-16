@@ -14,9 +14,10 @@ SusyNtObject::SusyNtObject():
         ele(this, "electrons", 0),
         muo(this, "muons", 0),
         jet(this, "jets", 0),
-	pho(this, "photons", 0),
-	tau(this, "taus", 0),
+	    pho(this, "photons", 0),
+	    tau(this, "taus", 0),
         met(this, "met", 0),
+        tkm(this, "trackMet", 0),
         tpr(this, "truthParticles", 0),
         tjt(this, "truthJets", 0),
         tmt(this, "truthMet", 0)
@@ -31,9 +32,10 @@ SusyNtObject::SusyNtObject(const Long64_t& entry):
         ele(this, "electrons", &entry),
         muo(this, "muons", &entry),
         jet(this, "jets", &entry),
-	pho(this, "photons", &entry),
-	tau(this, "taus", &entry),
+	    pho(this, "photons", &entry),
+	    tau(this, "taus", &entry),
         met(this, "met", &entry),
+        tkm(this, "trackMet", &entry),
         tpr(this, "truthParticles", &entry),
         tjt(this, "truthJets", &entry),
         tmt(this, "truthMet", &entry)
@@ -52,6 +54,7 @@ void SusyNtObject::SetActive()
   pho.SetActive(true);
   tau.SetActive(true);
   met.SetActive(true);
+  tkm.SetActive(true);
   tpr.SetActive(true); 
   tjt.SetActive(true); 
   tmt.SetActive(true);
@@ -69,6 +72,7 @@ void SusyNtObject::WriteTo(TTree* tree)
   pho.WriteTo(tree);
   tau.WriteTo(tree);
   met.WriteTo(tree);
+  tkm.WriteTo(tree);
   tpr.WriteTo(tree);
   tjt.WriteTo(tree);
   tmt.WriteTo(tree);
@@ -86,6 +90,7 @@ void SusyNtObject::ReadFrom(TTree* tree)
   pho.ReadFrom(tree);
   tau.ReadFrom(tree);
   met.ReadFrom(tree);
+  tkm.ReadFrom(tree);
   tpr.ReadFrom(tree);
   tjt.ReadFrom(tree);
   tmt.ReadFrom(tree);
@@ -103,6 +108,7 @@ void SusyNtObject::clear()
   pho()->clear();
   tau()->clear();
   met()->clear();
+  tkm()->clear();
   tpr()->clear();
   tjt()->clear();
   tmt()->clear();

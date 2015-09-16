@@ -9,7 +9,6 @@ using namespace Susy;
 // SusyNtAna Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtAna::SusyNtAna() : 
-        SusyNtTools(),
         nt(m_entry),
         m_entry(0),
         m_selectTaus(true),
@@ -66,11 +65,11 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   {
     cout << "**** Processing entry " << setw(6) << m_chainEntry
          << " run " << setw(6) << nt.evt()->run
-         << " event " << setw(7) << nt.evt()->event << " ****" << endl;
+         << " event " << setw(7) << nt.evt()->eventNumber << " ****" << endl;
   }
 
   //Debug this event - check if should be processed
-  if(m_dbgEvt && !processThisEvent(nt.evt()->run, nt.evt()->event)) return kFALSE;
+  if(m_dbgEvt && !processThisEvent(nt.evt()->run, nt.evt()->eventNumber)) return kFALSE;
 
   // Dump variables from the tree for testing
   if(m_dbg){
@@ -83,7 +82,7 @@ Bool_t SusyNtAna::Process(Long64_t entry)
   
   //Check Duplicate run:event
   if(!nt.evt()->isMC && checkDuplicate()){
-    if(isDuplicate(nt.evt()->run, nt.evt()->event))  return kFALSE;
+    if(isDuplicate(nt.evt()->run, nt.evt()->eventNumber))  return kFALSE;
   }
 
   // select baseline and signal objects
@@ -113,17 +112,17 @@ void SusyNtAna::Terminate()
 /*--------------------------------------------------------------------------------*/
 // Load Event list of run/event to process. Use to debug events
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::loadEventList()
+void SusyNtAna::loadEventList(const std::string filename)
 {
   int run, event;
-  FILE* eventsFile=fopen("debugEvents.txt","r");
+  FILE* eventsFile=fopen(filename.c_str(),"r");
   int nEvtDbg=0;
   while(fscanf(eventsFile,"%i %i \n",&run, &event) != EOF){
     cout << "Adding run-event " << run << " " << event << endl; 
     addRunEvent(m_eventList, run, event);
     nEvtDbg++;
   }
-  std::cout << " >>> Debuging " << nEvtDbg << " events " << std::endl;
+  std::cout << " >>> Debugging " << nEvtDbg << " events " << std::endl;
 }
 /*--------------------------------------------------------------------------------*/
 // Process selected events only
@@ -186,68 +185,136 @@ bool SusyNtAna::isDuplicate(unsigned int run, unsigned int event){
 /*--------------------------------------------------------------------------------*/
 void SusyNtAna::clearObjects()
 {
+  // pre objects
+  m_preElectrons.clear();
+  m_preMuons.clear();
+  m_preTaus.clear();
+  m_preJets.clear();
+  m_preLeptons.clear();
+
+  // baseline objects
   m_baseElectrons.clear();
   m_baseMuons.clear();
   m_baseTaus.clear();
-  m_baseLeptons.clear();
   m_baseJets.clear();
+  m_baseLeptons.clear();
+
+  // signal objects
   m_signalElectrons.clear();
   m_signalMuons.clear();
-  m_signalLeptons.clear();
   m_signalTaus.clear();
   m_signalJets.clear();
-  m_signalJets2Lep.clear();
-  m_mediumTaus.clear();
-  m_tightTaus.clear();
+  m_signalLeptons.clear();
+
+  // met
   m_met = NULL;
+  m_trackMet = NULL;
+
+  //////////////////
+  // old:
+  //m_baseElectrons.clear();
+  //m_baseMuons.clear();
+  //m_baseTaus.clear();
+  //m_baseLeptons.clear();
+  //m_baseJets.clear();
+  //m_signalElectrons.clear();
+  //m_signalMuons.clear();
+  //m_signalLeptons.clear();
+  //m_signalTaus.clear();
+  //m_signalJets.clear();
+  //m_signalJets2Lep.clear();
+  //m_mediumTaus.clear();
+  //m_tightTaus.clear();
+  //m_met = NULL;
+  //m_trackMet = NULL;
+  // old
+  //////////////////
 }
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::selectObjects(SusyNtSys sys, bool removeLepsFromIso, 
-                              TauID signalTauID, bool n0150BugFix)
+void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
 {
+  ///////////////////////////////////////
   // Empty the object vectors
+  ///////////////////////////////////////
   clearObjects();
 
-  // Get the Baseline objets
-  getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
-                     m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
-                     sys, m_selectTaus, n0150BugFix);
+  ///////////////////////////////////////
+  // Get the Pre-Selection.
+  // Systematic variation applied here.
+  ///////////////////////////////////////
+  m_nttools.getPreObjects(&nt, sys, m_preElectrons, m_preMuons, m_preJets, m_preTaus);
 
-  // Now grab Signal objects
-  // New signal tau prescription, fill both ID levels at once
-  getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
-                   m_signalElectrons, m_signalMuons, 
-                   m_mediumTaus, m_tightTaus, 
-                   m_signalJets, m_signalJets2Lep, 
-                   nt.evt()->nVtx, nt.evt()->isMC, 
-                   removeLepsFromIso, sys);
-  m_signalTaus = signalTauID==TauID_tight? m_tightTaus : m_mediumTaus;
+  ///////////////////////////////////////
+  // Get the Baseline Objects
+  ///////////////////////////////////////
+  m_nttools.getBaselineObjects(m_preElectrons, m_preMuons, m_preJets, m_preTaus,
+                               m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus);
+  ///////////////////////////////////////
+  // do OR 
+  ///////////////////////////////////////
+  m_nttools.overlapTool().performOverlap(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets);
 
-  // Grab met
-  SusyNtSys metSys = sys;
-  if(sys==NtSys_JVF_UP || sys==NtSys_JVF_DN) metSys = NtSys_NOM;
-  m_met = getMet(&nt, metSys);
+  ///////////////////////////////////////
+  // SFOS removal
+  ///////////////////////////////////////
+  if(m_nttools.doSFOSRemoval()){
+    m_nttools.removeSFOSPairs(m_baseElectrons, m_baseMuons);
+  }
 
+  ///////////////////////////////////////
+  // Get the Signal Objects
+  ///////////////////////////////////////
+  m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus,
+                              m_signalElectrons, m_signalMuons, m_signalJets, m_signalTaus, signalTauID);
+
+  ///////////////////////////////////////
   // Build Lepton vectors
-  buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
-  buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
+  ///////////////////////////////////////
+  m_nttools.buildLeptons(m_preLeptons, m_preElectrons, m_preMuons);
+  m_nttools.buildLeptons(m_baseLeptons, m_baseElectrons, m_baseMuons);
+  m_nttools.buildLeptons(m_signalLeptons, m_signalElectrons, m_signalMuons);
 
-  // sort leptons by pt
-  std::sort(m_baseLeptons.begin(), m_baseLeptons.end(), comparePt);
-  std::sort(m_signalLeptons.begin(), m_signalLeptons.end(), comparePt);
-  std::sort(m_signalJets.begin(), m_signalJets.end(), comparePt);
-  std::sort(m_signalJets2Lep.begin(), m_signalJets2Lep.end(), comparePt);
+  ///////////////////////////////////////
+  // Grab met
+  ///////////////////////////////////////
+  SusyNtSys metSys = sys;
+  //AT 05-09-15 JVF obsolete run-2
+  //if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
+  m_met = m_nttools.getMet(&nt, metSys);
+  m_trackMet = m_nttools.getTrackMet(&nt, metSys);
+
+ //////////////////////////////////////////////////////////////////////////////////
+ //// old:
+ // m_nttools.getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
+ //                              m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
+ //                              sys, m_selectTaus);
+
+ // // Now grab Signal objects
+ // // New signal tau prescription, fill both ID levels at once
+ // m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
+ //                            m_signalElectrons, m_signalMuons,
+ //                            m_mediumTaus, m_tightTaus,
+ //                            m_signalJets, m_signalJets2Lep,
+ //                            nt.evt()->nVtx, nt.evt()->isMC, sys);
+ // m_signalTaus = m_nttools.m_tauSelector.signalTauId() == TauId::Tight ? m_tightTaus : m_mediumTaus;
+ // //m_signalTaus = signalTauID == TauId::Tight ? m_tightTaus : m_mediumTaus;
+
+ // // old
+ // ////////////////////////////////////////////////////////////////////////////////
+
+
 }
 /*--------------------------------------------------------------------------------*/
 // Get on-the-fly cleaning cut flags. Select objects first!
 /*--------------------------------------------------------------------------------*/
 int SusyNtAna::cleaningCutFlags()
 {
-  return SusyNtTools::cleaningCutFlags(nt.evt()->cutFlags[NtSys_NOM],
-                                       m_preMuons, m_baseMuons,
-                                       m_preJets, m_baseJets);
+  return nt.evt()->cutFlags[NtSys::NOM];
+  //return m_nttools.cleaningCutFlags(nt.evt()->cutFlags[NtSys::NOM],
+  //                                  m_preMuons, m_baseMuons,
+  //                                  m_preJets, m_baseJets);
 }
 
 

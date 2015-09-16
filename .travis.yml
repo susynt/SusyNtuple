@@ -1,5 +1,6 @@
 # from https://github.com/rootpy/rootpy/blob/master/.travis.yml
 # travis-ci.org build & test configuration
+
 language: python
 
 python:
@@ -7,8 +8,8 @@ python:
 #  - "3.2"
 
 before_install:
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
   - sudo apt-get update -qq
-  - sudo apt-get install -qq  doxygen graphviz
 env:
   global:
      secure: MZDZhrKlxAlBmWmQV/xCN5xdfkDTKYzKvuzYDR3kQjz6JCYnCG2O4PZ3w3jAhOW/xqe/4dD+Se1HQl79FXUy+fQN0AfkLgZFObabYOEYtNhYpDxhz7rwe6RH0pOB1Qvp/pj50FfZZSjc5hdpBfMOstVmD4UgTl+TKYd/eLP0hFU=
@@ -19,6 +20,10 @@ env:
 
 
 install:
+  # pick g++ 4.8 to support c++11
+  - sudo apt-get install -qq g++-4.8
+  # - export CXX="g++-4.8"
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
   # Check if we are running Python 2 or 3. This is needed for the apt-get package names
   - if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then export PYTHON_SUFFIX="3"; fi
 
@@ -37,36 +42,37 @@ install:
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-numpy
   - time sudo apt-get install -qq python${PYTHON_SUFFIX}-scipy
   # Install a ROOT binary that we custom-built in a 64-bit Ubuntu VM (see scripts/build_root.sh)
-  - time wget --tries=2 --no-check-certificate https://copy.com/GArqtEGYzIKV -O root_v5.34.18.tgz
-  - tar xzf root_v5.34.18.tgz
-  - source root_v5.34.18/bin/thisroot.sh
+  - time wget --tries=2 --no-check-certificate https://copy.com/3vhULrCB2R2tjsfT -O root_v5.34.22.tgz
+  - tar xzf root_v5.34.22.tgz
+  - source root_v5.34.22/bin/thisroot.sh
 
   # get dependencies
   - cd ..
   - tar xzf SusyNtuple/data/SusyNt_dependencies.tgz
   - cd -
 
-  # setup RootCore
-  - cd ../RootCore
-  - echo "pwd is now `pwd`"
-  - ./configure
-  - cd ..
-  - source RootCore/scripts/setup.sh
-  - ./RootCore/scripts/find_packages.sh
-  - ./RootCore/scripts/compile.sh
-  - cd SusyNtuple/run
+#  # setup RootCore
+#  - cd ../RootCore
+#  - echo "pwd is now `pwd`"
+#  - ./configure
+#  - cd ..
+#  - source RootCore/scripts/setup.sh
+#  - ./RootCore/scripts/find_packages.sh
+#  - ./RootCore/scripts/compile.sh
+#  - cd SusyNtuple/run
 
 script:
   # Check if root and PyROOT work ok
   - time root -l -b -q
   - time python -c 'import ROOT; ROOT.TBrowser()'
 
-  # Now run the tests
-  # get an example test file
-  - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
-  # run the 2l cutflow
-  - Susy2LepCF -i mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
+#  # Now run the tests
+#  # get an example test file
+#  - time wget --tries=2 --no-check-certificate https://dl.dropboxusercontent.com/u/46907678/tmp/mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root
+#  # run the 2l cutflow
+#  - Susy2LepCF -i mc12_8TeV.179974.Sherpa_CT10_lllnu_WZ_MassiveCB.user.gerbaudo.031979._00007.susyNt.root -s Sherpa_CT10_lllnu_WZ_MassiveCB
 after_success:
+  - sudo apt-get install -qq  doxygen graphviz
   # from SusyNtuple/run, go back to the base dir and run doxygen if necessary
   - cd ${TRAVIS_BUILD_DIR}
   - doc/run_doxygen.sh

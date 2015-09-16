@@ -3,11 +3,11 @@
 #include <string>
 
 #include "TChain.h"
-#include "Cintex/Cintex.h"
 
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/MCWeighter.h"
+#include "SusyNtuple/string_utils.h"
 
 using namespace std;
 
@@ -43,7 +43,6 @@ void help()
 
 int main(int argc, char** argv)
 {
-  ROOT::Cintex::Cintex::Enable();
 
   int nEvt = -1;
   int nSkip = 0;
@@ -75,6 +74,8 @@ int main(int argc, char** argv)
       return 1;
   }
 
+  if(dbg)
+      cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
   cout << "flags:" << endl;
   cout << "  sample  " << sample   << endl;
   cout << "  sel     " << sel      << endl;
@@ -95,6 +96,7 @@ int main(int argc, char** argv)
   susyAna->setDebug(dbg);
   susyAna->setSampleName(sample);
   susyAna->setSelection(sel);
+  susyAna->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
 
   // MC Weighter
   /*MCWeighter* mcWeighter = new MCWeighter();

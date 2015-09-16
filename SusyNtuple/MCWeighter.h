@@ -5,19 +5,52 @@
 #include "TString.h"
 
 #include "SUSYTools/SUSYCrossSection.h"
-#include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/SusyDefs.h"
 
 #include <string>
+
+class TH1F;
+namespace Susy{ class Event; }
+
 /// A class to handle the normalization of Monte Carlo
 /**
-    There are options to control how to retrieve the sumw, xsec, etc.
-    The defaults are recommended, as long as they work.
+   A MC sample is normalized with the factor \f$\sigma * lumi / \sum
+   w\f$ This factor multiplies the generator event weight and all the
+   other factors (pileup, lepton efficiency, trigger scale factors
+   etc.)  Some samples can include multiple processes. This class
+   holds a map of the \f$\sum w\f$ values for each process. The
+   \f$\sum w\f$ is computed from the cutflow histograms that are
+   stored with the susyNt tree.
+
+   The user can specify the bin whose contents are used to compute
+   \sum w; otherwise defaultLabelBinCounter() will be used.
+
+   Two types of histograms are considered:
+   - for samples that contain only one process (most of them)
+     `genCutFlow`
+   - for samples that contain multiple processes (mostly slepton
+     samples) `procCutFlowXYZ`, where `XYZ` is the process number
+
+  \todo drop all the obsolete functionalities. Right now we support
+  only the sumwmap method with the sumw retrieved from the histogram.
+
 */
 
 class MCWeighter
 {
 
+ public:
+  struct SumwMapKey {
+    unsigned int dsid;
+    int proc;
+  SumwMapKey(): dsid(0), proc(0) {}
+  SumwMapKey(unsigned int d, int p): dsid(d), proc(p){}
+  };
+
   public:
+
+  //typedef std::pair<unsigned int, int> SumwMapKey;
+typedef std::map<SumwMapKey, float> SumwMap;
 
     //
     // Enums to control weighting options
@@ -55,6 +88,7 @@ class MCWeighter
       size_t counts_total;
       size_t counts_invalid;
       size_t max_warnings;
+      ProcessValidator& zero_hack(int &value) { value = 0; valid = true; return *this; }
       /**
          Also flag as invalid the suspicious events (i.e. when proc==-1 and proc!=previous_proc)
        */
@@ -80,6 +114,8 @@ class MCWeighter
     //
 
     MCWeighter();
+    MCWeighter(TTree* tree,
+               std::string xsecDir = "$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
     ~MCWeighter();
 
     /// Build a map of MCID -> sumw.
@@ -104,10 +140,11 @@ class MCWeighter
     void setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
 
     /// MC Weight includes generator, xsec, lumi, and pileup weights
-    float getMCWeight(const Susy::Event* evt, float lumi = LUMI_A_L, WeightSys sys=Sys_NOM);
+    float getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3, WeightSys sys=Sys_NOM);
     bool sumwmapHasKey(SumwMapKey k);
 
     /// Get sumw for this event
+    float total_sumw; 
     float getSumw(const Susy::Event* evt);
     /// Get cross section for this event
     SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
@@ -139,9 +176,11 @@ class MCWeighter
        "SusyProp Veto" for SUSY simplified models.
      */
     static std::string defaultLabelBinCounter(const unsigned int &dsid, bool verbose);
+    /// print a warning if the histo doesn't have a bin with the given label
+    static void checkHistoHasBin(const TH1F &histo, const std::string &binLabel);
     /// default directory from which we read the xsec files for SUSY::CrossSectionDB
     static std::string defaultXsecDir() {
-      return std::string("$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
+      return std::string("$ROOTCOREBIN/data/SUSYTools/mc15_13TeV/");
     }
     /// a list of the xsec files containing known simplified models
     static std::vector<std::string> xsecFilesForSimplifiedModels();
@@ -169,6 +208,10 @@ class MCWeighter
        See also util/test_mcWeighter.cxx
      */
     static bool isSimplifiedModel(const unsigned int &dsid, bool verbose);
+    /// read the first event from the tree (often used to retrieve sample parameters)
+    static const Susy::Event& readFirstEvent(TTree* tree);
+    /// extract 'XYZ' from 'prefixXYZ'
+    static int extractProcessFromCutflowHistoname(const std::string &histoName, const std::string &prefix);
  private:
     void buildSumwMapFromTree(TTree* tree);
     void buildSumwMapFromChain(TChain* chain);
@@ -196,5 +239,8 @@ class MCWeighter
     bool m_verbose; ///< toggle verbose printout
 };
 
+/// needed for std::map
+inline bool operator<(const MCWeighter::SumwMapKey &a, const MCWeighter::SumwMapKey &b)
+{ return a.dsid<b.dsid && a.proc<b.proc; }
 
 #endif

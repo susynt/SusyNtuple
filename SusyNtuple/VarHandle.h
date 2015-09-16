@@ -214,8 +214,8 @@ namespace D3PDReader {
 } // namespace D3PDReader
 
 // Include the implementation:
-#ifndef __CINT__
+#ifndef __CLING__
 #include "VarHandle.icc"
-#endif // __CINT__
+#endif // cling
 
 #endif // D3PDREADER_VARHANDLE_H

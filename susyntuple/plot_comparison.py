@@ -70,7 +70,8 @@ def args_are_valid(args):
             os.path.exists(input2) and
             utils.is_valid_output_dir(out_dir))
 
-def parse_input(name):
+def parse_input(name, opts):
+    verbose = opts.verbose
     result = []
     if os.path.isfile(name) and '.root' in name:
         result = [name]
@@ -78,6 +79,7 @@ def parse_input(name):
         result = [l.strip() for l in open(name).readlines() if '.root' in l]
     elif os.path.isdir(name):
         result = glob.glob(os.path.join(name, '*.root*'))
+    if verbose : print "parsed {0} files from input {1}".format(len(result), name)
     return result
 
 def run_fill(input1, input2, histos_filename, opts):
@@ -85,8 +87,8 @@ def run_fill(input1, input2, histos_filename, opts):
     num_entries = int(opts.num_entries) if opts.num_entries else None
     histos1 = book_histos(suffix='_1')
     histos2 = book_histos(suffix='_2')
-    fill_histos(parse_input(input1), histos1, max_num_entries=num_entries, verbose=opts.verbose)
-    fill_histos(parse_input(input2), histos2, max_num_entries=num_entries, verbose=opts.verbose)
+    fill_histos(parse_input(input1, opts), histos1, max_num_entries=num_entries, verbose=opts.verbose)
+    fill_histos(parse_input(input2, opts), histos2, max_num_entries=num_entries, verbose=opts.verbose)
     write_dict_or_obj(histos_filename, {'h1':histos1, 'h2':histos2})
 
 def book_histos(suffix='', out_file=None):
@@ -94,9 +96,13 @@ def book_histos(suffix='', out_file=None):
     histos = {}
     suffix = suffix if suffix else ''
     suffix = ('_'+suffix) if suffix and not suffix.startswith('_') else suffix
+    histos['el_n_base' ] = r.TH1F('el_n_base'+suffix,  'N base electrons / event; N_{el}', 21, -0.5, 20.5)
+    histos['el_n_sign' ] = r.TH1F('el_n_sign'+suffix,  'N signal electrons / event; N_{el}', 21, -0.5, 20.5)
     histos['el_pt' ] = r.TH1F('el_pt'+suffix,  'el p_{T};p_{T} [GeV]', 50, 0.0, 250.0)
     histos['el_eta'] = r.TH1F('el_eta'+suffix, 'el #eta; #eta', 50, -3.0, +3.0)
     histos['el_phi'] = r.TH1F('el_phi'+suffix, 'el #phi; #phi [rad]', 50, -math.pi, +math.pi)
+    histos['mu_n_base' ] = r.TH1F('mu_n_base'+suffix,  'N base muons / event; N_{mu}', 21, -0.5, 20.5)
+    histos['mu_n_sign' ] = r.TH1F('mu_n_sign'+suffix,  'N signal muons / event; N_{mu}', 21, -0.5, 20.5)
     histos['mu_pt' ] = r.TH1F('mu_pt'+suffix,  '#mu p_{T};p_{T} [GeV]', 50, 0.0, 250.0)
     histos['mu_eta'] = r.TH1F('mu_eta'+suffix, '#mu #eta; #eta', 50, -3.0, +3.0)
     histos['mu_phi'] = r.TH1F('mu_phi'+suffix, '#mu #phi; #phi [rad]', 50, -math.pi, +math.pi)
@@ -151,7 +157,7 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
     chain = r.TChain(tree_name)
     for f in input_files : chain.Add(f)
     num_entries = chain.GetEntries()
-    if verbose : print "About to loop on %d entries"%num_entries
+    if verbose : print "About to loop on %d entries from %d files"%(num_entries, len(input_files))
     nttool = r.SusyNtTools()
     m_entry = r.Long(-1)
     ntevent = r.Susy.SusyNtObject(m_entry)
@@ -160,7 +166,7 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
     period, useRewUtils = 'Moriond', False
     trig_logic = r.DilTrigLogic(period, useRewUtils)
     n_entries_to_print = 4
-    sys = utils.SusyNtSys.NtSys_NOM
+    sys = utils.SusyNtSys.NOM
     tauId = utils.TauID
     tauJetId, tauEleId, tauMuoId = tauId.TauID_loose, tauId.TauID_medium, tauId.TauID_medium
     cutflow = Cutflow()
@@ -187,22 +193,33 @@ def fill_histos(input_files, histos, tree_name='susyNt', max_num_entries=None, v
         nttool.buildLeptons(pre_lep, pre_elecs, pre_muons)
         nttool.buildLeptons(sig_lep, sig_elecs, sig_muons)
         if verbose and iEntry<n_entries_to_print:
+            print "run {0} event {1}".format(ntevent.evt().run, ntevent.evt().event)
+            print "pre_elecs[{0}], pre_muons[{1}] pre_taus[{2}] pre_jets[{3}]".format(len(pre_elecs), len(pre_muons), len(pre_taus), len(pre_jets))
             print 'pre_lep:\n','\n'.join(["[%d] %s (eta,phi,pt) = (%.3f, %.3f, %.3f)"
                                           %
                                           (iL, "mu" if l.isMu() else "el", l.Eta(), l.Phi(), l.Pt())
                                           for iL, l in enumerate(pre_lep)])
+            print 'pre_jets:\n','\n'.join(["[%d] (eta,phi,pt) = (%.3f, %.3f, %.3f)"
+                                           %
+                                           (iL, j.Eta(), j.Phi(), j.Pt())
+                                           for iL, j in enumerate(pre_jets)])
+
         event_flag = ntevent.evt().cutFlags[0]
         def mll(leps):
             return (leps[0] + leps[1]).M()
         try:
             cutflow.cut_if(False, 'input')
             cutflow.cut_if(not nttool.passLAr(event_flag), 'lar')
-            cutflow.cut_if(not nttool.passBadJet(event_flag), 'bad_jet')
-            cutflow.cut_if(not nttool.passBadMuon(event_flag), 'bad_mu')
-            cutflow.cut_if(not nttool.passCosmic(event_flag), 'cosmic')
+            cutflow.cut_if(False, 'bad_jet') #not nttool.passBadJet(event_flag), 'bad_jet')
+            cutflow.cut_if(False, 'bad_mu')  #not nttool.passBadMuon(event_flag), 'bad_mu')
+            cutflow.cut_if(False, 'cosmic')  #not nttool.passCosmic(event_flag), 'cosmic')
             cutflow.cut_if(not pre_lep.size()==2, '2lep')
             cutflow.cut_if(not trig_logic.passDilTrig(pre_lep, met.Et, ntevent.evt()), 'trigger')
             cutflow.cut_if(not mll(pre_lep)>20.0, 'mll20')
+            histos['el_n_base'].Fill(len(pre_elecs)) # todo: fix, use base rather than pre
+            histos['el_n_sign'].Fill(len(sig_elecs))
+            histos['mu_n_base'].Fill(len(pre_muons)) # todo: fix, use base rather than pre
+            histos['mu_n_sign'].Fill(len(sig_muons))
             for el in sig_elecs:
                 histos['el_pt'].Fill(el.Pt())
                 histos['el_eta'].Fill(el.Eta())

@@ -1,5 +1,10 @@
 # vim: set noexpandtab:
 
+2014-10-30 Serhan Mete <amete@cern.ch>
+	* Added SV1plusIP3D b-tag weight for jets in xAOD DC14
+	modified   Root/SusyNt.cxx
+	modified   SusyNtuple/SusyNt.h
+
 2014-10-01 Serhan Mete <amete@cern.ch>
 	modified:   Root/MCWeighter.cxx
 	modified:   SusyNtuple/MCWeighter.h

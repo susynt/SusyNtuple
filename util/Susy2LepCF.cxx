@@ -3,10 +3,10 @@
 #include <string>
 
 #include "TChain.h"
-#include "Cintex/Cintex.h"
 
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
+#include "SusyNtuple/string_utils.h"
 
 using namespace std;
 
@@ -39,7 +39,6 @@ void help()
 
 int main(int argc, char** argv)
 {
-  ROOT::Cintex::Cintex::Enable();
 
   int nEvt = -1;
   int nSkip = 0;
@@ -66,7 +65,9 @@ int main(int argc, char** argv)
       cout<<"You must specify an input"<<endl;
       return 1;
   }
-
+  if(dbg)
+      cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
+      
   cout << "flags:" << endl;
   cout << "  sample  " << sample   << endl;
   cout << "  nEvt    " << nEvt     << endl;
@@ -85,7 +86,8 @@ int main(int argc, char** argv)
   Susy2LepCutflow* susyAna = new Susy2LepCutflow();
   susyAna->setDebug(dbg);
   susyAna->setSampleName(sample);
-
+  susyAna->setChain(chain); // propagate the TChain to the analysis
+  susyAna->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
   // Run the job
   if(nEvt<0) nEvt = nEntries;
   cout << endl;

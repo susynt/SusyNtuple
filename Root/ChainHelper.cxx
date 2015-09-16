@@ -1,5 +1,8 @@
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/string_utils.h"
+#include "TObjArray.h"
+#include "TChainElement.h"
+
 #include <iostream>
 
 using namespace std;
@@ -51,7 +54,7 @@ ChainHelper::Status ChainHelper::addFileDir(TChain* chain, string fileDir)
 ChainHelper::Status ChainHelper::addInput(TChain* chain, const std::string &input, bool verbose)
 {
     Status status=GOOD;
-    using namespace susy::utils;
+    using namespace Susy::utils;
     if(contains(input, ",")){
         size_t num_added=0;
         std::vector< std::string > tokens = tokenizeString(input, ',');
@@ -78,18 +81,35 @@ ChainHelper::Status ChainHelper::addInput(TChain* chain, const std::string &inpu
     return status;
 }
 //----------------------------------------------------------
+std::string ChainHelper::firstFile(const std::string &input, bool verbose)
+{
+    string filename;
+    string defaultTreename = "susyNt";
+    TChain dummyChain(defaultTreename.c_str());
+    if(addInput(&dummyChain, input, verbose)==GOOD) {
+        TIter next(dummyChain.GetListOfFiles());
+        if(TChainElement *chEl = static_cast<TChainElement*>(next())) {
+            filename = chEl->GetTitle();
+        }
+    } else {
+        if(verbose)
+            cout<<"ChainHelper::firstFile(): invalid input, cannot provide first file"<<endl;
+    }
+    return filename;
+}
+//----------------------------------------------------------
 bool ChainHelper::inputIsFile(const std::string &input)
 {
-    return susy::utils::endswith(susy::utils::rmLeadingTrailingWhitespaces(input), ".root");
+    return Susy::utils::contains(Susy::utils::rmLeadingTrailingWhitespaces(input), ".root");
 }
 //----------------------------------------------------------
 bool ChainHelper::inputIsList(const std::string &input)
 {
-    return susy::utils::endswith(susy::utils::rmLeadingTrailingWhitespaces(input), ".txt");
+    return Susy::utils::endswith(Susy::utils::rmLeadingTrailingWhitespaces(input), ".txt");
 }
 //----------------------------------------------------------
 bool ChainHelper::inputIsDir(const std::string &input)
 {
-    return susy::utils::endswith(susy::utils::rmLeadingTrailingWhitespaces(input), "/");
+    return Susy::utils::endswith(Susy::utils::rmLeadingTrailingWhitespaces(input), "/");
 }
 //----------------------------------------------------------

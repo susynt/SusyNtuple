@@ -36,3 +36,7 @@ doc/doxygen/
 
 # emacs autosave
 *~
+
+# vim autosave
+*.swo
+*.swp

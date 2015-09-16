@@ -8,7 +8,6 @@
 // Susy Common
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/SusyNtTools.h"
-#include "SusyNtuple/TrilTrigLogic.h"
 
 #include <fstream>
 
@@ -27,7 +26,7 @@ class Susy3LepCutflow : public SusyNtAna
     virtual ~Susy3LepCutflow(){};
 
     // Output Text File
-    ofstream out;
+    std::ofstream out;
 
     // Init is called when TTree (or TChain) is attached
     virtual void    Init(TTree* tree);
@@ -42,6 +41,9 @@ class Susy3LepCutflow : public SusyNtAna
     // Book histograms
     void bookHistos();
 
+    // Event cleaning cuts
+    bool passEventCleaning(int cutflags, const MuonVector& preMuons,
+                const MuonVector& baseMuons, const JetVector& baseJets);
     // Full event selection. Specify which leptons to use.
     bool selectEvent(const LeptonVector& leptons, const TauVector& taus, 
                      const JetVector& jets, const Susy::Met* met);
@@ -54,7 +56,7 @@ class Susy3LepCutflow : public SusyNtAna
     void finalizeHistos();
 		     
     // Cut methods
-    bool passFCal();
+//    bool passFCal();
     bool passNLepCut(const LeptonVector& leptons);
     bool passNTauCut(const TauVector& taus);
     bool passTrigger(const LeptonVector& leptons);
@@ -85,7 +87,6 @@ class Susy3LepCutflow : public SusyNtAna
 
     std::string         m_sel;          // event selection string
 
-    TrilTrigLogic*      m_trigObj;      // My trigger logic class
 
     // Cut variables
     uint                m_nBaseLepMin;  // min base leptons
@@ -108,11 +109,14 @@ class Susy3LepCutflow : public SusyNtAna
 
     // Event counters
     uint                n_readin;
-    uint                n_pass_hotSpot;
-    uint                n_pass_badJet;
+    uint                n_pass_grl;
+    uint                n_pass_lar;
+    uint                n_pass_tile;
+    uint                n_pass_ttc;
     uint                n_pass_badMuon;
+    uint                n_pass_badJet;
+    uint                n_pass_goodVtx;
     uint                n_pass_cosmic;
-    uint                n_pass_feb;
     uint                n_pass_nLep;
     uint                n_pass_nTau;
     uint                n_pass_trig;

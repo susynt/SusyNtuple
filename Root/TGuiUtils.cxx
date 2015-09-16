@@ -790,9 +790,7 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
 
   //==>> Data/SM ratio
   TH1F*  _ratioH=NULL; //Used for axis stuff
-  float avg =0;
   if(_h){
-    TH1F* _hMC = (TH1F*) _stackH->Clone();
     _ratioH= (TH1F*) _h->Clone();
     _ratioH->Reset();
     _ratioH->GetXaxis()->SetTitle(_h->GetXaxis()->GetTitle());
@@ -803,8 +801,6 @@ TVirtualPad* TGuiUtils::myDrawRatio(TCanvas* _c, TPad* _pTop, TPad* _pBot,
     _ratioH->GetYaxis()->SetTitle("Data / SM");
     _ratioH->GetYaxis()->SetTitleSize(0.1);
     _ratioH->GetYaxis()->SetNdivisions(205);
-    //_ratioH->Divide(_h,_hMC,1,1,"B");
-    avg = _h->Integral(0,-1) / _hMC->Integral(0,-1);
   }
   //Data MC ratio plotted
   TGraphAsymmErrors* _ratioTG = myTGraphErrorsDivide(_dataTG, _bkgTG);

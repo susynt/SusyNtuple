@@ -12,8 +12,8 @@ using std::endl;
 using std::find;
 using std::setw;
 
-namespace sut = susy::utils;
-namespace smc =susy::mc;
+namespace sut = Susy::utils;
+namespace smc =Susy::mc;
 
 //----------------------------------
 // initialization of const vector is cumbersome; we need these ugly tmp arrays.
