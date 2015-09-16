@@ -4,9 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "TH1F.h"
 #include "TBits.h"
 
+class TH1;
 
 ////////////////////////////////////////////////////////
 // Function to grab the trigger "container"           //
@@ -23,29 +23,31 @@ class TriggerTools {
 public :
     
     ///> Constructor and destructor
-    TriggerTools(TChain* input_chain, const bool dbg);
+    TriggerTools(bool dbg=false);
     virtual ~TriggerTools()
     {
     };
-
+    /// initialize by reading the trigger histogram from file
+    bool init(const std::string &filename);
     // Method to build the trigger map given the SusyNt object
     //void buildTriggerMap(TChain* susyNt, bool dbg);
-    void buildTriggerMap();
+    void buildTriggerMap(const TH1* trigHisto);
 
     // Method to test whether a given trigger is passed
   //  bool passTrigger(std::map<std::string, int> trigMap, std::string triggerName);
-    bool passTrigger(TBits& triggerbits, std::string triggerName);
+    bool passTrigger(const TBits& triggerbits, const std::string &triggerName) const;
 
     // Method to dump the trigger information stored
-    void dumpTriggerInfo();
-        
+    void dumpTriggerInfo() const;
+
+    /* /// name of the first file in the  */
+    /* static std::string firstFilename(const TChain* chain); */
 
     // dbg level
     bool m_dbg;
 
 private :
     // trigger histo
-    TH1F* m_trigHisto;
     std::map<std::string, int>  m_triggerMap;
 
 };

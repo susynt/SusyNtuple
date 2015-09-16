@@ -16,6 +16,7 @@
 #include "SusyNtuple/OverlapTools.h"
 #include "SusyNtuple/TauSelector.h"
 #include "SusyNtuple/TauId.h"
+#include "SusyNtuple/TriggerTools.h"
 
 // SUSYTools
 #include "SUSYTools/SUSYCrossSection.h"
@@ -81,6 +82,15 @@ public:
     };
     AnalysisType getAnaType() { return m_anaType; }
 
+    /// initialize the trigger tool; return success
+    /**
+       TriggerTools needs to read the histogram with the triggers.
+       You need to call this function if you want to use the trigger
+       tool. The histogram can be read from any of the input files
+       (for example the one from ChainHelper::firstFile()).
+     */
+    bool initTriggerTool(const std::string &anyInputFilename);
+
     //
     // Methods to return the tools
     //
@@ -89,6 +99,7 @@ public:
     TauSelector&        getTauSelector()        { return m_tauSelector; }
     JetSelector&        getJetSelector()        { return m_jetSelector; }
     OverlapTools&       getOverlapTools()       { return m_overlapTool; }
+    TriggerTools&       triggerTool()           { return m_triggerTool; }
 
     //
     // Methods to perform event selection
@@ -223,6 +234,7 @@ public:
     TauSelector  m_tauSelector;
     JetSelector m_jetSelector;              ///< select jets according to the current analysis settings
     OverlapTools m_overlapTool;             ///< tool to perform the analysis' OR procedure
+    TriggerTools m_triggerTool;  ///< tool to access the trigger information
 
 protected:
 

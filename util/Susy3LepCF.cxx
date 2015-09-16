@@ -96,6 +96,7 @@ int main(int argc, char** argv)
   susyAna->setDebug(dbg);
   susyAna->setSampleName(sample);
   susyAna->setSelection(sel);
+  susyAna->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
 
   // MC Weighter
   /*MCWeighter* mcWeighter = new MCWeighter();

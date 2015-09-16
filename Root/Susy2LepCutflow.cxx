@@ -11,7 +11,6 @@ using namespace Susy;
 /*--------------------------------------------------------------------------------*/
 Susy2LepCutflow::Susy2LepCutflow() :
         m_input_chain(0),
-        m_ntTrig(0),
         m_nLepMin(2),
         m_nLepMax(2),
         m_cutNBaseLep(true),
@@ -79,9 +78,6 @@ void Susy2LepCutflow::Begin(TTree* /*tree*/)
 {
   SusyNtAna::Begin(0);
   if(m_dbg) cout << "Susy2LepCutflow::Begin" << endl;
-
-  // initialize the general trigger tool (SusyNtuple/TriggerTools)
-  m_ntTrig = new TriggerTools(m_input_chain, true);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -402,6 +398,8 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons, const Met* met)
   std::vector<std::string> single_lep_triggers = single_ele;
   single_lep_triggers.insert(single_lep_triggers.end(), single_muo.begin(), single_muo.end());
 
+  TriggerTools &ntTrig = nttools().triggerTool();
+
   //////////////////////////////////////////////////////
   // check if any single lepton trigger has been fired
   //////////////////////////////////////////////////////
@@ -409,7 +407,7 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons, const Met* met)
   std::vector<std::string> fired_triggers;
   for(unsigned int iTrig = 0; iTrig < single_lep_triggers.size(); iTrig++){
     std::string trig = "HLT_" + single_lep_triggers[iTrig];
-    if(m_ntTrig->passTrigger(nt.evt()->trigBits, trig)) { 
+    if(ntTrig.passTrigger(nt.evt()->trigBits, trig)) {
         trig_has_fired = true;
         fired_triggers.push_back(trig);
     }
@@ -424,8 +422,8 @@ bool Susy2LepCutflow::passTrigger(const LeptonVector& leptons, const Met* met)
     Susy::Lepton* lep = leptons.at(iLep);
     for(unsigned int iTrig = 0; iTrig < fired_triggers.size(); iTrig++){
         std::string trig = fired_triggers[iTrig];
-        if(m_ntTrig->passTrigger(lep->trigBits, trig) && iLep==0) lep_1_ismatched = true;
-        if(m_ntTrig->passTrigger(lep->trigBits, trig) && iLep==1) lep_2_ismatched = true;
+        if(ntTrig.passTrigger(lep->trigBits, trig) && iLep==0) lep_1_ismatched = true;
+        if(ntTrig.passTrigger(lep->trigBits, trig) && iLep==1) lep_2_ismatched = true;
     }
   }
   if(trig_has_fired && lep_1_ismatched && lep_2_ismatched) {

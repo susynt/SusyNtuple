@@ -45,6 +45,8 @@ class ChainHelper
        directory. Also accepts comma-separated list of inputs.
      */
     static Status addInput(TChain* chain, const std::string &input, bool verbose=false);
+    // get the first file from a generic input
+    static std::string firstFile(const std::string &input, bool verbose=false);
     /// input files are expected to have the '.root' extension
     static bool inputIsFile(const std::string &input);
     /// input filelists are expected to have the '.txt' extension
