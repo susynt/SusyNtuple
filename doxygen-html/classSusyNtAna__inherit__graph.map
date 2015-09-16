@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="44,83,175,112"/>
-<area shape="rect" id="node7" href="$classSusy3LepCutflow.html" title="Three lepton cutflow." alt="" coords="199,83,329,112"/>
-<area shape="rect" id="node5" href="$classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="5,160,213,189"/>
+<area shape="rect" id="node3" href="$classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="41,86,167,117"/>
+<area shape="rect" id="node7" href="$classSusy3LepCutflow.html" title="Three lepton cutflow." alt="" coords="191,86,316,117"/>
+<area shape="rect" id="node5" href="$classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="5,166,203,197"/>
 </map>

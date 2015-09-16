@@ -1,14 +1,15 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Met \&gt; * \&gt;" alt="" coords="291,5,629,35"/>
-<area shape="rect" id="node4" href="$classD3PDReader_1_1VarHandleBase.html" title="Base class for the different kind of VarHandle specializations." alt="" coords="5,272,213,301"/>
-<area shape="rect" id="node6" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Jet \&gt; * \&gt;" alt="" coords="295,59,625,88"/>
-<area shape="rect" id="node9" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Muon \&gt; * \&gt;" alt="" coords="285,112,635,141"/>
-<area shape="rect" id="node12" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; MetTrack \&gt; * \&gt;" alt="" coords="275,165,645,195"/>
-<area shape="rect" id="node15" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; Event * \&gt;" alt="" coords="333,219,587,248"/>
-<area shape="rect" id="node18" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthJet \&gt; * \&gt;" alt="" coords="279,272,641,301"/>
-<area shape="rect" id="node21" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthParticle \&gt; * \&gt;" alt="" coords="264,325,656,355"/>
-<area shape="rect" id="node24" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Photon \&gt; * \&gt;" alt="" coords="280,379,640,408"/>
-<area shape="rect" id="node27" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthMet \&gt; * \&gt;" alt="" coords="275,432,645,461"/>
-<area shape="rect" id="node30" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Electron \&gt; * \&gt;" alt="" coords="277,485,643,515"/>
-<area shape="rect" id="node33" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Tau \&gt; * \&gt;" alt="" coords="292,539,628,568"/>
+<area shape="rect" id="node2" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Met \&gt; * \&gt;" alt="" coords="341,165,659,195"/>
+<area shape="rect" id="node4" href="$classD3PDReader_1_1VarHandleBase.html" title="Base class for the different kind of VarHandle specializations." alt="" coords="7,271,212,302"/>
+<area shape="rect" id="node6" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Jet \&gt; * \&gt;" alt="" coords="344,218,656,249"/>
+<area shape="rect" id="node9" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Muon \&gt; * \&gt;" alt="" coords="336,271,664,302"/>
+<area shape="rect" id="node12" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; Event * \&gt;" alt="" coords="380,58,620,89"/>
+<area shape="rect" id="node17" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthJet \&gt; * \&gt;" alt="" coords="329,378,671,409"/>
+<area shape="rect" id="node20" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthParticle \&gt; * \&gt;" alt="" coords="316,431,684,462"/>
+<area shape="rect" id="node23" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Photon \&gt; * \&gt;" alt="" coords="332,485,668,515"/>
+<area shape="rect" id="node26" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TruthMet \&gt; * \&gt;" alt="" coords="327,538,673,569"/>
+<area shape="rect" id="node29" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Electron \&gt; * \&gt;" alt="" coords="329,5,671,35"/>
+<area shape="rect" id="node32" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; TrackMet \&gt; * \&gt;" alt="" coords="324,111,676,142"/>
+<area shape="rect" id="node35" href="$classD3PDReader_1_1VarHandle.html" title="D3PDReader::VarHandle\&lt; std::vector\&lt; Tau \&gt; * \&gt;" alt="" coords="341,325,659,355"/>
+<area shape="rect" id="node15" href="$classSusy_1_1Event.html" title="Event class." alt="" coords="64,58,155,89"/>
 </map>
