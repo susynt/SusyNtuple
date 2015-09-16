@@ -311,16 +311,6 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets, double dR)
 //----------------------------------------------------------
 // begin OverlapTools_SS3L
 //----------------------------------------------------------
-void OverlapTools_SS3L::performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                       TauVector& taus, JetVector& jets)
-{
-    j_e_overlap(electrons, jets, 0.2);
-    e_j_overlap(electrons, jets, 0.4);
-    m_j_overlap(muons, jets, 0.2); // default 0.4
-    e_m_overlap(electrons, muons, 0.01);
-    e_e_overlap(electrons, 0.05);
-}
-//----------------------------------------------------------
 void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
     // doing BjetOR procedure:

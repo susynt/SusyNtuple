@@ -97,8 +97,6 @@ class OverlapTools_2LepWH : public OverlapTools
 
 /// implements OR procedure from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class OverlapTools_SS3L: public OverlapTools {
-    virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                TauVector& taus, JetVector& jets);
     /// different from OverlapTools::j_e_overlap() : performs BjetOR
     virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR);
 };
