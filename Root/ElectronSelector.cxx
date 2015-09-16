@@ -170,7 +170,6 @@ bool ElectronSelector_SS3L::isSignal(const Electron* el)
 
 //----------------------------------------------------------
 // begin ElectronSelector_Stop2L
-// TODO Danny please check values
 //----------------------------------------------------------
 bool ElectronSelector_Stop2L::passIpCut(const Electron &el)
 {

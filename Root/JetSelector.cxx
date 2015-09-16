@@ -181,14 +181,12 @@ bool JetSelector_SS3L::isB(const Jet* jet)
 }
 //----------------------------------------------------------
 // begin JetSelector_Stop2L
-// TODO Danny please check values
 //----------------------------------------------------------
 bool JetSelector_Stop2L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (fabs(jet->Eta()) <  2.4 &&
-                jet->Pt()        > 20.0 );
+        pass = (jet->Pt()        > 20.0 );
     }
     return pass;
 }
@@ -197,8 +195,8 @@ bool JetSelector_Stop2L::isSignal(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass =((jet->Pt()        > 20.0) &&
-               (fabs(jet->Eta()) >  2.8) &&
+        pass =(jet->Pt()        > 20.0 &&
+               fabs(jet->Eta()) >  2.8 &&
                passJvt(jet));
     }
     return pass;

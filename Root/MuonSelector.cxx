@@ -180,7 +180,6 @@ bool MuonSelector_SS3L::isSignal(const Muon* mu)
 }
 //----------------------------------------------------------
 // begin MuonSelector_Stop2L
-// TODO Danny please check values
 //----------------------------------------------------------
 bool MuonSelector_Stop2L::passIpCut(const Muon* mu)
 {
@@ -196,7 +195,7 @@ bool MuonSelector_Stop2L::isBaseline(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (mu->loose &&
+        pass = (mu->medium &&
                 mu->Pt()        > 10.0 &&
                 fabs(mu->Eta()) <  2.4 );
     }

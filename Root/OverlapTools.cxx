@@ -322,7 +322,7 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
         const Electron* e = electrons.at(iEl);
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
-            if(e->DeltaRy(*j) < 0.2){ // was J_E_DR
+            if(e->DeltaRy(*j) < dR){
                 bool isBjet = (j->mv2c20 > JetSelector::mv2c20_80efficiency());
                 if(isBjet) {
                     electrons.erase(electrons.begin()+iEl);
