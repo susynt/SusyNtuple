@@ -77,7 +77,6 @@ void Susy3LepCutflow::Begin(TTree* /*tree*/)
     abort();
   }
 
-
   // Book histograms
   //bookHistos();
 }

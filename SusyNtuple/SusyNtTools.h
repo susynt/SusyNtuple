@@ -196,7 +196,6 @@ protected:
 
     AnalysisType m_anaType;    ///< Analysis type. currently 2-lep or 3-lep
     bool m_doSFOS;             ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
-
 };
 
 #endif

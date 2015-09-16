@@ -85,7 +85,6 @@ void MCWeighter::buildSumwMap(TTree* tree)
 /*--------------------------------------------------------------------------------*/
 void MCWeighter::buildSumwMapFromTree(TTree* tree)
 {
-
     const Event &evt = MCWeighter::readFirstEvent(tree);
     unsigned int mcid = evt.mcChannel;
     total_sumw += evt.sumOfEventWeights;
@@ -272,7 +271,6 @@ bool MCWeighter::sumwmapHasKey(SumwMapKey k)
 /*--------------------------------------------------------------------------------*/
 float MCWeighter::getSumw(const Event* evt)
 {
-
     float sumw = total_sumw;
    // double sumw = evt->sumw;
    // if(total_sumw>0) sumw = total_sumw;
