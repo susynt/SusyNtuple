@@ -14,7 +14,7 @@ https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/UCISusyNtuples
 Overview of the package
 -----------------------
 See the Doxygen documentation class description under the tab `Classes`
-at *[this link](http://gerbaudo.github.io/SusyNtuple/doxygen-html)*.
+at *[this link](http://susynt.github.io/SusyNtuple/doxygen-html)*.
 
 TODO: add an intro page to the doxygen directory.
 
