@@ -30,9 +30,7 @@ public:
 
     /// Constructor and destructor
     SusyNtTools();
-    virtual ~SusyNtTools()
-    {
-    };
+    virtual ~SusyNtTools();
 
     void setSFOSRemoval(AnalysisType A);
     bool doSFOSRemoval() { return m_doSFOS; }
@@ -42,44 +40,7 @@ public:
         Set AnalysisType to determine object selections
         and overlap procedure
     */
-    void setAnaType(AnalysisType A, bool verbose = false)
-    {
-        ////////////////////////////
-        // ElectronSelector
-        ////////////////////////////
-        m_electronSelector.setAnalysis(A);
-        ////////////////////////////
-        // MuonSelector
-        ////////////////////////////
-        m_muonSelector.setAnalysis(A);
-        ////////////////////////////
-        // TauSelector
-        ////////////////////////////
-        m_tauSelector.setAnalysis(A);
-        ////////////////////////////
-        // JetSelector
-        ////////////////////////////
-        m_jetSelector.setAnalysis(A);
-        ////////////////////////////
-        // OverlapTool
-        ////////////////////////////
-        // propagate isolation requirements
-        m_overlapTool.setElectronIsolation(m_electronSelector.signalIsolation());
-        m_overlapTool.setMuonIsolation(m_muonSelector.signalIsolation());
-        // propagate OR loose b-tag WP
-        m_overlapTool.setORBtagEff(m_jetSelector.overlapRemovalBtagEffWP());
-        // now setAnalysis
-        m_overlapTool.setAnalysis(A);
-
-        // set whether to perform SFOS removal on baseline objects
-        setSFOSRemoval(A);
-
-        // this should be in the logs no matter what
-        std::cout << ">>> Setting analysis type to " << AnalysisType2str(A) << std::endl;
-
-        // now that the tools are configured set this variable
-        m_anaType = A;
-    };
+    void setAnaType(AnalysisType A, bool verbose = false);
     AnalysisType getAnaType() { return m_anaType; }
 
     /// initialize the trigger tool; return success
@@ -94,12 +55,12 @@ public:
     //
     // Methods to return the tools
     //
-    ElectronSelector&   getElectronSelector()   { return m_electronSelector; }
-    MuonSelector&       getMuonSelector()       { return m_muonSelector; }
-    TauSelector&        getTauSelector()        { return m_tauSelector; }
-    JetSelector&        getJetSelector()        { return m_jetSelector; }
-    OverlapTools&       getOverlapTools()       { return m_overlapTool; }
-    TriggerTools&       triggerTool()           { return m_triggerTool; }
+    ElectronSelector&   electronSelector()   { return *m_electronSelector; }
+    MuonSelector&       muonSelector()       { return *m_muonSelector; }
+    TauSelector&        tauSelector()        { return *m_tauSelector; }
+    JetSelector&        jetSelector()        { return *m_jetSelector; }
+    OverlapTools&       overlapTool()        { return *m_overlapTool; }
+    TriggerTools&       triggerTool()        { return m_triggerTool; }
 
     //
     // Methods to perform event selection
@@ -154,18 +115,14 @@ public:
     ElectronVector getSignalElectrons(const ElectronVector& baseElecs);
     MuonVector     getSignalMuons(const MuonVector& baseMuons);
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
-    TauVector      getSignalTaus(const TauVector& baseTaus, TauId tauJetID = TauId::Medium,
-                                 TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
+    TauVector      getSignalTaus(const TauVector& baseTaus);
     JetVector      getSignalJets(const JetVector& baseJets);
 
     /// Check if signal object
-    bool isSignalLepton(const Susy::Lepton* l);
-    bool isSignalElectron(const Susy::Electron* e);
-    bool isSignalMuon(const Susy::Muon* m);
-    bool isSignalTau(const Susy::Tau* tau, TauId tauJetID = TauId::Medium,
-                     TauId tauEleID = TauId::Loose, TauId tauMuoID = TauId::Medium);
-    bool isSemiSignalElectron(const Susy::Electron* ele);
-    bool isSemiSignalMuon(const Susy::Muon* mu);
+    bool isSignal(const Susy::Lepton* l);
+    bool isSignal(const Susy::Electron* e);
+    bool isSignal(const Susy::Muon* m);
+    bool isSignal(const Susy::Tau* tau);
 
     /// Build lepton vector, sort by pT
     void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
@@ -226,14 +183,13 @@ public:
         }
     }
 
-    /////////////////////////////////////////////
+    // \todo make these datamembers protected
     // Object Selectors and Tools
-    /////////////////////////////////////////////
-    ElectronSelector m_electronSelector;
-    MuonSelector m_muonSelector;
-    TauSelector  m_tauSelector;
-    JetSelector m_jetSelector;              ///< select jets according to the current analysis settings
-    OverlapTools m_overlapTool;             ///< tool to perform the analysis' OR procedure
+    ElectronSelector* m_electronSelector; ///< select electrons according to the current analysis settings
+    MuonSelector* m_muonSelector;         ///< select muons according to the current analysis settings
+    TauSelector*  m_tauSelector;          ///< select taus according to the current analysis settings
+    JetSelector* m_jetSelector;           ///< select jets according to the current analysis settings
+    OverlapTools* m_overlapTool;          ///< tool to perform the analysis' OR procedure
     TriggerTools m_triggerTool;  ///< tool to access the trigger information
 
 protected:
