@@ -1,359 +1,193 @@
 #include "SusyNtuple/ElectronSelector.h"
-#include "SusyNtuple/MuonSelector.h"
-#include "SusyNtuple/SusyNt.h"
+#include "SusyNtuple/Electron.h"
 
 #include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <cmath> // abs
 
-using Susy::ElectronSelector;
-using Susy::Electron;
 using Susy::NtSys::SusyNtSys;
 using std::cout;
 using std::endl;
 using std::string;
 
 namespace Susy {
-// -------------------------------------------------------------------------------------------- //
-// Constructor
-// -------------------------------------------------------------------------------------------- //
+
+//----------------------------------------------------------
+ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
+{
+    ElectronSelector* s = nullptr;
+    switch(a) {
+    case AnalysisType::Ana_2Lep:
+        s = new ElectronSelector_2Lep();
+        s->setSignalId(ElectronId::TightLH);
+        s->setSignalIsolation(Isolation::GradientLoose);
+        break;
+    case AnalysisType::Ana_3Lep:
+        s = new ElectronSelector_3Lep();
+        s->setSignalId(ElectronId::TightLH);
+        s->setSignalIsolation(Isolation::GradientLoose);
+        break;
+    case AnalysisType::Ana_2LepWH:
+        s = new ElectronSelector_2LepWH();
+        s->setSignalId(ElectronId::TightLH);
+        s->setSignalIsolation(Isolation::GradientLoose);
+        break;
+    case AnalysisType::Ana_SS3L:
+        s = new ElectronSelector_SS3L();
+        s->setSignalId(ElectronId::TightLH);
+        s->setSignalIsolation(Isolation::GradientLoose);
+        break;
+    case AnalysisType::Ana_Stop2L:
+        s = new ElectronSelector_Stop2L();
+        s->setSignalId(ElectronId::MediumLH);
+        s->setSignalIsolation(Isolation::GradientLoose);
+        break;
+    default:
+        cout<<"ElectronSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
+            <<" returning vanilla ElectronSelector"<<endl;
+        s = new ElectronSelector();
+    }
+    return s;
+}
+//---------------------------------------------------------
 ElectronSelector::ElectronSelector() :
-    //////////////////////////
-    // default selection
-    //////////////////////////
-    EL_MIN_PT_BASELINE(10.0),
-    EL_MIN_PT_SIGNAL(10.0),
-    EL_MAX_ETA_BASELINE(2.47),
-    EL_MAX_ETA_SIGNAL(2.47),
-    EL_ISO_PT_THRS(60.0),
-    EL_PTCONE30_PT_CUT(0.16),
-    EL_TOPOCONE30_PT_CUT(0.18),
-    EL_MAX_D0SIG(5.0),
-    EL_MAX_Z0_SINTHETA(0.4),
-    EL_MIN_CRACK_ETA(1.37),
-    EL_MAX_CRACK_ETA(1.52),
-    //////////////////////////
-    m_systematic(NtSys::NOM),
-    m_analysis(AnalysisType::kUnknown),
-    m_vetoCrackRegion(false),
-    m_doIPCut(false),
-    m_eleBaseId(ElectronId::ElectronIdInvalid),
-    m_eleId(ElectronId::ElectronIdInvalid),   
-    m_sigIso(Isolation::IsolationInvalid),
-    m_2lep(false),
-    m_3lep(false),
-    m_2lepWH(false),
-    m_SS3L(false),
-    m_stop2l(false),
+    m_signalId(ElectronId::ElectronIdInvalid),
+    m_signalIsolation(Isolation::IsolationInvalid),
     m_verbose(false)
 {
 }
-// -------------------------------------------------------------------------------------------- //
-ElectronSelector& ElectronSelector::setAnalysis(const AnalysisType &a)
+//---------------------------------------------------------
+bool ElectronSelector::isBaseline(const Electron* el)
 {
-
-    //////////////////////////////////////
-    // Set analysis-specific cuts
-    //////////////////////////////////////
-
-    //////////////////////////////////////
-    // 2L-ANALYSIS
-    //////////////////////////////////////
-    if( a == AnalysisType::Ana_2Lep ) {
-        m_2lep = true;
-
-        // baseline
-        m_eleBaseId = ElectronId::LooseLH;
-        // signal
-        m_eleId  = ElectronId::TightLH;
-        m_sigIso = Isolation::GradientLoose;
-
-        m_doIPCut           = true;
-    } 
-    //////////////////////////////////////
-    // 3L-ANALYSIS
-    //////////////////////////////////////
-    else if( a == AnalysisType::Ana_3Lep ) {
-        m_3lep = true;
-
-        //baseline
-        m_eleBaseId = ElectronId::LooseLH;
-        // signal
-        m_eleId  = ElectronId::TightLH;
-        m_sigIso = Isolation::GradientLoose;
-
-        m_doIPCut           = true;
-
+    bool pass = false;
+    if(el) {
+        pass = (el->looseLH && // good for all
+                el->Pt()  > 10.0 && // was EL_MIN_PT_BASELINE, good for all
+                std::abs(el->clusEta) < 2.47 ); // was EL_MAX_ETA_BASELINE, good for all
     }
-    //////////////////////////////////////
-    // WH-ANALYSIS
-    //////////////////////////////////////
-    else if( a == AnalysisType::Ana_2LepWH ) {
-        m_2lepWH = true;
-
-        // baseline
-        m_eleBaseId = ElectronId::LooseLH;
-        // signal
-        m_eleId  = ElectronId::TightLH;
-        m_sigIso = Isolation::GradientLoose;
-
-        m_doIPCut           = true;
-
-        // cuts
-        EL_PTCONE30_PT_CUT              = 0.07;
-        EL_TOPOCONE30_PT_CUT            = 0.13;
-        EL_MAX_D0SIG                    = 3.0; 
-
-    }
-    ////////////////////////////////////
-    // SS3L-ANALYSIS
-    // values from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
-    ////////////////////////////////////
-    else if( a == AnalysisType::Ana_SS3L ) {
-        m_SS3L = true;
-        // baseline
-        m_eleBaseId         = ElectronId::LooseLH;
-        EL_MIN_PT_BASELINE  = 10.0;
-        EL_MAX_ETA_BASELINE = 2.47;
-        EL_MAX_D0SIG        = 5.0;
-        m_vetoCrackRegion   = true;
-        EL_MIN_CRACK_ETA    = 1.37;
-        EL_MAX_CRACK_ETA    = 1.52;
-        // signal
-        m_eleId             = ElectronId::TightLH;
-        EL_MAX_ETA_SIGNAL   = 2.0;
-        m_sigIso            = Isolation::GradientLoose;
-        EL_MAX_Z0_SINTHETA  = 0.5;
-        m_doIPCut           = true; // DG-2015-09-01 not sure about this
-    }
-    //////////////////////////////////////
-    // Stop2L-Analysis
-    //////////////////////////////////////
-    else if( a == AnalysisType::Ana_Stop2L ) {
-        m_stop2l = true;
-
-        //baseline
-        m_eleBaseId         = ElectronId::LooseLH;
-        //signal
-        m_eleId             = ElectronId::MediumLH;
-        m_sigIso            = Isolation::GradientLoose;
-        m_doIPCut           = true;
-
-        //cuts
-        EL_MAX_Z0_SINTHETA  = 0.5;
-    }
-    //////////////////////////////////////
-    // Didn't set AnalysisType
-    //////////////////////////////////////
-    else if( a == AnalysisType::kUnknown ) {
-        string error = "ElectronSelector::setAnalysis error: ";
-        cout << error << "The AnalysisType has not been set for ElectronSelector. Check that you properly call" << endl;
-        cout << error << "'setAnalysis' for ElectronSelector for your analysis." << endl;
-        cout << error << ">>> Exiting." << endl;
-        exit(1);
-    }
-    //////////////////////////////////////
-    // Gone fishin'
-    //////////////////////////////////////
-    else {
-        string error = "ElectronSelector::setAnalysis error: ";
-        cout << error << "ElectronSelector is not configured for the AnalysisType (" << AnalysisType2str(a) << ")  provided in " << endl;
-        cout << error << "'setAnalysis'! Be sure that your AnalysisType is provided for in SusyNtuple/AnalysisType.h" << endl;
-        cout << error << "and that you provide the necessary requirements for your analysis in 'setAnalysis'." << endl;
-        cout << error << ">>> Exiting." << endl;
-        exit(1);
-    }
-
-    m_analysis = a;
-
-    // check that the ele Id's have been set
-    if(m_eleId == ElectronId::ElectronIdInvalid || m_eleBaseId == ElectronId::ElectronIdInvalid) {
-        string error = "ElectronSelector::setAnalysis error: "; 
-        cout << error << "Baseline and/or signal electron ID requirements are not set." << endl;
-        cout << error << "Baseline ID = " << ElectronId2str(m_eleBaseId) 
-                                                       << " Signal ID = " << ElectronId2str(m_eleId) << endl;
-        cout << error << ">>> Exiting." << endl;
-        exit(1);
-    }
-    // check that the ele signal isolation has been set
-    if(m_sigIso == Isolation::IsolationInvalid) {
-        string error = "ElectronSelector::setAnalysis error: ";
-        cout << error << "Signal electron isolation requirement is not set." << endl;
-        cout << error << "Electron isolation = " << Isolation2str(m_sigIso) << endl;
-        cout << error << ">>> Exiting." << endl;
-        exit(1);
-    }
-
-    if (m_verbose)
-        cout << "ElectronSelector    Configured electron selection for AnalysisType " << AnalysisType2str(m_analysis) << endl;
-    
-    return *this;
+    return pass;
 }
-// ---------------------------------------------------------
-ElectronSelector& ElectronSelector::setSystematic(const NtSys::SusyNtSys &s)
+//----------------------------------------------------------
+bool ElectronSelector::isSignal(const Electron* el)
 {
-    m_systematic = s;
-    return *this;
-}
-// ---------------------------------------------------------
-bool ElectronSelector::isBaselineElectron(const Electron* ele)
-{
-    ElectronSelector::check();
-
-    /////////////////////////////
-    // Electron ID
-    /////////////////////////////
-    if(!elecPassID(ele, false)) return false;
-
-    //////////////////////////
-    // eta/pT
-    //////////////////////////
-    if(fabs(ele->clusEta) > EL_MAX_ETA_BASELINE) return false;
-    if(ele->Pt() < EL_MIN_PT_BASELINE) return false;
-       
-    //////////////////////////
-    // veto detector
-    //////////////////////////
-    if(m_vetoCrackRegion){
-        if(fabs(ele->clusEta)> EL_MIN_CRACK_ETA &&
-           fabs(ele->clusEta)< EL_MAX_CRACK_ETA) return false;
+    bool pass = false;
+    if(el) {
+        pass = (el->Pt() > 10.0 && // good for all
+                std::abs(el->Eta()) < 2.47 && // was EL_MAX_ETA_SIGNAL
+                el->tightLH && // good for all run1 ana
+                passIpCut(*el) && // 5.0 0.4 good for 2l 3l
+                el->isoGradientLoose); // good for all run1
     }
-    
-    if (m_doIPCut && m_SS3L) {
-        if(fabs(ele->d0sigBSCorr)  >= EL_MAX_D0SIG)   return false;
-    }
-    
-    return true;
-
+    return pass;
 }
-// ---------------------------------------------------------
-bool ElectronSelector::isSignalElectron(const Electron* ele)
-{
-    ElectronSelector::check();
-
-    /////////////////////////////
-    // Electron ID
-    /////////////////////////////
-    if(!elecPassID(ele, true)) return false;
-     
-    /////////////////////////////
-    // Eta
-    /////////////////////////////
-    if(fabs(ele->Eta()) > EL_MAX_ETA_SIGNAL ) return false;
-    
-
-    /////////////////////////////
-    // Impact parameter
-    /////////////////////////////
-    if (m_doIPCut) {
-        if(fabs(ele->d0sigBSCorr)      >= EL_MAX_D0SIG)   return false;
-        if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
-    }
-    
-    /////////////////////////////
-    // isolation now uses
-    // isolation tool
-    /////////////////////////////
-    if(!elecPassIsolation(ele)) return false;
-
-    /////////////////////////////
-    // ele pt
-    /////////////////////////////
-    if(ele->Pt() < EL_MIN_PT_SIGNAL) return false;
-    
-    return true;
-}
-/* --------------------------------------------------------------------------------------------- */ 
-bool ElectronSelector::isSemiSignalElectron(const Electron* ele)
-{
-    ElectronSelector::check();
-
-    /////////////////////////////
-    // Electron ID
-    /////////////////////////////
-    if(!elecPassID(ele, true)) return false;
-
-    /////////////////////////////
-    // Impact parameter
-    /////////////////////////////
-    if(m_doIPCut) {
-        if(fabs(ele->d0sigBSCorr) >= EL_MAX_D0SIG) return false;
-        if(fabs(ele->z0SinTheta()) >= EL_MAX_Z0_SINTHETA) return false;
-    }
-    return true;
-}
-/* --------------------------------------------------------------------------------------------- */ 
-bool ElectronSelector::elecPassID(const Electron* electron, bool signalQuality)
-{
-    ElectronId id = signalQuality ? m_eleId : m_eleBaseId;
-
-    if     (id == ElectronId::MediumLH)        return electron->mediumLH;
-    else if(id == ElectronId::LooseLH)         return electron->looseLH;
-    else if(id == ElectronId::TightLH)         return electron->tightLH;
-    else if(id == ElectronId::MediumLH_nod0)   return electron->mediumLH_nod0;
-    else if(id == ElectronId::TightLH_nod0)    return electron->tightLH_nod0;
-    else {
-        cout << "ElectronSelector::elecPassID() error: (signal) ele ID requirement not set for analysis!" << endl;
-        cout << "        Will set to TightLH." << endl;
-        return electron->tightLH;
-    }
-    
-    return false;
-
-}
-/* --------------------------------------------------------------------------------------------- */ 
-bool ElectronSelector::elecPassIsolation(const Electron* ele)
-{
-    if     (m_sigIso == Isolation::GradientLoose) return ele->isoGradientLoose;
-    else if(m_sigIso == Isolation::Gradient)    return ele->isoGradient;
-    else if(m_sigIso == Isolation::LooseTrackOnly) return ele->isoLooseTrackOnly;
-    else if(m_sigIso == Isolation::Loose) return ele->isoLoose;
-    else if(m_sigIso == Isolation::Tight) return ele->isoTight; 
-    else {
-        cout << "ElectronSelector::elecPassIsolation error: isolation requirement for electrons not set to signal-level isolation (Loose or Tight)" << endl;
-        cout << "ElectronSelector::elecPassIsolation error: >>> Exiting." << endl;
-        exit(1);
-    } 
-}
-/* --------------------------------------------------------------------------------------------- */
+//----------------------------------------------------------
 float ElectronSelector::effSF(const Electron& ele)
 {
-    ElectronSelector::check();
     // return the EffSF for the corresponding (signal) EL ID WP
-    return ele.eleEffSF[m_eleId]; 
+    return ele.eleEffSF[m_signalId];
 }
-/* --------------------------------------------------------------------------------------------- */
+//----------------------------------------------------------
 float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
 {
-    ElectronSelector::check();
     // return the error on the electron SF associated with systematic sys
     float err = 0.0;
     if(sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_UP) {
-        err = ele.errEffSF_id_corr_up[m_eleId];
+        err = ele.errEffSF_id_corr_up[m_signalId];
     }
     else if(sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_DN) {
-        err = ele.errEffSF_id_corr_dn[m_eleId];
+        err = ele.errEffSF_id_corr_dn[m_signalId];
     }
     else if(sys == NtSys::EL_EFF_Reco_TotalCorrUncertainty_UP) {
-        err = ele.errEffSF_reco_corr_up[m_eleId];
-    } 
+        err = ele.errEffSF_reco_corr_up[m_signalId];
+    }
     else if(sys == NtSys::EL_EFF_Reco_TotalCorrUncertainty_DN) {
-        err = ele.errEffSF_reco_corr_dn[m_eleId];
+        err = ele.errEffSF_reco_corr_dn[m_signalId];
     }
     return err;
 }
-/* --------------------------------------------------------------------------------------------- */
-void ElectronSelector::check()
+//----------------------------------------------------------
+bool ElectronSelector::passIpCut(const Electron &el)
 {
-    if(m_analysis == AnalysisType::kUnknown) {
-        string error = "ElectronSelector::setAnalysis error: ";
-        cout << error << "The AnalysisType has not been set for ElectronSelector. Check that you properly call" << endl;
-        cout << error << "'setAnalysis' for ElectronSelector for your analysis." << endl;
-        cout << error << ">>> Exiting." << endl;
-        exit(1);
-    }
-    return;
+    return (std::abs(el.d0sigBSCorr)  < 5.0 &&
+            std::abs(el.z0SinTheta()) < 0.4 );
 }
-/* --------------------------------------------------------------------------------------------- */
+//----------------------------------------------------------
+bool ElectronSelector::outsideCrackRegion(const Electron &el)
+{
+    return (std::abs(el.clusEta) < 1.37 ||
+            std::abs(el.clusEta) > 1.52 );
+}
 
-}; // namespace Susy
+//----------------------------------------------------------
+// begin ElectronSelector_2Lep
+//----------------------------------------------------------
+
+//----------------------------------------------------------
+// begin ElectronSelector_3Lep
+//----------------------------------------------------------
+
+//----------------------------------------------------------
+// begin ElectronSelector_2LepWH
+//----------------------------------------------------------
+bool ElectronSelector_2LepWH::passIpCut(const Electron &el)
+{
+    return (std::abs(el.d0sigBSCorr)  < 3.0 && // tighter than default
+            std::abs(el.z0SinTheta()) < 0.4 );
+
+}
+
+//----------------------------------------------------------
+// begin ElectronSelector_SS3L
+//----------------------------------------------------------
+bool ElectronSelector_SS3L::isBaseline(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (el->looseLH &&
+                el->Pt()             > 10.0  &&
+                std::abs(el->clusEta)    <  2.47 &&
+                abs(el->d0sigBSCorr) <  5.0  &&
+                outsideCrackRegion(*el));
+    }
+    return pass;
+}
+//----------------------------------------------------------
+bool ElectronSelector_SS3L::isSignal(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        bool isIsolated = ((el->ptvarcone20/el->Pt()  < 0.06) &&
+                           (el->etconetopo20/el->Pt() < 0.06) );
+        pass = (isBaseline(el) &&
+                isIsolated &&
+                el->tightLH &&
+                std::abs(el->trackEta)     <  2.0 &&
+                std::abs(el->z0SinTheta()) <  0.5 );
+    }
+    return pass;
+}
+
+//----------------------------------------------------------
+// begin ElectronSelector_Stop2L
+//----------------------------------------------------------
+bool ElectronSelector_Stop2L::passIpCut(const Electron &el)
+{
+    return (std::abs(el.d0sigBSCorr)  < 3.0 &&
+            std::abs(el.z0SinTheta()) < 0.5 );
+
+}
+//----------------------------------------------------------
+bool ElectronSelector_Stop2L::isSignal(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (isBaseline(el) &&
+                el->mediumLH &&
+                el->isoGradientLoose &&
+                passIpCut(*el));
+    }
+    return pass;
+}
+//----------------------------------------------------------
+} // namespace Susy

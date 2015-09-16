@@ -2,7 +2,6 @@
 #ifndef SUSYNTUPLE_MUONSELECTOR_H
 #define SUSYNTUPLE_MUONSELECTOR_H
 
-#include "SusyNtuple/SusyDefs.h"
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/Isolation.h"
@@ -11,109 +10,117 @@
 
 namespace Susy {
 
-    class Electron;
-    class Muon;
+class Muon;
 
-    /// A class to select muons
-    
-    class MuonSelector
-    {
-        public :
-        /// constructor
-        MuonSelector();
-        MuonSelector& setSystematic(const NtSys::SusyNtSys& systematic);
-        MuonSelector& setAnalysis(const AnalysisType& analysis);
-        /**
-            Method to retrieve the isolation requirement for signal muons.
-            This is helpful for other tools that need to know how the
-            the muons are configured.
-        */
-        Isolation signalIsolation() { return m_sigIso; } 
-        /**
-            Check that the input muon "mu" passes the quality
-            level required for the analysis.
-        */
-        bool muPassQuality(const Muon* mu, bool signalQuality);
-        /**
-            Input muon "mu" is required to pass baseline selection
-        */
-        bool isBaselineMuon(const Muon* mu);
-        /**
-            Input muon "mu" is required to pass impact parameter and
-            isolation cuts.
-        */
-        bool isSignalMuon(const Muon* mu);
-        /**
-            Check whether the input muon "mu" passes a given isolation quality
-            set by IsolationSelectionTool (parameter m_sigIso below).
-        */
-        bool muPassIsolation(const Muon* mu);
-        /**
-            Input muon "mu" is required only to pass impact parameter cuts
-        */
-        bool isSemiSignalMuon(const Muon* mu);
-        /**
-            Get the input muon "mu"'s nominal efficiency SF
-        */
-        float effSF(const Muon* mu) { return effSF(*mu); }
-        float effSF(const Muon& mu);
-        /**
-            Get the error on the input muon "mu"'/s efficiency SF
-            for the requested systematic
-        */
-        float errEffSF(const Muon* mu, const NtSys::SusyNtSys sys) { return errEffSF(*mu, sys); }
-        float errEffSF(const Muon& mu, const NtSys::SusyNtSys sys);
+/// A class to select muons
+/**
+   The generic MuonSelector implements the generic definitions from
+   https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Muons
 
-        void check();
+   Analysis-dependent criteria should be implemented in your
+   analysis-specific class inheriting from MuonSelector.
 
-        //////////////////////////////////////
-        // Analysis Selections
-        //////////////////////////////////////
-        // pT/eta
-        float MU_MIN_PT_BASELINE;           ///< minimum allowed pT for baseline muons (GeV)
-        float MU_MIN_PT_SIGNAL;             ///< minimum allowed pT for signal muons (GeV)
-        float MU_MAX_ETA_BASELINE;          ///< maximum allowed eta for baseline muons
-        float MU_MAX_ETA_SIGNAL;            ///< maximum allowed eta for signal muons
-        // isolation
-        float MU_ISO_PT_THRS;               ///< muon iso pt threshold (can 2lepWH analyzer comment?)
-        float MU_PTCONE30_SLOPE_DATA;       ///< pile-up correction term for ptcone30 (data)
-        float MU_PTCONE30_SLOPE_MC;         ///< pile-up correction term for ptcone30 (MC)
-        float MU_PTCONE30_PT_CUT;           ///< maximum allowed ptcon30/pt
-        float MU_PTCONE30ELSTYLE_PT_CUT;    ///< dantrim May 4 : not sure what this is
-        float MU_ETCONE30_K1_DATA;          ///< "1st-order" pile-up correction term for etcone30 (data)
-        float MU_ETCONE30_K2_DATA;          ///< "2nd-order" pile-up correction term for etcone30 (data)
-        float MU_ETCONE30_K1_MC;            ///< "1st-order" pile-up correction term for etcone30 (MC)
-        float MU_ETCONE30_K2_MC;            ///< "2nd-order" pile-up correction term for etcone30 (MC)
-        float MU_ETCONE30_PT_CUT;           ///< maximum allowed etcone30/pt
-        // IP
-        float MU_MAX_D0SIG    ;             ///< maximum allowed d0sig
-        float MU_MAX_Z0_SINTHETA;           ///< maximum allowed z0sinTheta
+   The analysis-specific selector should be instantiated with MuonsSelector::build().
 
- 
-        protected :
-        NtSys::SusyNtSys m_systematic;
-        AnalysisType m_analysis; // TODO : decide: bools or ana type? easier to check bools
-        bool m_doIPCut;
+   For details on the design and implementation of this class, see the
+   documentation for JetSelector.
 
-        MuonId m_muBaseId;      ///< muon ID quality requirement for baseline muons
-        MuonId m_muId;          ///< muon ID quality requirement for signal muons
+   davide.gerbaudo@gmail.com, Sep 2015
+*/
 
-        Isolation m_sigIso;     ///< muon isolation quality for signal muons (c.f. SusyNtuple/Isolation.h)
+class MuonSelector
+{
+public :
+    /// provide analysis-specific selector (or vanilla one if analysis is unknown)
+    /**
+       The user owns the selector (i.e. should use std::shared_ptr
+       or delete it when done with it).
+    */
+    static MuonSelector* build(const AnalysisType &a, bool verbose);
+    MuonSelector();  ///< Default ctor
+    virtual ~MuonSelector() {}; ///< dtor (for now we don't have anything to delete)
+    virtual bool isBaseline(const Muon* mu); ///< whether mu passes the baseline criteria
+    /// whether mu passes the signal criteria
+    /**
+       Usually baseline + impact parameter + isolation.
+    */
+    virtual bool isSignal(const Muon* mu);
+    /// whether mu is close enough to the primary vertex
+    virtual bool passIpCut(const Muon* mu);
+    /// nominal efficiency scale factor of mu
+    virtual float effSF(const Muon& mu);
+    /// wraps effSF() above
+    virtual float effSF(const Muon* mu) { return effSF(*mu); }
+    /// systematic error on the efficiency SF of mu
+    virtual float errEffSF(const Muon& mu, const NtSys::SusyNtSys sys);
+    /// wraps errEffSF() above
+    virtual float errEffSF(const Muon* mu,
+                           const NtSys::SusyNtSys sys)
+        { return errEffSF(*mu, sys); }
+    /// isolation required for signal muon
+    Isolation signalIsolation() const { return m_signalIsolation; }
+    /// set signal isolation
+    /**
+       Note: the value you set here should match whatever you have in
+       _your_ (overriding) implementation of isSignal()
+     */
+    MuonSelector& setSignalIsolation(const Isolation &v) { m_signalIsolation = v; return *this; }
+    /// id of signal muon, used to determine err SF
+    MuonId signalId() const { return m_signalId; }
+    /**
+       Note: the value you set here should match whatever you have in
+       _your_ (overriding) implementation of isSignal()
+     */
+    MuonSelector& setSignalId(const MuonId &v) { m_signalId = v; return *this; }
+    MuonSelector& setVerbose(const bool &v) { m_verbose = v; return *this; }
+    bool verbose() const { return m_verbose; }
+protected :
+    MuonId m_signalId; ///< required quality of the signal muon
+    Isolation m_signalIsolation; ///< required to propagate to OverlapTools
+    bool m_verbose;
 
-        //////////////////////////////
-        // Available analyses
-        //////////////////////////////
-        bool m_2lep;
-        bool m_3lep;
-        bool m_2lepWH;
-        bool m_SS3L;
-        bool m_stop2l;
+}; // end MuonSelector
 
-        // set verbose
-        bool m_verbose;
-    
-    }; // class
+//----------------------------------------------------------
+//
+// End generic selector, begin analysis-specific ones
+//
+//----------------------------------------------------------
+
+/// implements muon selection for ATL-COM-PHYS-2013-911
+class MuonSelector_2Lep : public MuonSelector
+{
+};
+
+/// implements muon selection for ATL-COM-PHYS-2013-888
+class MuonSelector_3Lep : public MuonSelector
+{
+    virtual bool isSignal(const Muon* mu);
+};
+
+/// implements muon selection for ATL-COM-PHYS-2014-221
+class MuonSelector_2LepWH : public MuonSelector
+{
+    virtual bool isSignal(const Muon* mu);
+};
+
+/// implements https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
+class MuonSelector_SS3L : public MuonSelector
+{
+    virtual bool passIpCut(const Muon* mu);
+    virtual bool isBaseline(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
+};
+
+/// implements Muon selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
+class MuonSelector_Stop2L : public MuonSelector
+{
+    virtual bool passIpCut(const Muon* mu);
+    virtual bool isBaseline(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
+};
+
 } // end namespace
 
 #endif
-    
+

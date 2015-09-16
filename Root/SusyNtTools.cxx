@@ -25,10 +25,52 @@ using namespace Susy;
 // Constructor
 /*--------------------------------------------------------------------------------*/
 SusyNtTools::SusyNtTools() :
-m_anaType(AnalysisType::kUnknown),
-m_doSFOS(false)
+    m_electronSelector(nullptr),
+    m_muonSelector(nullptr),
+    m_tauSelector(nullptr),
+    m_jetSelector(nullptr),
+    m_overlapTool(nullptr),
+    m_anaType(AnalysisType::kUnknown),
+    m_doSFOS(false)
 {
 }
+//----------------------------------------------------------
+SusyNtTools::~SusyNtTools()
+{
+    if(m_electronSelector) { delete m_electronSelector; m_electronSelector = nullptr; }
+    if(m_muonSelector) { delete m_muonSelector; m_muonSelector = nullptr; }
+    if(m_jetSelector) { delete m_jetSelector; m_jetSelector = nullptr; }
+    if(m_overlapTool) {delete m_overlapTool; m_overlapTool = nullptr; }
+}
+//----------------------------------------------------------
+void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
+{
+    if(m_electronSelector) delete m_electronSelector;
+    m_electronSelector = ElectronSelector::build(a, verbose);
+
+    if(m_muonSelector) delete m_muonSelector;
+    m_muonSelector = MuonSelector::build(a, verbose);
+    if(m_jetSelector) delete m_jetSelector;
+    m_jetSelector = JetSelector::build(a, verbose);
+
+    if(m_tauSelector) delete m_tauSelector;
+    m_tauSelector = TauSelector::build(a, verbose);
+
+    if(m_overlapTool) delete m_overlapTool;
+    m_overlapTool = OverlapTools::build(a, verbose);
+    // propagate isolation requirements, needed only for removeNonisolatedLeptons()
+    m_overlapTool->setElectronIsolation(electronSelector().signalIsolation());
+    m_overlapTool->setMuonIsolation(muonSelector().signalIsolation());
+
+    // set whether to perform SFOS removal on baseline objects
+    setSFOSRemoval(a);
+
+    // this should be in the logs no matter what
+    cout << ">>> Setting analysis type to " << AnalysisType2str(a) << std::endl;
+    // now that the tools are configured set this variable
+    m_anaType = a;
+}
+//----------------------------------------------------------
 /*--------------------------------------------------------------------------------*/
 // Event selection methods
 /*--------------------------------------------------------------------------------*/
@@ -139,7 +181,7 @@ void SusyNtTools::getSignalObjects(const ElectronVector& baseElectrons, const Mu
 {
     signalElectrons = getSignalElectrons(baseElectrons);
     signalMuons     = getSignalMuons(baseMuons);
-    signalTaus      = getSignalTaus(baseTaus, sigTauId, sigTauId, sigTauId); // jetBDT, eleBDT, muoBDT
+    signalTaus      = getSignalTaus(baseTaus);
     signalJets      = getSignalJets(baseJets);
 }
 /*--------------------------------------------------------------------------------*/
@@ -191,7 +233,7 @@ ElectronVector SusyNtTools::getBaselineElectrons(const ElectronVector& preElecs)
     ElectronVector elecs;
     for (uint ie = 0; ie < preElecs.size(); ++ie) {
         Electron* e = preElecs.at(ie);
-        if(m_electronSelector.isBaselineElectron(e)){
+        if(electronSelector().isBaseline(e)){
             elecs.push_back(e);
         }
     } // ie
@@ -220,7 +262,7 @@ MuonVector SusyNtTools::getBaselineMuons(const MuonVector& preMuons)
     MuonVector baseMuons;
     for (uint im = 0; im < preMuons.size(); ++im) {
         Muon* mu = preMuons.at(im);
-        if(m_muonSelector.isBaselineMuon(mu)){
+        if(muonSelector().isBaseline(mu)){
             baseMuons.push_back(mu);
         }
     } // im
@@ -235,7 +277,7 @@ TauVector SusyNtTools::getBaselineTaus(const TauVector& preTaus)
     TauVector baseTaus;
     for (uint iTau = 0; iTau < preTaus.size(); iTau++) {
         Tau* tau = preTaus.at(iTau);
-        if(m_tauSelector.isBaselineTau(tau)){
+        if(tauSelector().isBaseline(tau)){
             baseTaus.push_back(tau);
         }
     } // iTau
@@ -278,7 +320,7 @@ JetVector SusyNtTools::getBaselineJets(const JetVector& preJets)
     JetVector baseJets;
     for (uint ij = 0; ij < preJets.size(); ++ij) {
         Jet* j = preJets.at(ij);
-        if(m_jetSelector.isBaselineJet(j)) {
+        if(jetSelector().isBaseline(j)) {
             baseJets.push_back(j);
         }
     } // ij
@@ -295,7 +337,7 @@ ElectronVector SusyNtTools::getSignalElectrons(const ElectronVector& baseElecs)
     ElectronVector sigElecs;
     for (uint ie = 0; ie < baseElecs.size(); ++ie) {
         Electron* e = baseElecs.at(ie);
-        if (m_electronSelector.isSignalElectron(e)){ 
+        if (electronSelector().isSignal(e)){
             sigElecs.push_back(e);
         }
     }
@@ -310,7 +352,7 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons)
     MuonVector sigMuons;
     for (uint im = 0; im < baseMuons.size(); ++im) {
         Muon* mu = baseMuons.at(im);
-        if (m_muonSelector.isSignalMuon(mu)){
+        if (muonSelector().isSignal(mu)){
             sigMuons.push_back(mu);
         }
     }
@@ -320,13 +362,13 @@ MuonVector SusyNtTools::getSignalMuons(const MuonVector& baseMuons)
     return sigMuons;
 }
 /*--------------------------------------------------------------------------------*/
-TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus, TauId tauJetID, TauId tauEleID, TauId tauMuoID)
+TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus)
 {
     TauVector sigTaus;
     for (uint iTau = 0; iTau < baseTaus.size(); iTau++) {
         Tau* tau = baseTaus[iTau];
 
-        if(m_tauSelector.isSignalTau(tau, tauJetID, tauEleID, tauMuoID)) {
+        if(tauSelector().isSignal(tau)) {
             sigTaus.push_back(tau);
         }
     } // iTau
@@ -342,7 +384,7 @@ JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)
     JetVector sigJets;
     for(uint ij=0; ij<baseJets.size(); ++ij){
         Jet* j = baseJets.at(ij);
-        if(m_jetSelector.isSignalJet(j)) {
+        if(jetSelector().isSignal(j)) {
             sigJets.push_back(j);
         }
     }
@@ -419,58 +461,46 @@ TrackMet* SusyNtTools::getTrackMet(SusyNtObject* susyNt, SusyNtSys sys)//, bool 
 /*--------------------------------------------------------------------------------*/
 // Check if Lepton is Signal Lepton
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalLepton(const Lepton* l)
+bool SusyNtTools::isSignal(const Lepton* l)
 {
-    if(l->isEle()) return m_electronSelector.isSignalElectron((Electron*)l);
-    else           return m_muonSelector.isSignalMuon((Muon*)l);
+    if(l->isEle()) return electronSelector().isSignal((Electron*)l);
+    else           return muonSelector().isSignal((Muon*)l);
 };
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalElectron(const Electron* e)
+bool SusyNtTools::isSignal(const Electron* e)
 {
-    return m_electronSelector.isSignalElectron(e);
+    return electronSelector().isSignal(e);
 }
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalMuon(const Muon* m)
+bool SusyNtTools::isSignal(const Muon* m)
 {
-    return m_muonSelector.isSignalMuon(m);
+    return muonSelector().isSignal(m);
 }
 
 /*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSignalTau(const Tau* tau, TauId tauJetID, TauId tauEleID, TauId tauMuoID)
+bool SusyNtTools::isSignal(const Tau* tau)
 {
-    // At the moment, signal taus only use additional BDT selection
-    return m_tauSelector.isSignalTau(tau, tauJetID, tauEleID, tauMuoID);
+    return tauSelector().isSignal(tau);
 }
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSemiSignalElectron(const Electron* ele)
-{
-    return m_electronSelector.isSemiSignalElectron(ele);
-}
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::isSemiSignalMuon(const Muon* mu)
-{
-    return m_muonSelector.isSemiSignalMuon(mu);
-}
-
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCLJets(const JetVector& jets)
 {
-    return m_jetSelector.count_CL_jets(jets);
+    return jetSelector().count_CL_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfCBJets(const JetVector& jets)
 {
-    return m_jetSelector.count_CB_jets(jets);
+    return jetSelector().count_CB_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfFJets(const JetVector& jets)
 {
-    return m_jetSelector.count_F_jets(jets);
+    return jetSelector().count_F_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numBJets(const JetVector& jets)
 {
-    return m_jetSelector.count_CB_jets(jets);
+    return jetSelector().count_CB_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::hasBJet(const JetVector& jets)
@@ -482,7 +512,7 @@ JetVector SusyNtTools::getBJets(const JetVector& jets)
 {
     JetVector bJets;
     for(auto jet : jets) {
-        if (m_jetSelector.isCentralBJet(jet))
+        if (jetSelector().isCentralB(jet))
             bJets.push_back(jet);
     }
     return bJets;
@@ -520,9 +550,9 @@ float SusyNtTools::leptonEffSF(const Lepton& lep)
 {
     float sf = 1.0;
     if(lep.isEle()){
-        sf = m_electronSelector.effSF((Electron&)lep);
+        sf = electronSelector().effSF((Electron&)lep);
     } else {
-        sf = m_muonSelector.effSF((Muon&)lep);
+        sf = muonSelector().effSF((Muon&)lep);
     }
     return sf;
 }
@@ -530,9 +560,9 @@ float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sy
 {
     float errSF = 0.0;
     if(lep.isEle()){
-        errSF = m_electronSelector.errEffSF((Electron&)lep, sys);
+        errSF = electronSelector().errEffSF((Electron&)lep, sys);
     } else {
-        errSF = m_muonSelector.errEffSF((Muon&)lep, sys);
+        errSF = muonSelector().errEffSF((Muon&)lep, sys);
     }
     return errSF;
 }

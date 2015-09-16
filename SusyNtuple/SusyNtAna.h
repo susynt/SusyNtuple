@@ -97,7 +97,7 @@ class SusyNtAna : public TSelector
     
     void setEvtDebug() { m_dbgEvt = true; }
     bool dbgEvt() const { return m_dbgEvt; }
-    void loadEventList();
+    void loadEventList(const std::string filename="debugEvents.txt");
     bool processThisEvent(unsigned int run, unsigned int event);
     bool checkRunEvent(const RunEventMap &runEventMap, unsigned int run, unsigned int event);
     bool checkAndAddRunEvent(RunEventMap &runEventMap, unsigned int run, unsigned int event);

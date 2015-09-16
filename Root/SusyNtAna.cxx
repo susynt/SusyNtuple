@@ -112,10 +112,10 @@ void SusyNtAna::Terminate()
 /*--------------------------------------------------------------------------------*/
 // Load Event list of run/event to process. Use to debug events
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::loadEventList()
+void SusyNtAna::loadEventList(const std::string filename)
 {
   int run, event;
-  FILE* eventsFile=fopen("debugEvents.txt","r");
+  FILE* eventsFile=fopen(filename.c_str(),"r");
   int nEvtDbg=0;
   while(fscanf(eventsFile,"%i %i \n",&run, &event) != EOF){
     cout << "Adding run-event " << run << " " << event << endl; 
@@ -252,11 +252,10 @@ void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
   m_nttools.getBaselineObjects(m_preElectrons, m_preMuons, m_preJets, m_preTaus,
                                m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus);
   ///////////////////////////////////////
-  // do OR for baseline
+  // do OR 
   ///////////////////////////////////////
-  if(!m_nttools.m_overlapTool.useSignalLeptons()) {
-    m_nttools.m_overlapTool.performOverlap(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets);
-  }
+  m_nttools.overlapTool().performOverlap(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets);
+
   ///////////////////////////////////////
   // SFOS removal
   ///////////////////////////////////////
@@ -269,12 +268,6 @@ void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
   ///////////////////////////////////////
   m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus,
                               m_signalElectrons, m_signalMuons, m_signalJets, m_signalTaus, signalTauID);
-  ///////////////////////////////////////
-  // do OR for signal
-  ///////////////////////////////////////
-  if(m_nttools.m_overlapTool.useSignalLeptons()) {
-    m_nttools.m_overlapTool.performOverlap(m_signalElectrons, m_signalMuons, m_signalTaus, m_signalJets);
-  }
 
   ///////////////////////////////////////
   // Build Lepton vectors
