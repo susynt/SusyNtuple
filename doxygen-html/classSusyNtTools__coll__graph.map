@@ -1,8 +1,8 @@
 <map id="G" name="G">
-<area shape="rect" id="node2" href="$classSusy_1_1ElectronSelector.html" title="A class to select electrons." alt="" coords="7,5,164,35"/>
-<area shape="rect" id="node4" href="$classTriggerTools.html" title="TriggerTools" alt="" coords="35,58,136,89"/>
-<area shape="rect" id="node6" href="$classSusy_1_1TauSelector.html" title="A class to select tau." alt="" coords="19,111,152,142"/>
-<area shape="rect" id="node8" href="$classSusy_1_1JetSelector.html" title="A class to select jets." alt="" coords="21,165,149,195"/>
-<area shape="rect" id="node10" href="$classSusy_1_1OverlapTools.html" title="A class to perform the overlap removal." alt="" coords="15,218,156,249"/>
-<area shape="rect" id="node12" href="$classSusy_1_1MuonSelector.html" title="A class to select muons." alt="" coords="15,271,156,302"/>
+<area shape="rect" id="node2" href="$classSusy_1_1ElectronSelector.html" title="A class to select electrons." alt="" coords="5,5,171,35"/>
+<area shape="rect" id="node4" href="$classTriggerTools.html" title="TriggerTools" alt="" coords="41,59,135,88"/>
+<area shape="rect" id="node6" href="$classSusy_1_1TauSelector.html" title="A class to select tau." alt="" coords="21,112,155,141"/>
+<area shape="rect" id="node8" href="$classSusy_1_1JetSelector.html" title="A class to select jets." alt="" coords="24,165,152,195"/>
+<area shape="rect" id="node10" href="$classSusy_1_1OverlapTools.html" title="A class to perform the overlap removal." alt="" coords="19,219,157,248"/>
+<area shape="rect" id="node12" href="$classSusy_1_1MuonSelector.html" title="A class to select muons." alt="" coords="15,272,161,301"/>
 </map>

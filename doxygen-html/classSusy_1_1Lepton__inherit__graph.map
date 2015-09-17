@@ -1,5 +1,5 @@
 <map id="G" name="G">
-<area shape="rect" id="node5" href="$classSusy_1_1Electron.html" title="Electron class." alt="" coords="5,166,112,197"/>
-<area shape="rect" id="node7" href="$classSusy_1_1Muon.html" title="Muon class." alt="" coords="136,166,229,197"/>
-<area shape="rect" id="node2" href="$classSusy_1_1Particle.html" title="Particle class, base class for other object types." alt="" coords="68,6,172,37"/>
+<area shape="rect" id="node5" href="$classSusy_1_1Electron.html" title="Electron class." alt="" coords="5,160,117,189"/>
+<area shape="rect" id="node7" href="$classSusy_1_1Muon.html" title="Muon class." alt="" coords="141,160,235,189"/>
+<area shape="rect" id="node2" href="$classSusy_1_1Particle.html" title="Particle class, base class for other object types." alt="" coords="71,5,177,35"/>
 </map>

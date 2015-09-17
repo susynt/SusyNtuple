@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$classSusy_1_1ElectronSelector.html" title="A class to select electrons." alt="" coords="5,112,171,141"/>
+<area shape="rect" id="node3" href="$classSusy_1_1ElectronSelector__2Lep.html" title="implements electron selection for ATL&#45;COM&#45;PHYS&#45;2013&#45;911" alt="" coords="229,5,432,35"/>
+<area shape="rect" id="node5" href="$classSusy_1_1ElectronSelector__2LepWH.html" title="implements electron selection for ATL&#45;COM&#45;PHYS&#45;2014&#45;221" alt="" coords="219,59,443,88"/>
+<area shape="rect" id="node7" href="$classSusy_1_1ElectronSelector__3Lep.html" title="implements electron selection for ATL&#45;COM&#45;PHYS&#45;2013&#45;888" alt="" coords="229,112,432,141"/>
+<area shape="rect" id="node9" href="$classSusy_1_1ElectronSelector__SS3L.html" title="implements electron selection from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSi..." alt="" coords="228,165,433,195"/>
+<area shape="rect" id="node11" href="$classSusy_1_1ElectronSelector__Stop2L.html" title="implements electron selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lep..." alt="" coords="223,219,439,248"/>
+</map>

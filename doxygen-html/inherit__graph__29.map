@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node1" href="$classSusyNtAna.html" title="SusyNtAna &#45; base class for analyzing SusyNt." alt="" coords="5,31,93,62"/>
-<area shape="rect" id="node3" href="$classSusy2LepCutflow.html" title="Two lepton cutflow." alt="" coords="143,5,268,35"/>
-<area shape="rect" id="node7" href="$classSusy3LepCutflow.html" title="Three lepton cutflow." alt="" coords="143,58,268,89"/>
-<area shape="rect" id="node5" href="$classSusy_1_1DileptonCutflowWithList.html" title="Example class showing how to use an EventlistHandler." alt="" coords="319,5,516,35"/>
-</map>

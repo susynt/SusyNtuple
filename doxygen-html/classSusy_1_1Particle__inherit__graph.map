@@ -1,10 +1,10 @@
 <map id="G" name="G">
-<area shape="rect" id="node3" href="$classSusy_1_1Jet.html" title="Jet class." alt="" coords="5,86,83,117"/>
-<area shape="rect" id="node5" href="$classSusy_1_1Lepton.html" title="Lepton class, common to electrons and muons." alt="" coords="107,86,205,117"/>
-<area shape="rect" id="node11" href="$classSusy_1_1Photon.html" title="Photon class." alt="" coords="229,86,331,117"/>
-<area shape="rect" id="node13" href="$classSusy_1_1Tau.html" title="Tau class." alt="" coords="355,86,437,117"/>
-<area shape="rect" id="node15" href="$classSusy_1_1TruthJet.html" title="TruthJet." alt="" coords="461,86,568,117"/>
-<area shape="rect" id="node17" href="$classSusy_1_1TruthParticle.html" title="TruthParticle." alt="" coords="592,86,725,117"/>
-<area shape="rect" id="node7" href="$classSusy_1_1Electron.html" title="Electron class." alt="" coords="40,166,147,197"/>
-<area shape="rect" id="node9" href="$classSusy_1_1Muon.html" title="Muon class." alt="" coords="171,166,264,197"/>
+<area shape="rect" id="node3" href="$classSusy_1_1Jet.html" title="Jet class." alt="" coords="5,83,80,112"/>
+<area shape="rect" id="node5" href="$classSusy_1_1Lepton.html" title="Lepton class, common to electrons and muons." alt="" coords="104,83,208,112"/>
+<area shape="rect" id="node11" href="$classSusy_1_1Photon.html" title="Photon class." alt="" coords="232,83,336,112"/>
+<area shape="rect" id="node13" href="$classSusy_1_1Tau.html" title="Tau class." alt="" coords="360,83,440,112"/>
+<area shape="rect" id="node15" href="$classSusy_1_1TruthJet.html" title="TruthJet." alt="" coords="464,83,571,112"/>
+<area shape="rect" id="node17" href="$classSusy_1_1TruthParticle.html" title="TruthParticle." alt="" coords="595,83,731,112"/>
+<area shape="rect" id="node7" href="$classSusy_1_1Electron.html" title="Electron class." alt="" coords="36,160,148,189"/>
+<area shape="rect" id="node9" href="$classSusy_1_1Muon.html" title="Muon class." alt="" coords="172,160,265,189"/>
 </map>

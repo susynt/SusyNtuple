@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node1" href="$classSusy_1_1MuonSelector.html" title="A class to select muons." alt="" coords="7,111,148,142"/>
-<area shape="rect" id="node3" href="$classSusy_1_1MuonSelector__2Lep.html" title="implements muon selection for ATL&#45;COM&#45;PHYS&#45;2013&#45;911" alt="" coords="209,5,388,35"/>
-<area shape="rect" id="node5" href="$classSusy_1_1MuonSelector__2LepWH.html" title="implements muon selection for ATL&#45;COM&#45;PHYS&#45;2014&#45;221" alt="" coords="197,58,400,89"/>
-<area shape="rect" id="node7" href="$classSusy_1_1MuonSelector__3Lep.html" title="implements muon selection for ATL&#45;COM&#45;PHYS&#45;2013&#45;888" alt="" coords="209,111,388,142"/>
-<area shape="rect" id="node9" href="$classSusy_1_1MuonSelector__SS3L.html" title="implements https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2..." alt="" coords="208,165,389,195"/>
-<area shape="rect" id="node11" href="$classSusy_1_1MuonSelector__Stop2L.html" title="implements Muon selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton..." alt="" coords="203,218,395,249"/>
-</map>

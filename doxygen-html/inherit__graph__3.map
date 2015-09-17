@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node1" href="$classD3PDReader_1_1VarHandleBase.html" title="Base class for the different kind of VarHandle specializations." alt="" coords="7,31,212,62"/>
-<area shape="rect" id="node3" href="$classD3PDReader_1_1VarHandle.html" title="Class responsible for reading primitive types from the D3PD." alt="" coords="267,5,496,35"/>
-<area shape="rect" id="node5" href="$classD3PDReader_1_1VarHandle_3_01Type_01_5_01_4.html" title="Class responsible for reading STL objects from the D3PD." alt="" coords="261,58,501,89"/>
-</map>
