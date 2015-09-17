@@ -107,7 +107,6 @@ class MuonSelector_2LepWH : public MuonSelector
 /// implements https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class MuonSelector_SS3L : public MuonSelector
 {
-    virtual bool passIpCut(const Muon* mu);
     virtual bool isBaseline(const Muon* mu);
     virtual bool isSignal(const Muon* mu);
 };
@@ -115,7 +114,6 @@ class MuonSelector_SS3L : public MuonSelector
 /// implements Muon selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class MuonSelector_Stop2L : public MuonSelector
 {
-    virtual bool passIpCut(const Muon* mu);
     virtual bool isBaseline(const Muon* mu);
     virtual bool isSignal(const Muon* mu);
 };

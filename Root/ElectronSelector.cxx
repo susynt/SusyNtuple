@@ -110,7 +110,7 @@ float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
 bool ElectronSelector::passIpCut(const Electron &el)
 {
     return (std::abs(el.d0sigBSCorr)  < 5.0 &&
-            std::abs(el.z0SinTheta()) < 0.4 );
+            std::abs(el.z0SinTheta()) < 0.5 );
 }
 //----------------------------------------------------------
 bool ElectronSelector::outsideCrackRegion(const Electron &el)

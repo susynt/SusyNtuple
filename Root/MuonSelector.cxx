@@ -85,7 +85,7 @@ bool MuonSelector::passIpCut(const Muon* mu)
     bool pass = false;
     if(mu) {
         pass = (fabs(mu->d0sigBSCorr)  < 3.0 &&
-                fabs(mu->z0SinTheta()) < 0.4 );
+                fabs(mu->z0SinTheta()) < 0.5 );
     }
     return pass;
 }
@@ -147,16 +147,6 @@ bool MuonSelector_2LepWH::isSignal(const Muon* mu)
 //----------------------------------------------------------
 // begin MuonSelector_ss3l
 //----------------------------------------------------------
-bool MuonSelector_SS3L::passIpCut(const Muon* mu)
-{
-    bool pass = false;
-    if(mu) {
-        pass = (fabs(mu->d0sigBSCorr)  < 3.0 &&
-                fabs(mu->z0SinTheta()) < 0.5 );
-    }
-    return pass;
-}
-//----------------------------------------------------------
 bool MuonSelector_SS3L::isBaseline(const Muon* mu)
 {
     bool pass = false;
@@ -180,16 +170,6 @@ bool MuonSelector_SS3L::isSignal(const Muon* mu)
 }
 //----------------------------------------------------------
 // begin MuonSelector_Stop2L
-//----------------------------------------------------------
-bool MuonSelector_Stop2L::passIpCut(const Muon* mu)
-{
-    bool pass = false;
-    if(mu) {
-        pass = (fabs(mu->d0sigBSCorr)  < 3.0 &&
-                fabs(mu->z0SinTheta()) < 0.5 );
-    }
-    return pass;
-}
 //----------------------------------------------------------
 bool MuonSelector_Stop2L::isBaseline(const Muon* mu)
 {
