@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef WHTRUTHEXTRACTOR_H
 #define WHTRUTHEXTRACTOR_H
 

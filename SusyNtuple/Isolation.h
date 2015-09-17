@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SUSYNTUPLE_ISOLATION_H
 #define SUSYNTUPLE_ISOLATION_H
 

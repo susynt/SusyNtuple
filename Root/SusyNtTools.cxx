@@ -200,8 +200,9 @@ void SusyNtTools::buildLeptons(LeptonVector& leptons, const ElectronVector& elec
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::removeSFOSPairs(ElectronVector& electrons, MuonVector& muons)
 {
-    kin::removeSFOSPair(electrons, MLL_MIN);
-    kin::removeSFOSPair(muons, MLL_MIN);
+    float mllMin = 12;
+    kin::removeSFOSPair(electrons, mllMin);
+    kin::removeSFOSPair(muons, mllMin);
 }
 //----------------------------------------------------------
 bool SusyNtTools::initTriggerTool(const std::string &anyInputFilename)

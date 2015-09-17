@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SUSYNTUPLE_PHOTONSELECTOR_H
 #define SUSYNTUPLE_PHOTONSELECTOR_H
 

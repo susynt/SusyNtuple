@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyCommon_TriggerTools_h
 #define SusyCommon_TriggerTools_h
 

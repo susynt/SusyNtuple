@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyNtuple_SusyNt_h
 #define SusyNtuple_SusyNt_h
 

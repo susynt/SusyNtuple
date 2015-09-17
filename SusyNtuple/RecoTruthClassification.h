@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef RecoTruthClassification_h
 #define RecoTruthClassification_h
 
