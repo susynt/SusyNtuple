@@ -188,9 +188,6 @@ DataPeriod  getDataPeriod(uint run);
 McPeriod    getMcPeriod(uint run);
 bool        isPeriodAB3(uint run);
 
-//bool hasBJet(const JetVector& jets, float weight=MV1_60);
-//bool isBJet(const Susy::Jet* jet, float weight=MV1_60);
-
 // for pointer sorting
 bool comparePt(const TLorentzVector* p1, const TLorentzVector* p2);
 // find lepton in a collection
@@ -244,14 +241,6 @@ const float MUON_ETCONE30_PT_CUT = 0.12;
 const float MUON_ETCONE30_PT_WH_CUT = 0.14;//0.10;
 const float MUON_D0SIG_CUT = 3.0;
 const float MUON_Z0_SINTHETA_CUT = 1.0;//0.2;
-
-// B-tagging working points
-// Recently updated following this twiki:
-// https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/BtagAnalysis172#LC_Jets
-const float MV1_60 = 0.980;
-const float MV1_85 = 0.122;
-const float MV1_80 = 0.3511;
-const float SV1_80 = 0.60; //  SV1 is NOT RECOMMNEDED for use with MC12a
 
 // BAD FCAL
 const float BAD_FCAL_LUMI = 1.18034;
