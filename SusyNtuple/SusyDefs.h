@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyNtuple_SusyDefs_h
 #define SusyNtuple_SusyDefs_h
 
@@ -80,16 +81,6 @@ typedef std::vector<Susy::TruthJet*>      TruthJetVector;
 // Global enums
 //-----------------------------------------------------------------------------------
 
-/// Data stream
-//enum DataStream {
-//    Stream_Unknown = 0,
-//    Stream_MC,
-//    Stream_Muons,
-//    Stream_Egamma,
-//    Stream_JetTauEtmiss,
-//    Stream_N
-//};
-
 enum DataStream {
     Stream_Unknown = 0,
     Stream_MC,
@@ -143,7 +134,7 @@ enum BTagSys {
     BTag_N
 };
 
-/// Human-readable names for enum BTagSys 
+/// Human-readable names for enum BTagSys
 const std::string BTagSysNames[BTag_N] = {
     "BTag_NOM",
     "BTag_BJet_DN",
@@ -195,62 +186,6 @@ bool findLepton(const Susy::Lepton* lep, const LeptonVector& leptons);
 
 // Dilepton specific
 DiLepEvtType getDiLepEvtType(const LeptonVector& leptons);
-
-//-----------------------------------------------------------------------------------
-// Standard Analysis Cuts 
-//-----------------------------------------------------------------------------------
-
-// These cuts are defined for 2-lep and 3-lep. If there are differences
-// an extention of _2L or _3L is added.  We could also separate all cuts
-// into 2L and 3L separately, but that leads to duplications
-
-// Pt
-//const float ELECTRON_PT_CUT = 10; // GeV
-const float MUON_PT_CUT = 10; // GeV
-//const float TAU_PT_CUT = 20; // GeV
-
-const float MLL_MIN = 12;
-
-// Eta
-//const float ELECTRON_ETA_CUT = 2.47; // Currently applied in SusyNtMaker
-const float MUON_ETA_CUT = 2.4;  // Currently applied in SusyNtMaker
-
-// Signal Requirements
-const float ELECTRON_ISO_PT_THRS = 60.0;
-const float ELECTRON_PTCONE30_PT_CUT = 0.16;
-const float ELECTRON_PTCONE30_PT_WH_CUT = 0.07;
-const float ELECTRON_TOPOCONE30_SLOPE_DATA = 0.02015;
-const float ELECTRON_TOPOCONE30_SLOPE_MC = 0.01794;
-const float ELECTRON_TOPOCONE30_PT_CUT = 0.18;
-const float ELECTRON_TOPOCONE30_PT_WH_CUT = 0.13;
-const float ELECTRON_D0SIG_CUT = 5.0;
-const float ELECTRON_D0SIG_CUT_WH = 3.0;
-const float ELECTRON_Z0_SINTHETA_CUT = 0.4;
-
-const float MUON_ISO_PT_THRS = 60.0;
-const float MUON_PTCONE30_SLOPE_DATA = 0.01098;
-const float MUON_PTCONE30_SLOPE_MC = 0.00627;
-const float MUON_PTCONE30_PT_CUT = 0.12;
-const float MUON_PTCONE30ELSTYLE_PT_CUT = 0.12;
-const float MUON_PTCONE30ELSTYLE_PT_WH_CUT = 0.06;
-const float MUON_ETCONE30_K1_DATA = 0.0648;
-const float MUON_ETCONE30_K2_DATA = 0.00098;
-const float MUON_ETCONE30_K1_MC = 0.0692;
-const float MUON_ETCONE30_K2_MC = 0.00076;
-const float MUON_ETCONE30_PT_CUT = 0.12;
-const float MUON_ETCONE30_PT_WH_CUT = 0.14;//0.10;
-const float MUON_D0SIG_CUT = 3.0;
-const float MUON_Z0_SINTHETA_CUT = 1.0;//0.2;
-
-// BAD FCAL
-const float BAD_FCAL_LUMI = 1.18034;
-const int   BAD_FCAL_RUN1 = 206348;
-const int   BAD_FCAL_RUN2 = 207332;
-
-const float BAD_FCAL_PT = 20;
-const float BAD_FCAL_ETA = 3.2;
-const float BAD_FCAL_PHILOW = 1.6;
-const float BAD_FCAL_PHIHIGH = 3.1;
 
 // Truth level cuts
 const float TRUTH_ELECTRON_PT_CUT = 10.;
