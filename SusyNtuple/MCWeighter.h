@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyNtuple_MCWeighter_h
 #define SusyNtuple_MCWeighter_h
 

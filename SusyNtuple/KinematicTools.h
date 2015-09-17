@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyNtuple_KinematicTools_h
 #define SusyNtuple_KinematicTools_h
 

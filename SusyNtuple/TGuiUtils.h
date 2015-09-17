@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef TGUIUTILS_H
 #define TGUIUTILS_H
 

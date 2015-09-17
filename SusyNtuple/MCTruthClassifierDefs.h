@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef MCTRUTHCLASSIFIER_MCTRUTHCLASSIFIERDEFS_H
 #define MCTRUTHCLASSIFIER_MCTRUTHCLASSIFIERDEFS_H
 /********************************************************************

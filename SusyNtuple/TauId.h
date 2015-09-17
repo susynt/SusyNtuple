@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SUSY_TAUID_H
 #define SUSY_TAUID_H
 

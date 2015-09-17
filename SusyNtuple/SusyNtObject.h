@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyCommon_SusyNtObject_h
 #define SusyCommon_SusyNtObject_h
 

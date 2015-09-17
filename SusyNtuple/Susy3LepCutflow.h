@@ -1,3 +1,4 @@
+//  -*- c++ -*-
 #ifndef SusyAna_Susy3LepCutflow_h
 #define SusyAna_Susy3LepCutflow_h
 
