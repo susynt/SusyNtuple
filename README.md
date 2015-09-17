@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gerbaudo/SusyNtuple.svg?branch=master)](https://travis-ci.org/gerbaudo/SusyNtuple)
+[![Build Status](https://travis-ci.org/susynt/SusyNtuple.svg?branch=master)](https://travis-ci.org/susynt/SusyNtuple)
 
 SusyNtuple
 ----------
