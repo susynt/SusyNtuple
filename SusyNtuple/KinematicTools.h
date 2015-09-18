@@ -191,17 +191,17 @@ float getMetRel(const Met& met, const LeptonVector& leptons, const JetVector& je
 //////////////////////////////////////////////
 // MT2 calculation methods (mt2 Mt2)
 //////////////////////////////////////////////
-// calculate lepton mt2, leptons are assumed massless (massless LSP)
+// calculate lepton mt2, leptons are assumed to have massess of lv.M() (massless LSP)
 float getMT2(const LeptonVector& leptons, const Met* met);
 float getMT2(const LeptonVector& leptons, const Met& met);
 
-// calculate mt2 using two visible objects p1 and p2 that are assumed massless (massless LSP)
+// calculate mt2 using two visible objects p1 and p2 that are assumed to have masses of lv.M() (massless LSP)
 float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met);
 float getMT2(const TLorentzVector& p1, const TLorentzVector& p2, const Met& met);
 
 // calculate mt2 using two visible objects p1 and p2, specifiy whether to treat massless (set LSP mass)
-float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met, bool zeroMass, float lspMass = 0);
-float getMT2(const TLorentzVector& p1, const TLorentzVector& p2, const Met& met, bool zeroMass, float lspMass = 0);
+float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met, bool zeroMass, float lsp1Mass = 0., float lsp2Mass = 0.);
+float getMT2(const TLorentzVector& p1, const TLorentzVector& p2, const Met& met, bool zeroMass, float lsp1Mass = 0., float lsp2Mass = 0.);
 
 //////////////////////////////////////////////
 // MCT calculation methods Mct mct
