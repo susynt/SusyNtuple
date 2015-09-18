@@ -53,7 +53,8 @@ class ChainHelper
     static bool inputIsList(const std::string &input);
     /// input directories are expected to end with '/'
     static bool inputIsDir(const std::string &input);
-
+    /// retrieve the sample name from the first root file
+    static std::string sampleName(const std::string &input, bool verbose);
 };
 
 

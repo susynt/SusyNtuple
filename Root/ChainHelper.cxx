@@ -2,6 +2,7 @@
 #include "SusyNtuple/string_utils.h"
 #include "TObjArray.h"
 #include "TChainElement.h"
+#include "TKey.h"
 
 #include <iostream>
 
@@ -111,5 +112,28 @@ bool ChainHelper::inputIsList(const std::string &input)
 bool ChainHelper::inputIsDir(const std::string &input)
 {
     return Susy::utils::endswith(Susy::utils::rmLeadingTrailingWhitespaces(input), "/");
+}
+//----------------------------------------------------------
+std::string ChainHelper::sampleName(const std::string &input, bool verbose)
+{
+    string sampleName;
+    bool fileFound(false), containerFound(false);
+    string fileName = ChainHelper::firstFile(input, verbose);
+    string containerName = "outputContainerName"; // see SusyNtMaker::writeMetaData()
+    if(TFile *inputFile = TFile::Open(fileName.c_str())) {
+        fileFound = true;
+        if(TKey *container = inputFile->FindKey(containerName.c_str())) {
+            containerFound = true;
+            sampleName = container->GetTitle();
+        }
+        inputFile->Close();
+        inputFile->Delete();
+    }
+    if(verbose && !containerFound) {
+        cout<<"ChainHelper::sampleName: failed."<<endl
+            <<" fileFound: "<<fileFound<<" (firstFile '"<<fileName<<"')"<<endl
+            <<" containerFound "<<containerFound<<" (containerName '"<<containerName<<"')"<<endl;
+    }
+    return sampleName;
 }
 //----------------------------------------------------------
