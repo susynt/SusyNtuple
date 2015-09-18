@@ -106,10 +106,15 @@ class SusyNtAna : public TSelector
     { checkAndAddRunEvent(runEventMap, run, event); }
 
     bool isDuplicate(unsigned int run, unsigned int event);
+    /// the sample name used to be used to guess metadata info
+    /**
+       You should set it to the value provided by
+       ChainHelper::sampleName(), unless you know what you're doing.
 
-    // Sample name - can be used however you like
-    std::string sampleName() const { return m_sample; }
+       DG-2015-09-18 Is this still being used anywhere to guess info?
+     */
     void setSampleName(std::string s) { m_sample = s; }
+    std::string sampleName() const { return m_sample; }
 
     /// getter to be used from outside (set xsec dir, access weight, etc.)
     MCWeighter& mcWeighter() { return m_mcWeighter; }
