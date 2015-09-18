@@ -540,6 +540,7 @@ bool Susy2LepCutflow::passdPhi(TLorentzVector v0, TLorentzVector v1, float cut)
 bool Susy2LepCutflow::passMT2(const LeptonVector& leptons, const Met* met, float cut)
 {
   float mT2 = kin::getMT2(leptons, met);
+  // float mT2 = kin::getMT2(leptons.at(0), leptons.at(1), met, true); // For results a la Run-I style
   return (mT2 > cut);
 }
 

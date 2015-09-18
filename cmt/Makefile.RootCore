@@ -7,7 +7,7 @@ PACKAGE_PRELOAD  = Graf Gpad Hist Physics Tree
 PACKAGE_CXXFLAGS = 
 PACKAGE_LDFLAGS  = $(shell root-config --libs --glibs)
 PACKAGE_BINFLAGS = -lPyROOT -lXMLParser -lEG
-PACKAGE_DEP	  	 = SUSYTools Mt2
+PACKAGE_DEP	 = SUSYTools
 PACKAGE_NOOPT    = 0
 
 include $(ROOTCOREDIR)/Makefile-common

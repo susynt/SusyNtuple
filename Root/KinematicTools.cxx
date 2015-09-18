@@ -3,8 +3,7 @@
 
 // SusyNtuple
 #include "SusyNtuple/KinematicTools.h"
-
-#include "Mt2/mt2_bisect.h"
+#include "SusyNtuple/MT2_ROOT.h"
 
 using namespace std;
 using namespace Susy;
@@ -713,7 +712,7 @@ float getMetRel(const Met& met, const LeptonVector& leptons, const JetVector& je
 // MT2 calculation methods (mt2 Mt2)
 /////////////////////////////////////////////////////////////////////////////////
 
-// calculate leptonic mt2, leptons are assumed massless (massless LSP)
+// calculate lepton mt2, leptons are assumed to have massess of lv.M() (massless LSP)
 float getMT2(const LeptonVector& leptons, const Met* met)
 {
     return getMT2(leptons, *met);
@@ -727,19 +726,13 @@ float getMT2(const LeptonVector& leptons, const Met& met)
     TLorentzVector l0 = *leptons.at(0);
     TLorentzVector l1 = *leptons.at(1);
 
-    double pTMiss[3] = { 0.0, metlv.Px(), metlv.Py() };
-    double pA[3] = { 0.0, l0.Px(), l0.Py() };
-    double pB[3] = { 0.0, l1.Px(), l1.Py() };
-
     // Create Mt2 object
-    mt2_bisect::mt2 mt2_event;
-    mt2_event.set_momenta(pA, pB, pTMiss);
-    mt2_event.set_mn(0); // LSP mass = 0 is Generic
+    ComputeMT2 mt2_event = ComputeMT2(l0,l1,metlv,0.,0.); // masses 0. 0. for LSPs
 
-    return mt2_event.get_mt2();
+    return mt2_event.Compute(true); // true means using the actual masses of l0 and l1 - default 
 }
 
-// calculate mt2 using two visible objects p1 and p2 that are assumed massless (massless LSP)
+// calculate mt2 using two visible objects p1 and p2 that are assumed to have masses of lv.M() (massless LSP)
 float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met)
 {
     return getMT2(*p1, *p2, *met);
@@ -749,39 +742,29 @@ float getMT2(const TLorentzVector& p1, const TLorentzVector& p2, const Met& met)
     // necessary variables
     TLorentzVector metLV = met.lv();
 
-    double pTMiss[3] = { 0.0, metLV.Px(), metLV.Py() };
-    double pA[3] = { 0.0, p1.Px(), p1.Py() };
-    double pB[3] = { 0.0, p2.Px(), p2.Py() };
-
     // Create Mt2 object
-    mt2_bisect::mt2 mt2_event;
-    mt2_event.set_momenta(pA, pB, pTMiss);
-    mt2_event.set_mn(0); // LSP mass = 0 is Generic
+    ComputeMT2 mt2_event = ComputeMT2(p1,p2,metLV,0.,0.); // masses 0. 0. for LSPs
 
-    return mt2_event.get_mt2();
+    return mt2_event.Compute(true); // true means using the actual masses of p1 and p1 - default 
 }
 
 // calculate mt2 using two visible objects p1 and p2, specifiy whether to treat massless (set LSP mass)
-float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met, bool zeroMass, float lspMass)
+float getMT2(const TLorentzVector* p1, const TLorentzVector* p2, const Met* met, bool zeroMass, float lsp1Mass, float lsp2Mass)
 {
-    return getMT2(*p1, *p2, *met, zeroMass, lspMass);
+    return getMT2(*p1, *p2, *met, zeroMass, lsp1Mass, lsp2Mass);
 }
-float getMT2(const TLorentzVector& p1, const TLorentzVector& p2, const Met& met, bool zeroMass, float lspMass)
+float getMT2(const TLorentzVector& p1, const TLorentzVector& p2, const Met& met, bool zeroMass, float lsp1Mass, float lsp2Mass)
 {
     // necessary variables
     TLorentzVector metLV = met.lv();
 
-    double pTMiss[3] = { 0.0, metLV.Px(), metLV.Py() };
-    double pA[3] = { (zeroMass) ? 0.0 : p1.M(), p1.Px(), p1.Py() };
-    double pB[3] = { (zeroMass) ? 0.0 : p2.M(), p2.Px(), p2.Py() };
-
     // Create Mt2 object
-    mt2_bisect::mt2 mt2_event;
-    mt2_event.set_momenta(pA, pB, pTMiss);
-    mt2_event.set_mn(lspMass);
+    ComputeMT2 mt2_event = ComputeMT2(p1,p2,metLV,lsp1Mass,lsp2Mass); // non-zero trial masses
 
-    return mt2_event.get_mt2();
-
+    if(zeroMass)
+      return mt2_event.Compute(false); // false means using the zero masses for p1 and p2  
+    else
+      return mt2_event.Compute(true);  // true means using the actual masses of p1 and p2 - default 
 }
 
 /////////////////////////////////////////////////////////////////////////////////
