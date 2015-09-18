@@ -116,13 +116,24 @@ bool ChainHelper::inputIsDir(const std::string &input)
 //----------------------------------------------------------
 std::string ChainHelper::sampleName(const std::string &input, bool verbose)
 {
+    string containerName = "outputContainerName"; // see SusyNtMaker::writeMetaData()
+    return ChainHelper::readMetadataTitle(input, containerName, verbose);
+}
+//----------------------------------------------------------
+std::string ChainHelper::parentSampleName(const std::string &input, bool verbose)
+{
+    string containerName = "inputContainerName";
+    return ChainHelper::readMetadataTitle(input, containerName, verbose);
+}
+//----------------------------------------------------------
+std::string ChainHelper::readMetadataTitle(const std::string &input, const std::string tobjectName, bool verbose)
+{
     string sampleName;
     bool fileFound(false), containerFound(false);
     string fileName = ChainHelper::firstFile(input, verbose);
-    string containerName = "outputContainerName"; // see SusyNtMaker::writeMetaData()
     if(TFile *inputFile = TFile::Open(fileName.c_str())) {
         fileFound = true;
-        if(TKey *container = inputFile->FindKey(containerName.c_str())) {
+        if(TKey *container = inputFile->FindKey(tobjectName.c_str())) {
             containerFound = true;
             sampleName = container->GetTitle();
         }
@@ -132,7 +143,7 @@ std::string ChainHelper::sampleName(const std::string &input, bool verbose)
     if(verbose && !containerFound) {
         cout<<"ChainHelper::sampleName: failed."<<endl
             <<" fileFound: "<<fileFound<<" (firstFile '"<<fileName<<"')"<<endl
-            <<" containerFound "<<containerFound<<" (containerName '"<<containerName<<"')"<<endl;
+            <<" containerFound "<<containerFound<<" (TObject '"<<tobjectName<<"')"<<endl;
     }
     return sampleName;
 }
