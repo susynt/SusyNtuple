@@ -173,7 +173,7 @@ bool JetSelector_SS3L::isB(const Jet* jet)
     bool pass = false;
     if(jet) {
         pass = (jet->Pt()        > 20.0    &&
-                fabs(jet->Eta()) <  2.4    &&
+                fabs(jet->Eta()) <  2.5    &&
                 passJvt(jet)               &&
                 jet->mv2c20      > mv2c20_70efficiency());
     }
