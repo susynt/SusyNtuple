@@ -105,9 +105,9 @@ bool JetSelector::passJvt(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = ((jet->jvt          >  0.64) ||
-                (fabs(jet->detEta) >  2.4)  ||
-                (jet->Pt()         > 50.0)  );
+        pass = ((jet->jvt         >  0.64) ||
+                (fabs(jet->Eta()) >  2.4)  ||
+                (jet->Pt()         > 50.0) );
     }
     return pass;
 }
