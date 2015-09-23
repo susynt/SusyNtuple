@@ -15,22 +15,6 @@ TrackMet::TrackMet(const TrackMet &rhs) :
     Et(rhs.Et),
     phi(rhs.phi),
     sumet(rhs.sumet),
-    // ele term
-    refEle_et(rhs.refEle_et),
-    refEle_phi(rhs.refEle_phi),
-    refEle_sumet(rhs.refEle_sumet),
-    // muo term
-    refMuo_et(rhs.refMuo_et),
-    refMuo_phi(rhs.refMuo_phi),
-    refMuo_sumet(rhs.refMuo_sumet),
-    // jet term
-    refJet_et(rhs.refJet_et),
-    refJet_phi(rhs.refJet_phi),
-    refJet_sumet(rhs.refJet_sumet),
-    // soft term
-    softTerm_et(rhs.softTerm_et),
-    softTerm_phi(rhs.softTerm_phi),
-    softTerm_sumet(rhs.softTerm_sumet),
     sys(rhs.sys)
 {}
 /*--------------------------------------------------------------------------------*/
@@ -43,23 +27,6 @@ TrackMet& TrackMet::operator=(const TrackMet &rhs)
         Et = rhs.Et;
         phi = rhs.phi;
         sumet = rhs.sumet;
-        // ele term
-        refEle_et = rhs.refEle_et;
-        refEle_phi = rhs.refEle_phi;
-        refEle_sumet = rhs.refEle_sumet;
-        // muo term
-        refMuo_et = rhs.refMuo_et;
-        refMuo_phi = rhs.refMuo_phi;
-        refMuo_sumet = rhs.refMuo_sumet;
-        // jet term
-        refJet_et = rhs.refJet_et;
-        refJet_phi = rhs.refJet_phi;
-        refJet_sumet = rhs.refJet_sumet;
-        // soft term
-        softTerm_et = rhs.softTerm_et;
-        softTerm_phi = rhs.softTerm_phi;
-        softTerm_sumet = rhs.softTerm_sumet;
-
         sys = rhs.sys;
     }
     return *this;
