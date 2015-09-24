@@ -41,6 +41,7 @@ public:
 
     int hfor;                 ///< heavy flavor overlap removal decision
 
+    /// SUSY subprocess ID's: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalUncertainties#Subprocess_IDs
     int susyFinalState;       ///< Susy process
     int hDecay;               ///< Higgs decay (see WhTruthExtractor)
     bool eventWithSusyProp;   ///< Event generated involving SUSY propagators

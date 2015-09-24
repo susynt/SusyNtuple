@@ -9,6 +9,8 @@ namespace Susy
 enum class Isolation{
     GradientLoose=0
     ,Gradient
+    ,GradientT1
+    ,GradientT2
     ,LooseTrackOnly
     ,Loose
     ,Tight
