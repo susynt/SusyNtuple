@@ -2,6 +2,7 @@
 #include "SusyNtuple/string_utils.h"
 #include "TObjArray.h"
 #include "TChainElement.h"
+#include "TKey.h"
 
 #include <iostream>
 
@@ -111,5 +112,39 @@ bool ChainHelper::inputIsList(const std::string &input)
 bool ChainHelper::inputIsDir(const std::string &input)
 {
     return Susy::utils::endswith(Susy::utils::rmLeadingTrailingWhitespaces(input), "/");
+}
+//----------------------------------------------------------
+std::string ChainHelper::sampleName(const std::string &input, bool verbose)
+{
+    string containerName = "outputContainerName"; // see SusyNtMaker::writeMetaData()
+    return ChainHelper::readMetadataTitle(input, containerName, verbose);
+}
+//----------------------------------------------------------
+std::string ChainHelper::parentSampleName(const std::string &input, bool verbose)
+{
+    string containerName = "inputContainerName";
+    return ChainHelper::readMetadataTitle(input, containerName, verbose);
+}
+//----------------------------------------------------------
+std::string ChainHelper::readMetadataTitle(const std::string &input, const std::string tobjectName, bool verbose)
+{
+    string sampleName;
+    bool fileFound(false), containerFound(false);
+    string fileName = ChainHelper::firstFile(input, verbose);
+    if(TFile *inputFile = TFile::Open(fileName.c_str())) {
+        fileFound = true;
+        if(TKey *container = inputFile->FindKey(tobjectName.c_str())) {
+            containerFound = true;
+            sampleName = container->GetTitle();
+        }
+        inputFile->Close();
+        inputFile->Delete();
+    }
+    if(verbose && !containerFound) {
+        cout<<"ChainHelper::sampleName: failed."<<endl
+            <<" fileFound: "<<fileFound<<" (firstFile '"<<fileName<<"')"<<endl
+            <<" containerFound "<<containerFound<<" (TObject '"<<tobjectName<<"')"<<endl;
+    }
+    return sampleName;
 }
 //----------------------------------------------------------

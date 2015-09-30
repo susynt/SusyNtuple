@@ -76,6 +76,7 @@ int main(int argc, char** argv)
   cout << "  input   " << input    << endl;
   cout << endl;
 
+  bool verbose = dbg>0;
   // Build the input chain
   TChain* chain = new TChain("susyNt");
   ChainHelper::addInput(chain, input, dbg>0);
@@ -85,7 +86,7 @@ int main(int argc, char** argv)
   // Build the TSelector
   Susy2LepCutflow* susyAna = new Susy2LepCutflow();
   susyAna->setDebug(dbg);
-  susyAna->setSampleName(sample);
+  susyAna->setSampleName(ChainHelper::sampleName(input, verbose));
   susyAna->setChain(chain); // propagate the TChain to the analysis
   susyAna->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
   // Run the job

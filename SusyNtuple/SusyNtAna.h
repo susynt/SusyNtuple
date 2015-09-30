@@ -106,10 +106,18 @@ class SusyNtAna : public TSelector
     { checkAndAddRunEvent(runEventMap, run, event); }
 
     bool isDuplicate(unsigned int run, unsigned int event);
+    /// the sample name, which used to be used to guess metadata info
+    /**
+       You should set it to the value provided by
+       ChainHelper::sampleName(), unless you know what you're doing.
 
-    // Sample name - can be used however you like
-    std::string sampleName() const { return m_sample; }
-    void setSampleName(std::string s) { m_sample = s; }
+       DG-2015-09-18 Is this still being used anywhere to guess info?
+     */
+    SusyNtAna& setSampleName(std::string s) { m_sample = s; return *this; }
+    std::string sampleName() const;
+    /// right now used only in Superflow to autoguess settings
+    SusyNtAna& setParentSampleName(std::string s) { m_parentSample = s; return *this; }
+    std::string parentSampleName() const;
 
     /// getter to be used from outside (set xsec dir, access weight, etc.)
     MCWeighter& mcWeighter() { return m_mcWeighter; }
@@ -141,6 +149,7 @@ class SusyNtAna : public TSelector
     bool  m_duplicate;          ///< duplicate event
     
     std::string m_sample;       ///< sample name string
+    std::string m_parentSample; ///< name of sample from which the ntuple was generated
 
     // To debug events in input file 
     RunEventMap m_eventList;          ///< run:event to debug 
