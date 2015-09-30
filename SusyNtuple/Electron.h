@@ -43,6 +43,7 @@ public:
     // efficiency SF per electron LH WP
     std::vector<float> eleEffSF;
 
+    bool isMuon;              ///< True if electron track is same as a muon track
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
     int truthCharge; ///< as provided by xAOD::TruthHelpers::getTruthParticle
 
@@ -131,6 +132,7 @@ public:
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
       veryLooseLH = looseLH= mediumLH = tightLH = false;
       looseLH_nod0= mediumLH_nod0 = tightLH_nod0 = false;
+      isMuon = false;
       isChargeFlip = false;
       truthCharge = 0;
       
