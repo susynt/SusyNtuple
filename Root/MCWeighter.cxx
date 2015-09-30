@@ -315,10 +315,15 @@ size_t MCWeighter::parseAdditionalXsecFile(const std::string &input_filename, bo
             // this is an ugly conversion we inherit from SUSYCrossSection; drop when they provide Key::get_proc_id
             int proc_id(atoi(p->second.name().c_str()));
             bool alreadyThere(m_xsecDB.process(sample_id, proc_id).ID() != -1);
-            if (alreadyThere)
+            if (alreadyThere){
+                float old_xsec = m_xsecDB.process(sample_id, proc_id).xsect();
+                float new_xsec = p->second.xsect();
                 cout<<"MCWeighter::parseAdditionalXsecFile:"
                     <<" warning: the entry for (dsid="<<p->second.ID()<<" proc="<<p->second.name()<<")"
-                    <<" will be overwritten"<<endl;
+                    <<" will be overwritten"
+                    <<" (old xsec: "<<old_xsec<<", new xsec: "<<new_xsec<<")"
+                    <<endl;
+            }
         } // for(p)
         m_xsecDB.loadFile(gSystem->ExpandPathName(filename.c_str()));
     }
