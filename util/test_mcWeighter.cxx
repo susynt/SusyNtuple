@@ -113,6 +113,21 @@ int test_mc_weighter_with_susy_sample()
     return 0;
 }
 //----------------------------------------------------------
+int test_mc_weighter_overwrite_values()
+{
+    cout<<"-------------------------"<<endl
+        <<"test_mc_weighter_overwrite_values"<<endl
+        <<"-------------------------"<<endl;
+    bool verbose=false;
+    string dummyFilename="/tmp/dummy_xsec.txt";
+    writeDummyFile(dummyFilename);
+    MCWeighter mcw;
+    mcw.parseAdditionalXsecFile(dummyFilename, verbose);
+    verbose=true; // just to see the warning message when overwriting
+    mcw.parseAdditionalXsecFile(dummyFilename, verbose);
+    return 0;
+}
+//----------------------------------------------------------
 int test_process_validator()
 {
     MCWeighter::ProcessValidator validator;
@@ -138,6 +153,7 @@ int main(int argc, char **argv)
     else test_mc_weighter_with_susy_sample();
     cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
     test_process_validator();
+    test_mc_weighter_overwrite_values();
     cout<<"-------------------------"<<endl
         <<"test_isSimplified"<<endl
         <<"-------------------------"<<endl;
