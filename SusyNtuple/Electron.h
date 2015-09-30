@@ -44,6 +44,7 @@ public:
     std::vector<float> eleEffSF;
 
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
+    int truthCharge; ///< as provided by xAOD::TruthHelpers::getTruthParticle
 
     //AT: This is insane >50!
     float res_all_dn;
@@ -131,6 +132,7 @@ public:
       veryLooseLH = looseLH= mediumLH = tightLH = false;
       looseLH_nod0= mediumLH_nod0 = tightLH_nod0 = false;
       isChargeFlip = false;
+      truthCharge = 0;
       
       res_all_dn= res_all_up= 0;
       /*
@@ -168,7 +170,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 14);
+    ClassDef(Electron, 15);
 };
 } //Susy
 #endif
