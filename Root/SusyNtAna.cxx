@@ -316,7 +316,27 @@ int SusyNtAna::cleaningCutFlags()
   //                                  m_preMuons, m_baseMuons,
   //                                  m_preJets, m_baseJets);
 }
-
+//----------------------------------------------------------
+std::string SusyNtAna::sampleName() const
+{
+    if(m_sample.size()==0){
+        cout<<"SusyNtAna::sampleName: empty string."
+            <<" Did you forget to call setSampleName()?"
+            <<endl;
+    }
+    return m_sample;
+}
+//----------------------------------------------------------
+std::string SusyNtAna::parentSampleName() const
+{
+    if(m_parentSample.size()==0){
+        cout<<"SusyNtAna::parentSampleName: empty string."
+            <<" Did you forget to call setParentSampleName()?"
+            <<endl;
+    }
+    return m_parentSample;
+}
+//----------------------------------------------------------
 
 /*--------------------------------------------------------------------------------*/
 // Dump timer information

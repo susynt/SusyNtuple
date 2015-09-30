@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 
   DileptonCutflowWithList analysis;
   if(verbose) analysis.setDebug(1);
-  analysis.setSampleName(sampleName);
+  analysis.setSampleName(ChainHelper::sampleName(inputRootFname, verbose));
   analysis.m_eventList.setListName(sampleName); // can be anything; used to save the TEventList in the file
   analysis.m_eventList.setCacheFilename("./cache/"+sampleName+"_list.root"); // can be any (root) path where you have r/w permission
 
