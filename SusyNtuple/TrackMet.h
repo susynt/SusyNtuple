@@ -29,6 +29,23 @@ public:
             return tlv;
         }
 
+    // MET terms
+    float refEle_et;        ///< Ref electron term et
+    float refEle_phi;       ///< Ref electron term phi
+    float refEle_sumet;     ///< Ref elctron sumet
+
+    float refMuo_et;        ///< Ref muon term et
+    float refMuo_phi;       ///< Ref muon term phi
+    float refMuo_sumet;     ///< Ref muon term sumet
+
+    float refJet_et;        ///< Ref jet term et
+    float refJet_phi;       ///< Ref jet term phi
+    float refJet_sumet;     ///< Ref jet term sumet
+
+    float softTerm_et;      ///< Softterm et
+    float softTerm_phi;     ///< Softterm phi
+    float softTerm_sumet;   ///< Softterm sumet
+
     // I'm not a big fan of the way this is setup, would like to improve it someday
     int sys;                  ///< TrackMet stored in vector for each sys shift, this identifies TrackMet for specific shift
 
@@ -38,11 +55,20 @@ public:
     /// Clear vars
     void clear()
         {
-            Et = phi = sumet = 0;
+            Et = phi = sumet = 0.;
+            // ele term
+            refEle_et = refEle_phi = refEle_sumet = 0.;
+            // muon term
+            refMuo_et = refMuo_phi = refMuo_sumet = 0.;
+            // jet term
+            refJet_et = refJet_phi = refJet_sumet = 0.;
+            // soft term
+            softTerm_et = softTerm_phi = softTerm_sumet = 0.;
+
             sys = 0;
         }
 
-    ClassDef(TrackMet, 1);
+    ClassDef(TrackMet, 2);
 };
 } // Susy
 #endif
