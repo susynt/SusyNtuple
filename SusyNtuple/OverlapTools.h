@@ -68,7 +68,8 @@ public :
     OverlapTools& setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
-
+    OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
+    bool verbose() const { return m_verbose; }
 protected :
     Isolation m_electronIsolation;
     Isolation m_muonIsolation;

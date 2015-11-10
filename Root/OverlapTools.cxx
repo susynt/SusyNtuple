@@ -2,16 +2,68 @@
 #include "SusyNtuple/SusyNt.h"
 #include "SusyNtuple/JetSelector.h"
 
+
+#include <cassert>
 #include <set>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
 using Susy::OverlapTools;
 using Susy::Electron;
 using Susy::Muon;
+using Susy::Jet;
+using Susy::Lepton;
 using std::cout;
+using std::cerr;
 using std::endl;
 using std::string;
 
+
+#include <stdio.h>
+//----------------------------------------------------------
+// a few helper functions to print things out
+// (the str() ones could go in Jet, Lepton, etc.)
+//----------------------------------------------------------
+string str(const Jet* j)
+{
+    std::ostringstream oss;
+    oss<<"jet "
+       <<"("
+       <<std::setprecision(3)<<j->Pt()<<", "
+       <<std::setprecision(3)<<j->Eta()<<", "
+       <<std::setprecision(3)<<j->Phi()<<", "
+       <<"nTk "<<j->nTracks<<", "
+       <<"mv2c20 "<<j->mv2c20
+       <<")";
+    return oss.str();
+}
+
+string str(const Lepton* l)
+{
+    std::ostringstream oss;
+    oss<<(l->isEle() ? "el":"mu")<<" "
+       <<"("
+       <<std::setprecision(3)<<l->Pt()<<", "
+       <<std::setprecision(3)<<l->Eta()<<", "
+       <<std::setprecision(3)<<l->Phi()
+       <<")";
+    return oss.str();
+}
+
+void print_rm_msg(const string &msg, const Jet* j_drop, const Lepton* l_keep)
+{
+    cout<<msg<<" removing "<<str(j_drop)<<" overlapping (dRy="<<l_keep->DeltaRy(*j_drop)<<") with "<<str(l_keep)<<endl;
+}
+void print_rm_msg(const string &msg, const Lepton* l_drop, const Jet* j_keep)
+{
+    cout<<msg<<" removing "<<str(l_drop)<<" overlapping (dRy="<<l_drop->DeltaRy(*j_keep)<<") with "<<str(j_keep)<<endl;
+}
+void print_rm_msg(const string &msg, const Lepton* l_drop, const Lepton* l_keep)
+{
+    cout<<msg<<" removing "<<str(l_drop)<<" overlapping (dRy="<<l_drop->DeltaRy(*l_keep)<<") with "<<str(l_keep)<<endl;
+}
+//----------------------------------------------------------
 
 namespace Susy {
 //----------------------------------------------------------
@@ -120,6 +172,7 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets, doubl
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             if(e->DeltaRy(*j) < dR) {
+                if(verbose()) print_rm_msg("j_e_overlap: ", j, e);
                 jets.erase(jets.begin()+iJ);
             }
         } // iJ
@@ -135,6 +188,7 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets, doubl
         for(size_t iJ=0; iJ<jets.size(); iJ++){
             const Jet* j = jets.at(iJ);
             if(e->DeltaRy(*j) < dR) {
+                if(verbose()) print_rm_msg("e_j_overlap: ", e, j);
                 electrons.erase(electrons.begin()+iEl);
                 break;
             }
@@ -152,9 +206,11 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets, double dR)
             int jet_nTrk = j->nTracks;
             if(mu->DeltaRy(*j) > dR) continue;
             if(jet_nTrk < 3) {
+                if(verbose()) print_rm_msg("m_j_overlap: ", j, mu);
                 jets.erase(jets.begin() + iJ);
             }
             else {
+                if(verbose()) print_rm_msg("m_j_overlap: ", mu, j);
                 muons.erase(muons.begin() + iMu);
                 break;
             }
@@ -177,6 +233,8 @@ void OverlapTools::e_m_overlap(ElectronVector& electrons, MuonVector& muons, dou
         for(int iMu=0; iMu<nMu; iMu++){
             const Muon* mu = muons.at(iMu);
             if(e->DeltaRy(*mu) < dR){
+                if(verbose()) print_rm_msg("e_m_overlap: ", e, mu);
+                if(verbose()) print_rm_msg("e_m_overlap: ", mu, e);
                 electronsToRemove.insert(e);
                 muonsToRemove.insert(mu);
             } // dR match
@@ -215,9 +273,11 @@ void OverlapTools::e_e_overlap(ElectronVector& electrons, double dR)
             const Electron* ej = electrons.at(jEl);
             if(ei->DeltaRy(*ej) < dR){
                 if(ei->Pt() < ej->Pt()){
+                    if(verbose()) print_rm_msg(":e_e_overlap: ", ei, ej);
                     electronsToRemove.insert(ei);
                     break; // ei no longer exists for looping!
                 } else{
+                    if(verbose()) print_rm_msg(":e_e_overlap: ", ej, ei);
                     electronsToRemove.insert(ej);
                 }
             } // dR match
@@ -244,6 +304,8 @@ void OverlapTools::m_m_overlap(MuonVector& muons, double dR)
         for(int jMu=iMu+1; jMu<nMu; jMu++){
             const Muon* jmu = muons.at(jMu);
             if(imu->DeltaRy(*jmu) < dR){
+                if(verbose()) print_rm_msg("m_m_overlap: ", imu, jmu);
+                if(verbose()) print_rm_msg("m_m_overlap: ", jmu, imu);
                 muonsToRemove.insert(imu);
                 muonsToRemove.insert(jmu);
             }
@@ -268,6 +330,7 @@ void OverlapTools::t_e_overlap(TauVector& taus, ElectronVector& electrons, doubl
         for(int iEl=nEle-1; iEl>=0; iEl--){
             const Electron* e = electrons.at(iEl);
             if(tau->DeltaRy(*e) < dR){
+                // \todo if(verbose()) print_rm_msg()
                 taus.erase(taus.begin()+iTau);
                 break; // loop tau doesn't exist anymore!
             } // if(dR< )
@@ -285,6 +348,7 @@ void OverlapTools::t_m_overlap(TauVector& taus, MuonVector& muons, double dR)
         for(int iMu=nMuo-1; iMu>=0; iMu--){
             const Muon* mu = muons.at(iMu);
             if(tau->DeltaRy(*mu) < dR){
+                // \todo if(verbose()) print_rm_msg()
                 taus.erase(taus.begin()+iTau);
                 break; // loop tau doesn't exist anymore!
             } // if(dR< )
@@ -302,6 +366,7 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets, double dR)
         for(int iTau=nTau-1; iTau>=0; iTau--){
             const Tau* tau = taus.at(iTau);
             if(tau->DeltaRy(*jet) < dR){
+                // \todo if(verbose()) print_jet("j_t_overlap: removing jet ", jets[iJet]);
                 jets.erase(jets.begin()+iJet);
                 break; // loop jet doesn't exist anymore!
             } // if(dR< )
