@@ -180,6 +180,18 @@ bool JetSelector_SS3L::isB(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
+bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
+{
+    bool pass = false;
+    if(jet) {
+        pass = (jet->Pt()        > 20.0    &&
+                fabs(jet->Eta()) <  2.5    &&
+                passJvt(jet)               &&
+                jet->mv2c20      > mv2c20_80efficiency());
+    }
+    return pass;
+}
+//----------------------------------------------------------
 // begin JetSelector_Stop2L
 //----------------------------------------------------------
 bool JetSelector_Stop2L::isBaseline(const Jet* jet)

@@ -376,6 +376,21 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets, double dR)
 //----------------------------------------------------------
 // begin OverlapTools_SS3L
 //----------------------------------------------------------
+OverlapTools_SS3L::OverlapTools_SS3L():
+    OverlapTools(),
+    m_jetSelector(nullptr){}
+//----------------------------------------------------------
+void OverlapTools_SS3L::performOverlap(ElectronVector& electrons, MuonVector& muons,
+                                    TauVector& taus, JetVector& jets)
+{
+    j_e_overlap(electrons, jets, 0.2);
+    e_j_overlap(electrons, jets, 0.4);
+    #warning "update SS3L::m_j_overlap to 0.4"
+    m_j_overlap(muons, jets, 0.2); // just to compare cutflows, will move back to 0.4
+    e_m_overlap(electrons, muons, 0.01);
+    e_e_overlap(electrons, 0.05);
+}
+//----------------------------------------------------------
 void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
     // doing BjetOR procedure:
@@ -383,16 +398,23 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
     //       --> if bjet: keep the jet, remove electron
     //       --> if not bjet: remove the jet, keep the electron
     if(electrons.size()==0 || jets.size()==0) return;
+    if(not m_jetSelector) {
+        cerr<<"OverlapTools_SS3L: cannot perform j_e_overlap without JetSelector"<<endl
+            <<"Please call OverlapTools_SS3L::jetSelector(JetSelector*)"<<endl;
+        // assert(false);
+    }
     for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
         const Electron* e = electrons.at(iEl);
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             if(e->DeltaRy(*j) < dR){
-                bool isBjet = (j->mv2c20 > JetSelector::mv2c20_80efficiency());
+                bool isBjet = m_jetSelector->isB_for_OR(j);
                 if(isBjet) {
+                    if(verbose()) print_rm_msg("j_e_overlap: ", e, j);
                     electrons.erase(electrons.begin()+iEl);
                     break; // loop electron no longer exists
                 } else {
+                    if(verbose()) print_rm_msg("j_e_overlap: ", j, e);
                     jets.erase(jets.begin()+iJ);
                 }
             } // if(dR<)
