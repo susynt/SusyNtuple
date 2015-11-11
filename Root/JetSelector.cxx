@@ -196,7 +196,7 @@ bool JetSelector_Stop2L::isSignal(const Jet* jet)
     bool pass = false;
     if(jet) {
         pass =(jet->Pt()        > 20.0 &&
-               fabs(jet->Eta()) >  2.8 &&
+               fabs(jet->Eta()) <  2.8 &&
                passJvt(jet));
     }
     return pass;
