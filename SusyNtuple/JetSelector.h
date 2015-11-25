@@ -137,6 +137,7 @@ class JetSelector_SS3L : public JetSelector
     virtual bool isBaseline(const Jet* jet);
     virtual bool isSignal(const Jet* jet);
     virtual bool isB(const Jet* jet);
+public:
     virtual bool isB_for_OR(const Jet* jet);
 };
 
