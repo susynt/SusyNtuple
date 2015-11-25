@@ -398,7 +398,8 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
     //       --> if bjet: keep the jet, remove electron
     //       --> if not bjet: remove the jet, keep the electron
     if(electrons.size()==0 || jets.size()==0) return;
-    if(not m_jetSelector) {
+    JetSelector_SS3L* jetSelector = static_cast<JetSelector_SS3L*>(m_jetSelector);
+    if(not jetSelector) {
         cerr<<"OverlapTools_SS3L: cannot perform j_e_overlap without JetSelector"<<endl
             <<"Please call OverlapTools_SS3L::jetSelector(JetSelector*)"<<endl;
         // assert(false);
@@ -408,7 +409,7 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
         for(int iJ=jets.size()-1; iJ>=0; iJ--){
             const Jet* j = jets.at(iJ);
             if(e->DeltaRy(*j) < dR){
-                bool isBjet = m_jetSelector->isB_for_OR(j);
+                bool isBjet = jetSelector->isB_for_OR(j);
                 if(isBjet) {
                     if(verbose()) print_rm_msg("j_e_overlap: ", e, j);
                     electrons.erase(electrons.begin()+iEl);
