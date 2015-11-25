@@ -7,6 +7,7 @@
 #include "SusyNtuple/AnalysisType.h"
 #include "SusyNtuple/Isolation.h"
 
+namespace Susy { class JetSelector; }
 namespace Susy {
 
 /// A class to  perform the overlap removal
@@ -68,7 +69,8 @@ public :
     OverlapTools& setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
-
+    OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
+    bool verbose() const { return m_verbose; }
 protected :
     Isolation m_electronIsolation;
     Isolation m_muonIsolation;
@@ -97,8 +99,17 @@ class OverlapTools_2LepWH : public OverlapTools
 
 /// implements OR procedure from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
 class OverlapTools_SS3L: public OverlapTools {
+public:
+    OverlapTools_SS3L(); ///< Default ctor
+    virtual JetSelector* jetSelector() const { return m_jetSelector; }
+    virtual OverlapTools_SS3L& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
+    /// different dR values
+    virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
+                                TauVector& taus, JetVector& jets);
     /// different from OverlapTools::j_e_overlap() : performs BjetOR
     virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR);
+protected:
+    JetSelector *m_jetSelector; ///< needed for btag in j-e OR
 };
 
 /// implements OR procedure from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
