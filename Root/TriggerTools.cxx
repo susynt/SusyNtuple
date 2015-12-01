@@ -117,6 +117,83 @@ const std::vector<std::string> triggers_run2 = {
     ////////////////////////////
 
     // muon trig
+    "mu6",
+    "mu6_msonly",
+    "mu10",
+    "mu14",
+    "mu18",
+    "mu20",
+    "mu20_iloose_L1MU15",
+    "mu22",
+    "mu24",
+    "mu24_imedium",
+    "mu24_iloose_L1MU15",
+    "mu26_imedium",
+    "mu50",
+    "mu60_0eta105_msonly",
+
+    // dimuon trig
+    "2mu10",
+    "2mu14",
+    "mu18_mu8noL1",
+    "mu20_mu8noL1",
+    "mu22_mu8noL1",
+    "mu24_mu8noL1",
+
+    ////////////////////////////
+    // ELECTRON
+    ////////////////////////////
+
+    // electron trig cut
+    "e12_loose_L1EM10VH",
+    "e15_loose_L1EM13VH",
+    "e17_loose",
+
+    // electron trig lh
+    "e7_lhmedium",
+    "e9_lhmedium",
+    "e12_lhloose",
+    "e12_lhloose_L1EM10VH",
+    "e15_lhloose_L1EM13VH",
+    "e17_lhloose",
+    "e17_lhmedium",
+    "e24_lhmedium_iloose_L1EM18VH",
+    "e24_lhmedium_iloose_L1EM20VH",
+    "e24_lhmedium_L1EM20VHI",
+    "e24_lhtight_iloose",
+    "e26_lhmedium_L1EM22VHI",
+    "e26_lhtight_iloose",
+    "e60_lhmedium",
+
+    // di-electron trig lh
+    "2e12_lhloose_L12EM10VH",
+    "2e15_lhloose_L12EM13VH",
+    "2e17_lhloose",
+    
+    ////////////////////////////
+    // ELE/MUON
+    ////////////////////////////
+    "e17_lhloose_mu14",
+    "e7_lhmedium_mu24",
+    "e26_lhmedium_L1EM22VHI_mu8noL1",
+    "e24_lhmedium_L1EM20VHI_mu8noL1",
+
+    ////////////////////////////
+    // MET
+    ////////////////////////////
+
+    "HLT_xe35",
+    "HLT_xe35_pueta",
+    "HLT_xe50",
+    "HLT_xe50_pueta",
+    "HLT_xe70",
+    "HLT_xe70_pueta",
+    "HLT_xe100",
+    "HLT_xe100_pueta"
+
+    
+/*    // n0216 below
+    // muon trig
     "HLT_mu26_imedium",
     "HLT_mu24_imedium",
     "HLT_mu24_iloose_L1MU15",
@@ -188,90 +265,6 @@ const std::vector<std::string> triggers_run2 = {
     "HLT_xe70_pueta",
     "HLT_xe100",
     "HLT_xe100_pueta"
-
-/*    // DC14
-    // electron triggers
-    "HLT_e5_etcut",
-    "HLT_e5_lhtight",
-    "HLT_e9_etcut",
-    "HLT_e9_lhtight",
-    "HLT_e14_etcut",
-    "HLT_e14_lhtight",
-    "HLT_e20_medium",
-    "HLT_e24_medium1_iloose",
-    "HLT_e24_loose1",
-    "HLT_e24_tight_iloose",
-    "HLT_e25_lhvloose_L1EM15",
-    "HLT_e25_etcut_L1EM15",
-    "HLT_e26_tight_iloose",
-    "HLT_e26_lhtight_iloose",
-    "HLT_e28_tight1_iloose",
-    "HLT_e30_etcut_L1EM15",
-    "HLT_e40_etcut_L1EM15",
-    "HLT_e60_medium",
-    "HLT_e60_loose1",
-    "HLT_e60_medium1",
-    "HLT_e60_lhmedium",
-
-    // dielectron triggers
-    "HLT_2e12_loose1",
-    "HLT_2e12_loose_L12EM10VH",
-    "HLT_2e17_loose1",
-    "HLT_2e17_lhloose",
-
-    // muon triggers
-    "HLT_mu4",
-    "HLT_mu6",
-    "HLT_mu10",
-    "HLT_mu14",
-    "HLT_mu18",
-    "HLT_mu20",
-    "HLT_mu22",
-    "HLT_mu24",
-    "HLT_mu24_imedium",
-    "HLT_mu26",
-    "HLT_mu26_imedium",
-    "HLT_mu50",
-    "HLT_mu60_0eta105_msonly",
-    
-    // dimuon triggers
-    "HLT_2mu4",
-    "HLT_2mu6",
-    "HLT_2mu10",
-    "HLT_2mu14",
-    "HLT_mu24_mu8noL1",
-    "HLT_mu14_iloose_mu14",
-    "HLT_mu20_imedium_mu8noL1",
-    "HLT_mu20_iloose_mu8noL1",
-
-    // el/mu triggers
-    "HLT_e17_loose_mu14",
-    "HLT_e17_medium_mu12",
-    
-    // multi-lepton triggers
-    "HLT_3mu6",
-    "HLT_e12loose_2mu10",
-
-    // photon triggers
-    "HLT_g120_loose1",
-    "HLT_g140_loose1",
-    
-    // tau triggers
-    "HLT_e18_loose1_tau25_medium1_calo",
-    "HLT_e18_lhloose1_tau25_medium1_calo",
-    "HLT_mu14_tau25_medium1_calo",
-    "HLT_tau35_medium1_calo_tau25_medium1_calo",
-
-    // met triggers
-    "HLT_xe50_cell",
-    "HLT_xe60",
-    "HLT_xe70",
-    "HLT_xe100",
-    "HLT_xe100_cell",
-
-    // jet triggers
-    "HLT_j400",
-    "HLT_3j175"
 */
 };
 
