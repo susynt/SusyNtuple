@@ -27,6 +27,7 @@ Electron::Electron(const Electron &rhs):
   isMuon(rhs.isMuon),
   isChargeFlip(rhs.isChargeFlip),
   truthCharge(rhs.truthCharge),
+  ss3lChargeFlip(rhs.ss3lChargeFlip),
 
   res_all_dn(rhs.res_all_dn),
   res_all_up(rhs.res_all_up),
@@ -120,6 +121,7 @@ Electron& Electron::operator=(const Electron &rhs)
     isMuon = rhs.isMuon;
     isChargeFlip = rhs.isChargeFlip;
     truthCharge = rhs.truthCharge;
+    ss3lChargeFlip = rhs.ss3lChargeFlip;
    
     res_all_dn = rhs.res_all_dn;
     res_all_up = res_all_up;
