@@ -117,66 +117,66 @@ const std::vector<std::string> triggers_run2 = {
     ////////////////////////////
 
     // muon trig
-    "mu6",
-    "mu6_msonly",
-    "mu10",
-    "mu14",
-    "mu18",
-    "mu20",
-    "mu20_iloose_L1MU15",
-    "mu22",
-    "mu24",
-    "mu24_imedium",
-    "mu24_iloose_L1MU15",
-    "mu26_imedium",
-    "mu50",
-    "mu60_0eta105_msonly",
+    "HLT_mu6",
+    "HLT_mu6_msonly",
+    "HLT_mu10",
+    "HLT_mu14",
+    "HLT_mu18",
+    "HLT_mu20",
+    "HLT_mu20_iloose_L1MU15",
+    "HLT_mu22",
+    "HLT_mu24",
+    "HLT_mu24_imedium",
+    "HLT_mu24_iloose_L1MU15",
+    "HLT_mu26_imedium",
+    "HLT_mu50",
+    "HLT_mu60_0eta105_msonly",
 
     // dimuon trig
-    "2mu10",
-    "2mu14",
-    "mu18_mu8noL1",
-    "mu20_mu8noL1",
-    "mu22_mu8noL1",
-    "mu24_mu8noL1",
+    "HLT_2mu10",
+    "HLT_2mu14",
+    "HLT_mu18_mu8noL1",
+    "HLT_mu20_mu8noL1",
+    "HLT_mu22_mu8noL1",
+    "HLT_mu24_mu8noL1",
 
     ////////////////////////////
     // ELECTRON
     ////////////////////////////
 
     // electron trig cut
-    "e12_loose_L1EM10VH",
-    "e15_loose_L1EM13VH",
-    "e17_loose",
+    "HLT_e12_loose_L1EM10VH",
+    "HLT_e15_loose_L1EM13VH",
+    "HLT_e17_loose",
 
     // electron trig lh
-    "e7_lhmedium",
-    "e9_lhmedium",
-    "e12_lhloose",
-    "e12_lhloose_L1EM10VH",
-    "e15_lhloose_L1EM13VH",
-    "e17_lhloose",
-    "e17_lhmedium",
-    "e24_lhmedium_iloose_L1EM18VH",
-    "e24_lhmedium_iloose_L1EM20VH",
-    "e24_lhmedium_L1EM20VHI",
-    "e24_lhtight_iloose",
-    "e26_lhmedium_L1EM22VHI",
-    "e26_lhtight_iloose",
-    "e60_lhmedium",
+    "HLT_e7_lhmedium",
+    "HLT_e9_lhmedium",
+    "HLT_e12_lhloose",
+    "HLT_e12_lhloose_L1EM10VH",
+    "HLT_e15_lhloose_L1EM13VH",
+    "HLT_e17_lhloose",
+    "HLT_e17_lhmedium",
+    "HLT_e24_lhmedium_iloose_L1EM18VH",
+    "HLT_e24_lhmedium_iloose_L1EM20VH",
+    "HLT_e24_lhmedium_L1EM20VHI",
+    "HLT_e24_lhtight_iloose",
+    "HLT_e26_lhmedium_L1EM22VHI",
+    "HLT_e26_lhtight_iloose",
+    "HLT_e60_lhmedium",
 
     // di-electron trig lh
-    "2e12_lhloose_L12EM10VH",
-    "2e15_lhloose_L12EM13VH",
-    "2e17_lhloose",
+    "HLT_2e12_lhloose_L12EM10VH",
+    "HLT_2e15_lhloose_L12EM13VH",
+    "HLT_2e17_lhloose",
     
     ////////////////////////////
     // ELE/MUON
     ////////////////////////////
-    "e17_lhloose_mu14",
-    "e7_lhmedium_mu24",
-    "e26_lhmedium_L1EM22VHI_mu8noL1",
-    "e24_lhmedium_L1EM20VHI_mu8noL1",
+    "HLT_e17_lhloose_mu14",
+    "HLT_e7_lhmedium_mu24",
+    "HLT_e26_lhmedium_L1EM22VHI_mu8noL1",
+    "HLT_e24_lhmedium_L1EM20VHI_mu8noL1",
 
     ////////////////////////////
     // MET
