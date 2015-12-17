@@ -46,6 +46,7 @@ public:
     bool isMuon;              ///< True if electron track is same as a muon track
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
     int truthCharge; ///< as provided by xAOD::TruthHelpers::getTruthParticle
+    int ss3lChargeFlip; ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
 
     //AT: This is insane >50!
     float res_all_dn;
@@ -135,6 +136,7 @@ public:
       isMuon = false;
       isChargeFlip = false;
       truthCharge = 0;
+      ss3lChargeFlip = 0;
       
       res_all_dn= res_all_up= 0;
       /*
@@ -172,7 +174,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 15);
+    ClassDef(Electron, 16);
 };
 } //Susy
 #endif
