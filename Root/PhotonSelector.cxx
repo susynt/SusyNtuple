@@ -42,28 +42,28 @@ PhotonSelector& PhotonSelector::setAnalysis(const AnalysisType &a)
     //////////////////////////////////////
     if( a == AnalysisType::Ana_2Lep ) {
         m_2lep = true;
-        m_sigIso = Isolation::Cone40;
+        m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////
     // 3L-Analysis
     //////////////////////////////////////
     else if ( a == AnalysisType::Ana_3Lep ) {
         m_3lep = true;
-        m_sigIso = Isolation::Cone40;
+        m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////
     // WH-Analysis
     //////////////////////////////////////
     else if ( a == AnalysisType::Ana_2LepWH ) {
         m_2lepWH = true;
-        m_sigIso = Isolation::Cone40;
+        m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////
     // SS3L-Analysis
     //////////////////////////////////////
     else if ( a == AnalysisType::Ana_SS3L ) {
         m_SS3L = true;
-        m_sigIso = Isolation::Cone40;
+        m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////
     // Didn't set AnalysisType

@@ -7,16 +7,14 @@
 namespace Susy
 {
 enum class Isolation{
-    GradientLoose=0
-    ,Gradient
-    ,GradientT1
-    ,GradientT2
-    ,LooseTrackOnly
-    ,Loose
-    ,Tight
-    ,Cone40CaloOnly
-    ,Cone40
-    ,Cone20
+    GradientLoose=0 // lepton
+    ,Gradient // lepton
+    ,LooseTrackOnly // lepton
+    ,Loose // lepton
+    ,Tight // lepton
+    ,FixedCutTight // photon
+    ,FixedCutTightCaloOnly // photon
+    ,FixedCutLoose // photon
     ,IsolationInvalid
 };
 

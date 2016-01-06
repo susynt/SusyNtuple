@@ -27,9 +27,9 @@ public:
     bool  OQ;                 ///< GoodOQ
 
     // Isolation flags
-    bool isoCone40CaloOnly; ///< Cone40CaloOnly WP
-    bool isoCone40;         ///< Cone40 WP
-    bool isoCone20;         ///< Cone20 WP
+    bool isoFixedCutTightCaloOnly; ///< FixedCutTightCaloOnly WP
+    bool isoFixedCutTight;         ///< FixedCutTight WP
+    bool isoFixedCutLoose;         ///< FixedCutLoose WP
 
     float topoEtcone40;
 
@@ -50,12 +50,12 @@ public:
       tight = false;
       clusE = clusEta = clusPhi = 0;
       OQ = false;
-      isoCone40CaloOnly = isoCone40 = isoCone20 = false;
+      isoFixedCutTightCaloOnly = isoFixedCutTight = isoFixedCutLoose = false;
       topoEtcone40=0;
       Particle::clear();
     };
 
-    ClassDef(Photon, 4);
+    ClassDef(Photon, 5);
 };
 } // Susy
 #endif
