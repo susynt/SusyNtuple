@@ -24,6 +24,7 @@ Electron::Electron(const Electron &rhs):
   mediumLH_nod0(rhs.mediumLH_nod0),
   tightLH_nod0(rhs.tightLH_nod0),
   eleEffSF(rhs.eleEffSF),
+  eleTrigSF(rhs.eleTrigSF),
   isMuon(rhs.isMuon),
   isChargeFlip(rhs.isChargeFlip),
   truthCharge(rhs.truthCharge),
@@ -118,6 +119,7 @@ Electron& Electron::operator=(const Electron &rhs)
     mediumLH_nod0 = rhs.mediumLH_nod0;
     tightLH_nod0 = rhs.tightLH_nod0;
     eleEffSF = rhs.eleEffSF;
+    eleTrigSF = rhs.eleTrigSF;
     isMuon = rhs.isMuon;
     isChargeFlip = rhs.isChargeFlip;
     truthCharge = rhs.truthCharge;

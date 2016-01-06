@@ -44,6 +44,8 @@ public:
 
     // efficiency SF per muon quality WP
     std::vector<float> muoEffSF;
+    // trigger efficiency SF per muon quality WP
+    std::vector<float> muoTrigSF;
 
     bool isBadMuon;           ///< Bad muon flag from SUSYTools
     bool isCosmic;            ///< Cosmic muon flag from SUSYTools
@@ -81,6 +83,7 @@ public:
       veryLoose = loose = medium = tight = false;
 
       muoEffSF.assign(MuonId::MuonIdInvalid, 1);
+      muoTrigSF.assign(MuonId::MuonIdInvalid, 1);
       errEffSF_stat_up.assign(MuonId::MuonIdInvalid, 0);
       errEffSF_stat_dn.assign(MuonId::MuonIdInvalid, 0);
       errEffSF_syst_up.assign(MuonId::MuonIdInvalid, 0);
@@ -92,7 +95,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Muon, 14);
+    ClassDef(Muon, 15);
 };
 } // Susy
 #endif

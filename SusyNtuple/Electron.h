@@ -42,6 +42,8 @@ public:
 
     // efficiency SF per electron LH WP
     std::vector<float> eleEffSF;
+    // trigger efficiency SF per electron LH WP
+    std::vector<float> eleTrigSF;
 
     bool isMuon;              ///< True if electron track is same as a muon track
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
@@ -166,6 +168,7 @@ public:
      // eff_corr_dn = eff_corr_up =0;
      // eff_uncorr_dn = eff_uncorr_up =0;
      eleEffSF.assign(ElectronId::ElectronIdInvalid, 1);
+     eleTrigSF.assign(ElectronId::ElectronIdInvalid, 1);
      errEffSF_id_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
      errEffSF_id_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
      errEffSF_reco_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
@@ -174,7 +177,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 16);
+    ClassDef(Electron, 17);
 };
 } //Susy
 #endif
