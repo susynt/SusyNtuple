@@ -68,19 +68,29 @@ enum SusyNtSys {
   ,EG_SCALE_ZEESYST_DN
   ,EG_SCALE_ZEESYST_UP
   */
-// dantrim : replacing these 4 for the ID/RECO verions August 2 2015
-//  ,EL_EFF_CorrUncertainty_DN //weight
-//  ,EL_EFF_CorrUncertainty_UP //weight
-//  ,EL_EFF_UncorrUncertainty_DN //weight
-//  ,EL_EFF_UncorrUncertainty_UP //weight
   ,EL_EFF_ID_TotalCorrUncertainty_UP  // weight
   ,EL_EFF_ID_TotalCorrUncertainty_DN  // weight
+  ,EL_EFF_Iso_TotalCorrUncertainty_UP // weight 
+  ,EL_EFF_Iso_TotalCorrUncertainty_DN // weight 
   ,EL_EFF_Reco_TotalCorrUncertainty_UP  // weight
   ,EL_EFF_Reco_TotalCorrUncertainty_DN  // weight
+  ,EL_EFF_Trigger_TotalCorrUncertainty_UP
+  ,EL_EFF_Trigger_TotalCorrUncertainty_DN
   /*
   ,EL_SCALE_MOMENTUM_DN
   ,EL_SCALE_MOMENTUM_UP
   */
+  ,FT_EFF_B_systematics_UP
+  ,FT_EFF_B_systematics_DN
+  ,FT_EFF_C_systematics_UP
+  ,FT_EFF_C_systematics_DN
+  ,FT_EFF_Light_systematics_UP
+  ,FT_EFF_Light_systematics_DN
+  ,FT_EFF_extrapolation_UP
+  ,FT_EFF_extrapolation_DN
+  ,FT_EFF_extrapolation_charm_UP
+  ,FT_EFF_extrapolation_charm_DN
+  /*
   ,FT_Eigen_B_0_DN // All FT_ are weight
   ,FT_Eigen_B_0_UP
   ,FT_Eigen_B_1_DN
@@ -133,6 +143,7 @@ enum SusyNtSys {
   ,FT_Eigen_Light_8_UP
   ,FT_Eigen_Light_9_DN
   ,FT_Eigen_Light_9_UP
+  */
   ,JER
   //NEW
   ,JET_GroupedNP_1_UP
@@ -305,14 +316,29 @@ const std::string SusyNtSysNames[] = {
     ,"EG_SCALE_ZEESYST_DN"
     ,"EG_SCALE_ZEESYST_UP"
     */
-    ,"EL_EFF_CorrUncertainty_DN"
-    ,"EL_EFF_CorrUncertainty_UP"
-    ,"EL_EFF_UncorrUncertainty_DN"
-    ,"EL_EFF_UncorrUncertainty_UP"
+    ,"EL_EFF_ID_CorrUncertainty_UP"
+    ,"EL_EFF_ID_CorrUncertainty_DN"
+    ,"EL_EFF_Iso_CorrUncertainty_UP"
+    ,"EL_EFF_Iso_CorrUncertainty_DN"
+    ,"EL_EFF_Reco_CorrUncertainty_UP"
+    ,"EL_EFF_Reco_CorrUncertainty_DN"
+    ,"EL_EFF_Trigger_CorrUncertainty_UP"
+    ,"EL_EFF_Trigger_CorrUncertainty_DN"
     /*
     ,"EL_SCALE_MOMENTUM_DN"
     ,"EL_SCALE_MOMENTUM_UP"
     */
+    ,"FT_EFF_B_systematics_UP"
+    ,"FT_EFF_B_systematics_DN"
+    ,"FT_EFF_C_systematics_UP"
+    ,"FT_EFF_C_systematics_DN"
+    ,"FT_EFF_Light_systematics_UP"
+    ,"FT_EFF_Light_systematics_DN"
+    ,"FT_EFF_extrapolation_UP"
+    ,"FT_EFF_extrapolation_DN"
+    ,"FT_EFF_extrapolation_charm_UP"
+    ,"FT_EFF_extrapolation_charm_DN"
+    /*
     ,"FT_Eigen_B_0_DN"
     ,"FT_Eigen_B_0_UP"
     ,"FT_Eigen_B_1_DN"
@@ -365,6 +391,7 @@ const std::string SusyNtSysNames[] = {
     ,"FT_Eigen_Light_8_UP"
     ,"FT_Eigen_Light_9_DN"
     ,"FT_Eigen_Light_9_UP"
+    */
     ,"JER"
     ,"JET_GroupedNP_1_UP"
     ,"JET_GroupedNP_1_DN"
