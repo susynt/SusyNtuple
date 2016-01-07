@@ -155,7 +155,18 @@ void Jet::setState(int sys)
 float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
 {
     float s= 1;
-    
+
+    if      ( sys == NtSys::FT_EFF_B_systematics_DN ) s= FTSys[0];
+    else if ( sys == NtSys::FT_EFF_B_systematics_UP ) s= FTSys[1];
+    else if ( sys == NtSys::FT_EFF_C_systematics_DN ) s= FTSys[2];
+    else if ( sys == NtSys::FT_EFF_C_systematics_UP ) s= FTSys[3];
+    else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) s= FTSys[4];
+    else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) s= FTSys[5];
+    else if ( sys == NtSys::FT_EFF_extrapolation_DN ) s= FTSys[6];
+    else if ( sys == NtSys::FT_EFF_extrapolation_UP ) s= FTSys[7];
+    else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) s= FTSys[8];
+    else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) s= FTSys[9];
+    /*  
     if      ( sys == NtSys::FT_Eigen_B_0_DN) s = FTSys[0];
     else if ( sys == NtSys::FT_Eigen_B_0_UP) s = FTSys[1];
     else if ( sys == NtSys::FT_Eigen_B_1_DN) s = FTSys[2];
@@ -210,13 +221,25 @@ float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
     else if ( sys == NtSys::FT_Eigen_Light_10_UP) s = FTSys[49];
     else if ( sys == NtSys::FT_Eigen_Light_11_DN) s = FTSys[50];
     else if ( sys == NtSys::FT_Eigen_Light_11_UP) s = FTSys[51];
-
+    */
     return s;
 
 }
 
-void Jet::setFTSys(Susy::NtSys::SusyNtSys sys, double scale=1.)
+void Jet::setFTSys(Susy::NtSys::SusyNtSys sys, double scale=0.)
 {
+    if      ( sys == NtSys::FT_EFF_B_systematics_DN ) FTSys[0] =scale;
+    else if ( sys == NtSys::FT_EFF_B_systematics_UP ) FTSys[1] =scale;
+    else if ( sys == NtSys::FT_EFF_C_systematics_DN ) FTSys[2] =scale;
+    else if ( sys == NtSys::FT_EFF_C_systematics_UP ) FTSys[3] =scale;
+    else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) FTSys[4] =scale;
+    else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) FTSys[5] =scale;
+    else if ( sys == NtSys::FT_EFF_extrapolation_DN ) FTSys[6] =scale;
+    else if ( sys == NtSys::FT_EFF_extrapolation_UP ) FTSys[7] =scale;
+    else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) FTSys[8] =scale;
+    else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) FTSys[9] =scale;
+
+    /*
     if      ( sys == NtSys::FT_Eigen_B_0_DN) FTSys[0] = scale;
     else if ( sys == NtSys::FT_Eigen_B_0_UP) FTSys[1] = scale;
     else if ( sys == NtSys::FT_Eigen_B_1_DN) FTSys[2] = scale;
@@ -271,7 +294,7 @@ void Jet::setFTSys(Susy::NtSys::SusyNtSys sys, double scale=1.)
     else if ( sys == NtSys::FT_Eigen_Light_10_UP) FTSys[49] = scale;
     else if ( sys == NtSys::FT_Eigen_Light_11_DN) FTSys[50] = scale;
     else if ( sys == NtSys::FT_Eigen_Light_11_UP) FTSys[51] = scale;
-
+    */
     return;
 }
 

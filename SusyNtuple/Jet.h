@@ -85,7 +85,7 @@ public:
 
       jer = 0;
       groupedNP.resize(3*2,0.0);
-      FTSys.resize(26*2,0.0);
+      FTSys.resize(5*2,0.0);
 
       /*
       bjes.resize(2,0.0);
@@ -102,7 +102,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 18);
+    ClassDef(Jet, 19);
 };
 } // Susy
 #endif
