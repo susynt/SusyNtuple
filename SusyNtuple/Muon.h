@@ -59,10 +59,18 @@ public:
     float scale_dn;           ///< SCALE Pt - sigma
 
     // SF uncertainties
-    std::vector<float> errEffSF_stat_up;
-    std::vector<float> errEffSF_stat_dn;
-    std::vector<float> errEffSF_syst_up;
-    std::vector<float> errEffSF_syst_dn;
+    std::vector<float> errEffSF_stat_up;        // MUON_EFF_STAT_UP
+    std::vector<float> errEffSF_stat_dn;        // MUON_EFF_STAT_DN
+    std::vector<float> errEffSF_syst_up;        // MUON_EFF_SYS_UP
+    std::vector<float> errEffSF_syst_dn;        // MUON_EFF_SYS_DN
+    std::vector<float> errEffSF_stat_lowpt_up;  // MUON_EFF_STAT_LOWPT_UP
+    std::vector<float> errEffSF_stat_lowpt_dn;  // MUON_EFF_STAT_LOWPT_DN
+    std::vector<float> errEffSF_syst_lowpt_up;  // MUON_EFF_SYS_LOWPT_UP
+    std::vector<float> errEffSF_syst_lowpt_dn;  // MUON_EFF_SYS_LOWPT_DN
+    std::vector<float> errIso_stat_up;          // MUON_ISO_STAT_UP
+    std::vector<float> errIso_stat_dn;          // MUON_ISO_STAT_DN
+    std::vector<float> errIso_syst_up;          // MUON_ISO_SYS_UP
+    std::vector<float> errIso_syst_dn;          // MUON_ISO_SYS_DN
 
     // Polymorphism, baby!!
     bool isEle() const { return false; }
@@ -88,6 +96,14 @@ public:
       errEffSF_stat_dn.assign(MuonId::MuonIdInvalid, 0);
       errEffSF_syst_up.assign(MuonId::MuonIdInvalid, 0);
       errEffSF_syst_dn.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_stat_lowpt_up.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_stat_lowpt_dn.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_syst_lowpt_up.assign(MuonId::MuonIdInvalid, 0);
+      errEffSF_syst_lowpt_dn.assign(MuonId::MuonIdInvalid, 0);
+      errIso_stat_up.assign(MuonId::MuonIdInvalid, 0);
+      errIso_stat_dn.assign(MuonId::MuonIdInvalid, 0);
+      errIso_syst_up.assign(MuonId::MuonIdInvalid, 0);
+      errIso_syst_dn.assign(MuonId::MuonIdInvalid, 0);
 
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
@@ -95,7 +111,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Muon, 15);
+    ClassDef(Muon, 16);
 };
 } // Susy
 #endif

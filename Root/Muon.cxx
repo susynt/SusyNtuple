@@ -42,7 +42,15 @@ Muon::Muon(const Muon &rhs):
   errEffSF_stat_up(rhs.errEffSF_stat_up),
   errEffSF_stat_dn(rhs.errEffSF_stat_dn),
   errEffSF_syst_up(rhs.errEffSF_syst_up),
-  errEffSF_syst_dn(rhs.errEffSF_syst_dn)
+  errEffSF_syst_dn(rhs.errEffSF_syst_dn),
+  errEffSF_stat_lowpt_up(rhs.errEffSF_stat_lowpt_up),
+  errEffSF_stat_lowpt_dn(rhs.errEffSF_stat_lowpt_dn),
+  errEffSF_syst_lowpt_up(rhs.errEffSF_syst_lowpt_up),
+  errEffSF_syst_lowpt_dn(rhs.errEffSF_syst_lowpt_dn),
+  errIso_stat_up(rhs.errIso_stat_up),
+  errIso_stat_dn(rhs.errIso_stat_dn),
+  errIso_syst_up(rhs.errIso_syst_up),
+  errIso_syst_dn(rhs.errIso_syst_dn)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -83,6 +91,14 @@ Muon& Muon::operator=(const Muon &rhs)
     errEffSF_stat_dn = rhs.errEffSF_stat_dn;
     errEffSF_syst_up = rhs.errEffSF_syst_up;
     errEffSF_syst_dn = rhs.errEffSF_syst_dn;
+    errEffSF_stat_lowpt_up = rhs.errEffSF_stat_lowpt_up;
+    errEffSF_stat_lowpt_dn = rhs.errEffSF_stat_lowpt_dn;
+    errEffSF_syst_lowpt_up = rhs.errEffSF_syst_lowpt_up;
+    errEffSF_syst_lowpt_dn = rhs.errEffSF_syst_lowpt_dn;
+    errIso_stat_up = rhs.errIso_stat_up;
+    errIso_stat_dn = rhs.errIso_stat_dn;
+    errIso_syst_up = rhs.errIso_syst_up;
+    errIso_syst_dn = rhs.errIso_syst_dn;
   }
   return *this;
 }
