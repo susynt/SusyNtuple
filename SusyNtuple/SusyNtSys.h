@@ -199,10 +199,18 @@ enum SusyNtSys {
   ,MET_SoftTrk_ScaleDown
   ,MET_SoftTrk_ScaleUp
   //END NEW
-  ,MUONSFSTAT_DN  //weight
-  ,MUONSFSTAT_UP  //weight
-  ,MUONSFSYS_DN   //weight
-  ,MUONSFSYS_UP   //weight
+  ,MUON_EFF_STAT_DN  //weight
+  ,MUON_EFF_STAT_UP  //weight
+  ,MUON_EFF_STAT_LOWPT_DN
+  ,MUON_EFF_STAT_LOWPT_UP
+  ,MUON_EFF_SYS_DN   //weight
+  ,MUON_EFF_SYS_UP   //weight
+  ,MUON_EFF_SYS_LOWPT_DN
+  ,MUON_EFF_SYS_LOWPT_UP
+  ,MUON_ISO_STAT_DN
+  ,MUON_ISO_STAT_UP
+  ,MUON_ISO_SYS_DN
+  ,MUON_ISO_SYS_UP
   ,MUONS_ID_DN
   ,MUONS_ID_UP
   ,MUONS_MS_DN
@@ -316,14 +324,14 @@ const std::string SusyNtSysNames[] = {
     ,"EG_SCALE_ZEESYST_DN"
     ,"EG_SCALE_ZEESYST_UP"
     */
-    ,"EL_EFF_ID_CorrUncertainty_UP"
-    ,"EL_EFF_ID_CorrUncertainty_DN"
-    ,"EL_EFF_Iso_CorrUncertainty_UP"
-    ,"EL_EFF_Iso_CorrUncertainty_DN"
-    ,"EL_EFF_Reco_CorrUncertainty_UP"
-    ,"EL_EFF_Reco_CorrUncertainty_DN"
-    ,"EL_EFF_Trigger_CorrUncertainty_UP"
-    ,"EL_EFF_Trigger_CorrUncertainty_DN"
+    ,"EL_EFF_ID_TotalCorrUncertainty_UP"
+    ,"EL_EFF_ID_TotalCorrUncertainty_DN"
+    ,"EL_EFF_Iso_TotalCorrUncertainty_UP"
+    ,"EL_EFF_Iso_TotalCorrUncertainty_DN"
+    ,"EL_EFF_Reco_TotalCorrUncertainty_UP"
+    ,"EL_EFF_Reco_TotalCorrUncertainty_DN"
+    ,"EL_EFF_Trigger_TotalCorrUncertainty_UP"
+    ,"EL_EFF_Trigger_TotalCorrUncertainty_DN"
     /*
     ,"EL_SCALE_MOMENTUM_DN"
     ,"EL_SCALE_MOMENTUM_UP"
@@ -444,10 +452,18 @@ const std::string SusyNtSysNames[] = {
     ,"MET_SoftTrk_ResoPerp"
     ,"MET_SoftTrk_ScaleDown"
     ,"MET_SoftTrk_ScaleUp"
-    ,"MUONSFSTAT_DN"
-    ,"MUONSFSTAT_UP"
-    ,"MUONSFSYS_DN"
-    ,"MUONSFSYS_UP"
+    ,"MUON_EFF_STAT_DN"
+    ,"MUON_EFF_STAT_UP"
+    ,"MUON_EFF_STAT_LOWPT_DN"
+    ,"MUON_EFF_STAT_LOWPT_UP"
+    ,"MUON_EFF_SYS_DN"
+    ,"MUON_EFF_SYS_UP"
+    ,"MUON_EFF_SYS_LOWPT_DN"
+    ,"MUON_EFF_SYS_LOWPT_UP"
+    ,"MUON_ISO_STAT_DN"
+    ,"MUON_ISO_STAT_UP"
+    ,"MUON_ISO_SYS_DN"
+    ,"MUON_ISO_SYS_UP"
     ,"MUONS_ID_DN"
     ,"MUONS_ID_UP"
     ,"MUONS_MS_DN"

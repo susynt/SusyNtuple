@@ -100,13 +100,13 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
 {
     // return the error on the muon SF associated with systematc sys
     float err = 0.0;
-    if(sys == NtSys::MUONSFSTAT_UP) {
+    if(sys == NtSys::MUON_EFF_STAT_UP) {
         err = mu.errEffSF_stat_up[m_signalId];
-    } else if(sys == NtSys::MUONSFSTAT_DN) {
+    } else if(sys == NtSys::MUON_EFF_STAT_DN) {
         err = mu.errEffSF_stat_dn[m_signalId];
-    } else if(sys == NtSys::MUONSFSYS_UP) {
+    } else if(sys == NtSys::MUON_EFF_SYS_UP) {
         err = mu.errEffSF_syst_up[m_signalId];
-    } else if(sys == NtSys::MUONSFSYS_DN) {
+    } else if(sys == NtSys::MUON_EFF_SYS_DN) {
         err = mu.errEffSF_syst_dn[m_signalId];
     } else {
         cout<<"MuonSelector::errEffSF(): you are calling this function with"
