@@ -96,7 +96,11 @@ Electron::Electron(const Electron &rhs):
   errEffSF_id_corr_up(rhs.errEffSF_id_corr_up),
   errEffSF_id_corr_dn(rhs.errEffSF_id_corr_dn),
   errEffSF_reco_corr_up(rhs.errEffSF_reco_corr_up),
-  errEffSF_reco_corr_dn(rhs.errEffSF_reco_corr_dn)
+  errEffSF_reco_corr_dn(rhs.errEffSF_reco_corr_dn),
+  errEffSF_iso_corr_up(rhs.errEffSF_iso_corr_up),
+  errEffSF_iso_corr_dn(rhs.errEffSF_iso_corr_dn),
+  errEffSF_trig_corr_up(rhs.errEffSF_trig_corr_up),
+  errEffSF_trig_corr_dn(rhs.errEffSF_trig_corr_dn)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -192,6 +196,10 @@ Electron& Electron::operator=(const Electron &rhs)
     errEffSF_id_corr_dn = rhs.errEffSF_id_corr_dn;
     errEffSF_reco_corr_up = rhs.errEffSF_reco_corr_up;
     errEffSF_reco_corr_dn = rhs.errEffSF_reco_corr_dn;
+    errEffSF_iso_corr_up = rhs.errEffSF_iso_corr_up;
+    errEffSF_iso_corr_dn = rhs.errEffSF_iso_corr_dn;
+    errEffSF_trig_corr_up = rhs.errEffSF_trig_corr_up;
+    errEffSF_trig_corr_dn = rhs.errEffSF_trig_corr_dn;
   }
   return *this;
 }
