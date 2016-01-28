@@ -56,7 +56,7 @@ PhotonSelector& PhotonSelector::setAnalysis(const AnalysisType &a)
     //////////////////////////////////////
     else if ( a == AnalysisType::Ana_4Lep ) {
         m_4lep = true;
-        m_sigIso = Isolation::Cone40;
+        m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////
     // WH-Analysis
