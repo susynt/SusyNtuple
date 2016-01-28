@@ -52,6 +52,13 @@ PhotonSelector& PhotonSelector::setAnalysis(const AnalysisType &a)
         m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////
+    // 4L-Analysis
+    //////////////////////////////////////
+    else if ( a == AnalysisType::Ana_4Lep ) {
+        m_4lep = true;
+        m_sigIso = Isolation::Cone40;
+    }
+    //////////////////////////////////////
     // WH-Analysis
     //////////////////////////////////////
     else if ( a == AnalysisType::Ana_2LepWH ) {

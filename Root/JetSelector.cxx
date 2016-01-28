@@ -19,6 +19,7 @@ JetSelector* JetSelector::build(const AnalysisType &a, bool verbose)
     switch(a) {
     case AnalysisType::Ana_2Lep   : selector = new JetSelector_2Lep(); break;
     case AnalysisType::Ana_3Lep   : selector = new JetSelector_3Lep(); break;
+    case AnalysisType::Ana_4Lep   : selector = new JetSelector_4Lep(); break;
     case AnalysisType::Ana_2LepWH : selector = new JetSelector_2LepWH(); break;
     case AnalysisType::Ana_SS3L   : selector = new JetSelector_SS3L(); break;
     case AnalysisType::Ana_Stop2L : selector = new JetSelector_Stop2L(); break;
@@ -142,6 +143,14 @@ size_t JetSelector::count_F_jets(const JetVector &jets)
 //----------------------------------------------------------
 // begin JetSelector_2LepWH
 //----------------------------------------------------------
+
+//----------------------------------------------------------
+// begin JetSelector_4L
+//----------------------------------------------------------
+bool JetSelector_4Lep::isBaseline(const Jet* jet)
+{
+  return (jet->Pt() > 20.0);
+}
 
 //----------------------------------------------------------
 // begin JetSelector_SS3L
