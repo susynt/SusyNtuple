@@ -31,6 +31,7 @@ namespace Susy {
         ///////////////////////////////
         bool m_2lep;    ///< flag for 2L analysis
         bool m_3lep;    ///< flag for 3L analysis
+        bool m_4lep;    ///< flag for 4L analysis
         bool m_2lepWH;  ///< flag for 2L WH analysis
         bool m_SS3L;    ///< flag for the strong SS3L analysis 
 
