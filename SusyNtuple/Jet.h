@@ -24,6 +24,7 @@ public:
     int truthLabel;           ///< Flavor truth label
     bool matchTruth;          ///< Matches truth jet
     int nTracks;              ///< Number of tracks associated with jet
+    float sumTrkPt;           ///< Sum pT of all tracks associated with this jet
 
     // btagging
     bool bjet;                ///< Is b-jet a la SUSYTools (70% w.p.)
@@ -73,6 +74,7 @@ public:
     // Clear vars
     void clear(){
       jvf = jvt = truthLabel = nTracks = 0;
+      sumTrkPt = 0;
       matchTruth = false;
       bjet = false;
       effscalefact = 0.;
@@ -102,7 +104,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 19);
+    ClassDef(Jet, 20);
 };
 } // Susy
 #endif

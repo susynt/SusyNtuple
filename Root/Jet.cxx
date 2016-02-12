@@ -20,6 +20,7 @@ Jet::Jet(const Jet &rhs):
   truthLabel(rhs.truthLabel),
   matchTruth(rhs.matchTruth),
   nTracks(rhs.nTracks),
+  sumTrkPt(rhs.sumTrkPt),
   bjet(rhs.bjet),
   effscalefact(rhs.effscalefact),
   mv1(rhs.mv1),
@@ -64,6 +65,7 @@ Jet& Jet::operator=(const Jet &rhs)
     bjet = rhs.bjet;
     effscalefact = rhs.effscalefact;
     nTracks = rhs.nTracks;
+    sumTrkPt = rhs.sumTrkPt;
     mv1 = rhs.mv1;
     mv2c20 = rhs.mv2c20;
     isBadVeryLoose = rhs.isBadVeryLoose;

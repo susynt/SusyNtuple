@@ -20,6 +20,7 @@ public:
     /** Assignment operator */
     Muon& operator=(const Muon &);
 
+    bool isCaloTagged;        ///< Is calo tagged
     bool isCombined;          ///< Is combined muon, otherwise segment tagged
 
     float idTrackPt;          ///< ID track pt
@@ -83,6 +84,7 @@ public:
     /// Clear vars
     void clear(){
       isCombined = 0;
+      isCaloTagged = 0;
       idTrackPt = idTrackEta = idTrackPhi = 0;
       msTrackPt = msTrackEta = msTrackPhi = 0;
       idTrackQ  = msTrackQ = 0;
@@ -111,7 +113,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Muon, 16);
+    ClassDef(Muon, 17);
 };
 } // Susy
 #endif

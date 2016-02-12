@@ -12,6 +12,7 @@ using Susy::Lepton;
 /*--------------------------------------------------------------------------------*/
 Muon::Muon(const Muon &rhs):
   Lepton(rhs),
+  isCaloTagged(rhs.isCaloTagged),
   isCombined(rhs.isCombined),
   idTrackPt(rhs.idTrackPt),
   idTrackEta(rhs.idTrackEta),
@@ -60,6 +61,7 @@ Muon& Muon::operator=(const Muon &rhs)
 {
   if (this != &rhs) {
     Lepton::operator=(rhs);
+    isCaloTagged = rhs.isCaloTagged;
     isCombined = rhs.isCombined;
     idTrackPt = rhs.idTrackPt;
     idTrackEta = rhs.idTrackEta;
@@ -129,6 +131,7 @@ void Muon::print() const
   cout.precision(2);
   cout << fixed << "Mu : q " << setw(2) << q << " pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
        << " phi " << setw(5) << Phi()
+       << " calo " << isCaloTagged
        << " cb " << isCombined
        << " type " << mcType << " origin " << mcOrigin 
        << endl;
