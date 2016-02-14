@@ -46,8 +46,10 @@ public:
 
     bool isMuon;              ///< True if electron track is same as a muon track
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
-    int truthCharge; ///< as provided by xAOD::TruthHelpers::getTruthParticle
-    int ss3lChargeFlip; ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
+    int truthCharge;          ///< as provided by xAOD::TruthHelpers::getTruthParticle
+    int ss3lChargeFlip;       ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
+    int mcBkgMotherPdgId;     ///< TODO: document me
+    int mcBkgTruthOrigin;     ///< TODO: document me
 
     //AT: This is insane >50!
     float res_all_dn;
@@ -175,7 +177,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 17);
+    ClassDef(Electron, 18);
 };
 } //Susy
 #endif
