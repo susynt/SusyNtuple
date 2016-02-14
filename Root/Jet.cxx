@@ -13,6 +13,7 @@ using Susy::Particle;
 /*--------------------------------------------------------------------------------*/
 Jet::Jet(const Jet &rhs):
   Particle(rhs),
+  idx(rhs.idx),
   jvf(rhs.jvf),
   jvt(rhs.jvt),
   detEta(rhs.detEta),
@@ -56,6 +57,7 @@ Jet& Jet::operator=(const Jet &rhs)
 {
   if (this != &rhs) {
     Particle::operator=(rhs);
+    idx  = rhs.idx;
     jvf  = rhs.jvf; 
     jvt  = rhs.jvt; 
     detEta = rhs.detEta;

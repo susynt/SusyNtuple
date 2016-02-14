@@ -17,6 +17,8 @@ public:
     /** Assignment operator */
     Jet& operator=(const Jet &);
 
+    int idx;                  ///< index of jet in jet collection stored in SusyNt
+
     float jvf;                ///< Jet vertex fraction
     float jvt;                ///< Jet vertex tagger
     float detEta;             ///< Detector eta
@@ -73,6 +75,7 @@ public:
 
     // Clear vars
     void clear(){
+      idx = 0;
       jvf = jvt = truthLabel = nTracks = 0;
       sumTrkPt = 0;
       matchTruth = false;
