@@ -20,27 +20,27 @@ ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
     switch(a) {
     case AnalysisType::Ana_2Lep:
         s = new ElectronSelector_2Lep();
-        s->setSignalId(ElectronId::TightLH);
+        s->setSignalId(ElectronId::TightLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_3Lep:
         s = new ElectronSelector_3Lep();
-        s->setSignalId(ElectronId::TightLH);
+        s->setSignalId(ElectronId::TightLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_2LepWH:
         s = new ElectronSelector_2LepWH();
-        s->setSignalId(ElectronId::TightLH);
+        s->setSignalId(ElectronId::TightLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_SS3L:
         s = new ElectronSelector_SS3L();
-        s->setSignalId(ElectronId::TightLH);
+        s->setSignalId(ElectronId::TightLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_Stop2L:
         s = new ElectronSelector_Stop2L();
-        s->setSignalId(ElectronId::MediumLH);
+        s->setSignalId(ElectronId::MediumLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     default:
@@ -62,7 +62,7 @@ bool ElectronSelector::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (el->looseLH && // good for all
+        pass = (el->looseLLH && // good for all
                 el->Pt()  > 10.0 && // was EL_MIN_PT_BASELINE, good for all
                 std::abs(el->clusEta) < 2.47 ); // was EL_MAX_ETA_BASELINE, good for all
     }
@@ -75,7 +75,7 @@ bool ElectronSelector::isSignal(const Electron* el)
     if(el) {
         pass = (el->Pt() > 10.0 && // good for all
                 std::abs(el->Eta()) < 2.47 && // was EL_MAX_ETA_SIGNAL
-                el->tightLH && // good for all run1 ana
+                el->tightLLH && // good for all run1 ana
                 passIpCut(*el) && // 5.0 0.4 good for 2l 3l
                 el->isoGradientLoose); // good for all run1
     }
@@ -144,7 +144,7 @@ bool ElectronSelector_SS3L::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (el->looseLH &&
+        pass = (el->looseLLH &&
                 el->Pt()             > 10.0  &&
                 std::abs(el->clusEta)    <  2.47 &&
                 abs(el->d0sigBSCorr) <  5.0  &&
@@ -161,7 +161,7 @@ bool ElectronSelector_SS3L::isSignal(const Electron* el)
                            (el->etconetopo20/el->Pt() < 0.06) );
         pass = (isBaseline(el) &&
                 isIsolated &&
-                el->tightLH &&
+                el->tightLLH &&
                 std::abs(el->trackEta)     <  2.0 &&
                 std::abs(el->z0SinTheta()) <  0.5 );
     }
@@ -183,7 +183,7 @@ bool ElectronSelector_Stop2L::isSignal(const Electron* el)
     bool pass = false;
     if(el) {
         pass = (isBaseline(el) &&
-                el->mediumLH &&
+                el->mediumLLH &&
                 el->isoGradientLoose &&
                 passIpCut(*el));
     }

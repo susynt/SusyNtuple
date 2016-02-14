@@ -30,15 +30,15 @@ public:
     float trackEta;           ///< ID track eta
 
     //LH quality flags
-    bool veryLooseLH;        ///< veryLooseLH
-    bool looseLH;            ///< looseLH
-    bool mediumLH;           ///< mediumLH
-    bool tightLH;            ///< tightLH
+    bool veryLooseLLH;        ///< veryLooseLLH
+    bool looseLLH;            ///< looseLLH
+    bool mediumLLH;           ///< mediumLLH
+    bool tightLLH;            ///< tightLLH
 
     //Without d0 cut
-    bool looseLH_nod0;       ///< looseLH
-    bool mediumLH_nod0;      ///< mediumLH
-    bool tightLH_nod0;       ///< tightLH
+    bool looseLLH_nod0;       ///< looseLLH
+    bool mediumLLH_nod0;      ///< mediumLLH
+    bool tightLLH_nod0;       ///< tightLLH
 
     // efficiency SF per electron LH WP
     std::vector<float> eleEffSF;
@@ -137,8 +137,8 @@ public:
     /// Clear vars
     void clear(){
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
-      veryLooseLH = looseLH= mediumLH = tightLH = false;
-      looseLH_nod0= mediumLH_nod0 = tightLH_nod0 = false;
+      veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
+      looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       isMuon = false;
       isChargeFlip = false;
       truthCharge = 0;
@@ -185,7 +185,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 18);
+    ClassDef(Electron, 19);
 };
 } //Susy
 #endif
