@@ -10,6 +10,7 @@ std::string ElectronId2str(const ElectronId &e)
     switch(e){
     case ElectronId::TightLLH           : s = "TightLLH"         ; break;
     case ElectronId::MediumLLH          : s = "MediumLLH"        ; break;
+    case ElectronId::LooseLLHBLayer     : s = "LooseLLHBLayer"   ; break;
     case ElectronId::LooseLLH           : s = "LooseLLH"         ; break;
     case ElectronId::VeryLooseLLH       : s = "VeryLooseLLH"     ; break;
     case ElectronId::TightLLH_nod0      : s = "TightLLH_nod0"    ; break;

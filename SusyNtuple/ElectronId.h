@@ -10,6 +10,7 @@ namespace Susy
 enum ElectronId {
     TightLLH=0
     ,MediumLLH
+    ,LooseLLHBLayer
     ,LooseLLH
     ,VeryLooseLLH
     ,TightLLH_nod0

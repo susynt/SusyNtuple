@@ -18,6 +18,7 @@ Electron::Electron(const Electron &rhs):
   trackEta(rhs.trackEta),
   veryLooseLLH(rhs.veryLooseLLH),
   looseLLH(rhs.looseLLH),
+  looseLLHBLayer(rhs.looseLLHBLayer),
   mediumLLH(rhs.mediumLLH),
   tightLLH(rhs.tightLLH),
   looseLLH_nod0(rhs.looseLLH_nod0),
@@ -117,6 +118,7 @@ Electron& Electron::operator=(const Electron &rhs)
     trackEta = rhs.trackEta;
     veryLooseLLH = rhs.veryLooseLLH;
     looseLLH = rhs.looseLLH;
+    looseLLHBLayer = rhs.looseLLHBLayer;
     mediumLLH = rhs.mediumLLH;
     tightLLH = rhs.tightLLH;
     looseLLH_nod0 = rhs.looseLLH_nod0;

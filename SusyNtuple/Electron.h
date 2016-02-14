@@ -32,6 +32,7 @@ public:
     //LH quality flags
     bool veryLooseLLH;        ///< veryLooseLLH
     bool looseLLH;            ///< looseLLH
+    bool looseLLHBLayer;      ///< LooseAndBLayerLLH
     bool mediumLLH;           ///< mediumLLH
     bool tightLLH;            ///< tightLLH
 
@@ -137,7 +138,7 @@ public:
     /// Clear vars
     void clear(){
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
-      veryLooseLLH = looseLLH= mediumLLH = tightLLH = false;
+      veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       isMuon = false;
       isChargeFlip = false;
@@ -185,7 +186,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 19);
+    ClassDef(Electron, 20);
 };
 } //Susy
 #endif
