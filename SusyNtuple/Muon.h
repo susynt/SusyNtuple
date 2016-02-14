@@ -22,6 +22,7 @@ public:
 
     bool isCaloTagged;        ///< Is calo tagged
     bool isCombined;          ///< Is combined muon, otherwise segment tagged
+    std::vector<int> ghostTrack; ///< Indices of SusyNt preJets to which this muon's ID track is ghost associated
 
     float idTrackPt;          ///< ID track pt
     float idTrackEta;         ///< ID track eta
@@ -85,6 +86,7 @@ public:
     void clear(){
       isCombined = 0;
       isCaloTagged = 0;
+      ghostTrack.assign(100, 0);
       idTrackPt = idTrackEta = idTrackPhi = 0;
       msTrackPt = msTrackEta = msTrackPhi = 0;
       idTrackQ  = msTrackQ = 0;
