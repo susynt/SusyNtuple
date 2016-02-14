@@ -132,6 +132,10 @@ const std::vector<std::string> triggers_run2 = {
     "HLT_mu50",
     "HLT_mu60_0eta105_msonly",
 
+    // L1 items
+    "L1_MU10",
+    "L1_MU15",
+
     // dimuon trig
     "HLT_2mu10",
     "HLT_2mu14",
