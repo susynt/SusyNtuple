@@ -140,6 +140,9 @@ public:
       isChargeFlip = false;
       truthCharge = 0;
       ss3lChargeFlip = 0;
+      OQ = false;
+      mcBkgMotherPdgId = -1;
+      mcBkgTruthOrigin = -1;
       
       res_all_dn= res_all_up= 0;
       /*
