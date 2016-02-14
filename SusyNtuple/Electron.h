@@ -28,6 +28,7 @@ public:
     float clusPhi;            ///< CaloCluster phi
     float trackPt;            ///< ID track pt
     float trackEta;           ///< ID track eta
+    bool  OQ;                 ///< GoodOQ
 
     //LH quality flags
     bool veryLooseLH;        ///< veryLooseLH
@@ -174,7 +175,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 16);
+    ClassDef(Electron, 17);
 };
 } //Susy
 #endif
