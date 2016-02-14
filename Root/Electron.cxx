@@ -24,6 +24,7 @@ Electron::Electron(const Electron &rhs):
   looseLLH_nod0(rhs.looseLLH_nod0),
   mediumLLH_nod0(rhs.mediumLLH_nod0),
   tightLLH_nod0(rhs.tightLLH_nod0),
+  passOQBadClusElectron(rhs.passOQBadClusElectron),
   eleEffSF(rhs.eleEffSF),
   eleTrigSF(rhs.eleTrigSF),
   isMuon(rhs.isMuon),
@@ -124,6 +125,7 @@ Electron& Electron::operator=(const Electron &rhs)
     looseLLH_nod0 = rhs.looseLLH_nod0;
     mediumLLH_nod0 = rhs.mediumLLH_nod0;
     tightLLH_nod0 = rhs.tightLLH_nod0;
+    passOQBadClusElectron = rhs.passOQBadClusElectron;
     eleEffSF = rhs.eleEffSF;
     eleTrigSF = rhs.eleTrigSF;
     isMuon = rhs.isMuon;
@@ -291,6 +293,7 @@ void Electron::print() const
        << " phi " << setw(5) << Phi()
        << " tight " << tightLLH 
        << " type " << mcType << " origin " << mcOrigin 
+       << " OQ " << (passOQBadClusElectron ? 1 : 0)
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);

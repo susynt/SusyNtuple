@@ -36,6 +36,9 @@ public:
     bool mediumLLH;           ///< mediumLLH
     bool tightLLH;            ///< tightLLH
 
+    // object quality
+    bool passOQBadClusElectron; ///< True if not xAOD::EgammaParameters::BADCLUSELECTRON
+
     //Without d0 cut
     bool looseLLH_nod0;       ///< looseLLH
     bool mediumLLH_nod0;      ///< mediumLLH
@@ -140,6 +143,7 @@ public:
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
+      passOQBadClusElectron = false;
       isMuon = false;
       isChargeFlip = false;
       truthCharge = 0;
