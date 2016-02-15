@@ -100,15 +100,43 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
 {
     // return the error on the muon SF associated with systematc sys
     float err = 0.0;
-    if(sys == NtSys::MUON_EFF_STAT_UP) {
+    if       (sys == NtSys::MUON_EFF_STAT_UP) {
         err = mu.errEffSF_stat_up[m_signalId];
-    } else if(sys == NtSys::MUON_EFF_STAT_DN) {
+    }
+    else if(sys == NtSys::MUON_EFF_STAT_DN) {
         err = mu.errEffSF_stat_dn[m_signalId];
-    } else if(sys == NtSys::MUON_EFF_SYS_UP) {
+    }
+    else if(sys == NtSys::MUON_EFF_SYS_UP) {
         err = mu.errEffSF_syst_up[m_signalId];
-    } else if(sys == NtSys::MUON_EFF_SYS_DN) {
+    }
+    else if(sys == NtSys::MUON_EFF_SYS_DN) {
         err = mu.errEffSF_syst_dn[m_signalId];
-    } else {
+    }
+    else if(sys == NtSys::MUON_EFF_STAT_LOWPT_DN) {
+        err = mu.errEffSF_stat_lowpt_dn[m_signalId];
+    }
+    else if(sys == NtSys::MUON_EFF_STAT_LOWPT_UP) {
+        err = mu.errEffSF_stat_lowpt_up[m_signalId];
+    }
+    else if(sys == NtSys::MUON_EFF_SYS_LOWPT_DN) {
+        err = mu.errEffSF_syst_lowpt_dn[m_signalId];
+    }
+    else if(sys == NtSys::MUON_EFF_SYS_LOWPT_UP) {
+        err = mu.errEffSF_syst_lowpt_up[m_signalId];
+    }
+    else if(sys == NtSys::MUON_ISO_STAT_DN) {
+        err = mu.errIso_stat_dn[m_signalId];
+    }
+    else if(sys == NtSys::MUON_ISO_STAT_UP) {
+        err = mu.errIso_stat_up[m_signalId];
+    }
+    else if(sys == NtSys::MUON_ISO_SYS_DN) {
+        err = mu.errIso_syst_dn[m_signalId];
+    }
+    else if(sys == NtSys::MUON_ISO_SYS_UP) {
+        err = mu.errIso_syst_up[m_signalId];
+    }
+    else {
         cout<<"MuonSelector::errEffSF(): you are calling this function with"
             <<" sys '"<<NtSys::SusyNtSysNames[sys]<<"'."
             <<" This is not a muon sys. Returning "<<err

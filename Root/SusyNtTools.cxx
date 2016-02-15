@@ -533,6 +533,18 @@ float SusyNtTools::bTagSF(const JetVector& jets)
     return sf;
 }
 
+float SusyNtTools::bTagSFError(const JetVector& jets, const NtSys::SusyNtSys sys)
+{
+    float errSF = 0.0;
+    if(jets.size()>0) {
+        errSF = 1.0;
+        for(uint ij = 0; ij < jets.size(); ij++) {
+            errSF *= jets[ij]->getFTSys(sys);
+        }
+    }
+    return errSF;
+}
+
 ////////////////////////////
 // Lepton efficiency SF
 ////////////////////////////

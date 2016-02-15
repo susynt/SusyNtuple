@@ -152,6 +152,7 @@ public:
 
     /// Method to get the nominal b-Tag efficiency scale-factor for the collection of jets
     float bTagSF(const JetVector& jets);
+    float bTagSFError(const JetVector& jets, const NtSys::SusyNtSys sys);
    
     /// Method to get the nominal lepton efficiency scale-factor for the collection of leptons
     float leptonEffSF(const LeptonVector& leps);

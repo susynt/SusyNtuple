@@ -92,7 +92,7 @@ float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
 {
     // return the error on the electron SF associated with systematic sys
     float err = 0.0;
-    if(sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_UP) {
+    if     (sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_UP) {
         err = ele.errEffSF_id_corr_up[m_signalId];
     }
     else if(sys == NtSys::EL_EFF_ID_TotalCorrUncertainty_DN) {
@@ -103,6 +103,24 @@ float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
     }
     else if(sys == NtSys::EL_EFF_Reco_TotalCorrUncertainty_DN) {
         err = ele.errEffSF_reco_corr_dn[m_signalId];
+    }
+    else if(sys == NtSys::EL_EFF_Iso_TotalCorrUncertainty_UP) {
+        err = ele.errEffSF_iso_corr_up[m_signalId];
+    }
+    else if(sys == NtSys::EL_EFF_Iso_TotalCorrUncertainty_DN) {
+        err = ele.errEffSF_iso_corr_dn[m_signalId];
+    }
+    else if(sys == NtSys::EL_EFF_Trigger_TotalCorrUncertainty_DN) {
+        err = ele.errEffSF_trig_corr_dn[m_signalId];
+    }
+    else if(sys == NtSys::EL_EFF_Trigger_TotalCorrUncertainty_UP) {
+        err = ele.errEffSF_trig_corr_up[m_signalId];
+    }
+    else {
+        cout << "ElectronSelector::errEffSF(): you are calling this function with"
+             <<" sys '" << NtSys::SusyNtSysNames[sys]<<"'."
+             <<" This is not an electron sys. Returning " << err
+             << endl;
     }
     return err;
 }
