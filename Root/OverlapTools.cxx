@@ -161,6 +161,15 @@ void OverlapTools::removeNonisolatedLeptons(ElectronVector& electrons, MuonVecto
     }
 }
 //----------------------------------------------------------
+bool OverlapTools::muonIsGhostMatched(const Muon* mu, const Jet* jet)
+{
+    if(!(mu->ghostTrack.size()>0))
+        return false;
+    if(jet->idx > ((int)mu->ghostTrack.size()-1))
+        return false;
+    return ((mu->ghostTrack[jet->idx]==1) ? true : false); 
+}
+//----------------------------------------------------------
 void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
     // default procedure:

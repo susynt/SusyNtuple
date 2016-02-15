@@ -69,6 +69,11 @@ public :
     OverlapTools& setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
+
+    /// check if muon ID tracks are ghost associated with the input jet
+    bool muonIsGhostMatched(const Muon* mu, const Jet* jet);
+
+
     OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
     bool verbose() const { return m_verbose; }
 protected :
