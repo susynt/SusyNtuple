@@ -385,8 +385,7 @@ void OverlapTools_SS3L::performOverlap(ElectronVector& electrons, MuonVector& mu
 {
     j_e_overlap(electrons, jets, 0.2);
     e_j_overlap(electrons, jets, 0.4);
-    #warning "update SS3L::m_j_overlap to 0.4"
-    m_j_overlap(muons, jets, 0.2); // just to compare cutflows, will move back to 0.4
+    m_j_overlap(muons, jets, 0.4);
     e_m_overlap(electrons, muons, 0.01);
     e_e_overlap(electrons, 0.05);
 }
