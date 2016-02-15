@@ -63,6 +63,7 @@ bool ElectronSelector::isBaseline(const Electron* el)
     bool pass = false;
     if(el) {
         pass = (el->looseLLH && // good for all
+                el->passOQBadClusElectron &&
                 el->Pt()  > 10.0 && // was EL_MIN_PT_BASELINE, good for all
                 std::abs(el->clusEta) < 2.47 ); // was EL_MAX_ETA_BASELINE, good for all
     }
@@ -163,6 +164,7 @@ bool ElectronSelector_SS3L::isBaseline(const Electron* el)
     bool pass = false;
     if(el) {
         pass = (el->looseLLH &&
+                el->passOQBadClusElectron &&
                 el->Pt()             > 10.0  &&
                 std::abs(el->clusEta)    <  2.47 &&
                 abs(el->d0sigBSCorr) <  5.0  &&
