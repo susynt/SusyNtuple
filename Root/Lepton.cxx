@@ -29,6 +29,8 @@ Lepton::Lepton(const Lepton &rhs):
   errZ0(rhs.errZ0),
   mcType(rhs.mcType),
   mcOrigin(rhs.mcOrigin),
+  mcBkgMotherPdgId(rhs.mcBkgMotherPdgId),
+  mcBkgTruthOrigin(rhs.mcBkgTruthOrigin),
   matched2TruthLepton(rhs.matched2TruthLepton),
   //truthMatchType(rhs.truthMatchType),
   truthType(rhs.truthType),
@@ -65,6 +67,8 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     errZ0 = rhs.errZ0;
     mcType = rhs.mcType;
     mcOrigin = rhs.mcOrigin;
+    mcBkgMotherPdgId = rhs.mcBkgMotherPdgId;
+    mcBkgTruthOrigin = rhs.mcBkgTruthOrigin;
     matched2TruthLepton = rhs.matched2TruthLepton;
     //truthMatchType = rhs.truthMatchType;
     truthType = rhs.truthType;

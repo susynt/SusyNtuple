@@ -54,6 +54,23 @@ public:
     unsigned int mcType;      ///< MCTruthClassifier particle type
     unsigned int mcOrigin;    ///< MCTruthClassifier particle origin
 
+    /** Bkg ID information
+            mcBkgMotherPdgId
+            mcBkgTruthOrigin 
+
+        For the moment this deals only with electrons
+        but potentially in the future the same decorators
+        may be needed for muons, so we add this to the
+        Lepton class.
+
+        For more information see the following:
+        [1] http://atlas-computing.web.cern.ch/atlas-computing/links/nightlyDocDirectory/DerivationFrameworkEGamma/html/BkgElectronClassification_8cxx_source.html
+        [2] http://atlas-computing.web.cern.ch/atlas-computing/links/buildDirectory/AtlasOffline/19.1.0/InstallArea/doc/MCTruthClassifier/html/classMCTruthClassifier.html
+        [3] https://twiki.cern.ch/twiki/bin/view/AtlasProtected/MCTruthClassifier#ID_track_classification
+    */
+    unsigned int mcBkgMotherPdgId;
+    unsigned int mcBkgTruthOrigin;
+
     bool matched2TruthLepton; ///< flag from RecoTruthMatch::Matched2TruthLepton
     int truthType;            ///< RecoTruthMatch::type
 
@@ -88,7 +105,7 @@ public:
                      = ptvarcone20 = ptvarcone30 = 0;
         isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoTight = false;
         d0 = errD0 = d0sigBSCorr = z0 = errZ0 = 0;
-        mcType = mcOrigin = 0;
+        mcType = mcOrigin = mcBkgMotherPdgId = mcBkgTruthOrigin = 0;
         matched2TruthLepton = false;
         truthType = -1;
         effSF = 1;
