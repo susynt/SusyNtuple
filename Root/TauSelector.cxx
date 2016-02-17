@@ -17,6 +17,7 @@ TauSelector* TauSelector::build(const AnalysisType &a, bool verbose)
     switch(a) {
     case AnalysisType::Ana_2Lep   : selector = new TauSelector_2Lep(); break;
     case AnalysisType::Ana_3Lep   : selector = new TauSelector_3Lep(); break;
+    case AnalysisType::Ana_4Lep   : selector = new TauSelector_4Lep(); break;
     case AnalysisType::Ana_2LepWH : selector = new TauSelector_2LepWH(); break;
     case AnalysisType::Ana_SS3L   : selector = new TauSelector_SS3L(); break;
     case AnalysisType::Ana_Stop2L : selector = new TauSelector_Stop2L(); break;
@@ -72,6 +73,18 @@ bool TauSelector::passBdtSignal(const Tau& tau)
 //----------------------------------------------------------
 // begin JetSelector_3Lep
 //----------------------------------------------------------
+
+//----------------------------------------------------------
+// begin TauSelector_4Lep
+//----------------------------------------------------------
+bool TauSelector_4Lep::isBaseline(const Tau& tau)
+{
+    return (tau.Pt() > 20.0 					&&
+			std::abs(tau.Eta()) < 2.47			&& 
+			(tau.nTrack == 1 || tau.nTrack ==3 )&&
+			std::abs(tau.q) == 1 				&&
+            passBdtBaseline(tau));
+}
 
 //----------------------------------------------------------
 // begin JetSelector_2LepWH

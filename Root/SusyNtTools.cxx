@@ -131,6 +131,7 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
 {
     if(a == AnalysisType::Ana_2Lep ||
        a == AnalysisType::Ana_3Lep ||
+       a == AnalysisType::Ana_4Lep ||
        a == AnalysisType::Ana_2LepWH ) { m_doSFOS = true; }
 
     else if( a == AnalysisType::Ana_SS3L )   { m_doSFOS = false; }

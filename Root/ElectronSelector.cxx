@@ -28,6 +28,11 @@ ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
         s->setSignalId(ElectronId::TightLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
+    case AnalysisType::Ana_4Lep:
+        s = new ElectronSelector_4Lep();
+        s->setSignalId(ElectronId::MediumLH);
+        s->setSignalIsolation(Isolation::GradientLoose);
+        break;
     case AnalysisType::Ana_2LepWH:
         s = new ElectronSelector_2LepWH();
         s->setSignalId(ElectronId::TightLH);

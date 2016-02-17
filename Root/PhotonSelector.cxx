@@ -24,6 +24,7 @@ PhotonSelector::PhotonSelector() :
     m_sigIso(Isolation::IsolationInvalid),
     m_2lep(false),
     m_3lep(false),
+    m_4lep(false),
     m_2lepWH(false),
     m_SS3L(false),
     m_verbose(false)
@@ -49,6 +50,13 @@ PhotonSelector& PhotonSelector::setAnalysis(const AnalysisType &a)
     //////////////////////////////////////
     else if ( a == AnalysisType::Ana_3Lep ) {
         m_3lep = true;
+        m_sigIso = Isolation::FixedCutTight;
+    }
+    //////////////////////////////////////
+    // 4L-Analysis
+    //////////////////////////////////////
+    else if ( a == AnalysisType::Ana_4Lep ) {
+        m_4lep = true;
         m_sigIso = Isolation::FixedCutTight;
     }
     //////////////////////////////////////

@@ -98,6 +98,12 @@ class MuonSelector_3Lep : public MuonSelector
     virtual bool isSignal(const Muon* mu);
 };
 
+/// implements muon selection for 4L
+class MuonSelector_4Lep : public MuonSelector
+{
+    bool isBaseline(const Muon* mu);
+};
+
 /// implements muon selection for ATL-COM-PHYS-2014-221
 class MuonSelector_2LepWH : public MuonSelector
 {
