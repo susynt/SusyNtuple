@@ -381,10 +381,6 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets, double dR)
 //----------------------------------------------------------
 // begin OverlapTools_4Lep
 //----------------------------------------------------------
-OverlapTools_4Lep::OverlapTools_4Lep():
-    OverlapTools(),
-    m_jetSelector(nullptr){}
-//----------------------------------------------------------
 void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
                                     TauVector& taus, JetVector& jets)
 {
@@ -533,13 +529,6 @@ void OverlapTools_4Lep::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
 {
   if(electrons.size()==0 || jets.size()==0) return;
 
-  JetSelector_4Lep* jetSelector = static_cast<JetSelector_4Lep*>(m_jetSelector);
-  if(not jetSelector) {
-    cerr<<"OverlapTools_4Lep: cannot perform j_e_overlap without JetSelector"<<endl
-	<<"Please call OverlapTools_4Lep::jetSelector(JetSelector*)"<<endl;
-    // assert(false);
-  }
-
   for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
     const Electron* e = electrons.at(iEl);
     for(int iJ=jets.size()-1; iJ>=0; iJ--){
@@ -563,13 +552,6 @@ void OverlapTools_4Lep::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
 void OverlapTools_4Lep::e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
   if(electrons.size()==0 || jets.size()==0) return;
-
-  JetSelector_4Lep* jetSelector = static_cast<JetSelector_4Lep*>(m_jetSelector);
-  if(not jetSelector) {
-    cerr<<"OverlapTools_4Lep: cannot perform e_j_overlap without JetSelector"<<endl
-	<<"Please call OverlapTools_4Lep::jetSelector(JetSelector*)"<<endl;
-    // assert(false);
-  }
 
   for(int iEl=electrons.size()-1; iEl>=0; iEl--){
     const Electron* e = electrons.at(iEl);
@@ -598,13 +580,6 @@ void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double d
 
   bool useGhostAssoc=true;
   if(m_useOldOverlap) useGhostAssoc=false;
-
-  JetSelector_4Lep* jetSelector = static_cast<JetSelector_4Lep*>(m_jetSelector);
-  if(not jetSelector) {
-    cerr<<"OverlapTools_4Lep: cannot perform j_m_overlap without JetSelector"<<endl
-	<<"Please call OverlapTools_4Lep::jetSelector(JetSelector*)"<<endl;
-    // assert(false);
-  }
 
   for(int iMu=muons.size()-1; iMu>=0; iMu--) {
     const Muon* mu = muons.at(iMu);
@@ -643,13 +618,6 @@ void OverlapTools_4Lep::m_j_overlap(MuonVector& muons, JetVector& jets, double d
 {
   if(muons.size()==0 || jets.size()==0) return;
 
-  JetSelector_4Lep* jetSelector = static_cast<JetSelector_4Lep*>(m_jetSelector);
-  if(not jetSelector) {
-    cerr<<"OverlapTools_4Lep: cannot perform m_j_overlap without JetSelector"<<endl
-	<<"Please call OverlapTools_4Lep::jetSelector(JetSelector*)"<<endl;
-    // assert(false);
-  }
-
   for(int iMu=muons.size()-1; iMu>=0; iMu--){
     const Muon* mu = muons.at(iMu);
     for(size_t iJ=0; iJ<jets.size(); iJ++){
@@ -672,13 +640,6 @@ void OverlapTools_4Lep::m_j_overlap(MuonVector& muons, JetVector& jets, double d
 //----------------------------------------------------------
 void OverlapTools_4Lep::j_photon_overlap(PhotonVector& photons, JetVector& jets, double dR)
 {
-
-  JetSelector_4Lep* jetSelector = static_cast<JetSelector_4Lep*>(m_jetSelector);
-  if(not jetSelector) {
-    cerr<<"OverlapTools_4Lep: cannot perform j_photon_overlap without JetSelector"<<endl
-	<<"Please call OverlapTools_4Lep::jetSelector(JetSelector*)"<<endl;
-    // assert(false);
-  }
 
   if(photons.size()==0 || jets.size()==0) return;
   for(int iPh=photons.size()-1; iPh>=0; iPh--) {

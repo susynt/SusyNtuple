@@ -69,6 +69,9 @@ public :
     OverlapTools& setElectronIsolation( Isolation eleIso ) { m_electronIsolation = eleIso; return *this; }
     /// muon isolation used in leptonPassesIsolation()
     OverlapTools& setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; return *this; }
+    /// jet selector needed for j_X OR
+    JetSelector* jetSelector() const { return m_jetSelector; }
+    OverlapTools& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
     OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
@@ -77,6 +80,7 @@ public :
 protected :
     Isolation m_electronIsolation;
     Isolation m_muonIsolation;
+    JetSelector *m_jetSelector;
     bool m_verbose;
     bool m_useOldOverlap;
 }; // class OverlapTools
@@ -100,10 +104,6 @@ class OverlapTools_3Lep : public OverlapTools
 class OverlapTools_4Lep : public OverlapTools
 {
 public:
-    OverlapTools_4Lep(); ///< Default ctor
-    virtual JetSelector* jetSelector() const { return m_jetSelector; }
-    virtual OverlapTools_4Lep& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
-
   virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, TauVector& taus, JetVector& jets);
   virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, TauVector& taus, TauVector& SIGNALtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg);
   virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons); ///< remove electron from muon
@@ -115,7 +115,6 @@ public:
   virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove electron from jet
   virtual void j_photon_overlap(PhotonVector& photons, JetVector& jets, double dR);
 protected:
-  JetSelector* m_jetSelector;           ///< select jets according to the current analysis settings
 
 };
 
