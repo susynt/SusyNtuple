@@ -164,6 +164,15 @@ void OverlapTools::removeNonisolatedLeptons(ElectronVector& electrons, MuonVecto
     }
 }
 //----------------------------------------------------------
+bool OverlapTools::muonIsGhostMatched(const Muon* mu, const Jet* jet)
+{
+  if(!(mu->ghostTrack.size()>0))
+    return false;
+  if(jet->idx > ((int)mu->ghostTrack.size()-1))
+    return false;
+  return ((mu->ghostTrack[jet->idx]==1) ? true : false); 
+}
+//----------------------------------------------------------
 void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
     // default procedure:
@@ -440,7 +449,7 @@ void OverlapTools_4Lep::e_m_overlap(ElectronVector& electrons, MuonVector& muons
   if( removeCaloMuons ){
     for(int iMu=muons.size()-1; iMu>=0; iMu--){
       const Muon* mu = muons.at(iMu);
-      if(mu->isCombined) continue;//if(!mu->isCalo) continue; // ATTENTION
+      if(!mu->isCaloTagged) continue; 
       for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
 	const Electron* e = electrons.at(iEl);
 	
@@ -593,12 +602,12 @@ void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double d
       bool discard_jet = false;
       if(useGhostAssoc){
 	if(mu->DeltaRy(*j) < 0.2) discard_jet = true;
-	//if( mu->isGhostTrack && mu->DeltaRy(*j) < 0.4 ) discard_jet = true; // ATTENTION
+	if(muonIsGhostMatched(mu, j) ) discard_jet=true;
       }
       else{
 	if( m_useOldOverlap ) continue;
 	int jet_nTrk = j->nTracks;
-	double sumTrkPt = mu->Pt(); // need jet getSumTrackPt(*jet, vtx->index()); ATTENTION
+	double sumTrkPt = j->sumTrkPt;
 	if( jet_nTrk >= 3  && (mu->Pt()/j->Pt() < 0.5 || mu->Pt()/sumTrkPt < 0.7)) continue;
 	if(mu->DeltaRy(*j) < 0.2) discard_jet = true;
       }

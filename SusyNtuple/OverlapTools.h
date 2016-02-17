@@ -74,6 +74,8 @@ public :
     OverlapTools& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
+    /// check if muon ID tracks are ghost associated with the input jet
+    bool muonIsGhostMatched(const Muon* mu, const Jet* jet);
     OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
     OverlapTools& useOldOverlap(bool v) { m_useOldOverlap = v; return *this; }
     bool verbose() const { return m_verbose; }
