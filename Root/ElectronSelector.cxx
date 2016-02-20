@@ -160,9 +160,15 @@ bool ElectronSelector_SS3L::isSignal(const Electron* el)
     if(el) {
         bool isIsolated = ((el->ptvarcone20/el->Pt()  < 0.06) &&
                            (el->etconetopo20/el->Pt() < 0.06) );
+        bool passLH;
+        if (el->Pt() < 300) {
+            passLH = el->tightLH;
+        } else {
+            passLH = el->mediumLH;
+        }
         pass = (isBaseline(el) &&
                 isIsolated &&
-                el->tightLH &&
+                passLH &&
                 std::abs(el->trackEta)     <  2.0 &&
                 std::abs(el->z0SinTheta()) <  0.5 );
     }
