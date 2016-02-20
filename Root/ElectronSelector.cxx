@@ -144,7 +144,8 @@ bool ElectronSelector_SS3L::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (el->looseLH &&
+        pass = (el->OQ &&
+                el->looseLH &&
                 el->Pt()             > 10.0  &&
                 std::abs(el->clusEta)    <  2.47 &&
                 abs(el->d0sigBSCorr) <  5.0  &&
