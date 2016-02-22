@@ -397,7 +397,7 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
     //       --> if bjet: keep the jet, remove electron
     //       --> if not bjet: remove the jet, keep the electron
     if(electrons.size()==0 || jets.size()==0) return;
-    JetSelector_SS3L* jetSelector = static_cast<JetSelector_SS3L*>(m_jetSelector);
+    JetSelector_SS3L* jetSelector = static_cast<JetSelector_SS3L*>(JetSelector::build(AnalysisType::Ana_SS3L, true));
     if(not jetSelector) {
         cerr<<"OverlapTools_SS3L: cannot perform j_e_overlap without JetSelector"<<endl
             <<"Please call OverlapTools_SS3L::jetSelector(JetSelector*)"<<endl;
