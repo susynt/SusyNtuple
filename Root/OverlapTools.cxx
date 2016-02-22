@@ -391,35 +391,18 @@ void OverlapTools::j_t_overlap(TauVector& taus, JetVector& jets, double dR)
 // begin OverlapTools_4Lep
 //----------------------------------------------------------
 void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                    TauVector& taus, JetVector& jets)
+				       TauVector& taus,TauVector& LOOSEtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg)
 {
-						///without the Photon OR
-                                                /// updated for SUSYTools/harmonization consistency Feb/16
-  /*1*/	t_e_overlap(taus,electrons,0.2); // straightforward dR comparison
-  /*2*/	t_m_overlap(taus, muons,0.2);    // dR comparison for taus pT<50. For tau pT>50, only compare to combined muons
-  /*3*/ e_m_overlap(electrons,muons);    // discard electrons sharing ID track with muons (Calo muons are be removed first if they share a track with an electron)
-  ///*4,5*/ photon_lep_overlap(photons, electrons, muons, 0.4);	// discard pho overlapping with e/mu
-  /*6*/	j_e_overlap(electrons, jets, 0.2);  // discard non-b-tagged jets with dR<0.2
-        e_j_overlap(electrons,jets,0.4);    // discard ele with dR<0.4 to non-pileup jets
 
-  /*7*/	j_m_overlap(muons, jets,0.2);  // discard jets with few tracks or small jet/mu pT ratio. 
-        m_j_overlap(muons, jets,0.4);       // discard ele with dR<0.4 to non-pileup jets
-  
-  /*8*/	j_t_overlap(taus,jets,0.2);  // discard jets overlapping with signal taus
+  // if PhotonVector is empty, photon overlap won't be performed
+  // if m_TauCtrlReg, then jets will be discarded on overlap with loose taus
+  /// updated for SUSYTools/harmonization consistency Feb/16
 
-	///*9*/ j_photon_overlap(photons, jets, 0.4);	// discard jet overlapping with photon
+  /*1*/	if(!m_TauCtrlReg) t_e_overlap(taus,electrons,0.2); // straightforward dR comparison
+        else t_e_overlap(LOOSEtaus,electrons,0.2);
+  /*2*/	if(!m_TauCtrlReg) t_m_overlap(taus, muons,0.2);    // dR comparison for taus pT<50. For tau pT>50, only compare to combined muons
+        else t_m_overlap(LOOSEtaus, muons,0.2);  
 
-	//DY is performed in  'm_nttools.removeSFOSPairs' step
-	
-}
-void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
-				       TauVector& taus,TauVector& SIGNALtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg)
-{
-						///with the Photon OR
-						/// and Signal Taus for the last step
-                                                /// updated for SUSYTools/harmonization consistency Feb/16
-  /*1*/	t_e_overlap(taus,electrons,0.2); // straightforward dR comparison
-  /*2*/	t_m_overlap(taus, muons,0.2);    // dR comparison for taus pT<50. For tau pT>50, only compare to combined muons
   /*3*/ e_m_overlap(electrons,muons);    // discard electrons sharing ID track with muons (Calo muons are be removed first if they share a track with an electron)
   /*4,5*/ photon_lep_overlap(photons, electrons, muons, 0.4);	// discard pho overlapping with e/mu
   /*6*/	j_e_overlap(electrons, jets, 0.2);  // discard non-b-tagged jets with dR<0.2
@@ -428,10 +411,11 @@ void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& mu
   /*7*/	j_m_overlap(muons, jets,0.2);  // discard jets with few tracks or small jet/mu pT ratio. 
         m_j_overlap(muons, jets,0.4);       // discard ele with dR<0.4 to non-pileup jets
   
-  /*8*/	if(!m_TauCtrlReg) j_t_overlap(SIGNALtaus,jets,0.2);  // discard jets overlapping with signal taus
-	else j_t_overlap(taus,jets,0.2);  // compare to all loose taus for CR
+  /*8*/	if(!m_TauCtrlReg) j_t_overlap(taus,jets,0.2);  // discard jets overlapping with signal taus
+	else j_t_overlap(LOOSEtaus,jets,0.2);  // compare to all loose taus for CR
 
   /*9*/ j_photon_overlap(photons, jets, 0.4);	// discard jet overlapping with photon
+
 
 	//DY is performed in  'm_nttools.removeSFOSPairs' step
 	
@@ -585,10 +569,8 @@ void OverlapTools_4Lep::e_j_overlap(ElectronVector& electrons, JetVector& jets, 
 //----------------------------------------------------------
 void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double dR)
 {
+  if(m_useOldOverlap) return;
   if(muons.size()==0 || jets.size()==0) return;
-
-  bool useGhostAssoc=true;
-  if(m_useOldOverlap) useGhostAssoc=false;
 
   for(int iMu=muons.size()-1; iMu>=0; iMu--) {
     const Muon* mu = muons.at(iMu);
@@ -600,17 +582,15 @@ void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double d
       if( is_bjet ) continue;
 
       bool discard_jet = false;
-      if(useGhostAssoc){
-	if(mu->DeltaRy(*j) < 0.2) discard_jet = true;
-	if(muonIsGhostMatched(mu, j) ) discard_jet=true;
-      }
-      else{
-	if( m_useOldOverlap ) continue;
-	int jet_nTrk = j->nTracks;
-	double sumTrkPt = j->sumTrkPt;
-	if( jet_nTrk >= 3  && (mu->Pt()/j->Pt() < 0.5 || mu->Pt()/sumTrkPt < 0.7)) continue;
-	if(mu->DeltaRy(*j) < 0.2) discard_jet = true;
-      }
+
+      // only compare jets with high nTrk and low mu/jet pt ratio
+      int jet_nTrk = j->nTracks;
+      double sumTrkPt = j->sumTrkPt;
+      if( jet_nTrk >= 3  && (mu->Pt()/j->Pt() < 0.5 || mu->Pt()/sumTrkPt < 0.7)) continue;
+      if(mu->DeltaRy(*j) < dR) discard_jet = true;
+      
+      // discard jets with ghost tracks matched to the muon
+      if(muonIsGhostMatched(mu, j) && mu->DeltaRy(*j) < dR ) discard_jet=true;
 
       if(discard_jet) {
 	if(verbose()) print_rm_msg("j_m_overlap: ", j, mu);
