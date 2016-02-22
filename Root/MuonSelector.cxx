@@ -58,7 +58,6 @@ MuonSelector::MuonSelector():
 //----------------------------------------------------------
 bool MuonSelector::isBaseline(const Muon* mu)
 {
-    // works for Ana_2Lep, Ana_3Lep, Ana_2LepWH
     bool pass = false;
     if(mu) {
         pass = (mu->medium &&
@@ -145,7 +144,7 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
     return err;
 }
 //----------------------------------------------------------
-// begin MuonSelector_3Lep
+// begin MuonSelector_3Lep Ana_3Lep
 //----------------------------------------------------------
 bool MuonSelector_3Lep::isSignal(const Muon* mu)
 {
@@ -159,21 +158,21 @@ bool MuonSelector_3Lep::isSignal(const Muon* mu)
 }
 
 //----------------------------------------------------------
-// begin MuonSelector_ss3l
+// begin MuonSelector_2LepWH Ana_2LepWH
 //----------------------------------------------------------
 bool MuonSelector_2LepWH::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
         pass = (isBaseline(mu) &&
-                mu->ptvarcone30/mu->Pt() < 0.06 && // note: isBaselineMuon guarantees pt>0
-                mu->etconetopo30/mu->Pt() < 0.14 && // was etcone?
+                mu->ptvarcone30/mu->Pt() < 0.06 &&
+                mu->etconetopo30/mu->Pt() < 0.14 &&
                 passIpCut(mu));
     }
     return pass;
 }
 //----------------------------------------------------------
-// begin MuonSelector_ss3l
+// begin MuonSelector_SS3L Ana_SS3L
 //----------------------------------------------------------
 bool MuonSelector_SS3L::isBaseline(const Muon* mu)
 {
@@ -191,13 +190,13 @@ bool MuonSelector_SS3L::isSignal(const Muon* mu)
     bool pass = false;
     if(mu) {
         pass = (isBaseline(mu) &&
-                mu->ptvarcone30/mu->Pt() < 0.06 && // note: isBaselineMuon guarantees pt>0
+                mu->ptvarcone30/mu->Pt() < 0.06 &&
                 passIpCut(mu));
     }
     return pass;
 }
 //----------------------------------------------------------
-// begin MuonSelector_Stop2L
+// begin MuonSelector_Stop2L Ana_Stop2L
 //----------------------------------------------------------
 bool MuonSelector_Stop2L::isBaseline(const Muon* mu)
 {

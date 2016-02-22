@@ -132,19 +132,19 @@ size_t JetSelector::count_F_jets(const JetVector &jets)
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin JetSelector_2Lep
+// begin JetSelector_2Lep Ana_2Lep
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin JetSelector_3Lep
+// begin JetSelector_3Lep Ana_3Lep
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin JetSelector_2LepWH
+// begin JetSelector_2LepWH Ana_2LepWH
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin JetSelector_SS3L
+// begin JetSelector_SS3L Ana_SS3L
 //----------------------------------------------------------
 bool JetSelector_SS3L::isBaseline(const Jet* jet)
 {
@@ -192,13 +192,13 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-// begin JetSelector_Stop2L
+// begin JetSelector_Stop2L Ana_Stop2L
 //----------------------------------------------------------
 bool JetSelector_Stop2L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (jet->Pt()        > 20.0 );
+        pass = (jet->Pt() > 20.0 );
     }
     return pass;
 }

@@ -64,8 +64,8 @@ bool ElectronSelector::isBaseline(const Electron* el)
     if(el) {
         pass = (el->looseLLH && // good for all
                 el->passOQBadClusElectron &&
-                el->Pt()  > 10.0 && // was EL_MIN_PT_BASELINE, good for all
-                std::abs(el->clusEta) < 2.47 ); // was EL_MAX_ETA_BASELINE, good for all
+                el->Pt()  > 10.0 &&
+                std::abs(el->clusEta) < 2.47 );
     }
     return pass;
 }
@@ -75,10 +75,10 @@ bool ElectronSelector::isSignal(const Electron* el)
     bool pass = false;
     if(el) {
         pass = (el->Pt() > 10.0 && // good for all
-                std::abs(el->Eta()) < 2.47 && // was EL_MAX_ETA_SIGNAL
-                el->tightLLH && // good for all run1 ana
-                passIpCut(*el) && // 5.0 0.4 good for 2l 3l
-                el->isoGradientLoose); // good for all run1
+                std::abs(el->Eta()) < 2.47 &&
+                el->tightLLH &&
+                passIpCut(*el) &&
+                el->isoGradientLoose);
     }
     return pass;
 }
@@ -139,15 +139,15 @@ bool ElectronSelector::outsideCrackRegion(const Electron &el)
 }
 
 //----------------------------------------------------------
-// begin ElectronSelector_2Lep
+// begin ElectronSelector_2Lep Ana_2Lep
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin ElectronSelector_3Lep
+// begin ElectronSelector_3Lep Ana_3Lep
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin ElectronSelector_2LepWH
+// begin ElectronSelector_2LepWH Ana_2LepWH
 //----------------------------------------------------------
 bool ElectronSelector_2LepWH::passIpCut(const Electron &el)
 {
@@ -157,7 +157,7 @@ bool ElectronSelector_2LepWH::passIpCut(const Electron &el)
 }
 
 //----------------------------------------------------------
-// begin ElectronSelector_SS3L
+// begin ElectronSelector_SS3L Ana_SS3L
 //----------------------------------------------------------
 bool ElectronSelector_SS3L::isBaseline(const Electron* el)
 {
@@ -189,7 +189,7 @@ bool ElectronSelector_SS3L::isSignal(const Electron* el)
 }
 
 //----------------------------------------------------------
-// begin ElectronSelector_Stop2L
+// begin ElectronSelector_Stop2L Ana_Stop2L
 //----------------------------------------------------------
 bool ElectronSelector_Stop2L::passIpCut(const Electron &el)
 {
