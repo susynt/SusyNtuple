@@ -17,6 +17,7 @@ public:
     Photon& operator=(const Photon &);
 
     /// Author information
+    // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/EGammaIdentificationRun2#Photon_authors
     int author;
     bool authorPhoton;           ///< photon reconstructed exclusively as a photon (author == 4)
     bool authorAmbiguous;        ///< photon reconstructed both as electron and photon (author == 16)
