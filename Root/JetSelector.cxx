@@ -150,8 +150,9 @@ bool JetSelector_SS3L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet){
-        pass = (jet->Pt()        > 20.0 &&
-                fabs(jet->Eta()) <  2.8 );
+        pass = jet->Pt() > 20.0;
+        // Note: abs(eta) < 2.8 criterion moved to `isSignal` so that
+        //       overlap removal can be performed using baseline jets
     }
     return pass;
 }
