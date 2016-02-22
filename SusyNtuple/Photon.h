@@ -16,6 +16,11 @@ public:
     /** Assignment operator */
     Photon& operator=(const Photon &);
 
+    /// Author information
+    int author;
+    bool authorPhoton;           ///< photon reconstructed exclusively as a photon (author == 4)
+    bool authorAmbiguous;        ///< photon reconstructed both as electron and photon (author == 16)
+
     /// Conversion Information
     bool isConv;
 
@@ -46,6 +51,8 @@ public:
     /// Clear
     void clear(){
       //pes_up = pes_dn = per_up = per_dn = 0;
+      author = 0;
+      authorPhoton = authorAmbiguous = false;
       isConv = false;
       tight = false;
       clusE = clusEta = clusPhi = 0;
@@ -55,7 +62,7 @@ public:
       Particle::clear();
     };
 
-    ClassDef(Photon, 5);
+    ClassDef(Photon, 6);
 };
 } // Susy
 #endif

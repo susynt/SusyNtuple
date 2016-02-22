@@ -6,6 +6,9 @@ using Susy::Photon;
 /*--------------------------------------------------------------------------------*/
 Photon::Photon(const Photon &rhs):
   Particle(rhs),
+  author(rhs.author),
+  authorPhoton(rhs.authorPhoton),
+  authorAmbiguous(rhs.authorAmbiguous),
   isConv(rhs.isConv),
   tight(rhs.tight),
   clusE(rhs.clusE),
@@ -25,6 +28,9 @@ Photon& Photon::operator=(const Photon &rhs)
 {
   if (this != &rhs) {
     Particle::operator=(rhs);
+    author = rhs.author;
+    authorPhoton = rhs.authorPhoton;
+    authorAmbiguous = rhs.authorAmbiguous;
     isConv  = rhs.isConv; 
     tight = rhs.tight;
     clusE = rhs.clusE;
