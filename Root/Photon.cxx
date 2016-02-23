@@ -15,6 +15,7 @@ Photon::Photon(const Photon &rhs):
   clusEta(rhs.clusEta),
   clusPhi(rhs.clusPhi),
   OQ(rhs.OQ),
+  passPhotonCleaning(rhs.passPhotonCleaning),
   isoFixedCutTightCaloOnly(rhs.isoFixedCutTightCaloOnly),
   isoFixedCutTight(rhs.isoFixedCutTight),
   isoFixedCutLoose(rhs.isoFixedCutLoose),
@@ -37,6 +38,7 @@ Photon& Photon::operator=(const Photon &rhs)
     clusEta = rhs.clusEta;
     clusPhi = rhs.clusPhi;
     OQ = rhs.OQ;
+    passPhotonCleaning = rhs.passPhotonCleaning;
     isoFixedCutTightCaloOnly = rhs.isoFixedCutTightCaloOnly;
     isoFixedCutTight = rhs.isoFixedCutTight;
     isoFixedCutLoose = rhs.isoFixedCutLoose;

@@ -31,6 +31,9 @@ public:
     float clusEta;            ///< CaloCluster eta
     float clusPhi;            ///< CaloCluster phi
     bool  OQ;                 ///< GoodOQ
+    // ShowerShape and LAr cleaning
+    // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/LArCleaningAndObjectQuality#Photon_Cleaning
+    bool passPhotonCleaning;  ///< ShowerShape and LAr cleaning flag 
 
     // Isolation flags
     bool isoFixedCutTightCaloOnly; ///< FixedCutTightCaloOnly WP
@@ -58,6 +61,7 @@ public:
       tight = false;
       clusE = clusEta = clusPhi = 0;
       OQ = false;
+      passPhotonCleaning = false;
       isoFixedCutTightCaloOnly = isoFixedCutTight = isoFixedCutLoose = false;
       topoEtcone40=0;
       Particle::clear();
