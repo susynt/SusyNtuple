@@ -14,33 +14,23 @@ Tau::Tau(const Tau &rhs):
   //Lepton(rhs),
   Particle(rhs),
   q(rhs.q),
-  author(rhs.author),
   nTrack(rhs.nTrack),
-  eleBDT(rhs.eleBDT),
-  jetBDT(rhs.jetBDT),
-  jetBDTSigLoose(rhs.jetBDTSigLoose),
-  jetBDTSigMedium(rhs.jetBDTSigMedium),
-  jetBDTSigTight(rhs.jetBDTSigTight),
-  eleBDTLoose(rhs.eleBDTLoose),
-  eleBDTMedium(rhs.eleBDTMedium),
-  eleBDTTight(rhs.eleBDTTight),
-  muonVeto(rhs.muonVeto),
-  trueTau(rhs.trueTau),
+  loose(rhs.loose),
+  medium(rhs.medium),
+  tight(rhs.tight),
+  isTruthMatched(rhs.isTruthMatched),
+  truthPdgId(rhs.truthPdgId),
+  truthNProngs(rhs.truthNProngs),
+  truthCharge(rhs.truthCharge),
+  isHadronicTau(rhs.isHadronicTau),
   truthType(rhs.truthType),
-  matched2TruthLepton(rhs.matched2TruthLepton),
-  detailedTruthType(rhs.detailedTruthType),
+  truthOrigin(rhs.truthOrigin),
   looseEffSF(rhs.looseEffSF),
   errLooseEffSF(rhs.errLooseEffSF),
   mediumEffSF(rhs.mediumEffSF),
   errMediumEffSF(rhs.errMediumEffSF),
   tightEffSF(rhs.tightEffSF),
   errTightEffSF(rhs.errTightEffSF),
-  looseEVetoSF(rhs.looseEVetoSF),
-  errLooseEVetoSF(rhs.errLooseEVetoSF),
-  mediumEVetoSF(rhs.mediumEVetoSF),
-  errMediumEVetoSF(rhs.errMediumEVetoSF),
-  tightEVetoSF(rhs.tightEVetoSF),
-  errTightEVetoSF(rhs.errTightEVetoSF),
   sme_total_up(rhs.sme_total_up),
   sme_total_dn(rhs.sme_total_dn),
   trigFlags(rhs.trigFlags)
@@ -54,33 +44,23 @@ Tau& Tau::operator=(const Tau &rhs)
   if (this != &rhs) {
     Particle::operator=(rhs);
     q = rhs.q;
-    author = rhs.author; 
     nTrack = rhs.nTrack;
-    eleBDT = rhs.eleBDT;
-    jetBDT = rhs.jetBDT;
-    jetBDTSigLoose = rhs.jetBDTSigLoose;
-    jetBDTSigMedium = rhs.jetBDTSigMedium;
-    jetBDTSigTight = rhs.jetBDTSigTight;
-    eleBDTLoose = rhs.eleBDTLoose;
-    eleBDTMedium = rhs.eleBDTMedium;
-    eleBDTTight = rhs.eleBDTTight;
-    muonVeto = rhs.muonVeto;
-    trueTau = rhs.trueTau;
+    loose = rhs.loose;
+    medium = rhs.medium;
+    tight = rhs.tight;
+    isTruthMatched = rhs.isTruthMatched;
+    truthPdgId = rhs.truthPdgId;
+    truthNProngs = rhs.truthNProngs;
+    truthCharge = rhs.truthCharge;
+    isHadronicTau = rhs.isHadronicTau;
     truthType = rhs.truthType;
-    matched2TruthLepton = rhs.matched2TruthLepton;
-    detailedTruthType = rhs.detailedTruthType;
+    truthOrigin = rhs.truthOrigin;
     looseEffSF = rhs.looseEffSF;
     errLooseEffSF = rhs.errLooseEffSF;
     mediumEffSF = rhs.mediumEffSF;
     errMediumEffSF = rhs.errMediumEffSF;
     tightEffSF = rhs.tightEffSF;
     errTightEffSF = rhs.errTightEffSF;
-    looseEVetoSF = rhs.looseEVetoSF;
-    errLooseEVetoSF = rhs.errLooseEVetoSF;
-    mediumEVetoSF = rhs.mediumEVetoSF;
-    errMediumEVetoSF = rhs.errMediumEVetoSF;
-    tightEVetoSF = rhs.tightEVetoSF;
-    errTightEVetoSF = rhs.errTightEVetoSF;
     sme_total_up = rhs.sme_total_up;
     sme_total_dn = rhs.sme_total_dn;
     trigFlags = rhs.trigFlags;
@@ -111,10 +91,7 @@ void Tau::print() const
   cout << fixed << "Tau : q " << setw(2) << q << " Et " << setw(6) << Et() << " eta " << setw(5) << Eta()
        << " nTrk " << nTrack
        << " phi " << setw(5) << Phi()
-       << " jetBDT " << jetBDTSigLoose << jetBDTSigMedium << jetBDTSigTight
-       << " eleBDT " << eleBDTLoose << eleBDTMedium << eleBDTTight
-       << " muVeto " << muonVeto
-       << " true " << trueTau
+       << " truthMatched " << isTruthMatched
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);

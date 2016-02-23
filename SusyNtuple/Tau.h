@@ -18,25 +18,23 @@ public:
     Tau& operator=(const Tau &);
 
     int q;                    ///< Charge
-    int author;               ///< author
     int nTrack;               ///< number of tracks
-    float eleBDT;             ///< electron BDT score
-    float jetBDT;             ///< jet BDT score
-    int jetBDTSigLoose;       ///< jet BDT working point
-    int jetBDTSigMedium;      ///< jet BDT working point
-    int jetBDTSigTight;       ///< jet BDT working point
-    int eleBDTLoose;          ///< ele BDT working point
-    int eleBDTMedium;         ///< ele BDT working point
-    int eleBDTTight;          ///< ele BDT working point
-    int muonVeto;             ///< muon veto flag
 
-    bool trueTau;             ///< matched to true tau
+    bool loose;               ///< passes TauAnalysisTool::TauSelectionTool "Loose" WP
+    bool medium;              ///< passes TauAnalysisTool::TauSelectionTool "Medium" WP
+    bool tight;               ///< passes TauAnalysisTool::TauSelectionTool "Tight" WP
 
-    int truthType;            ///< Tau truth classification 
+    bool isTruthMatched;      ///< matched to true tau
+    int truthPdgId;           ///< pdgId of truth particle matched to tau
+    int truthNProngs;         ///< number of prongs of matched truth-tau
+    int truthCharge;          ///< charge of matched truth-tau
+    bool isHadronicTau;       ///< tau is truth matched to hadronic tau
 
-//obsolete -remove 
-    bool matched2TruthLepton; ///< flag from RecoTruthMatch::Matched2TruthLepton
-    int detailedTruthType;    ///< RecoTauMatch::TauDetailedFakeType
+    /** MCTruthClassifier enum
+        http://atlas-computing.web.cern.ch/atlas-computing/links/buildDirectory/AtlasOffline/19.1.0/InstallArea/doc/MCTruthClassifier/html/MCTruthClassifierDefs_8h_source.html
+    */
+    int truthType;            ///< MCTruthClassifier Particle Type
+    int truthOrigin;          ///< MCTruthClassifier Particle Origin
 
     // Taus have a lot of SFs
     float looseEffSF;         ///< Loose efficiency scale factor
@@ -45,12 +43,6 @@ public:
     float errMediumEffSF;     ///< Medium efficiency scale factor uncertainty
     float tightEffSF;         ///< Tight efficiency scale factor
     float errTightEffSF;      ///< Tight efficiency scale factor uncertainty
-    float looseEVetoSF;       ///< Loose efficiency scale factor
-    float errLooseEVetoSF;    ///< Loose efficiency scale factor uncertaintiy
-    float mediumEVetoSF;      ///< Medium efficiency scale factor
-    float errMediumEVetoSF;   ///< Medium efficiency scale factor uncertainty
-    float tightEVetoSF;       ///< Tight efficiency scale factor
-    float errTightEVetoSF;    ///< Tight efficiency scale factor uncertainty
  
     // Systematic factors
     float sme_total_up;       ///< tau energy scale + sigma
@@ -71,24 +63,21 @@ public:
     void print() const;
 
     void clear(){
-        q = author = nTrack = 0;
-        eleBDT = jetBDT = 0;
-        jetBDTSigLoose = jetBDTSigMedium = jetBDTSigTight = 0;
-        eleBDTLoose = eleBDTMedium = eleBDTTight = 0;
-        muonVeto = 0;
-        trueTau = false;
-        matched2TruthLepton = false;
-        truthType = detailedTruthType = -1;
+        q = nTrack = 0;
+        loose = medium = tight = false;
+        isTruthMatched = false;
+        truthPdgId = 0;
+        truthNProngs = truthCharge = 0;
+        isHadronicTau = false;
+        truthType = truthOrigin = -1;
         looseEffSF = mediumEffSF = tightEffSF = 1;
         errLooseEffSF = errMediumEffSF = errTightEffSF = 0;
-        looseEVetoSF = mediumEVetoSF = tightEVetoSF = 1;
-        errLooseEVetoSF = errMediumEVetoSF = errTightEVetoSF = 0;
         sme_total_up = sme_total_dn = 0;
         trigFlags = 0;
         Particle::clear();
     }
 
-    ClassDef(Tau, 7);
+    ClassDef(Tau, 8);
   };
 } // Susy
 #endif

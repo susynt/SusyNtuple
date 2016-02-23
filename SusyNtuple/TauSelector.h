@@ -43,16 +43,9 @@ public:
     /// wraps above
     bool isBaseline(const Tau* tau) { return isBaseline(*tau); }
     /// whether tau passes the signal criteria
-    /**
-       Usually baseline + bdt
-    */
     virtual bool isSignal(const Tau& tau);
     /// wraps above
     virtual bool isSignal(const Tau* tau) { return isSignal(*tau); }
-    /// \todo document
-    virtual bool passBdtBaseline(const Tau&);
-    /// \todo document
-    virtual bool passBdtSignal(const Tau&);
 
 protected :
     /// whether it should be verbose
@@ -67,26 +60,31 @@ protected :
 //----------------------------------------------------------
 
 /// implements tau selection for ATL-COM-PHYS-2013-911
+// Ana_2Lep
 class TauSelector_2Lep : public TauSelector
 {
 };
 
 /// implements tau selection for ATL-COM-PHYS-2013-888
+// Ana_3Lep
 class TauSelector_3Lep : public TauSelector
 {
 };
 
 /// implements tau selection for ATL-COM-PHYS-2014-221
+// Ana_2LepWH
 class TauSelector_2LepWH : public TauSelector
 {
 };
 
 /// implements tau selection from https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSameSignLeptonsJetsRun2
+// Ana_SS3L
 class TauSelector_SS3L : public TauSelector
 {
 };
 
 /// implements tau selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
+// Ana_Stop2L
 class TauSelector_Stop2L : public TauSelector
 {
 };
