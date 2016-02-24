@@ -25,15 +25,14 @@ public:
     /// Conversion Information
     bool isConv;
 
-    //AT 2014-10-29: new v2
-    bool  tight;
+    /// Photon Selector IsEM flags
+    bool loose;               ///< AsgPhotonIsEMSelector "Loose" WP flag
+    bool tight;               ///< AsgPhotonIsEMSelector "Tight" WP flag
+
     float clusE;              ///< CaloCluster energy
     float clusEta;            ///< CaloCluster eta
     float clusPhi;            ///< CaloCluster phi
     bool  OQ;                 ///< GoodOQ
-    // ShowerShape and LAr cleaning
-    // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/LArCleaningAndObjectQuality#Photon_Cleaning
-    bool passPhotonCleaning;  ///< ShowerShape and LAr cleaning flag 
 
     // Isolation flags
     bool isoFixedCutTightCaloOnly; ///< FixedCutTightCaloOnly WP
@@ -58,10 +57,9 @@ public:
       author = 0;
       authorPhoton = authorAmbiguous = false;
       isConv = false;
-      tight = false;
+      loose = tight = false;
       clusE = clusEta = clusPhi = 0;
       OQ = false;
-      passPhotonCleaning = false;
       isoFixedCutTightCaloOnly = isoFixedCutTight = isoFixedCutLoose = false;
       topoEtcone40=0;
       Particle::clear();

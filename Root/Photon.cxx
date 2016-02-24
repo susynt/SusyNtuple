@@ -10,12 +10,12 @@ Photon::Photon(const Photon &rhs):
   authorPhoton(rhs.authorPhoton),
   authorAmbiguous(rhs.authorAmbiguous),
   isConv(rhs.isConv),
+  loose(rhs.loose),
   tight(rhs.tight),
   clusE(rhs.clusE),
   clusEta(rhs.clusEta),
   clusPhi(rhs.clusPhi),
   OQ(rhs.OQ),
-  passPhotonCleaning(rhs.passPhotonCleaning),
   isoFixedCutTightCaloOnly(rhs.isoFixedCutTightCaloOnly),
   isoFixedCutTight(rhs.isoFixedCutTight),
   isoFixedCutLoose(rhs.isoFixedCutLoose),
@@ -33,12 +33,12 @@ Photon& Photon::operator=(const Photon &rhs)
     authorPhoton = rhs.authorPhoton;
     authorAmbiguous = rhs.authorAmbiguous;
     isConv  = rhs.isConv; 
+    loose = rhs.loose;
     tight = rhs.tight;
     clusE = rhs.clusE;
     clusEta = rhs.clusEta;
     clusPhi = rhs.clusPhi;
     OQ = rhs.OQ;
-    passPhotonCleaning = rhs.passPhotonCleaning;
     isoFixedCutTightCaloOnly = rhs.isoFixedCutTightCaloOnly;
     isoFixedCutTight = rhs.isoFixedCutTight;
     isoFixedCutLoose = rhs.isoFixedCutLoose;
