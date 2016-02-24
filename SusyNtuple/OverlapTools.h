@@ -12,19 +12,23 @@ namespace Susy {
 
 /// A class to  perform the overlap removal
 /**
-   The generic OverlapTools implements the generic definitions from
-   https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Overlap_Removals
+    The generic OverlapTools implements the generic definitions from
+    AssociationUtils [1]. The SUSYTools configuration is default as
+    specified in the SUSY Background Forum meeting on January 26, 2016 [2].
 
-   Analysis-dependent criteria should be implemented in your
-   analysis-specific class inheriting from Overlap_Removals.
+    Analysis-dependent criteria should be implemented in your
+    analysis-specific class inheriting from Overlap_Removals.
 
-   The analysis-specific tool should be instantiated with Overlap_Removals::build().
+    The analysis-specific tool should be instantiated with Overlap_Removals::build().
 
-   For details on the design and implementation of this class, see the
-   documentation for JetSelector.
+    For details on the design and implementation of this class, see the
+    documentation for JetSelector.
 
-   daniel.joseph.antrim@cern.ch
-   davide.gerbaudo@gmail.com, Sep 2015
+    daniel.joseph.antrim@cern.ch, February 24, 2016
+    davide.gerbaudo@gmail.com
+
+    [1] https://svnweb.cern.ch/trac/atlasoff/browser/PhysicsAnalysis/AnalysisCommon/AssociationUtils
+    [2] https://indico.cern.ch/event/490240/attachments/1225853/1794468/ORsummary.pdf
 */
 class OverlapTools
 {
@@ -43,15 +47,34 @@ public :
     */
     virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
                                 TauVector& taus, JetVector& jets);
-    virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove jet from electron
-    virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove electron from jet
-    virtual void m_j_overlap(MuonVector& muons, JetVector& jets, double dR); ///< remove muon from jet
-    virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons, double dR); ///< remove electron from muon
-    virtual void e_e_overlap(ElectronVector& electrons, double dR); ///< remove electron from electron
-    virtual void m_m_overlap(MuonVector& muons, double dR); ///< remove muon from muon
+
+    /**
+        the separate steps of OR removal implemented within "performOverlap(...)"
+    */
+    virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets,
+                                         double dR = 0.2, bool doBJetOR = true); ///< remove jet from electron
+    virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets,
+                                        double dR = 0.4, bool doSlidingCone = false, bool applyJVT = true); ///< remove electron from jet
+    virtual void j_m_overlap(JetVector& jets, MuonVector& muons,
+                                         double dR = 0.2, bool doBJetOR = true, bool doGhost = true);
+    virtual void m_j_overlap(MuonVector& muons, JetVector& jets,
+                                        double dR = 0.4, bool doSlidingCone = false, bool applyJVT = true); ///< remove muon from jet
+    virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons); ///< remove electron from muon (shared-track)
+    virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons, float dR); ///< remove electron from muon (dR-based)
+    virtual void m_e_overlap(MuonVector& muons, ElectronVector& electrons); ///< remove calo muons overlapping with electrons
     virtual void t_e_overlap(TauVector& taus, ElectronVector& electrons, double dR); ///< remove tau from electron
     virtual void t_m_overlap(TauVector& taus, MuonVector& muons, double dR); ///< remove tau from muon
     virtual void j_t_overlap(TauVector& taus, JetVector& jets, double dR); ///< remove jet from tau
+
+    virtual void p_e_overlap(PhotonVector& photons, ElectronVector& electrons, double dR); ///< remove photons overlapping with electrons
+    virtual void p_m_overlap(PhotonVector& photons, MuonVector& muons, double dR); ///< remove photons overlapping with muons
+    virtual void j_p_overlap(JetVector& jets, PhotonVector& photons, double dR = 0.4); ///< remove jet overlapping with photon
+
+    virtual void e_e_overlap(ElectronVector& electrons, double dR); ///< remove electron from electron
+    virtual void m_m_overlap(MuonVector& muons, double dR); ///< remove muon from muon
+
+    // helper methods
+
     /// remove non-isolated leptons from the input collections
     /**
        Some analyses might want to perform the overlap removal using
@@ -73,13 +96,24 @@ public :
     /// check if muon ID tracks are ghost associated with the input jet
     bool muonIsGhostMatched(const Muon* mu, const Jet* jet);
 
+    /// check if the electron and muon have shared ID tracks
+    bool eleMuSharedTrack(const Electron* el, const Muon* mu);
+
+    /// calculate the cone size for a sliding cone size based on object pT
+    float getSlidingDRCone(float pT, float c1 = 0.04, float c2 = 10. /*GeV*/, float maxConeSize = 0.4);
+
+    /// check if a jet satisfies the b-jet criteria for OR
+    bool isBJetOR(const Jet* jet);
+
 
     OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
     bool verbose() const { return m_verbose; }
+
 protected :
     Isolation m_electronIsolation;
     Isolation m_muonIsolation;
     bool m_verbose;
+
 }; // class OverlapTools
 
 //----------------------------------------------------------

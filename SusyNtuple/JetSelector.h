@@ -74,7 +74,7 @@ public:
     virtual bool isCentralB(const Jet* jet);
     virtual bool isForward(const Jet* jet);
     /// The jet-vertex-fraction requirement: usually applied to low-pt central jets
-    virtual bool passJvt(const Jet* jet);
+    static bool passJvt(const Jet* jet);
 
     virtual bool isBaseline(const Jet* jet); ///< often analsysi-dependent
     virtual bool isSignal(const Jet* jet); ///< often analsysi-dependent
