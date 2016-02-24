@@ -49,7 +49,7 @@ public:
     // trigger efficiency SF per electron LH WP
     std::vector<float> eleTrigSF;
 
-    bool isMuon;              ///< True if electron track is same as a muon track
+    std::vector<int> sharedMuTrk; ///< Indices of SusyNt preMuons with which this electron's track is shared
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
     int truthCharge; ///< as provided by xAOD::TruthHelpers::getTruthParticle
     int ss3lChargeFlip; ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
@@ -144,7 +144,7 @@ public:
       veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
       looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       passOQBadClusElectron = false;
-      isMuon = false;
+      sharedMuTrk.assign(100,0);
       isChargeFlip = false;
       truthCharge = 0;
       ss3lChargeFlip = 0;
@@ -190,7 +190,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 20);
+    ClassDef(Electron, 19);
 };
 } //Susy
 #endif

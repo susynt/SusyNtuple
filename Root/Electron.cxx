@@ -27,7 +27,7 @@ Electron::Electron(const Electron &rhs):
   passOQBadClusElectron(rhs.passOQBadClusElectron),
   eleEffSF(rhs.eleEffSF),
   eleTrigSF(rhs.eleTrigSF),
-  isMuon(rhs.isMuon),
+  sharedMuTrk(rhs.sharedMuTrk),
   isChargeFlip(rhs.isChargeFlip),
   truthCharge(rhs.truthCharge),
   ss3lChargeFlip(rhs.ss3lChargeFlip),
@@ -128,7 +128,7 @@ Electron& Electron::operator=(const Electron &rhs)
     passOQBadClusElectron = rhs.passOQBadClusElectron;
     eleEffSF = rhs.eleEffSF;
     eleTrigSF = rhs.eleTrigSF;
-    isMuon = rhs.isMuon;
+    sharedMuTrk = rhs.sharedMuTrk;
     isChargeFlip = rhs.isChargeFlip;
     truthCharge = rhs.truthCharge;
     ss3lChargeFlip = rhs.ss3lChargeFlip;

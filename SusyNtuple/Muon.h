@@ -20,6 +20,8 @@ public:
     /** Assignment operator */
     Muon& operator=(const Muon &);
 
+    int idx;                  ///< index of muon in muon collection stored in SusyNt
+
     bool isCaloTagged;        ///< Is calo tagged
     bool isCombined;          ///< Is combined muon, otherwise segment tagged
     std::vector<int> ghostTrack; ///< Indices of SusyNt preJets to which this muon's ID track is ghost associated
@@ -84,6 +86,7 @@ public:
 
     /// Clear vars
     void clear(){
+      idx = 0;
       isCombined = 0;
       isCaloTagged = 0;
       ghostTrack.assign(100, 0);

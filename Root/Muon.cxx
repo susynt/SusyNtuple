@@ -12,6 +12,7 @@ using Susy::Lepton;
 /*--------------------------------------------------------------------------------*/
 Muon::Muon(const Muon &rhs):
   Lepton(rhs),
+  idx(rhs.idx),
   isCaloTagged(rhs.isCaloTagged),
   isCombined(rhs.isCombined),
   ghostTrack(rhs.ghostTrack),
@@ -62,6 +63,7 @@ Muon& Muon::operator=(const Muon &rhs)
 {
   if (this != &rhs) {
     Lepton::operator=(rhs);
+    idx = rhs.idx;
     isCaloTagged = rhs.isCaloTagged;
     isCombined = rhs.isCombined;
     ghostTrack = rhs.ghostTrack;
