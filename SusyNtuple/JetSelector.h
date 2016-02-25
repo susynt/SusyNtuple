@@ -126,6 +126,12 @@ class JetSelector_3Lep : public JetSelector
 {
 };
 
+/// implements jet selection for 4L
+class JetSelector_4Lep : public JetSelector
+{
+  bool isBaseline(const Jet* jet);
+};
+
 /// implements jet selection from ATL-COM-PHYS-2014-221
 class JetSelector_2LepWH : public JetSelector
 {

@@ -68,6 +68,7 @@ void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
     // propagate isolation requirements, needed only for removeNonisolatedLeptons()
     m_overlapTool->setElectronIsolation(electronSelector().signalIsolation());
     m_overlapTool->setMuonIsolation(muonSelector().signalIsolation());
+    m_overlapTool->jetSelector(m_jetSelector);
 
     // set whether to perform SFOS removal on baseline objects
     setSFOSRemoval(a);
@@ -140,6 +141,7 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
 {
     if(a == AnalysisType::Ana_2Lep ||
        a == AnalysisType::Ana_3Lep ||
+       a == AnalysisType::Ana_4Lep ||
        a == AnalysisType::Ana_2LepWH ) { m_doSFOS = true; }
 
     else if( a == AnalysisType::Ana_SS3L )   { m_doSFOS = false; }

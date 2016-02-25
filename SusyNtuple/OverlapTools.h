@@ -90,6 +90,9 @@ public :
     OverlapTools& setElectronIsolation( Isolation eleIso ) { m_electronIsolation = eleIso; return *this; }
     /// muon isolation used in leptonPassesIsolation()
     OverlapTools& setMuonIsolation( Isolation muIso ) { m_muonIsolation = muIso; return *this; }
+    /// jet selector needed for j_X OR
+    JetSelector* jetSelector() const { return m_jetSelector; }
+    OverlapTools& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
 
@@ -107,13 +110,15 @@ public :
 
 
     OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
+    OverlapTools& useOldOverlap(bool v) { m_useOldOverlap = v; return *this; }
     bool verbose() const { return m_verbose; }
 
 protected :
     Isolation m_electronIsolation;
     Isolation m_muonIsolation;
+    JetSelector *m_jetSelector;
     bool m_verbose;
-
+    bool m_useOldOverlap;
 }; // class OverlapTools
 
 //----------------------------------------------------------
@@ -130,6 +135,24 @@ class OverlapTools_2Lep : public OverlapTools
 class OverlapTools_3Lep : public OverlapTools
 {
 };
+
+/// implements OR procedure for 4L
+class OverlapTools_4Lep : public OverlapTools
+{
+public:
+  virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, TauVector& taus, TauVector& LOOSEtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg);
+  virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons); ///< remove electron from muon
+  virtual void t_m_overlap(TauVector& taus, MuonVector& muons, double dR); ///< remove tau from muon
+  virtual void photon_lep_overlap(PhotonVector& photons, ElectronVector& electrons, MuonVector& muons, double dR);
+  virtual void j_m_overlap(MuonVector& muons, JetVector& jets, double dR);
+  virtual void m_j_overlap(MuonVector& muons, JetVector& jets, double dR);
+  virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove jet from electron
+  virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove electron from jet
+  virtual void j_photon_overlap(PhotonVector& photons, JetVector& jets, double dR);
+protected:
+
+};
+
 
 /// implements OR procedure from ATL-COM-PHYS-2014-221
 class OverlapTools_2LepWH : public OverlapTools
