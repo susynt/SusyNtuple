@@ -35,17 +35,15 @@ TauSelector::TauSelector():
 //----------------------------------------------------------
 bool TauSelector::isBaseline(const Tau& tau)
 {
-    // https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#Taus
-    return (std::abs(tau.Eta()) < 2.5 &&
-            tau.nTrack > 0 &&
-            tau.medium);
+    return ( (std::abs(tau.Eta()) < 2.47) &&
+             (tau.Pt() > 20.0) &&
+             (tau.nTrack==1 || tau.nTrack==3) );
 }
 //----------------------------------------------------------
 bool TauSelector::isSignal(const Tau& tau)
 {
     return (isBaseline(tau) &&
-            std::abs(tau.Eta()) < 2.47 &&
-            tau.Pt() > 20);
+            tau.medium);
 }
 //----------------------------------------------------------
 //----------------------------------------------------------
