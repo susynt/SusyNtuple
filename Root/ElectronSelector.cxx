@@ -67,7 +67,7 @@ bool ElectronSelector::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (el->looseLLH && // good for all
+        pass = (el->looseLLHBLayer && // good for all
                 el->passOQBadClusElectron &&
                 el->Pt()  > 10.0 &&
                 std::abs(el->clusEta) < 2.47 );
