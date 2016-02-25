@@ -70,6 +70,12 @@ bool TauSelector_4Lep::isBaseline(const Tau& tau)
 			(tau.nTrack == 1 || tau.nTrack ==3 )&&
 			std::abs(tau.q) == 1 );
 }
+//----------------------------------------------------------
+bool TauSelector_4Lep::isSignal(const Tau& tau)
+{
+    return (isBaseline(tau) &&
+            tau.medium);
+}
 
 //----------------------------------------------------------
 // begin TauSelector_SS3L Ana_SS3L

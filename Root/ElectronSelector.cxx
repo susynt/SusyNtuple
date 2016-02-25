@@ -152,6 +152,22 @@ bool ElectronSelector::outsideCrackRegion(const Electron &el)
 //----------------------------------------------------------
 
 //----------------------------------------------------------
+// begin ElectronSelector_4Lep Ana_4Lep
+//----------------------------------------------------------
+
+bool ElectronSelector_4Lep::isSignal(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (isBaseline(el) &&
+                el->mediumLLH &&
+                el->isoGradientLoose &&
+                passIpCut(*el));
+    }
+    return pass;
+}
+
+//----------------------------------------------------------
 // begin ElectronSelector_2LepWH Ana_2LepWH
 //----------------------------------------------------------
 bool ElectronSelector_2LepWH::passIpCut(const Electron &el)

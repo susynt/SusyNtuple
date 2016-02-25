@@ -74,7 +74,8 @@ class TauSelector_3Lep : public TauSelector
 /// 4Leptons search
 class TauSelector_4Lep : public TauSelector
 {
-	bool isBaseline(const Tau& tau);
+	virtual bool isBaseline(const Tau& tau);
+    virtual bool isSignal(const Tau& tau);
 };
 
 /// implements tau selection for ATL-COM-PHYS-2014-221

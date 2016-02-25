@@ -108,6 +108,7 @@ class ElectronSelector_3Lep : public ElectronSelector
 /// implements electron selection for 4L
 class ElectronSelector_4Lep : public ElectronSelector
 {
+    virtual bool isSignal(const Electron* el);
 };
 
 /// implements electron selection for ATL-COM-PHYS-2014-221
