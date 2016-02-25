@@ -49,7 +49,7 @@ def run_with_chain(tree, n_max_entries=-1):
         pre_muons  = nttool.getPreMuons(ntevent, sys)
         pre_taus   = nttool.getPreTaus(ntevent, sys)
         pre_jets   = nttool.getPreJets(ntevent, sys)
-        nttool.performOverlap(pre_elecs, pre_muons, pre_taus, pre_jets)
+        nttool.performOverlap(pre_elecs, pre_muons, pre_jets, pre_taus)
         nttool.removeSFOSPair(pre_elecs, 12.0)
         nttool.removeSFOSPair(pre_muons, 12.0)
         rmLepsFromIso = False

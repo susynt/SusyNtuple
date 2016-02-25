@@ -46,7 +46,7 @@ public :
        includes several of the member functions below.
     */
     virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                TauVector& taus, JetVector& jets);
+                                JetVector& jets, TauVector& taus, PhotonVector& photons);
 
     /**
         the separate steps of OR removal implemented within "performOverlap(...)"
@@ -144,7 +144,7 @@ public:
     virtual OverlapTools_SS3L& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
     /// different dR values
     virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                TauVector& taus, JetVector& jets);
+                                JetVector& jets, TauVector& taus);
     /// different from OverlapTools::j_e_overlap() : performs BjetOR
     virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR);
 protected:

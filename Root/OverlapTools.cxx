@@ -120,7 +120,7 @@ OverlapTools::OverlapTools() :
 }
 //----------------------------------------------------------
 void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                    TauVector& taus, JetVector& jets)
+                                    JetVector& jets, TauVector& taus, PhotonVector& photons)
 {
 
     // ---------------------------------------------- //
@@ -129,12 +129,22 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
     // default specification as seen in Bkg Forum
     // on January 26 2016 :
     //  https://indico.cern.ch/event/490240/attachments/1225853/1794468/ORsummary.pdf
-    
-    //t_e_overlap(taus, electrons, 0.2);
-    //t_m_overlap(taus, muons, 0.2);
 
+    /* --------------------------------------------
+        Remove overlapping taus and (light) leptons
+
+            Remove taus matched within dRy cone with electrons/muons
+                > default cone size is dRy = 0.2
+    */ 
 
     /*
+    // tau OR not default -- TODO : add toggle to turn this on/off
+
+    t_e_overlap(taus, electrons, 0.2);
+    t_m_overlap(taus, muons, 0.2);
+    */
+
+    /* ---------------------------------------------
         Remove overlapping electrons and muons
 
         step 1:
@@ -156,10 +166,21 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
     e_m_overlap(electrons, muons);
 
 
-    //p_e_overlap(photons, electrons, 0.4);
-    //p_m_overlap(photons, muons, 0.4);
+    /* --------------------------------------------
+        Remove overlapping photons and (light) leptons
+
+            Remove photons matched within dRy with electrons/muons
+                > default cone size is dRy = 0.4
+    */
 
     /*
+    // photon OR not default -- TODO : add toggle to turn this on/off
+
+    p_e_overlap(photons, electrons, 0.4);
+    p_m_overlap(photons, muons, 0.4);
+    */
+
+    /* --------------------------------------------
         Remove overlapping jets and electrons
 
         step 1:
@@ -181,7 +202,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
     j_e_overlap(electrons, jets, 0.2, true);
     e_j_overlap(electrons, jets, 0.4, false, true);
 
-    /*
+    /* --------------------------------------------
         Remove overlapping jets and muons
 
         step 1:
@@ -206,7 +227,23 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
     j_m_overlap(jets, muons, 0.2, true, true);
     m_j_overlap(muons, jets, 0.4, false, true);
 
+    /* --------------------------------------------
+        Remove overlapping taus and jets
+
+            Remove jets matched within dRy cone with remaining taus
+                > default cone size is dRy = 0.2
+    */
+
+    // tau OR not default -- TODO add toggle
     //j_t_overlap(taus, jets, 0.2);
+
+    /* --------------------------------------------
+        Remove overlapping jets and photons
+
+            Remove jets matched within dRy cone with remaining photons
+                > default cone size is dRy = 0.4
+    */
+    // photon OR not default -- TODO add toggle
     //j_p_overlap(jets, photons, 0.4);
 
 }
@@ -687,7 +724,7 @@ OverlapTools_SS3L::OverlapTools_SS3L():
     m_jetSelector(nullptr){}
 //----------------------------------------------------------
 void OverlapTools_SS3L::performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                    TauVector& taus, JetVector& jets)
+                                    JetVector& jets, TauVector& taus)
 {
     j_e_overlap(electrons, jets, 0.2);
     e_j_overlap(electrons, jets, 0.4);
