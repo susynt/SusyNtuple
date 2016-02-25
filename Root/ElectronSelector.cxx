@@ -30,7 +30,7 @@ ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
         break;
     case AnalysisType::Ana_4Lep:
         s = new ElectronSelector_4Lep();
-        s->setSignalId(ElectronId::MediumLH);
+        s->setSignalId(ElectronId::MediumLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_2LepWH:

@@ -36,15 +36,16 @@ TauSelector::TauSelector():
 //----------------------------------------------------------
 bool TauSelector::isBaseline(const Tau& tau)
 {
-    return ( (std::abs(tau.Eta()) < 2.47) &&
-             (tau.Pt() > 20.0) &&
-             (tau.nTrack==1 || tau.nTrack==3) );
+    return ( (std::abs(tau.Eta()) < 2.5) &&
+             (tau.nTrack > 0) &&
+             (tau.medium) );
 }
 //----------------------------------------------------------
 bool TauSelector::isSignal(const Tau& tau)
 {
     return (isBaseline(tau) &&
-            tau.medium);
+            std::abs(tau.Eta()) < 2.47 &&
+            tau.Pt() > 20);
 }
 //----------------------------------------------------------
 //----------------------------------------------------------
@@ -67,8 +68,7 @@ bool TauSelector_4Lep::isBaseline(const Tau& tau)
     return (tau.Pt() > 20.0 					&&
 			std::abs(tau.Eta()) < 2.47			&& 
 			(tau.nTrack == 1 || tau.nTrack ==3 )&&
-			std::abs(tau.q) == 1 				&&
-            passBdtBaseline(tau));
+			std::abs(tau.q) == 1 );
 }
 
 //----------------------------------------------------------

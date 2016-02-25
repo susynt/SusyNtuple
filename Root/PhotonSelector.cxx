@@ -21,6 +21,10 @@ PhotonSelector* PhotonSelector::build(const AnalysisType &a, bool verbose)
         p = new PhotonSelector_3Lep();
         p->setSignalIsolation(Isolation::FixedCutTight);
         break;
+    case AnalysisType::Ana_4Lep :
+        p = new PhotonSelector_4Lep();
+        p->setSignalIsolation(Isolation::FixedCutTight);
+        break;
     case AnalysisType::Ana_2LepWH :
         p = new PhotonSelector_2LepWH();
         p->setSignalIsolation(Isolation::FixedCutTight);

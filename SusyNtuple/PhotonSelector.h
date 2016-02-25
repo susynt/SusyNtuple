@@ -70,6 +70,11 @@ namespace Susy {
     {
     };
 
+    /// Implement photon selector for Ana_4Lep
+    class PhotonSelector_4Lep : public PhotonSelector
+    {
+    };
+
     /// Implement photon selector for Ana_2LepWH
     class PhotonSelector_2LepWH : public PhotonSelector
     {
