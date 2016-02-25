@@ -39,11 +39,6 @@ public:
     // object quality
     bool passOQBadClusElectron; ///< True if not xAOD::EgammaParameters::BADCLUSELECTRON
 
-    //Without d0 cut
-    bool looseLLH_nod0;       ///< looseLLH
-    bool mediumLLH_nod0;      ///< mediumLLH
-    bool tightLLH_nod0;       ///< tightLLH
-
     // efficiency SF per electron LH WP
     std::vector<float> eleEffSF;
     // trigger efficiency SF per electron LH WP
@@ -142,7 +137,6 @@ public:
     void clear(){
       clusE = clusEta = clusPhi = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
-      looseLLH_nod0= mediumLLH_nod0 = tightLLH_nod0 = false;
       passOQBadClusElectron = false;
       sharedMuTrk.assign(100,0);
       isChargeFlip = false;

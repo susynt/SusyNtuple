@@ -13,9 +13,6 @@ enum ElectronId {
     ,LooseLLHBLayer
     ,LooseLLH
     ,VeryLooseLLH
-    ,TightLLH_nod0
-    ,MediumLLH_nod0
-    ,LooseLLH_nod0
     ,ElectronIdInvalid
 };
 

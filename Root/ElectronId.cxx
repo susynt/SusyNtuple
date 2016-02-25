@@ -13,9 +13,6 @@ std::string ElectronId2str(const ElectronId &e)
     case ElectronId::LooseLLHBLayer     : s = "LooseLLHBLayer"   ; break;
     case ElectronId::LooseLLH           : s = "LooseLLH"         ; break;
     case ElectronId::VeryLooseLLH       : s = "VeryLooseLLH"     ; break;
-    case ElectronId::TightLLH_nod0      : s = "TightLLH_nod0"    ; break;
-    case ElectronId::MediumLLH_nod0     : s = "MediumLLH_nod0"   ; break;
-    case ElectronId::LooseLLH_nod0      : s = "LooseLLH_nod0"    ; break;
     case ElectronId::ElectronIdInvalid : s = "ElectronIdInvalid"; break;
     }
     return s;

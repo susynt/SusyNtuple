@@ -21,9 +21,6 @@ Electron::Electron(const Electron &rhs):
   looseLLHBLayer(rhs.looseLLHBLayer),
   mediumLLH(rhs.mediumLLH),
   tightLLH(rhs.tightLLH),
-  looseLLH_nod0(rhs.looseLLH_nod0),
-  mediumLLH_nod0(rhs.mediumLLH_nod0),
-  tightLLH_nod0(rhs.tightLLH_nod0),
   passOQBadClusElectron(rhs.passOQBadClusElectron),
   eleEffSF(rhs.eleEffSF),
   eleTrigSF(rhs.eleTrigSF),
@@ -122,9 +119,6 @@ Electron& Electron::operator=(const Electron &rhs)
     looseLLHBLayer = rhs.looseLLHBLayer;
     mediumLLH = rhs.mediumLLH;
     tightLLH = rhs.tightLLH;
-    looseLLH_nod0 = rhs.looseLLH_nod0;
-    mediumLLH_nod0 = rhs.mediumLLH_nod0;
-    tightLLH_nod0 = rhs.tightLLH_nod0;
     passOQBadClusElectron = rhs.passOQBadClusElectron;
     eleEffSF = rhs.eleEffSF;
     eleTrigSF = rhs.eleTrigSF;
