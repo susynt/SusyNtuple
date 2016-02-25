@@ -162,30 +162,32 @@ class SusyNtAna : public TSelector
     // Object collections
     //
 
-    ElectronVector      m_preElectrons;         ///< selected electrons before OR
-    MuonVector          m_preMuons;             ///< selected muons before OR
-    LeptonVector        m_preLeptons;       
-    JetVector           m_preJets;              ///< selected jets before OR
-    TauVector           m_preTaus;
+    ElectronVector      m_preElectrons;         ///< electrons stored in susyNt (no selection applied) 
+    MuonVector          m_preMuons;             ///< muon stored in susyNt (no selection applied)
+    LeptonVector        m_preLeptons;           
+    JetVector           m_preJets;              ///< jets stored in susyNt (no selection applied)
+    TauVector           m_preTaus;              ///< taus stored in susyNt (no selection applied)
+    PhotonVector        m_prePhotons;           ///< photons stored in susyNt (no selection applied)
 
     ElectronVector      m_baseElectrons;        ///< baseline electrons
     MuonVector          m_baseMuons;            ///< baseline muons
     LeptonVector        m_baseLeptons;          ///< baseline leptons
     TauVector           m_baseTaus;             ///< baseline taus
     JetVector           m_baseJets;             ///< baseline jets
+    PhotonVector        m_basePhotons;          ///< baseline photons
 
     ElectronVector      m_signalElectrons;      ///< signal electrons
     MuonVector          m_signalMuons;          ///< signal muons
     LeptonVector        m_signalLeptons;        ///< signal leptons
     TauVector           m_signalTaus;           ///< signal taus
     JetVector           m_signalJets;           ///< signal jets
-    JetVector           m_signalJets2Lep;       ///< signal jets for 2 Lep
+    PhotonVector        m_signalPhotons;        ///< signal photons
 
     // New organization of tau selections
     TauVector           m_mediumTaus;           ///< taus with medium ID
     TauVector           m_tightTaus;            ///< taus with tight ID
 
-    const Susy::Met*    m_met;                  ///< Met
+    const Susy::Met*         m_met;             ///< Met (TST)
     const Susy::TrackMet*    m_trackMet;        ///< TrackMet
 
     /// Timer

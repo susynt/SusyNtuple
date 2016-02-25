@@ -14,6 +14,7 @@
 #include "SusyNtuple/JetSelector.h"
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/ElectronSelector.h"
+#include "SusyNtuple/PhotonSelector.h"
 #include "SusyNtuple/OverlapTools.h"
 #include "SusyNtuple/TauSelector.h"
 #include "SusyNtuple/TauId.h"
@@ -60,6 +61,7 @@ public:
     MuonSelector&       muonSelector()       { return *m_muonSelector; }
     TauSelector&        tauSelector()        { return *m_tauSelector; }
     JetSelector&        jetSelector()        { return *m_jetSelector; }
+    PhotonSelector&     photonSelector()     { return *m_photonSelector; }
     OverlapTools&       overlapTool()        { return *m_overlapTool; }
     TriggerTools&       triggerTool()        { return m_triggerTool; }
 
@@ -88,12 +90,14 @@ public:
     MuonVector     getPreMuons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     TauVector      getPreTaus(Susy::SusyNtObject* susyNt, SusyNtSys sys);
     JetVector      getPreJets(Susy::SusyNtObject* susyNt, SusyNtSys sys);
+    PhotonVector   getPrePhotons(Susy::SusyNtObject* susyNt, SusyNtSys sys);
 
     /// Apply Baseline selection to the 'Pre' objects
     ElectronVector getBaselineElectrons(const ElectronVector& preElectrons);
     MuonVector     getBaselineMuons(const MuonVector& preMuons);
     TauVector      getBaselineTaus(const TauVector& preTaus);
     JetVector      getBaselineJets(const JetVector& preJets);
+    PhotonVector   getBaselinePhotons(const PhotonVector& prePhotons);
 
     /// Get 'Pre' Objects. These are the objects ase they are in the SusyNt.
     /// The systematic variations are applied here and then propagated to baseline
@@ -102,14 +106,15 @@ public:
                                                    ElectronVector& preElectrons,
                                                    MuonVector& preMuons,
                                                    JetVector& preJets,
-                                                   TauVector& preTaus);
+                                                   TauVector& preTaus,
+                                                   PhotonVector& prePhotons);
 
     /// Get Baseline objects
-    void getBaselineObjects(const ElectronVector& preElectrons, const MuonVector& preMuons, const JetVector& preJets, const TauVector& preTaus,
-                            ElectronVector& baseElectrons, MuonVector& baseMuons, JetVector& baseJets, TauVector& baseTaus);
+    void getBaselineObjects(const ElectronVector& preElectrons, const MuonVector& preMuons, const JetVector& preJets, const TauVector& preTaus, const PhotonVector& prePhotons,
+                            ElectronVector& baseElectrons, MuonVector& baseMuons, JetVector& baseJets, TauVector& baseTaus, PhotonVector& basePhotons);
     /// Get Signal Objects
-    void getSignalObjects(const ElectronVector& baseElectrons, const MuonVector& baseMuons, const JetVector& baseJets, const TauVector& baseTaus,
-                            ElectronVector& signalElectrons, MuonVector& signalMuons, JetVector& signalJets, TauVector& signalTaus, TauId& sigTauId);
+    void getSignalObjects(const ElectronVector& baseElectrons, const MuonVector& baseMuons, const JetVector& baseJets, const TauVector& baseTaus, const PhotonVector& basePhotons,
+                            ElectronVector& signalElectrons, MuonVector& signalMuons, JetVector& signalJets, TauVector& signalTaus, PhotonVector& signalPhotons);
 
 
     /// Signal objects
@@ -118,12 +123,14 @@ public:
     PhotonVector   getSignalPhotons(Susy::SusyNtObject* susyNt);
     TauVector      getSignalTaus(const TauVector& baseTaus);
     JetVector      getSignalJets(const JetVector& baseJets);
+    PhotonVector   getSignalPhotons(const PhotonVector& basePhotons);
 
     /// Check if signal object
     bool isSignal(const Susy::Lepton* l);
     bool isSignal(const Susy::Electron* e);
     bool isSignal(const Susy::Muon* m);
     bool isSignal(const Susy::Tau* tau);
+    bool isSignal(const Susy::Photon* photon);
 
     /// Build lepton vector, sort by pT
     void buildLeptons(LeptonVector &lep, const ElectronVector& ele, const MuonVector& muo);
@@ -191,6 +198,7 @@ public:
     MuonSelector* m_muonSelector;         ///< select muons according to the current analysis settings
     TauSelector*  m_tauSelector;          ///< select taus according to the current analysis settings
     JetSelector* m_jetSelector;           ///< select jets according to the current analysis settings
+    PhotonSelector* m_photonSelector;     ///< select photons according to the current analysis settings
     OverlapTools* m_overlapTool;          ///< tool to perform the analysis' OR procedure
     TriggerTools m_triggerTool;  ///< tool to access the trigger information
 

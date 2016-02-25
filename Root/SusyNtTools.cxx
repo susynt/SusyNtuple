@@ -10,6 +10,8 @@
 #include "SusyNtuple/ElectronSelector.h"
 #include "SusyNtuple/MuonSelector.h"
 #include "SusyNtuple/JetSelector.h"
+#include "SusyNtuple/TauSelector.h"
+#include "SusyNtuple/PhotonSelector.h"
 #include "SusyNtuple/OverlapTools.h"
 #include "SusyNtuple/KinematicTools.h"
 
@@ -27,6 +29,7 @@ SusyNtTools::SusyNtTools() :
     m_muonSelector(nullptr),
     m_tauSelector(nullptr),
     m_jetSelector(nullptr),
+    m_photonSelector(nullptr),
     m_overlapTool(nullptr),
     m_anaType(AnalysisType::kUnknown),
     m_doSFOS(false)
@@ -38,6 +41,8 @@ SusyNtTools::~SusyNtTools()
     if(m_electronSelector) { delete m_electronSelector; m_electronSelector = nullptr; }
     if(m_muonSelector) { delete m_muonSelector; m_muonSelector = nullptr; }
     if(m_jetSelector) { delete m_jetSelector; m_jetSelector = nullptr; }
+    if(m_tauSelector) { delete m_tauSelector; m_tauSelector = nullptr; }
+    if(m_photonSelector) { delete m_photonSelector; m_photonSelector = nullptr; }
     if(m_overlapTool) {delete m_overlapTool; m_overlapTool = nullptr; }
 }
 //----------------------------------------------------------
@@ -48,11 +53,15 @@ void SusyNtTools::setAnaType(AnalysisType a, bool verbose)
 
     if(m_muonSelector) delete m_muonSelector;
     m_muonSelector = MuonSelector::build(a, verbose);
+
     if(m_jetSelector) delete m_jetSelector;
     m_jetSelector = JetSelector::build(a, verbose);
 
     if(m_tauSelector) delete m_tauSelector;
     m_tauSelector = TauSelector::build(a, verbose);
+
+    if(m_photonSelector) delete m_photonSelector;
+    m_photonSelector = PhotonSelector::build(a, verbose);
 
     if(m_overlapTool) delete m_overlapTool;
     m_overlapTool = OverlapTools::build(a, verbose);
@@ -157,30 +166,37 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
     
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getPreObjects(SusyNtObject* susyNt, SusyNtSys sys,
-        ElectronVector& preElectrons, MuonVector& preMuons, JetVector& preJets, TauVector& preTaus)
+        ElectronVector& preElectrons, MuonVector& preMuons, JetVector& preJets, TauVector& preTaus, PhotonVector& prePhotons)
 {
     preElectrons = getPreElectrons(susyNt, sys);
     preMuons     = getPreMuons(susyNt, sys);
     preJets      = getPreJets(susyNt, sys);
     preTaus      = getPreTaus(susyNt, sys);
+    prePhotons   = getPrePhotons(susyNt, sys);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getBaselineObjects(const ElectronVector& preElectrons, const MuonVector& preMuons, const JetVector& preJets, const TauVector& preTaus,
-                                     ElectronVector& baseElectrons, MuonVector& baseMuons, JetVector& baseJets, TauVector& baseTaus)
+                                        const PhotonVector& prePhotons,
+                                     ElectronVector& baseElectrons, MuonVector& baseMuons, JetVector& baseJets, TauVector& baseTaus,
+                                        PhotonVector& basePhotons)
 {
     baseElectrons = getBaselineElectrons(preElectrons);
     baseMuons     = getBaselineMuons(preMuons);
     baseJets      = getBaselineJets(preJets);
     baseTaus      = getBaselineTaus(preTaus);
+    basePhotons   = getBaselinePhotons(prePhotons);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::getSignalObjects(const ElectronVector& baseElectrons, const MuonVector& baseMuons, const JetVector& baseJets, const TauVector& baseTaus,
-                                    ElectronVector& signalElectrons, MuonVector& signalMuons, JetVector& signalJets, TauVector& signalTaus, TauId& sigTauId)
+                                    const PhotonVector& basePhotons,
+                                    ElectronVector& signalElectrons, MuonVector& signalMuons, JetVector& signalJets, TauVector& signalTaus,
+                                    PhotonVector& signalPhotons)
 {
     signalElectrons = getSignalElectrons(baseElectrons);
     signalMuons     = getSignalMuons(baseMuons);
-    signalTaus      = getSignalTaus(baseTaus);
     signalJets      = getSignalJets(baseJets);
+    signalTaus      = getSignalTaus(baseTaus);
+    signalPhotons   = getSignalPhotons(basePhotons);
 }
 /*--------------------------------------------------------------------------------*/
 void SusyNtTools::buildLeptons(LeptonVector& leptons, const ElectronVector& electrons, const MuonVector& muons)
@@ -286,6 +302,21 @@ TauVector SusyNtTools::getBaselineTaus(const TauVector& preTaus)
     return baseTaus;
 }
 /*--------------------------------------------------------------------------------*/
+PhotonVector SusyNtTools::getBaselinePhotons(const PhotonVector& prePhotons)
+{
+    PhotonVector basePhotons;
+    for(uint iPho = 0; iPho < prePhotons.size(); iPho++){
+        Photon* pho = prePhotons.at(iPho);
+        if(photonSelector().isBaseline(pho)){
+            basePhotons.push_back(pho);
+        }
+    } // iPho
+    // sort by pT
+    std::sort(basePhotons.begin(), basePhotons.end(), comparePt);
+
+    return basePhotons;
+}
+/*--------------------------------------------------------------------------------*/
 TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
 {
     TauVector taus;
@@ -298,6 +329,20 @@ TauVector SusyNtTools::getPreTaus(SusyNtObject* susyNt, SusyNtSys sys)
     std::sort(taus.begin(), taus.end(), comparePt);
 
     return taus;
+}
+/*--------------------------------------------------------------------------------*/
+PhotonVector SusyNtTools::getPrePhotons(SusyNtObject* susyNt, SusyNtSys sys)
+{
+    PhotonVector photons;
+    for(uint iPho = 0; iPho < susyNt->pho()->size(); iPho++) {
+        Photon* photon = &susyNt->pho()->at(iPho);
+        photon->setState(sys);
+        photons.push_back(photon);
+    }
+    // sort by pT
+    std::sort(photons.begin(), photons.end(), comparePt);
+
+    return photons;
 }
 /*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getPreJets(SusyNtObject* susyNt, SusyNtSys sys)
@@ -376,6 +421,20 @@ TauVector SusyNtTools::getSignalTaus(const TauVector& baseTaus)
     std::sort(sigTaus.begin(), sigTaus.end(), comparePt);
 
     return sigTaus;
+}
+/*--------------------------------------------------------------------------------*/
+PhotonVector SusyNtTools::getSignalPhotons(const PhotonVector& basePhotons)
+{
+    PhotonVector sigPhotons;
+    for(uint iPho = 0; iPho < basePhotons.size(); iPho++) {
+        Photon* pho = basePhotons[iPho];
+        if(photonSelector().isSignal(pho)) {
+            sigPhotons.push_back(pho);
+        }
+    } // iPho
+    // sort by pT
+    std::sort(sigPhotons.begin(), sigPhotons.end(), comparePt);
+    return sigPhotons;
 }
 /*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getSignalJets(const JetVector& baseJets)

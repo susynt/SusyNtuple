@@ -191,6 +191,7 @@ void SusyNtAna::clearObjects()
   m_preTaus.clear();
   m_preJets.clear();
   m_preLeptons.clear();
+  m_prePhotons.clear();
 
   // baseline objects
   m_baseElectrons.clear();
@@ -198,6 +199,7 @@ void SusyNtAna::clearObjects()
   m_baseTaus.clear();
   m_baseJets.clear();
   m_baseLeptons.clear();
+  m_basePhotons.clear();
 
   // signal objects
   m_signalElectrons.clear();
@@ -205,30 +207,12 @@ void SusyNtAna::clearObjects()
   m_signalTaus.clear();
   m_signalJets.clear();
   m_signalLeptons.clear();
+  m_signalPhotons.clear();
 
   // met
   m_met = NULL;
   m_trackMet = NULL;
 
-  //////////////////
-  // old:
-  //m_baseElectrons.clear();
-  //m_baseMuons.clear();
-  //m_baseTaus.clear();
-  //m_baseLeptons.clear();
-  //m_baseJets.clear();
-  //m_signalElectrons.clear();
-  //m_signalMuons.clear();
-  //m_signalLeptons.clear();
-  //m_signalTaus.clear();
-  //m_signalJets.clear();
-  //m_signalJets2Lep.clear();
-  //m_mediumTaus.clear();
-  //m_tightTaus.clear();
-  //m_met = NULL;
-  //m_trackMet = NULL;
-  // old
-  //////////////////
 }
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
@@ -244,17 +228,17 @@ void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
   // Get the Pre-Selection.
   // Systematic variation applied here.
   ///////////////////////////////////////
-  m_nttools.getPreObjects(&nt, sys, m_preElectrons, m_preMuons, m_preJets, m_preTaus);
+  m_nttools.getPreObjects(&nt, sys, m_preElectrons, m_preMuons, m_preJets, m_preTaus, m_prePhotons);
 
   ///////////////////////////////////////
   // Get the Baseline Objects
   ///////////////////////////////////////
-  m_nttools.getBaselineObjects(m_preElectrons, m_preMuons, m_preJets, m_preTaus,
-                               m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus);
+  m_nttools.getBaselineObjects(m_preElectrons, m_preMuons, m_preJets, m_preTaus, m_prePhotons,
+                               m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus, m_basePhotons);
   ///////////////////////////////////////
   // do OR 
   ///////////////////////////////////////
-  m_nttools.overlapTool().performOverlap(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets);
+  m_nttools.overlapTool().performOverlap(m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus, m_basePhotons);
 
   ///////////////////////////////////////
   // SFOS removal
@@ -266,8 +250,8 @@ void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
   ///////////////////////////////////////
   // Get the Signal Objects
   ///////////////////////////////////////
-  m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus,
-                              m_signalElectrons, m_signalMuons, m_signalJets, m_signalTaus, signalTauID);
+  m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseJets, m_baseTaus, m_basePhotons,
+                              m_signalElectrons, m_signalMuons, m_signalJets, m_signalTaus, m_signalPhotons);
 
   ///////////////////////////////////////
   // Build Lepton vectors
@@ -284,26 +268,6 @@ void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
   //if(sys==NtSys::JVF_UP || sys==NtSys::JVF_DN) metSys = NtSys::NOM;
   m_met = m_nttools.getMet(&nt, metSys);
   m_trackMet = m_nttools.getTrackMet(&nt, metSys);
-
- //////////////////////////////////////////////////////////////////////////////////
- //// old:
- // m_nttools.getBaselineObjects(&nt, m_preElectrons, m_preMuons, m_preJets, 
- //                              m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets, 
- //                              sys, m_selectTaus);
-
- // // Now grab Signal objects
- // // New signal tau prescription, fill both ID levels at once
- // m_nttools.getSignalObjects(m_baseElectrons, m_baseMuons, m_baseTaus, m_baseJets,
- //                            m_signalElectrons, m_signalMuons,
- //                            m_mediumTaus, m_tightTaus,
- //                            m_signalJets, m_signalJets2Lep,
- //                            nt.evt()->nVtx, nt.evt()->isMC, sys);
- // m_signalTaus = m_nttools.m_tauSelector.signalTauId() == TauId::Tight ? m_tightTaus : m_mediumTaus;
- // //m_signalTaus = signalTauID == TauId::Tight ? m_tightTaus : m_mediumTaus;
-
- // // old
- // ////////////////////////////////////////////////////////////////////////////////
-
 
 }
 /*--------------------------------------------------------------------------------*/
