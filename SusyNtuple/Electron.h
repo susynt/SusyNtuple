@@ -51,8 +51,8 @@ public:
 
     std::vector<int> sharedMuTrk; ///< Indices of SusyNt preMuons with which this electron's track is shared
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
-    int truthCharge; ///< as provided by xAOD::TruthHelpers::getTruthParticle
-    int ss3lChargeFlip; ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
+    int truthCharge;          ///< as provided by xAOD::TruthHelpers::getTruthParticle
+    int ss3lChargeFlip;       ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
 
     //AT: This is insane >50!
     float res_all_dn;
@@ -190,7 +190,11 @@ public:
       Lepton::clear();
     }
 
+<<<<<<< HEAD
     ClassDef(Electron, 19);
+=======
+    ClassDef(Electron, 18);
+>>>>>>> origin/changes-for-ss3l
 };
 } //Susy
 #endif
