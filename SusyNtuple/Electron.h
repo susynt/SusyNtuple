@@ -190,11 +190,7 @@ public:
       Lepton::clear();
     }
 
-<<<<<<< HEAD
     ClassDef(Electron, 19);
-=======
-    ClassDef(Electron, 18);
->>>>>>> origin/changes-for-ss3l
 };
 } //Susy
 #endif
