@@ -105,6 +105,11 @@ class ElectronSelector_3Lep : public ElectronSelector
 {
 };
 
+/// implements electron selection for 4L
+class ElectronSelector_4Lep : public ElectronSelector
+{
+};
+
 /// implements electron selection for ATL-COM-PHYS-2014-221
 class ElectronSelector_2LepWH : public ElectronSelector
 {
