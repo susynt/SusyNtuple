@@ -27,6 +27,9 @@ Jet::Jet(const Jet &rhs):
   mv1(rhs.mv1),
   mv2c20(rhs.mv2c20),
   sv1plusip3d(rhs.sv1plusip3d),
+  jvtEff(rhs.jvtEff),
+  jvtEff_up(rhs.jvtEff_up),
+  jvtEff_dn(rhs.jvtEff_dn),
   isBadVeryLoose(rhs.isBadVeryLoose),
   isHotTile(rhs.isHotTile),
   bch_corr_jet(rhs.bch_corr_jet),
@@ -70,6 +73,10 @@ Jet& Jet::operator=(const Jet &rhs)
     sumTrkPt = rhs.sumTrkPt;
     mv1 = rhs.mv1;
     mv2c20 = rhs.mv2c20;
+    sv1plusip3d = rhs.sv1plusip3d;
+    jvtEff = rhs.jvtEff;
+    jvtEff_up = rhs.jvtEff_up;
+    jvtEff_dn = rhs.jvtEff_dn;
     isBadVeryLoose = rhs.isBadVeryLoose;
     isHotTile = rhs.isHotTile;
     bch_corr_jet = rhs.bch_corr_jet;

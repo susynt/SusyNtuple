@@ -35,6 +35,11 @@ public:
     float mv2c20;             ///< MV2c20 btag weight
     float sv1plusip3d;        ///< SV1plusIP3D btag weight
 
+    // jvt efficiency SF
+    float jvtEff;             ///< JvtEfficiency nominal SF
+    float jvtEff_up;          ///< JvtEfficiencyUp
+    float jvtEff_dn;          ///< JvtEfficiencyDn
+
     // Flags/variables for cleaning
     bool isBadVeryLoose;      ///< bad jet flag computed with SUSYTools
     bool isHotTile;           ///< tile hot spot flag computed with SUSYTools
@@ -84,6 +89,8 @@ public:
       detEta = 0;
       emfrac = 0;
       mv1 = sv1plusip3d = mv2c20 = 0;
+      jvtEff = 1.0;
+      jvtEff_up = jvtEff_dn = 0;
       isBadVeryLoose = isHotTile = false;
       bch_corr_jet = bch_corr_cell = 0;
       isBadMediumBCH = isBadMediumBCH_up = isBadMediumBCH_dn = isBadTightBCH = false;

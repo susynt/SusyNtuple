@@ -152,6 +152,8 @@ enum SusyNtSys {
   ,JET_GroupedNP_2_DN
   ,JET_GroupedNP_3_UP
   ,JET_GroupedNP_3_DN
+  ,JET_JVTEff_UP
+  ,JET_JVTEff_DN
   /*
   ,JET_BJES_Response_DN
   ,JET_BJES_Response_UP
@@ -407,6 +409,8 @@ const std::string SusyNtSysNames[] = {
     ,"JET_GroupedNP_2_DN"
     ,"JET_GroupedNP_3_UP"
     ,"JET_GroupedNP_3_DN"
+    ,"JET_JVTEff_UP"
+    ,"JET_JVTEff_DN"
     /*
     ,"JET_BJES_Response_DN"
     ,"JET_BJES_Response_UP"
