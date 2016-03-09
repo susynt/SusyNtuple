@@ -141,6 +141,8 @@ class OverlapTools_4Lep : public OverlapTools
 {
 public:
   virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, 
+			      JetVector& jets, TauVector& taus, PhotonVector& photons);
+  virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, 
 			      JetVector& jets, TauVector& taus, TauVector& LOOSEtaus, PhotonVector& photons, bool m_TauCtrlReg);
 protected:
 

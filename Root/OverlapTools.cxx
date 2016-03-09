@@ -141,12 +141,12 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                 > default cone size is dRy = 0.2
     */
 
-    
+    /*
     // tau OR not default -- TODO : add toggle to turn this on/off
 
     t_e_overlap(taus, electrons, 0.2);
     t_m_overlap(taus, muons, 0.2);
-    
+    */
 
     /* ---------------------------------------------
         Remove overlapping electrons and muons
@@ -177,12 +177,12 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                 > default cone size is dRy = 0.4
     */
 
-    
+    /*
     // photon OR not default -- TODO : add toggle to turn this on/off
 
     p_e_overlap(photons, electrons, 0.4);
     p_m_overlap(photons, muons, 0.4);
-    
+    */
 
     /* --------------------------------------------
         Remove overlapping jets and electrons
@@ -248,7 +248,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                 > default cone size is dRy = 0.4
     */
     // photon OR not default -- TODO add toggle
-    j_p_overlap(jets, photons, 0.4);
+    //j_p_overlap(jets, photons, 0.4);
 
 }
 //----------------------------------------------------------
@@ -723,6 +723,14 @@ void OverlapTools::j_p_overlap(JetVector& jets, PhotonVector& photons, double dR
 //----------------------------------------------------------
 // begin OverlapTools_4Lep Ana_4Lep
 //----------------------------------------------------------
+//----------------------------------------------------------
+void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
+                                    JetVector& jets, TauVector& taus, PhotonVector& photons)
+{ 
+  TauVector loosetaus;
+  performOverlap(electrons, muons, jets, taus, loosetaus, photons, false);
+}
+
 void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
 				       JetVector& jets, TauVector& taus,TauVector& LOOSEtaus, PhotonVector& photons, bool m_TauCtrlReg)
 {
