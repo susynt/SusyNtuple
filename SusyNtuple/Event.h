@@ -48,6 +48,9 @@ public:
     ///< (See Serhan's msg http://goo.gl/ucwl9)
     int susySpartId1;         ///< SUSY sparticle 1 pdg ID
     int susySpartId2;         ///< SUSY sparticle 2 pdg ID
+    float susy3BodyLeftPol;   ///< Left polarized stop
+    float susy3BodyRightPol;  ///< Right polarized stop (70%)
+    float susy3BodyOnlyMass;  ///< No new angle, test for just mass - ASM-2016-04-25
 
     float mllMcTruth;         ///< mll from mcTruth (filled for Z->ll overlapping samples)
     bool passMllForAlpgen;    ///< computed from value above; see MultiLep/TruthTools for details
@@ -114,6 +117,7 @@ public:
       hDecay = -1;
       eventWithSusyProp = false;
       susySpartId1 = susySpartId2 = 0;
+      susy3BodyLeftPol = susy3BodyRightPol = susy3BodyOnlyMass = 0;
       passMllForAlpgen = true;
       //memset(evtFlag,0,sizeof(evtFlag));
       memset(cutFlags,0,sizeof(cutFlags));
@@ -123,7 +127,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 31);
+    ClassDef(Event, 32);
   };
 } // Susy
 #endif
