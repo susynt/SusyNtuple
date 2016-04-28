@@ -14,6 +14,7 @@ Muon::Muon(const Muon &rhs):
   Lepton(rhs),
   idx(rhs.idx),
   isCaloTagged(rhs.isCaloTagged),
+  isSiForward(rhs.isSiForward),
   isCombined(rhs.isCombined),
   ghostTrack(rhs.ghostTrack),
   idTrackPt(rhs.idTrackPt),
@@ -65,6 +66,7 @@ Muon& Muon::operator=(const Muon &rhs)
     Lepton::operator=(rhs);
     idx = rhs.idx;
     isCaloTagged = rhs.isCaloTagged;
+    isSiForward = rhs.isSiForward;
     isCombined = rhs.isCombined;
     ghostTrack = rhs.ghostTrack;
     idTrackPt = rhs.idTrackPt;
