@@ -316,7 +316,7 @@ bool OverlapTools::isBJetOR(const Jet* jet)
     // TODO -- implement this from within JetSelector ?
     return ((jet->Pt()        > 20.0 /*GeV*/) &&
             (fabs(jet->Eta()) < 2.5         ) &&
-            (jet->mv2c20      > JetSelector::mv2c20_80efficiency()) &&
+            (jet->mv2c20      > JetSelector::mv2c20_85efficiency()) &&
             (JetSelector::passJvt(jet)));
 }
 //----------------------------------------------------------

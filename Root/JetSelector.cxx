@@ -106,9 +106,9 @@ bool JetSelector::passJvt(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = ((jet->jvt         >  0.64) ||
+        pass = ((jet->jvt         >  0.59) ||
                 (fabs(jet->Eta()) >  2.4)  ||
-                (jet->Pt()         > 50.0) );
+                (jet->Pt()         > 60.0) );
     }
     return pass;
 }
@@ -198,7 +198,7 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
         pass = (jet->Pt()        > 20.0    &&
                 fabs(jet->Eta()) <  2.5    &&
                 passJvt(jet)               &&
-                jet->mv2c20      > mv2c20_80efficiency());
+                jet->mv2c20      > mv2c20_85efficiency());
     }
     return pass;
 }

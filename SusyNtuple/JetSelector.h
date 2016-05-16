@@ -94,16 +94,19 @@ public:
        See
        https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c20_tagger_AntiKt4EMTopoJets
     */
-    static float mv2c20_70efficiency() { return -0.0436; } ///< threshold for 70% efficiency
-    static float mv2c20_77efficiency() { return -0.4434; } ///< threshold for 77% efficiency
-    static float mv2c20_80efficiency() { return -0.5911; } ///< threshold for 80% efficiency
+    //static float mv2c20_70efficiency() { return -0.0436; } ///< threshold for 70% efficiency
+    //static float mv2c20_77efficiency() { return -0.4434; } ///< threshold for 77% efficiency
+    //static float mv2c20_80efficiency() { return -0.5911; } ///< threshold for 80% efficiency
+    static float mv2c20_70efficiency() { return 0.7110; } ///< threshold for 70% efficiency
+    static float mv2c20_77efficiency() { return 0.4803; } ///< threshold for 77% efficiency
+    static float mv2c20_85efficiency() { return 0.0206; } ///< threshold for 80% efficiency (the # 0.0206 is actually the 85% WP)
 
     /// b-tag operating point used for the overlap removal.
     /**
        See
        https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#b_tagging
      */
-    static float overlapRemovalBtagEffWP() { return mv2c20_80efficiency(); }
+    static float overlapRemovalBtagEffWP() { return mv2c20_85efficiency(); }
     //@}
 private:
     NtSys::SusyNtSys m_systematic; ///< current syst variation
