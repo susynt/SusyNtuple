@@ -90,16 +90,22 @@ public:
 
     //@{
     /**
-       b-tag operating points for AntiKt4EMTopoJets with MV2c20.
-       See
-       https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c20_tagger_AntiKt4EMTopoJets
+       b-tag operating points for AntiKt4EMTopoJets with MV2c20
+       see:
+       https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c20_tagger
     */
-    //static float mv2c20_70efficiency() { return -0.0436; } ///< threshold for 70% efficiency
-    //static float mv2c20_77efficiency() { return -0.4434; } ///< threshold for 77% efficiency
-    //static float mv2c20_80efficiency() { return -0.5911; } ///< threshold for 80% efficiency
     static float mv2c20_70efficiency() { return 0.7110; } ///< threshold for 70% efficiency
     static float mv2c20_77efficiency() { return 0.4803; } ///< threshold for 77% efficiency
-    static float mv2c20_85efficiency() { return 0.0206; } ///< threshold for 80% efficiency (the # 0.0206 is actually the 85% WP)
+    static float mv2c20_85efficiency() { return 0.0206; } ///< threshold for 85% efficiency
+
+    /**
+        b-tag operating points with MV2c10 as of May 22 2016
+        see:
+        https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c10_tagger_added_on_11th_May
+    */
+    static float mv2c10_70efficiency() { return 0.8244; } ///< threshold for 70% b-tag efficiency
+    static float mv2c10_77efficiency() { return 0.6459; } ///< threshold for 77% b-tag efficiency
+    static float mv2c10_85efficiency() { return 0.1758; } ///< threshold for 85% b-tag efficiency
 
     /// b-tag operating point used for the overlap removal.
     /**
