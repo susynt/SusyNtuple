@@ -32,7 +32,8 @@ public:
     bool bjet;                ///< Is b-jet a la SUSYTools (70% w.p.)
     float effscalefact;       ///< B-tag SF a la SUSYTools (70% w.p.)  
     float mv1;                ///< MV1 btag weight
-    float mv2c20;             ///< MV2c20 btag weight
+    float mv2c20;             ///< MV2c20 btag discriminant
+    float mv2c10;             ///< MV2c10 btag discriminant
     float sv1plusip3d;        ///< SV1plusIP3D btag weight
 
     // jvt efficiency SF
@@ -88,7 +89,7 @@ public:
       effscalefact = 0.;
       detEta = 0;
       emfrac = 0;
-      mv1 = sv1plusip3d = mv2c20 = 0;
+      mv1 = sv1plusip3d = mv2c20 = mv2c10 = 0;
       jvtEff = 1.0;
       jvtEff_up = jvtEff_dn = 0;
       isBadVeryLoose = isHotTile = false;
@@ -114,7 +115,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 20);
+    ClassDef(Jet, 21);
 };
 } // Susy
 #endif

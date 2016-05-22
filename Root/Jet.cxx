@@ -26,6 +26,7 @@ Jet::Jet(const Jet &rhs):
   effscalefact(rhs.effscalefact),
   mv1(rhs.mv1),
   mv2c20(rhs.mv2c20),
+  mv2c10(rhs.mv2c10),
   sv1plusip3d(rhs.sv1plusip3d),
   jvtEff(rhs.jvtEff),
   jvtEff_up(rhs.jvtEff_up),
@@ -73,6 +74,7 @@ Jet& Jet::operator=(const Jet &rhs)
     sumTrkPt = rhs.sumTrkPt;
     mv1 = rhs.mv1;
     mv2c20 = rhs.mv2c20;
+    mv2c10 = rhs.mv2c10;
     sv1plusip3d = rhs.sv1plusip3d;
     jvtEff = rhs.jvtEff;
     jvtEff_up = rhs.jvtEff_up;
