@@ -68,6 +68,9 @@ enum SusyNtSys {
   ,EG_SCALE_ZEESYST_DN
   ,EG_SCALE_ZEESYST_UP
   */
+
+ // dantrim May23 2016 changing these names
+ /*
   ,EL_EFF_ID_TotalCorrUncertainty_UP  // weight
   ,EL_EFF_ID_TotalCorrUncertainty_DN  // weight
   ,EL_EFF_Iso_TotalCorrUncertainty_UP // weight 
@@ -76,6 +79,15 @@ enum SusyNtSys {
   ,EL_EFF_Reco_TotalCorrUncertainty_DN  // weight
   ,EL_EFF_Trigger_TotalCorrUncertainty_UP
   ,EL_EFF_Trigger_TotalCorrUncertainty_DN
+ */
+  ,EL_EFF_ID_TOTAL_Uncorr_DN
+  ,EL_EFF_ID_TOTAL_Uncorr_UP
+  ,EL_EFF_Iso_TOTAL_Uncorr_DN
+  ,EL_EFF_Iso_TOTAL_Uncorr_UP
+  ,EL_EFF_Reco_TOTAL_Uncorr_DN
+  ,EL_EFF_Reco_TOTAL_Uncorr_UP
+  ,EL_EFF_Trigger_TOTAL_Uncorr_DN
+  ,EL_EFF_Trigger_TOTAL_Uncorr_UP
   /*
   ,EL_SCALE_MOMENTUM_DN
   ,EL_SCALE_MOMENTUM_UP
@@ -326,14 +338,22 @@ const std::string SusyNtSysNames[] = {
     ,"EG_SCALE_ZEESYST_DN"
     ,"EG_SCALE_ZEESYST_UP"
     */
-    ,"EL_EFF_ID_TotalCorrUncertainty_UP"
-    ,"EL_EFF_ID_TotalCorrUncertainty_DN"
-    ,"EL_EFF_Iso_TotalCorrUncertainty_UP"
-    ,"EL_EFF_Iso_TotalCorrUncertainty_DN"
-    ,"EL_EFF_Reco_TotalCorrUncertainty_UP"
-    ,"EL_EFF_Reco_TotalCorrUncertainty_DN"
-    ,"EL_EFF_Trigger_TotalCorrUncertainty_UP"
-    ,"EL_EFF_Trigger_TotalCorrUncertainty_DN"
+    ,"EL_EFF_ID_TOTAL_Uncorr_DN"
+    ,"EL_EFF_ID_TOTAL_Uncorr_UP"
+    ,"EL_EFF_Iso_TOTAL_Uncorr_DN"
+    ,"EL_EFF_Iso_TOTAL_Uncorr_UP"
+    ,"EL_EFF_Reco_TOTAL_Uncorr_DN"
+    ,"EL_EFF_Reco_TOTAL_Uncorr_UP"
+    ,"EL_EFF_Trigger_TOTAL_Uncorr_DN"
+    ,"EL_EFF_Trigger_TOTAL_Uncorr_UP"
+  //  ,"EL_EFF_ID_TotalCorrUncertainty_UP"
+  //  ,"EL_EFF_ID_TotalCorrUncertainty_DN"
+  //  ,"EL_EFF_Iso_TotalCorrUncertainty_UP"
+  //  ,"EL_EFF_Iso_TotalCorrUncertainty_DN"
+  //  ,"EL_EFF_Reco_TotalCorrUncertainty_UP"
+  //  ,"EL_EFF_Reco_TotalCorrUncertainty_DN"
+  //  ,"EL_EFF_Trigger_TotalCorrUncertainty_UP"
+  //  ,"EL_EFF_Trigger_TotalCorrUncertainty_DN"
     /*
     ,"EL_SCALE_MOMENTUM_DN"
     ,"EL_SCALE_MOMENTUM_UP"

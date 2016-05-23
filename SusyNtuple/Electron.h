@@ -107,18 +107,14 @@ public:
     float scale_ZeeSys_dn;
     float scale_ZeeSys_up;
 */
-  //  float eff_corr_dn;
-  //  float eff_corr_up;
-  //  float eff_uncorr_dn;
-  //  float eff_uncorr_up;
-    std::vector<float> errEffSF_id_corr_up;     // EL_EFF_ID_TotalCorrUncertainty_UP
-    std::vector<float> errEffSF_id_corr_dn;     // EL_EFF_ID_TotalCorrUncertainty_DN
-    std::vector<float> errEffSF_reco_corr_up;   // EL_EFF_Reco_TotalCorrUncertainty_UP
-    std::vector<float> errEffSF_reco_corr_dn;   // EL_EFF_Reco_TotalCorrUncertainty_DN
-    std::vector<float> errEffSF_iso_corr_up;    // EL_EFF_Iso_TotalCorrUncertainty_UP
-    std::vector<float> errEffSF_iso_corr_dn;    // EL_EFF_Iso_TotalCorrUncertainty_DN
-    std::vector<float> errEffSF_trig_corr_up;   // EL_EFF_Trigger_TotalCorrUncertainty_UP
-    std::vector<float> errEffSF_trig_corr_dn;   // EL_EFF_Trigger_TotalCorrUncertainty_DN
+    std::vector<float> errEffSF_id_up;     // EL_EFF_ID_TOTAL_Uncorr_UP 
+    std::vector<float> errEffSF_id_dn;     // EL_EFF_ID_TOTAL_Uncorr_DN 
+    std::vector<float> errEffSF_reco_up;   // EL_EFF_Reco_TOTAL_Uncorr_UP
+    std::vector<float> errEffSF_reco_dn;   // EL_EFF_Reco_TOTAL_Uncorr_DN
+    std::vector<float> errEffSF_iso_up;    // EL_EFF_Iso_TOTAL_Uncorr_UP
+    std::vector<float> errEffSF_iso_dn;    // EL_EFF_Iso_TOTAL_Uncorr_DN
+    std::vector<float> errEffSF_trig_up;   // EL_EFF_Trigger_TOTAL_Uncorr_UP
+    std::vector<float> errEffSF_trig_dn;   // EL_EFF_Trigger_TOTAL_Uncorr_DN
 /*
     float scale_mom_dn;
     float scale_mom_up;
@@ -168,23 +164,21 @@ public:
       scale_ZeeStat_dn=scale_ZeeStat_up=
       scale_ZeeSys_dn=scale_ZeeSys_up=scale_mom_dn=scale_mom_up=0;
 */
-     // eff_corr_dn = eff_corr_up =0;
-     // eff_uncorr_dn = eff_uncorr_up =0;
      eleEffSF.assign(ElectronId::ElectronIdInvalid, 1);
      eleTrigSF.assign(ElectronId::ElectronIdInvalid, 1);
-     errEffSF_id_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_id_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_reco_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_reco_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_iso_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_iso_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_trig_corr_up.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_trig_corr_dn.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_id_up.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_id_dn.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_reco_up.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_reco_dn.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_iso_up.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_iso_dn.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_up.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_dn.assign(ElectronId::ElectronIdInvalid, 0);
 
       Lepton::clear();
     }
 
-    ClassDef(Electron, 19);
+    ClassDef(Electron, 20);
 };
 } //Susy
 #endif
