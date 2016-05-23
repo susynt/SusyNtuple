@@ -55,6 +55,10 @@ public:
     float mllMcTruth;         ///< mll from mcTruth (filled for Z->ll overlapping samples)
     bool passMllForAlpgen;    ///< computed from value above; see MultiLep/TruthTools for details
 
+    // sherpa 2.2 V+jets reweighting
+    // see: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/CentralMC15ProductionList#NEW_Sherpa_v2_2_V_jets_NJet_rewe
+    float sherpa22VjetsWeight;
+
     //unsigned int trigFlags; ///< Event level trigger bits
     long long trigFlags;      ///< Event level trigger bits
 
@@ -119,6 +123,7 @@ public:
       susySpartId1 = susySpartId2 = 0;
       susy3BodyLeftPol = susy3BodyRightPol = susy3BodyOnlyMass = 0;
       passMllForAlpgen = true;
+      sherpa22VjetsWeight = 1;
       //memset(evtFlag,0,sizeof(evtFlag));
       memset(cutFlags,0,sizeof(cutFlags));
       wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
@@ -127,7 +132,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 32);
+    ClassDef(Event, 33);
   };
 } // Susy
 #endif
