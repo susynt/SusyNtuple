@@ -141,7 +141,8 @@ typedef std::map<SumwMapKey, float> SumwMap;
     void setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
 
     /// MC Weight includes generator, xsec, lumi, and pileup weights
-    float getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3, WeightSys sys=Sys_NOM);
+    float getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3, WeightSys sys=Sys_NOM,
+                                                    bool includePileup=true);
     bool sumwmapHasKey(SumwMapKey k);
 
     /// Get sumw for this event

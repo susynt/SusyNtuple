@@ -168,7 +168,8 @@ void MCWeighter::dumpXsecDb() const
         cout<<process2str(it->second)<<endl;
 }
 /*--------------------------------------------------------------------------------*/
-float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys)
+float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys,
+                                            bool includePileup)
 {
     float weight = 1.0;
     size_t maxNwarnings = 100;
@@ -178,6 +179,7 @@ float MCWeighter::getMCWeight(const Event* evt, float lumi, WeightSys sys)
         //double sumw = evt->sumOfEventWeights; // now stored using CutBookKeeper
         float xsec = getXsecTimesEff(evt, sys);
         float pupw = getPileupWeight(evt, sys);
+        if(!includePileup) pupw = 1.0;
         if (sumw) {
             weight = evt->w * pupw * xsec * lumi / sumw;
         }
