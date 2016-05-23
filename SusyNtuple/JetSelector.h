@@ -112,7 +112,7 @@ public:
        See
        https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SusyObjectDefinitionsr2013TeV#b_tagging
      */
-    static float overlapRemovalBtagEffWP() { return mv2c20_85efficiency(); }
+    static float overlapRemovalBtagEffWP() { return mv2c10_85efficiency(); }
     //@}
 private:
     NtSys::SusyNtSys m_systematic; ///< current syst variation

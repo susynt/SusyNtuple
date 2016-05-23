@@ -502,7 +502,7 @@ bool Susy2LepCutflow::passbJetVeto(const JetVector& jets)
   bool hasbjet = false;
   for(uint i=0; i<jets.size(); ++i){
     const Jet* jet = jets.at(i);
-    if( jet->mv2c20 > JetSelector::mv2c20_77efficiency())  // this is a dummy BJet tag
+    if( jet->mv2c10 > JetSelector::mv2c10_77efficiency())  // this is a dummy BJet tag
         hasbjet = true;
     break;
   }

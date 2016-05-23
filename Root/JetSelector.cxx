@@ -59,7 +59,7 @@ bool JetSelector::isB(const Jet* jet)
 {
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
-            (jet->mv2c20      > mv2c20_77efficiency()) &&
+            (jet->mv2c10      > mv2c10_77efficiency()) &&
             (passJvt(jet)));
 }
 //----------------------------------------------------------
@@ -186,7 +186,7 @@ bool JetSelector_SS3L::isB(const Jet* jet)
         pass = (jet->Pt()        > 20.0    &&
                 fabs(jet->Eta()) <  2.5    &&
                 passJvt(jet)               &&
-                jet->mv2c20      > mv2c20_70efficiency());
+                jet->mv2c10      > mv2c10_70efficiency());
     }
     return pass;
 }
@@ -198,7 +198,7 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
         pass = (jet->Pt()        > 20.0    &&
                 fabs(jet->Eta()) <  2.5    &&
                 passJvt(jet)               &&
-                jet->mv2c20      > mv2c20_85efficiency());
+                jet->mv2c10      > mv2c10_85efficiency());
     }
     return pass;
 }

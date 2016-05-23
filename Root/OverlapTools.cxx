@@ -34,7 +34,7 @@ string str(const Jet* j)
        <<std::setprecision(3)<<j->Eta()<<", "
        <<std::setprecision(3)<<j->Phi()<<", "
        <<"nTk "<<j->nTracks<<", "
-       <<"mv2c20 "<<j->mv2c20
+       <<"mv2c10 "<<j->mv2c10
        <<")";
     return oss.str();
 }
@@ -316,7 +316,7 @@ bool OverlapTools::isBJetOR(const Jet* jet)
     // TODO -- implement this from within JetSelector ?
     return ((jet->Pt()        > 20.0 /*GeV*/) &&
             (fabs(jet->Eta()) < 2.5         ) &&
-            (jet->mv2c20      > JetSelector::mv2c20_85efficiency()) &&
+            (jet->mv2c10      > JetSelector::mv2c10_85efficiency()) &&
             (JetSelector::passJvt(jet)));
 }
 //----------------------------------------------------------
