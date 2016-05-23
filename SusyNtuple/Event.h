@@ -55,7 +55,7 @@ public:
     float mllMcTruth;         ///< mll from mcTruth (filled for Z->ll overlapping samples)
     bool passMllForAlpgen;    ///< computed from value above; see MultiLep/TruthTools for details
 
-    // sherpa 2.2 V+jets reweighting
+    //  sherpa 2.2 V+jets reweighting
     // see: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/CentralMC15ProductionList#NEW_Sherpa_v2_2_V_jets_NJet_rewe
     float sherpa22VjetsWeight;
 
