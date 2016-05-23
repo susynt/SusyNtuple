@@ -80,6 +80,12 @@ public:
     bool passJetCleaning(const JetVector* preJets) { return SusyNtTools::passJetCleaning(*preJets); }
     bool passJetCleaning(const JetVector& preJets);
 
+    // TST MET bug cleaning (temporary fix)
+    // see:
+    // https://indico.cern.ch/event/528073/contributions/2161457/attachments/1272110/1885539/ETmiss_intro_20160512.pdf
+    // https://indico.cern.ch/event/524019/
+    bool passMetCleaning(const Met* met);
+
     //
     // Methods to grab objects based on systematic shift desired
     //

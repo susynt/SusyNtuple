@@ -134,6 +134,19 @@ bool SusyNtTools::passJetCleaning(const JetVector& baseJets)
     } // ijet
     return pass_jetCleaning;
 }
+bool SusyNtTools::passMetCleaning(const Met* in)
+{
+    float met = in->Et;
+    float met_phi = in->phi;
+    float tst_met = in->softTerm_et;
+    float tst_met_phi = in->softTerm_phi;
+
+    if(tst_met < 100) return true;
+    if(met>0.)
+        if( (tst_met/met) < 0.4 ) return true;
+    if(fabs(TVector2::Phi_mpi_pi( tst_met_phi - met_phi) ) > 0.8) return true;
+    return false;
+}
 /*--------------------------------------------------------------------------------*/
 // Full object selection methods
 /*--------------------------------------------------------------------------------*/
