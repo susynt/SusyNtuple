@@ -137,9 +137,12 @@ void Muon::print() const
   cout.precision(2);
   cout << fixed << "Mu : q " << setw(2) << q << " pt " << setw(6) << Pt() << " eta " << setw(5) << Eta()
        << " phi " << setw(5) << Phi()
-       << " calo " << isCaloTagged
-       << " cb " << isCombined
-       << " type " << mcType << " origin " << mcOrigin 
+       << " loose " << loose
+       << " medium " << medium
+       << " isoGradientLoose " << isoGradientLoose
+       << " isCosmic " << isCosmic
+       << " isBadMuon " << isBadMuon
+       //<< " type " << mcType << " origin " << mcOrigin 
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);

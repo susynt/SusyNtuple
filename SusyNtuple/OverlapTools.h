@@ -180,7 +180,6 @@ class OverlapTools_Stop2L : public OverlapTools
 };
 
 
-
 }
 
 

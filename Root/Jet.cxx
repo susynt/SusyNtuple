@@ -322,7 +322,7 @@ void Jet::print() const
        << " phi " << setw(5) << Phi()
        << " jvf " << setw(4) << jvf
        << " jvt " << setw(4) << jvt
-       << " mv1 " << setw(5) << mv1
+       << " mv2c10 " << setw(5) << mv2c10 
        // No way do we want to see this every time we print
        //<< " jer " << jer << " jes_up " << jes_up << " jes_dn " << jes_dn
        << endl;

@@ -243,9 +243,9 @@ void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
   ///////////////////////////////////////
   // SFOS removal
   ///////////////////////////////////////
-  if(m_nttools.doSFOSRemoval()){
-    m_nttools.removeSFOSPairs(m_baseElectrons, m_baseMuons);
-  }
+  //if(m_nttools.doSFOSRemoval()){
+  //  m_nttools.removeSFOSPairs(m_baseElectrons, m_baseMuons);
+  //}
 
   ///////////////////////////////////////
   // Get the Signal Objects

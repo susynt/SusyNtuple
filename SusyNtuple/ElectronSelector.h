@@ -98,6 +98,9 @@ protected :
 /// implements electron selection for ATL-COM-PHYS-2013-911
 class ElectronSelector_2Lep : public ElectronSelector
 {
+    virtual bool isBaseline(const Electron* el);
+    virtual bool passIpCut(const Electron  &el);
+    virtual bool isSignal(const Electron* el);
 };
 
 /// implements electron selection for ATL-COM-PHYS-2013-888

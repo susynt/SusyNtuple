@@ -118,7 +118,7 @@ OverlapTools* OverlapTools::build(const AnalysisType &a, bool verbose)
 OverlapTools::OverlapTools() :
     m_electronIsolation(Isolation::IsolationInvalid),
     m_muonIsolation(Isolation::IsolationInvalid),
-    m_verbose(false),
+    m_verbose(true),
     m_useOldOverlap(false)
 {
 }
@@ -229,7 +229,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                              being compared to is flagged as a pileup jet
     */
     j_m_overlap(jets, muons, 0.2, true, true);
-    m_j_overlap(muons, jets, 0.4, false, true);
+    m_j_overlap(muons, jets, 0.4, true  /*false*/, true);
 
     /* --------------------------------------------
         Remove overlapping taus and jets
