@@ -118,7 +118,7 @@ OverlapTools* OverlapTools::build(const AnalysisType &a, bool verbose)
 OverlapTools::OverlapTools() :
     m_electronIsolation(Isolation::IsolationInvalid),
     m_muonIsolation(Isolation::IsolationInvalid),
-    m_verbose(true),
+    m_verbose(false),
     m_useOldOverlap(false)
 {
 }
