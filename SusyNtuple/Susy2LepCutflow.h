@@ -99,6 +99,7 @@ class Susy2LepCutflow : public SusyNtAna
     uint                n_pass_LAr;
     uint                n_pass_tileErr;
     uint                n_pass_ttc;
+    uint                n_pass_sct;
     uint                n_pass_BadJet;
     uint                n_pass_BadMuon;
     uint                n_pass_goodVtx;

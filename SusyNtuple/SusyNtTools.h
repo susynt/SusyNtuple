@@ -71,6 +71,7 @@ public:
     bool passGRL(int flags);
     bool passLarErr(int flags);
     bool passTileErr(int flags);
+    bool passSCTErr(int flags);
     bool passTTC(int flags);
     bool passGoodVtx(int flags);
     bool passBadMuon(const MuonVector* preMuons) { return SusyNtTools::passBadMuon(*preMuons); }

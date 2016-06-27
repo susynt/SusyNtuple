@@ -94,6 +94,10 @@ bool SusyNtTools::passTileErr(int flags)
 {
     return (flags & ECut_TileErr);
 }
+bool SusyNtTools::passSCTErr(int flags)
+{
+    return (flags & ECut_SCTErr);
+}
 bool SusyNtTools::passTTC(int flags)
 {
     return (flags & ECut_TTC);

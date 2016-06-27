@@ -36,6 +36,7 @@ Susy3LepCutflow::Susy3LepCutflow() :
   n_pass_lar      = 0;
   n_pass_tile     = 0;
   n_pass_ttc      = 0;
+  n_pass_sct      = 0;
   n_pass_badMuon  = 0;
   n_pass_badJet   = 0;
   n_pass_goodVtx  = 0;
@@ -214,6 +215,8 @@ bool Susy3LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons,
         n_pass_tile++;
     if( !nttools().passTTC(flags) )                  return false;
         n_pass_ttc++;
+    if( !nttools().passSCTErr(flags) )               return false;
+        n_pass_sct++;
     if( !nttools().passGoodVtx(flags) )              return false;
         n_pass_goodVtx++;
 
@@ -387,6 +390,7 @@ void Susy3LepCutflow::dumpEventCounters()
   cout << "pass LArErr :  " << n_pass_lar      << endl;
   cout << "pass TileErr:  " << n_pass_tile     << endl;
   cout << "pass TTCVeto:  " << n_pass_ttc      << endl;
+  cout << "pass SCTerr :  " << n_pass_sct      << endl;
   cout << "pass PrimVtx:  " << n_pass_goodVtx  << endl;
   cout << "pass BadMuon:  " << n_pass_badMuon  << endl;
   cout << "pass cosmic :  " << n_pass_cosmic   << endl;

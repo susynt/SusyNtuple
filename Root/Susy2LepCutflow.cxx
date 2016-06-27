@@ -22,6 +22,7 @@ Susy2LepCutflow::Susy2LepCutflow() :
   n_pass_LAr     = 0;
   n_pass_tileErr = 0;
   n_pass_ttc     = 0;
+  n_pass_sct     = 0;
   n_pass_BadJet  = 0;
   n_pass_BadMuon = 0;
   n_pass_goodVtx = 0;
@@ -161,6 +162,9 @@ bool Susy2LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons, c
   // ttc veto
   if( !m_nttools.passTTC(flags) )               return false;
     n_pass_ttc++;
+  // no error due to SCT seu
+  if( !m_nttools.passSCTErr(flags))             return false;
+    n_pass_sct++;
   // event has primary vertex
   if( !m_nttools.passGoodVtx(flags) )           return false;
     n_pass_goodVtx++;
@@ -556,6 +560,7 @@ void Susy2LepCutflow::dumpEventCounters()
   cout << "pass LAr       :" << n_pass_LAr     << endl;
   cout << "pass tile err  :" << n_pass_tileErr << endl;
   cout << "pass ttc veto  :" << n_pass_ttc     << endl;
+  cout << "pass sct err   :" << n_pass_sct     << endl;
   cout << "pass primVtx   :" << n_pass_goodVtx << endl;
   cout << "pass BadMu     :" << n_pass_BadMuon << endl;
   cout << "pass Cosmic    :" << n_pass_Cosmic  << endl;

@@ -114,6 +114,7 @@ class Susy3LepCutflow : public SusyNtAna
     uint                n_pass_lar;
     uint                n_pass_tile;
     uint                n_pass_ttc;
+    uint                n_pass_sct;
     uint                n_pass_badMuon;
     uint                n_pass_badJet;
     uint                n_pass_goodVtx;
