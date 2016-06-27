@@ -26,6 +26,7 @@ public:
     unsigned int eventNumber; ///< event number
     unsigned int lb;          ///< lumi block number
     DataStream stream;        ///< DataStream enum, defined in SusyDefs.h
+    int treatAsYear;          ///< SUSYObjDef::treatAsYear (equals either 2015 or 2016)
 
     bool isMC;                ///< is MC flag
     unsigned int mcChannel;   ///< MC channel ID number (mc run number)
@@ -110,6 +111,7 @@ public:
     void clear(){
       run = eventNumber = lb = 0;
       stream = Stream_Unknown;
+      treatAsYear = -1;
       isMC = false;
       mcChannel = w = 0;
       initialNumberOfEvents = sumOfEventWeights = sumOfEventWeightsSquared = 0;
