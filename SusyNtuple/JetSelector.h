@@ -103,9 +103,9 @@ public:
         see:
         https://twiki.cern.ch/twiki/bin/view/AtlasProtected/BTaggingBenchmarks#MV2c10_tagger_added_on_11th_May
     */
-    static float mv2c10_70efficiency() { return 0.8244; } ///< threshold for 70% b-tag efficiency
-    static float mv2c10_77efficiency() { return 0.6459; } ///< threshold for 77% b-tag efficiency
-    static float mv2c10_85efficiency() { return 0.1758; } ///< threshold for 85% b-tag efficiency
+    static float mv2c10_70efficiency() { return 0.824427; } ///< threshold for 70% b-tag efficiency
+    static float mv2c10_77efficiency() { return 0.645925; } ///< threshold for 77% b-tag efficiency
+    static float mv2c10_85efficiency() { return 0.175848; } ///< threshold for 85% b-tag efficiency
 
     /// b-tag operating point used for the overlap removal.
     /**
