@@ -72,6 +72,10 @@ public:
     std::vector<float> errEffSF_stat_lowpt_dn;  // MUON_EFF_STAT_LOWPT_DN
     std::vector<float> errEffSF_syst_lowpt_up;  // MUON_EFF_SYS_LOWPT_UP
     std::vector<float> errEffSF_syst_lowpt_dn;  // MUON_EFF_SYS_LOWPT_DN
+    std::vector<float> errTrigSF_stat_up;       // MUON_EFF_TRIG_STAT_UP
+    std::vector<float> errTrigSF_stat_dn;       // MUON_EFF_TRIG_STAT_DN
+    std::vector<float> errTrigSF_syst_up;       // MUON_EFF_TRIG_SYST_UP
+    std::vector<float> errTrigSF_syst_dn;       // MUON_EFF_TRIG_SYST_DN
     std::vector<float> errIso_stat_up;          // MUON_ISO_STAT_UP
     std::vector<float> errIso_stat_dn;          // MUON_ISO_STAT_DN
     std::vector<float> errIso_syst_up;          // MUON_ISO_SYS_UP
@@ -109,6 +113,10 @@ public:
       errEffSF_stat_lowpt_dn.assign(MuonId::MuonIdInvalid, 0);
       errEffSF_syst_lowpt_up.assign(MuonId::MuonIdInvalid, 0);
       errEffSF_syst_lowpt_dn.assign(MuonId::MuonIdInvalid, 0);
+      errTrigSF_stat_up.assign(MuonId::MuonIdInvalid, 0);
+      errTrigSF_stat_dn.assign(MuonId::MuonIdInvalid, 0);
+      errTrigSF_syst_up.assign(MuonId::MuonIdInvalid, 0);
+      errTrigSF_syst_dn.assign(MuonId::MuonIdInvalid, 0);
       errIso_stat_up.assign(MuonId::MuonIdInvalid, 0);
       errIso_stat_dn.assign(MuonId::MuonIdInvalid, 0);
       errIso_syst_up.assign(MuonId::MuonIdInvalid, 0);
@@ -120,7 +128,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Muon, 18);
+    ClassDef(Muon, 19);
 };
 } // Susy
 #endif
