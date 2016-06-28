@@ -134,7 +134,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 33);
+    ClassDef(Event, 34);
   };
 } // Susy
 #endif
