@@ -26,6 +26,8 @@ public:
     float clusE;              ///< CaloCluster energy
     float clusEta;            ///< CaloCluster eta
     float clusPhi;            ///< CaloCluster phi
+    float clusEtaBE;          ///< CaloCluster eta (2nd sampling) EMB/EMEC combined barycenter eta
+    float clusPhiBE;          ///< CaloCluster phi (2nd sampling) EMB/EMEC combined barycenter phi
     float trackPt;            ///< ID track pt
     float trackEta;           ///< ID track eta
 
@@ -131,7 +133,7 @@ public:
 
     /// Clear vars
     void clear(){
-      clusE = clusEta = clusPhi = trackPt = trackEta = 0;
+      clusE = clusEta = clusPhi = clusEtaBE = clusPhiBE = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
       passOQBadClusElectron = false;
       sharedMuTrk.assign(100,0);
@@ -178,7 +180,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 20);
+    ClassDef(Electron, 21);
 };
 } //Susy
 #endif

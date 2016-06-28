@@ -14,6 +14,8 @@ Electron::Electron(const Electron &rhs):
   clusE(rhs.clusE),
   clusEta(rhs.clusEta),
   clusPhi(rhs.clusPhi),
+  clusEtaBE(rhs.clusEtaBE),
+  clusPhiBE(rhs.clusPhiBE),
   trackPt(rhs.trackPt),
   trackEta(rhs.trackEta),
   veryLooseLLH(rhs.veryLooseLLH),
@@ -108,6 +110,8 @@ Electron& Electron::operator=(const Electron &rhs)
     clusE = rhs.clusE;
     clusEta = rhs.clusEta;
     clusPhi = rhs.clusPhi;
+    clusEtaBE = rhs.clusEtaBE;
+    clusPhiBE = rhs.clusPhiBE;
     trackPt = rhs.trackPt;
     trackEta = rhs.trackEta;
     veryLooseLLH = rhs.veryLooseLLH;

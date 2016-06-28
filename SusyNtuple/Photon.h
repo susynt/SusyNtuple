@@ -32,6 +32,8 @@ public:
     float clusE;              ///< CaloCluster energy
     float clusEta;            ///< CaloCluster eta
     float clusPhi;            ///< CaloCluster phi
+    float clusEtaBE;          ///< CaloCluster eta (2nd sampling) EMB/EMEC combined barycenter eta
+    float clusPhiBE;          ///< CaloCluster phi (2nd sampling) EMB/EMEC combined barycenter phi 
     bool  OQ;                 ///< GoodOQ
 
     // Isolation flags
@@ -58,14 +60,14 @@ public:
       authorPhoton = authorAmbiguous = false;
       isConv = false;
       loose = tight = false;
-      clusE = clusEta = clusPhi = 0;
+      clusE = clusEta = clusPhi = clusEtaBE = clusPhiBE = 0;
       OQ = false;
       isoFixedCutTightCaloOnly = isoFixedCutTight = isoFixedCutLoose = false;
       topoEtcone40=0;
       Particle::clear();
     };
 
-    ClassDef(Photon, 6);
+    ClassDef(Photon, 7);
 };
 } // Susy
 #endif
