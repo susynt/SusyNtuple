@@ -64,7 +64,7 @@ bool PhotonSelector::isBaseline(const Photon* ph)
         bool pass_author = (ph->authorPhoton || ph->authorAmbiguous); // reco. as photon OR (photon AND ele)
         pass = (ph->tight &&
                 ph->Pt()        > 25 &&
-                std::abs(ph->clusEta) < 2.37 &&
+                std::abs(ph->clusEtaBE) < 2.37 &&
                 pass_author);
     }
     return pass;

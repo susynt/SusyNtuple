@@ -70,7 +70,7 @@ bool ElectronSelector::isBaseline(const Electron* el)
         pass = (el->looseLLHBLayer && // good for all
                 el->passOQBadClusElectron &&
                 el->Pt()  > 10.0 &&
-                std::abs(el->clusEta) < 2.47 );
+                std::abs(el->clusEta) < 2.47 ); // SUSYTools uses CaloCluster::eta() for this but CaloCluster::etaBE(2) for crack region...
     }
     return pass;
 }
@@ -139,8 +139,8 @@ bool ElectronSelector::passIpCut(const Electron &el)
 //----------------------------------------------------------
 bool ElectronSelector::outsideCrackRegion(const Electron &el)
 {
-    return (std::abs(el.clusEta) < 1.37 ||
-            std::abs(el.clusEta) > 1.52 );
+    return (std::abs(el.clusEtaBE) < 1.37 ||
+            std::abs(el.clusEtaBE) > 1.52 );
 }
 
 //----------------------------------------------------------
