@@ -229,7 +229,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                              being compared to is flagged as a pileup jet
     */
     j_m_overlap(jets, muons, 0.2, true, true);
-    m_j_overlap(muons, jets, 0.4, false, true);
+    m_j_overlap(muons, jets, 0.4, true, true);
 
     /* --------------------------------------------
         Remove overlapping taus and jets
