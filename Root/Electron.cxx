@@ -281,8 +281,11 @@ void Electron::print() const
   cout.precision(2);
   cout << fixed << "El : q " << setw(2) << q << " pt " << setw(6) << Pt() << " eta " << setw(5) << Eta() 
        << " phi " << setw(5) << Phi()
-       << " tight " << tightLLH 
-       << " type " << mcType << " origin " << mcOrigin 
+       << " cluster eta " << setw(5) << clusEta
+       << " loose " << looseLLH 
+       << " medium " << mediumLLH 
+       << " isoGradientLoose " << isoGradientLoose
+       //<< " type " << mcType << " origin " << mcOrigin 
        << " OQ " << (passOQBadClusElectron ? 1 : 0)
        << endl;
   cout.precision(6);

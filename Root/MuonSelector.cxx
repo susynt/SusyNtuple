@@ -149,6 +149,30 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
     return err;
 }
 //----------------------------------------------------------
+// begin MuonSelector_2Lep Ana_2Lep
+//----------------------------------------------------------
+bool MuonSelector_2Lep::isBaseline(const Muon* mu)
+{
+    bool pass = false;
+    if(mu) {
+        pass = (mu->medium &&
+                mu->Pt()        > 10.0 && 
+                fabs(mu->Eta()) <  2.4); // I don't think this is the best ASM 9/6/16
+    }
+    return pass;
+}
+//----------------------------------------------------------
+bool MuonSelector_2Lep::isSignal(const Muon* mu)
+{
+    bool pass = false;
+    if(mu) {
+        pass = (isBaseline(mu)       &&
+                mu->isoGradientLoose &&
+                passIpCut(mu)        );
+    }
+    return pass;
+}
+//----------------------------------------------------------
 // begin MuonSelector_3Lep Ana_3Lep
 //----------------------------------------------------------
 bool MuonSelector_3Lep::isSignal(const Muon* mu)

@@ -20,7 +20,7 @@ ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
     switch(a) {
     case AnalysisType::Ana_2Lep:
         s = new ElectronSelector_2Lep();
-        s->setSignalId(ElectronId::TightLLH);
+        s->setSignalId(ElectronId::MediumLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     case AnalysisType::Ana_3Lep:
@@ -146,6 +146,36 @@ bool ElectronSelector::outsideCrackRegion(const Electron &el)
 //----------------------------------------------------------
 // begin ElectronSelector_2Lep Ana_2Lep
 //----------------------------------------------------------
+bool ElectronSelector_2Lep::isBaseline(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (el->looseLLHBLayer && 
+                el->passOQBadClusElectron &&
+                el->Pt()  > 10.0 && 
+                std::abs(el->clusEta) < 2.47);
+    }
+    return pass;
+}
+//----------------------------------------------------------
+bool ElectronSelector_2Lep::passIpCut(const Electron &el)
+{
+    return (std::abs(el.d0sigBSCorr)  < 5.0 &&
+            std::abs(el.z0SinTheta()) < 0.5 );
+
+}
+//----------------------------------------------------------
+bool ElectronSelector_2Lep::isSignal(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (isBaseline(el)       &&
+                el->mediumLLH        &&
+                el->isoGradientLoose &&
+                passIpCut(*el));
+    }
+    return pass;
+}
 
 //----------------------------------------------------------
 // begin ElectronSelector_3Lep Ana_3Lep

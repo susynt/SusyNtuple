@@ -90,6 +90,8 @@ protected :
 /// implements muon selection for ATL-COM-PHYS-2013-911
 class MuonSelector_2Lep : public MuonSelector
 {
+    bool isBaseline(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
 };
 
 /// implements muon selection for ATL-COM-PHYS-2013-888
