@@ -58,6 +58,7 @@ public:
 
     //  sherpa 2.2 V+jets reweighting
     // see: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/CentralMC15ProductionList#NEW_Sherpa_v2_2_V_jets_NJet_rewe
+    bool isSherpaVjetsSample;
     float sherpa22VjetsWeight;
 
     //unsigned int trigFlags; ///< Event level trigger bits
@@ -125,6 +126,7 @@ public:
       susySpartId1 = susySpartId2 = 0;
       susy3BodyLeftPol = susy3BodyRightPol = susy3BodyOnlyMass = 0;
       passMllForAlpgen = true;
+      isSherpaVjetsSample = false;
       sherpa22VjetsWeight = 1;
       //memset(evtFlag,0,sizeof(evtFlag));
       memset(cutFlags,0,sizeof(cutFlags));
@@ -134,7 +136,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 34);
+    ClassDef(Event, 35);
   };
 } // Susy
 #endif
