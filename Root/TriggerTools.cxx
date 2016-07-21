@@ -72,7 +72,7 @@ const std::vector<std::string> triggers_run2 = {
     // dimuon trig
     //"HLT_2mu10",
     //"HLT_2mu14",
-    //"HLT_mu18_mu8noL1",
+    "HLT_mu18_mu8noL1",
     "HLT_mu20_mu8noL1",
     "HLT_mu22_mu8noL1",
     "HLT_mu24_mu8noL1",
@@ -110,7 +110,7 @@ const std::vector<std::string> triggers_run2 = {
     // di-electron trig lh
     //"HLT_2e12_lhvloose_L12EM10VH",
     //"HLT_2e12_lhvloose_nod0_L12EM10VH",
-    //"HLT_2e12_lhloose_L12EM10VH",
+    "HLT_2e12_lhloose_L12EM10VH",
     "HLT_2e15_lhloose_L12EM13VH",
     "HLT_2e15_lhvloose_L12EM13VH",
     "HLT_2e15_lhvloose_nod0_L12EM13VH",
@@ -133,7 +133,7 @@ const std::vector<std::string> triggers_run2 = {
     // MET
     ////////////////////////////
 
-    //"HLT_xe70",
+    "HLT_xe70",
     //"HLT_xe80_tc_lcw_L1XE50",
     "HLT_xe80_tc_lcw_L1XE50",
     "HLT_xe90_mht_L1XE50",
