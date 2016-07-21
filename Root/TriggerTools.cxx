@@ -36,73 +36,7 @@ using namespace std;
 ////////////
 // Run 1
 ////////////
-const std::vector<std::string> triggers_run1 = {
-    // 2012
-    // electron triggers
-    "EF_e7_medium1",
-    "EF_e12Tvh_loose1",
-    "EF_e12Tvh_medium1",
-    "EF_e24vh_medium1",
-    "EF_e24vhi_medium1",
-    "EF_2e12Tvh_loose1",
-    "EF_e24vh_medium1_e7_medium1",
-
-    // muon triggers
-    "EF_mu4T",
-    "EF_mu6",
-    "EF_mu8",
-    "EF_mu13",
-    "EF_mu18_tight",
-    "EF_mu24",
-    "EF_mu24i_tight",
-    "EF_2mu6",
-    "EF_2mu13",
-    "EF_mu18_tight_mu8_EFFS",
-    "EF_e12Tvh_medium1_mu8",
-    "EF_mu18_tight_e7_medium1",
-    "EF_3mu6",
-    "EF_e18vh_medium1_2e7T_medium1",
-    "EF_mu18_tight_2mu4_EFFS",
-    "EF_2e7T_medium1_mu6",
-    "EF_e7T_medium1_2mu6",
-    
-    // photon triggers
-    "EF_g20_loose",
-    "EF_g40_loose",
-    "EF_g60_loose",
-    "EF_g80_loose",
-    "EF_g100_loose",
-    "EF_g120_loose",
-
-    // tau triggers
-    "EF_tau20_medium1",
-    "EF_tau20Ti_medium1",
-    "EF_tau29Ti_medium1",
-    "EF_tau29Ti_medium1_tau20Ti_medium1",
-    "EF_tau20Ti_medium1_e18vh_medium1",
-    "EF_tau20_medium1_mu15",
-
-    // lep-tau matching
-    "EF_e18vh_medium1",
-    "EF_mu15",
-
-    // MET trigger
-    "EF_2mu8_EFxe40wMu_tclcw",
-    "EF_xe80_tclcw_loose",
-    
-    // jet + met
-    "EF_j110_aftchad_xe90_tclcw_loose",
-    "EF_j80_a4tchad_xe100_tclcw_loose",
-    "EF_j80_a4tchad_xe70_tclcw_dphi2j45xe10",
-
-    // more triggers for ISR analysis
-    "EF_mu4T_j65_a4tchad_xe70_tclcw_veryloose",
-    "EF_2mu4T_xe60_tclcw",
-    "EF_2mu8_EFxe40_tclcw",
-    "EF_e24vh_medium1_EFxe35_tclcw",
-    "EF_mu24_j65_a4tchad_EFxe40_tclcw",
-    "EF_mu24_j65_a4tchad_EFxe40wMu_tclcw"
-};
+const std::vector<std::string> triggers_run1 = {""};
 
 ////////////
 // Run 2
@@ -114,11 +48,11 @@ const std::vector<std::string> triggers_run2 = {
     ////////////////////////////
 
     // muon trig
-    "HLT_mu6",
-    "HLT_mu6_msonly",
-    "HLT_mu10",
-    "HLT_mu14",
-    "HLT_mu18",
+    //"HLT_mu6",
+    //"HLT_mu6_msonly",
+    //"HLT_mu10",
+    //"HLT_mu14",
+    //"HLT_mu18",
     "HLT_mu20",
     "HLT_mu20_iloose_L1MU15",
     "HLT_mu22",
@@ -132,28 +66,28 @@ const std::vector<std::string> triggers_run2 = {
     "HLT_mu60_0eta105_msonly",
 
     // L1 items
-    "L1_MU10",
-    "L1_MU15",
+    //"L1_MU10",
+    //"L1_MU15",
 
     // dimuon trig
-    "HLT_2mu10",
-    "HLT_2mu14",
-    "HLT_mu18_mu8noL1",
+    //"HLT_2mu10",
+    //"HLT_2mu14",
+    //"HLT_mu18_mu8noL1",
     "HLT_mu20_mu8noL1",
     "HLT_mu22_mu8noL1",
     "HLT_mu24_mu8noL1",
-    "HLT_2mu14_nomucomb",
-    "HLT_2mu10_nomucomb", 
+    //"HLT_2mu14_nomucomb",
+    //"HLT_2mu10_nomucomb", 
 
     ////////////////////////////
     // ELECTRON
     ////////////////////////////
     
     // electron trig lh
-    "HLT_e7_lhmedium",
-    "HLT_e9_lhmedium",
-    "HLT_e12_lhloose",
-    "HLT_e12_lhloose_L1EM10VH",
+    //"HLT_e7_lhmedium",
+    //"HLT_e9_lhmedium",
+    //"HLT_e12_lhloose",
+    //"HLT_e12_lhloose_L1EM10VH",
     "HLT_e15_lhloose_L1EM13VH",
     "HLT_e17_lhloose",
     "HLT_e17_lhmedium",
@@ -163,20 +97,25 @@ const std::vector<std::string> triggers_run2 = {
     "HLT_e24_lhtight_iloose",
     "HLT_e24_lhtight_nod0_iloose",
     "HLT_e24_lhmedium_nod0_iloose_L1EM20VH",
+    "HLT_e24_lhtight_ivarloose",
+    "HLT_e24_lhtight_ivarloose_nod0",
     "HLT_e26_lhmedium_L1EM22VHI",
     "HLT_e26_lhtight_iloose",
     "HLT_e26_lhtight_nod0_iloose",
+    "HLT_e26_lhtight_ivarloose",
+    "HLT_e26_lhtight_ivarloose_nod0",
     "HLT_e60_lhmedium",
     "HLT_e60_lhmedium_nod0",
 
     // di-electron trig lh
-    "HLT_2e12_lhvloose_L12EM10VH",
-    "HLT_2e12_lhvloose_nod0_L12EM10VH",
-    "HLT_2e12_lhloose_L12EM10VH",
+    //"HLT_2e12_lhvloose_L12EM10VH",
+    //"HLT_2e12_lhvloose_nod0_L12EM10VH",
+    //"HLT_2e12_lhloose_L12EM10VH",
     "HLT_2e15_lhloose_L12EM13VH",
     "HLT_2e15_lhvloose_L12EM13VH",
     "HLT_2e15_lhvloose_nod0_L12EM13VH",
     "HLT_2e17_lhloose",
+    "HLT_2e17_lhvloose",
     "HLT_2e17_lhvloose_nod0",
     
     ////////////////////////////
@@ -194,21 +133,21 @@ const std::vector<std::string> triggers_run2 = {
     // MET
     ////////////////////////////
 
-    "HLT_xe70",
+    //"HLT_xe70",
+    //"HLT_xe80_tc_lcw_L1XE50",
     "HLT_xe80_tc_lcw_L1XE50",
-    "HLT_xe100"
+    "HLT_xe90_mht_L1XE50",
+    "HLT_xe110_mht_L1XE50",
+    "HLT_xe100_mht_L1XE50"
     
 };
 
 std::vector<std::string> getTrigNames(string set)
 { 
     if(set.compare("run1")==0) { 
-        std::cout << std::endl;
-        std::cout << " ------------------------ " << std::endl;
-        std::cout << " Storing Run1 trigger set " << std::endl;
-        std::cout << " ------------------------ " << std::endl;
-        std::cout << std::endl;
-        return triggers_run1;
+        std::cout << "Attempting to store Run1 triggers which are no longer available" << std::endl;
+        std::cout << " >>> Exitting." << std::endl;
+        exit(1);
     }
     else if(set.compare("run2")==0) {
         std::cout << std::endl;
