@@ -221,8 +221,8 @@ SUSY::CrossSectionDB::Process MCWeighter::getCrossSection(const Event* evt)
         // SUSYTools expects 0 as default value, but we have existing tags with default of -1
         int proc = evt->susyFinalState > 0 ? evt->susyFinalState : 0;
         unsigned int mcid = evt->mcChannel;
-        if (m_procidValidator.zero_hack(proc).valid) {
-            // if(m_procidValidator.validate(proc).valid){
+        //if (m_procidValidator.zero_hack(proc).valid) {
+        if(m_procidValidator.validate(proc).valid){
             const intpair k(mcid, proc);
             XSecMap::const_iterator iter = m_xsecCache.find(k);
             bool isAlreadyCached(iter != m_xsecCache.end());
