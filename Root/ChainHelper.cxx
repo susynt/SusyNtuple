@@ -17,6 +17,25 @@ ChainHelper::Status ChainHelper::addFile(TChain* chain, string file)
   return GOOD;
 }
 /*--------------------------------------------------------------------------------*/
+// Test if file has expected TTree object
+/*--------------------------------------------------------------------------------*/
+bool ChainHelper::hasChainName(TChain* chain, string filename)
+{
+    bool has_tree = true;
+    TFile* tmp_file = TFile::Open(filename.c_str());
+    has_tree = tmp_file->GetListOfKeys()->Contains(chain->GetName());
+    if(!has_tree) {
+        cout << "ChainHelper WARNING Input file (" << filename << ") does not"
+             << " contain requested TTree object (" << chain->GetName() << ")"
+             << endl;
+        cout << "ChainHelper WARNING This file will not be included in "
+             << "the final TChain" << endl;
+    }
+    delete tmp_file;
+    return has_tree;
+}
+
+/*--------------------------------------------------------------------------------*/
 // Build TChain from input fileList
 /*--------------------------------------------------------------------------------*/
 ChainHelper::Status ChainHelper::addFileList(TChain* chain, string fileListName)
@@ -29,10 +48,13 @@ ChainHelper::Status ChainHelper::addFileList(TChain* chain, string fileListName)
     }
     string fileName;
     while(fileList >> fileName){
-      // Add protection against file read errors
-      if(chain->Add(fileName.c_str(), -1)==0){
-        cerr << "ChainHelper ERROR adding file " << fileName << endl;
-        return BAD;
+      // Only consider files that have the TTree we request
+      if(hasChainName(chain, fileName)) {
+        // Add protection against file read errors
+        if(chain->Add(fileName.c_str(), -1)==0){
+            cerr << "ChainHelper ERROR adding file " << fileName << endl;
+            return BAD;
+        }
       }
     }
     fileList.close();

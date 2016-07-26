@@ -30,6 +30,9 @@ class ChainHelper
       BAD = 1
     };
 
+    /// Check if the file has the expected TTree object
+    static bool hasChainName(TChain* chain, std::string filename);
+
     /// Add a file - not very useful (obsolete, use addInput() instead)
     static Status addFile(TChain* chain, std::string file);
 
