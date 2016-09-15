@@ -168,7 +168,7 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
             << " for MCID " << mcid << " while looking in file: "
             << m_sumw_file <<endl;
         cout<<"MCWeighter::getSumwFromFile    FATAL  --> Is the format of the file"
-            << " correct (it should be two columns, separated by white-space) "
+            << " correct (it should be 3 columns, separated by white-space) "
             << " or is the MCID not in the file?" << endl;
         exit(1);
     }
