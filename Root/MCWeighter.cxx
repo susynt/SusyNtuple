@@ -152,7 +152,6 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
     while(getline(infile, line)) {
         if(isCommentLine(line) || isEmptyLine(line)) continue;
         stringstream iss(line);
-        int col = 0;
         while(iss) {
             iss >> mcid_ >> proc_ >> sumw_;
         }
