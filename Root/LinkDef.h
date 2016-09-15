@@ -14,7 +14,6 @@
 #include "SusyNtuple/SusyNtTruthAna.h"
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
-#include "SusyNtuple/CheckWeights.h"
 #include "SusyNtuple/TGuiUtils.h"
 
 #ifdef __CLING__
@@ -30,7 +29,6 @@
 #pragma link C++ class SusyNtTruthAna;
 #pragma link C++ class Susy2LepCutflow;
 #pragma link C++ class Susy3LepCutflow;
-#pragma link C++ class CheckWeights;
 
 #pragma link C++ namespace Susy+;
 //#pragma link C++ namespace BTagCalib;
