@@ -1,248 +1,136 @@
-//  -*- c++ -*-
 #ifndef SusyNtuple_MCWeighter_h
 #define SusyNtuple_MCWeighter_h
 
+//ROOT
 #include "TChain.h"
 #include "TString.h"
 
+//SUSY
 #include "SUSYTools/SUSYCrossSection.h"
 #include "SusyNtuple/SusyDefs.h"
+#include "SusyNtuple/SusyNtSys.h"
 
+
+//std/stl
 #include <string>
+#include <map>
 
-class TH1F;
-namespace Susy{ class Event; }
+//forward
+namespace Susy { class Event; }
 
-/// A class to handle the normalization of Monte Carlo
-/**
-   A MC sample is normalized with the factor \f$\sigma * lumi / \sum
-   w\f$ This factor multiplies the generator event weight and all the
-   other factors (pileup, lepton efficiency, trigger scale factors
-   etc.)  Some samples can include multiple processes. This class
-   holds a map of the \f$\sum w\f$ values for each process. The
-   \f$\sum w\f$ is computed from the cutflow histograms that are
-   stored with the susyNt tree.
-
-   The user can specify the bin whose contents are used to compute
-   \sum w; otherwise defaultLabelBinCounter() will be used.
-
-   Two types of histograms are considered:
-   - for samples that contain only one process (most of them)
-     `genCutFlow`
-   - for samples that contain multiple processes (mostly slepton
-     samples) `procCutFlowXYZ`, where `XYZ` is the process number
-
-  \todo drop all the obsolete functionalities. Right now we support
-  only the sumwmap method with the sumw retrieved from the histogram.
-
+/// A class to handle the normalization of Monte-Carlo
+/*
 */
 
 class MCWeighter
 {
+    public :
+        struct SumwMapKey {
+            unsigned int dsid;
+            int proc;
+            SumwMapKey() : dsid(0), proc(0) {}
+            SumwMapKey(unsigned int d, int p) : dsid(d), proc(p) {}
 
- public:
-  struct SumwMapKey {
-    unsigned int dsid;
-    int proc;
-  SumwMapKey(): dsid(0), proc(0) {}
-  SumwMapKey(unsigned int d, int p): dsid(d), proc(p){}
-  };
+            bool operator<(const SumwMapKey& rhs) const {
+                if(dsid==rhs.dsid) return proc<rhs.proc;
+                return (dsid<rhs.dsid);
+            }
+            bool operator==(const SumwMapKey& rhs) const {
+                return (dsid==rhs.dsid && proc==rhs.proc); }
 
-  public:
+        }; // struct
 
-  //typedef std::pair<unsigned int, int> SumwMapKey;
-typedef std::map<SumwMapKey, float> SumwMap;
+        typedef std::map<SumwMapKey, float> SumwMap;
 
-    //
-    // Enums to control weighting options
-    //
+        typedef std::pair<int, int> intpair;
+        typedef std::map<intpair, SUSY::CrossSectionDB::Process> XSecMap;
+//
+//
+        //
+        //  Enums to control weighting options
+        //
+        // sumw method
+        enum SumwMethod
+        {
+            Sumw_NT = 0, // use the sumw information as stored in susyNt (from CutBookKeepers) [default]
+            Sumw_FILE    // look up sumw from a user-specified file
+        };
 
-    // Sumw method
-    enum SumwMethod
-    {
-      Sumw_NT = 0,      // Use sumw stored in the ntuple
-      Sumw_MAP          // Use SumwMap (recommended)
-      //Sumw_FILE       // Use a text file for sumw (not supported)
-    };
+        // xsec method
+        enum XsecMethod
+        {
+            Xsec_ST = 0 // use SUSYTools' xsec database [default]
+        };
 
-    // Xsec method
-    enum XsecMethod
-    {
-      Xsec_NT = 0,      // Use xsec stored in the ntuple
-      Xsec_ST           // Use xsec from SUSYTools (recommended)
-    };
 
-    // Systematic
-    enum WeightSys
-    {
-      Sys_NOM = 0,
-      Sys_XSEC_UP,
-      Sys_XSEC_DN,
-      Sys_PILEUP_UP,
-      Sys_PILEUP_DN,
-      Sys_N
-    };
+        //
+        // Initialization and configuration
+        //
+        MCWeighter();
+        MCWeighter(TTree* tree,
+                std::string xsecDir = "$ROOTCOREDIR/data/SUSYTools/mc15_13TeV/");
+        virtual ~MCWeighter() {};
 
-    /// Helper to keep track of events with  invalid process id
-    struct ProcessValidator {
-    ProcessValidator() : counts_total(0), counts_invalid(0), max_warnings(4), valid(false), last(0) {}
-      size_t counts_total;
-      size_t counts_invalid;
-      size_t max_warnings;
-      ProcessValidator& zero_hack(int &value) { value = 0; valid = true; return *this; }
-      /**
-         Also flag as invalid the suspicious events (i.e. when proc==-1 and proc!=previous_proc)
-       */
-      ProcessValidator& validate(int &value);
-      bool valid; ///< status from the current call to validate()
-      int last; ///< procid from the last call to validate()
-      std::string summary() const;
-      /// convert our 'unknown' value (-1) to the SUSYTools 'unknown' value (0)
-      /**
-         In some of our old productions we used a different default
-         process than the one used by SUSYTools. With this default
-         value we cannot find any xsec in the db, so we need to
-         convert the value when necessary (will become obsolete, DG 2014-11-30).
-       */
-      static int convertDefaultSusyNt2DefaultSusyTools(const int &v);
-      static const int defaultSusyNt = -1; ///< see SusyNtMaker::selectEvent() (was -1 for old prod, then 0)
-      static const int defaultSusyTools = 0; ///< see SUSYCrossSection.h: CrossSectionDB::Key c'tor
+        void setVerbose(bool doit) { m_dbg = doit; }
+        bool dbg() { return m_dbg; }
 
-    };
+        static std::string defaultXsecDir() {
+            return std::string("$ROOTCOREBIN/data/SUSYTools/mc15_13TeV/");
+        }
 
-    //
-    // Initialization and configuration
-    //
+        void setSumwFromNT() { m_sumw_method = Sumw_NT; }
+        void setSumwFromFILE(std::string file); // { m_sumw_method = Sumw_FILE; }
 
-    MCWeighter();
-    MCWeighter(TTree* tree,
-               std::string xsecDir = "$ROOTCOREDIR/data/SUSYTools/mc12_8TeV/");
-    ~MCWeighter();
+        SumwMethod& sumwMethod() { return m_sumw_method; }
+        XsecMethod& xsecMethod() { return m_xsec_method; }
 
-    /// Build a map of MCID -> sumw.
-    /**
-     This method will loop over the input files associated with the TChain. The MCID
-     in the first entry of the tree will be used, so one CANNOT use this if multiple
-     datasets are combined into one SusyNt tree file! The generator weighted cutflow
-     histograms will then be used to calculate the total sumw for each MCID. Each
-     dataset used here must be complete, they CANNOT be spread out across multiple jobs.
-     However, one can have more than one (complete) dataset in the chain, which is why
-     we use the map.
-    */
-    void buildSumwMap(TTree* tree);
-    void clearAndRebuildSumwMap(TTree* tree) { m_sumwMap.clear(); buildSumwMap(tree); }
-    void dumpSumwMap() const;
-    void dumpXsecCache() const;
-    void dumpXsecDb() const;
+        void buildSumwMap(TTree* tree);
+        static const Susy::Event& readFirstEvent(TTree* tree);
 
-    /// Specify methods to retrieve sumw and xsec
-    void setUseProcSumw(bool useProcSumw=true) { m_useProcSumw = useProcSumw; }
-    void setSumwMethod(SumwMethod opt=Sumw_MAP) { m_sumwMethod = opt; }
-    void setXsecMethod(XsecMethod opt=Xsec_ST) { m_xsecMethod = opt; }
+        bool mapHasKey(SumwMapKey& k);
 
-    /// MC Weight includes generator, xsec, lumi, and pileup weights
-    float getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3, WeightSys sys=Sys_NOM,
-                                                    bool includePileup=true);
-    bool sumwmapHasKey(SumwMapKey k);
+        void printSumwMap() const;
 
-    /// Get sumw for this event
-    float total_sumw; 
-    float getSumw(const Susy::Event* evt);
-    /// Get cross section for this event
-    SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
-    float getXsecTimesEff(const Susy::Event* evt, WeightSys sys=Sys_NOM);
-    /// Get the pileup weight
-    float getPileupWeight(const Susy::Event* evt, WeightSys sys=Sys_NOM);
-    /// specify the bin used to compute sumw
-    /**
-       If the label is set after sumwmap has been built, you need to call clearAndRebuildSumwMap.
-       For a list of available bin labels (counters), see SusyNtMaker::makeCutFlow()
-    */
-    MCWeighter& setLabelBinCounter(const std::string &v);
-    /// read additional files containing more cross section values
-    /**
-       This is to account for samples that are not in the SUSYTools lists.
-       Returns the number of cross section values read from the file.
-     */
-    size_t parseAdditionalXsecFile(const std::string &filename, bool verbose);
-    /// same as parseAdditionalXsecFile, but get any *.txt in a given directory
-    size_t parseAdditionalXsecDirectory(const std::string &dir, bool verbose);
-    /// toggle m_allowInvalid option
-    MCWeighter& setAllowInvalid(bool v);
-    /// toggle m_verbose
-    MCWeighter& setVerbose(bool v);
-    /// counter used to compute the normalization
-    /**
-       Unless the user has specified a value with
-       setLabelBinCounter(), use "Initial" for all samples, and
-       "SusyProp Veto" for SUSY simplified models.
-     */
-    static std::string defaultLabelBinCounter(const unsigned int &dsid, bool verbose);
-    /// print a warning if the histo doesn't have a bin with the given label
-    static void checkHistoHasBin(const TH1F &histo, const std::string &binLabel);
-    /// default directory from which we read the xsec files for SUSY::CrossSectionDB
-    static std::string defaultXsecDir() {
-      return std::string("$ROOTCOREBIN/data/SUSYTools/mc15_13TeV/");
-    }
-    /// a list of the xsec files containing known simplified models
-    static std::vector<std::string> xsecFilesForSimplifiedModels();
-    /// a list of known SM dsids from xsecFilesForSimplifiedModels()
-    static std::vector<int> dsidsForKnownSimpliedModelSamples(bool verbose);
-    /// determine whether a given file is formatted following the CrossSectionDB format
-    /**
-       The format is essentially 6 words:
+        double getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3,
+                Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM, bool includePileup = true);
 
-       id       name(or final_state)   xsect    kfactor    efficiency    rel.uncertainty
+        double getSumw(const Susy::Event* evt);
 
-       Empty lines and comments ('#') are skipped.
-       For more details, see SUSYTools/SUSYCrossSection.h
-    */
-    static bool isFormattedAsSusyCrossSection(std::string filename, bool verbose);
-    /// given a text file containing cross sections for CrossSectionDB, return the dsids
-    static std::vector<int> readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose);
-    /// given a line from a xsec file, parse the dsid; return false if cannot parse
-    static bool readDsidsFromSusyCrossSectionLine(const std::string &line, int &dsid, bool verbose);
-    /// guess from dsid whether this sample is a simplified model one
-    /**
-       This guess is based on whether the dsid is in a
-       list of known dsids from the xsec files in 'SUSYTools/data'.
+        SUSY::CrossSectionDB::Process getCrossSection(const Susy::Event* evt);
+        float getXsecTimesEff(const Susy::Event* evt, Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM);
+        float getPileupWeight(const Susy::Event* evt, Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM);
 
-       See also util/test_mcWeighter.cxx
-     */
-    static bool isSimplifiedModel(const unsigned int &dsid, bool verbose);
-    /// read the first event from the tree (often used to retrieve sample parameters)
-    static const Susy::Event& readFirstEvent(TTree* tree);
-    /// extract 'XYZ' from 'prefixXYZ'
-    static int extractProcessFromCutflowHistoname(const std::string &histoName, const std::string &prefix);
- private:
-    void buildSumwMapFromTree(TTree* tree);
-    void buildSumwMapFromChain(TChain* chain);
+        
 
-    bool m_useProcSumw;
 
-    // typedefs, for convenience
-    typedef std::pair<int, int> intpair;
-    typedef std::map<intpair, SUSY::CrossSectionDB::Process> XSecMap;
+    private :
+        bool m_dbg;
+        SumwMethod m_sumw_method;
+        XsecMethod m_xsec_method;
 
-    SumwMethod m_sumwMethod;
-    XsecMethod m_xsecMethod;
+        double m_sumw;
+        double m_default_sumw;
+        std::string m_sumw_file;
 
-    // Map of (MCID, proc) -> sumw
-    SumwMap m_sumwMap;
+        // get sumw
+        void buildSumwMapFromTree(TTree* tree);
+        void buildSumwMapFromChain(TChain* chain);
+        void getSumwFromFile(unsigned int mcid);
+        bool isCommentLine(const std::string& line);
+        bool isEmptyLine(const std::string& line);
 
-    /// SUSYTools cross sections
-    SUSY::CrossSectionDB m_xsecDB;
-    XSecMap m_xsecCache;
+        SumwMap m_sumwMap;
+        bool m_sumw_map_built;
 
-    std::string m_labelBinCounter; ///< label of the bin (from the SusyNt histos) used to determine sumw
-    size_t m_warningCounter;
-    bool m_allowInvalid; ///< whether we allow invalid processes (i.e. missing xsec from db)
-    ProcessValidator m_procidValidator; ///< validate susy process id
-    bool m_verbose; ///< toggle verbose printout
-};
+        // SUSYCrossSection DB
+        SUSY::CrossSectionDB m_xsecDB;
+        std::string m_xsecDBdir;
+        XSecMap m_xsecCache;
 
-/// needed for std::map
-inline bool operator<(const MCWeighter::SumwMapKey &a, const MCWeighter::SumwMapKey &b)
-{ return a.dsid<b.dsid && a.proc<b.proc; }
+}; // class
+
+      //  // needed for std::map lookup
+      //  inline bool operator<(const MCWeighter::SumwMapKey &a, const MCWeighter::SumwMapKey &b)
+      //      { return a.dsid<b.dsid && a.proc<b.proc; } 
 
 #endif

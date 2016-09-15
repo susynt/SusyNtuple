@@ -276,8 +276,8 @@ enum SusyNtSys {
   ,BKGMETHOD_UP    ///< Positive shift due to background estimation method
                    ///< (chargeflip, jetveto, fakeweights,...) 
   ,BKGMETHOD_DN    ///< Negative shift due to background estimation method 
-  ,XS_UP           ///< Positive shift in theoretical cross-section uncertainty
-  ,XS_DN           ///< Negative shift in theoretical cross-section uncertainty
+  ,XS_UP           ///< Positive shift in cross-section uncertainty
+  ,XS_DN           ///< Negative shift in cross-section uncertainty
   
   ,SYS_UNKNOWN
 };

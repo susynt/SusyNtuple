@@ -3,11 +3,7 @@
 ####################################################
 # Provide a path to a directory that contains
 # *.txt files each of which is a filelist for
-# specific MC sample, this script will make a
-# text file in the current directory that contains
-# on each line a single root file corresponding
-# to the first file in each of the *.txt files
-# in the user-provided input directory.
+# specific MC sample.
 #
 # Each line of a *.txt file filelist is a single
 # susyNt.root file.
@@ -31,6 +27,9 @@
 #  mc15_13TeV.410000.*.0001.susyNt.root
 #  mc15_13TeV.410000.*.0002.susyNt.root
 #  mc15_13TeV.410000.*.0003.susyNt.root
+#
+# example usage:
+#   ./checkXSecInfo.py -i <path-to-dir>/
 #
 # daniel.joseph.antrim@cern.ch
 # September 2016
@@ -133,6 +132,7 @@ def check_weights(infile, n_checked, n_total) :
 
     return bad_dsid
 
+#######################################################################
 if __name__ == "__main__" :
     parser = OptionParser()
     parser.add_option("-i", "--input", help="Input directory containing text files", default = "")
