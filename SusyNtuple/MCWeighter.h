@@ -44,8 +44,7 @@ class MCWeighter
 
         typedef std::pair<int, int> intpair;
         typedef std::map<intpair, SUSY::CrossSectionDB::Process> XSecMap;
-//
-//
+
         //
         //  Enums to control weighting options
         //
@@ -128,9 +127,5 @@ class MCWeighter
         XSecMap m_xsecCache;
 
 }; // class
-
-      //  // needed for std::map lookup
-      //  inline bool operator<(const MCWeighter::SumwMapKey &a, const MCWeighter::SumwMapKey &b)
-      //      { return a.dsid<b.dsid && a.proc<b.proc; } 
 
 #endif

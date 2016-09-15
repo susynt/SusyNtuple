@@ -129,7 +129,7 @@ void MCWeighter::buildSumwMapFromTree(TTree* tree)
         m_sumw += evt.sumOfEventWeights;
         m_sumwMap[key] = m_sumw;
         if(dbg()) cout << "MCWeighter::buildSumwMapFromTree    mcid: " << mcid
-                    << "  running sumw: " << m_sumw << "(" << m_sumwMap[key] << ")" << endl;
+                    << "  running sumw: " << m_sumw << " (" << m_sumwMap[key] << ")" << endl;
         
     }
     else if(sumwMethod()==Sumw_FILE) {
