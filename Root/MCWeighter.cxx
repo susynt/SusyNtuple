@@ -75,6 +75,17 @@ void MCWeighter::setSumwFromFILE(string file)
 
 }
 // ------------------------------------------------------------------------- //
+bool isCommentLine(const string &line)
+{
+    string strippedLine(Susy::utils::rmLeadingTrailingWhitespaces(line));
+    return strippedLine.size() > 0 && strippedLine[0] == '#';
+}
+// ------------------------------------------------------------------------- //
+bool isEmptyLine(const string &line)
+{
+    return Susy::utils::rmLeadingTrailingWhitespaces(line).size() == 0;
+}
+// ------------------------------------------------------------------------- //
 const Susy::Event& MCWeighter::readFirstEvent(TTree* tree)
 {
     Susy::Event* evt = 0;
@@ -143,6 +154,14 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
 {
     m_sumw = m_default_sumw;
 
+
+    bool valid_file(MCWeighter::isFormattedAsSusyCrossSection(m_sumw_file, dbg(), true));
+    if(!valid_file) {
+        cout<<"MCWeighter::getSumwFromFile    FATAL Invalid format for provided sumw file: "
+            << m_sumw_file << endl;
+        exit(1);
+    }
+
     std::ifstream infile(m_sumw_file);
     string line;
 
@@ -163,15 +182,15 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
         }
     } // while
 
-    if((sumw_ == m_default_sumw) || (sumw_ == 0)) {
-        cout<<"MCWeighter::getSumwFromFile    FATAL Unable to find correct sumw"
-            << " for MCID " << mcid << " while looking in file: "
-            << m_sumw_file <<endl;
-        cout<<"MCWeighter::getSumwFromFile    FATAL  --> Is the format of the file"
-            << " correct (it should be 3 columns, separated by white-space) "
-            << " or is the MCID not in the file?" << endl;
-        exit(1);
-    }
+    //if((sumw_ == m_default_sumw) || (sumw_ == 0)) {
+    //    cout<<"MCWeighter::getSumwFromFile    FATAL Unable to find correct sumw"
+    //        << " for MCID " << mcid << " while looking in file: "
+    //        << m_sumw_file <<endl;
+    //    cout<<"MCWeighter::getSumwFromFile    FATAL  --> Is the format of the file"
+    //        << " correct (it should be 3 columns, separated by white-space) "
+    //        << " or is the MCID not in the file?" << endl;
+    //    exit(1);
+    //}
 }
 // ------------------------------------------------------------------------- //
 double MCWeighter::getMCWeight(const Susy::Event* evt, const float lumi,
@@ -304,13 +323,112 @@ void MCWeighter::printSumwMap() const
     cout.precision(6);
 }
 // ------------------------------------------------------------------------- //
-bool MCWeighter::isCommentLine(const string &line)
+size_t MCWeighter::parseAdditionalXsecFile(const string& infilename, bool verbose)
 {
-    string strippedLine(Susy::utils::rmLeadingTrailingWhitespaces(line));
-    return strippedLine.size() > 0 && strippedLine[0] == '#';
+    string filename = gSystem->ExpandPathName(infilename.c_str());
+    size_t nInitialElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
+    bool inputFileIsValid(MCWeighter::isFormattedAsSusyCrossSection(filename, verbose));
+    if(inputFileIsValid) {
+        SUSY::CrossSectionDB tmpXsecDB;
+        tmpXsecDB.loadFile(filename.c_str());
+        for(SUSY::CrossSectionDB::iterator p = tmpXsecDB.begin(); p != tmpXsecDB.end(); ++p) {
+            int sample_id(p->second.ID());
+            int proc_id(atoi(p->second.name().c_str()));
+            bool alreadyThere(m_xsecDB.process(sample_id, proc_id).ID() != -1);
+            if(alreadyThere) {
+            float old_xsec = m_xsecDB.process(sample_id, proc_id).xsect();
+            float new_xsec = p->second.xsect();
+            cout<<"MCWeighter::parseAdditionalXsecFile    WARNING "
+                << "The entry for (dsid="<<p->second.ID()<<", proc=" << p->second.name()<<")"
+                <<" will be overwritten "
+                <<"(old xsec: " << old_xsec <<", new xsec: " << new_xsec<<")" << endl;
+            } // alreadythere
+        } // for
+        m_xsecDB.loadFile(gSystem->ExpandPathName(filename.c_str()));
+    } // valid input
+    else {
+        cout<<"MCWeighter::parseAdditionalXsecFile    Invalid input file '" << filename << "'" <<endl;
+    }
+
+    size_t nFinalElements(std::distance(m_xsecDB.begin(), m_xsecDB.end()));
+    if(verbose) {
+        cout<<"MCWeighter::parseAdditionalXsecFile   Parsed and loaded "
+            << (nFinalElements - nInitialElements) << " xsec values from " << filename << endl;
+    }
+    return (nFinalElements-nInitialElements);
 }
 // ------------------------------------------------------------------------- //
-bool MCWeighter::isEmptyLine(const std::string &line)
+bool MCWeighter::isFormattedAsSusyCrossSection(string infilename, bool verbose, bool is_sumw_file)
 {
-    return Susy::utils::rmLeadingTrailingWhitespaces(line).size() == 0;
+    size_t nUsefulLines = readDsidsFromSusyCrossSectionFile(infilename, verbose, is_sumw_file).size();
+    return nUsefulLines>0;
+}
+// ------------------------------------------------------------------------- //
+vector<int> MCWeighter::readDsidsFromSusyCrossSectionFile(string filename, bool verbose, bool is_sumw_file)
+{
+    vector<int> dsids;
+    ifstream input;
+    input.open(filename.c_str(), ifstream::in);
+    bool fileIsOpen(input.is_open());
+    if(!fileIsOpen) {
+        cerr<<"MCWeighter::readDsidsFromSusyCrossSectionFile   Cannot open file: " << filename << endl;
+        return dsids;
+    }
+    size_t nEmptyOrCommentLines =0;
+    size_t nValidLines =0;
+    size_t nInvalidLines =0;
+    string line;
+    if(verbose)
+        cout << "MCWeighter::readDsidsFromSusyCrossSectionFile    Parsing: " << filename << endl;
+    while(getline(input, line)) {
+        bool skipThisLine(isEmptyLine(line) || isCommentLine(line));
+        if(skipThisLine) {
+            nEmptyOrCommentLines++;
+            continue;
+        }
+        else {
+            int dsid;
+            if(MCWeighter::readDsidsFromSusyCrossSectionLine(line, dsid, verbose, is_sumw_file)) {
+                dsids.push_back(dsid);
+                nValidLines++;
+            }
+            else {
+                nInvalidLines++;
+            }
+        }
+    } // while
+    if(verbose) {
+        cout<<"MCWeighter::readDsidsFromSusyCrossSectionFile    "
+        << (is_sumw_file ? "Xsec" : "Sumw") << " file " << filename << " summary: " << endl;
+        cout << "   lines valid     : " << nValidLines << endl;
+        cout << "   lines invalid   : " << nInvalidLines << endl;
+        cout << "   lines empty/com.: " << nEmptyOrCommentLines << endl;
+    }
+    return dsids;
+}
+// ------------------------------------------------------------------------- //
+bool MCWeighter::readDsidsFromSusyCrossSectionLine(const string& line, int& dsid, bool verbose, bool is_sumw_file)
+{
+    bool valid = false;
+    const size_t nExpectedTokens = (is_sumw_file ? 3 : 6);
+    vector<string> tokens(Susy::utils::tokenizeString(line, ' '));
+    bool hasExpectedTokens(tokens.size() == nExpectedTokens);
+    bool firstTokenIsDsid(tokens.size() > 0 && Susy::utils::isInt(tokens[0]));
+    bool isValidLine(hasExpectedTokens && firstTokenIsDsid);
+    if(isValidLine) {
+        dsid = atoi(tokens[0].c_str());
+        valid = true;
+    }
+    else {
+        if(verbose) {
+            cout<<"MCWeighter::readDsidsFromSusyCrossSectionLine   invalid line "
+            <<" in " << (is_sumw_file ? "Sumw" : "Xsec") << " file "
+            <<" ("<<tokens.size() << " tokens, expected " << nExpectedTokens<<","
+            <<" firstTokenIsDsid " <<(firstTokenIsDsid ? "true" : "false")
+            <<", " << (tokens.size() ? tokens[0] : "")
+            <<" ): "
+            <<"'" << line << "'" << endl;
+        }
+    }
+    return valid;
 }

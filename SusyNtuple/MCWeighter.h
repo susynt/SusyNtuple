@@ -99,7 +99,25 @@ class MCWeighter
         float getXsecTimesEff(const Susy::Event* evt, Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM);
         float getPileupWeight(const Susy::Event* evt, Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM);
 
-        
+        // methods for parsing additional xsec files and checking files        
+        size_t parseAdditionalXsecFile(const std::string& filename, bool verbose=false);
+
+
+        /**
+            The format is 6 words:
+                dsid    name(or process id)   xsec    kfactor   efficiency   relative-uncertainty
+            Empty lines and comments ('#') are skipped.
+            c.f. SUSYTools/SUSYCrossSection.h
+
+            If 'is_sumw_file' set to true, will assume a 3 word format:
+                dsid     process-id     sumw
+            where process-id is 0 for background (non-signal) samples
+        */
+        static bool isFormattedAsSusyCrossSection(std::string filename, bool verbose=false, bool is_sumw_file=false);
+        /// given a cross-section/sumw text file (CrossSectionDB format), return the dsids
+        static std::vector<int> readDsidsFromSusyCrossSectionFile(std::string filename, bool verbose=false, bool is_sumw_file=false);
+        /// given a line from a cross-section/sumw file, parse the dsid; return false if not found
+        static bool readDsidsFromSusyCrossSectionLine(const std::string& line, int& dsid, bool verbose=false, bool is_sumw_file=false);
 
 
     private :
@@ -115,8 +133,6 @@ class MCWeighter
         void buildSumwMapFromTree(TTree* tree);
         void buildSumwMapFromChain(TChain* chain);
         void getSumwFromFile(unsigned int mcid);
-        bool isCommentLine(const std::string& line);
-        bool isEmptyLine(const std::string& line);
 
         SumwMap m_sumwMap;
         bool m_sumw_map_built;
