@@ -179,6 +179,13 @@ public:
     float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
     float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
 
+    ///////////////////////////////////////////
+    // check of sample is Sherpa2.2 V+jet
+    ///////////////////////////////////////////
+    static bool isSherpa22Vjet(const int dsid);
+    static bool isSherpa22Wjet(const int dsid);
+    static bool isSherpa22Zjet(const int dsid);
+
     //
     // Object printing
     //

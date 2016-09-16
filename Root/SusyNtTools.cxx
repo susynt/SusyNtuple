@@ -656,3 +656,28 @@ float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sy
     }
     return errSF;
 }
+///////////////////////////////////////////////////////////////////////
+// Sherpa 2.2 V+jets
+///////////////////////////////////////////////////////////////////////
+bool SusyNtTools::isSherpa22Vjet(const int dsid)
+{
+    return (isSherpa22Wjet(dsid) || isSherpa22Zjet(dsid)); 
+}
+bool SusyNtTools::isSherpa22Wjet(const int mc_)
+{
+    bool is_wjet = false;
+    if( (mc_ >= 363331 && mc_ <= 363354) ||
+        (mc_ >= 363436 && mc_ <= 363459) ||
+        (mc_ >= 363460 && mc_ <= 363483) ) is_wjet = true;
+    return is_wjet;
+}
+bool SusyNtTools::isSherpa22Zjet(const int mc_)
+{
+    bool is_zjet = false;
+    if( (mc_ >= 363102 && mc_ <= 363122) ||
+        (mc_ >= 363361 && mc_ <= 363363) ||
+        (mc_ >= 363388 && mc_ <= 363411) ||
+        (mc_ >= 363364 && mc_ <= 363387) ||
+        (mc_ >= 363412 && mc_ <= 363433) ) is_zjet = true;
+    return is_zjet;
+}

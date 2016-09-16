@@ -186,7 +186,6 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
 double MCWeighter::getMCWeight(const Susy::Event* evt, const float lumi,
     Susy::NtSys::SusyNtSys sys, bool includePileup)
 {
-
     double weight = 1.0;
     if(evt->isMC) {
         double sumw = getSumw(evt);
@@ -214,7 +213,6 @@ double MCWeighter::getMCWeight(const Susy::Event* evt, const float lumi,
     } // ismC
 
     return weight;
-
 }
 // ------------------------------------------------------------------------- //
 double MCWeighter::getSumw(const Susy::Event* evt)
