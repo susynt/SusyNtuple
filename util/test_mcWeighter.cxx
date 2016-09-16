@@ -18,7 +18,7 @@ using namespace std;
    davide.gerbaudo@gmail.com
    Jun 2014
  */
-
+/*
 void writeDummyFile(const string &filename)
 {
     ofstream outFile;
@@ -161,3 +161,4 @@ int main(int argc, char **argv)
     return 0;
 
 }
+*/
