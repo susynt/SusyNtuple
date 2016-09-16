@@ -154,22 +154,22 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
 {
     m_sumw = m_default_sumw;
 
-
-    bool valid_file(MCWeighter::isFormattedAsSusyCrossSection(m_sumw_file, dbg(), true));
-    if(!valid_file) {
-        cout<<"MCWeighter::getSumwFromFile    FATAL Invalid format for provided sumw file: "
-            << m_sumw_file << endl;
-        exit(1);
-    }
-
     std::ifstream infile(m_sumw_file);
     string line;
 
+    int dummy;
     unsigned int mcid_;
     int proc_;
     double sumw_;
     while(getline(infile, line)) {
         if(isCommentLine(line) || isEmptyLine(line)) continue;
+
+        if(!MCWeighter::readDsidsFromSusyCrossSectionLine(line, dummy, dbg(), true)) {
+            cout<<"MCWeighter::getSumwFromFile    FATAL Invalid format in line from provided sumw file ("
+                << m_sumw_file << ") : " << line << endl;
+            exit(1);
+        } 
+
         stringstream iss(line);
         while(iss) {
             iss >> mcid_ >> proc_ >> sumw_;
@@ -181,16 +181,6 @@ void MCWeighter::getSumwFromFile(unsigned int mcid)
             }
         }
     } // while
-
-    //if((sumw_ == m_default_sumw) || (sumw_ == 0)) {
-    //    cout<<"MCWeighter::getSumwFromFile    FATAL Unable to find correct sumw"
-    //        << " for MCID " << mcid << " while looking in file: "
-    //        << m_sumw_file <<endl;
-    //    cout<<"MCWeighter::getSumwFromFile    FATAL  --> Is the format of the file"
-    //        << " correct (it should be 3 columns, separated by white-space) "
-    //        << " or is the MCID not in the file?" << endl;
-    //    exit(1);
-    //}
 }
 // ------------------------------------------------------------------------- //
 double MCWeighter::getMCWeight(const Susy::Event* evt, const float lumi,
