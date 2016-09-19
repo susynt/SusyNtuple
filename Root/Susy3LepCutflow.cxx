@@ -131,12 +131,12 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   //
   // Event weighting
   //
-
   // Weight event to luminosity with cross section and pileup
   // New approach, using MCWeighter
   const Event* evt = nt.evt();
-  MCWeighter::WeightSys wSys = MCWeighter::Sys_NOM;
+  NtSys::SusyNtSys wSys = NtSys::NOM;
   float w = SusyNtAna::mcWeighter().getMCWeight(evt, LUMI_A_A3, wSys);
+
 
   // Lepton efficiency correction
   float lepSF = nttools().leptonEffSF(m_signalLeptons);
