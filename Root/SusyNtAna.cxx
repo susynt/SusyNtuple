@@ -15,18 +15,28 @@ SusyNtAna::SusyNtAna() :
         m_printFreq(50000),
         m_dbg(0),
         m_dbgEvt(false),
-        m_duplicate(false)
+        m_duplicate(false),
+        m_sumw_file(""),
+        m_use_sumw_file(false)
 {
 }
 
 /*--------------------------------------------------------------------------------*/
 // Attach tree (normally a TChain)
 /*--------------------------------------------------------------------------------*/
+void SusyNtAna::setUseSumwFile(string file)
+{
+    m_sumw_file = file;
+    m_use_sumw_file = true;
+}
 void SusyNtAna::Init(TTree* tree)
 {
   if(m_dbg) cout << "SusyNtAna::Init" << endl;
   m_tree = tree;
   nt.ReadFrom(tree);
+  if(m_use_sumw_file) {
+    m_mcWeighter.setSumwFromFILE(m_sumw_file);
+  }
   m_mcWeighter.buildSumwMap(tree);
 }
 

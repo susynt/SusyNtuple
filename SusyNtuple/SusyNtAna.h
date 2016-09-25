@@ -121,6 +121,7 @@ class SusyNtAna : public TSelector
 
     /// getter to be used from outside (set xsec dir, access weight, etc.)
     MCWeighter& mcWeighter() { return m_mcWeighter; }
+    void setUseSumwFile(std::string file);
 
     /// Dump timer
     void dumpTimer();
@@ -156,6 +157,8 @@ class SusyNtAna : public TSelector
     RunEventMap m_eventListDuplicate; ///< Checks for duplicate run/event
 
     MCWeighter m_mcWeighter;   // provides MC normalization and event weight
+    std::string m_sumw_file;
+    bool m_use_sumw_file;
 
 
     //
