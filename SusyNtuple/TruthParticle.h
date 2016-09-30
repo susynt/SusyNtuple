@@ -36,7 +36,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(TruthParticle,1);
+    ClassDef(TruthParticle,2);
 };
 } // Susy
 #endif
