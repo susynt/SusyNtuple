@@ -16,7 +16,9 @@ TruthParticle::TruthParticle(const TruthParticle &rhs):
   pdgId(rhs.pdgId),
   charge(rhs.charge),
   status(rhs.status),
-  motherPdgId(rhs.motherPdgId)
+  motherPdgId(rhs.motherPdgId),
+  type(rhs.type),
+  origin(rhs.origin)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -29,7 +31,9 @@ TruthParticle& TruthParticle::operator=(const TruthParticle &rhs)
     pdgId       = rhs.pdgId;
     charge      = rhs.charge;
     status      = rhs.status;
-    motherPdgId = rhs.motherPdgId;    
+    motherPdgId = rhs.motherPdgId;
+    type        = rhs.type;
+    origin      = rhs.origin;    
   }
   return *this;
 }
@@ -44,7 +48,9 @@ void TruthParticle::print() const
        << " pdgId "       << setw(10) << pdgId
        << " charge "      << setw(2)  << charge
        //<< " status "      << setw(2)  << status
-       //<< " motherPdgId " << setw(10) << motherPdgId 
+       //<< " motherPdgId " << setw(10) << motherPdgId
+       //<< " type 	  " << setw(?)  << type
+       //<< " origin      " << setw(?)  << origin 
        << endl;
   cout.precision(6);
   cout.unsetf(ios_base::fixed);

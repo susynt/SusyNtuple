@@ -20,6 +20,8 @@ public:
     int charge;
     int status;
     int motherPdgId;
+    int type;
+    int origin; 
 
     // Print method
     void print() const;
@@ -29,6 +31,8 @@ public:
       charge = 0;
       status = 0;
       motherPdgId = 0;
+      type = 0;
+      origin = 0;
       Particle::clear();
     }
 
