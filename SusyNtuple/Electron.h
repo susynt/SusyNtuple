@@ -50,6 +50,8 @@ public:
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
     int truthCharge;          ///< as provided by xAOD::TruthHelpers::getTruthParticle
     int ss3lChargeFlip;       ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
+    bool passChargeFlipTagger; ///< boolean result from ElectronPhotonSelector/AsgElectronChargeFlipTaggerTool
+    double chargeFlipBDT;       ///< BDT value from ElectronPhotonSelector/AsgElectronChargeFlipTaggerTool 
 
     //AT: This is insane >50!
     float res_all_dn;
@@ -140,6 +142,8 @@ public:
       isChargeFlip = false;
       truthCharge = 0;
       ss3lChargeFlip = 0;
+      passChargeFlipTagger = false;
+      chargeFlipBDT = -99;
       
       res_all_dn= res_all_up= 0;
       /*
@@ -180,7 +184,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 21);
+    ClassDef(Electron, 22);
 };
 } //Susy
 #endif

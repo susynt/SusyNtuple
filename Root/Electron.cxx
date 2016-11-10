@@ -30,6 +30,8 @@ Electron::Electron(const Electron &rhs):
   isChargeFlip(rhs.isChargeFlip),
   truthCharge(rhs.truthCharge),
   ss3lChargeFlip(rhs.ss3lChargeFlip),
+  passChargeFlipTagger(rhs.passChargeFlipTagger),
+  chargeFlipBDT(rhs.chargeFlipBDT),
 
   res_all_dn(rhs.res_all_dn),
   res_all_up(rhs.res_all_up),
@@ -126,7 +128,9 @@ Electron& Electron::operator=(const Electron &rhs)
     isChargeFlip = rhs.isChargeFlip;
     truthCharge = rhs.truthCharge;
     ss3lChargeFlip = rhs.ss3lChargeFlip;
-   
+    passChargeFlipTagger = rhs.passChargeFlipTagger;
+    chargeFlipBDT = rhs.chargeFlipBDT;
+ 
     res_all_dn = rhs.res_all_dn;
     res_all_up = res_all_up;
 /*
