@@ -80,6 +80,10 @@ public:
     std::vector<float> errIso_stat_dn;          // MUON_ISO_STAT_DN
     std::vector<float> errIso_syst_up;          // MUON_ISO_SYS_UP
     std::vector<float> errIso_syst_dn;          // MUON_ISO_SYS_DN
+    std::vector<float> errTTVA_stat_up;         // MUON_TTVA_STAT_UP
+    std::vector<float> errTTVA_stat_dn;         // MUON_TTVA_STAT_DN
+    std::vector<float> errTTVA_syst_up;         // MUON_TTVA_SYS_UP
+    std::vector<float> errTTVA_syst_dn;         // MUON_TTVA_SYS_DN
 
     // Polymorphism, baby!!
     bool isEle() const { return false; }
@@ -121,14 +125,17 @@ public:
       errIso_stat_dn.assign(MuonId::MuonIdInvalid, 0);
       errIso_syst_up.assign(MuonId::MuonIdInvalid, 0);
       errIso_syst_dn.assign(MuonId::MuonIdInvalid, 0);
-
+      errTTVA_stat_up.assign(MuonId::MuonIdInvalid, 0);
+      errTTVA_stat_dn.assign(MuonId::MuonIdInvalid, 0);
+      errTTVA_syst_up.assign(MuonId::MuonIdInvalid, 0);
+      errTTVA_syst_dn.assign(MuonId::MuonIdInvalid, 0);
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
 
       Lepton::clear();
     }
 
-    ClassDef(Muon, 19);
+    ClassDef(Muon, 20);
 };
 } // Susy
 #endif

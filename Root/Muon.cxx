@@ -54,7 +54,11 @@ Muon::Muon(const Muon &rhs):
   errIso_stat_up(rhs.errIso_stat_up),
   errIso_stat_dn(rhs.errIso_stat_dn),
   errIso_syst_up(rhs.errIso_syst_up),
-  errIso_syst_dn(rhs.errIso_syst_dn)
+  errIso_syst_dn(rhs.errIso_syst_dn),
+  errTTVA_stat_up(rhs.errTTVA_stat_up),
+  errTTVA_stat_dn(rhs.errTTVA_stat_dn),
+  errTTVA_syst_up(rhs.errTTVA_syst_up),
+  errTTVA_syst_dn(rhs.errTTVA_syst_dn)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -107,6 +111,10 @@ Muon& Muon::operator=(const Muon &rhs)
     errIso_stat_dn = rhs.errIso_stat_dn;
     errIso_syst_up = rhs.errIso_syst_up;
     errIso_syst_dn = rhs.errIso_syst_dn;
+    errTTVA_stat_up = rhs.errTTVA_stat_up;
+    errTTVA_stat_dn = rhs.errTTVA_stat_dn;
+    errTTVA_syst_up = rhs.errTTVA_syst_up;
+    errTTVA_syst_dn = rhs.errTTVA_syst_dn;
   }
   return *this;
 }
