@@ -7,6 +7,7 @@
 #include "SusyNtuple/MuonId.h"
 
 #include <vector>
+#include <map>
 
 namespace Susy
 {
@@ -51,6 +52,9 @@ public:
     std::vector<float> muoEffSF;
     // trigger efficiency SF per muon quality WP
     std::vector<float> muoTrigSF;
+
+    // indices of other muons passing dimuon triggers with this muon
+    std::map<std::string, std::vector<unsigned int>> diMuTrigMap;
 
     bool isBadMuon;           ///< Bad muon flag from SUSYTools
     bool isCosmic;            ///< Cosmic muon flag from SUSYTools
@@ -129,6 +133,7 @@ public:
       errTTVA_stat_dn.assign(MuonId::MuonIdInvalid, 0);
       errTTVA_syst_up.assign(MuonId::MuonIdInvalid, 0);
       errTTVA_syst_dn.assign(MuonId::MuonIdInvalid, 0);
+      diMuTrigMap.clear();
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
 
