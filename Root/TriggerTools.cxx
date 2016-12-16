@@ -86,8 +86,8 @@ const std::vector<std::string> triggers_run2 = {
     // electron trig lh
     //"HLT_e7_lhmedium",
     //"HLT_e9_lhmedium",
-    //"HLT_e12_lhloose",
-    //"HLT_e12_lhloose_L1EM10VH",
+    "HLT_e12_lhloose",
+    "HLT_e12_lhloose_L1EM10VH",
     "HLT_e15_lhloose_L1EM13VH",
     "HLT_e17_lhloose",
     "HLT_e17_lhmedium",

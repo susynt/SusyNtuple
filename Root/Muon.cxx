@@ -35,6 +35,7 @@ Muon::Muon(const Muon &rhs):
   tight(rhs.tight),
   muoEffSF(rhs.muoEffSF),
   muoTrigSF(rhs.muoTrigSF),
+  diMuTrigMap(rhs.diMuTrigMap),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
   ms_up(rhs.ms_up),
@@ -89,6 +90,7 @@ Muon& Muon::operator=(const Muon &rhs)
     loose = rhs.loose;
     medium = rhs.medium;
     tight = rhs.tight;
+    diMuTrigMap = rhs.diMuTrigMap;
     isBadMuon = rhs.isBadMuon;
     isCosmic = rhs.isCosmic;
     ms_up = rhs.ms_up;
