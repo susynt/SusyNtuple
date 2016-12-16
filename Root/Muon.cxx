@@ -127,12 +127,12 @@ void Muon::setState(int sys)
   if(sys == NtSys::NOM) return;
   
   float sf = 0;
-  if     ( sys == NtSys::MUONS_MS_UP ) sf = ms_up;
-  else if( sys == NtSys::MUONS_MS_DN ) sf = ms_dn;
-  else if( sys == NtSys::MUONS_ID_UP ) sf = id_up;
-  else if( sys == NtSys::MUONS_ID_DN ) sf = id_dn;
-  else if( sys == NtSys::MUONS_SCALE_UP ) sf = scale_up;
-  else if( sys == NtSys::MUONS_SCALE_DN ) sf = scale_dn;
+  if     ( sys == NtSys::MUON_MS_UP ) sf = ms_up;
+  else if( sys == NtSys::MUON_MS_DN ) sf = ms_dn;
+  else if( sys == NtSys::MUON_ID_UP ) sf = id_up;
+  else if( sys == NtSys::MUON_ID_DN ) sf = id_dn;
+  else if( sys == NtSys::MUON_SCALE_UP ) sf = scale_up;
+  else if( sys == NtSys::MUON_SCALE_DN ) sf = scale_dn;
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());
