@@ -39,6 +39,7 @@ public:
 
     unsigned int nVtx;        ///< number of good vertices
     float avgMu;              ///< average interactions per bunch crossing
+    float avgMuDataSF;        ///< average interactions per bunch crossing with Data SF applied
 
     int hfor;                 ///< heavy flavor overlap removal decision
 
@@ -117,7 +118,7 @@ public:
       mcChannel = w = 0;
       initialNumberOfEvents = sumOfEventWeights = sumOfEventWeightsSquared = 0;
       larError = 0;
-      nVtx = avgMu = trigFlags = 0;
+      nVtx = avgMu = avgMuDataSF = trigFlags = 0;
       hfor = -1;
       susyFinalState = 0;
       mllMcTruth = -1.0;
@@ -136,7 +137,7 @@ public:
       eventScale = alphaQCD = alphaQED = 0;
     }
 
-    ClassDef(Event, 35);
+    ClassDef(Event, 36);
   };
 } // Susy
 #endif
