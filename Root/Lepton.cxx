@@ -21,7 +21,7 @@ Lepton::Lepton(const Lepton &rhs):
   isoGradient(rhs.isoGradient),
   isoLooseTrackOnly(rhs.isoLooseTrackOnly),
   isoLoose(rhs.isoLoose),
-  isoTight(rhs.isoTight),
+  isoFixedCutTightTrackOnly(rhs.isoFixedCutTightTrackOnly),
   d0(rhs.d0),
   errD0(rhs.errD0),
   d0sigBSCorr(rhs.d0sigBSCorr),
@@ -59,7 +59,7 @@ Lepton& Lepton::operator=(const Lepton &rhs)
     isoGradient = rhs.isoGradient;
     isoLooseTrackOnly = rhs.isoLooseTrackOnly;
     isoLoose = rhs.isoLoose;
-    isoTight = rhs.isoTight;
+    isoFixedCutTightTrackOnly = rhs.isoFixedCutTightTrackOnly;
     d0 = rhs.d0;
     errD0 = rhs.errD0;
     d0sigBSCorr = rhs.d0sigBSCorr;

@@ -11,7 +11,7 @@ enum class Isolation{
     ,Gradient // lepton
     ,LooseTrackOnly // lepton
     ,Loose // lepton
-    ,Tight // lepton
+    ,FixedCutTightTrackOnly // lepton
     ,FixedCutTight // photon
     ,FixedCutTightCaloOnly // photon
     ,FixedCutLoose // photon

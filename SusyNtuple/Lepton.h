@@ -38,11 +38,11 @@ public:
     float ptvarcone30;        ///< ptvarcone30 iso
 
     // IsolationSelectionTool flags
-    bool isoGradientLoose;    ///< GradientLoose WP
-    bool isoGradient;         ///< Gradient WP
-    bool isoLooseTrackOnly;   ///< LooseTrackOnly WP
-    bool isoLoose;            ///< Loose WP
-    bool isoTight;            ///< Tight WP
+    bool isoGradientLoose;          ///< GradientLoose WP
+    bool isoGradient;               ///< Gradient WP
+    bool isoLooseTrackOnly;         ///< LooseTrackOnly WP
+    bool isoLoose;                  ///< Loose WP
+    bool isoFixedCutTightTrackOnly; ///< FixedCutTightTrackOnly WP
 
 
     float d0;                 ///< d0 extrapolated to PV
@@ -103,7 +103,7 @@ public:
         etconetopo20 = etconetopo30
                      = ptcone20    = ptcone30 
                      = ptvarcone20 = ptvarcone30 = 0;
-        isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoTight = false;
+        isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoFixedCutTightTrackOnly = false;
         d0 = errD0 = d0sigBSCorr = z0 = errZ0 = 0;
         mcType = mcOrigin = mcBkgMotherPdgId = mcBkgTruthOrigin = 0;
         matched2TruthLepton = false;
@@ -114,7 +114,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 22);
+    ClassDef(Lepton, 23);
 };
 } // Susy
 #endif

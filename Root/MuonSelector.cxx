@@ -24,7 +24,7 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_3Lep   :
         s = new MuonSelector_3Lep();
         s->setSignalId(MuonId::Medium);
-        s->setSignalIsolation(Isolation::Tight);
+        s->setSignalIsolation(Isolation::FixedCutTightTrackOnly);
         break;
     case AnalysisType::Ana_4Lep   :
         s = new MuonSelector_4Lep();
@@ -34,7 +34,7 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_2LepWH :
         s = new MuonSelector_2LepWH();
         s->setSignalId(MuonId::Medium);
-        s->setSignalIsolation(Isolation::Tight);
+        s->setSignalIsolation(Isolation::FixedCutTightTrackOnly);
         break;
     case AnalysisType::Ana_SS3L   :
         s = new MuonSelector_SS3L();
@@ -180,7 +180,7 @@ bool MuonSelector_3Lep::isSignal(const Muon* mu)
     bool pass = false;
     if(mu) {
         pass = (isBaseline(mu) &&
-                mu->isoTight &&
+                mu->isoFixedCutTightTrackOnly &&
                 passIpCut(mu));
     }
     return pass;

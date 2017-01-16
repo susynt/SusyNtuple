@@ -255,11 +255,11 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
 bool OverlapTools::leptonPassesIsolation(const Lepton* lep, const Isolation &iso)
 {
 
-    if      (iso == Isolation::GradientLoose)   return lep->isoGradientLoose;
-    else if (iso == Isolation::Gradient)        return lep->isoGradient;
-    else if (iso == Isolation::LooseTrackOnly)  return lep->isoLooseTrackOnly;
-    else if (iso == Isolation::Loose)           return lep->isoLoose;
-    else if (iso == Isolation::Tight)           return lep->isoTight;
+    if      (iso == Isolation::GradientLoose)           return lep->isoGradientLoose;
+    else if (iso == Isolation::Gradient)                return lep->isoGradient;
+    else if (iso == Isolation::LooseTrackOnly)          return lep->isoLooseTrackOnly;
+    else if (iso == Isolation::Loose)                   return lep->isoLoose;
+    else if (iso == Isolation::FixedCutTightTrackOnly)  return lep->isoFixedCutTightTrackOnly;
     else {
         cout<<"OverlapTools::leptonPassesIsolation:"
             <<" unknown isolation '"<<Isolation2str(iso)<<"'."<<endl;

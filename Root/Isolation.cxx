@@ -12,7 +12,7 @@ std::string Isolation2str(const Isolation &iso)
         case Isolation::Gradient                : s = "Gradient"        ; break;
         case Isolation::LooseTrackOnly          : s = "LooseTrackOnly"  ; break;
         case Isolation::Loose                   : s = "Loose"           ; break;
-        case Isolation::Tight                   : s = "Tight"           ; break;
+        case Isolation::FixedCutTightTrackOnly  : s = "FixedCutTightTrackOnly" ; break;
         case Isolation::FixedCutTight           : s = "FixedCutTight"   ; break;
         case Isolation::FixedCutTightCaloOnly   : s = "FixedCutTightCaloOnly" ; break;
         case Isolation::FixedCutLoose           : s = "FixedCutLoose"   ; break;
