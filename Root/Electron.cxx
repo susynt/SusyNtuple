@@ -11,6 +11,9 @@ using Susy::Electron;
 /*--------------------------------------------------------------------------------*/
 Electron::Electron(const Electron &rhs):
   Lepton(rhs),
+  author(rhs.author),
+  authorElectron(rhs.authorElectron),
+  authorAmbiguous(rhs.authorAmbiguous),
   clusE(rhs.clusE),
   clusEta(rhs.clusEta),
   clusPhi(rhs.clusPhi),
@@ -109,6 +112,9 @@ Electron& Electron::operator=(const Electron &rhs)
 {
   if (this != &rhs) {
     Lepton::operator=(rhs);
+    author = rhs.author;
+    authorElectron = rhs.authorElectron;
+    authorAmbiguous = rhs.authorAmbiguous;
     clusE = rhs.clusE;
     clusEta = rhs.clusEta;
     clusPhi = rhs.clusPhi;

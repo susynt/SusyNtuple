@@ -22,6 +22,12 @@ public:
     /** Assignment operator */
     Electron& operator=(const Electron &);
 
+    /// Author information
+    // https://twiki.cern.ch/twiki/bin/view/AtlasProtected/EGammaIdentificationRun2
+    int author;
+    bool authorElectron;            ///< electron reconstructed exclusively as an electron (author == 1)
+    bool authorAmbiguous;           ///< electron reconstructed both as electron and photon (author == 16)
+
     // Cluster/track variables
     float clusE;              ///< CaloCluster energy
     float clusEta;            ///< CaloCluster eta
@@ -135,6 +141,8 @@ public:
 
     /// Clear vars
     void clear(){
+      author = 0;
+      authorElectron = authorAmbiguous = false;
       clusE = clusEta = clusPhi = clusEtaBE = clusPhiBE = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
       passOQBadClusElectron = false;
@@ -184,7 +192,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 22);
+    ClassDef(Electron, 23);
 };
 } //Susy
 #endif
