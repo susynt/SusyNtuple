@@ -105,6 +105,11 @@ public:
     float alphaQCD;
     float alphaQED;
 
+    /// all MC weights
+    // would like this to be a `std::map<std::string, float>, but would need something like an updated version of TruthTools
+    // e.g. see https://svnweb.cern.ch/trac/atlasoff/browser/Generators/GenAnalysisTools/TruthTools?order=name
+    std::vector<float> mcWeights;
+
     /// print event
     void print() const;
 
@@ -134,9 +139,10 @@ public:
       xsec = errXsec = sumw = pdfSF = 0;
       pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
       eventScale = alphaQCD = alphaQED = 0;
+      mcWeights.clear();
     }
 
-    ClassDef(Event, 35);
+    ClassDef(Event, 36);
   };
 } // Susy
 #endif
