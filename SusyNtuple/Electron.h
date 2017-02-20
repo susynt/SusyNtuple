@@ -51,8 +51,11 @@ public:
     std::vector<float> eleEffSF;
     // trigger efficiency SF per electron LH WP
     std::vector<float> eleTrigSF;
+    // charge flip efficiency SF per electron LH WP
+    std::vector<float> eleCHFSF;
 
     std::vector<int> sharedMuTrk; ///< Indices of SusyNt preMuons with which this electron's track is shared
+    std::vector<int> sharedEleEleTrk; ///< Indices of SusyNt preElectrons which this electron's track is shared
     bool isChargeFlip;        ///< Charge flip flag from RecoTruthMatch
     int truthCharge;          ///< as provided by xAOD::TruthHelpers::getTruthParticle
     int ss3lChargeFlip;       ///< as provided by ss3l_chargeflip::fillElectronChargeFlip
@@ -146,7 +149,8 @@ public:
       clusE = clusEta = clusPhi = clusEtaBE = clusPhiBE = trackPt = trackEta = 0;
       veryLooseLLH = looseLLH = looseLLHBLayer = mediumLLH = tightLLH = false;
       passOQBadClusElectron = false;
-      sharedMuTrk.assign(100,0);
+      sharedMuTrk.assign(50,0);
+      sharedEleEleTrk.assign(50,0);
       isChargeFlip = false;
       truthCharge = 0;
       ss3lChargeFlip = 0;
@@ -180,6 +184,7 @@ public:
 */
      eleEffSF.assign(ElectronId::ElectronIdInvalid, 1);
      eleTrigSF.assign(ElectronId::ElectronIdInvalid, 1);
+     eleCHFSF.assign(ElectronId::ElectronIdInvalid, 1);
      errEffSF_id_up.assign(ElectronId::ElectronIdInvalid, 0);
      errEffSF_id_dn.assign(ElectronId::ElectronIdInvalid, 0);
      errEffSF_reco_up.assign(ElectronId::ElectronIdInvalid, 0);
@@ -192,7 +197,7 @@ public:
       Lepton::clear();
     }
 
-    ClassDef(Electron, 23);
+    ClassDef(Electron, 24);
 };
 } //Susy
 #endif
