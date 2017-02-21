@@ -23,6 +23,8 @@ public:
     /** Assignment operator */
     Lepton& operator=(const Lepton &);
 
+    int idx;                ///< index of lepton in lepton (muon or electron) collection stored in SusyNt
+
     // public member vars
     int q;                    ///< Charge
     bool isBaseline; ///< flag computed by SUSYTools_xAOD
@@ -99,6 +101,7 @@ public:
 
     /// Clear vars
     void clear(){
+        idx = 0;
         q = 0;
         etconetopo20 = etconetopo30
                      = ptcone20    = ptcone30 
@@ -114,7 +117,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 23);
+    ClassDef(Lepton, 24);
 };
 } // Susy
 #endif

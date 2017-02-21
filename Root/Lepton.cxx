@@ -8,6 +8,7 @@ using Susy::Particle;
 /*--------------------------------------------------------------------------------*/
 Lepton::Lepton(const Lepton &rhs):
   Particle(rhs),
+  idx(rhs.idx),
   q(rhs.q),
   isBaseline(rhs.isBaseline),
   isSignal(rhs.isSignal),
@@ -46,6 +47,7 @@ Lepton& Lepton::operator=(const Lepton &rhs)
 {
   if (this != &rhs) {
     Particle::operator=(rhs);
+    idx = rhs.idx;
     q = rhs.q; 
     isBaseline = rhs.isBaseline;
     isSignal = rhs.isSignal;
