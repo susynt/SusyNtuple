@@ -43,6 +43,10 @@ Muon::Muon(const Muon &rhs):
   id_dn(rhs.id_dn),
   scale_up(rhs.scale_up),
   scale_dn(rhs.scale_dn),
+  sagitta_bias_dn(rhs.sagitta_bias_dn),
+  sagitta_bias_up(rhs.sagitta_bias_up),
+  sagitta_rho_dn(rhs.sagitta_rho_dn),
+  sagitta_rho_up(rhs.sagitta_rho_up),
   errEffSF_stat_up(rhs.errEffSF_stat_up),
   errEffSF_stat_dn(rhs.errEffSF_stat_dn),
   errEffSF_syst_up(rhs.errEffSF_syst_up),
@@ -58,7 +62,11 @@ Muon::Muon(const Muon &rhs):
   errTTVA_stat_up(rhs.errTTVA_stat_up),
   errTTVA_stat_dn(rhs.errTTVA_stat_dn),
   errTTVA_syst_up(rhs.errTTVA_syst_up),
-  errTTVA_syst_dn(rhs.errTTVA_syst_dn)
+  errTTVA_syst_dn(rhs.errTTVA_syst_dn),
+  errBadMu_stat_dn(rhs.errBadMu_stat_dn),
+  errBadMu_stat_up(rhs.errBadMu_stat_up),
+  errBadMu_syst_dn(rhs.errBadMu_syst_dn),
+  errBadMu_syst_up(rhs.errBadMu_syst_up)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -97,6 +105,10 @@ Muon& Muon::operator=(const Muon &rhs)
     id_dn = rhs.id_dn;
     scale_up = rhs.scale_up;
     scale_dn = rhs.scale_dn;
+    sagitta_bias_dn = rhs.sagitta_bias_dn;
+    sagitta_bias_up = rhs.sagitta_bias_up;
+    sagitta_rho_dn = rhs.sagitta_rho_dn;
+    sagitta_rho_up = rhs.sagitta_rho_up;
     muoEffSF = rhs.muoEffSF;
     muoTrigSF = rhs.muoTrigSF;
     errEffSF_stat_up = rhs.errEffSF_stat_up;
@@ -115,6 +127,10 @@ Muon& Muon::operator=(const Muon &rhs)
     errTTVA_stat_dn = rhs.errTTVA_stat_dn;
     errTTVA_syst_up = rhs.errTTVA_syst_up;
     errTTVA_syst_dn = rhs.errTTVA_syst_dn;
+    errBadMu_stat_dn = rhs.errBadMu_stat_dn;
+    errBadMu_stat_up = rhs.errBadMu_stat_up;
+    errBadMu_syst_dn = rhs.errBadMu_syst_dn;
+    errBadMu_syst_up = rhs.errBadMu_syst_up;
   }
   return *this;
 }
@@ -133,6 +149,10 @@ void Muon::setState(int sys)
   else if( sys == NtSys::MUON_ID_DN ) sf = id_dn;
   else if( sys == NtSys::MUON_SCALE_UP ) sf = scale_up;
   else if( sys == NtSys::MUON_SCALE_DN ) sf = scale_dn;
+  else if( sys == NtSys::MUON_SAGITTA_RESBIAS_UP ) sf = sagitta_bias_up;
+  else if( sys == NtSys::MUON_SAGITTA_RESBIAS_DN ) sf = sagitta_bias_dn;
+  else if( sys == NtSys::MUON_SAGITTA_RHO_UP ) sf = sagitta_rho_up;
+  else if( sys == NtSys::MUON_SAGITTA_RHO_DN ) sf = sagitta_rho_dn;
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());

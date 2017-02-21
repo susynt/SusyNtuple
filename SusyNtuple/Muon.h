@@ -21,8 +21,6 @@ public:
     /** Assignment operator */
     Muon& operator=(const Muon &);
 
-    int idx;                  ///< index of muon in muon collection stored in SusyNt
-
     bool isCaloTagged;        ///< Is calo tagged
     bool isSiForward;         ///< Is Silicon associated forward muon
     bool isCombined;          ///< Is combined muon, otherwise segment tagged
@@ -66,6 +64,10 @@ public:
     float id_dn;              ///< ID Pt - sigma
     float scale_up;           ///< SCALE Pt + sigma
     float scale_dn;           ///< SCALE Pt - sigma
+    float sagitta_bias_dn;    ///< MUON_SAGITTA_RESBIAS_DN
+    float sagitta_bias_up;    ///< MUON_SAGITTA_RESBIAS_UP
+    float sagitta_rho_dn;     ///< MUON_SAGITTA_RHO_DN
+    float sagitta_rho_up;     ///< MUON_SAGITTA_RHO_UP
 
     // SF uncertainties
     std::vector<float> errEffSF_stat_up;        // MUON_EFF_STAT_UP
@@ -88,6 +90,10 @@ public:
     std::vector<float> errTTVA_stat_dn;         // MUON_TTVA_STAT_DN
     std::vector<float> errTTVA_syst_up;         // MUON_TTVA_SYS_UP
     std::vector<float> errTTVA_syst_dn;         // MUON_TTVA_SYS_DN
+    std::vector<float> errBadMu_stat_dn;        // MUON_BADMUON_STAT_DN
+    std::vector<float> errBadMu_stat_up;        // MUON_BADMUON_STAT_UP
+    std::vector<float> errBadMu_syst_dn;        // MUON_BADMUON_SYS_DN
+    std::vector<float> errBadMu_syst_up;        // MUON_BADMUON_SYS_UP
 
     // Polymorphism, baby!!
     bool isEle() const { return false; }
@@ -99,7 +105,6 @@ public:
 
     /// Clear vars
     void clear(){
-      idx = 0;
       isCombined = 0;
       isCaloTagged = 0;
       isSiForward = 0;
@@ -133,14 +138,20 @@ public:
       errTTVA_stat_dn.assign(MuonId::MuonIdInvalid, 0);
       errTTVA_syst_up.assign(MuonId::MuonIdInvalid, 0);
       errTTVA_syst_dn.assign(MuonId::MuonIdInvalid, 0);
+      errBadMu_stat_dn.assign(MuonId::MuonIdInvalid, 0);
+      errBadMu_stat_up.assign(MuonId::MuonIdInvalid, 0);
+      errBadMu_syst_dn.assign(MuonId::MuonIdInvalid, 0);
+      errBadMu_syst_up.assign(MuonId::MuonIdInvalid, 0);
       diMuTrigMap.clear();
       isBadMuon = isCosmic = false;
       ms_up = ms_dn = id_up = id_dn = scale_up = scale_dn  = 0;
+      sagitta_bias_dn = sagitta_bias_up = 0;
+      sagitta_rho_dn = sagitta_rho_up = 0;
 
       Lepton::clear();
     }
 
-    ClassDef(Muon, 20);
+    ClassDef(Muon, 22);
 };
 } // Susy
 #endif
