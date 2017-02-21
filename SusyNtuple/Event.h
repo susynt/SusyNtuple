@@ -41,8 +41,6 @@ public:
     float avgMu;              ///< average interactions per bunch crossing
     float avgMuDataSF;        ///< average interactions per bunch crossing with Data SF applied
 
-    int hfor;                 ///< heavy flavor overlap removal decision
-
     /// SUSY subprocess ID's: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/SUSYSignalUncertainties#Subprocess_IDs
     int susyFinalState;       ///< Susy process
     int hDecay;               ///< Higgs decay (see WhTruthExtractor)
@@ -54,8 +52,6 @@ public:
     float susy3BodyRightPol;  ///< Right polarized stop (70%)
     float susy3BodyOnlyMass;  ///< No new angle, test for just mass - ASM-2016-04-25
 
-    float mllMcTruth;         ///< mll from mcTruth (filled for Z->ll overlapping samples)
-    bool passMllForAlpgen;    ///< computed from value above; see MultiLep/TruthTools for details
 
     //  sherpa 2.2 V+jets reweighting
     // see: https://twiki.cern.ch/twiki/bin/viewauth/AtlasProtected/CentralMC15ProductionList#NEW_Sherpa_v2_2_V_jets_NJet_rewe
@@ -86,25 +82,11 @@ public:
     float wPileup;            ///< pileup weight for full dataset
     float wPileup_up;         ///< pileup weight shifted for systematic
     float wPileup_dn;         ///< pileup weight shifted for systematic
-    float wPileupAB3;         ///< pileup weight for 2012 period A-B3 only
-    float wPileupAB;          ///< pileup weight for 2012 period A-B only
-    float wPileupIL;          ///< pileup weight for 2012 period I,L only (TEMPORARY)
-    float wPileupAE;          ///< pileup weight for HCP dataset A-E
     float xsec;               ///< cross section * kfactor * efficiency, from SUSY db
     float errXsec;            ///< cross section uncertainty
     float sumw;               ///< Sum of generator weights
-    float pdfSF;              ///< PDF weight, for scaling 7TeV MC to 8TeV
 
     /// PDF Systematic information
-    int pdf_id1;
-    int pdf_id2;
-    float pdf_x1;
-    float pdf_x2;
-    float pdf_scale;
-
-    float eventScale;
-    float alphaQCD;
-    float alphaQED;
 
     /// MC weights
     // would like this to be a `std::map<std::string, float>, but would need something like an updated version of TruthTools
@@ -124,26 +106,21 @@ public:
       initialNumberOfEvents = sumOfEventWeights = sumOfEventWeightsSquared = 0;
       larError = 0;
       nVtx = avgMu = avgMuDataSF = trigFlags = 0;
-      hfor = -1;
       susyFinalState = 0;
-      mllMcTruth = -1.0;
       hDecay = -1;
       eventWithSusyProp = false;
       susySpartId1 = susySpartId2 = 0;
       susy3BodyLeftPol = susy3BodyRightPol = susy3BodyOnlyMass = 0;
-      passMllForAlpgen = true;
       isSherpaVjetsSample = false;
       sherpa22VjetsWeight = 1;
       //memset(evtFlag,0,sizeof(evtFlag));
       memset(cutFlags,0,sizeof(cutFlags));
-      wPileup = wPileup_up = wPileup_dn = wPileupAB3 = wPileupAB = wPileupIL = wPileupAE = 0;
-      xsec = errXsec = sumw = pdfSF = 0;
-      pdf_id1 = pdf_id2 = pdf_x1 = pdf_x2 = pdf_scale = 0;
-      eventScale = alphaQCD = alphaQED = 0;
+      wPileup = wPileup_up = wPileup_dn = 0;
+      xsec = errXsec = sumw = 0;
       mcWeights.clear();
     }
 
-    ClassDef(Event, 37);
+    ClassDef(Event, 38);
   };
 } // Susy
 #endif

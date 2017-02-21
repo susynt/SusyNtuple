@@ -12,74 +12,8 @@ enum SusyNtSys {
   NOM             // Central value
   ,EG_RESOLUTION_ALL_DN
   ,EG_RESOLUTION_ALL_UP
-  /*
-  ,EG_RESOLUTION_LASTRESOLUTIONVARIATION
-  ,EG_RESOLUTION_MATERIALCALO_DN
-  ,EG_RESOLUTION_MATERIALCALO_UP
-  ,EG_RESOLUTION_MATERIALCRYO_DN
-  ,EG_RESOLUTION_MATERIALCRYO_UP
-  ,EG_RESOLUTION_MATERIALGAP_DN
-  ,EG_RESOLUTION_MATERIALGAP_UP
-  ,EG_RESOLUTION_MATERIALID_DN
-  ,EG_RESOLUTION_MATERIALID_UP
-  ,EG_RESOLUTION_NOMINAL
-  ,EG_RESOLUTION_NONE
-  ,EG_RESOLUTION_PILEUP_DN
-  ,EG_RESOLUTION_PILEUP_UP
-  ,EG_RESOLUTION_SAMPLINGTERM_DN
-  ,EG_RESOLUTION_SAMPLINGTERM_UP
-  ,EG_RESOLUTION_ZSMEARING_DN
-  ,EG_RESOLUTION_ZSMEARING_UP
-  */
   ,EG_SCALE_ALL_DN
   ,EG_SCALE_ALL_UP
-  /*
-  ,EG_SCALE_G4_DN
-  ,EG_SCALE_G4_UP
-  ,EG_SCALE_L1GAIN_DN
-  ,EG_SCALE_L1GAIN_UP
-  ,EG_SCALE_L2GAIN_DN
-  ,EG_SCALE_L2GAIN_UP
-  ,EG_SCALE_LARCALIB_DN
-  ,EG_SCALE_LARCALIB_UP
-  ,EG_SCALE_LARELECCALIB_DN
-  ,EG_SCALE_LARELECCALIB_UP
-  ,EG_SCALE_LARELECUNCONV_DN
-  ,EG_SCALE_LARELECUNCONV_UP
-  ,EG_SCALE_LARUNCONVCALIB_DN
-  ,EG_SCALE_LARUNCONVCALIB_UP
-  ,EG_SCALE_LASTSCALEVARIATION
-  ,EG_SCALE_MATCALO_DN
-  ,EG_SCALE_MATCALO_UP
-  ,EG_SCALE_MATCRYO_DN
-  ,EG_SCALE_MATCRYO_UP
-  ,EG_SCALE_MATID_DN
-  ,EG_SCALE_MATID_UP
-  ,EG_SCALE_NOMINAL
-  ,EG_SCALE_NONE
-  ,EG_SCALE_PEDESTAL_DN
-  ,EG_SCALE_PEDESTAL_UP
-  ,EG_SCALE_PS_DN
-  ,EG_SCALE_PS_UP
-  ,EG_SCALE_S12_DN
-  ,EG_SCALE_S12_UP
-  ,EG_SCALE_ZEESTAT_DN
-  ,EG_SCALE_ZEESTAT_UP
-  ,EG_SCALE_ZEESYST_DN
-  ,EG_SCALE_ZEESYST_UP
-  */
-
- // dantrim May23 2016 changing these names
- /*
-  ,EL_EFF_ID_TotalCorrUncertainty_UP  // weight
-  ,EL_EFF_ID_TotalCorrUncertainty_DN  // weight
-  ,EL_EFF_Iso_TotalCorrUncertainty_UP // weight 
-  ,EL_EFF_Iso_TotalCorrUncertainty_DN // weight 
-  ,EL_EFF_Reco_TotalCorrUncertainty_UP  // weight
-  ,EL_EFF_Reco_TotalCorrUncertainty_DN  // weight
-  ,EL_EFF_Trigger_TotalCorrUncertainty_UP
-  ,EL_EFF_Trigger_TotalCorrUncertainty_DN
- */
   ,EL_EFF_ID_TOTAL_Uncorr_DN
   ,EL_EFF_ID_TOTAL_Uncorr_UP
   ,EL_EFF_Iso_TOTAL_Uncorr_DN
@@ -88,10 +22,6 @@ enum SusyNtSys {
   ,EL_EFF_Reco_TOTAL_Uncorr_UP
   ,EL_EFF_Trigger_TOTAL_Uncorr_DN
   ,EL_EFF_Trigger_TOTAL_Uncorr_UP
-  /*
-  ,EL_SCALE_MOMENTUM_DN
-  ,EL_SCALE_MOMENTUM_UP
-  */
   ,FT_EFF_B_systematics_UP
   ,FT_EFF_B_systematics_DN
   ,FT_EFF_C_systematics_UP
@@ -102,62 +32,7 @@ enum SusyNtSys {
   ,FT_EFF_extrapolation_DN
   ,FT_EFF_extrapolation_charm_UP
   ,FT_EFF_extrapolation_charm_DN
-  /*
-  ,FT_Eigen_B_0_DN // All FT_ are weight
-  ,FT_Eigen_B_0_UP
-  ,FT_Eigen_B_1_DN
-  ,FT_Eigen_B_1_UP
-  ,FT_Eigen_B_2_DN
-  ,FT_Eigen_B_2_UP
-  ,FT_Eigen_B_3_DN
-  ,FT_Eigen_B_3_UP
-  ,FT_Eigen_B_4_DN
-  ,FT_Eigen_B_4_UP
-  ,FT_Eigen_B_5_DN
-  ,FT_Eigen_B_5_UP
-  ,FT_Eigen_B_6_DN
-  ,FT_Eigen_B_6_UP
-  ,FT_Eigen_B_7_DN
-  ,FT_Eigen_B_7_UP
-  ,FT_Eigen_B_8_DN
-  ,FT_Eigen_B_8_UP
-  ,FT_Eigen_B_9_DN
-  ,FT_Eigen_B_9_UP
-  ,FT_Eigen_C_0_DN
-  ,FT_Eigen_C_0_UP
-  ,FT_Eigen_C_1_DN
-  ,FT_Eigen_C_1_UP
-  ,FT_Eigen_C_2_DN
-  ,FT_Eigen_C_2_UP
-  ,FT_Eigen_C_3_DN
-  ,FT_Eigen_C_3_UP
-  ,FT_Eigen_Light_0_DN
-  ,FT_Eigen_Light_0_UP
-  ,FT_Eigen_Light_10_DN
-  ,FT_Eigen_Light_10_UP
-  ,FT_Eigen_Light_11_DN
-  ,FT_Eigen_Light_11_UP
-  ,FT_Eigen_Light_1_DN
-  ,FT_Eigen_Light_1_UP
-  ,FT_Eigen_Light_2_DN
-  ,FT_Eigen_Light_2_UP
-  ,FT_Eigen_Light_3_DN
-  ,FT_Eigen_Light_3_UP
-  ,FT_Eigen_Light_4_DN
-  ,FT_Eigen_Light_4_UP
-  ,FT_Eigen_Light_5_DN
-  ,FT_Eigen_Light_5_UP
-  ,FT_Eigen_Light_6_DN
-  ,FT_Eigen_Light_6_UP
-  ,FT_Eigen_Light_7_DN
-  ,FT_Eigen_Light_7_UP
-  ,FT_Eigen_Light_8_DN
-  ,FT_Eigen_Light_8_UP
-  ,FT_Eigen_Light_9_DN
-  ,FT_Eigen_Light_9_UP
-  */
   ,JER
-  //NEW
   ,JET_GroupedNP_1_UP
   ,JET_GroupedNP_1_DN
   ,JET_GroupedNP_2_UP
@@ -166,45 +41,6 @@ enum SusyNtSys {
   ,JET_GroupedNP_3_DN
   ,JET_JVTEff_UP
   ,JET_JVTEff_DN
-  /*
-  ,JET_BJES_Response_DN
-  ,JET_BJES_Response_UP
-  ,JET_EffectiveNP_1_DN
-  ,JET_EffectiveNP_1_UP
-  ,JET_EffectiveNP_2_DN
-  ,JET_EffectiveNP_2_UP
-  ,JET_EffectiveNP_3_DN
-  ,JET_EffectiveNP_3_UP
-  ,JET_EffectiveNP_4_DN
-  ,JET_EffectiveNP_4_UP
-  ,JET_EffectiveNP_5_DN
-  ,JET_EffectiveNP_5_UP
-  ,JET_EffectiveNP_6restTerm_DN
-  ,JET_EffectiveNP_6restTerm_UP
-  ,JET_EtaIntercalibration_Modelling_DN
-  ,JET_EtaIntercalibration_Modelling_UP
-  ,JET_EtaIntercalibration_TotalStat_DN
-  ,JET_EtaIntercalibration_TotalStat_UP
-  ,JET_Flavor_Composition_DN
-  ,JET_Flavor_Composition_UP
-  ,JET_Flavor_Response_DN
-  ,JET_Flavor_Response_UP
-  ,JET_Pileup_OffsetMu_DN
-  ,JET_Pileup_OffsetMu_UP
-  ,JET_Pileup_OffsetNPV_DN
-  ,JET_Pileup_OffsetNPV_UP
-  ,JET_Pileup_PtTerm_DN
-  ,JET_Pileup_PtTerm_UP
-  ,JET_Pileup_RhoTopology_DN
-  ,JET_Pileup_RhoTopology_UP
-  ,JET_PunchThrough_MC12_DN
-  ,JET_PunchThrough_MC12_UP
- ,JET_SingleParticle_HighPt_DN
-  ,JET_SingleParticle_HighPt_UP
-  //,JET_RelativeNonClosure_MC12_DN
-  //,JET_RelativeNonClosure_MC12_UP
-  */
-  //NEW
   ,MET_SoftCalo_Reso
   ,MET_SoftCalo_ScaleDown
   ,MET_SoftCalo_ScaleUp
@@ -212,7 +48,6 @@ enum SusyNtSys {
   ,MET_SoftTrk_ResoPerp
   ,MET_SoftTrk_ScaleDown
   ,MET_SoftTrk_ScaleUp
-  //END NEW
   ,MUON_EFF_STAT_DN  //weight
   ,MUON_EFF_STAT_UP  //weight
   ,MUON_EFF_STAT_LOWPT_DN
@@ -290,62 +125,8 @@ const std::string SusyNtSysNames[] = {
     "NOM"
     ,"EG_RESOLUTION_ALL_DN"
     ,"EG_RESOLUTION_ALL_UP"
-    /*
-    ,"EG_RESOLUTION_LASTRESOLUTIONVARIATION"
-    ,"EG_RESOLUTION_MATERIALCALO_DN"
-    ,"EG_RESOLUTION_MATERIALCALO_UP"
-    ,"EG_RESOLUTION_MATERIALCRYO_DN"
-    ,"EG_RESOLUTION_MATERIALCRYO_UP"
-    ,"EG_RESOLUTION_MATERIALGAP_DN"
-    ,"EG_RESOLUTION_MATERIALGAP_UP"
-    ,"EG_RESOLUTION_MATERIALID_DN"
-    ,"EG_RESOLUTION_MATERIALID_UP"
-    ,"EG_RESOLUTION_NOMINAL"
-    ,"EG_RESOLUTION_NONE"
-    ,"EG_RESOLUTION_PILEUP_DN"
-    ,"EG_RESOLUTION_PILEUP_UP"
-    ,"EG_RESOLUTION_SAMPLINGTERM_DN"
-    ,"EG_RESOLUTION_SAMPLINGTERM_UP"
-    ,"EG_RESOLUTION_ZSMEARING_DN"
-    ,"EG_RESOLUTION_ZSMEARING_UP"
-    */
     ,"EG_SCALE_ALL_DN"
     ,"EG_SCALE_ALL_UP"
-    /*
-    ,"EG_SCALE_G4_DN"
-    ,"EG_SCALE_G4_UP"
-    ,"EG_SCALE_L1GAIN_DN"
-    ,"EG_SCALE_L1GAIN_UP"
-    ,"EG_SCALE_L2GAIN_DN"
-    ,"EG_SCALE_L2GAIN_UP"
-    ,"EG_SCALE_LARCALIB_DN"
-    ,"EG_SCALE_LARCALIB_UP"
-    ,"EG_SCALE_LARELECCALIB_DN"
-    ,"EG_SCALE_LARELECCALIB_UP"
-    ,"EG_SCALE_LARELECUNCONV_DN"
-    ,"EG_SCALE_LARELECUNCONV_UP"
-    ,"EG_SCALE_LARUNCONVCALIB_DN"
-    ,"EG_SCALE_LARUNCONVCALIB_UP"
-    ,"EG_SCALE_LASTSCALEVARIATION"
-    ,"EG_SCALE_MATCALO_DN"
-    ,"EG_SCALE_MATCALO_UP"
-    ,"EG_SCALE_MATCRYO_DN"
-    ,"EG_SCALE_MATCRYO_UP"
-    ,"EG_SCALE_MATID_DN"
-    ,"EG_SCALE_MATID_UP"
-    ,"EG_SCALE_NOMINAL"
-    ,"EG_SCALE_NONE"
-    ,"EG_SCALE_PEDESTAL_DN"
-    ,"EG_SCALE_PEDESTAL_UP"
-    ,"EG_SCALE_PS_DN"
-    ,"EG_SCALE_PS_UP"
-    ,"EG_SCALE_S12_DN"
-    ,"EG_SCALE_S12_UP"
-    ,"EG_SCALE_ZEESTAT_DN"
-    ,"EG_SCALE_ZEESTAT_UP"
-    ,"EG_SCALE_ZEESYST_DN"
-    ,"EG_SCALE_ZEESYST_UP"
-    */
     ,"EL_EFF_ID_TOTAL_Uncorr_DN"
     ,"EL_EFF_ID_TOTAL_Uncorr_UP"
     ,"EL_EFF_Iso_TOTAL_Uncorr_DN"
@@ -354,18 +135,6 @@ const std::string SusyNtSysNames[] = {
     ,"EL_EFF_Reco_TOTAL_Uncorr_UP"
     ,"EL_EFF_Trigger_TOTAL_Uncorr_DN"
     ,"EL_EFF_Trigger_TOTAL_Uncorr_UP"
-  //  ,"EL_EFF_ID_TotalCorrUncertainty_UP"
-  //  ,"EL_EFF_ID_TotalCorrUncertainty_DN"
-  //  ,"EL_EFF_Iso_TotalCorrUncertainty_UP"
-  //  ,"EL_EFF_Iso_TotalCorrUncertainty_DN"
-  //  ,"EL_EFF_Reco_TotalCorrUncertainty_UP"
-  //  ,"EL_EFF_Reco_TotalCorrUncertainty_DN"
-  //  ,"EL_EFF_Trigger_TotalCorrUncertainty_UP"
-  //  ,"EL_EFF_Trigger_TotalCorrUncertainty_DN"
-    /*
-    ,"EL_SCALE_MOMENTUM_DN"
-    ,"EL_SCALE_MOMENTUM_UP"
-    */
     ,"FT_EFF_B_systematics_UP"
     ,"FT_EFF_B_systematics_DN"
     ,"FT_EFF_C_systematics_UP"
@@ -376,60 +145,6 @@ const std::string SusyNtSysNames[] = {
     ,"FT_EFF_extrapolation_DN"
     ,"FT_EFF_extrapolation_charm_UP"
     ,"FT_EFF_extrapolation_charm_DN"
-    /*
-    ,"FT_Eigen_B_0_DN"
-    ,"FT_Eigen_B_0_UP"
-    ,"FT_Eigen_B_1_DN"
-    ,"FT_Eigen_B_1_UP"
-    ,"FT_Eigen_B_2_DN"
-    ,"FT_Eigen_B_2_UP"
-    ,"FT_Eigen_B_3_DN"
-    ,"FT_Eigen_B_3_UP"
-    ,"FT_Eigen_B_4_DN"
-    ,"FT_Eigen_B_4_UP"
-    ,"FT_Eigen_B_5_DN"
-    ,"FT_Eigen_B_5_UP"
-    ,"FT_Eigen_B_6_DN"
-    ,"FT_Eigen_B_6_UP"
-    ,"FT_Eigen_B_7_DN"
-    ,"FT_Eigen_B_7_UP"
-    ,"FT_Eigen_B_8_DN"
-    ,"FT_Eigen_B_8_UP"
-    ,"FT_Eigen_B_9_DN"
-    ,"FT_Eigen_B_9_UP"
-    ,"FT_Eigen_C_0_DN"
-    ,"FT_Eigen_C_0_UP"
-    ,"FT_Eigen_C_1_DN"
-    ,"FT_Eigen_C_1_UP"
-    ,"FT_Eigen_C_2_DN"
-    ,"FT_Eigen_C_2_UP"
-    ,"FT_Eigen_C_3_DN"
-    ,"FT_Eigen_C_3_UP"
-    ,"FT_Eigen_Light_0_DN"
-    ,"FT_Eigen_Light_0_UP"
-    ,"FT_Eigen_Light_10_DN"
-    ,"FT_Eigen_Light_10_UP"
-    ,"FT_Eigen_Light_11_DN"
-    ,"FT_Eigen_Light_11_UP"
-    ,"FT_Eigen_Light_1_DN"
-    ,"FT_Eigen_Light_1_UP"
-    ,"FT_Eigen_Light_2_DN"
-    ,"FT_Eigen_Light_2_UP"
-    ,"FT_Eigen_Light_3_DN"
-    ,"FT_Eigen_Light_3_UP"
-    ,"FT_Eigen_Light_4_DN"
-    ,"FT_Eigen_Light_4_UP"
-    ,"FT_Eigen_Light_5_DN"
-    ,"FT_Eigen_Light_5_UP"
-    ,"FT_Eigen_Light_6_DN"
-    ,"FT_Eigen_Light_6_UP"
-    ,"FT_Eigen_Light_7_DN"
-    ,"FT_Eigen_Light_7_UP"
-    ,"FT_Eigen_Light_8_DN"
-    ,"FT_Eigen_Light_8_UP"
-    ,"FT_Eigen_Light_9_DN"
-    ,"FT_Eigen_Light_9_UP"
-    */
     ,"JER"
     ,"JET_GroupedNP_1_UP"
     ,"JET_GroupedNP_1_DN"
@@ -439,44 +154,6 @@ const std::string SusyNtSysNames[] = {
     ,"JET_GroupedNP_3_DN"
     ,"JET_JVTEff_UP"
     ,"JET_JVTEff_DN"
-    /*
-    ,"JET_BJES_Response_DN"
-    ,"JET_BJES_Response_UP"
-    ,"JET_EffectiveNP_1_DN"
-    ,"JET_EffectiveNP_1_UP"
-    ,"JET_EffectiveNP_2_DN"
-    ,"JET_EffectiveNP_2_UP"
-    ,"JET_EffectiveNP_3_DN"
-    ,"JET_EffectiveNP_3_UP"
-    ,"JET_EffectiveNP_4_DN"
-    ,"JET_EffectiveNP_4_UP"
-    ,"JET_EffectiveNP_5_DN"
-    ,"JET_EffectiveNP_5_UP"
-    ,"JET_EffectiveNP_6restTerm_DN"
-    ,"JET_EffectiveNP_6restTerm_UP"
-    ,"JET_EtaIntercalibration_Modelling_DN"
-    ,"JET_EtaIntercalibration_Modelling_UP"
-    ,"JET_EtaIntercalibration_TotalStat_DN"
-    ,"JET_EtaIntercalibration_TotalStat_UP"
-    ,"JET_Flavor_Composition_DN"
-    ,"JET_Flavor_Composition_UP"
-    ,"JET_Flavor_Response_DN"
-    ,"JET_Flavor_Response_UP"
-    ,"JET_Pileup_OffsetMu_DN"
-    ,"JET_Pileup_OffsetMu_UP"
-    ,"JET_Pileup_OffsetNPV_DN"
-    ,"JET_Pileup_OffsetNPV_UP"
-    ,"JET_Pileup_PtTerm_DN"
-    ,"JET_Pileup_PtTerm_UP"
-    ,"JET_Pileup_RhoTopology_DN"
-    ,"JET_Pileup_RhoTopology_UP"
-    ,"JET_PunchThrough_MC12_DN"
-    ,"JET_PunchThrough_MC12_UP"
-    ,"JET_SingleParticle_HighPt_DN"
-    ,"JET_SingleParticle_HighPt_UP"
-    //,"JET_RelativeNonClosure_MC12_DN"
-    //,"JET_RelativeNonClosure_MC12_UP"
-    */
     ,"MET_SoftCalo_Reso"
     ,"MET_SoftCalo_ScaleDown"
     ,"MET_SoftCalo_ScaleUp"
