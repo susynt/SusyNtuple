@@ -211,13 +211,14 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
 
         step 1:
             Remove jets overlapping with muons
-            j_m_overlap(jets, muons, float dRcone, bool doBJetOR, bool doGhost)
+            j_m_overlap(jets, muons, float dRcone, bool doBJetOR, bool doGhost, bool doPtRatio)
                 > doBJetOR : if true, do not compare jets and muons when jet is
                              tagged as a b-jet
                              See OverlapTools::isBJetOR(...)
                 > doGhost  : if true, check if muon is ghost associated with the jet
                              and rmoeve the jet if it is (in addition to the dR match).
                              See OverlapTools::muonIsGhostMatched(...)
+                > doPtRatio : use muon/jet pT ratios
 
         step 2:
             Remove muons overlapping with remaining jets
@@ -228,7 +229,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                 > applyJVT : if true, do not remove muon if the jet
                              being compared to is flagged as a pileup jet
     */
-    j_m_overlap(jets, muons, 0.2, true, true);
+    j_m_overlap(jets, muons, 0.2, true, true, false);
     m_j_overlap(muons, jets, 0.4, true, true);
 
     /* --------------------------------------------
@@ -373,26 +374,9 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets, doubl
             }
         } // iJ
     } // iEl
-
-/*
- // old method
-
-    if(electrons.size()==0 || jets.size()==0) return;
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--){
-        const Electron* e = electrons.at(iEl);
-        for(size_t iJ=0; iJ<jets.size(); iJ++){
-            const Jet* j = jets.at(iJ);
-            if(e->DeltaRy(*j) < dR) {
-                if(verbose()) print_rm_msg("e_j_overlap: ", e, j);
-                electrons.erase(electrons.begin()+iEl);
-                break;
-            }
-        } // for(iJ)
-    } // for(iEl)
-*/
 }
 //----------------------------------------------------------
-void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=0.2*/, bool doBJetOR /*=true*/, bool doGhost /*=true*/)
+void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=0.2*/, bool doBJetOR /*=true*/, bool doGhost /*=true*/, bool doPtRatio /*=false*/)
 {
     if(jets.size()==0 || muons.size()==0) return;
     for(int iJ = jets.size()-1; iJ>=0; iJ--){
@@ -404,10 +388,10 @@ void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=
         for(int iMu = 0; iMu < (int)muons.size(); iMu++){
             const Muon* mu = muons.at(iMu);
 
-            float ptRatio = mu->Pt() / j->Pt() * 1.0;
-            float trkRatio = mu->Pt() / j->sumTrkPt * 1.0;
-            if( (j->nTracks >= 3) &&
-                ( ptRatio<0.5 || trkRatio<0.7) ) continue;
+            bool high_track_mult = (j->nTracks >= 3);
+            bool high_rel_pt = ( ((mu->Pt() / jet->Pt()) < 0.5) ||
+                                 ((mu->Pt() / j->sumTrkPt) < 0.7));
+            if(high_track_mult && (!doPtRatio || high_rel_pt)) continue;
 
             bool remove_jet = false;
             // check dR match regardless
@@ -426,7 +410,6 @@ void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=
 //----------------------------------------------------------
 void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets, double dR /*=0.4*/, bool doSlidingCone /*=false*/, bool applyJVT /*=true*/)
 {
-
     if(muons.size()==0 || jets.size()==0) return;
     for(int iMu = muons.size()-1; iMu>=0; iMu--){
         const Muon* mu = muons.at(iMu);
@@ -444,32 +427,12 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets, double dR /*=
             }
         } // iJ
     } // iMu
-
-/*
- // old method
-    if(muons.size()==0 || jets.size()==0) return;
-    for(int iMu=muons.size()-1; iMu>=0; iMu--){
-        const Muon* mu = muons.at(iMu);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-            int jet_nTrk = j->nTracks;
-            if(mu->DeltaRy(*j) > dR) continue;
-            if(jet_nTrk < 3) {
-                if(verbose()) print_rm_msg("m_j_overlap: ", j, mu);
-                jets.erase(jets.begin() + iJ);
-            }
-            else {
-                if(verbose()) print_rm_msg("m_j_overlap: ", mu, j);
-                muons.erase(muons.begin() + iMu);
-                break;
-            }
-        } // for(iJ)
-    } // for(iMu)
-*/
 }
 //----------------------------------------------------------
 void OverlapTools::m_e_overlap(MuonVector& muons, ElectronVector& electrons)
 {
+    // remove calo-tagged muons overlapping with electrons
+
     if(electrons.size()==0 || muons.size()==0) return;
 
     for(int iMu=muons.size()-1; iMu>=0; iMu--){
@@ -488,6 +451,8 @@ void OverlapTools::m_e_overlap(MuonVector& muons, ElectronVector& electrons)
 //----------------------------------------------------------
 void OverlapTools::e_m_overlap(ElectronVector& electrons, MuonVector& muons)
 {
+    // remove electrons overlapping with muons
+
     if(electrons.size()==0 || muons.size()==0) return;
 
     for(int iEl=electrons.size()-1; iEl>=0; iEl--){

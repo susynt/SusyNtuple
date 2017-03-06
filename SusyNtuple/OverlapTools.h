@@ -56,7 +56,7 @@ public :
     virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets,
                                         double dR = 0.4, bool doSlidingCone = false, bool applyJVT = true); ///< remove electron from jet
     virtual void j_m_overlap(JetVector& jets, MuonVector& muons,
-                                         double dR = 0.2, bool doBJetOR = true, bool doGhost = true);
+                                         double dR = 0.2, bool doBJetOR = true, bool doGhost = true, bool doPtRatio = false);
     virtual void m_j_overlap(MuonVector& muons, JetVector& jets,
                                         double dR = 0.4, bool doSlidingCone = false, bool applyJVT = true); ///< remove muon from jet
     virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons); ///< remove electron from muon (shared-track)
