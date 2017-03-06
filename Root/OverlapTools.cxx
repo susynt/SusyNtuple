@@ -389,7 +389,7 @@ void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=
             const Muon* mu = muons.at(iMu);
 
             bool high_track_mult = (j->nTracks >= 3);
-            bool high_rel_pt = ( ((mu->Pt() / jet->Pt()) < 0.5) ||
+            bool high_rel_pt = ( ((mu->Pt() / j->Pt()) < 0.5) ||
                                  ((mu->Pt() / j->sumTrkPt) < 0.7));
             if(high_track_mult && (!doPtRatio || high_rel_pt)) continue;
 
