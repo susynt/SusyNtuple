@@ -140,15 +140,10 @@ class OverlapTools_3Lep : public OverlapTools
 class OverlapTools_4Lep : public OverlapTools
 {
 public:
-  virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, TauVector& taus, TauVector& LOOSEtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg);
-  virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons); ///< remove electron from muon
-  virtual void t_m_overlap(TauVector& taus, MuonVector& muons, double dR); ///< remove tau from muon
-  virtual void photon_lep_overlap(PhotonVector& photons, ElectronVector& electrons, MuonVector& muons, double dR);
-  virtual void j_m_overlap(MuonVector& muons, JetVector& jets, double dR);
-  virtual void m_j_overlap(MuonVector& muons, JetVector& jets, double dR);
-  virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove jet from electron
-  virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR); ///< remove electron from jet
-  virtual void j_photon_overlap(PhotonVector& photons, JetVector& jets, double dR);
+  virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, 
+			      JetVector& jets, TauVector& taus, PhotonVector& photons);
+  virtual void performOverlap(ElectronVector& electrons, MuonVector& muons, 
+			      JetVector& jets, TauVector& taus, TauVector& LOOSEtaus, PhotonVector& photons, bool m_TauCtrlReg);
 protected:
 
 };
