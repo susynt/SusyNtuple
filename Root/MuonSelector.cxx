@@ -142,7 +142,7 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
     }
     else {
         cout<<"MuonSelector::errEffSF(): you are calling this function with"
-            <<" sys '"<<NtSys::SusyNtSysNames[sys]<<"'."
+            <<" sys '"<<NtSys::SusyNtSysNames.at(sys)<<"'."
             <<" This is not a muon sys. Returning "<<err
             <<endl;
     }

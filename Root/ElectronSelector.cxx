@@ -124,7 +124,7 @@ float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
     }
     else {
         cout << "ElectronSelector::errEffSF(): you are calling this function with"
-             <<" sys '" << NtSys::SusyNtSysNames[sys]<<"'."
+             <<" sys '" << NtSys::SusyNtSysNames.at(sys)<<"'."
              <<" This is not an electron sys. Returning " << err
              << endl;
     }
