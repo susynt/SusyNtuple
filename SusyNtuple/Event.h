@@ -2,8 +2,10 @@
 #ifndef SUSYNTUPLE_EVENT_H
 #define SUSYNTUPLE_EVENT_H
 
+//SusyNtuple
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/SusyDefs.h" // DataStream
+#include "SusyNtuple/TriggerTools.h" // DileptonTrigTuple
 
 #include "TBits.h"
 #include "TObject.h"
@@ -64,6 +66,9 @@ public:
     TBits               trigBits;
     static const size_t m_nTriggerBits=64;
 
+    // Dilepton trigger matching information
+    std::map<DileptonTrigTuple, int> m_dilepton_trigger_matches; 
+
     /// Check trigger firing
     /** provide the trigger chain via bit mask, e.g. TRIG_mu18 */
     bool passTrig(long long mask, bool requireAll=true) const {
@@ -120,7 +125,7 @@ public:
       mcWeights.clear();
     }
 
-    ClassDef(Event, 38);
+    ClassDef(Event, 39);
   };
 } // Susy
 #endif
