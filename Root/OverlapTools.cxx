@@ -336,22 +336,6 @@ void OverlapTools::j_e_overlap(ElectronVector& electrons, JetVector& jets, doubl
             }
         } // iEl
     } // iJ
-/*
- // old method for removing jets from electrons
-
-    if(electrons.size()==0 || jets.size()==0) return;
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
-        const Electron* e = electrons.at(iEl);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-            if(e->DeltaRy(*j) < dR) {
-                if(verbose()) print_rm_msg("j_e_overlap: ", j, e);
-                jets.erase(jets.begin()+iJ);
-            }
-        } // iJ
-    } // iEl
-*/
-
 }
 //----------------------------------------------------------
 void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR /*=0.4*/, bool doSlidingCone /*=false*/, bool applyJVT /*=true*/)
@@ -373,23 +357,6 @@ void OverlapTools::e_j_overlap(ElectronVector& electrons, JetVector& jets, doubl
             }
         } // iJ
     } // iEl
-
-/*
- // old method
-
-    if(electrons.size()==0 || jets.size()==0) return;
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--){
-        const Electron* e = electrons.at(iEl);
-        for(size_t iJ=0; iJ<jets.size(); iJ++){
-            const Jet* j = jets.at(iJ);
-            if(e->DeltaRy(*j) < dR) {
-                if(verbose()) print_rm_msg("e_j_overlap: ", e, j);
-                electrons.erase(electrons.begin()+iEl);
-                break;
-            }
-        } // for(iJ)
-    } // for(iEl)
-*/
 }
 //----------------------------------------------------------
 void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=0.2*/, bool doBJetOR /*=true*/, bool doGhost /*=true*/)
@@ -426,7 +393,6 @@ void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons, double dR /*=
 //----------------------------------------------------------
 void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets, double dR /*=0.4*/, bool doSlidingCone /*=false*/, bool applyJVT /*=true*/)
 {
-
     if(muons.size()==0 || jets.size()==0) return;
     for(int iMu = muons.size()-1; iMu>=0; iMu--){
         const Muon* mu = muons.at(iMu);
@@ -444,28 +410,6 @@ void OverlapTools::m_j_overlap(MuonVector& muons, JetVector& jets, double dR /*=
             }
         } // iJ
     } // iMu
-
-/*
- // old method
-    if(muons.size()==0 || jets.size()==0) return;
-    for(int iMu=muons.size()-1; iMu>=0; iMu--){
-        const Muon* mu = muons.at(iMu);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-            int jet_nTrk = j->nTracks;
-            if(mu->DeltaRy(*j) > dR) continue;
-            if(jet_nTrk < 3) {
-                if(verbose()) print_rm_msg("m_j_overlap: ", j, mu);
-                jets.erase(jets.begin() + iJ);
-            }
-            else {
-                if(verbose()) print_rm_msg("m_j_overlap: ", mu, j);
-                muons.erase(muons.begin() + iMu);
-                break;
-            }
-        } // for(iJ)
-    } // for(iMu)
-*/
 }
 //----------------------------------------------------------
 void OverlapTools::m_e_overlap(MuonVector& muons, ElectronVector& electrons)
@@ -506,9 +450,6 @@ void OverlapTools::e_m_overlap(ElectronVector& electrons, MuonVector& muons)
 //----------------------------------------------------------
 void OverlapTools::e_m_overlap(ElectronVector& electrons, MuonVector& muons, float dR)
 {
- // old e_m_overlap method
- // TODO -- check if any analysis really does this dR based one still
-
     int nEl = electrons.size();
     int nMu = muons.size();
     if(nEl==0 || nMu==0) return;
@@ -720,9 +661,11 @@ void OverlapTools::j_p_overlap(JetVector& jets, PhotonVector& photons, double dR
     } // iJ
 }
 
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // begin OverlapTools_4Lep Ana_4Lep
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
 				       TauVector& taus,TauVector& LOOSEtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg)
 {
@@ -787,9 +730,7 @@ void OverlapTools_4Lep::e_m_overlap(ElectronVector& electrons, MuonVector& muons
             }
         } // iMu
     } // iEl
-
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::t_m_overlap(TauVector& taus, MuonVector& muons, double dR)
 {
@@ -810,7 +751,6 @@ void OverlapTools_4Lep::t_m_overlap(TauVector& taus, MuonVector& muons, double d
         } // for(iMu)
     } // for(iTau)
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::photon_lep_overlap(PhotonVector& photons, ElectronVector& /*pre*/electrons, MuonVector& /*pre*/muons, double dR)
 {
@@ -843,9 +783,7 @@ void OverlapTools_4Lep::photon_lep_overlap(PhotonVector& photons, ElectronVector
 
         } // for(iEl)
     } // for(iPho)
-
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
@@ -867,9 +805,7 @@ void OverlapTools_4Lep::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
 
         } // iJ
     } // iEl
-
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR)
 {
@@ -891,7 +827,6 @@ void OverlapTools_4Lep::e_j_overlap(ElectronVector& electrons, JetVector& jets, 
         } // for(iJ)
     } // for(iEl)
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double dR)
 {
@@ -926,7 +861,6 @@ void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double d
         } // iJ
     } // iMu
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::m_j_overlap(MuonVector& muons, JetVector& jets, double dR)
 {
@@ -950,7 +884,6 @@ void OverlapTools_4Lep::m_j_overlap(MuonVector& muons, JetVector& jets, double d
         } // for(iJ)
     } // for(iMu)
 }
-
 //----------------------------------------------------------
 void OverlapTools_4Lep::j_photon_overlap(PhotonVector& photons, JetVector& jets, double dR)
 {
@@ -967,11 +900,11 @@ void OverlapTools_4Lep::j_photon_overlap(PhotonVector& photons, JetVector& jets,
         } // iJ
     } // iPh
 }
-
-
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // begin OverlapTools_SS3L
-//----------------------------------------------------------
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 OverlapTools_SS3L::OverlapTools_SS3L():
     OverlapTools(),
     m_jetSelector(nullptr){}
