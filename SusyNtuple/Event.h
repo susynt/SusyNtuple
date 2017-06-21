@@ -123,6 +123,7 @@ public:
       wPileup = wPileup_up = wPileup_dn = 0;
       xsec = errXsec = sumw = 0;
       mcWeights.clear();
+      m_dilepton_trigger_matches.clear();
     }
 
     ClassDef(Event, 39);
