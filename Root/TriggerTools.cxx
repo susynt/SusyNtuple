@@ -267,6 +267,16 @@ bool TriggerTools::dilepton_trigger_match(Susy::Event* evt, Susy::Lepton* l0,
     int l0_idx = l0->idx;
     int l1_idx = l1->idx;
 
+    // when storing the triggers we restrict the loops in the second lepton index
+    // to be greater than the index of the first lepton (for EE and MM)
+    if((is_ee || is_mm) && !(l1_idx > l0_idx)) {
+        int tmp_idx_l0 = l1_idx;
+        int tmp_idx_l1 = l0_idx;
+
+        l0_idx = tmp_idx_l0;
+        l1_idx = tmp_idx_l1;
+    }
+
     // build the mask
     DileptonTrigTuple tuple = 0;
     tuple |= (trigger_idx_to_check << 8);
