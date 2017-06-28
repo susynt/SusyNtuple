@@ -3,6 +3,7 @@
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/KinematicTools.h"
 #include "SusyNtuple/JetSelector.h"
+#include "SusyNtuple/TriggerTools.h"
 
 using namespace std;
 using namespace Susy;
@@ -80,6 +81,9 @@ void Susy2LepCutflow::Begin(TTree* /*tree*/)
 {
   SusyNtAna::Begin(0);
   if(m_dbg) cout << "Susy2LepCutflow::Begin" << endl;
+
+    m_trig_sf_file = new TFile("trig_sf_file.root", "RECREATE");
+    h_med_trig_sf = new TH1F("h_trig_sf", "Trig SF", 120, 0, 1.2);
 }
 
 /*--------------------------------------------------------------------------------*/
@@ -112,11 +116,95 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
   //dumpBaselineObjects();
   //dumpSignalObjects();
 
+    std::string trig = "HLT_mu20";
+    int idx = nttools().triggerTool().idx_of_trigger(trig);
+    cout << "------------------------------------" << endl;
+    for(auto & m : m_preMuons) {
+        if(m_preMuons.size()==2 && m_preLeptons.size()==2) {
+            string test_trig = "HLT_mu24_iloose_L1MU15";
+            float sf = nttools().leptonTriggerSF(m_preLeptons, test_trig);
+        }
+        //cout << "pt = " << m->Pt() << "   eff_data = " << m->muoTrigEffData[idx] << "  eff_mc = " << m->muoTrigEffMC[idx] << endl;
+    }
+    vector<string> mutrigs = nttools().triggerTool().single_muo_triggers(); 
+    vector<string> di = nttools().triggerTool().di_muo_triggers();
+    mutrigs.insert(mutrigs.end(), di.begin(), di.end());
+    //for(auto t : mutrigs) {
+    std::string t = "HLT_mu22_mu8noL1";
+    if(m_signalMuons.size()==2) {
+        bool trig_fired = nttools().triggerTool().passTrigger(nt.evt()->trigBits, t);
+        bool pass_pt = (m_signalMuons.at(0)->Pt()>28 && m_signalMuons.at(1)->Pt()>25);
+        
+        //for(auto & m : m_signalMuons) {
+            if(pass_pt && trig_fired)  {
+            //if(m->Pt() > 55  && fabs(m->Eta()<2.5))  {
+                float sf = nttools().get_muon_trigger_scale_factor(m_signalMuons, t);
+                //float sf = nttools().get_muon_trigger_scale_factor(*m, t);
+                h_med_trig_sf->Fill(sf);
+            }
+        //}
+    }
+    //}
+
+    //if(m_signalMuons.size()==2 && m_preLeptons.size()==2) {
+    //    string trig = "HLT_mu20";
+    //    float muon_sf = nttools().leptonTriggerSF(m_preLeptons, trig); 
+    //}
+
+
+    /*
   // Check that the event passes event cleaning cuts
   int flags = nt.evt()->cutFlags[NtSys::NOM];
-  if(!passEventCleaning(flags, m_preMuons, m_baseMuons, m_baseJets)) return false;
-  // Check that the event passes basic object selection
-  if(!selectEvent(m_signalLeptons, m_baseLeptons)) return false;
+  cout << "---------------------------------------------------" << endl;
+  cout << "trig evt : " << nt.evt()->eventNumber << endl;
+    cout << " - ee - " << endl;
+    for(int ilep = 0; ilep < (int)m_preElectrons.size(); ilep++) {
+        for(int jlep = 0; jlep < (int)m_preElectrons.size(); jlep++) {
+
+            Susy::Electron* l0 = m_preElectrons.at(ilep);
+            Susy::Electron* l1 = m_preElectrons.at(jlep);
+
+            if(!(l0->pt > TriggerTools::ele_match_pt() && l1->pt > TriggerTools::ele_match_pt())) continue;
+
+            for(auto x : TriggerTools::di_ele_triggers()) {
+                if(nttools().triggerTool().dilepton_trigger_match(nt.evt(), l0, l1, x))
+                cout << " > " << x << " (" << l0->idx << "," << l1->idx << ") = " << nttools().triggerTool().dilepton_trigger_match(nt.evt(), l0, l1, x) << "  l0 pt = " << l0->pt << "  l1 pt = " << l1->pt << endl;
+            }
+        }
+    }
+    cout << " - mm - " << endl;
+    for(int ilep = 0; ilep < (int)m_preMuons.size(); ilep++) {
+        for(int jlep = 0; jlep < (int)m_preMuons.size(); jlep++) {
+            Susy::Muon* l0 = m_preMuons.at(ilep);
+            Susy::Muon* l1 = m_preMuons.at(jlep);
+            //if(!(l0->idx > l1->idx)) continue;
+            //if(!(jlep>ilep)) continue;
+            if(!(l0->pt > TriggerTools::muo_match_pt() && l1->pt > TriggerTools::muo_match_pt())) continue;
+
+            for(auto x : TriggerTools::di_muo_triggers()) {
+                if(nttools().triggerTool().dilepton_trigger_match(nt.evt(), l0, l1, x))
+                cout << " > " << x << " (" << l0->idx << "," << l1->idx << ") = " << nttools().triggerTool().dilepton_trigger_match(nt.evt(), l0, l1, x) << "  l0 pt = " << l0->pt << "  l1 pt = " << l1->pt << endl;
+            }
+        }
+    }
+    cout << " - em - " << endl;
+    for(int ilep = 0; ilep < (int)m_preElectrons.size(); ilep++) {
+        for(int jlep = 0; jlep < (int)m_preMuons.size(); jlep++) {
+            Susy::Electron* l0 = m_preElectrons.at(ilep);
+            Susy::Muon* l1 = m_preMuons.at(jlep);
+            if(!(l0->pt > TriggerTools::ele_match_pt() && l1->pt > TriggerTools::muo_match_pt())) continue;
+
+            for(auto x : TriggerTools::ele_muo_triggers()) {
+                if(nttools().triggerTool().dilepton_trigger_match(nt.evt(), l0, l1, x))
+                cout << " > " << x << " (" << l0->idx << "," << l1->idx << ") = " << nttools().triggerTool().dilepton_trigger_match(nt.evt(), l0, l1, x) << "  l0 pt = " << l0->pt << "  l1 pt = " << l1->pt <<  endl;
+            }
+        }
+    }
+    */
+
+  //if(!passEventCleaning(flags, m_preMuons, m_baseMuons, m_baseJets)) return false;
+  //// Check that the event passes basic object selection
+  //if(!selectEvent(m_signalLeptons, m_baseLeptons)) return false;
 
   // Count SS and OS
   if(sameSign(m_signalLeptons))     n_pass_ss[m_ET]++;
@@ -140,6 +228,10 @@ void Susy2LepCutflow::Terminate()
 {
   SusyNtAna::Terminate();
   if(m_dbg) cout << "Susy2LepCutflow::Terminate" << endl;
+
+    m_trig_sf_file->cd();
+    h_med_trig_sf->Write();
+    m_trig_sf_file->Write();
 
   dumpEventCounters();
 }

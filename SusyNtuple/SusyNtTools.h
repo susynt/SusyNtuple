@@ -179,6 +179,13 @@ public:
     float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
     float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
 
+    float leptonTriggerSF(const LeptonVector& leps, std::string trigger);
+    float get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger);
+    float get_muon_trigger_scale_factor(Susy::Muon& muon, std::string trigger);
+    float get_muon_trigger_scale_factor(Susy::Muon& mu1, Susy::Muon& mu2, std::string trigger);
+    //float get_electron_trigger_scale_factor(const ElectronVector& electrons, std::string trigger);
+
+
     ///////////////////////////////////////////
     // check of sample is Sherpa2.2 V+jet
     ///////////////////////////////////////////
@@ -220,6 +227,7 @@ protected:
 
     AnalysisType m_anaType;    ///< Analysis type. currently 2-lep or 3-lep
     bool m_doSFOS;             ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
+    int n_warning;
 };
 
 #endif
