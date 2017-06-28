@@ -43,7 +43,7 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
         break;
     case AnalysisType::Ana_Stop2L :
         s = new MuonSelector_Stop2L();
-        s->setSignalId(MuonId::Loose);
+        s->setSignalId(MuonId::Medium);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     default:
