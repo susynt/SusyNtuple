@@ -7,6 +7,9 @@
 //////////////////////////////////////////////////////////////////////////////
 const std::vector<std::string> single_muo_triggers_list =
 {
+    "HLT_mu8noL1", // dantrim 2017 June 28 - this should never fire for event level, but need it here for trigger SF mapping
+    "HLT_mu14", // dantrim 2017 June 28 - this is for trigger SF mapping
+    "HLT_mu18", // dantrim 2017 June 28 - this is for trigger SF mapping
     "HLT_mu20",
     "HLT_mu20_iloose_L1MU15",
     "HLT_mu22",
