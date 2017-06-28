@@ -50,6 +50,11 @@ public:
     std::vector<float> muoEffSF;
     // trigger efficiency SF per muon quality WP
     std::vector<float> muoTrigSF;
+    std::map<int, float> muoTrigEffData_medium;
+    std::map<int, float> muoTrigEffMC_medium;
+    std::map<int, float> muoTrigEffData_loose;
+    std::map<int, float> muoTrigEffMC_loose;
+    
 
     // indices of other muons passing dimuon triggers with this muon
     std::map<std::string, std::vector<unsigned int>> diMuTrigMap;

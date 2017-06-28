@@ -34,6 +34,10 @@ Muon::Muon(const Muon &rhs):
   tight(rhs.tight),
   muoEffSF(rhs.muoEffSF),
   muoTrigSF(rhs.muoTrigSF),
+  muoTrigEffData_medium(rhs.muoTrigEffData_medium),
+  muoTrigEffMC_medium(rhs.muoTrigEffMC_medium),
+  muoTrigEffData_loose(rhs.muoTrigEffData_loose),
+  muoTrigEffMC_loose(rhs.muoTrigEffMC_loose),
   diMuTrigMap(rhs.diMuTrigMap),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
@@ -111,6 +115,10 @@ Muon& Muon::operator=(const Muon &rhs)
     sagitta_rho_up = rhs.sagitta_rho_up;
     muoEffSF = rhs.muoEffSF;
     muoTrigSF = rhs.muoTrigSF;
+    muoTrigEffData_medium = rhs.muoTrigEffData_medium;
+    muoTrigEffMC_medium = rhs.muoTrigEffMC_medium;
+    muoTrigEffData_loose = rhs.muoTrigEffData_loose;
+    muoTrigEffMC_loose = rhs.muoTrigEffMC_loose;
     errEffSF_stat_up = rhs.errEffSF_stat_up;
     errEffSF_stat_dn = rhs.errEffSF_stat_dn;
     errEffSF_syst_up = rhs.errEffSF_syst_up;
