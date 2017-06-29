@@ -792,13 +792,13 @@ float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, Muon
     // if "mu8noL1" is not in the trigger or if "2mu" is in the trigger return
     // the assumption is that htere is only TWO mu chains int he trigger name, e.g.:
     // HLT_mu22_mu8noL1 and NOT HLT_mu24_mu14_mu8noL1
-    string second_leg = "mu8noL1";
+    string second_leg = "_mu8noL1";
     string true_dimu = "2mu";
     bool has_mu8noL1 = (trigger.find(second_leg) != std::string::npos);
-    bool is_true_dimu = (trigger.find(true_dimu) == std::string::npos);
+    bool is_true_dimu = (trigger.find(true_dimu) != std::string::npos);
 
     if(is_true_dimu) {
-        cout << "SusyNtTools:get_dimuon_trigger_scale_factor    "
+        cout << "SusyNtTools::get_dimuon_trigger_scale_factor    "
             << "ERROR We do not store muon trigger efficiencies for the dimuon triggers "
             << "with '2mu' (e.g. HLT_2mu10 or HLT_2mu14), you have provided " << trigger << " -- Exiting." << endl;
         exit(1);
@@ -817,6 +817,7 @@ float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, Muon
     trig_test.erase(0, hlt.length());
     size_t second_pos = trig_test.find(second_leg);
     trig_test.erase(second_pos, second_leg.length());
+    second_leg = "mu8noL1";
 
     string trig_first_leg = "HLT_" + trig_test;
     string trig_second_leg = "HLT_" + second_leg;
