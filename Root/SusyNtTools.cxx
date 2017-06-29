@@ -659,6 +659,13 @@ float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sy
 }
 float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trigger)
 {
+    string hlt = "HLT_";
+    bool has_hlt_start = (trigger.find(hlt) != std::string::npos);
+    if(!has_hlt_start) {
+        cout << "SusyNtTools::leptonTriggerSF    ERROR Triggers must start with 'HLT_', the trigger "
+            << "you provided (" << trigger << ") does not contain this -- Exiting." << endl;
+        exit(1);
+    }
     float trigger_sf = 1.0;
 
     if(leptons.size()==0) return trigger_sf;
@@ -691,9 +698,15 @@ float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trig
         }
         trigger_sf = get_muon_trigger_scale_factor(muons, trigger);
     }
-    //else if(n_el>0) {
-    //    trigger_sf = get_electron_trigger_scale_factor(leptons, trigger);
-    //}
+
+    else if(n_el>0) {
+        ElectronVector electrons;
+        for(auto & l : leptons) {
+            Electron* e = dynamic_cast<Susy::Electron*>(l);
+            electrons.push_back(e);
+        }
+        trigger_sf = get_electron_trigger_scale_factor(electrons, trigger);
+    }
     return trigger_sf;
 }
 float SusyNtTools::get_muon_trigger_scale_factor(Muon& mu1, Muon& mu2, std::string trigger)
@@ -711,104 +724,187 @@ float SusyNtTools::get_muon_trigger_scale_factor(Muon& muon, std::string trigger
 }
 float SusyNtTools::get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger)
 {
-    // TODO - this should handle the splitting up of dilepton triggers by 'mu' legs
-    // TODO - this does not handle the different muon ID working points
-
     float scale_factor = 1.0;
     const vector<string> triggers = TriggerTools::getTrigNames();
     vector<string> muon_triggers;
     vector<string> single_muon_triggers = TriggerTools::single_muo_triggers();
     vector<string> di_muon_triggers = TriggerTools::di_muo_triggers();
 
-
     // single muon
     bool is_single = (std::find(single_muon_triggers.begin(), single_muon_triggers.end(), trigger) != single_muon_triggers.end());
     bool is_dimuon = (std::find(di_muon_triggers.begin(), di_muon_triggers.end(), trigger) != di_muon_triggers.end());
 
-    if(!(is_single || is_dimuon)) return scale_factor;
-    int idx = triggerTool().idx_of_trigger(trigger);
+    if(!(is_single || is_dimuon)) {
+        cout << "SusyNtuple::get_muon_trigger_scale_factor    ERROR Provided trigger " << trigger << " is "
+            << "not a supported single or dimuon trigger. Acceptable triggers to provide are "
+            << "(c.f. SusyNtuple/TriggerList.h):" << endl;
+        for(auto x : single_muon_triggers)
+            cout << "SusyNtuple::get_muon_trigger_scale_factor    " << x << endl;
+        for(auto x : di_muon_triggers)
+            cout << "SusyNtuple::get_muon_trigger_scale_factor    " << x << endl;
+        cout << "SusyNtuple::get_muon_trigger_scale_factor    Exiting." << endl;
+        exit(1);
+    }
 
     if(is_single) {
-        double data_factor = 1.0;
-        double mc_factor = 1.0;
+        scale_factor = get_single_muon_trigger_scale_factor(muons, muonSelector().signalId(), trigger);
+    }
+    else if(is_dimuon) {
+        scale_factor = get_dimuon_trigger_scale_factor(muons, muonSelector().signalId(), trigger);
+    }
+
+    return scale_factor;
+}
+float SusyNtTools::get_single_muon_trigger_scale_factor(const MuonVector& muons, MuonId id, string trigger)
+{
+    int idx = triggerTool().idx_of_trigger(trigger);
+    double rate_not_fired_data = 1.0;
+    double rate_not_fired_mc = 1.0;
+    for(auto & m : muons) {
+        double eff_data = 1.0;
+        double eff_mc = 1.0;
+        if(id == MuonId::Medium) {
+            eff_data = m->muoTrigEffData_medium[idx];
+            eff_mc = m->muoTrigEffMC_medium[idx];
+        }
+        else if(id == MuonId::Loose) {
+            eff_data = m->muoTrigEffData_loose[idx];
+            eff_mc = m->muoTrigEffMC_loose[idx];
+        }
+        else {
+            cout << "SusyNtTools::get_single_muon_trigger_scale_factor    "
+                << "ERROR Unhandled MuonId, we only accept Medium and Loose muon ID working points -- "
+                 << "Exiting." << endl;
+            exit(1); // dantrim June 29 2017 -- just exit, ignorance is not bliss
+        }
+        rate_not_fired_data *= (1. - eff_data);
+        rate_not_fired_mc *= (1. - eff_mc);
+    } // m
+    float scale_factor = 1.0;
+    if(1. - rate_not_fired_data == 0) { scale_factor = 0.; } 
+    if(1. - rate_not_fired_mc > 0.) {
+        scale_factor = ( 1. - rate_not_fired_data ) / ( 1. - rate_not_fired_mc );
+    }
+    return scale_factor;
+}
+float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, MuonId id, string trigger)
+{
+    // if "mu8noL1" is not in the trigger or if "2mu" is in the trigger return
+    // the assumption is that htere is only TWO mu chains int he trigger name, e.g.:
+    // HLT_mu22_mu8noL1 and NOT HLT_mu24_mu14_mu8noL1
+    string second_leg = "mu8noL1";
+    string true_dimu = "2mu";
+    bool has_mu8noL1 = (trigger.find(second_leg) != std::string::npos);
+    bool is_true_dimu = (trigger.find(true_dimu) == std::string::npos);
+
+    if(is_true_dimu) {
+        cout << "SusyNtTools:get_dimuon_trigger_scale_factor    "
+            << "ERROR We do not store muon trigger efficiencies for the dimuon triggers "
+            << "with '2mu' (e.g. HLT_2mu10 or HLT_2mu14), you have provided " << trigger << " -- Exiting." << endl;
+        exit(1);
+    }
+    if(!has_mu8noL1) {
+        cout << "SusyNtTools::get_dimuon_trigger_scale_factor    "
+            << "ERROR We can only handle dimuon trigger scale factors for those dimuon triggers "
+            << "with the second leg 'mu8noL1', you have provided " << trigger << " -- Exiting." << endl;
+        exit(1);
+    }
+
+    float scale_factor = 1.0;
+
+    string hlt = "HLT_";
+    string trig_test = trigger;
+    trig_test.erase(0, hlt.length());
+    size_t second_pos = trig_test.find(second_leg);
+    trig_test.erase(second_pos, second_leg.length());
+
+    string trig_first_leg = "HLT_" + trig_test;
+    string trig_second_leg = "HLT_" + second_leg;
+    vector<string> trigs_split { trig_first_leg, trig_second_leg };
+    for(auto t : trigs_split) {
+        int idx_t = triggerTool().idx_of_trigger(t);
+        double rate_not_fired_data = 1.0;
+        double rate_not_fired_mc = 1.0;
         for(auto & m : muons) {
             double eff_data = 1.0;
             double eff_mc = 1.0;
-            if(muonSelector().signalId() == MuonId::Medium) {
-                eff_data = m->muoTrigEffData_medium[idx];
-                eff_mc = m->muoTrigEffMC_medium[idx];
+            if(id == MuonId::Medium) {
+                eff_data = m->muoTrigEffData_medium[idx_t];
+                eff_mc = m->muoTrigEffMC_medium[idx_t];
             }
-            else if(muonSelector().signalId() == MuonId::Loose) {
-                eff_data = m->muoTrigEffData_loose[idx];
-                eff_mc = m->muoTrigEffMC_loose[idx];
+            else if(id == MuonId::Loose) {
+                eff_data = m->muoTrigEffData_loose[idx_t];
+                eff_mc = m->muoTrigEffMC_loose[idx_t];
             }
             else {
-                    cout << "SusyNtTools::get_muon_trigger_scale_factor    Unhandled MuonId, returning SF = 1.0 for trigger " << trigger << endl;
+                cout << "SusyNtTools::get_dimuon_trigger_scale_factor    "
+                    << "ERROR Unhandled MuonId, we only accept Medium and Loose muon ID working points -- "
+                     << "Exiting." << endl;
+                exit(1); // dantrim June 29 2017 -- just exit, ignorance is not bliss
             }
-
-            data_factor *= (1. - eff_data);
-            mc_factor *= (1. - eff_mc);
-            cout << " >> mu with pt = " << m->Pt() << "  eff_data = " << eff_data << "  eff_mc = " << eff_mc << endl;
+            rate_not_fired_data *= (1. - eff_data);
+            rate_not_fired_mc *= (1. - eff_mc);
+        } // m
+        if(1. - rate_not_fired_data == 0) { scale_factor = 0.; }
+        if(1. - rate_not_fired_mc > 0.) {
+            scale_factor *= (1. - rate_not_fired_data) / (1. - rate_not_fired_mc);
         }
+    } // t
+    return scale_factor;
 
-        if(1. - data_factor == 0) { scale_factor = 0.; }
-        if(1. - mc_factor > 0.) {
-            scale_factor = ( 1. - data_factor ) / ( 1. - mc_factor );
-        }
-        cout << "trigger sf = " << scale_factor << endl;
+}
+float SusyNtTools::get_electron_trigger_scale_factor(Susy::Electron& ele, string trigger)
+{
+    ElectronVector trig_ele;
+    trig_ele.push_back(&ele);
+    return get_electron_trigger_scale_factor(trig_ele, trigger);
+}
+float SusyNtTools::get_electron_trigger_scale_factor(Susy::Electron& el1, Susy::Electron& el2, string trigger)
+{
+    ElectronVector trig_ele;
+    trig_ele.push_back(&el1);
+    trig_ele.push_back(&el2);
+    return get_electron_trigger_scale_factor(trig_ele, trigger);
+}
+float SusyNtTools::get_electron_trigger_scale_factor(const ElectronVector& electrons, string trigger)
+{
+    float scale_factor = 1.0;
+
+    vector<string> single_ele_triggers = triggerTool().single_ele_triggers();
+    vector<string> di_ele_triggers = triggerTool().di_ele_triggers();
+    vector<string> mixed_ele_muo_triggers = triggerTool().ele_muo_triggers();
+
+    bool is_single = 
+    (std::find(single_ele_triggers.begin(), single_ele_triggers.end(), trigger) != single_ele_triggers.end());
+    bool is_double =
+    (std::find(di_ele_triggers.begin(), di_ele_triggers.end(), trigger) != di_ele_triggers.end());    
+    bool is_mixed =
+    (std::find(mixed_ele_muo_triggers.begin(), mixed_ele_muo_triggers.end(), trigger) != mixed_ele_muo_triggers.end());
+
+    if(!(is_single || is_double || is_mixed)) {
+        cout << "SusyNtTools::get_electron_trigger_scale_factor    ERROR Could not find "
+            << "requested trigger (" << trigger << ") in list of electron triggers "
+            << "(c.f. SusyNtuple/TriggerList.h) -- Exiting" << endl;
+        exit(1);
     }
-    else if(is_dimuon) {
-        // split the triggers to get the first leg (second leg is assumed to be mu8noL1!!!)
-        string hlt = "HLT_";
-        string second_leg = "_mu8noL1";
-        string trig_test = trigger;
-        trig_test.erase(0,hlt.length());
-        size_t second_pos = trig_test.find(second_leg);
-        trig_test.erase(second_pos, second_leg.length());
 
-        string trig_first_leg = "HLT_" + trig_test;
-        string trig_second_leg = "HLT_mu8noL1";
-        vector<string> trigs_split { trig_first_leg, trig_second_leg };
-        for(auto t : trigs_split) {
-            int idx_t = triggerTool().idx_of_trigger(t);
-            double data_factor = 1.0;
-            double mc_factor = 1.0;
-            for(auto & m : muons) {
-                double eff_data = 1.0;
-                double eff_mc = 1.0;
-                if(muonSelector().signalId() == MuonId::Medium) {
-                    eff_data = m->muoTrigEffData_medium[idx_t];
-                    eff_mc = m->muoTrigEffMC_medium[idx_t];
-                }
-                else if(muonSelector().signalId() == MuonId::Loose) {
-                    eff_data = m->muoTrigEffData_loose[idx_t];
-                    eff_mc = m->muoTrigEffMC_loose[idx_t];
-                }
-                else {
-                    cout << "SusyNtTools::get_muon_trigger_scale_factor    Unhandled MuonId, returning SF = 1.0 for trigger " << trigger << endl;
-                }
+    ElectronId id = electronSelector().signalId();
 
-                data_factor *= (1. - eff_data);
-                mc_factor *= (1. - eff_mc);
-                cout << "  >> mu with pt = " << m->Pt() << endl;
-            } // m
-            if(1. - data_factor == 0) { scale_factor = 0.; }
-            if(1. - mc_factor > 0.) {
-                scale_factor *= (1. - data_factor) / (1. - mc_factor);
-            }
-        } // t
-        if(trigger == "HLT_mu24_mu8noL1") {
-            cout << "trigger sf = " << scale_factor << endl;
+    // get the god-given, so-called "single", "double", or "mixed" electron trigger SF's
+    for(auto & el : electrons) {
+        if(is_single) {
+            scale_factor *= el->eleTrigSF_single[id];
+        }
+        else if(is_double) {
+            scale_factor *= el->eleTrigSF_double[id];
+        }
+        else if(is_mixed) {
+            scale_factor *= el->eleTrigSF_mixed[id];
         }
     }
 
     return scale_factor;
 }
-//float SusyNtTools::get_electron_trigger_scale_factor(const ElectronVector& electrons, std::string trigger)
-//{
-//    float scale_factor = 1.0;
-//    return scale_factor;
-//}
 ///////////////////////////////////////////////////////////////////////
 // Sherpa 2.2 V+jets
 ///////////////////////////////////////////////////////////////////////

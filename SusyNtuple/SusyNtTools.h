@@ -179,11 +179,21 @@ public:
     float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
     float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
 
+    /// Methods to grab lepton trigger scale-factors
     float leptonTriggerSF(const LeptonVector& leps, std::string trigger);
+
+    /// Methods to grab muon trigger scale-factors
     float get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger);
     float get_muon_trigger_scale_factor(Susy::Muon& muon, std::string trigger);
     float get_muon_trigger_scale_factor(Susy::Muon& mu1, Susy::Muon& mu2, std::string trigger);
+    float get_single_muon_trigger_scale_factor(const MuonVector& muons, MuonId id, std::string trigger); 
+    float get_dimuon_trigger_scale_factor(const MuonVector& muons, MuonId id, std::string trigger);
+
+    /// Methods to grab electron trigger scale-factors
     //float get_electron_trigger_scale_factor(const ElectronVector& electrons, std::string trigger);
+    float get_electron_trigger_scale_factor(const ElectronVector& electrons, std::string trigger);
+    float get_electron_trigger_scale_factor(Susy::Electron& electron, std::string trigger);
+    float get_electron_trigger_scale_factor(Susy::Electron& el1, Susy::Electron& el2, std::string trigger);
 
 
     ///////////////////////////////////////////
