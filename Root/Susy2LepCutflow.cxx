@@ -84,6 +84,10 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
     // check that the event passes dilepton selection
     if(!passDileptonEvent(m_baseLeptons, m_signalLeptons)) return false;
 
+    // at this point we have two, good leptons in the event
+    // --> we should get their associated scale factors
+    // TODO dantrim July 4 2017 -- get lepton scale factors
+
     // pass mt2 selections
     check_mt2_selections(m_signalLeptons, m_met);
 
