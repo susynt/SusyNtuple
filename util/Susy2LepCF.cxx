@@ -1,104 +1,127 @@
-
-#include <cstdlib>
-#include <string>
-
-#include "TChain.h"
-
+//SusyNtuple
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/string_utils.h"
 
+//std/stl
+#include <iostream>
+#include <cstdlib>
+#include <string>
 using namespace std;
 
-/*
+//ROOT
+#include "TChain.h"
 
-SusySelection - perform selection and dump cutflows 
+//////////////////////////////////////////////////////
+//
+// Susy2LepCutflow
+//
+// Example looper for selection dilepton events
+// and taking counts in dummy signal regions
+//
+// daniel.joseph.antrim@cern.ch
+// July 2017
+//
+//////////////////////////////////////////////////////
 
-*/
 
 void help()
 {
-  cout << "  Options:"                          << endl;
-  cout << "  -n number of events to process"    << endl;
-  cout << "     defaults: -1 (all events)"      << endl;
-
-  cout << "  -k number of events to skip"       << endl;
-  cout << "     defaults: 0"                    << endl;
-
-  cout << "  -d debug printout level"           << endl;
-  cout << "     defaults: 0 (quiet) "           << endl;
-
-  cout << "  -i input (file, list, or dir)"     << endl;
-  cout << "     defaults: ''"                   << endl;
-
-  cout << "  -s sample name, for naming files"  << endl;
-  cout << "     defaults: ntuple sample name"   << endl;
-
-  cout << "  -h print this help"                << endl;
+    cout << "----------------------------------------------------------" << endl;
+    cout << " Susy2LepCF" << endl;
+    cout << endl;
+    cout << "  Options:" << endl;
+    cout << "   -n          number of events to process (default: all)" << endl;
+    cout << "   -d          debug level (integer) (default: 0)" << endl;
+    cout << "   -i          input file (ROOT file, *.txt file, or directory)" << endl;
+    cout << "   -h          print this help message" << endl;
+    cout << endl;
+    cout << "  Example Usage:" << endl;
+    cout << "   Susy2LepCF -i susyNt.root -n 500" << endl;
+    cout << "----------------------------------------------------------" << endl;
 }
 
 int main(int argc, char** argv)
 {
 
-  int nEvt = -1;
-  int nSkip = 0;
-  int dbg = 0;
-  string sample;
-  string input;
-  cout << "Susy2LepCutflow" << endl;
-  cout << endl;
+    /////////////////////////
+    // cmd line options
+    /////////////////////////
 
-  /** Read inputs to program */
-  for(int i = 1; i < argc; i++) {
-    if      (strcmp(argv[i], "-n") == 0) nEvt = atoi(argv[++i]);
-    else if (strcmp(argv[i], "-k") == 0) nSkip = atoi(argv[++i]);
-    else if (strcmp(argv[i], "-d") == 0) dbg = atoi(argv[++i]);
-    else if (strcmp(argv[i], "-i") == 0) input = argv[++i];
-    else if (strcmp(argv[i], "-s") == 0) sample = argv[++i];
-    else {
-        help();
-        return 0;
+    int n_events = -1;
+    int dbg = 0;
+    string input = "";
+
+    for(int i = 1; i < argc; i++) {
+        if      (strcmp(argv[i], "-n") == 0) n_events = atoi(argv[++i]);
+        else if (strcmp(argv[i], "-d") == 0) dbg = atoi(argv[++i]);
+        else if (strcmp(argv[i], "-i") == 0) input = argv[++i];
+        else if (strcmp(argv[i], "-h") == 0) { help(); return 0; }
+        else {
+            cout << "Susy2LepCF    Unknown command line argument '" << argv[i] << "', exiting" << endl;
+            help();
+            return 1;
+        }
+    } // i
+
+    if(input.empty()) {
+        cout << "Susy2LepCF    You must specify an input" << endl;
+        return 1;
     }
-  }
 
-  if(input.empty()){
-      cout<<"You must specify an input"<<endl;
-      return 1;
-  }
-  if(dbg)
-      cout<<"Being called as: "<<Susy::utils::commandLineArguments(argc, argv)<<endl;
-      
-  cout << "flags:" << endl;
-  cout << "  sample  " << sample   << endl;
-  cout << "  nEvt    " << nEvt     << endl;
-  cout << "  nSkip   " << nSkip    << endl;
-  cout << "  dbg     " << dbg      << endl;
-  cout << "  input   " << input    << endl;
-  cout << endl;
 
-  bool verbose = dbg>0;
-  // Build the input chain
-  TChain* chain = new TChain("susyNt");
-  ChainHelper::addInput(chain, input, dbg>0);
-  Long64_t nEntries = chain->GetEntries();
-  chain->ls();
+    /////////////////////////////////////////////////////////
+    // Build the TChain object
+    // For SusyNtuple analysis, the chain name is susyNt
+    /////////////////////////////////////////////////////////
+    TChain* chain = new TChain("susyNt");
 
-  // Build the TSelector
-  Susy2LepCutflow* susyAna = new Susy2LepCutflow();
-  susyAna->setDebug(dbg);
-  susyAna->setSampleName(ChainHelper::sampleName(input, verbose));
-  susyAna->setChain(chain); // propagate the TChain to the analysis
-  susyAna->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
-  // Run the job
-  if(nEvt<0) nEvt = nEntries;
-  cout << endl;
-  cout << "Total entries:   " << nEntries << endl;
-  cout << "Process entries: " << nEvt << endl;
-  if(nEvt>0) chain->Process(susyAna, sample.c_str(), nEvt, nSkip);
+    // use ChainHelper to infer the input type (ROOT file, *.txt, or dir/)
+    // and build the full chain of the input files
+    // (c.f. SusyNtuple/ChainHelper.h)
+    ChainHelper::addInput(chain, input, dbg>0);
+    Long64_t n_entries_in_chain = chain->GetEntries();
+    // let's see what it looks like
+    chain->ls();
 
-  cout << endl;
-  cout << "SusySelection job done" << endl;
+    /////////////////////////////////////////////////////////
+    // Build the TSelector object
+    // SusyNt analyses inheriting from SusyNtAna must
+    // build their own TSelector looper
+    /////////////////////////////////////////////////////////
+    Susy2LepCutflow* analysis = new Susy2LepCutflow();
 
-  delete chain;
-  return 0;
+    // set to do the 2 lepton analysis object selection (c.f. SusyNtuple/AnalysisType.h)
+    // the AnalysisType configures all of the selector tools (c.f. SusyNtuple/SusyNtTools.h)
+    analysis->setAnaType(AnalysisType::Ana_2Lep);
+
+    analysis->set_debug(dbg);
+    analysis->setSampleName(ChainHelper::sampleName(input, dbg>0)); // SusyNtAna setSampleName (c.f. SusyNtuple/SusyNtAna.h)
+    analysis->set_chain(chain); // propagate the TChain to the analysis
+
+    // for using the TriggerTools (c.f. SusyNtuple/TriggerTools.h) we
+    // must provide the first file in our chain to initialize the
+    // underlying TriggerTool object (to inspect the "trig" histogram
+    // stored in the susyNt file)
+
+    // we use the inherited SusyNtTools object from SusyNtAna base class
+    // to initialize the underlying TriggerTool object
+    analysis->nttools().initTriggerTool(ChainHelper::firstFile(input, dbg>0));
+
+    if(n_events < 0) n_events = n_entries_in_chain;
+
+    cout << "---------------------------------------------------------" << endl;
+    cout << " Total entries in input chain          : " << n_entries_in_chain << endl;
+    cout << " Total entries to process for analysis : " << n_events << endl;
+    cout << "---------------------------------------------------------" << endl;
+
+    
+    // call TChain Process to star the TSelector looper over the input TChain
+    if(n_events > 0) chain->Process(analysis, input.c_str(), n_events);
+
+    cout << endl;
+    cout << "Susy2LepCF    Analysis loop done" << endl;
+
+    delete chain;
+    return 0;
 }
