@@ -90,7 +90,7 @@ class MCWeighter
 
         void printSumwMap() const;
 
-        double getMCWeight(const Susy::Event* evt, const float lumi = LUMI_A_A3,
+        double getMCWeight(const Susy::Event* evt, const float lumi = 1000,
                 Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM, bool includePileup = true);
 
         double getSumw(const Susy::Event* evt);
