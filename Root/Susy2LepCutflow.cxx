@@ -19,7 +19,9 @@ Susy2LepCutflow::Susy2LepCutflow() :
     m_dbg(0),
     m_input_chain(nullptr),
     m_lep_type(DiLepEvtType::ET_Unknown),
-    m_mc_weight(1.0)
+    m_mc_weight(1.0),
+    m_lep_sf(1.0),
+    m_btag_sf(1.0)
 {
     initialize_counters();
 }
@@ -84,9 +86,6 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
     // check that the event passes dilepton selection
     if(!passDileptonEvent(m_baseLeptons, m_signalLeptons)) return false;
 
-    // at this point we have two, good leptons in the event
-    // --> we should get their associated scale factors
-    // TODO dantrim July 4 2017 -- get lepton scale factors
 
     // pass mt2 selections
     check_mt2_selections(m_signalLeptons, m_met);
@@ -162,20 +161,29 @@ bool Susy2LepCutflow::passDileptonEvent(const LeptonVector& baseLeptons, const L
     ///////////////////////////////////////////////////////
     size_t n_base_leptons = (baseLeptons.size());
 
+    // compute the lepton efficiency scale factors
+    m_lep_sf = compute_lepton_scale_factors(baseLeptons);
+
     if(!n_base_leptons>=2) return false;
     dilepton_counters.n_baseline++;
-    dilepton_counters.n_baseline_w += w();
+    dilepton_counters.n_baseline_w += w() * sf();
 
     ///////////////////////////////////////////////////////
     // exactly two signal leptons
     ///////////////////////////////////////////////////////
+
+
     size_t n_signal_leptons = (signalLeptons.size());
     if(n_signal_leptons!=2) return false;
+
+    // re-compute the lepton efficiency scale factor using the signal leptons
+    // (really, since we got here, this value should not have changed)
+    m_lep_sf = compute_lepton_scale_factors(signalLeptons);
 
     m_lep_type = getDiLepEvtType(signalLeptons); // c.f. SusyNtuple/SusyDefs.h
     if(m_lep_type == ET_me) m_lep_type = ET_em; // group together all different-flavor
     dilepton_counters.n_signal[m_lep_type]++;
-    dilepton_counters.n_signal_w[m_lep_type] += w();
+    dilepton_counters.n_signal_w[m_lep_type] += w() * sf();
 
     Susy::Lepton* l0 = signalLeptons.at(0);
     Susy::Lepton* l1 = signalLeptons.at(1);
@@ -186,7 +194,7 @@ bool Susy2LepCutflow::passDileptonEvent(const LeptonVector& baseLeptons, const L
     float is_os = ((l0->q * l1->q) < 0);
     if(!is_os) return false;
     dilepton_counters.n_os[m_lep_type]++;
-    dilepton_counters.n_os_w[m_lep_type] += w();
+    dilepton_counters.n_os_w[m_lep_type] += w() * sf();
 
     ///////////////////////////////////////////////////////
     // dilepton invariant mass > 20 GeV
@@ -194,7 +202,7 @@ bool Susy2LepCutflow::passDileptonEvent(const LeptonVector& baseLeptons, const L
     float mll = (*l0 + *l1).M(); // Susy::Lepton inherits from TLorentzVector
     if(! (mll>20. /*GeV*/)) return false;
     dilepton_counters.n_mll[m_lep_type]++;
-    dilepton_counters.n_mll_w[m_lep_type] += w();
+    dilepton_counters.n_mll_w[m_lep_type] += w() * sf();
 
     ///////////////////////////////////////////////////////
     // veto Z decays
@@ -204,7 +212,7 @@ bool Susy2LepCutflow::passDileptonEvent(const LeptonVector& baseLeptons, const L
         if(!pass_z) return false;
     }
     dilepton_counters.n_vetoZ[m_lep_type]++;
-    dilepton_counters.n_vetoZ_w[m_lep_type] += w();
+    dilepton_counters.n_vetoZ_w[m_lep_type] += w() * sf();
 
     ///////////////////////////////////////////////////////
     // lepton pT > (25, 20) for (lead, sublead)
@@ -217,9 +225,37 @@ bool Susy2LepCutflow::passDileptonEvent(const LeptonVector& baseLeptons, const L
 
     if(!(lead_pt_ok && sublead_pt_ok)) return false;
     dilepton_counters.n_pt[m_lep_type]++;
-    dilepton_counters.n_pt_w[m_lep_type] += w();
+    dilepton_counters.n_pt_w[m_lep_type] += w() * sf();
 
     return true;
+}
+//////////////////////////////////////////////////////////////////////////////
+float Susy2LepCutflow::compute_lepton_scale_factors(const LeptonVector& leptons)
+{
+    float sf = 1.0;
+    // Use the internal SusyNtTools object to calculate the lepton scale facotrs
+    // for ID+Reco+Isolation corrections -- the leptonEffSF method internally
+    // handles muons and electrons separately, using the different selectors
+    // (c.f. SusyNtuple/ElectronSelector.h and SusyNtuple/MuonSelector.h)
+    // to compute the scale factors for each lepton provided
+    sf = nttools().leptonEffSF(leptons);
+
+    if(dbg()>=5) {
+        cout << "Susy2LepCutflow::compute_lepton_scale_factors    Event lepton (ID+Reco+Isolation) SF = " << sf << endl;
+    }
+
+    return sf;
+}
+//////////////////////////////////////////////////////////////////////////////
+float Susy2LepCutflow::compute_btagging_sf(const JetVector& jets)
+{
+    float sf = 1.0;
+    sf = nttools().bTagSF(jets);
+
+    if(dbg()>=5) {
+        cout << "Susy2LepCutflow::compute_btagging_sf    Event b-tag SF = " << sf << endl;
+    }
+    return sf;
 }
 //////////////////////////////////////////////////////////////////////////////
 void Susy2LepCutflow::check_mt2_selections(const LeptonVector& leptons, const Met* met)
@@ -229,19 +265,19 @@ void Susy2LepCutflow::check_mt2_selections(const LeptonVector& leptons, const Me
     float mt2 = kin::getMT2(leptons, met);
     if(mt2>90) {
         dilepton_counters.n_mt290[m_lep_type]++;
-        dilepton_counters.n_mt290_w[m_lep_type] += w();
+        dilepton_counters.n_mt290_w[m_lep_type] += w() * sf();
     }
 
     // mt2 > 120 GeV
     if(mt2>120) {
         dilepton_counters.n_mt2120[m_lep_type]++;
-        dilepton_counters.n_mt2120_w[m_lep_type] += w();
+        dilepton_counters.n_mt2120_w[m_lep_type] += w() * sf();
     }
 
     // mt2 > 150 GeV
     if(mt2>150) {
         dilepton_counters.n_mt2150[m_lep_type]++;
-        dilepton_counters.n_mt2150_w[m_lep_type] += w();
+        dilepton_counters.n_mt2150_w[m_lep_type] += w() * sf();
     }
 
 }
@@ -259,18 +295,23 @@ void Susy2LepCutflow::check_njet_selections(const JetVector& jets)
         else { non_bjets.push_back(j); }
     }
 
+    // we are now selecting on b-tagged objects, so compute the b-tagging scale-factor
+    // using the internal SusyNtTools object
+    m_btag_sf = nttools().bTagSF(jets);
+    m_btag_sf = compute_btagging_sf(jets);
+
     size_t n_bjets = bjets.size();
     size_t n_nonbjets = non_bjets.size();
 
     if(n_bjets>=2) {
         dilepton_counters.n_ge2bjets[m_lep_type]++;
-        dilepton_counters.n_ge2bjets_w[m_lep_type] += w();
+        dilepton_counters.n_ge2bjets_w[m_lep_type] += w() * sf() * btagsf();
         if(n_bjets==2) {
             dilepton_counters.n_e2bjets[m_lep_type]++;
-            dilepton_counters.n_e2bjets_w[m_lep_type] += w();
+            dilepton_counters.n_e2bjets_w[m_lep_type] += w() * sf() * btagsf();
             if(n_nonbjets==0) {
                 dilepton_counters.n_e2bjets0sjets[m_lep_type]++;
-                dilepton_counters.n_e2bjets0sjets_w[m_lep_type] += w();
+                dilepton_counters.n_e2bjets0sjets_w[m_lep_type] += w() * sf() * btagsf();
             }
         }
     }
@@ -292,21 +333,21 @@ void Susy2LepCutflow::check_jetmet_selections(const JetVector& jets, const Met* 
     // require at least 2 jets
     if(n_jets>=2) {
         dilepton_counters.n_ge2jets[m_lep_type]++;
-        dilepton_counters.n_ge2jets_w[m_lep_type] += w();
+        dilepton_counters.n_ge2jets_w[m_lep_type] += w() * sf();
     }
     else { return; }
 
     // veto forward jets
     if(fjets.size()==0) {
         dilepton_counters.n_forwardJetVeto[m_lep_type]++;
-        dilepton_counters.n_forwardJetVeto_w[m_lep_type] += w();
+        dilepton_counters.n_forwardJetVeto_w[m_lep_type] += w() * sf();
     }
     else { return; }
 
     // veto b-tagged jets
     if(bjets.size()==0) {
         dilepton_counters.n_bveto[m_lep_type]++;
-        dilepton_counters.n_bveto_w[m_lep_type] += w();
+        dilepton_counters.n_bveto_w[m_lep_type] += w() * sf() * btagsf();
     }
     else { return; }
 
@@ -316,7 +357,7 @@ void Susy2LepCutflow::check_jetmet_selections(const JetVector& jets, const Met* 
     float delta_phi = l0->DeltaPhi(*l1);
     if(fabs(delta_phi) < (M_PI/2.)) {
         dilepton_counters.n_dphill[m_lep_type]++;
-        dilepton_counters.n_dphill_w[m_lep_type] += w();
+        dilepton_counters.n_dphill_w[m_lep_type] += w() * sf() * btagsf();
     }
     else { return; }
 
@@ -324,7 +365,7 @@ void Susy2LepCutflow::check_jetmet_selections(const JetVector& jets, const Met* 
     float metvalue = m_met->Et;
     if(metvalue>100.) {
         dilepton_counters.n_met100[m_lep_type]++;
-        dilepton_counters.n_met100_w[m_lep_type] += w();
+        dilepton_counters.n_met100_w[m_lep_type] += w() * sf() * btagsf();
     }
     else { return; }
 
@@ -334,7 +375,7 @@ void Susy2LepCutflow::check_jetmet_selections(const JetVector& jets, const Met* 
     for(auto & j : jets) ht += j->Pt();
     if(ht>500.) {
         dilepton_counters.n_ht500[m_lep_type]++;
-        dilepton_counters.n_ht500_w[m_lep_type] += w();
+        dilepton_counters.n_ht500_w[m_lep_type] += w() * sf() * btagsf();
     }
     else { return; }
 
@@ -344,7 +385,7 @@ void Susy2LepCutflow::check_jetmet_selections(const JetVector& jets, const Met* 
     ht += m_met->Et;
     if(ht>500.) {
         dilepton_counters.n_meff500[m_lep_type]++;
-        dilepton_counters.n_meff500_w[m_lep_type] += w();
+        dilepton_counters.n_meff500_w[m_lep_type] += w() * sf() * btagsf();
     }
     else { return; }
 }
@@ -434,7 +475,6 @@ void Susy2LepCutflow::print_counters()
 {
     cout << event_counters() << endl;
     cout << dilepton_counts() << endl;
-
 }
 //////////////////////////////////////////////////////////////////////////////
 void Susy2LepCutflow::Terminate()

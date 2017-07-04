@@ -46,6 +46,8 @@ class Susy2LepCutflow : public SusyNtAna
         void initialize_counters();
 
         float w() { return m_mc_weight; }
+        float sf() { return m_lep_sf; }
+        float btagsf() { return m_btag_sf; }
 
 
         // standard ATLAS event cleaning
@@ -54,6 +56,12 @@ class Susy2LepCutflow : public SusyNtAna
 
         // select dilepton events
         bool passDileptonEvent(const LeptonVector& baseLeptons, const LeptonVector& signalLeptons);
+
+        // compute lepton scale factors for ID, Reco, and Isolation corrections
+        float compute_lepton_scale_factors(const LeptonVector& leptons);
+
+        // compute flavor tagging efficiency scale factor
+        float compute_btagging_sf(const JetVector& jets);
 
         // signal regions
         void check_mt2_selections(const LeptonVector& leptons, const Met* met);
@@ -235,6 +243,8 @@ class Susy2LepCutflow : public SusyNtAna
         TChain* m_input_chain; // the TChain object we are processing
         DiLepEvtType m_lep_type;
         float m_mc_weight;
+        float m_lep_sf;
+        float m_btag_sf;
 
         ////////////////////////////////////////////
         // counters
