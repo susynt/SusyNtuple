@@ -76,8 +76,16 @@ public:
     std::vector<float> errEffSF_reco_dn;   // EL_EFF_Reco_TOTAL_Uncorr_DN
     std::vector<float> errEffSF_iso_up;    // EL_EFF_Iso_TOTAL_Uncorr_UP
     std::vector<float> errEffSF_iso_dn;    // EL_EFF_Iso_TOTAL_Uncorr_DN
-    std::vector<float> errEffSF_trig_up;   // EL_EFF_Trigger_TOTAL_Uncorr_UP
-    std::vector<float> errEffSF_trig_dn;   // EL_EFF_Trigger_TOTAL_Uncorr_DN
+
+    std::vector<float> errEffSF_trig_up_single;   // EL_EFF_Trigger_TOTAL_Uncorr_UP
+    std::vector<float> errEffSF_trig_dn_single;   // EL_EFF_Trigger_TOTAL_Uncorr_DN
+    std::vector<float> errEffSF_trig_up_double;   // EL_EFF_Trigger_TOTAL_Uncorr_UP
+    std::vector<float> errEffSF_trig_dn_double;   // EL_EFF_Trigger_TOTAL_Uncorr_DN
+    std::vector<float> errEffSF_trig_up_mixed;   // EL_EFF_Trigger_TOTAL_Uncorr_UP
+    std::vector<float> errEffSF_trig_dn_mixed;   // EL_EFF_Trigger_TOTAL_Uncorr_DN
+
+
+
 /*
     float scale_mom_dn;
     float scale_mom_up;
@@ -121,8 +129,12 @@ public:
      errEffSF_reco_dn.assign(ElectronId::ElectronIdInvalid, 0);
      errEffSF_iso_up.assign(ElectronId::ElectronIdInvalid, 0);
      errEffSF_iso_dn.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_trig_up.assign(ElectronId::ElectronIdInvalid, 0);
-     errEffSF_trig_dn.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_up_single.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_dn_single.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_up_double.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_dn_double.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_up_mixed.assign(ElectronId::ElectronIdInvalid, 0);
+     errEffSF_trig_dn_mixed.assign(ElectronId::ElectronIdInvalid, 0);
 
       Lepton::clear();
     }

@@ -49,8 +49,12 @@ Electron::Electron(const Electron &rhs):
   errEffSF_reco_dn(rhs.errEffSF_reco_dn),
   errEffSF_iso_up(rhs.errEffSF_iso_up),
   errEffSF_iso_dn(rhs.errEffSF_iso_dn),
-  errEffSF_trig_up(rhs.errEffSF_trig_up),
-  errEffSF_trig_dn(rhs.errEffSF_trig_dn)
+  errEffSF_trig_up_single(rhs.errEffSF_trig_up_single),
+  errEffSF_trig_dn_single(rhs.errEffSF_trig_dn_single),
+  errEffSF_trig_up_double(rhs.errEffSF_trig_up_double),
+  errEffSF_trig_dn_double(rhs.errEffSF_trig_dn_double),
+  errEffSF_trig_up_mixed(rhs.errEffSF_trig_up_mixed),
+  errEffSF_trig_dn_mixed(rhs.errEffSF_trig_dn_mixed)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -99,8 +103,12 @@ Electron& Electron::operator=(const Electron &rhs)
     errEffSF_reco_dn = rhs.errEffSF_reco_dn;
     errEffSF_iso_up = rhs.errEffSF_iso_up;
     errEffSF_iso_dn = rhs.errEffSF_iso_dn;
-    errEffSF_trig_up = rhs.errEffSF_trig_up;
-    errEffSF_trig_dn = rhs.errEffSF_trig_dn;
+    errEffSF_trig_up_single = rhs.errEffSF_trig_up_single;
+    errEffSF_trig_dn_single = rhs.errEffSF_trig_dn_single;
+    errEffSF_trig_up_double = rhs.errEffSF_trig_up_double;
+    errEffSF_trig_dn_double = rhs.errEffSF_trig_dn_double;
+    errEffSF_trig_up_mixed = rhs.errEffSF_trig_up_mixed;
+    errEffSF_trig_dn_mixed = rhs.errEffSF_trig_dn_mixed;
   }
   return *this;
 }
