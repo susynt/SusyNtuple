@@ -133,7 +133,6 @@ def strip_skeleton_file(out_dir, skeleton_file, skeleton) :
     outfile = open(outfilename, 'w')
 
     now = datetime.datetime.now()
-    print "NOW ", now.strftime("%Y-%m-%d %H:%M")
 
     lines = open(skeleton_file).readlines()
     for line in lines :
@@ -176,7 +175,6 @@ def make_package(skeleton) :
     skeleton_files = skeleton.get_skeleton_files()
 
     for f in skeleton_files :
-        print "BLAH ", f
         if "LOOPER.cxx" in f :
             make_package_file(f, "Root/", skeleton)
         elif "LOOPER.h" in f :
