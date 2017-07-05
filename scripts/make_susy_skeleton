@@ -1,0 +1,222 @@
+#!/usr/bin/env python
+
+from optparse import OptionParser
+import os
+
+import subprocess
+
+import sys
+
+import datetime
+
+
+class Skeleton :
+    def __init__(self, package_dir, class_name, executable_name) :
+        self.package_dir = package_dir
+        self.class_name = class_name
+        self.executable_name = executable_name
+        self.skeleton_dir = ""
+        self.final_package_dir = ""
+
+        # full dirs
+        self.skeleton_looper_cxx = ""
+        self.skeleton_looper_h = ""
+        self.skeleton_exec = ""
+        self.skeleton_linkdef = ""
+        self.skeleton_makefile = ""
+
+        self.looper_cxx = ""
+        self.looper_h = ""
+        self.looper_exec = ""
+        self.link_dir = ""
+        self.makefile = ""
+
+        self.get_skeleton(package_dir)
+        self.get_final_package_dir(package_dir, class_name)
+
+    def get_skeleton(self, top_level) :
+
+        susy_dir = "%s%s"%(top_level, "SusyNtuple/")
+
+        if not os.path.isdir(susy_dir) :
+            print "make_susy_skeleton    ERROR SusyNtuple package not found (looking in %s)"%susy_dir
+            sys.exit()
+
+        self.skeleton_dir = "%s%s/skeleton/"%(susy_dir, "data")
+        skeleton_dir = self.skeleton_dir
+
+        self.skeleton_looper_cxx = "%s%s"%(skeleton_dir, "skeleton_LOOPER.cxx")
+        self.skeleton_looper_h = "%s%s"%(skeleton_dir, "skeleton_LOOPER.h")
+        self.skeleton_exec = "%s%s"%(skeleton_dir, "skeleton_EXEC.cxx")
+        self.skeleton_linkdef = "%s%s"%(skeleton_dir, "skeleton_LinkDef.h")
+        self.skeleton_makefile = "%s%s"%(skeleton_dir, "skeleton_Makefile.RootCore")
+
+    def get_final_package_dir(self, package_dir, class_name) :
+        self.final_package_dir = "%s%s"%(package_dir, class_name)
+        return self.final_package_dir
+
+    def get_skeleton_files(self) :
+        out = []
+        out.append(self.skeleton_looper_cxx)
+        out.append(self.skeleton_looper_h)
+        out.append(self.skeleton_exec)
+        out.append(self.skeleton_linkdef)
+        out.append(self.skeleton_makefile)
+        return out
+
+def check_slash(name) :
+    if not name.endswith("/") :
+        name += "/"
+    return name
+
+def check_rootcoredir() :
+
+    try :
+        rootcore = os.environ["ROOTCOREBIN"]
+    except :
+        print "make_susy_skeleton    ERROR Rootcore does not appear to be set up (there is no 'ROOTCOREBIN' environment variable)"
+        print "make_susy_skeleton    ERROR Be sure to have Rootcore setup (source rcSetup.sh or source RootCore/scripts/setup.sh)"
+        sys.exit()
+
+    ending = rootcore.split("/")[-1]
+    top_level = rootcore.replace(ending, "")
+    print "make_susy_skeleton    Rootcore area found, will place analysis package in: %s"%top_level
+    return top_level
+
+def mkdir(directory) :
+
+    if os.path.isdir(directory) :
+        print "make_susy_skeleton    ERROR Found existing directory '%s'"%directory
+        print "make_susy_skeleton    ERROR Cannot overrwrite, exiting" 
+        sys.exit()
+
+    mkdir_cmd = "mkdir -p %s"%directory
+    subprocess.call(mkdir_cmd, shell=True)
+
+def make_rootcore_structure(class_name, install_dir) :
+
+    package_dir = "%s%s/"%(install_dir, class_name)
+    mkdir(package_dir)
+
+    dirs_to_make = ["Root", class_name, "util", "run", "cmt"]
+    for d in dirs_to_make :
+        full_dir = "%s%s/%s"%(install_dir, class_name, d)
+        mkdir(full_dir)
+
+def get_filename(skeleton_file, skeleton) :
+
+    class_name = skeleton.class_name
+    exec_name = skeleton.executable_name
+    if "LOOPER.cxx" in skeleton_file :
+        return "%s.cxx"%(class_name)
+    elif "LOOPER.h" in skeleton_file :
+        return "%s.h"%(class_name)
+    elif "EXEC.cxx" in skeleton_file :
+        return "%s.cxx"%(exec_name)
+    elif "LinkDef.h" in skeleton_file :
+        return "LinkDef.h"
+    elif "Makefile.RootCore" in skeleton_file :
+        return "Makefile.RootCore"
+    else :
+        print "make_susy_skeleton    ERROR Unhandled skeleton file name '%s'"%(skeleton_file)
+        sys.exit()
+
+def strip_skeleton_file(out_dir, skeleton_file, skeleton) :
+
+    filename = get_filename(skeleton_file, skeleton)
+    out_dir = check_slash(out_dir)
+    outfilename = "%s%s"%(out_dir, filename) 
+
+    class_name = skeleton.class_name
+    exec_name = skeleton.executable_name
+
+    outfile = open(outfilename, 'w')
+
+    now = datetime.datetime.now()
+    print "NOW ", now.strftime("%Y-%m-%d %H:%M")
+
+    lines = open(skeleton_file).readlines()
+    for line in lines :
+        if not line : continue
+        ##line = line.strip()
+        line = line.replace("\n", "")
+
+        if "SKELETON_LOOPER_CLASS" in line and "DESCRIPTION" not in line :
+            line = line.replace("SKELETON_LOOPER_CLASS", class_name)
+            outfile.write(line + "\n")
+        elif "SKELETON_EXEC_NAME" in line :
+            line = line.replace("SKELETON_EXEC_NAME", exec_name)
+            outfile.write(line + "\n")
+
+        elif "SKELETON_LOOPER_CLASS_DESCRIPTION" in line :
+            line = line.replace("SKELETON_LOOPER_CLASS_DESCRIPTION", class_name)
+            outfile.write(line + "\n")
+            time_line = "// Class auto-generated with SusyNtuple/make_susy_skeleton on %s"%(now.strftime("%Y-%m-%d %H:%M"))
+            outfile.write(time_line + "\n")
+
+        elif "SKELETON_DESCRIPTION" in line :
+            line = line.replace("SKELETON_DESCRIPTION", exec_name)
+            outfile.write(line + "\n")
+            time_line = "// Executable auto-generated with SusyNtuple/make_susy_skeleton on %s"%(now.strftime("%Y-%m-%d %H:%M"))
+            outfile.write(time_line + "\n")
+        else :
+            outfile.write(line + "\n")
+
+    outfile.close()
+
+def make_package_file(skeleton_file, place_dir, skeleton) :
+
+    package_dir = skeleton.final_package_dir
+    package_dir = check_slash(package_dir)
+    root_dir = "%s%s"%(package_dir, place_dir)
+    strip_skeleton_file(root_dir, skeleton_file, skeleton)
+
+def make_package(skeleton) :
+
+    skeleton_files = skeleton.get_skeleton_files()
+
+    for f in skeleton_files :
+        print "BLAH ", f
+        if "LOOPER.cxx" in f :
+            make_package_file(f, "Root/", skeleton)
+        elif "LOOPER.h" in f :
+            make_package_file(f, "%s/"%skeleton.class_name, skeleton)
+        elif "EXEC.cxx" in f :
+            make_package_file(f, "util/", skeleton)
+        elif "Linkdef.h" in f :
+            make_package_file(f, "Root/", skeleton)
+        elif "Makefile.RootCore" in f :
+            make_package_file(f, "cmt/", skeleton)
+
+def setup_package(class_name, executable_name, install_dir) :
+
+    make_rootcore_structure(class_name, install_dir)
+
+    skeleton = Skeleton(install_dir, class_name, executable_name)
+
+    make_package(skeleton)
+
+def main() :
+
+    parser = OptionParser()
+    parser.add_option("-x", "--exec-name", help="Name of final analysis executable (e.g. Susy2LepCF)", default="") 
+    parser.add_option("-c", "--looper-class", help="Name of analysis looper class (e.g. Susy2LepCutflow)", default="") 
+    (options, args) = parser.parse_args()
+    executable_name = options.exec_name
+    class_name = options.looper_class
+
+    if executable_name == "" :
+        print "make_susy_skeleton    You did not provide an executable name (-x|--exec-name cmd line option)"
+        sys.exit()
+    if class_name == "" :
+        print "make_susy_skeleton    You did not provide a looper class name (-c|--looper-class cmd line option)"
+        sys.exit()
+
+    install_dir = check_rootcoredir() 
+
+    setup_package(class_name, executable_name, install_dir)
+
+
+#___________________________________________________
+if __name__ == "__main__" :
+    main()
