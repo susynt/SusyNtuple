@@ -29,8 +29,8 @@ enum SusyNtSys {
     ,EL_EFF_Iso_TOTAL_Uncorr_UP
     ,EL_EFF_Reco_TOTAL_Uncorr_DN
     ,EL_EFF_Reco_TOTAL_Uncorr_UP
-    ,EL_EFF_Trigger_TOTAL_Uncorr_DN
-    ,EL_EFF_Trigger_TOTAL_Uncorr_UP
+    ,EL_EFF_Trigger_TOTAL_DN
+    ,EL_EFF_Trigger_TOTAL_UP
 
     ////////////////////////////////////////////
     // FLAVOR TAGGING
@@ -60,6 +60,12 @@ enum SusyNtSys {
     ,JET_GroupedNP_2_DN
     ,JET_GroupedNP_3_UP
     ,JET_GroupedNP_3_DN
+
+    ////////////////////////////////////////////
+    // JET ETA INTERCALIBRATION NON CLOSURE
+    ////////////////////////////////////////////
+    ,JET_EtaIntercalibration_UP
+    ,JET_EtaIntercalibration_DN
 
     ////////////////////////////////////////////
     // JVT EFFICIENCY
@@ -164,8 +170,8 @@ const std::map<SusyNtSys, std::string> SusyNtSysNames {
     {EL_EFF_Iso_TOTAL_Uncorr_UP,        "EL_EFF_Iso_TOTAL_Uncorr_UP"},
     {EL_EFF_Reco_TOTAL_Uncorr_DN,       "EL_EFF_Reco_TOTAL_Uncorr_DN"},
     {EL_EFF_Reco_TOTAL_Uncorr_UP,       "EL_EFF_Reco_TOTAL_Uncorr_UP"},
-    {EL_EFF_Trigger_TOTAL_Uncorr_DN,    "EL_EFF_Trigger_TOTAL_Uncorr_DN"},
-    {EL_EFF_Trigger_TOTAL_Uncorr_UP,    "EL_EFF_Trigger_TOTAL_Uncorr_UP"},
+    {EL_EFF_Trigger_TOTAL_DN,           "EL_EFF_Trigger_TOTAL_DN"},
+    {EL_EFF_Trigger_TOTAL_UP,           "EL_EFF_Trigger_TOTAL_UP"},
 
     ////////////////////////////////////////////
     // FLAVOR TAGGING
@@ -195,6 +201,12 @@ const std::map<SusyNtSys, std::string> SusyNtSysNames {
     {JET_GroupedNP_2_DN,                "JET_GroupedNP_2_DN"},
     {JET_GroupedNP_3_UP,                "JET_GroupedNP_3_UP"},
     {JET_GroupedNP_3_DN,                "JET_GroupedNP_3_DN"},
+
+    ////////////////////////////////////////////
+    // JET ETA INTERCALIBRATION NON CLOSURE
+    ////////////////////////////////////////////
+    {JET_EtaIntercalibration_UP,        "JET_EtaIntercalibration_UP"},
+    {JET_EtaIntercalibration_DN,        "JET_EtaIntercalibration_DN"},
 
     ////////////////////////////////////////////
     // JVT EFFICIENCY
