@@ -116,11 +116,12 @@ float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
     else if(sys == NtSys::EL_EFF_Iso_TOTAL_Uncorr_DN) {
         err = ele.errEffSF_iso_dn[m_signalId];
     }
-    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_Uncorr_DN) {
-        err = ele.errEffSF_trig_dn[m_signalId];
+    #warning for trigger SF systematics we only handle single electron sf
+    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_DN) {
+        err = ele.errEffSF_trig_dn_single[m_signalId];
     }
-    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_Uncorr_UP) {
-        err = ele.errEffSF_trig_up[m_signalId];
+    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_UP) {
+        err = ele.errEffSF_trig_up_single[m_signalId];
     }
     else {
         cout << "ElectronSelector::errEffSF(): you are calling this function with"

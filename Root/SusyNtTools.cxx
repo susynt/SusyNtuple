@@ -709,20 +709,23 @@ float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trig
     }
     return trigger_sf;
 }
-float SusyNtTools::get_muon_trigger_scale_factor(Muon& mu1, Muon& mu2, std::string trigger)
+float SusyNtTools::get_muon_trigger_scale_factor(Muon& mu1, Muon& mu2, std::string trigger,
+        const SusyNtSys sys)
 {
     MuonVector trig_muons;
     trig_muons.push_back(&mu1);
     trig_muons.push_back(&mu2);
-    return get_muon_trigger_scale_factor(trig_muons, trigger);
+    return get_muon_trigger_scale_factor(trig_muons, trigger, sys);
 }
-float SusyNtTools::get_muon_trigger_scale_factor(Muon& muon, std::string trigger)
+float SusyNtTools::get_muon_trigger_scale_factor(Muon& muon, std::string trigger,
+        const SusyNtSys sys)
 {
     MuonVector trig_muons;
     trig_muons.push_back(&muon);
-    return get_muon_trigger_scale_factor(trig_muons, trigger);
+    return get_muon_trigger_scale_factor(trig_muons, trigger, sys);
 }
-float SusyNtTools::get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger)
+float SusyNtTools::get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger,
+        const SusyNtSys sys)
 {
     float scale_factor = 1.0;
     const vector<string> triggers = TriggerTools::getTrigNames();
@@ -736,6 +739,7 @@ float SusyNtTools::get_muon_trigger_scale_factor(const MuonVector& muons, std::s
 
     if(!(is_single || is_dimuon)) {
         cout << "SusyNtuple::get_muon_trigger_scale_factor    ERROR Provided trigger " << trigger << " is "
+    // get the god-given, so-called "single", "double", or "mixed" electron trigger SF's
             << "not a supported single or dimuon trigger. Acceptable triggers to provide are "
             << "(c.f. SusyNtuple/TriggerList.h):" << endl;
         for(auto x : single_muon_triggers)
@@ -747,15 +751,16 @@ float SusyNtTools::get_muon_trigger_scale_factor(const MuonVector& muons, std::s
     }
 
     if(is_single) {
-        scale_factor = get_single_muon_trigger_scale_factor(muons, muonSelector().signalId(), trigger);
+        scale_factor = get_single_muon_trigger_scale_factor(muons, muonSelector().signalId(), trigger, sys);
     }
     else if(is_dimuon) {
-        scale_factor = get_dimuon_trigger_scale_factor(muons, muonSelector().signalId(), trigger);
+        scale_factor = get_dimuon_trigger_scale_factor(muons, muonSelector().signalId(), trigger, sys);
     }
 
     return scale_factor;
 }
-float SusyNtTools::get_single_muon_trigger_scale_factor(const MuonVector& muons, MuonId id, string trigger)
+float SusyNtTools::get_single_muon_trigger_scale_factor(const MuonVector& muons, MuonId id, string trigger,
+        const SusyNtSys sys)
 {
     int idx = triggerTool().idx_of_trigger(trigger);
     double rate_not_fired_data = 1.0;
@@ -764,10 +769,33 @@ float SusyNtTools::get_single_muon_trigger_scale_factor(const MuonVector& muons,
         double eff_data = 1.0;
         double eff_mc = 1.0;
         if(id == MuonId::Medium) {
-            eff_data = m->muoTrigEffData_medium[idx];
-            eff_mc = m->muoTrigEffMC_medium[idx];
+            if(sys == NtSys::NOM) {
+                eff_data = m->muoTrigEffData_medium[idx];
+                eff_mc = m->muoTrigEffMC_medium[idx];
+            }
+            else if(sys == NtSys::MUON_EFF_TRIG_STAT_UP) {
+                eff_data = m->muoTrigEffErrData_stat_up_medium[idx];
+                eff_mc = m->muoTrigEffErrMC_stat_up_medium[idx];
+            }
+            else if(sys == NtSys::MUON_EFF_TRIG_STAT_DN) {
+                eff_data = m->muoTrigEffErrData_stat_dn_medium[idx];
+                eff_mc = m->muoTrigEffErrMC_stat_dn_medium[idx];
+            }
+            else if(sys == NtSys::MUON_EFF_TRIG_SYST_UP) {
+                eff_data = m->muoTrigEffErrData_syst_up_medium[idx];
+                eff_mc = m->muoTrigEffErrMC_syst_up_medium[idx];
+            }
+            else if(sys == NtSys::MUON_EFF_TRIG_SYST_DN) {
+                eff_data = m->muoTrigEffErrData_syst_dn_medium[idx];
+                eff_mc = m->muoTrigEffErrMC_syst_dn_medium[idx];
+            }
         }
         else if(id == MuonId::Loose) {
+            if(sys != NtSys::NOM) {
+                cout << "SusyNtTools::get_single_muon_trigger_scale_factor   "
+                        << "ERROR We only store trigger SF variations for Medium muons -- Exiting." << endl;
+                exit(1);
+            }
             eff_data = m->muoTrigEffData_loose[idx];
             eff_mc = m->muoTrigEffMC_loose[idx];
         }
@@ -787,7 +815,8 @@ float SusyNtTools::get_single_muon_trigger_scale_factor(const MuonVector& muons,
     }
     return scale_factor;
 }
-float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, MuonId id, string trigger)
+float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, MuonId id, string trigger,
+        const SusyNtSys sys)
 {
     // if "mu8noL1" is not in the trigger or if "2mu" is in the trigger return
     // the assumption is that htere is only TWO mu chains int he trigger name, e.g.:
@@ -830,10 +859,33 @@ float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, Muon
             double eff_data = 1.0;
             double eff_mc = 1.0;
             if(id == MuonId::Medium) {
-                eff_data = m->muoTrigEffData_medium[idx_t];
-                eff_mc = m->muoTrigEffMC_medium[idx_t];
+                if(sys == NtSys::NOM) {
+                    eff_data = m->muoTrigEffData_medium[idx_t];
+                    eff_mc = m->muoTrigEffMC_medium[idx_t];
+                }
+                else if(sys == NtSys::MUON_EFF_TRIG_STAT_UP) {
+                    eff_data = m->muoTrigEffErrData_stat_up_medium[idx_t];
+                    eff_mc = m->muoTrigEffErrMC_stat_up_medium[idx_t];
+                }
+                else if(sys == NtSys::MUON_EFF_TRIG_STAT_DN) {
+                    eff_data = m->muoTrigEffErrData_stat_dn_medium[idx_t];
+                    eff_mc = m->muoTrigEffErrMC_stat_dn_medium[idx_t];
+                }
+                else if(sys == NtSys::MUON_EFF_TRIG_SYST_UP) {
+                    eff_data = m->muoTrigEffErrData_syst_up_medium[idx_t];
+                    eff_mc = m->muoTrigEffErrMC_syst_up_medium[idx_t];
+                }
+                else if(sys == NtSys::MUON_EFF_TRIG_SYST_DN) {
+                    eff_data = m->muoTrigEffErrData_syst_dn_medium[idx_t];
+                    eff_mc = m->muoTrigEffErrMC_syst_dn_medium[idx_t];
+                }
             }
             else if(id == MuonId::Loose) {
+                if(sys != NtSys::NOM) {
+                    cout << "SusyNtTools::get_dimuon_trigger_scale_factor   "
+                            << "ERROR We only store trigger SF variations for Medium muons -- Exiting." << endl;
+                    exit(1);
+                }
                 eff_data = m->muoTrigEffData_loose[idx_t];
                 eff_mc = m->muoTrigEffMC_loose[idx_t];
             }
@@ -854,20 +906,23 @@ float SusyNtTools::get_dimuon_trigger_scale_factor(const MuonVector& muons, Muon
     return scale_factor;
 
 }
-float SusyNtTools::get_electron_trigger_scale_factor(Susy::Electron& ele, string trigger)
+float SusyNtTools::get_electron_trigger_scale_factor(Susy::Electron& ele, string trigger,
+        const NtSys::SusyNtSys sys)
 {
     ElectronVector trig_ele;
     trig_ele.push_back(&ele);
-    return get_electron_trigger_scale_factor(trig_ele, trigger);
+    return get_electron_trigger_scale_factor(trig_ele, trigger, sys);
 }
-float SusyNtTools::get_electron_trigger_scale_factor(Susy::Electron& el1, Susy::Electron& el2, string trigger)
+float SusyNtTools::get_electron_trigger_scale_factor(Susy::Electron& el1, Susy::Electron& el2, string trigger,
+        const NtSys::SusyNtSys sys)
 {
     ElectronVector trig_ele;
     trig_ele.push_back(&el1);
     trig_ele.push_back(&el2);
-    return get_electron_trigger_scale_factor(trig_ele, trigger);
+    return get_electron_trigger_scale_factor(trig_ele, trigger, sys);
 }
-float SusyNtTools::get_electron_trigger_scale_factor(const ElectronVector& electrons, string trigger)
+float SusyNtTools::get_electron_trigger_scale_factor(const ElectronVector& electrons, string trigger,
+        const NtSys::SusyNtSys sys)
 {
     float scale_factor = 1.0;
 
@@ -891,16 +946,53 @@ float SusyNtTools::get_electron_trigger_scale_factor(const ElectronVector& elect
 
     ElectronId id = electronSelector().signalId();
 
+
+    // check the systematic
+    int sys_ele = 0;
+    if(sys == NtSys::EL_EFF_Trigger_TOTAL_DN) {
+        sys_ele = -1;
+    }
+    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_UP) {
+        sys_ele = 1;
+    }
+
     // get the god-given, so-called "single", "double", or "mixed" electron trigger SF's
     for(auto & el : electrons) {
+        // single
         if(is_single) {
-            scale_factor *= el->eleTrigSF_single[id];
+            if(sys_ele==0) {
+                scale_factor *= el->eleTrigSF_single[id];
+            }
+            else if(sys_ele<0) {
+                scale_factor *= el->errEffSF_trig_dn_single[id];
+            }
+            else if(sys_ele>0) {
+                scale_factor *= el->errEffSF_trig_up_single[id];
+            }
         }
+        // double
         else if(is_double) {
-            scale_factor *= el->eleTrigSF_double[id];
+            if(sys_ele==0) {
+                scale_factor *= el->eleTrigSF_double[id];
+            }
+            else if(sys_ele<0) {
+                scale_factor *= el->errEffSF_trig_dn_double[id];
+            }
+            else if(sys_ele>0) {
+                scale_factor *= el->errEffSF_trig_up_double[id];
+            }
         }
+        // mixed
         else if(is_mixed) {
-            scale_factor *= el->eleTrigSF_mixed[id];
+            if(sys_ele==0) {
+                scale_factor *= el->eleTrigSF_mixed[id];
+            }
+            else if(sys_ele<0) {
+                scale_factor *= el->errEffSF_trig_dn_mixed[id];
+            }
+            else if(sys_ele>0) {
+                scale_factor *= el->errEffSF_trig_up_mixed[id];
+            }
         }
     }
 
