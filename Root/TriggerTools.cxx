@@ -161,6 +161,13 @@ bool TriggerTools::passTrigger(const TBits& triggerbits, const std::string &trig
     return pass;
 }
 //////////////////////////////////////////////////////////////////////////////
+bool TriggerTools::lepton_trigger_match(Susy::Lepton* lep, string trigger)
+{
+    // lepton_trigger_match is just an ~alias so that it is made clear that it is
+    // different than the event-wise passTrigger method
+    return passTrigger(lep->trigBits, trigger);
+}
+//////////////////////////////////////////////////////////////////////////////
 bool TriggerTools::dilepton_trigger_match(Susy::Event* evt, Susy::Lepton* l0,
         Susy::Lepton* l1, std::string trigger)
 {

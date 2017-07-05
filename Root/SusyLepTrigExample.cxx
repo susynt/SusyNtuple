@@ -319,7 +319,7 @@ void SusyLepTrigExample::test_single_mu_trigger(Susy::Muon* muon, string trigger
 
     
     bool mu_is_matched = (muon->Pt() >= threshold);
-    mu_is_matched = (mu_is_matched && nttools().triggerTool().passTrigger(muon->trigBits, trigger));
+    mu_is_matched = (mu_is_matched && nttools().triggerTool().lepton_trigger_match(muon, trigger));
     if(mu_is_matched) {
         int content = h_single_mu_match->GetBinContent(sm_idx+1);
         h_single_mu_match->SetBinContent(sm_idx+1, content+1);
@@ -336,7 +336,7 @@ void SusyLepTrigExample::test_single_ele_trigger(Susy::Electron* electron, strin
     int content = h_single_ele_fired->GetBinContent(se_idx+1);
     h_single_ele_fired->SetBinContent(se_idx+1, content+1);
 
-    bool ele_is_matched = nttools().triggerTool().passTrigger(electron->trigBits, trigger);
+    bool ele_is_matched = nttools().triggerTool().lepton_trigger_match(electron, trigger);
     if(ele_is_matched) {
         int content = h_single_ele_match->GetBinContent(se_idx+1);
         h_single_ele_match->SetBinContent(se_idx+1, content+1);
