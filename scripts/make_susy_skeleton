@@ -194,6 +194,10 @@ def setup_package(class_name, executable_name, install_dir) :
 
     make_package(skeleton)
 
+    print "make_susy_skeleton    Rootcore package with your analysis looper '%s' done"%(class_name)
+    print "make_susy_skeleton    Compile it and run with the '%s' command"%(executable_name)
+
+
 def main() :
 
     parser = OptionParser()
