@@ -169,18 +169,16 @@ public:
     float bTagSFError(const JetVector& jets, const NtSys::SusyNtSys sys);
    
     /// Method to get the nominal lepton efficiency scale-factor for the collection of leptons
-    float leptonEffSF(const LeptonVector& leps);
- 
-    /// Method to get the nominal lepton scale-factor
-    float leptonEffSF(const Lepton* lep) { return leptonEffSF(*lep); }
-    float leptonEffSF(const Lepton& lep);
+    float leptonEffSF(const LeptonVector& leps, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float leptonEffSF(const Lepton* lep, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float leptonEffSF(const Lepton& lep, const NtSys::SusyNtSys sys = NtSys::NOM);
 
-    /// Method to get the error on the lepton scale-factor for systematic sys
-    float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
+    /// Method to get the difference w.r.t. nominal for a given SF variation
     float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
+    float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError((*lep), sys); }
 
     /// Methods to grab lepton trigger scale-factors
-    float leptonTriggerSF(const LeptonVector& leps, std::string trigger);
+    float leptonTriggerSF(const LeptonVector& leps, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
 
     /// Methods to grab muon trigger scale-factors
     float get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);

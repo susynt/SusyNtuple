@@ -628,36 +628,44 @@ float SusyNtTools::bTagSFError(const JetVector& jets, const NtSys::SusyNtSys sys
 ////////////////////////////
 // Lepton efficiency SF
 ////////////////////////////
-float SusyNtTools::leptonEffSF(const LeptonVector& leps)
+float SusyNtTools::leptonEffSF(const LeptonVector& leps, const NtSys::SusyNtSys sys)
 {
     float sf = 1.0;
-    for(uint i=0; i< leps.size(); i++){
-        sf *= SusyNtTools::leptonEffSF(leps[i]);
+    for(uint i = 0; i < leps.size(); i++) {
+        sf *= SusyNtTools::leptonEffSF(leps.at(i), sys);
     } // i
     return sf;
 }
 
-float SusyNtTools::leptonEffSF(const Lepton& lep)
+float SusyNtTools::leptonEffSF(const Lepton* lep, const NtSys::SusyNtSys sys)
+{
+    return leptonEffSF(*lep, sys);
+}
+
+float SusyNtTools::leptonEffSF(const Lepton& lep, const NtSys::SusyNtSys sys)
 {
     float sf = 1.0;
-    if(lep.isEle()){
-        sf = electronSelector().effSF((Electron&)lep);
-    } else {
-        sf = muonSelector().effSF((Muon&)lep);
+    if(lep.isEle()) {
+        sf = electronSelector().effSF((Electron&)lep, sys);
+    }
+    else {
+        sf = muonSelector().effSF((Muon&)lep, sys);
     }
     return sf;
 }
+
 float SusyNtTools::leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys)
 {
-    float errSF = 0.0;
+    float delta = 0.0;
     if(lep.isEle()){
-        errSF = electronSelector().errEffSF((Electron&)lep, sys);
+        delta = electronSelector().errEffSF((Electron&)lep, sys);
     } else {
-        errSF = muonSelector().errEffSF((Muon&)lep, sys);
+        delta = muonSelector().errEffSF((Muon&)lep, sys);
     }
-    return errSF;
+    return delta;
 }
-float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trigger)
+float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trigger,
+        const NtSys::SusyNtSys sys)
 {
     string hlt = "HLT_";
     bool has_hlt_start = (trigger.find(hlt) != std::string::npos);
@@ -696,7 +704,7 @@ float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trig
             Muon* m = dynamic_cast<Susy::Muon*>(l);
             muons.push_back(m);
         }
-        trigger_sf = get_muon_trigger_scale_factor(muons, trigger);
+        trigger_sf = get_muon_trigger_scale_factor(muons, trigger, sys);
     }
 
     else if(n_el>0) {
@@ -705,7 +713,7 @@ float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trig
             Electron* e = dynamic_cast<Susy::Electron*>(l);
             electrons.push_back(e);
         }
-        trigger_sf = get_electron_trigger_scale_factor(electrons, trigger);
+        trigger_sf = get_electron_trigger_scale_factor(electrons, trigger, sys);
     }
     return trigger_sf;
 }

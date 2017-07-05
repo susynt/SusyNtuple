@@ -94,10 +94,17 @@ bool MuonSelector::passIpCut(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-float MuonSelector::effSF(const Muon& mu)
+float MuonSelector::effSF(const Muon& mu, const NtSys::SusyNtSys sys)
 {
-    // return the EffSF for the corresponding (signal) muon quality
-    return mu.muoEffSF[m_signalId];
+    float out_sf = mu.muoEffSF[m_signalId]; // nominal
+    if(sys!=NtSys::NOM) {
+        // retrieve the error w.r.t. nominal for the given sys
+        // (we store the delta w.r.t. to the nominal, i.e. delta = SF_sys - SF_nom
+        // and errEffSF returns the delta)
+        float delta = errEffSF(mu, sys);
+        out_sf += delta;
+    }
+    return out_sf;
 }
 //----------------------------------------------------------
 float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)

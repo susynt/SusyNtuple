@@ -88,10 +88,14 @@ bool ElectronSelector::isSignal(const Electron* el)
     return pass;
 }
 //----------------------------------------------------------
-float ElectronSelector::effSF(const Electron& ele)
+float ElectronSelector::effSF(const Electron& ele, const NtSys::SusyNtSys sys)
 {
-    // return the EffSF for the corresponding (signal) EL ID WP
-    return ele.eleEffSF[m_signalId];
+    float out_sf = ele.eleEffSF[m_signalId];
+    if(sys != NtSys::NOM) { 
+        float delta = errEffSF(ele, sys);
+        out_sf += delta;
+    }
+    return out_sf;
 }
 //----------------------------------------------------------
 float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)

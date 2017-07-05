@@ -73,9 +73,9 @@ public:
     /**
        Get the input electron "ele"'s nominal efficicncy SF
     */
-    float effSF(const Electron& ele);
+    float effSF(const Electron& ele, const NtSys::SusyNtSys sys = NtSys::NOM);
     /// wraps above
-    float effSF(const Electron* ele) { return effSF(*ele); }
+    float effSF(const Electron* ele, const NtSys::SusyNtSys sys = NtSys::NOM) { return effSF(*ele, sys); }
 
     ///  Error on the efficiency for the requested systematic
     float errEffSF(const Electron& ele, const NtSys::SusyNtSys sys);
