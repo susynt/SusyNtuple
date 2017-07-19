@@ -114,9 +114,7 @@ Bool_t Susy3LepCutflow::Process(Long64_t entry)
   //
 
   SusyNtSys ntSys = NtSys::NOM;
-  TauId tauID = TauId::Medium;
-  //TauID tauID = TauID_medium;
-  SusyNtAna::selectObjects(ntSys, tauID);
+  SusyNtAna::selectObjects(ntSys);
 
   //
   // Event selection

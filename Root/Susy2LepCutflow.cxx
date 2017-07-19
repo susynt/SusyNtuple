@@ -73,7 +73,7 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
     // get the MC weight using the inherited MCWeighter object
     // (c.f. SusyNtuple/MCWeighter.h)
     if(nt.evt()->isMC) {
-        float lumi = 100000; // normalize the MC to 100 fb-1
+        float lumi = 100000; // normalize the MC to 100 fb-1 (we store xsec in pb so lumi is in pb-1)
         m_mc_weight = SusyNtAna::mcWeighter().getMCWeight(nt.evt(), lumi, NtSys::NOM);
     }
     else {
@@ -85,7 +85,6 @@ Bool_t Susy2LepCutflow::Process(Long64_t entry)
 
     // check that the event passes dilepton selection
     if(!passDileptonEvent(m_baseLeptons, m_signalLeptons)) return false;
-
 
     // pass mt2 selections
     check_mt2_selections(m_signalLeptons, m_met);

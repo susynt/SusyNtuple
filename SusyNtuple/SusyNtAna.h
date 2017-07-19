@@ -67,8 +67,7 @@ class SusyNtAna : public TSelector
 
     // Object selection
     void clearObjects();
-    void selectObjects(Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM,
-                       TauId signalTauID=TauId::Medium);
+    void selectObjects(Susy::NtSys::SusyNtSys sys = Susy::NtSys::NOM);
 
     // Cleaning cuts
     int cleaningCutFlags();

@@ -681,6 +681,7 @@ float SusyNtTools::leptonTriggerSF(const LeptonVector& leptons, std::string trig
     if(leptons.size() > 2) {
         if(n_warning < 20) {
             cout << "SusyNtTools::leptonTriggerSF    WARNING [" << (n_warning + 1) << "/" << n_warning << "]    Provided more than 2 leptons, we can handle only 1 and 2 leptons for trigger scale factors - returning 1.0" << endl;
+            n_warning++;
         }
         return 1.0;
     }
@@ -747,7 +748,6 @@ float SusyNtTools::get_muon_trigger_scale_factor(const MuonVector& muons, std::s
 
     if(!(is_single || is_dimuon)) {
         cout << "SusyNtuple::get_muon_trigger_scale_factor    ERROR Provided trigger " << trigger << " is "
-    // get the god-given, so-called "single", "double", or "mixed" electron trigger SF's
             << "not a supported single or dimuon trigger. Acceptable triggers to provide are "
             << "(c.f. SusyNtuple/TriggerList.h):" << endl;
         for(auto x : single_muon_triggers)

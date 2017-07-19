@@ -227,7 +227,7 @@ void SusyNtAna::clearObjects()
 /*--------------------------------------------------------------------------------*/
 // Select baseline and signal leptons
 /*--------------------------------------------------------------------------------*/
-void SusyNtAna::selectObjects(SusyNtSys sys, TauId signalTauID)
+void SusyNtAna::selectObjects(SusyNtSys sys)
 {
   ///////////////////////////////////////
   // Empty the object vectors
