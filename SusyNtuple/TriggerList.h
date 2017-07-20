@@ -15,9 +15,13 @@ const std::vector<std::string> single_muo_triggers_list =
     "HLT_mu22",
     "HLT_mu24",
     "HLT_mu24_iloose",
+    "HLT_mu24_ivarloose",
     "HLT_mu24_imedium",
     "HLT_mu24_iloose_L1MU15",
+    "HLT_mu24_ivarloose_L1MU15",
+    "HLT_mu24_ivarmedium",
     "HLT_mu26_imedium",
+    "HLT_mu26_ivarmedium",
     "HLT_mu40",
     "HLT_mu50",
     "HLT_mu60_0eta105_msonly"
@@ -40,6 +44,7 @@ const std::vector<std::string> single_ele_triggers_list =
     "HLT_e17_lhmedium",
     "HLT_e24_lhmedium_iloose_L1EM18VH",
     "HLT_e24_lhmedium_iloose_L1EM20VH",
+    "HLT_e24_lhmedium_L1EM20VH",
     "HLT_e24_lhmedium_L1EM20VHI",
     "HLT_e24_lhtight_iloose",
     "HLT_e24_lhtight_nod0_iloose",
@@ -52,7 +57,9 @@ const std::vector<std::string> single_ele_triggers_list =
     "HLT_e26_lhtight_ivarloose",
     "HLT_e26_lhtight_nod0_ivarloose",
     "HLT_e60_lhmedium",
-    "HLT_e60_lhmedium_nod0"
+    "HLT_e60_lhmedium_nod0",
+    "HLT_e120_lhloose",
+    "HLT_e140_lhloose_nod0"
 };
 //////////////////////////////////////////////////////////////////////////////
 const std::vector<std::string> di_ele_triggers_list =
