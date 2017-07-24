@@ -125,6 +125,13 @@ class MuonSelector_Stop2L : public MuonSelector
     virtual bool isBaseline(const Muon* mu);
     virtual bool isSignal(const Muon* mu);
 };
+/// implements muon selection for Analysis WWBB
+class MuonSelector_WWBB : public MuonSelector
+{
+    virtual bool isBaseline(const Muon* mu);
+    virtual bool isSignal(const Muon* mu);
+};
+
 
 } // end namespace
 

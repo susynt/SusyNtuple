@@ -14,6 +14,7 @@ enum class AnalysisType {
     Ana_2LepWH,     ///< C1N2 in WH samesign+jets
     Ana_SS3L,       ///< Strong SS3L analysis 
     Ana_Stop2L,     ///< Direct stop to two lepton analysis
+    Ana_WWBB,       ///< Dilepton hh to WWbb analysis
     kUnknown
 };
 /// Human-readable names

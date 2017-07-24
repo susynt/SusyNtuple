@@ -23,6 +23,7 @@ JetSelector* JetSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_2LepWH : selector = new JetSelector_2LepWH(); break;
     case AnalysisType::Ana_SS3L   : selector = new JetSelector_SS3L(); break;
     case AnalysisType::Ana_Stop2L : selector = new JetSelector_Stop2L(); break;
+    case AnalysisType::Ana_WWBB   : selector = new JetSelector_WWBB(); break;
     default:
         cout<<"JetSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla JetSelector"<<endl;
@@ -225,4 +226,58 @@ bool JetSelector_Stop2L::isSignal(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
+//----------------------------------------------------------
+// begin JetSelector_WWBB Ana_WWBB
+//----------------------------------------------------------
+bool JetSelector_WWBB::isBaseline(const Jet* jet)
+{
+    bool pass = false;
+    if(jet) {
+        pass = (jet->Pt() > 20.0);
+    }
+    return pass;
+}
+bool JetSelector_WWBB::isSignal(const Jet* jet)
+{
+    bool pass = false;
+    if(jet) {
+        pass = (jet->Pt() > 20.0 &&
+                fabs(jet->Eta()) < 2.8 &&
+                passJvt(jet));
+    }
+    return pass;
+}
+bool JetSelector_WWBB::isB(const Jet* jet)
+{
+    bool pass = false;
+    if(jet) {
+        pass = (jet->Pt() > 20.0 &&
+                fabs(jet->Eta()) < 2.5 &&
+                passJvt(jet) &&
+                jet->mv2c10 > mv2c10_85efficiency());
+    }
+    return pass;
+}
+
+bool JetSelector_WWBB::isBMod(const Jet* jet, int wp, float pt_cut)
+{
+    bool pass = false;
+    if(jet) {
+        bool pass_pt = jet->Pt() > pt_cut;
+        bool pass_eta = fabs(jet->Eta()) < 2.5;
+        bool pass_jvt = passJvt(jet);
+        bool pass_wp = true;
+        if(wp==77) {
+            pass_wp = jet->mv2c10 > mv2c10_77efficiency();
+        }
+        else if(wp==85) {
+            pass_wp = jet->mv2c10 > mv2c10_85efficiency();
+        }
+        else {
+            cout << "JetSelector_WWBB::isBMod    Unsupported MV2 working point '" << wp << "' provided!" << endl;
+        }
+        pass = (pass_pt && pass_eta && pass_jvt && pass_wp);
+    }
+    return pass;
+}
 } // Susy namespace

@@ -134,6 +134,13 @@ class ElectronSelector_Stop2L : public ElectronSelector
     virtual bool isSignal(const Electron* el);
 };
 
+/// WWBB analysis
+class ElectronSelector_WWBB : public ElectronSelector
+{
+    virtual bool passIpCut(const Electron &el);
+    virtual bool isBaseline(const Electron* el);
+    virtual bool isSignal(const Electron* el);
+};
 } // Susy
 
 #endif

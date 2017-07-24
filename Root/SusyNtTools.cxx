@@ -164,6 +164,7 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
 
     else if( a == AnalysisType::Ana_SS3L )   { m_doSFOS = false; }
     else if( a == AnalysisType::Ana_Stop2L ) { m_doSFOS = false; }
+    else if( a == AnalysisType::Ana_WWBB )   { m_doSFOS = false; }
 
     else if( a == AnalysisType::kUnknown ) {
         string error = "SusyNtTools::setSFOSRemoval error: ";

@@ -90,6 +90,10 @@ namespace Susy {
     {
     };
 
+    /// Implement photon selector for Ana_WWBB
+    class PhotonSelector_WWBB : public PhotonSelector
+    {
+    };
 } // namespace Susy
 
 #endif

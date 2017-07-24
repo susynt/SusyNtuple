@@ -21,6 +21,7 @@ TauSelector* TauSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_2LepWH : selector = new TauSelector_2LepWH();    break;
     case AnalysisType::Ana_SS3L   : selector = new TauSelector_SS3L();      break;
     case AnalysisType::Ana_Stop2L : selector = new TauSelector_Stop2L();    break;
+    case AnalysisType::Ana_WWBB   : selector = new TauSelector_WWBB();      break;
     default:
         cout<<"TauSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla TauSelector"<<endl;

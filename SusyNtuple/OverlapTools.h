@@ -174,6 +174,14 @@ class OverlapTools_Stop2L : public OverlapTools
 };
 
 
+/// implements OR procedure for WWBB
+class OverlapTools_WWBB : public OverlapTools
+{
+    virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
+        JetVector& jets, TauVector& taus, PhotonVector& photons);
+
+};
+
 }
 
 

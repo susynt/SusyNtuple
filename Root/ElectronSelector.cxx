@@ -48,6 +48,11 @@ ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
         s->setSignalId(ElectronId::MediumLLH);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
+    case AnalysisType::Ana_WWBB:
+        s = new ElectronSelector_WWBB();
+        s->setSignalId(ElectronId::MediumLLH);
+        s->setSignalIsolation(Isolation::FixedCutTightTrackOnly);
+        break;
     default:
         cout<<"ElectronSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla ElectronSelector"<<endl;
@@ -273,4 +278,37 @@ bool ElectronSelector_Stop2L::isSignal(const Electron* el)
     return pass;
 }
 //----------------------------------------------------------
+//----------------------------------------------------------
+// begin ElectronSelector_Stop2L Ana_WWBB
+//----------------------------------------------------------
+bool ElectronSelector_WWBB::passIpCut(const Electron &el)
+{
+    return (std::abs(el.d0sigBSCorr) < 3.0 && std::abs(el.z0SinTheta()) < 0.5);
+}
+//----------------------------------------------------------
+bool ElectronSelector_WWBB::isBaseline(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (el->looseLLHBLayer &&
+                el->passOQBadClusElectron &&
+                el->Pt() > 10.0 &&
+                std::abs(el->clusEta) < 2.47);// &&
+                //outsideCrackRegion(el));
+    }
+    return pass;
+}
+//----------------------------------------------------------
+bool ElectronSelector_WWBB::isSignal(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (ElectronSelector_WWBB::isBaseline(el) &&
+                el->mediumLLH &&
+                el->isoFixedCutTightTrackOnly &&
+                ElectronSelector_WWBB::passIpCut(*el) &&
+                outsideCrackRegion(*el));
+    }
+    return pass; 
+}
 } // namespace Susy

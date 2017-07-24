@@ -70,6 +70,7 @@ public:
     JetSelector& setSystematic(const NtSys::SusyNtSys&); ///< set syst (needed for example for jvt)
     /// whether the jet is b-tagged
     virtual bool isB(const Jet* jet);
+    virtual bool isBMod(const Jet* jet, int wp, float pt_cut) { return isB(jet); };
     virtual bool isCentralLight(const Jet* jet);
     virtual bool isCentralB(const Jet* jet);
     virtual bool isForward(const Jet* jet);
@@ -163,6 +164,13 @@ class JetSelector_Stop2L : public JetSelector
     virtual bool isSignal(const Jet* jet);
 };
 
+class JetSelector_WWBB : public JetSelector
+{
+    virtual bool isBaseline(const Jet* jet);
+    virtual bool isSignal(const Jet* jet);
+    virtual bool isB(const Jet* jet);
+    virtual bool isBMod(const Jet* jet, int wp=77, float ptcut=20.);
+};
 } // Susy
 
 #endif

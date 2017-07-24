@@ -96,5 +96,9 @@ class TauSelector_Stop2L : public TauSelector
 {
 };
 
+// Ana_WWBB
+class TauSelector_WWBB : public TauSelector
+{
+};
 } // namespace Susy
 #endif

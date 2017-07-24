@@ -13,6 +13,7 @@ std::string AnalysisType2str(const AnalysisType &a)
     case AnalysisType::Ana_2LepWH : out = "Ana_2LepWH"   ; break;
     case AnalysisType::Ana_SS3L   : out = "Ana_SS3L"     ; break;
     case AnalysisType::Ana_Stop2L : out = "Ana_Stop2L"   ; break;
+    case AnalysisType::Ana_WWBB   : out = "Ana_WWBB"     ; break;
     case AnalysisType::kUnknown   : out = "Unknown"      ; break;
     }
     return out;    

@@ -46,6 +46,11 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
         s->setSignalId(MuonId::Medium);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
+    case AnalysisType::Ana_WWBB :
+        s = new MuonSelector_WWBB();
+        s->setSignalId(MuonId::Medium);
+        s->setSignalIsolation(Isolation::FixedCutTightTrackOnly);
+        break;
     default:
         cout<<"MuonSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla MuonSelector"<<endl;
@@ -271,4 +276,28 @@ bool MuonSelector_Stop2L::isSignal(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
+//----------------------------------------------------------
+// begin MuonSelector_WWBB Ana_WWBB
+//----------------------------------------------------------
+bool MuonSelector_WWBB::isBaseline(const Muon* mu)
+{
+    bool pass = false;
+    if(mu) {
+        pass = (mu->medium &&
+                mu->Pt() > 10.0 &&
+                fabs(mu->Eta()) < 2.4);
+    }
+    return pass;
+}
+//----------------------------------------------------------
+bool MuonSelector_WWBB::isSignal(const Muon* mu)
+{
+    bool pass = false;
+    if(mu) {
+        pass = (MuonSelector_WWBB::isBaseline(mu) &&
+                mu->isoFixedCutTightTrackOnly &&
+                passIpCut(mu));
+    }
+    return pass;
+}
 }; // namespace Susy
