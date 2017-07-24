@@ -54,6 +54,8 @@ public:
 
     // Systematics
     float jer;                       ///< jet energy resolution
+    float eta_intercal_up; // JET_EtaIntercalibration_NonClosure_UP
+    float eta_intercal_dn; // JET_EtaIntercalibration_NonClosure_DN
     std::vector<float> groupedNP;    ///< Reduced 3*2 JES systematics
     std::vector<float> FTSys; ///< Flavor Tagger syst: B(10*2), C(4*2), light(12*2) jet systematics
 
@@ -99,6 +101,8 @@ public:
       jer = 0;
       groupedNP.resize(3*2,0.0);
       FTSys.resize(5*2,0.0);
+      eta_intercal_up = 0;
+      eta_intercal_dn = 0;
 
       /*
       bjes.resize(2,0.0);
@@ -115,7 +119,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 21);
+    ClassDef(Jet, 22);
 };
 } // Susy
 #endif

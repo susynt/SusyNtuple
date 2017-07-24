@@ -1,4 +1,6 @@
 #include <vector>
+#include <map>
+#include <tuple>
 
 #include "SusyNtuple/SusyNtSys.h"
 #include "SusyNtuple/SusyNt.h"
@@ -15,6 +17,7 @@
 #include "SusyNtuple/Susy2LepCutflow.h"
 #include "SusyNtuple/Susy3LepCutflow.h"
 #include "SusyNtuple/TGuiUtils.h"
+#include "SusyNtuple/TriggerTools.h"
 
 #ifdef __CLING__
 

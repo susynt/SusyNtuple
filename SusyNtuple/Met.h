@@ -62,14 +62,24 @@ public:
 
     /// Clear vars
     void clear(){
-      Et = phi = sumet = 0;
+      Et = sumet = 0;
       refEle_et = refGamma_et = refTau_et = refJet_et = softTerm_et = refMuo_et = 0;
-      refEle_phi = refGamma_phi = refTau_phi = refJet_phi = softTerm_phi = refMuo_phi = 0;
       refEle_sumet = refGamma_sumet = refTau_sumet = refJet_sumet = softTerm_sumet = refMuo_sumet = 0;
+
+      // default of phi = 0 is annoying for met components
+      phi = -5.;
+      refEle_phi = -5.;
+      refMuo_phi = -5.;
+      refGamma_phi = -5.;
+      refTau_phi = -5.;
+      refJet_phi = -5.;
+      softTerm_phi = -5.;  
+
+
       sys = 0;
     }
 
-    ClassDef(Met, 5);
+    ClassDef(Met, 6);
 };
 } // Susy
 #endif

@@ -46,6 +46,10 @@ public:
     bool isoLoose;                  ///< Loose WP
     bool isoFixedCutTightTrackOnly; ///< FixedCutTightTrackOnly WP
 
+    // CloseBy correction
+    bool isoGradientLooseCloseBy;   ///< GradientLoose WP with CloseBy lepton correction
+    bool isoFixedCutTightTrackOnlyCloseBy; ///< FixedCutTightTrackOnly WP with CloseBy lepton correction
+
 
     float d0;                 ///< d0 extrapolated to PV
     float errD0;              ///< Uncertainty on d0
@@ -107,6 +111,7 @@ public:
                      = ptcone20    = ptcone30 
                      = ptvarcone20 = ptvarcone30 = 0;
         isoGradientLoose = isoGradient = isoLooseTrackOnly = isoLoose = isoFixedCutTightTrackOnly = false;
+        isoGradientLooseCloseBy = isoFixedCutTightTrackOnly = false;
         d0 = errD0 = d0sigBSCorr = z0 = errZ0 = 0;
         mcType = mcOrigin = mcBkgMotherPdgId = mcBkgTruthOrigin = 0;
         matched2TruthLepton = false;
@@ -117,7 +122,7 @@ public:
         Particle::clear();
     }
 
-    ClassDef(Lepton, 24);
+    ClassDef(Lepton, 25);
 };
 } // Susy
 #endif

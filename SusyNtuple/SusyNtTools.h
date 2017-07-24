@@ -169,15 +169,29 @@ public:
     float bTagSFError(const JetVector& jets, const NtSys::SusyNtSys sys);
    
     /// Method to get the nominal lepton efficiency scale-factor for the collection of leptons
-    float leptonEffSF(const LeptonVector& leps);
- 
-    /// Method to get the nominal lepton scale-factor
-    float leptonEffSF(const Lepton* lep) { return leptonEffSF(*lep); }
-    float leptonEffSF(const Lepton& lep);
+    float leptonEffSF(const LeptonVector& leps, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float leptonEffSF(const Lepton* lep, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float leptonEffSF(const Lepton& lep, const NtSys::SusyNtSys sys = NtSys::NOM);
 
-    /// Method to get the error on the lepton scale-factor for systematic sys
-    float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError(*lep, sys); }
+    /// Method to get the difference w.r.t. nominal for a given SF variation
     float leptonEffSFError(const Lepton& lep, const NtSys::SusyNtSys sys);
+    float leptonEffSFError(const Lepton* lep, const NtSys::SusyNtSys sys) { return leptonEffSFError((*lep), sys); }
+
+    /// Methods to grab lepton trigger scale-factors
+    float leptonTriggerSF(const LeptonVector& leps, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+
+    /// Methods to grab muon trigger scale-factors
+    float get_muon_trigger_scale_factor(const MuonVector& muons, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float get_muon_trigger_scale_factor(Susy::Muon& muon, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float get_muon_trigger_scale_factor(Susy::Muon& mu1, Susy::Muon& mu2, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float get_single_muon_trigger_scale_factor(const MuonVector& muons, MuonId id, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM); 
+    float get_dimuon_trigger_scale_factor(const MuonVector& muons, MuonId id, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+
+    /// Methods to grab electron trigger scale-factors
+    float get_electron_trigger_scale_factor(const ElectronVector& electrons, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float get_electron_trigger_scale_factor(Susy::Electron& electron, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+    float get_electron_trigger_scale_factor(Susy::Electron& el1, Susy::Electron& el2, std::string trigger, const NtSys::SusyNtSys sys = NtSys::NOM);
+
 
     ///////////////////////////////////////////
     // check of sample is Sherpa2.2 V+jet
@@ -220,6 +234,7 @@ protected:
 
     AnalysisType m_anaType;    ///< Analysis type. currently 2-lep or 3-lep
     bool m_doSFOS;             ///< toggle to set whether to remove SFOS pairs from baseline leptons (set based on AnalysisType)
+    int n_warning;
 };
 
 #endif

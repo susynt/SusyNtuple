@@ -34,6 +34,18 @@ Muon::Muon(const Muon &rhs):
   tight(rhs.tight),
   muoEffSF(rhs.muoEffSF),
   muoTrigSF(rhs.muoTrigSF),
+  muoTrigEffData_medium(rhs.muoTrigEffData_medium),
+  muoTrigEffMC_medium(rhs.muoTrigEffMC_medium),
+  muoTrigEffData_loose(rhs.muoTrigEffData_loose),
+  muoTrigEffMC_loose(rhs.muoTrigEffMC_loose),
+  muoTrigEffErrData_stat_up_medium(rhs.muoTrigEffErrData_stat_up_medium),
+  muoTrigEffErrData_stat_dn_medium(rhs.muoTrigEffErrData_stat_dn_medium),
+  muoTrigEffErrMC_stat_up_medium(rhs.muoTrigEffErrMC_stat_up_medium),
+  muoTrigEffErrMC_stat_dn_medium(rhs.muoTrigEffErrMC_stat_dn_medium),
+  muoTrigEffErrData_syst_up_medium(rhs.muoTrigEffErrData_syst_up_medium),
+  muoTrigEffErrData_syst_dn_medium(rhs.muoTrigEffErrData_syst_dn_medium),
+  muoTrigEffErrMC_syst_up_medium(rhs.muoTrigEffErrMC_syst_up_medium),
+  muoTrigEffErrMC_syst_dn_medium(rhs.muoTrigEffErrMC_syst_dn_medium),
   diMuTrigMap(rhs.diMuTrigMap),
   isBadMuon(rhs.isBadMuon),
   isCosmic(rhs.isCosmic),
@@ -111,6 +123,18 @@ Muon& Muon::operator=(const Muon &rhs)
     sagitta_rho_up = rhs.sagitta_rho_up;
     muoEffSF = rhs.muoEffSF;
     muoTrigSF = rhs.muoTrigSF;
+    muoTrigEffData_medium = rhs.muoTrigEffData_medium;
+    muoTrigEffMC_medium = rhs.muoTrigEffMC_medium;
+    muoTrigEffData_loose = rhs.muoTrigEffData_loose;
+    muoTrigEffMC_loose = rhs.muoTrigEffMC_loose;
+    muoTrigEffErrData_stat_up_medium = rhs.muoTrigEffErrData_stat_up_medium;
+    muoTrigEffErrData_stat_dn_medium = rhs.muoTrigEffErrData_stat_dn_medium;
+    muoTrigEffErrMC_stat_up_medium = rhs.muoTrigEffErrMC_stat_up_medium;
+    muoTrigEffErrMC_stat_dn_medium = rhs.muoTrigEffErrMC_stat_dn_medium;
+    muoTrigEffErrData_syst_up_medium = rhs.muoTrigEffErrData_syst_up_medium;
+    muoTrigEffErrData_syst_dn_medium = rhs.muoTrigEffErrData_syst_dn_medium;
+    muoTrigEffErrMC_syst_up_medium = rhs.muoTrigEffErrMC_syst_up_medium;
+    muoTrigEffErrMC_syst_dn_medium = rhs.muoTrigEffErrMC_syst_dn_medium;
     errEffSF_stat_up = rhs.errEffSF_stat_up;
     errEffSF_stat_dn = rhs.errEffSF_stat_dn;
     errEffSF_syst_up = rhs.errEffSF_syst_up;

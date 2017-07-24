@@ -43,7 +43,7 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
         break;
     case AnalysisType::Ana_Stop2L :
         s = new MuonSelector_Stop2L();
-        s->setSignalId(MuonId::Loose);
+        s->setSignalId(MuonId::Medium);
         s->setSignalIsolation(Isolation::GradientLoose);
         break;
     default:
@@ -94,10 +94,17 @@ bool MuonSelector::passIpCut(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-float MuonSelector::effSF(const Muon& mu)
+float MuonSelector::effSF(const Muon& mu, const NtSys::SusyNtSys sys)
 {
-    // return the EffSF for the corresponding (signal) muon quality
-    return mu.muoEffSF[m_signalId];
+    float out_sf = mu.muoEffSF[m_signalId]; // nominal
+    if(sys!=NtSys::NOM) {
+        // retrieve the error w.r.t. nominal for the given sys
+        // (we store the delta w.r.t. to the nominal, i.e. delta = SF_sys - SF_nom
+        // and errEffSF returns the delta)
+        float delta = errEffSF(mu, sys);
+        out_sf += delta;
+    }
+    return out_sf;
 }
 //----------------------------------------------------------
 float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
@@ -142,7 +149,7 @@ float MuonSelector::errEffSF(const Muon& mu, const SusyNtSys sys)
     }
     else {
         cout<<"MuonSelector::errEffSF(): you are calling this function with"
-            <<" sys '"<<NtSys::SusyNtSysNames[sys]<<"'."
+            <<" sys '"<<NtSys::SusyNtSysNames.at(sys)<<"'."
             <<" This is not a muon sys. Returning "<<err
             <<endl;
     }

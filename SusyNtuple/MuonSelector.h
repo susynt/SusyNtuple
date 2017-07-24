@@ -48,9 +48,9 @@ public :
     /// whether mu is close enough to the primary vertex
     virtual bool passIpCut(const Muon* mu);
     /// nominal efficiency scale factor of mu
-    virtual float effSF(const Muon& mu);
+    virtual float effSF(const Muon& mu, const NtSys::SusyNtSys sys);
     /// wraps effSF() above
-    virtual float effSF(const Muon* mu) { return effSF(*mu); }
+    virtual float effSF(const Muon* mu, const NtSys::SusyNtSys sys = NtSys::NOM) { return effSF(*mu, sys); }
     /// systematic error on the efficiency SF of mu
     virtual float errEffSF(const Muon& mu, const NtSys::SusyNtSys sys);
     /// wraps errEffSF() above

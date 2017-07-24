@@ -88,10 +88,14 @@ bool ElectronSelector::isSignal(const Electron* el)
     return pass;
 }
 //----------------------------------------------------------
-float ElectronSelector::effSF(const Electron& ele)
+float ElectronSelector::effSF(const Electron& ele, const NtSys::SusyNtSys sys)
 {
-    // return the EffSF for the corresponding (signal) EL ID WP
-    return ele.eleEffSF[m_signalId];
+    float out_sf = ele.eleEffSF[m_signalId];
+    if(sys != NtSys::NOM) { 
+        float delta = errEffSF(ele, sys);
+        out_sf += delta;
+    }
+    return out_sf;
 }
 //----------------------------------------------------------
 float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
@@ -116,15 +120,16 @@ float ElectronSelector::errEffSF(const Electron& ele, const SusyNtSys sys)
     else if(sys == NtSys::EL_EFF_Iso_TOTAL_Uncorr_DN) {
         err = ele.errEffSF_iso_dn[m_signalId];
     }
-    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_Uncorr_DN) {
-        err = ele.errEffSF_trig_dn[m_signalId];
+    #warning for trigger SF systematics we only handle single electron sf
+    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_DN) {
+        err = ele.errEffSF_trig_dn_single[m_signalId];
     }
-    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_Uncorr_UP) {
-        err = ele.errEffSF_trig_up[m_signalId];
+    else if(sys == NtSys::EL_EFF_Trigger_TOTAL_UP) {
+        err = ele.errEffSF_trig_up_single[m_signalId];
     }
     else {
         cout << "ElectronSelector::errEffSF(): you are calling this function with"
-             <<" sys '" << NtSys::SusyNtSysNames[sys]<<"'."
+             <<" sys '" << NtSys::SusyNtSysNames.at(sys)<<"'."
              <<" This is not an electron sys. Returning " << err
              << endl;
     }

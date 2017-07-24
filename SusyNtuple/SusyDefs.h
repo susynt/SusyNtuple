@@ -36,20 +36,6 @@ namespace Susy {
 const float MZ = 91.2;
 const float MW = 80.4;
 
-// Run 2 Luminosities [pb-1]
-// see data15_13TeV : https://atlas-tagservices.cern.ch/tagservices/RunBrowser/runBrowserReport/rBR_Period_Report.php
-const float LUMI_A_A3 = 1.28; ///< "all good" luminosity for periods A1-A3
-const float LUMI_A_A4 = 8.33; ///< "all good" luminosity for periods A1-A4
-
-// Run 1 Luminosities
-//const float LUMI_A_B3 = 1037.;
-//const float LUMI_A_B14 = 5835.;
-//const float LUMI_A_D7 = 9632.86;
-//const float LUMI_A_D = 10454.;
-//const float LUMI_A_E = 13021.8;
-//
-//const float LUMI_A_L = 20339.8; // 20690.4;
-
 //-----------------------------------------------------------------------------------
 // Convenience typedefs
 //-----------------------------------------------------------------------------------
@@ -89,37 +75,6 @@ enum DataStream {
     Stream_Egamma,
     Stream_JetTauEtmiss,
     Stream_N
-};
-
-/// Enum for Data Periods
-enum DataPeriod {
-    Period_A = 0,
-    Period_B,
-    Period_C,
-    Period_D,
-    Period_E,
-    Period_G,
-    Period_H,
-    Period_I,
-    Period_J,
-    Period_L,
-    Period_Num
-};
-
-/// MC periods have less granularity than data
-/** Not currently relevant! */
-enum McPeriod {
-    McPeriod_AB = 0,
-    McPeriod_Num
-};
-
-/// SUSY D3PD tag, for controlling which branch names to grab
-enum D3PDTag {
-    D3PD_p1032 = 0,
-    D3PD_p1181,
-    D3PD_p1328,
-    D3PD_p1512,
-    D3PD_N
 };
 
 ///Enum for BTag SF & systematics
@@ -176,9 +131,6 @@ enum DiLepEvtType {
 // Global functions - most of them moved to SusyNtTools
 //-----------------------------------------------------------------------------------
 std::string streamName(DataStream);
-DataPeriod  getDataPeriod(uint run);
-McPeriod    getMcPeriod(uint run);
-bool        isPeriodAB3(uint run);
 
 // for pointer sorting
 bool comparePt(const TLorentzVector* p1, const TLorentzVector* p2);

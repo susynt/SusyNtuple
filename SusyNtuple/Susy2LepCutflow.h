@@ -1,149 +1,261 @@
-//  -*- c++ -*-
-#ifndef SusyAna_Susy2LepCutflow_h
-#define SusyAna_Susy2LepCutflow_h
+#ifndef SusyNtuple_Susy2LepCutflow_h
+#define SusyNtuple_Susy2LepCutflow_h
 
-
-// Common Packages
-
-// Root Packages
+//ROOT
 #include "TTree.h"
 #include "TChain.h"
 
-// SusyNtuple
+//SusyNtuple
 #include "SusyNtuple/SusyNtAna.h"
 #include "SusyNtuple/SusyNtTools.h"
 
+//std/stl
 #include <fstream>
 
-/// Two lepton cutflow
-/**
-General script to implement basic selection with all signal region cut
- methods.
-*/
+/////////////////////////////////////////////////////////////
+//
+// Susy2LepCutflow
+//
+// Analysis (TSelector) looper with AnalysisType::Ana_2Lep
+// base selection and several signal-region like selections
+// applied
+//
+// daniel.joseph.antrim@cern.ch
+// July 2017
+//
+/////////////////////////////////////////////////////////////
+
+// for TSelector analysis loopers processing susyNt you MUST inherit from SusyNtAna
+// in order to pick up the susyNt class objects
 class Susy2LepCutflow : public SusyNtAna
 {
 
-  public:
+    public :
+        Susy2LepCutflow();
+        virtual ~Susy2LepCutflow() {};
 
-    Susy2LepCutflow();
-    virtual ~Susy2LepCutflow(){};
+        void set_debug(int dbg) { m_dbg = dbg; }
+        int dbg() { return m_dbg; }
 
-    // Propagate the input TChain
-    void setChain(TChain* chain) { m_input_chain = chain; }
+        void set_chain(TChain* chain) { m_input_chain = chain; }
+        TChain* chain() { return m_input_chain; }
 
-    // Begin is called before looping on entries
-    virtual void    Begin(TTree *tree);
-    // Terminate is called after looping is finished
-    virtual void    Terminate();
+        ////////////////////////////////////////////
+        // analysis methods
+        ////////////////////////////////////////////
+        void initialize_counters();
 
-    // Main event loop function
-    virtual Bool_t  Process(Long64_t entry);
-
-    // Event cleaning cuts
-    bool passEventCleaning(int cutflags, const MuonVector& preMuons, const MuonVector& baseMuons,
-                                const JetVector& baseJets);
-    // Full event selection. Specify which leptons to use.
-    bool selectEvent(const LeptonVector& leptons, const LeptonVector& baseLeptons);
-		     
-    // Signal regions
-    bool passSR1(const LeptonVector& leptons, const JetVector& jets, const Met* met);
-    bool passSR2(const LeptonVector& leptons, const JetVector& jets, const Met* met);
-    bool passSR3(const LeptonVector& leptons, const JetVector& jets, const Met* met);
-    bool passSR4(const LeptonVector& leptons, const JetVector& jets, const Met* met);
-    bool passSR5(const LeptonVector& leptons, const JetVector& jets, const Met* met);
-
-    // Cut methods
-    bool passNLepCut(const LeptonVector& leptons);
-    bool passNBaseLepCut(const LeptonVector& baseLeptons);
-    bool passTrigger(const LeptonVector& leptons, const Met* met);
-    bool sameFlavor(const LeptonVector& leptons);
-    bool oppositeFlavor(const LeptonVector& leptons);
-    bool sameSign(const LeptonVector& leptons);
-    bool oppositeSign(const LeptonVector& leptons);
-    bool passMll(const LeptonVector& leptons, float mll = 20);
-
-    // Signal Region Cuts
-    bool passJetVeto(const JetVector& jets);
-    bool passZVeto(const LeptonVector& leptons, float Zlow = 81.2, float Zhigh = 101.2);
-    bool passMETRel(const Met *met, const LeptonVector& leptons, 
-		    const JetVector& jets, float maxMet = 100);
-    bool passbJetVeto(const JetVector& jets);
-    bool passge2Jet(const JetVector& jets);
-    bool passdPhi(TLorentzVector v0, TLorentzVector v1, float cut);
-    bool passMT2(const LeptonVector& leptons, const Met* met, float cut);
+        float w() { return m_mc_weight; }
+        float sf() { return m_lep_sf; }
+        float btagsf() { return m_btag_sf; }
 
 
-    // Dump cutflow - if derived class uses different cut ordering,
-    // override this method
-    virtual void dumpEventCounters();
+        // standard ATLAS event cleaning
+        bool passEventCleaning(const MuonVector& preMuons, const MuonVector& baseMuons,
+                const JetVector& baseJets);
 
-    // debug check
-    bool debugEvent();
+        // select dilepton events
+        bool passDileptonEvent(const LeptonVector& baseLeptons, const LeptonVector& signalLeptons);
 
-    ClassDef(Susy2LepCutflow, 1);
+        // compute lepton scale factors for ID, Reco, and Isolation corrections
+        float compute_lepton_scale_factors(const LeptonVector& leptons);
 
-  protected:
+        // compute flavor tagging efficiency scale factor
+        float compute_btagging_sf(const JetVector& jets);
 
-    TChain*             m_input_chain;  // input chain being processed
-
-    // Cut variables
-    uint                m_nLepMin;      // min leptons
-    uint                m_nLepMax;      // max leptons
-    bool                m_cutNBaseLep;  // apply nLep cuts to baseline leptons as well as signal
-
-    DiLepEvtType        m_ET;           // Dilepton event type to store cf
-
-    // Event counters
-    uint                n_readin;
-    uint                n_pass_grl;
-    uint                n_pass_LAr;
-    uint                n_pass_tileErr;
-    uint                n_pass_ttc;
-    uint                n_pass_sct;
-    uint                n_pass_BadJet;
-    uint                n_pass_BadMuon;
-    uint                n_pass_goodVtx;
-    uint                n_pass_Cosmic;
-    uint                n_pass_flavor[ET_N];
-    uint                n_pass_nLep[ET_N];
-    uint                n_pass_mll[ET_N];    
-    uint                n_pass_os[ET_N];
-    uint                n_pass_ss[ET_N];
-    uint                n_pass_trig[ET_N];
-
-    // SR1 counts
-    uint                n_pass_SR1jv[ET_N];
-    uint                n_pass_SR1Zv[ET_N];
-    uint                n_pass_SR1MET[ET_N];
-
-    // SR2 counts
-    uint                n_pass_SR2jv[ET_N];
-    uint                n_pass_SR2MET[ET_N];
-
-    // SR3 counts
-    uint                n_pass_SR3ge2j[ET_N];
-    uint                n_pass_SR3Zv[ET_N];
-    uint                n_pass_SR3bjv[ET_N];
-    uint                n_pass_SR3mct[ET_N];
-    uint                n_pass_SR3MET[ET_N];
-
-    // SR4 counts
-    uint                n_pass_SR4jv[ET_N];
-    uint                n_pass_SR4MET[ET_N];
-    uint                n_pass_SR4Zv[ET_N];
-    uint                n_pass_SR4L0pt[ET_N];
-    uint                n_pass_SR4SUMpt[ET_N];
-    uint                n_pass_SR4dPhiMETLL[ET_N];
-    uint                n_pass_SR4dPhiMETL1[ET_N];
-    
-    // SR5 counts
-    uint                n_pass_SR5jv[ET_N];
-    uint                n_pass_SR5Zv[ET_N];
-    uint                n_pass_SR5MET[ET_N];
-    uint                n_pass_SR5MT2[ET_N];
-    
+        // signal regions
+        void check_mt2_selections(const LeptonVector& leptons, const Met* met);
+        void check_njet_selections(const JetVector& jets);
+        void check_jetmet_selections(const JetVector& jets, const Met* met, const LeptonVector& leptons);
 
 
-};
+        ////////////////////////////////////////////
+        // TSelector methods override
+        ////////////////////////////////////////////
+        virtual void Begin(TTree* tree); // Begin is called before looping on entries
+        virtual Bool_t Process(Long64_t entry); // Main event loop function called on each event
+        virtual void Terminate(); // Terminate is called after looping has finished
+
+        ////////////////////////////////////////////
+        // helper
+        ////////////////////////////////////////////
+        std::string weight_str(float weighted_counter, int raw_counter);
+        void print_counters();
+        std::string event_counters();
+        std::string dilepton_counts();
+        std::string dil_cut(float* counter_w, uint* counter, int weight=20);
+
+        struct EventCleaning {
+            EventCleaning() :
+                grl(0),
+                lar(0),
+                tile(0),
+                ttc(0),
+                sct(0),
+                vtx(0),
+                bad_mu(0),
+                cos_mu(0),
+                bad_jet(0),
+                grl_w(0.0),
+                lar_w(0.0),
+                tile_w(0.0),
+                ttc_w(0.0),
+                sct_w(0.0),
+                vtx_w(0.0),
+                bad_mu_w(0.0),
+                cos_mu_w(0.0),
+                bad_jet_w(0.0)
+            {}
+
+            uint grl;       // event count pass GRL
+            uint lar;       // event count pass LAr error flags
+            uint tile;      // event count pass TILE error flags
+            uint ttc;       // event count pass TTC veto
+            uint sct;       // event count pass SCT error flags
+            uint vtx;       // event count event has primary vertex
+            uint bad_mu;    // event count pass bad muon check
+            uint cos_mu;    // event count pass cosmic muon check
+            uint bad_jet;   // event count pass bad jet (jet cleaning)
+
+            float grl_w;
+            float lar_w;
+            float tile_w;
+            float ttc_w;
+            float sct_w;
+            float vtx_w;
+            float bad_mu_w;
+            float cos_mu_w;
+            float bad_jet_w;
+        };
+
+        struct DileptonCounts {
+
+            DileptonCounts() :
+                n_baseline(0),
+                n_baseline_w(0) { clear(); }
+
+            // selecting dilepton events
+            uint n_baseline;
+            uint n_signal[DiLepEvtType::ET_N];
+            uint n_os[DiLepEvtType::ET_N];
+            uint n_vetoZ[DiLepEvtType::ET_N];
+            uint n_mll[DiLepEvtType::ET_N];
+            uint n_pt[DiLepEvtType::ET_N];
+
+            float n_baseline_w;
+            float n_signal_w[DiLepEvtType::ET_N];
+            float n_os_w[DiLepEvtType::ET_N];
+            float n_vetoZ_w[DiLepEvtType::ET_N];
+            float n_mll_w[DiLepEvtType::ET_N];
+            float n_pt_w[DiLepEvtType::ET_N];
+
+            // mt2 selections
+            uint n_mt290[DiLepEvtType::ET_N];
+            uint n_mt2120[DiLepEvtType::ET_N];
+            uint n_mt2150[DiLepEvtType::ET_N];
+
+            float n_mt290_w[DiLepEvtType::ET_N];
+            float n_mt2120_w[DiLepEvtType::ET_N];
+            float n_mt2150_w[DiLepEvtType::ET_N];
+
+            // jets
+            uint n_e2bjets[DiLepEvtType::ET_N];
+            uint n_e2bjets0sjets[DiLepEvtType::ET_N];
+            uint n_ge2bjets[DiLepEvtType::ET_N];
+
+            float n_e2bjets_w[DiLepEvtType::ET_N];
+            float n_e2bjets0sjets_w[DiLepEvtType::ET_N];
+            float n_ge2bjets_w[DiLepEvtType::ET_N];
+
+            // jets + met
+            uint n_ge2jets[DiLepEvtType::ET_N];
+            uint n_forwardJetVeto[DiLepEvtType::ET_N];
+            uint n_bveto[DiLepEvtType::ET_N];
+            uint n_dphill[DiLepEvtType::ET_N];
+            uint n_met100[DiLepEvtType::ET_N];
+            uint n_ht500[DiLepEvtType::ET_N];
+            uint n_meff500[DiLepEvtType::ET_N];
+            
+            float n_ge2jets_w[DiLepEvtType::ET_N];
+            float n_forwardJetVeto_w[DiLepEvtType::ET_N];
+            float n_bveto_w[DiLepEvtType::ET_N];
+            float n_dphill_w[DiLepEvtType::ET_N];
+            float n_met100_w[DiLepEvtType::ET_N];
+            float n_ht500_w[DiLepEvtType::ET_N];
+            float n_meff500_w[DiLepEvtType::ET_N];
+            
+            
+
+
+            void clear() {
+                for(int i = 0; i < DiLepEvtType::ET_N; i++) {
+                    // raw
+                    n_signal[i] = 0;
+                    n_os[i] = 0;
+                    n_mll[i] = 0;
+                    n_vetoZ[i] = 0;
+                    n_pt[i] = 0;
+                    n_mt290[i] = 0;
+                    n_mt2120[i] = 0;
+                    n_mt2150[i] = 0;
+
+                    n_e2bjets[i] = 0;
+                    n_e2bjets0sjets[i] = 0;
+                    n_ge2bjets[i] = 0;
+
+                    n_ge2jets[i] = 0;
+                    n_forwardJetVeto[i] = 0;
+                    n_bveto[i] = 0;
+                    n_dphill[i] = 0;
+                    n_met100[i] = 0;
+                    n_ht500[i] = 0;
+                    n_meff500[i] = 0;
+
+                    // weighted
+                    n_signal_w[i] = 0.0;
+                    n_os_w[i] = 0.0;
+                    n_mll_w[i] = 0.0;
+                    n_vetoZ_w[i] = 0.0;
+                    n_pt_w[i] = 0.0;
+                    n_mt290_w[i] = 0.0;
+                    n_mt2120_w[i] = 0.0;
+                    n_mt2150_w[i] = 0.0;
+
+                    n_e2bjets_w[i] = 0.0;
+                    n_e2bjets0sjets_w[i] = 0.0;
+                    n_ge2bjets_w[i] = 0.0;
+
+                    n_ge2jets_w[i] = 0.0;
+                    n_forwardJetVeto_w[i] = 0.0;
+                    n_bveto_w[i] = 0.0;
+                    n_dphill_w[i] = 0.0;
+                    n_met100_w[i] = 0.0;
+                    n_ht500_w[i] = 0.0;
+                    n_meff500_w[i] = 0.0;
+                } // i
+            }
+            
+
+        };
+
+    private :
+        int m_dbg;
+        TChain* m_input_chain; // the TChain object we are processing
+        DiLepEvtType m_lep_type;
+        float m_mc_weight;
+        float m_lep_sf;
+        float m_btag_sf;
+
+        ////////////////////////////////////////////
+        // counters
+        ////////////////////////////////////////////
+        uint          n_readin; // total events processed
+        EventCleaning event_cleaning_counters;
+        DileptonCounts dilepton_counters;
+        
+
+
+}; //class
+
 
 #endif

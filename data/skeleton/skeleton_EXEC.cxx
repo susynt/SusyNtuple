@@ -1,5 +1,5 @@
 //SusyNtuple
-#include "SusyNtuple/Susy2LepCutflow.h"
+#include "SKELETON_LOOPER_CLASS/SKELETON_LOOPER_CLASS.h"
 #include "SusyNtuple/ChainHelper.h"
 #include "SusyNtuple/string_utils.h"
 
@@ -14,13 +14,8 @@ using namespace std;
 
 //////////////////////////////////////////////////////
 //
-// Susy2LepCutflow
+// SKELETON_DESCRIPTION 
 //
-// Example looper for selection dilepton events
-// and taking counts in dummy signal regions
-//
-// daniel.joseph.antrim@cern.ch
-// July 2017
 //
 //////////////////////////////////////////////////////
 
@@ -28,7 +23,7 @@ using namespace std;
 void help()
 {
     cout << "----------------------------------------------------------" << endl;
-    cout << " Susy2LepCF" << endl;
+    cout << " SKELETON_EXEC_NAME" << endl;
     cout << endl;
     cout << "  Options:" << endl;
     cout << "   -n          number of events to process (default: all)" << endl;
@@ -37,7 +32,7 @@ void help()
     cout << "   -h          print this help message" << endl;
     cout << endl;
     cout << "  Example Usage:" << endl;
-    cout << "   Susy2LepCF -i susyNt.root -n 500" << endl;
+    cout << "   SKELETON_EXEC_NAME -i susyNt.root -n 500" << endl;
     cout << "----------------------------------------------------------" << endl;
 }
 
@@ -58,14 +53,14 @@ int main(int argc, char** argv)
         else if (strcmp(argv[i], "-i") == 0) input = argv[++i];
         else if (strcmp(argv[i], "-h") == 0) { help(); return 0; }
         else {
-            cout << "Susy2LepCF    Unknown command line argument '" << argv[i] << "', exiting" << endl;
+            cout << "SKELETON_EXEC_NAME    Unknown command line argument '" << argv[i] << "', exiting" << endl;
             help();
             return 1;
         }
     } // i
 
     if(input.empty()) {
-        cout << "Susy2LepCF    You must specify an input" << endl;
+        cout << "SKELETON_EXEC_NAME    You must specify an input" << endl;
         return 1;
     }
 
@@ -89,7 +84,7 @@ int main(int argc, char** argv)
     // SusyNt analyses inheriting from SusyNtAna must
     // build their own TSelector looper
     /////////////////////////////////////////////////////////
-    Susy2LepCutflow* analysis = new Susy2LepCutflow();
+    SKELETON_LOOPER_CLASS* analysis = new SKELETON_LOOPER_CLASS();
 
     // set to do the 2 lepton analysis object selection (c.f. SusyNtuple/AnalysisType.h)
     // the AnalysisType configures all of the selector tools (c.f. SusyNtuple/SusyNtTools.h)
@@ -120,7 +115,7 @@ int main(int argc, char** argv)
     if(n_events > 0) chain->Process(analysis, input.c_str(), n_events);
 
     cout << endl;
-    cout << "Susy2LepCF    Analysis loop done" << endl;
+    cout << "SKELETON_EXEC_NAME    Analysis loop done" << endl;
 
     delete chain;
     return 0;

@@ -6,12 +6,18 @@
 // date  : April 6 2015                        //
 // ------------------------------------------- //
 
+//SusyNtuple
 #include "SusyNtuple/TriggerTools.h"
+#include "SusyNtuple/TriggerList.h"
+#include "SusyNtuple/Event.h"
+#include "SusyNtuple/Lepton.h"
 
+//ROOT
 #include "TH1F.h"
 #include "TFile.h"
 #include "TChain.h"
 
+//std/stl
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -20,192 +26,70 @@
 
 using namespace std;
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-
-/* Trigger "containers"                        */
-/*   Used at the SusyNt writing stage to set   */
-/*   which triggers are stored in the final    */
-/*   output ntuple.                            */
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-
-////////////
-// Run 1
-////////////
-const std::vector<std::string> triggers_run1 = {""};
-
-////////////
-// Run 2
-////////////
-const std::vector<std::string> triggers_run2 = {
-
-    ////////////////////////////
-    // MUON
-    ////////////////////////////
-
-    // muon trig
-    //"HLT_mu6",
-    //"HLT_mu6_msonly",
-    //"HLT_mu10",
-    //"HLT_mu14",
-    //"HLT_mu18",
-    "HLT_mu20",
-    "HLT_mu20_iloose_L1MU15",
-    "HLT_mu22",
-    "HLT_mu24",
-    "HLT_mu24_iloose",
-    "HLT_mu24_imedium",
-    "HLT_mu24_iloose_L1MU15",
-    "HLT_mu24_ivarloose",
-    "HLT_mu24_ivarloose_L1MU15",
-    "HLT_mu24_ivarmedium",
-    "HLT_mu26_imedium",
-    "HLT_mu26_ivarmedium",
-    "HLT_mu40",
-    "HLT_mu50",
-    "HLT_mu60_0eta105_msonly",
-
-    // L1 items
-    //"L1_MU10",
-    //"L1_MU15",
-
-    // dimuon trig
-    //"HLT_2mu10",
-    //"HLT_2mu14",
-    "HLT_mu18_mu8noL1",
-    "HLT_mu20_mu8noL1",
-    "HLT_mu22_mu8noL1",
-    "HLT_mu24_mu8noL1",
-    //"HLT_2mu14_nomucomb",
-    //"HLT_2mu10_nomucomb", 
-
-    ////////////////////////////
-    // ELECTRON
-    ////////////////////////////
-    
-    // electron trig lh
-    //"HLT_e7_lhmedium",
-    //"HLT_e9_lhmedium",
-    "HLT_e12_lhloose",
-    "HLT_e12_lhloose_L1EM10VH",
-    "HLT_e15_lhloose_L1EM13VH",
-    "HLT_e17_lhloose",
-    "HLT_e17_lhmedium",
-    "HLT_e24_lhmedium_iloose_L1EM18VH",
-    "HLT_e24_lhmedium_iloose_L1EM20VH",
-    "HLT_e24_lhmedium_L1EM20VHI",
-    "HLT_e24_lhmedium_L1EM20VH",
-    "HLT_e24_lhtight_iloose",
-    "HLT_e24_lhtight_nod0_ivarloose",
-    "HLT_e24_lhtight_nod0_iloose",
-    "HLT_e24_lhmedium_nod0_iloose_L1EM20VH",
-    "HLT_e24_lhtight_ivarloose",
-    "HLT_e24_lhtight_nod0_ivarloose",
-    "HLT_e26_lhmedium_L1EM22VHI",
-    "HLT_e26_lhtight_iloose",
-    "HLT_e26_lhtight_nod0_iloose",
-    "HLT_e26_lhtight_ivarloose",
-    "HLT_e26_lhtight_nod0_ivarloose",
-    "HLT_e60_lhmedium",
-    "HLT_e60_lhmedium_nod0",
-    "HLT_e120_lhloose",
-    "HLT_e140_lhloose_nod0",
-
-    // di-electron trig lh
-    //"HLT_2e12_lhvloose_L12EM10VH",
-    //"HLT_2e12_lhvloose_nod0_L12EM10VH",
-    "HLT_2e12_lhloose_L12EM10VH",
-    "HLT_2e15_lhloose_L12EM13VH",
-    "HLT_2e15_lhvloose_L12EM13VH",
-    "HLT_2e15_lhvloose_nod0_L12EM13VH",
-    "HLT_2e17_lhloose",
-    "HLT_2e17_lhvloose",
-    "HLT_2e17_lhvloose_nod0",
-    
-    ////////////////////////////
-    // ELE/MUON
-    ////////////////////////////
-    "HLT_e17_loose_mu14",
-    "HLT_e17_lhloose_mu14",
-    "HLT_e17_lhloose_nod0_mu14",
-    "HLT_e7_lhmedium_mu24",
-    "HLT_e7_lhmedium_nod0_mu24",
-    "HLT_e26_lhmedium_L1EM22VHI_mu8noL1",
-    "HLT_e26_lhmedium_nod0_L1EM22VHI_mu8noL1",
-    "HLT_e24_lhmedium_L1EM20VHI_mu8noL1",
-
-    ////////////////////////////
-    // MET
-    ////////////////////////////
-
-    "HLT_xe70",
-    //"HLT_xe80_tc_lcw_L1XE50",
-    "HLT_xe80_tc_lcw_L1XE50",
-    "HLT_xe90_mht_L1XE50",
-    "HLT_xe110_mht_L1XE50",
-    "HLT_xe100_mht_L1XE50"
-    
-};
-
-std::vector<std::string> getTrigNames(string set)
-{ 
-    if(set.compare("run1")==0) { 
-        std::cout << "Attempting to store Run1 triggers which are no longer available" << std::endl;
-        std::cout << " >>> Exitting." << std::endl;
-        exit(1);
-    }
-    else if(set.compare("run2")==0) {
-        std::cout << std::endl;
-        std::cout << " ------------------------ " << std::endl;
-        std::cout << " Storing Run2 trigger set " << std::endl;
-        std::cout << " ------------------------ " << std::endl;
-        std::cout << std::endl;
-        return triggers_run2;
-    }
-    else {
-        std::cout << "getTrigNames error: Requested set of triggers ("<< set << ") not available. Storing Run-2 triggers instead." << std::endl;
-        return triggers_run2;
-    }
-}
-
-// ---------- !! PARADIGM SHIFT !! ----------- //
-// ---------- !! PARADIGM SHIFT !! ----------- //
-// ---------- !! PARADIGM SHIFT !! ----------- //
-
-
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-
-/* Trigger tool                                */
-/*    To be used at the analysis level of      */
-/*    SusyNt                                   */
-
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-
-// ------------------------------------------- //
-// Constructor                                 //
-// ------------------------------------------- //
 TriggerTools::TriggerTools(bool dbg) :
     m_dbg(dbg)
 {
 }
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::getTrigNames()
+{ 
+    //c.f. SusyNtuple/TriggerList.h
 
-//----------------------------------------------------------
+    vector<string> all_triggers;
+    // add single muon triggers
+    all_triggers.insert(all_triggers.end(), single_muo_triggers_list.begin(), single_muo_triggers_list.end());
+    // add dimuon triggers
+    all_triggers.insert(all_triggers.end(), di_muo_triggers_list.begin(), di_muo_triggers_list.end());
+    // add single electron triggers
+    all_triggers.insert(all_triggers.end(), single_ele_triggers_list.begin(), single_ele_triggers_list.end());
+    // add di-electron triggers
+    all_triggers.insert(all_triggers.end(), di_ele_triggers_list.begin(), di_ele_triggers_list.end());
+    // add ele+muon dilepton triggers
+    all_triggers.insert(all_triggers.end(), ele_muo_triggers_list.begin(), ele_muo_triggers_list.end());
+    // add met triggers
+    all_triggers.insert(all_triggers.end(), met_triggers_list.begin(), met_triggers_list.end());
+
+    return all_triggers;
+}
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::single_muo_triggers()
+{
+    return single_muo_triggers_list;
+}
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::di_muo_triggers()
+{
+    return di_muo_triggers_list;
+}
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::single_ele_triggers()
+{
+    return single_ele_triggers_list;
+}
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::di_ele_triggers()
+{
+    return di_ele_triggers_list;
+}
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::ele_muo_triggers()
+{
+    return ele_muo_triggers_list;
+}
+//////////////////////////////////////////////////////////////////////////////
+const std::vector<std::string> TriggerTools::met_triggers()
+{
+    return met_triggers_list;
+}
+//////////////////////////////////////////////////////////////////////////////
 bool TriggerTools::init(const std::string &filename)
 {
     bool success=false;
-    if(m_dbg)
-        cout<<" ------------------ "<<endl
-            <<"Initializing Trigger"<<endl
-            <<" ------------------ "<<endl;
+    if(m_dbg) {
+        cout << "-----------------------------------------------------------------" << endl;
+        cout << "TriggerTools::init    Initializing internal trigger tool and map" << endl;
+        cout << "-----------------------------------------------------------------" << endl;
+    }
     TString nameTriggerHistogram("trig");
     TFile *f = TFile::Open(filename.c_str());
     TH1F *h = f ? static_cast<TH1F*>(f->Get(nameTriggerHistogram)) : nullptr;
@@ -228,29 +112,38 @@ bool TriggerTools::init(const std::string &filename)
     }
     return success;
 }
-// ------------------------------------------- //
-// Build trigger-map 
-// ------------------------------------------- //
-// BinLabels <---> trigger name
-// BinNumber <---> trigger bit number
-
+//////////////////////////////////////////////////////////////////////////////
 void TriggerTools::buildTriggerMap(const TH1* trigHisto)
 {
     for(int trigBin = 1; trigBin < trigHisto->GetNbinsX(); trigBin++) {
         string triggerChainName = trigHisto->GetXaxis()->GetBinLabel(trigBin);
         m_triggerMap[triggerChainName] = trigBin-1;
-        
+        m_triggerMap_bit[m_triggerMap[triggerChainName]] = triggerChainName;
+
         if(m_dbg) {
             cout << "Trigger " << triggerChainName << " at bit " << m_triggerMap[triggerChainName] << endl;
         }
     }
 }
-
-// ------------------------------------------- //
-// Test whether a given trigger has fired
-// ------------------------------------------- //
+//////////////////////////////////////////////////////////////////////////////
+int TriggerTools::idx_of_trigger(std::string chain)
+{
+    const vector<string> trigs = getTrigNames();
+    for(size_t trig_idx = 0; trig_idx < trigs.size(); trig_idx++) {
+        if(trigs.at(trig_idx) == chain) {
+            return trig_idx;
+        }
+    }
+    cout << "TriggerTools::idx_of_trigger    WARNING Did not find index of requested trigger '" << chain << "'!" << endl;
+    return -1;
+}
+//////////////////////////////////////////////////////////////////////////////
+std::string TriggerTools::trigger_at_idx(int idx)
+{
+    return m_triggerMap_bit[idx];
+}
+//////////////////////////////////////////////////////////////////////////////
 bool TriggerTools::passTrigger(const TBits& triggerbits, const std::string &triggerName) const
-// bool TriggerTools::passTrigger(TBits& triggerbits, std::string triggerName)
 {
     bool pass = false;
     auto nameBit = m_triggerMap.find(triggerName);
@@ -265,11 +158,140 @@ bool TriggerTools::passTrigger(const TBits& triggerbits, const std::string &trig
     }
     return pass;
 }
+//////////////////////////////////////////////////////////////////////////////
+bool TriggerTools::lepton_trigger_match(Susy::Lepton* lep, string trigger)
+{
+    // lepton_trigger_match is just an ~alias so that it is made clear that it is
+    // different than the event-wise passTrigger method
+    return passTrigger(lep->trigBits, trigger);
+}
+//////////////////////////////////////////////////////////////////////////////
+bool TriggerTools::dilepton_trigger_match(Susy::Event* evt, Susy::Lepton* l0,
+        Susy::Lepton* l1, std::string trigger)
+{
+    bool l0_is_ele = l0->isEle();
+    bool l1_is_ele = l1->isEle();
 
-// ------------------------------------------- //
-// Dump information about what triggers are
-// stored in the SusyNt
-// ------------------------------------------- //
+    bool is_ee = (l0_is_ele && l1_is_ele);
+    bool is_mm = (!l0_is_ele && !l1_is_ele);
+    bool is_em = (l0_is_ele && !l1_is_ele);
+
+    if(!(is_ee || is_mm || is_em)) {
+        cout << "TriggerTools::dilepton_trigger_match    WARNING Could not determine if "
+            << "you are providing EE, MM, or EM lepton pairs (n.b. for E+M the first lepton"
+            << " must be the electron), returning false" << endl;
+        return false;
+    }
+
+    // this is the global index of the trigger we want to test
+    // for matching
+    int trigger_idx_to_check = -1;
+
+    // we store the trigger bits for dilepton matching based on global trigger indices,
+    // so loop over the result of 'TriggerTools::getTrigNames' as opposed to the
+    // trigger lists (c.f. SusyNtuple/TriggerList.h) for the individual dilepton
+    // trigger groups
+    const vector<string> triggers = getTrigNames();
+
+    //////////////////////////////////////////////////////////////////////////
+    // E+E Dilepton Trigger Matching
+    //////////////////////////////////////////////////////////////////////////
+    if(is_ee) {
+
+        if(!(std::find(triggers.begin(), triggers.end(), trigger)==triggers.end())) {
+            int idx = 0;
+            for(auto x : triggers) {
+                if(x==trigger) { trigger_idx_to_check = idx; break; } 
+                idx++;
+            }
+        }
+        else {
+            cout << "TriggerTools::dilepton_trigger_match    WARNING Did not find requested "
+                    << "EE trigger for matching, returning false" << endl;
+            cout << "TriggerTools::dilepton_trigger_match    WARNING Possible EE dilepton triggers"
+                << " are: " << endl;
+            for(auto x : di_ele_triggers()) {
+                cout << "TriggerTools::dilepton_trigger_match     > " << x << endl;
+            }
+            
+            return false;
+        }
+        
+    } // ee
+    //////////////////////////////////////////////////////////////////////////
+    // M+M Dilepton Trigger Matching
+    //////////////////////////////////////////////////////////////////////////
+    else if(is_mm) {
+        if(!(std::find(triggers.begin(), triggers.end(), trigger)==triggers.end())) {
+            int idx = 0;
+            for(auto x : triggers) {
+                if(x==trigger) { trigger_idx_to_check = idx; break; }
+                idx++;
+            }
+        }
+        else {
+            cout << "TriggerTools::dilepton_trigger_match    WARNING Did not find requested "
+                    << "MM trigger for matching, returning false" << endl;
+            cout << "TriggerTools::dilepton_trigger_match    WARNING Possible MM dilepton triggers"
+                << " are: " << endl;
+            for(auto x : di_muo_triggers()) {
+                cout << "TriggerTools::dilepton_trigger_match     > " << x << endl;
+            }
+            return false;
+        }
+    } // mm
+    //////////////////////////////////////////////////////////////////////////
+    // E+M Dilepton Trigger Matching
+    //////////////////////////////////////////////////////////////////////////
+    else if(is_em) {
+        if(!(std::find(triggers.begin(), triggers.end(), trigger)==triggers.end())) {
+            int idx = 0;
+            for(auto x : triggers) {
+                if(x==trigger) { trigger_idx_to_check = idx; break; }
+                idx++;
+            }
+        }
+        else {
+            cout << "TriggerTools::dilepton_trigger_match    WARNING Did not find requested "
+                    << "EM trigger for matching, returning false" << endl;
+            cout << "TriggerTools::dilepton_trigger_match    WARNING Possible EM dilepton triggers"
+                << " are: " << endl;
+            for(auto x : ele_muo_triggers()) {
+                cout << "TriggerTools::dilepton_trigger_match     > " << x << endl;
+            }
+            return false;
+        }
+    } // em
+
+    if(trigger_idx_to_check < 0) {
+        cout << "TriggerTools::dilepton_trigger_match    WARNING Did not find requested "
+            << " trigger '" << trigger << "' in the list of triggers, returning false" << endl;
+        return false;
+    }
+
+    int l0_idx = l0->idx;
+    int l1_idx = l1->idx;
+
+    // when storing the triggers we restrict the loops in the second lepton index
+    // to be greater than the index of the first lepton (for EE and MM)
+    if((is_ee || is_mm) && !(l1_idx > l0_idx)) {
+        int tmp_idx_l0 = l1_idx;
+        int tmp_idx_l1 = l0_idx;
+
+        l0_idx = tmp_idx_l0;
+        l1_idx = tmp_idx_l1;
+    }
+
+    // build the mask
+    DileptonTrigTuple tuple = 0;
+    tuple |= (trigger_idx_to_check << 8);
+    tuple |= (l0_idx << 4);
+    tuple |= (l1_idx);
+
+    // and return the test result
+    return evt->m_dilepton_trigger_matches[tuple];
+}
+//////////////////////////////////////////////////////////////////////////////
 void TriggerTools::dumpTriggerInfo() const
 {
     // print them sorted by value, not by key (default for map)

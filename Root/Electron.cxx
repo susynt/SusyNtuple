@@ -28,7 +28,9 @@ Electron::Electron(const Electron &rhs):
   tightLLH(rhs.tightLLH),
   passOQBadClusElectron(rhs.passOQBadClusElectron),
   eleEffSF(rhs.eleEffSF),
-  eleTrigSF(rhs.eleTrigSF),
+  eleTrigSF_single(rhs.eleTrigSF_single),
+  eleTrigSF_double(rhs.eleTrigSF_double),
+  eleTrigSF_mixed(rhs.eleTrigSF_mixed),
   eleCHFSF(rhs.eleCHFSF),
   sharedMuTrk(rhs.sharedMuTrk),
   sharedEleEleTrk(rhs.sharedEleEleTrk),
@@ -37,74 +39,22 @@ Electron::Electron(const Electron &rhs):
   ss3lChargeFlip(rhs.ss3lChargeFlip),
   passChargeFlipTagger(rhs.passChargeFlipTagger),
   chargeFlipBDT(rhs.chargeFlipBDT),
-
   res_all_dn(rhs.res_all_dn),
   res_all_up(rhs.res_all_up),
-/*
-  res_matCalo_dn(rhs.res_matCalo_dn),
-  res_matCalo_up(rhs.res_matCalo_up),
-  res_matCryo_dn(rhs.res_matCryo_dn),
-  res_matCryo_up(rhs.res_matCryo_up),
-  res_matGap_dn(rhs.res_matGap_dn),
-  res_matGap_up(rhs.res_matGap_up),
-  res_matId_dn(rhs.res_matId_dn),
-  res_matId_up(rhs.res_matId_up),
-  res_nom(rhs.res_nom),
-  res_none(rhs.res_none),
-  res_pileup_dn(rhs.res_pileup_dn),
-  res_pileup_up(rhs.res_pileup_up),
-  res_sampTerm_dn(rhs.res_sampTerm_dn),
-  res_sampTerm_up(rhs.res_sampTerm_up),
-  res_z_dn(rhs.res_z_dn),
-  res_z_up(rhs.res_z_up),
-*/
   scale_all_dn(rhs.scale_all_dn),
   scale_all_up(rhs.scale_all_up),
-/*
-  scale_G4_dn(rhs.scale_G4_dn),
-  scale_G4_up(rhs.scale_G4_up),
-  scale_L1_dn(rhs.scale_L1_dn),
-  scale_L1_up(rhs.scale_L1_up),
-  scale_L2_dn(rhs.scale_L2_dn),
-  scale_L2_up(rhs.scale_L2_up),
-  scale_LArCalib_dn(rhs.scale_LArCalib_dn),
-  scale_LArCalib_up(rhs.scale_LArCalib_up),
-  scale_LArECalib_dn(rhs.scale_LArECalib_dn),
-  scale_LArECalib_up(rhs.scale_LArECalib_up),
-  scale_LArEunconv_dn(rhs.scale_LArEunconv_dn),
-  scale_LArEunconv_up(rhs.scale_LArEunconv_up),
-  scale_LArUnconv_dn(rhs.scale_LArUnconv_dn),
-  scale_LArUnconv_up(rhs.scale_LArUnconv_up),
-  scale_last(rhs.scale_last),
-  scale_matCalo_dn(rhs.scale_matCalo_dn),
-  scale_matCalo_up(rhs.scale_matCalo_up),
-  scale_matCryo_dn(rhs.scale_matCryo_dn),
-  scale_matCryo_up(rhs.scale_matCryo_up),
-  scale_matId_dn(rhs.scale_matId_dn),
-  scale_matId_up(rhs.scale_matId_up),
-  scale_nom(rhs.scale_nom),
-  scale_none(rhs.scale_none),
-  scale_ped_dn(rhs.scale_ped_dn),
-  scale_ped_up(rhs.scale_ped_up),
-  scale_ps_dn(rhs.scale_ps_dn),
-  scale_ps_up(rhs.scale_ps_up),
-  scale_s12_dn(rhs.scale_s12_dn),
-  scale_s12_up(rhs.scale_s12_up),
-  scale_ZeeStat_dn(rhs.scale_ZeeStat_dn),
-  scale_ZeeStat_up(rhs.scale_ZeeStat_up),
-  scale_ZeeSys_dn(rhs.scale_ZeeSys_dn),
-  scale_ZeeSys_up(rhs.scale_ZeeSys_up),
-  scale_mom_dn(rhs.scale_mom_dn),
-  scale_mom_up(rhs.scale_mom_up)
-*/
   errEffSF_id_up(rhs.errEffSF_id_up),
   errEffSF_id_dn(rhs.errEffSF_id_dn),
   errEffSF_reco_up(rhs.errEffSF_reco_up),
   errEffSF_reco_dn(rhs.errEffSF_reco_dn),
   errEffSF_iso_up(rhs.errEffSF_iso_up),
   errEffSF_iso_dn(rhs.errEffSF_iso_dn),
-  errEffSF_trig_up(rhs.errEffSF_trig_up),
-  errEffSF_trig_dn(rhs.errEffSF_trig_dn)
+  errEffSF_trig_up_single(rhs.errEffSF_trig_up_single),
+  errEffSF_trig_dn_single(rhs.errEffSF_trig_dn_single),
+  errEffSF_trig_up_double(rhs.errEffSF_trig_up_double),
+  errEffSF_trig_dn_double(rhs.errEffSF_trig_dn_double),
+  errEffSF_trig_up_mixed(rhs.errEffSF_trig_up_mixed),
+  errEffSF_trig_dn_mixed(rhs.errEffSF_trig_dn_mixed)
 {
 }
 /*--------------------------------------------------------------------------------*/
@@ -131,7 +81,9 @@ Electron& Electron::operator=(const Electron &rhs)
     tightLLH = rhs.tightLLH;
     passOQBadClusElectron = rhs.passOQBadClusElectron;
     eleEffSF = rhs.eleEffSF;
-    eleTrigSF = rhs.eleTrigSF;
+    eleTrigSF_single = rhs.eleTrigSF_single;
+    eleTrigSF_double = rhs.eleTrigSF_double;
+    eleTrigSF_mixed  = rhs.eleTrigSF_mixed;
     eleCHFSF = rhs.eleCHFSF;
     sharedMuTrk = rhs.sharedMuTrk;
     sharedEleEleTrk = rhs.sharedEleEleTrk;
@@ -143,71 +95,20 @@ Electron& Electron::operator=(const Electron &rhs)
  
     res_all_dn = rhs.res_all_dn;
     res_all_up = res_all_up;
-/*
-    res_matCalo_dn = rhs.res_matCalo_dn;
-    res_matCalo_up = rhs.res_matCalo_up;
-    res_matCryo_dn = rhs.res_matCryo_dn;
-    res_matCryo_up = rhs.res_matCryo_up;
-    res_matGap_dn = rhs.res_matGap_dn;
-    res_matGap_up = rhs.res_matGap_up;
-    res_matId_dn = rhs.res_matId_dn;
-    res_matId_up = rhs.res_matId_up;
-    res_nom = rhs.res_nom;
-    res_none = rhs.res_none;
-    res_pileup_dn = rhs.res_pileup_dn;
-    res_pileup_up = rhs.res_pileup_up;
-    res_sampTerm_dn = rhs.res_sampTerm_dn;
-    res_sampTerm_up = rhs.res_sampTerm_up;
-    res_z_dn = rhs.res_z_dn;
-    res_z_up = rhs.res_z_up;
-*/
     scale_all_dn = rhs.scale_all_dn;
     scale_all_up = rhs.scale_all_up;
-/*
-    scale_G4_dn = rhs.scale_G4_dn;
-    scale_G4_up = rhs.scale_G4_up;
-    scale_L1_dn = rhs.scale_L1_dn;
-    scale_L1_up = rhs.scale_L1_up;
-    scale_L2_dn = rhs.scale_L2_dn;
-    scale_L2_up = rhs.scale_L2_up;
-    scale_LArCalib_dn = rhs.scale_LArCalib_dn;
-    scale_LArCalib_up = rhs.scale_LArCalib_up;
-    scale_LArECalib_dn = rhs.scale_LArECalib_dn;
-    scale_LArECalib_up = rhs.scale_LArECalib_up;
-    scale_LArEunconv_dn = rhs.scale_LArEunconv_dn;
-    scale_LArEunconv_up = rhs.scale_LArEunconv_up;
-    scale_LArUnconv_dn = rhs.scale_LArUnconv_dn;
-    scale_LArUnconv_up = rhs.scale_LArUnconv_up;
-    scale_last = rhs.scale_last;
-    scale_matCalo_dn = rhs.scale_matCalo_dn;
-    scale_matCalo_up = rhs.scale_matCalo_up;
-    scale_matCryo_dn = rhs.scale_matCryo_dn;
-    scale_matCryo_up = rhs.scale_matCryo_up;
-    scale_matId_dn = rhs.scale_matId_dn;
-    scale_matId_up = rhs.scale_matId_up;
-    scale_nom = rhs.scale_nom;
-    scale_none = rhs.scale_none;
-    scale_ped_dn = rhs.scale_ped_dn;
-    scale_ped_up = rhs.scale_ped_up;
-    scale_ps_dn = rhs.scale_ps_dn;
-    scale_ps_up = rhs.scale_ps_up;
-    scale_s12_dn = rhs.scale_s12_dn;
-    scale_s12_up = rhs.scale_s12_up;
-    scale_ZeeStat_dn = rhs.scale_ZeeStat_dn;
-    scale_ZeeStat_up = rhs.scale_ZeeStat_up;
-    scale_ZeeSys_dn = rhs.scale_ZeeSys_dn;
-    scale_ZeeSys_up = rhs.scale_ZeeSys_up;
-    scale_mom_dn = rhs.scale_mom_dn;
-    scale_mom_up = rhs.scale_mom_up;
-*/
     errEffSF_id_up = rhs.errEffSF_id_up;
     errEffSF_id_dn = rhs.errEffSF_id_dn;
     errEffSF_reco_up = rhs.errEffSF_reco_up;
     errEffSF_reco_dn = rhs.errEffSF_reco_dn;
     errEffSF_iso_up = rhs.errEffSF_iso_up;
     errEffSF_iso_dn = rhs.errEffSF_iso_dn;
-    errEffSF_trig_up = rhs.errEffSF_trig_up;
-    errEffSF_trig_dn = rhs.errEffSF_trig_dn;
+    errEffSF_trig_up_single = rhs.errEffSF_trig_up_single;
+    errEffSF_trig_dn_single = rhs.errEffSF_trig_dn_single;
+    errEffSF_trig_up_double = rhs.errEffSF_trig_up_double;
+    errEffSF_trig_dn_double = rhs.errEffSF_trig_dn_double;
+    errEffSF_trig_up_mixed = rhs.errEffSF_trig_up_mixed;
+    errEffSF_trig_dn_mixed = rhs.errEffSF_trig_dn_mixed;
   }
   return *this;
 }
@@ -223,66 +124,8 @@ void Electron::setState(int sys)
   
   if     ( sys == NtSys::EG_RESOLUTION_ALL_DN ) sf = res_all_dn;
   else if( sys == NtSys::EG_RESOLUTION_ALL_UP ) sf = res_all_up;
-/*
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALCALO_DN ) sf = res_matCalo_dn;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALCALO_UP ) sf = res_matCalo_up;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALCRYO_DN ) sf = res_matCryo_dn;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALCRYO_UP ) sf = res_matCryo_up;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALGAP_DN ) sf = res_matGap_dn;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALGAP_UP) sf = res_matGap_up;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALID_DN ) sf = res_matId_dn;
-  else if( sys == NtSys::EG_RESOLUTION_MATERIALID_UP ) sf = res_matId_up;
-  else if( sys == NtSys::EG_RESOLUTION_NOMINAL ) sf = res_nom;
-  else if( sys == NtSys::EG_RESOLUTION_NONE ) sf = res_none;
-  else if( sys == NtSys::EG_RESOLUTION_PILEUP_DN ) sf = res_pileup_dn;
-  else if( sys == NtSys::EG_RESOLUTION_PILEUP_UP ) sf = res_pileup_up;
-  else if( sys == NtSys::EG_RESOLUTION_SAMPLINGTERM_DN ) sf = res_sampTerm_dn;
-  else if( sys == NtSys::EG_RESOLUTION_SAMPLINGTERM_UP ) sf = res_sampTerm_up;
-  else if( sys == NtSys::EG_RESOLUTION_ZSMEARING_DN ) sf = res_z_dn;
-  else if( sys == NtSys::EG_RESOLUTION_ZSMEARING_UP ) sf = res_z_up;
-*/
   else if( sys == NtSys::EG_SCALE_ALL_DN ) sf = scale_all_dn;
   else if( sys == NtSys::EG_SCALE_ALL_UP ) sf = scale_all_up;
-/*
-  else if( sys == NtSys::EG_SCALE_G4_DN ) sf = scale_G4_dn;
-  else if( sys == NtSys::EG_SCALE_G4_UP ) sf = scale_G4_up;
-  else if( sys == NtSys::EG_SCALE_L1GAIN_DN ) sf = scale_L1_dn;
-  else if( sys == NtSys::EG_SCALE_L1GAIN_UP ) sf = scale_L1_up;
-  else if( sys == NtSys::EG_SCALE_L2GAIN_DN ) sf = scale_L2_dn;
-  else if( sys == NtSys::EG_SCALE_L2GAIN_UP ) sf = scale_L2_up;
-  else if( sys == NtSys::EG_SCALE_LARCALIB_DN ) sf = scale_LArCalib_dn;
-  else if( sys == NtSys::EG_SCALE_LARCALIB_UP ) sf = scale_LArCalib_up;
-  else if( sys == NtSys::EG_SCALE_LARELECCALIB_DN ) sf = scale_LArECalib_dn;
-  else if( sys == NtSys::EG_SCALE_LARELECCALIB_UP ) sf = scale_LArECalib_up;
-  else if( sys == NtSys::EG_SCALE_LARELECUNCONV_DN ) sf = scale_LArEunconv_dn;
-  else if( sys == NtSys::EG_SCALE_LARELECUNCONV_UP ) sf = scale_LArEunconv_up;
-  else if( sys == NtSys::EG_SCALE_LARUNCONVCALIB_DN ) sf = scale_LArUnconv_dn;
-  else if( sys == NtSys::EG_SCALE_LARUNCONVCALIB_UP ) sf = scale_LArUnconv_up;
-  else if( sys == NtSys::EG_SCALE_LASTSCALEVARIATION ) sf = scale_last;
-  else if( sys == NtSys::EG_SCALE_MATCALO_DN ) sf = scale_matCalo_dn;
-  else if( sys == NtSys::EG_SCALE_MATCALO_UP ) sf = scale_matCalo_up;
-  else if( sys == NtSys::EG_SCALE_MATCRYO_DN ) sf = scale_matCryo_dn;
-  else if( sys == NtSys::EG_SCALE_MATCRYO_UP ) sf = scale_matCryo_up;
-  else if( sys == NtSys::EG_SCALE_MATID_DN ) sf = scale_matId_dn;
-  else if( sys == NtSys::EG_SCALE_MATID_UP ) sf = scale_matId_up;
-  else if( sys == NtSys::EG_SCALE_NOMINAL ) sf = scale_nom;
-  else if( sys == NtSys::EG_SCALE_NONE ) sf = scale_none;
-  else if( sys == NtSys::EG_SCALE_PEDESTAL_DN ) sf = scale_ped_dn;
-  else if( sys == NtSys::EG_SCALE_PEDESTAL_UP ) sf = scale_ped_up;
-  else if( sys == NtSys::EG_SCALE_PS_DN ) sf = scale_ps_dn;
-  else if( sys == NtSys::EG_SCALE_PS_UP ) sf = scale_ps_up;
-  else if( sys == NtSys::EG_SCALE_S12_DN ) sf = scale_s12_dn;
-  else if( sys == NtSys::EG_SCALE_S12_UP ) sf = scale_s12_up;
-  else if( sys == NtSys::EG_SCALE_ZEESTAT_DN ) sf = scale_ZeeStat_dn;
-  else if( sys == NtSys::EG_SCALE_ZEESTAT_UP ) sf = scale_ZeeStat_up;
-  else if( sys == NtSys::EG_SCALE_ZEESYST_DN ) sf = scale_ZeeSys_dn;
-  else if( sys == NtSys::EG_SCALE_ZEESYST_UP ) sf = scale_ZeeSys_up;
-*/
-
-/*
-  else if( sys == NtSys::EL_SCALE_MOMENTUM_DN ) sf = scale_mom_dn;
-  else if( sys == NtSys::EL_SCALE_MOMENTUM_UP ) sf = scale_mom_up;
-*/
   else return;
 
   this->SetPtEtaPhiE(sf * this->Pt(), this->Eta(), this->Phi(), sf * this->E());

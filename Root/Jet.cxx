@@ -40,6 +40,8 @@ Jet::Jet(const Jet &rhs):
   isBadMediumBCH_dn(rhs.isBadMediumBCH_dn),
   isBadTightBCH(rhs.isBadTightBCH),
   jer(rhs.jer),
+  eta_intercal_up(rhs.eta_intercal_up),
+  eta_intercal_dn(rhs.eta_intercal_dn),
   groupedNP(rhs.groupedNP),
   FTSys(rhs.FTSys)
   /*
@@ -88,6 +90,8 @@ Jet& Jet::operator=(const Jet &rhs)
     isBadMediumBCH_dn = rhs.isBadMediumBCH_dn;
     isBadTightBCH = rhs.isBadTightBCH;
     jer = rhs.jer;
+    eta_intercal_up = rhs.eta_intercal_up;
+    eta_intercal_dn = rhs.eta_intercal_dn;
     groupedNP = rhs.groupedNP;
     FTSys = rhs.FTSys;
     /*
@@ -120,6 +124,8 @@ void Jet::setState(int sys)
   else if( sys == NtSys::JET_GroupedNP_2_DN) sf = groupedNP[3];
   else if( sys == NtSys::JET_GroupedNP_3_UP) sf = groupedNP[4];
   else if( sys == NtSys::JET_GroupedNP_3_DN) sf = groupedNP[5];
+  else if( sys == NtSys::JET_EtaIntercalibration_UP) sf = eta_intercal_up;
+  else if( sys == NtSys::JET_EtaIntercalibration_DN) sf = eta_intercal_dn;
 /*
   else if( sys == NtSys::JET_BJES_Response_DN) sf = bjes[0];
   else if( sys == NtSys::JET_BJES_Response_UP) sf = bjes[1];
