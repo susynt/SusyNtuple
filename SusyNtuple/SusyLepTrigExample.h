@@ -5,6 +5,7 @@
 #include "TFile.h"
 #include "TChain.h"
 #include "TH1F.h"
+#include "TCanvas.h"
 
 //SusyNtuple
 #include "SusyNtuple/SusyNtAna.h"
