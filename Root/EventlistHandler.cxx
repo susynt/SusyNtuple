@@ -25,7 +25,7 @@ std::string basedir(const std::string &path)
 bool fileExists(const std::string &filename)
 {
   std::ifstream file(filename.c_str());
-  bool doesExists = file;
+  bool doesExists = file.good();
   file.close();
   return doesExists;
 }
