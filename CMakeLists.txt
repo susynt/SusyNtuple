@@ -13,6 +13,7 @@ set( extra_libs )
 atlas_depends_on_subdirs(
     PUBLIC
     SUSYPhys/SUSYTools
+    Tools/PathResolver
     ${extra_deps}
 )
 
@@ -31,7 +32,7 @@ atlas_add_library( SusyNtupleLib
     SusyNtuple/*.h Root/*.cxx ${SusyNtupleCintDict}
     PUBLIC_HEADERS SusyNtuple 
     PRIVATE_INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
-    LINK_LIBRARIES SUSYToolsLib
+    LINK_LIBRARIES SUSYToolsLib PathResolver
     PRIVATE_LINK_LIBRARIES ${ROOT_LIBRARIES}
 )
 
@@ -53,4 +54,6 @@ file(GLOB files "util/*.cxx")
 foreach(file ${files})
     SusyNtExec(${file})
 endforeach()
+
+atlas_install_data( data/* )
 
