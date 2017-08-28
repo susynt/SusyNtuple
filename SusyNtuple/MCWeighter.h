@@ -69,14 +69,14 @@ class MCWeighter
         //
         MCWeighter();
         MCWeighter(TTree* tree,
-                std::string xsecDir = PathResolverFindCalibDirectory("SUSYTools/mc15_13TeV/");
+                std::string xsecDir = PathResolverFindCalibDirectory("SUSYTools/mc15_13TeV/"));
         virtual ~MCWeighter() {};
 
         void setVerbose(bool doit) { m_dbg = doit; }
         bool dbg() { return m_dbg; }
 
         static std::string defaultXsecDir() {
-            return std::string(PathResolverFindCalibDirectory("SUSYTools/mc15_13TeV/");
+            return std::string(PathResolverFindCalibDirectory("SUSYTools/mc15_13TeV/"));
         }
 
         void setSumwFromNT() { m_sumw_method = Sumw_NT; }
