@@ -13,14 +13,13 @@ set( extra_libs )
 atlas_depends_on_subdirs(
     PUBLIC
     SUSYTools
+    Tools/PathResolver
     ${extra_deps}
 )
 
 # external dependencies
 find_package( ROOT COMPONENTS Gpad Graf Graf3d Core Tree MathCore Hist Tree RIO )
 
-#atlas_add_root_dictionary( SusyNtupleLib SusyNtupleLibCintDict
-#    ROOT_HEADERS 
 atlas_add_root_dictionary( SusyNtupleLib SusyNtupleCintDict 
             ROOT_HEADERS SusyNtuple/*.h Root/LinkDef.h
             EXTERNAL_PACKAGES ROOT
@@ -31,7 +30,7 @@ atlas_add_library( SusyNtupleLib
     SusyNtuple/*.h Root/*.cxx ${SusyNtupleCintDict}
     PUBLIC_HEADERS SusyNtuple 
     PRIVATE_INCLUDE_DIRS ${ROOT_INCLUDE_DIRS}
-    LINK_LIBRARIES SUSYToolsLib
+    LINK_LIBRARIES SUSYToolsLib PathResolver
     PRIVATE_LINK_LIBRARIES ${ROOT_LIBRARIES}
 )
 
@@ -53,4 +52,6 @@ file(GLOB files "util/*.cxx")
 foreach(file ${files})
     SusyNtExec(${file})
 endforeach()
+
+atlas_install_data( data/* )
 
