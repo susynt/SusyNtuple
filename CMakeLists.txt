@@ -12,7 +12,7 @@ set( extra_libs )
 # declare the SusyCommon package dependencies
 atlas_depends_on_subdirs(
     PUBLIC
-    SUSYPhys/SUSYTools
+    SUSYTools
     ${extra_deps}
 )
 
