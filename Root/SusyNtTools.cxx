@@ -130,8 +130,8 @@ bool SusyNtTools::passCosmicMuon(const MuonVector& baseMuons)
 }
 bool SusyNtTools::passJetCleaning(const JetVector& baseJets)
 {
-    // You must pass this function the 'Pre-Jets', i.e.
-    // the jets prior to baseline selection and overlap
+    // You must pass this function the 'Base-Jets', i.e.
+    // the jets after baseline selection and overlap
     // removal
     bool pass_jetCleaning = true;
     for(uint ijet=0; ijet<baseJets.size(); ijet++){
