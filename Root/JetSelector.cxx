@@ -213,7 +213,7 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
         pass = (jet->Pt()        > 20.0    &&
                 fabs(jet->Eta()) <  2.5    &&
                 passJvt(jet)               &&
-                jet->mv2c10      > mv2c10_77efficiency());
+                jet->mv2c10      > mv2c10_85efficiency());
     }
     return pass;
 }
@@ -234,7 +234,7 @@ bool JetSelector_Stop2L::isSignal(const Jet* jet)
     bool pass = false;
     if(jet) {
         pass =(jet->Pt()        > 20.0 &&
-               fabs(jet->Eta()) <  2.5 &&
+               fabs(jet->Eta()) <  2.8 &&
                passfJvt(jet) &&
                passJvt(jet));
     }

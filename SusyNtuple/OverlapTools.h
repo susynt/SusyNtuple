@@ -177,10 +177,7 @@ protected:
 /// implements OR procedure from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 class OverlapTools_Stop2L : public OverlapTools
 {
-    virtual void performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                JetVector& jets, TauVector& taus);
 };
-
 
 
 }

@@ -141,7 +141,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                 > default cone size is dRy = 0.2
     */
 
-    /* 
+    /*
     // tau OR not default -- TODO : add toggle to turn this on/off
 
     t_e_overlap(taus, electrons, 0.2);
@@ -950,19 +950,5 @@ void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, 
         } // for(iJ)
     } // for(iEl)
 }
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-// begin OverlapTools_Stop2L
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-void OverlapTools_Stop2L::performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                    JetVector& jets, TauVector& taus)
-{
-    e_j_overlap(electrons, jets, 0.2);
-    m_j_overlap(muons, jets, 0.2);
-    t_m_overlap(taus, muons, 0.2);
-    t_e_overlap(taus, electrons, 0.2);
-}
-
 //----------------------------------------------------------
 }; // namespace Susy
