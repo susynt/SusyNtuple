@@ -88,8 +88,6 @@ namespace Susy {
     /// Implement photon selector for Ana_Stop2L
     class PhotonSelector_Stop2L : public PhotonSelector
     {
-        virtual bool isBaseline(const Photon* ph); 
-        virtual bool isSignal(const Photon* ph);
     };
 
 } // namespace Susy

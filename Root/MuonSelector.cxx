@@ -44,7 +44,7 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_Stop2L :
         s = new MuonSelector_Stop2L();
         s->setSignalId(MuonId::Medium);
-        s->setSignalIsolation(Isolation::Gradient);
+        s->setSignalIsolation(Isolation::GradientLoose);
         break;
     default:
         cout<<"MuonSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
@@ -252,9 +252,9 @@ bool MuonSelector_Stop2L::isBaseline(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (mu->loose &&
+        pass = (mu->medium &&
                 mu->Pt()        > 10.0 &&
-                fabs(mu->Eta()) <  2.5);
+                fabs(mu->Eta()) <  2.4 );
     }
     return pass;
 }
@@ -265,10 +265,8 @@ bool MuonSelector_Stop2L::isSignal(const Muon* mu)
     if(mu) {
         pass = (mu->Pt() > 10.0 &&
                 isBaseline(mu) &&
-                mu->medium &&
-                mu->isoGradient
-                //passIpCut(mu)
-                );
+                mu->isoGradientLoose &&
+                passIpCut(mu));
     }
     return pass;
 }
