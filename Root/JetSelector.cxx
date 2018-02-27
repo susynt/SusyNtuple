@@ -59,7 +59,7 @@ bool JetSelector::isB(const Jet* jet)
 {
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
-            (jet->mv2c10      > mv2c10_77efficiency()) &&
+            (jet->mv2c10      > mv2c10_85efficiency()) &&
             (passJvt(jet)));
 }
 //----------------------------------------------------------
@@ -109,6 +109,21 @@ bool JetSelector::passJvt(const Jet* jet)
         pass = ((jet->jvt         >  0.59) ||
                 (fabs(jet->Eta()) >  2.4)  ||
                 (jet->Pt()         > 60.0) );
+    }
+    return pass;
+}
+//----------------------------------------------------------
+/*
+  Threshold as recommended at
+  https://twiki.cern.ch/twiki/bin/view/AtlasProtected/FJVTCalibration
+*/
+bool JetSelector::passfJvt(const Jet* jet)
+{
+    bool pass = false;
+    if(jet) {
+        pass = ((jet->fjvt        > 0.4) ||
+                (fabs(jet->Eta()) < 2.5)  ||
+                (jet->Pt()        > 50.0) );
     }
     return pass;
 }
@@ -209,7 +224,10 @@ bool JetSelector_Stop2L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (jet->Pt() > 20.0 );
+        pass = (jet->Pt() > 20.0 &&
+                fabs(jet->Eta()) <  4.5 &&
+                passJvt(jet) &&
+                passfJvt(jet));
     }
     return pass;
 }
@@ -219,7 +237,7 @@ bool JetSelector_Stop2L::isSignal(const Jet* jet)
     bool pass = false;
     if(jet) {
         pass =(jet->Pt()        > 20.0 &&
-               fabs(jet->Eta()) <  2.8 &&
+               fabs(jet->Eta()) <  2.5 &&
                passJvt(jet));
     }
     return pass;

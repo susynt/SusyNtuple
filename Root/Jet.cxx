@@ -16,6 +16,8 @@ Jet::Jet(const Jet &rhs):
   idx(rhs.idx),
   jvf(rhs.jvf),
   jvt(rhs.jvt),
+  fjvt(rhs.fjvt),
+  pass_fjvt(rhs.pass_fjvt),
   detEta(rhs.detEta),
   emfrac(rhs.emfrac),
   truthLabel(rhs.truthLabel),
@@ -66,6 +68,8 @@ Jet& Jet::operator=(const Jet &rhs)
     idx  = rhs.idx;
     jvf  = rhs.jvf; 
     jvt  = rhs.jvt; 
+    fjvt = rhs.fjvt;
+    pass_fjvt = rhs.pass_fjvt;
     detEta = rhs.detEta;
     emfrac = rhs.emfrac;
     truthLabel = rhs.truthLabel;

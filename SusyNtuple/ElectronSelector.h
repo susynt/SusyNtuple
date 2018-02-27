@@ -131,6 +131,7 @@ class ElectronSelector_SS3L : public ElectronSelector
 class ElectronSelector_Stop2L : public ElectronSelector
 {
     virtual bool passIpCut(const Electron  &el);
+    virtual bool isBaseline(const Electron* el);
     virtual bool isSignal(const Electron* el);
 };
 

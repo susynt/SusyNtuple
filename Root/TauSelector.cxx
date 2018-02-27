@@ -84,7 +84,20 @@ bool TauSelector_4Lep::isSignal(const Tau& tau)
 //----------------------------------------------------------
 // begin TauSelector_Stop2L Ana_Stop2L
 //----------------------------------------------------------
-
+bool TauSelector_Stop2L::isBaseline(const Tau& tau)
+{
+    return true; // isAccepted(tau)?
+}
+//----------------------------------------------------------
+bool TauSelector_Stop2L::isSignal(const Tau& tau)
+{
+    return (isBaseline(tau) &&
+            tau.Pt() > 20.0 					&&
+			std::abs(tau.Eta()) < 2.47			&& 
+			(tau.nTrack == 1 || tau.nTrack ==3 )
+			//std::abs(tau.q) == 1 
+            );
+}
 //----------------------------------------------------------
 } // namespace Susy
 

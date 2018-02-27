@@ -98,5 +98,26 @@ bool PhotonSelector::isSignal(const Photon* ph)
 // -------------------------------------------------------------------------------------------- //
 // begin PhotonSelector_Stop2L Ana_Stop2L
 // -------------------------------------------------------------------------------------------- //
+bool PhotonSelector_Stop2L::isBaseline(const Photon* ph)
+{
+    bool pass = false;
+    if(ph) {
+        bool pass_author = (ph->authorPhoton || ph->authorAmbiguous); // reco. as photon OR (photon AND ele)
+        pass = (ph->tight &&
+                ph->Pt()        > 10 &&
+                std::abs(ph->clusEtaBE) < 2.47 &&
+                pass_author);
+    }
+    return pass;
+}
+// -------------------------------------------------------------------------------------------- //
+bool PhotonSelector_Stop2L::isSignal(const Photon* ph)
+{
+    bool pass = false;
+    if(ph) {
+        pass = (isBaseline(ph));
+    }
+    return pass;
+}
 
 } // namespace Susy

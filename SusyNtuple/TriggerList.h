@@ -40,6 +40,7 @@ const std::vector<std::string> single_ele_triggers_list =
     "HLT_e12_lhloose",
     "HLT_e12_lhloose_L1EM10VH",
     "HLT_e15_lhloose_L1EM13VH",
+    "HLT_e17_lhvloose_nod0",
     "HLT_e17_lhloose",
     "HLT_e17_lhmedium",
     "HLT_e24_lhmedium_iloose_L1EM18VH",

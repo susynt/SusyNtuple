@@ -94,6 +94,8 @@ class TauSelector_SS3L : public TauSelector
 // Ana_Stop2L
 class TauSelector_Stop2L : public TauSelector
 {
+	virtual bool isBaseline(const Tau& tau);
+    virtual bool isSignal(const Tau& tau);
 };
 
 } // namespace Susy

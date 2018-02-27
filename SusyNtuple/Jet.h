@@ -21,6 +21,8 @@ public:
 
     float jvf;                ///< Jet vertex fraction
     float jvt;                ///< Jet vertex tagger
+    float fjvt;               ///< forward Jet vertex tagger
+    bool pass_fjvt; 
     float detEta;             ///< Detector eta
     float emfrac;             ///< EM fraction
     int truthLabel;           ///< Flavor truth label
@@ -84,7 +86,8 @@ public:
     // Clear vars
     void clear(){
       idx = 0;
-      jvf = jvt = truthLabel = nTracks = 0;
+      jvf = jvt = fjvt = truthLabel = nTracks = 0;
+      pass_fjvt = false;
       sumTrkPt = 0;
       matchTruth = false;
       bjet = false;
@@ -119,7 +122,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 22);
+    ClassDef(Jet, 23);
 };
 } // Susy
 #endif
