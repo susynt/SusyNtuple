@@ -59,7 +59,7 @@ bool JetSelector::isB(const Jet* jet)
 {
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
-            (jet->mv2c10      > mv2c10_85efficiency()) &&
+            (jet->mv2c10      > mv2c10_77efficiency()) &&
             (passJvt(jet)));
 }
 //----------------------------------------------------------
@@ -213,7 +213,7 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
         pass = (jet->Pt()        > 20.0    &&
                 fabs(jet->Eta()) <  2.5    &&
                 passJvt(jet)               &&
-                jet->mv2c10      > mv2c10_85efficiency());
+                jet->mv2c10      > mv2c10_77efficiency());
     }
     return pass;
 }
@@ -224,10 +224,7 @@ bool JetSelector_Stop2L::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (jet->Pt() > 20.0 &&
-                fabs(jet->Eta()) <  4.5 &&
-                passJvt(jet) &&
-                passfJvt(jet));
+        pass = (jet->Pt() > 20.0 );
     }
     return pass;
 }
@@ -238,6 +235,7 @@ bool JetSelector_Stop2L::isSignal(const Jet* jet)
     if(jet) {
         pass =(jet->Pt()        > 20.0 &&
                fabs(jet->Eta()) <  2.5 &&
+               passfJvt(jet) &&
                passJvt(jet));
     }
     return pass;
