@@ -241,7 +241,7 @@ bool Susy3LepCutflow::passEventCleaning(int flags, const MuonVector& preMuons,
 bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& taus, 
                                   const JetVector& jets, const Met* met)
 {
-
+  (void)jets;
   if(!passNLepCut(leptons)) return false;
   n_pass_nLep++;
   if(!passNTauCut(taus)) return false;
@@ -272,6 +272,11 @@ bool Susy3LepCutflow::selectEvent(const LeptonVector& leptons, const TauVector& 
 void Susy3LepCutflow::fillHistos(const LeptonVector& leptons, const TauVector& taus,
                                  const JetVector& jets, const Met* met, float weight)
 {
+  (void)leptons;
+  (void)taus;
+  (void)jets;
+  (void)met;
+  (void)weight;
   // Fill histograms here
 }
 
@@ -296,21 +301,26 @@ void Susy3LepCutflow::finalizeHistos()
 bool Susy3LepCutflow::passNLepCut(const LeptonVector& leptons)
 {
   uint nLep = leptons.size();
-  if(m_nLepMin>=0 && nLep < m_nLepMin) return false;
-  if(m_nLepMax>=0 && nLep > m_nLepMax) return false;
+  //if(m_nLepMin>=0 && nLep < m_nLepMin) return false;
+  //if(m_nLepMax>=0 && nLep > m_nLepMax) return false;
+  if(nLep < m_nLepMin) return false;
+  if(nLep > m_nLepMax) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passNTauCut(const TauVector& taus)
 {
   uint nTau = taus.size();
-  if(m_nTauMin>=0 && nTau < m_nTauMin) return false;
-  if(m_nTauMax>=0 && nTau > m_nTauMax) return false;
+  //if(m_nTauMin>=0 && nTau < m_nTauMin) return false;
+  //if(m_nTauMax>=0 && nTau > m_nTauMax) return false;
+  if(nTau < m_nTauMin) return false;
+  if(nTau > m_nTauMax) return false;
   return true;
 }
 /*--------------------------------------------------------------------------------*/
 bool Susy3LepCutflow::passTrigger(const LeptonVector& leptons) 
 {
+  (void)leptons;
   //if(!m_trigObj->passTriggerMatching(leptons, m_signalTaus, nt.evt())) return false;
   return true;
 }

@@ -320,6 +320,7 @@ void Susy2LepCutflow::check_njet_selections(const JetVector& jets)
 void Susy2LepCutflow::check_jetmet_selections(const JetVector& jets, const Met* met,
             const LeptonVector& leptons)
 {
+    (void)met;
     size_t n_jets = jets.size();
     JetVector bjets;
     JetVector fjets;

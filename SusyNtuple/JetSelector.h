@@ -75,6 +75,7 @@ public:
     virtual bool isForward(const Jet* jet);
     /// The jet-vertex-fraction requirement: usually applied to low-pt central jets
     static bool passJvt(const Jet* jet);
+    bool passfJvt(const Jet* jet);
 
     virtual bool isBaseline(const Jet* jet); ///< often analsysi-dependent
     virtual bool isSignal(const Jet* jet); ///< often analsysi-dependent
@@ -157,7 +158,10 @@ public:
 };
 
 /// implements jet selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
-class JetSelector_Stop2L : public JetSelector
+class JetSelector_Stop2L : public JetSelector {
+};
+
+class JetSelector_HLFV : public JetSelector
 {
     virtual bool isBaseline(const Jet* jet);
     virtual bool isSignal(const Jet* jet);

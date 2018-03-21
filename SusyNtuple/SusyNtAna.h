@@ -61,6 +61,7 @@ class SusyNtAna : public TSelector
     /** Get entry simply communicates the entry number from TSelector 
         to this class and hence to all of the VarHandles */
     virtual Int_t   GetEntry(Long64_t e, Int_t getall = 0) {
+      (void)getall;
       m_entry=e;
       return kTRUE;
     }

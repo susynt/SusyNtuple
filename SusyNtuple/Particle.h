@@ -32,7 +32,10 @@ public:
 
     /// Systematic-shifted state for particles.
     /** Base class method simply resets */
-    void setState(int sys){ resetTLV(); };
+    void setState(int sys){ 
+        (void)sys;
+        resetTLV(); 
+    };
 
     void clear() {
       TLorentzVector::Clear();

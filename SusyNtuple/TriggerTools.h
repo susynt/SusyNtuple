@@ -63,8 +63,8 @@ class TriggerTools {
         bool passTrigger(const TBits& triggerbits, const std::string &triggerName) const;
 
         // Dilepton Trigger Match
-        static const float ele_match_pt() { return DILEPTON_TRIG_MATCH_ELE_PT; }
-        static const float muo_match_pt() { return DILEPTON_TRIG_MATCH_MUO_PT; }
+        static const float& ele_match_pt() { return DILEPTON_TRIG_MATCH_ELE_PT; }
+        static const float& muo_match_pt() { return DILEPTON_TRIG_MATCH_MUO_PT; }
 
         bool lepton_trigger_match(Susy::Lepton* lep, std::string trigger);
         bool dilepton_trigger_match(Susy::Event* evt, Susy::Lepton* lep0, Susy::Lepton* lep1, std::string trigger="");

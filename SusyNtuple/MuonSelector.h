@@ -120,7 +120,10 @@ class MuonSelector_SS3L : public MuonSelector
 };
 
 /// implements Muon selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
-class MuonSelector_Stop2L : public MuonSelector
+class MuonSelector_Stop2L : public MuonSelector {
+};
+
+class MuonSelector_HLFV : public MuonSelector 
 {
     virtual bool isBaseline(const Muon* mu);
     virtual bool isSignal(const Muon* mu);

@@ -348,6 +348,7 @@ void SusyLepTrigExample::test_single_ele_trigger(Susy::Electron* electron, strin
 void SusyLepTrigExample::test_dimuon_trigger(Susy::Muon* mu0, Susy::Muon* mu1, string trigger,
             pair<float, float> thresholds, int dimu_idx)
 {
+    (void)thresholds;
     //int idx = nttools().triggerTool().idx_of_trigger(trigger);
 
     // did the trigger even fire?

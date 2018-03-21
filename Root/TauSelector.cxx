@@ -21,6 +21,7 @@ TauSelector* TauSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_2LepWH : selector = new TauSelector_2LepWH();    break;
     case AnalysisType::Ana_SS3L   : selector = new TauSelector_SS3L();      break;
     case AnalysisType::Ana_Stop2L : selector = new TauSelector_Stop2L();    break;
+    case AnalysisType::Ana_HLFV   : selector = new TauSelector_HLFV();      break;
     default:
         cout<<"TauSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla TauSelector"<<endl;
@@ -34,18 +35,18 @@ TauSelector::TauSelector():
 {
 }
 //----------------------------------------------------------
-bool TauSelector::isBaseline(const Tau& tau)
+bool TauSelector::isBaseline(const Tau* tau)
 {
-    return ( (std::abs(tau.Eta()) < 2.5) &&
-             (tau.nTrack > 0) &&
-             (tau.medium) );
+    return ( (std::abs(tau->Eta()) < 2.5) &&
+             (tau->nTrack > 0) &&
+             (tau->medium) );
 }
 //----------------------------------------------------------
-bool TauSelector::isSignal(const Tau& tau)
+bool TauSelector::isSignal(const Tau* tau)
 {
     return (isBaseline(tau) &&
-            std::abs(tau.Eta()) < 2.47 &&
-            tau.Pt() > 20);
+            std::abs(tau->Eta()) < 2.47 &&
+            tau->Pt() > 20);
 }
 //----------------------------------------------------------
 //----------------------------------------------------------
@@ -63,18 +64,18 @@ bool TauSelector::isSignal(const Tau& tau)
 //----------------------------------------------------------
 // begin TauSelector_4Lep Ana_4Lep
 //----------------------------------------------------------
-bool TauSelector_4Lep::isBaseline(const Tau& tau)
+bool TauSelector_4Lep::isBaseline(const Tau* tau)
 {
-    return (tau.Pt() > 20.0 					&&
-			std::abs(tau.Eta()) < 2.47			&& 
-			(tau.nTrack == 1 || tau.nTrack ==3 )&&
-			std::abs(tau.q) == 1 );
+    return (tau->Pt() > 20.0 					&&
+			std::abs(tau->Eta()) < 2.47			&& 
+			(tau->nTrack == 1 || tau->nTrack ==3 )&&
+			std::abs(tau->q) == 1 );
 }
 //----------------------------------------------------------
-bool TauSelector_4Lep::isSignal(const Tau& tau)
+bool TauSelector_4Lep::isSignal(const Tau* tau)
 {
     return (isBaseline(tau) &&
-            tau.medium);
+            tau->medium);
 }
 
 //----------------------------------------------------------
@@ -82,9 +83,23 @@ bool TauSelector_4Lep::isSignal(const Tau& tau)
 //----------------------------------------------------------
 
 //----------------------------------------------------------
-// begin TauSelector_Stop2L Ana_Stop2L
+// begin TauSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
-
+bool TauSelector_HLFV::isBaseline(const Tau* tau)
+{
+    return true; // isAccepted(tau)?
+}
+//----------------------------------------------------------
+bool TauSelector_HLFV::isSignal(const Tau* tau)
+{
+    return (isBaseline(tau) &&
+            tau->medium                         &&
+            tau->Pt() > 20.0 					&&
+			std::abs(tau->Eta()) < 2.47			&& 
+			(tau->nTrack == 1 || tau->nTrack ==3 )
+			//std::abs(tau->q) == 1 
+            );
+}
 //----------------------------------------------------------
 } // namespace Susy
 

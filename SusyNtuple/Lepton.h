@@ -98,7 +98,10 @@ public:
     // Polymorphism, baby!!
     virtual bool isEle() const { return false; }
     virtual bool isMu()  const { return false; }
-    void setState(int sys){ resetTLV(); }
+    void setState(int sys){ 
+        (void)sys;
+        resetTLV(); 
+    }
 
     /// Print method
     virtual void print() const {};

@@ -37,6 +37,10 @@ PhotonSelector* PhotonSelector::build(const AnalysisType &a, bool verbose)
         p = new PhotonSelector_Stop2L();
         p->setSignalIsolation(Isolation::FixedCutTight);
         break;
+    case AnalysisType::Ana_HLFV :
+        p = new PhotonSelector_HLFV();
+        p->setSignalIsolation(Isolation::FixedCutTight);
+        break;
     default :
         cout << "PhotonSelector::build(): unknown analysis type '" << AnalysisType2str(a) << "'"
              << " returning vanilla PhotonSelector" << endl;

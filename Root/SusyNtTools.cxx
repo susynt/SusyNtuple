@@ -164,6 +164,7 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
 
     else if( a == AnalysisType::Ana_SS3L )   { m_doSFOS = false; }
     else if( a == AnalysisType::Ana_Stop2L ) { m_doSFOS = false; }
+    else if( a == AnalysisType::Ana_HLFV ) { m_doSFOS = false; }
 
     else if( a == AnalysisType::kUnknown ) {
         string error = "SusyNtTools::setSFOSRemoval error: ";
@@ -176,7 +177,7 @@ void SusyNtTools::setSFOSRemoval(AnalysisType a)
     else {
         string error = "SusyNtTools::setSFOSRemoval error: ";
         cout << error << "SusyNtTools is not configured for the AnalysisType (" << AnalysisType2str(a) << ") provided in" << endl;
-        cout << error << "'setAnaTypee'! Be sure that your AnalyssiType is provided for in SusyNtuple/AnalysisTyp.eh" << endl;
+        cout << error << "'setAnaType'! Be sure that your AnalyssiType is provided for in SusyNtuple/AnalysisType.h" << endl;
         cout << error << "and that you provide the necessary requirements for your analysis in 'setAnaType'." << endl;
         cout << error << ">>> Exiting." << endl;
         exit(1);
@@ -543,7 +544,7 @@ bool SusyNtTools::isSignal(const Lepton* l)
 {
     if(l->isEle()) return electronSelector().isSignal((Electron*)l);
     else           return muonSelector().isSignal((Muon*)l);
-};
+}
 /*--------------------------------------------------------------------------------*/
 bool SusyNtTools::isSignal(const Electron* e)
 {

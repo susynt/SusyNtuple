@@ -128,9 +128,13 @@ class ElectronSelector_SS3L : public ElectronSelector
 };
 
 /// implements electron selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
-class ElectronSelector_Stop2L : public ElectronSelector
+class ElectronSelector_Stop2L : public ElectronSelector {
+};
+
+class ElectronSelector_HLFV : public ElectronSelector
 {
     virtual bool passIpCut(const Electron  &el);
+    virtual bool isBaseline(const Electron* el);
     virtual bool isSignal(const Electron* el);
 };
 

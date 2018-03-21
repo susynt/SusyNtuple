@@ -67,7 +67,7 @@ namespace Susy
   };
 
 
-};
+}
 
 
 #endif

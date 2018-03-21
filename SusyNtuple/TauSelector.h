@@ -39,13 +39,13 @@ public:
     /**
        Usually pt+bdt
     */
-    virtual bool isBaseline(const Tau& tau);
+    virtual bool isBaseline(const Tau* tau);
     /// wraps above
-    bool isBaseline(const Tau* tau) { return isBaseline(*tau); }
+    //bool isBaseline(const Tau* tau) { return isBaseline(*tau); }
     /// whether tau passes the signal criteria
-    virtual bool isSignal(const Tau& tau);
+    virtual bool isSignal(const Tau* tau);
     /// wraps above
-    virtual bool isSignal(const Tau* tau) { return isSignal(*tau); }
+    //virtual bool isSignal(const Tau* tau) { return isSignal(*tau); }
 
 protected :
     /// whether it should be verbose
@@ -74,8 +74,8 @@ class TauSelector_3Lep : public TauSelector
 /// 4Leptons search
 class TauSelector_4Lep : public TauSelector
 {
-	virtual bool isBaseline(const Tau& tau);
-    virtual bool isSignal(const Tau& tau);
+	virtual bool isBaseline(const Tau* tau);
+    virtual bool isSignal(const Tau* tau);
 };
 
 /// implements tau selection for ATL-COM-PHYS-2014-221
@@ -92,8 +92,13 @@ class TauSelector_SS3L : public TauSelector
 
 /// implements tau selection from https://twiki.cern.ch/twiki/bin/view/AtlasProtected/DirectStop2Lepton
 // Ana_Stop2L
-class TauSelector_Stop2L : public TauSelector
+class TauSelector_Stop2L : public TauSelector {
+};
+
+class TauSelector_HLFV : public TauSelector
 {
+	virtual bool isBaseline(const Tau* tau);
+    virtual bool isSignal(const Tau* tau);
 };
 
 } // namespace Susy

@@ -90,6 +90,11 @@ namespace Susy {
     {
     };
 
+    /// Implement photon selector for Ana_HLFV
+    class PhotonSelector_HLFV : public PhotonSelector
+    {
+    };
+
 } // namespace Susy
 
 #endif

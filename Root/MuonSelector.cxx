@@ -44,7 +44,12 @@ MuonSelector* MuonSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_Stop2L :
         s = new MuonSelector_Stop2L();
         s->setSignalId(MuonId::Medium);
-        s->setSignalIsolation(Isolation::GradientLoose);
+        s->setSignalIsolation(Isolation::Gradient);
+        break;
+    case AnalysisType::Ana_HLFV :
+        s = new MuonSelector_HLFV();
+        s->setSignalId(MuonId::Medium);
+        s->setSignalIsolation(Isolation::Gradient);
         break;
     default:
         cout<<"MuonSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
@@ -246,29 +251,32 @@ bool MuonSelector_SS3L::isSignal(const Muon* mu)
     return pass;
 }
 //----------------------------------------------------------
-// begin MuonSelector_Stop2L Ana_Stop2L
+// begin MuonSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
-bool MuonSelector_Stop2L::isBaseline(const Muon* mu)
+bool MuonSelector_HLFV::isBaseline(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (mu->medium &&
-                mu->Pt()        > 10.0 &&
-                fabs(mu->Eta()) <  2.4 );
+        pass = (mu->loose &&
+                mu->Pt() > 2.0
+               );
     }
     return pass;
 }
 //----------------------------------------------------------
-bool MuonSelector_Stop2L::isSignal(const Muon* mu)
+bool MuonSelector_HLFV::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (mu->Pt() > 10.0 &&
-                isBaseline(mu) &&
-                mu->isoGradientLoose &&
-                passIpCut(mu));
+        pass = (isBaseline(mu) &&
+                mu->Pt() >= 10.0 &&
+                fabs(mu->Eta()) <= 2.47 &&
+                mu->medium &&
+                mu->isoGradient
+                //passIpCut(mu)
+                );
     }
     return pass;
 }
 //----------------------------------------------------------
-}; // namespace Susy
+} // namespace Susy

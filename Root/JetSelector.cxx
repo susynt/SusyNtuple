@@ -23,6 +23,7 @@ JetSelector* JetSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_2LepWH : selector = new JetSelector_2LepWH(); break;
     case AnalysisType::Ana_SS3L   : selector = new JetSelector_SS3L(); break;
     case AnalysisType::Ana_Stop2L : selector = new JetSelector_Stop2L(); break;
+    case AnalysisType::Ana_HLFV : selector = new JetSelector_HLFV(); break;
     default:
         cout<<"JetSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla JetSelector"<<endl;
@@ -59,7 +60,7 @@ bool JetSelector::isB(const Jet* jet)
 {
     return ((jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
-            (jet->mv2c10      > mv2c10_77efficiency()) &&
+            (jet->mv2c10      > mv2c10_85efficiency()) &&
             (passJvt(jet)));
 }
 //----------------------------------------------------------
@@ -79,10 +80,8 @@ bool JetSelector::isCentralB(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (jet->Pt()         > 20.0 &&
-                fabs(jet->detEta) <  2.4 &&
-                passJvt(jet) &&
-                isB(jet));
+        pass = (isB(jet) && 
+                fabs(jet->detEta) <  2.4);
     }
     return pass;
 }
@@ -110,6 +109,22 @@ bool JetSelector::passJvt(const Jet* jet)
                 (fabs(jet->Eta()) >  2.4)  ||
                 (jet->Pt()         > 60.0) );
     }
+    return pass;
+}
+//----------------------------------------------------------
+/*
+  Threshold as recommended at
+  https://twiki.cern.ch/twiki/bin/view/AtlasProtected/FJVTCalibration
+*/
+bool JetSelector::passfJvt(const Jet* jet)
+{
+    bool pass = false;
+    // fJVT not defined yet
+    //if(jet) {
+    //    pass = ((jet->fjvt        > 0.4) ||
+    //            (fabs(jet->Eta()) < 2.5)  ||
+    //            (jet->Pt()        > 50.0) );
+    //}
     return pass;
 }
 //----------------------------------------------------------
@@ -203,24 +218,26 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
     return pass;
 }
 //----------------------------------------------------------
-// begin JetSelector_Stop2L Ana_Stop2L
+// begin JetSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
-bool JetSelector_Stop2L::isBaseline(const Jet* jet)
+bool JetSelector_HLFV::isBaseline(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass = (jet->Pt() > 20.0 );
+        pass = (jet->Pt() > 20.0 &&
+                fabs(jet->Eta()) <  4.5 &&
+                //passfJvt(jet) &&
+                passJvt(jet));
     }
     return pass;
 }
 //----------------------------------------------------------
-bool JetSelector_Stop2L::isSignal(const Jet* jet)
+bool JetSelector_HLFV::isSignal(const Jet* jet)
 {
     bool pass = false;
     if(jet) {
-        pass =(jet->Pt()        > 20.0 &&
-               fabs(jet->Eta()) <  2.8 &&
-               passJvt(jet));
+        pass = (isBaseline(jet) && 
+                fabs(jet->Eta()) <  2.5);
     }
     return pass;
 }

@@ -46,7 +46,12 @@ ElectronSelector* ElectronSelector::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_Stop2L:
         s = new ElectronSelector_Stop2L();
         s->setSignalId(ElectronId::MediumLLH);
-        s->setSignalIsolation(Isolation::GradientLoose);
+        s->setSignalIsolation(Isolation::Gradient);
+        break;
+    case AnalysisType::Ana_HLFV:
+        s = new ElectronSelector_HLFV();
+        s->setSignalId(ElectronId::MediumLLH);
+        s->setSignalIsolation(Isolation::Gradient);
         break;
     default:
         cout<<"ElectronSelector::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
@@ -252,23 +257,38 @@ bool ElectronSelector_SS3L::isSignal(const Electron* el)
 }
 
 //----------------------------------------------------------
-// begin ElectronSelector_Stop2L Ana_Stop2L
+// begin ElectronSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
-bool ElectronSelector_Stop2L::passIpCut(const Electron &el)
+bool ElectronSelector_HLFV::passIpCut(const Electron &el)
 {
     return (std::abs(el.d0sigBSCorr)  < 3.0 &&
             std::abs(el.z0SinTheta()) < 0.5 );
 
 }
+//---------------------------------------------------------
+bool ElectronSelector_HLFV::isBaseline(const Electron* el)
+{
+    bool pass = false;
+    if(el) {
+        pass = (el->looseLLHBLayer && // good for all
+                el->passOQBadClusElectron &&
+                el->Pt()  > 15.0 &&
+                outsideCrackRegion(*el) &&
+                std::abs(el->clusEta) < 2.47 && // SUSYTools uses CaloCluster::eta() for this but CaloCluster::etaBE(2) for crack region...
+                std::abs(el->clusEtaBE) < 2.47 );
+    }
+    return pass;
+}
 //----------------------------------------------------------
-bool ElectronSelector_Stop2L::isSignal(const Electron* el)
+bool ElectronSelector_HLFV::isSignal(const Electron* el)
 {
     bool pass = false;
     if(el) {
         pass = (isBaseline(el) &&
                 el->mediumLLH &&
-                el->isoGradientLoose &&
-                passIpCut(*el));
+                el->isoGradient 
+                //passIpCut(*el)
+                );
     }
     return pass;
 }

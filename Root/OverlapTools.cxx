@@ -107,6 +107,9 @@ OverlapTools* OverlapTools::build(const AnalysisType &a, bool verbose)
     case AnalysisType::Ana_Stop2L :
         o = new OverlapTools_Stop2L();
         break;
+    case AnalysisType::Ana_HLFV :
+        o = new OverlapTools_HLFV();
+        break;
     default:
         cout<<"OverlapTools::build(): unknown analysis type '"<<AnalysisType2str(a)<<"'"
             <<" returning vanilla OverlapTools"<<endl;
@@ -127,6 +130,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                                     JetVector& jets, TauVector& taus, PhotonVector& photons)
 {
 
+    std::cout << "Removing Standard Overlap" << std::endl; 
     // ---------------------------------------------- //
     /*    Implement default SUSYTools OR              */
     // ---------------------------------------------- //
@@ -141,7 +145,7 @@ void OverlapTools::performOverlap(ElectronVector& electrons, MuonVector& muons,
                 > default cone size is dRy = 0.2
     */
 
-    /*
+    /* 
     // tau OR not default -- TODO : add toggle to turn this on/off
 
     t_e_overlap(taus, electrons, 0.2);
@@ -666,289 +670,33 @@ void OverlapTools::j_p_overlap(JetVector& jets, PhotonVector& photons, double dR
 // begin OverlapTools_4Lep Ana_4Lep
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-void OverlapTools_4Lep::performOverlap(ElectronVector& electrons, MuonVector& muons,
-				       TauVector& taus,TauVector& LOOSEtaus, JetVector& jets, PhotonVector& photons, bool m_TauCtrlReg)
-{
 
-    // if PhotonVector is empty, photon overlap won't be performed
-    // if m_TauCtrlReg, then jets will be discarded on overlap with loose taus
-    /// updated for SUSYTools/harmonization consistency Feb/16
 
-    /*1*/   if(!m_TauCtrlReg) t_e_overlap(taus,electrons,0.2); // straightforward dR comparison
-            else t_e_overlap(LOOSEtaus,electrons,0.2);
-    /*2*/   if(!m_TauCtrlReg) t_m_overlap(taus, muons,0.2);    // dR comparison for taus pT<50. For tau pT>50, only compare to combined muons
-            else t_m_overlap(LOOSEtaus, muons,0.2);
-
-    /*3*/   e_m_overlap(electrons,muons);    // discard electrons sharing ID track with muons (Calo muons are be removed first if they share a track with an electron)
-    /*4,5*/ photon_lep_overlap(photons, electrons, muons, 0.4);	// discard pho overlapping with e/mu
-    /*6*/   j_e_overlap(electrons, jets, 0.2);  // discard non-b-tagged jets with dR<0.2
-            e_j_overlap(electrons,jets,0.4);    // discard ele with dR<0.4 to non-pileup jets
-
-    /*7*/   j_m_overlap(muons, jets,0.2);  // discard jets with few tracks or small jet/mu pT ratio.
-            m_j_overlap(muons, jets,0.4);       // discard ele with dR<0.4 to non-pileup jets
-
-    /*8*/   if(!m_TauCtrlReg) j_t_overlap(taus,jets,0.2);  // discard jets overlapping with signal taus
-            else j_t_overlap(LOOSEtaus,jets,0.2);  // compare to all loose taus for CR
-
-    /*9*/   j_photon_overlap(photons, jets, 0.4);	// discard jet overlapping with photon
-}
-
-//----------------------------------------------------------
-void OverlapTools_4Lep::e_m_overlap(ElectronVector& electrons, MuonVector& muons)
-{
-    if(electrons.size()==0 || muons.size()==0) return;
-
-    bool removeCaloMuons=true;
-    if(m_useOldOverlap) removeCaloMuons=false;
-
-    // Discard Calo muons if they share a track with an electron
-    if( removeCaloMuons ){
-        for(int iMu=muons.size()-1; iMu>=0; iMu--){
-            const Muon* mu = muons.at(iMu);
-            if(!mu->isCaloTagged) continue;
-            for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
-                const Electron* e = electrons.at(iEl);
-
-                // compare the tracks and dR to make sure it is overlapping THIS muon track
-                if( eleMuSharedTrack(e, mu) && e->DeltaRy(*mu) < 0.001){
-                    muons.erase(muons.begin()+iMu);
-                    break;
-                }
-            } // iEl
-        } // iMu
-    } // if removeCaloMuons
-
-    // discard electrons sharing ID track with surviving muons
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
-        const Electron* e = electrons.at(iEl);
-        for(int iMu=muons.size()-1; iMu>=0; iMu--){
-            const Muon* mu = muons.at(iMu);
-
-            if( eleMuSharedTrack(e, mu) && e->DeltaRy(*mu) < 0.001){
-                electrons.erase(electrons.begin()+iEl);
-                break;
-            }
-        } // iMu
-    } // iEl
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::t_m_overlap(TauVector& taus, MuonVector& muons, double dR)
-{
-    if(taus.size()==0 || muons.size()==0) return;
-
-    for(int iTau=taus.size()-1; iTau>=0; iTau--){
-        const Tau* tau = taus.at(iTau);
-        for(int iMu=muons.size()-1; iMu>=0; iMu--){
-            const Muon* mu = muons.at(iMu);
-            //High-pT taus are only compared to combined muons
-            if(tau->Pt()>50.0 && !mu->isCombined) continue;
-
-            if(tau->DeltaRy(*mu) < dR){
-                taus.erase(taus.begin()+iTau);
-                break;
-            } // if(dR< )
-
-        } // for(iMu)
-    } // for(iTau)
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::photon_lep_overlap(PhotonVector& photons, ElectronVector& /*pre*/electrons, MuonVector& /*pre*/muons, double dR)
-{
-    if( photons.size()==0) return;
-
-    // discard photons overlapping with muons
-    for(int iPho=photons.size()-1; iPho>=0; iPho--){
-        const Photon* pho = photons.at(iPho);
-        for(int iMu=muons.size()-1; iMu>=0; iMu--){
-            const Muon* mu = muons.at(iMu);
-
-            if(pho->DeltaRy(*mu) < dR){
-                photons.erase(photons.begin()+iPho);
-                break;
-            } // if(dR< )
-
-        } // for(iMu)
-    } // for(iPho)
-
-    // discard photons overlapping with electrons
-    for(int iPho=photons.size()-1; iPho>=0; iPho--){
-        const Photon* pho = photons.at(iPho);
-        for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
-            const Electron* el = electrons.at(iEl);
-
-            if(pho->DeltaRy(*el) < dR){
-                photons.erase(photons.begin()+iPho);
-                break;
-            } // if(dR< )
-
-        } // for(iEl)
-    } // for(iPho)
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
-{
-    if(electrons.size()==0 || jets.size()==0) return;
-
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
-        const Electron* e = electrons.at(iEl);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-
-            bool is_bjet = isBJetOR(j);
-            // only compare non-b-tagged jets
-            if( is_bjet ) continue;
-
-            if(e->DeltaRy(*j) < dR) {
-                if(verbose()) print_rm_msg("j_e_overlap: ", j, e);
-                jets.erase(jets.begin()+iJ);
-            }
-
-        } // iJ
-    } // iEl
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::e_j_overlap(ElectronVector& electrons, JetVector& jets, double dR)
-{
-    if(electrons.size()==0 || jets.size()==0) return;
-
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--){
-        const Electron* e = electrons.at(iEl);
-        for(size_t iJ=0; iJ<jets.size(); iJ++){
-            const Jet* j = jets.at(iJ);
-
-            bool pass_jvt = JetSelector::passJvt(j);
-            //don't compare with pileup jets
-            if( !m_useOldOverlap && !pass_jvt ) continue;
-                if(e->DeltaRy(*j) < dR) {
-                    if(verbose()) print_rm_msg("e_j_overlap: ", e, j);
-                    electrons.erase(electrons.begin()+iEl);
-                    break;
-                }
-        } // for(iJ)
-    } // for(iEl)
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::j_m_overlap(MuonVector& muons, JetVector& jets, double dR)
-{
-    if(m_useOldOverlap) return;
-    if(muons.size()==0 || jets.size()==0) return;
-
-    for(int iMu=muons.size()-1; iMu>=0; iMu--) {
-        const Muon* mu = muons.at(iMu);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-
-            bool is_bjet = isBJetOR(j);
-            // only compare non-b-tagged jets
-            if( is_bjet ) continue;
-
-            bool discard_jet = false;
-
-            // only compare jets with high nTrk and low mu/jet pt ratio
-            int jet_nTrk = j->nTracks;
-            double sumTrkPt = j->sumTrkPt;
-            if( jet_nTrk >= 3  && (mu->Pt()/j->Pt() < 0.5 || mu->Pt()/sumTrkPt < 0.7)) continue;
-            if(mu->DeltaRy(*j) < dR) discard_jet = true;
-
-            // discard jets with ghost tracks matched to the muon
-            if(muonIsGhostMatched(mu, j) && mu->DeltaRy(*j) < dR ) discard_jet=true;
-
-            if(discard_jet) {
-                if(verbose()) print_rm_msg("j_m_overlap: ", j, mu);
-                jets.erase(jets.begin()+iJ);
-            }
-
-        } // iJ
-    } // iMu
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::m_j_overlap(MuonVector& muons, JetVector& jets, double dR)
-{
-    if(muons.size()==0 || jets.size()==0) return;
-
-    for(int iMu=muons.size()-1; iMu>=0; iMu--){
-        const Muon* mu = muons.at(iMu);
-        for(size_t iJ=0; iJ<jets.size(); iJ++){
-            const Jet* j = jets.at(iJ);
-
-            bool pass_jvt = m_jetSelector->passJvt(j);
-            //don't compare with pileup jets
-            if( !m_useOldOverlap && !pass_jvt ) continue;
-
-            if(mu->DeltaRy(*j) < dR) {
-                if(verbose()) print_rm_msg("m_j_overlap: ", mu, j);
-                muons.erase(muons.begin()+iMu);
-                break;
-            }
-
-        } // for(iJ)
-    } // for(iMu)
-}
-//----------------------------------------------------------
-void OverlapTools_4Lep::j_photon_overlap(PhotonVector& photons, JetVector& jets, double dR)
-{
-    if(photons.size()==0 || jets.size()==0) return;
-    for(int iPh=photons.size()-1; iPh>=0; iPh--) {
-        const Photon* ph = photons.at(iPh);
-
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-
-            if(ph->DeltaRy(*j) < dR) {
-                jets.erase(jets.begin()+iJ);
-            }
-        } // iJ
-    } // iPh
-}
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // begin OverlapTools_SS3L
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-OverlapTools_SS3L::OverlapTools_SS3L():
-    OverlapTools(),
-    m_jetSelector(nullptr){}
-//----------------------------------------------------------
-void OverlapTools_SS3L::performOverlap(ElectronVector& electrons, MuonVector& muons,
-                                    JetVector& jets, TauVector& taus)
+
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+// begin OverlapTools_HLFV
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+void OverlapTools_HLFV::performOverlap(ElectronVector& electrons, MuonVector& muons,
+                                    JetVector& jets, TauVector& taus, PhotonVector& photons)
 {
+    (void)photons;
+    t_m_overlap(taus, muons, 0.2);
+    t_e_overlap(taus, electrons, 0.2);
     j_e_overlap(electrons, jets, 0.2);
-    e_j_overlap(electrons, jets, 0.4);
-    m_j_overlap(muons, jets, 0.4);
-    e_m_overlap(electrons, muons, 0.01);
-    e_e_overlap(electrons, 0.05);
+    //e_j_overlap(electrons, jets, 0.4);
+    j_m_overlap(jets, muons, 0.2, false, true);
+    //m_j_overlap(muons, jets, 0.4, false, true);
+    j_t_overlap(taus, jets, 0.2);
+    e_m_overlap(electrons, muons, 0.2);
 }
-//----------------------------------------------------------
-void OverlapTools_SS3L::j_e_overlap(ElectronVector& electrons, JetVector& jets, double dR)
-{
-    // doing BjetOR procedure:
-    //  > if electron close to jet:
-    //       --> if bjet: keep the jet, remove electron
-    //       --> if not bjet: remove the jet, keep the electron
-    if(electrons.size()==0 || jets.size()==0) return;
-    JetSelector_SS3L* jetSelector = static_cast<JetSelector_SS3L*>(JetSelector::build(AnalysisType::Ana_SS3L, true));
-    if(not jetSelector) {
-        cerr<<"OverlapTools_SS3L: cannot perform j_e_overlap without JetSelector"<<endl
-            <<"Please call OverlapTools_SS3L::jetSelector(JetSelector*)"<<endl;
-        // assert(false);
-    }
-    for(int iEl=electrons.size()-1; iEl>=0; iEl--) {
-        const Electron* e = electrons.at(iEl);
-        for(int iJ=jets.size()-1; iJ>=0; iJ--){
-            const Jet* j = jets.at(iJ);
-            if(e->DeltaRy(*j) < dR){
-                bool isBjet = jetSelector->isB_for_OR(j);
-                if(isBjet) {
-                    if(verbose()) print_rm_msg("j_e_overlap: ", e, j);
-                    electrons.erase(electrons.begin()+iEl);
-                    break; // loop electron no longer exists
-                } else {
-                    if(verbose()) print_rm_msg("j_e_overlap: ", j, e);
-                    jets.erase(jets.begin()+iJ);
-                }
-            } // if(dR<)
-        } // for(iJ)
-    } // for(iEl)
-}
+
 //----------------------------------------------------------
 }; // namespace Susy
