@@ -151,13 +151,12 @@ public:
     //
 
     // B jets
-    int numBJets(const JetVector& jets);
     bool hasBJet(const JetVector& jets);
     JetVector getBJets(const JetVector& jets);
 
 
-    int numberOfCLJets(const JetVector& jets);
-    int numberOfCBJets(const JetVector& jets);
+    int numberOfLJets(const JetVector& jets);
+    int numberOfBJets(const JetVector& jets);
     int numberOfFJets(const JetVector& jets);
 
     ///////////////////////////////////////////

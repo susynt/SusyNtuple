@@ -562,14 +562,19 @@ bool SusyNtTools::isSignal(const Tau* tau)
     return tauSelector().isSignal(tau);
 }
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numberOfCLJets(const JetVector& jets)
+int SusyNtTools::numberOfLJets(const JetVector& jets)
 {
-    return jetSelector().count_CL_jets(jets);
+    return jetSelector().count_L_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numberOfCBJets(const JetVector& jets)
+int SusyNtTools::numberOfBJets(const JetVector& jets)
 {
-    return jetSelector().count_CB_jets(jets);
+    return jetSelector().count_B_jets(jets);
+}
+/*--------------------------------------------------------------------------------*/
+bool SusyNtTools::hasBJet(const JetVector& jets)
+{
+    return jetSelector().count_B_jets(jets) > 0;
 }
 /*--------------------------------------------------------------------------------*/
 int SusyNtTools::numberOfFJets(const JetVector& jets)
@@ -577,21 +582,11 @@ int SusyNtTools::numberOfFJets(const JetVector& jets)
     return jetSelector().count_F_jets(jets);
 }
 /*--------------------------------------------------------------------------------*/
-int SusyNtTools::numBJets(const JetVector& jets)
-{
-    return jetSelector().count_CB_jets(jets);
-}
-/*--------------------------------------------------------------------------------*/
-bool SusyNtTools::hasBJet(const JetVector& jets)
-{
-    return numBJets(jets)>0;
-}
-/*--------------------------------------------------------------------------------*/
 JetVector SusyNtTools::getBJets(const JetVector& jets)
 {
     JetVector bJets;
     for(auto jet : jets) {
-        if (jetSelector().isCentralB(jet))
+        if (jetSelector().isB(jet))
             bJets.push_back(jet);
     }
     return bJets;

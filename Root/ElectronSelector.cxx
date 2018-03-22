@@ -284,7 +284,7 @@ bool ElectronSelector_HLFV::isSignal(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (isBaseline(el) &&
+        pass = (ElectronSelector_HLFV::isBaseline(el) &&
                 el->mediumLLH &&
                 el->isoGradient 
                 //passIpCut(*el)

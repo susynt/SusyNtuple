@@ -38,9 +38,9 @@ int main(int argc, char **argv)
     JetSelector &s = *selector;
 
     bool passAll = true;
-    passAll &= (s.isCentralLight(&centralLightJet)==true);
+    //passAll &= (s.isCentralLight(&centralLightJet)==true);
     passAll &= (s.isB           (&centralLightJet)==false);
-    passAll &= (s.isCentralLight(&centralBJet    )==false);
+    //passAll &= (s.isCentralLight(&centralBJet    )==false);
     passAll &= (s.isB           (&centralBJet    )==true);
     passAll &= (s.isForward     (&forwardJet     )==false);
     // \todo test jfv, test analysis-specific cuts

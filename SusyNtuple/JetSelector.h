@@ -69,9 +69,8 @@ public:
     virtual ~JetSelector() {}; ///< dtor (for now we don't have anything to delete)
     JetSelector& setSystematic(const NtSys::SusyNtSys&); ///< set syst (needed for example for jvt)
     /// whether the jet is b-tagged
+    virtual bool isLight(const Jet* jet);
     virtual bool isB(const Jet* jet);
-    virtual bool isCentralLight(const Jet* jet);
-    virtual bool isCentralB(const Jet* jet);
     virtual bool isForward(const Jet* jet);
     /// The jet-vertex-fraction requirement: usually applied to low-pt central jets
     static bool passJvt(const Jet* jet);
@@ -83,9 +82,9 @@ public:
     bool verbose() const { return m_verbose; }
     JetSelector& setVerbose(bool v) { m_verbose = v; return *this; }
     /// count central light jets \todo const (depends on jvf tool interface)
-    virtual size_t count_CL_jets(const JetVector &jets) /*const*/;
+    virtual size_t count_L_jets(const JetVector &jets) /*const*/;
     /// count central b-tagged jets \todo const
-    virtual size_t count_CB_jets(const JetVector &jets) /*const*/;
+    virtual size_t count_B_jets(const JetVector &jets) /*const*/;
     /// count forward jets \todo const
     virtual size_t count_F_jets(const JetVector &jets) /*const*/;
 

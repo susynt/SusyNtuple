@@ -690,13 +690,13 @@ void OverlapTools_HLFV::performOverlap(ElectronVector& electrons, MuonVector& mu
     (void)photons;
     t_m_overlap(taus, muons, 0.2);
     t_e_overlap(taus, electrons, 0.2);
-    j_e_overlap(electrons, jets, 0.2);
-    //e_j_overlap(electrons, jets, 0.4);
+    j_e_overlap(electrons, jets, 0.2, false);
+    e_j_overlap(electrons, jets, 0.4, false, true);
     j_m_overlap(jets, muons, 0.2, false, true);
-    //m_j_overlap(muons, jets, 0.4, false, true);
+    m_j_overlap(muons, jets, 0.4, false, true);
     j_t_overlap(taus, jets, 0.2);
     e_m_overlap(electrons, muons, 0.2);
+    m_e_overlap(muons, electrons);
 }
-
 //----------------------------------------------------------
 }; // namespace Susy

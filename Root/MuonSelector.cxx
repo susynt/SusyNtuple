@@ -268,7 +268,7 @@ bool MuonSelector_HLFV::isSignal(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (isBaseline(mu) &&
+        pass = (MuonSelector_HLFV::isBaseline(mu) &&
                 mu->Pt() >= 10.0 &&
                 fabs(mu->Eta()) <= 2.47 &&
                 mu->medium &&
