@@ -272,7 +272,7 @@ bool ElectronSelector_HLFV::isBaseline(const Electron* el)
     if(el) {
         pass = (el->looseLLHBLayer && // good for all
                 el->passOQBadClusElectron &&
-                el->Pt()  > 15.0 &&
+                el->Pt()  > 5.0 &&
                 outsideCrackRegion(*el) &&
                 std::abs(el->clusEta) < 2.47 && // SUSYTools uses CaloCluster::eta() for this but CaloCluster::etaBE(2) for crack region...
                 std::abs(el->clusEtaBE) < 2.47 );
@@ -285,6 +285,7 @@ bool ElectronSelector_HLFV::isSignal(const Electron* el)
     bool pass = false;
     if(el) {
         pass = (ElectronSelector_HLFV::isBaseline(el) &&
+                el->Pt()  > 15.0 &&
                 el->mediumLLH &&
                 el->isoGradient 
                 //passIpCut(*el)

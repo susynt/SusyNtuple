@@ -53,7 +53,7 @@ public :
         the separate steps of OR removal implemented within "performOverlap(...)"
     */
     ///< remove jet from electron
-    virtual void j_e_overlap(ElectronVector& electrons, JetVector& jets,
+    virtual void j_e_overlap(JetVector& jets, ElectronVector& electrons, 
                              double dR = 0.2,
                              bool doBJetOR = true);
     ///< remove electron from jet
@@ -81,7 +81,7 @@ public :
     ///< remove tau from electron
     virtual void t_e_overlap(TauVector& taus, ElectronVector& electrons,
                              double dR = 0.2,
-                             ElectronId el_ID = ElectronId::LooseLLH);
+                             const ElectronId& el_ID = ElectronId::LooseLLH);
     ///< remove tau from muon
     virtual void t_m_overlap(TauVector& taus, MuonVector& muons,
                              double dR = 0.2);
@@ -91,8 +91,7 @@ public :
                              bool doBJetOR = true);
     ///< remove tau from jet
     virtual void t_j_overlap(TauVector& taus, JetVector& jets,
-                             double dR = 0.2,
-                             bool doBJetOR = true);
+                             double dR = 0.2);
 
     ///< remove photons overlapping with electrons
     virtual void p_e_overlap(PhotonVector& photons, ElectronVector& electrons,
@@ -108,7 +107,7 @@ public :
                              bool useTrackMatch = true,
                              bool useClusterMatch = false,
                              double dEta_max = 3*0.025,
-                             double dPhi_max = 5*0.025)
+                             double dPhi_max = 5*0.025);
     ///< remove duplicate muon
     virtual void m_m_overlap(MuonVector& muons,
                              double dR);
@@ -135,7 +134,12 @@ public :
     OverlapTools& jetSelector(JetSelector* js) { m_jetSelector = js; return *this; }
     /// used within removeNonisolatedLeptons()
     bool leptonPassesIsolation(const Lepton* lep, const Isolation &iso);
-
+    bool electronPassesID(const Electron* el, const ElectronId &el_ID);
+    bool electronsMatch(const Electron* el1, const Electron* el2,
+                        int el1_index,
+                        bool useTrackMatch, bool useClusterMatch,
+                        double dEta_max, double dPhi_max);
+    const Electron* handleOverlap(const Electron* el1, const Electron* el2);
     /// check if muon ID tracks are ghost associated with the input jet
     bool muonIsGhostMatched(const Muon* mu, const Jet* jet);
 
@@ -200,6 +204,13 @@ class OverlapTools_HLFV : public OverlapTools
                         JetVector& jets,
                         TauVector& taus,
                         PhotonVector& photons);
+    void t_e_overlap(TauVector& taus, ElectronVector& electrons,
+                     double dR = 0.2,
+                     const ElectronId& el_ID = ElectronId::LooseLLH);
+    void j_t_overlap(JetVector& jets, TauVector& taus,
+                     double dR = 0.2,
+                     bool doBJetOR = true);
+    void e_m_overlap(ElectronVector& electrons, MuonVector& muons, float dR);
 };
 
 
