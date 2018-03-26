@@ -96,7 +96,7 @@ bool ElectronSelector::isSignal(const Electron* el)
 float ElectronSelector::effSF(const Electron& ele, const NtSys::SusyNtSys sys)
 {
     float out_sf = ele.eleEffSF[m_signalId];
-    if(sys != NtSys::NOM) { 
+    if(sys != NtSys::NOM) {
         float delta = errEffSF(ele, sys);
         out_sf += delta;
     }
@@ -160,9 +160,9 @@ bool ElectronSelector_2Lep::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (el->looseLLHBLayer && 
+        pass = (el->looseLLHBLayer &&
                 el->passOQBadClusElectron &&
-                el->Pt()  > 10.0 && 
+                el->Pt()  > 10.0 &&
                 std::abs(el->clusEta) < 2.47);
     }
     return pass;
@@ -259,22 +259,14 @@ bool ElectronSelector_SS3L::isSignal(const Electron* el)
 //----------------------------------------------------------
 // begin ElectronSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
-bool ElectronSelector_HLFV::passIpCut(const Electron &el)
-{
-    return (std::abs(el.d0sigBSCorr)  < 3.0 &&
-            std::abs(el.z0SinTheta()) < 0.5 );
-
-}
-//---------------------------------------------------------
 bool ElectronSelector_HLFV::isBaseline(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (el->looseLLHBLayer && // good for all
+        pass = (el->looseLLHBLayer &&
                 el->passOQBadClusElectron &&
-                el->Pt()  > 5.0 &&
+                el->Pt()  > 15.0 &&
                 outsideCrackRegion(*el) &&
-                std::abs(el->clusEta) < 2.47 && // SUSYTools uses CaloCluster::eta() for this but CaloCluster::etaBE(2) for crack region...
                 std::abs(el->clusEtaBE) < 2.47 );
     }
     return pass;
@@ -284,12 +276,11 @@ bool ElectronSelector_HLFV::isSignal(const Electron* el)
 {
     bool pass = false;
     if(el) {
-        pass = (ElectronSelector_HLFV::isBaseline(el) &&
-                el->Pt()  > 15.0 &&
+        pass = (isBaseline(el) &&
+                std::abs(el->clusEta) < 2.47 &&
+                std::abs(el->clusEtaBE) < 2.47 &&
                 el->mediumLLH &&
-                el->isoGradient 
-                //passIpCut(*el)
-                );
+                el->isoGradient);
     }
     return pass;
 }

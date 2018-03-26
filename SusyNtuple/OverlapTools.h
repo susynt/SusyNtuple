@@ -53,24 +53,27 @@ public :
         the separate steps of OR removal implemented within "performOverlap(...)"
     */
     ///< remove jet from electron
-    virtual void j_e_overlap(JetVector& jets, ElectronVector& electrons, 
+    virtual void j_e_overlap(JetVector& jets, ElectronVector& electrons,
                              double dR = 0.2,
-                             bool doBJetOR = true);
+                             bool doBJetOR = false,
+                             applyPtRatio = false,
+                             double eleJetPtRatio = 0.8);
     ///< remove electron from jet
     virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets,
                              double dR = 0.4,
-                             bool doSlidingCone = false,
-                             bool applyJVT = true);
+                             bool doSlidingCone = true,
+                             bool applyJVT = false);
     ///< remove jet from muon
     virtual void j_m_overlap(JetVector& jets, MuonVector& muons,
                              double dR = 0.2,
-                             bool doBJetOR = true,
-                             bool doGhost = true);
+                             bool doBJetOR = false,
+                             bool doGhost = true,
+                             bool applyRelPt = false);
     ///< remove muon from jet
     virtual void m_j_overlap(MuonVector& muons, JetVector& jets,
                              double dR = 0.4,
                              bool doSlidingCone = false,
-                             bool applyJVT = true);
+                             bool applyJVT = false);
     ///< remove electron from muon (shared-track)
     virtual void e_m_overlap(ElectronVector& electrons, MuonVector& muons);
     ///< remove electron from muon (dR-based)
@@ -84,7 +87,9 @@ public :
                              const ElectronId& el_ID = ElectronId::LooseLLH);
     ///< remove tau from muon
     virtual void t_m_overlap(TauVector& taus, MuonVector& muons,
-                             double dR = 0.2);
+                             double dR = 0.2,
+                             double minMuonPt = 0,
+                             double maxTauPt = DBL_MAX);
     ///< remove jet from tau
     virtual void j_t_overlap(JetVector& jets, TauVector& taus,
                              double dR = 0.2,
@@ -207,20 +212,25 @@ class OverlapTools_HLFV : public OverlapTools
     void t_e_overlap(TauVector& taus, ElectronVector& electrons,
                      double dR = 0.2,
                      const ElectronId& el_ID = ElectronId::LooseLLH);
-    void j_t_overlap(JetVector& jets, TauVector& taus,
+    void j_m_overlap(JetVector& jets, MuonVector& muons,
                      double dR = 0.2,
-                     bool doBJetOR = true);
-    void e_m_overlap(ElectronVector& electrons, MuonVector& muons, float dR);
+                     bool doBJetOR = false,
+                     bool doGhost = true,
+                     bool applyRelPt = false);
+    void m_j_overlap(MuonVector& muons, JetVector& jets,
+                     double dR = 0.4,
+                     bool doSlidingCone = false,
+                     bool applyJVT = false);
+    void e_m_overlap(ElectronVector& electrons, MuonVector& muons);
+    void m_e_overlap(MuonVector& muons, ElectronVector& electrons);
+    void t_m_overlap(TauVector& taus, MuonVector& muons,
+                     double dR = 0.2,
+                     double minMuonPt = 0,
+                     double maxTauPt = DBL_MAX);
+    void p_m_overlap(PhotonVector& photons, MuonVector& muons,
+                     double dR);
 };
 
-
-
 }
-
-
-
-
-
-
 
 #endif

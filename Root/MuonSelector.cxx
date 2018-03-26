@@ -168,7 +168,7 @@ bool MuonSelector_2Lep::isBaseline(const Muon* mu)
     bool pass = false;
     if(mu) {
         pass = (mu->medium &&
-                mu->Pt()        > 10.0 && 
+                mu->Pt()        > 10.0 &&
                 fabs(mu->Eta()) <  2.4); // I don't think this is the best ASM 9/6/16
     }
     return pass;
@@ -202,7 +202,7 @@ bool MuonSelector_3Lep::isSignal(const Muon* mu)
 // begin MuonSelector_4Lep
 //----------------------------------------------------------
 bool MuonSelector_4Lep::isBaseline(const Muon* mu)
-{    
+{
     bool pass = false;
     if(mu) {
         pass = (mu->medium &&
@@ -257,7 +257,8 @@ bool MuonSelector_HLFV::isBaseline(const Muon* mu)
 {
     bool pass = false;
     if(mu) {
-        pass = (mu->loose &&
+        pass = (fabs(mu->Eta()) <= 2.7 &&
+                mu->loose &&
                 mu->Pt() > 2.0
                );
     }
