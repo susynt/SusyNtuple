@@ -56,7 +56,7 @@ public :
     virtual void j_e_overlap(JetVector& jets, ElectronVector& electrons,
                              double dR = 0.2,
                              bool doBJetOR = false,
-                             applyPtRatio = false,
+                             bool applyPtRatio = false,
                              double eleJetPtRatio = 0.8);
     ///< remove electron from jet
     virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets,

@@ -629,11 +629,12 @@ void OverlapTools::j_e_overlap(JetVector& jets, ElectronVector& electrons,
 
         // Don't reject user-defined b-tagged jets
         if(doBJetOR && isBJetOR(j)) continue;
-        // Don't reject jets with high relative PT
-        if(applyPtRatio && el->Pt()/jet->Pt() < eleJetPtRatio) continue;
         // flag overlapping jets
         for(int iEl=0; iEl < (int)electrons.size(); iEl++){
             const Electron* el = electrons.at(iEl);
+            // Don't reject jets with high relative PT
+            if(applyPtRatio && el->Pt()/j->Pt() < eleJetPtRatio) continue;
+
             if(el->DeltaRy(*j) < dR) {
                 if(verbose()) print_rm_msg("j_e_overlap: ", j, el);
                 jets.erase(jets.begin()+iJ);

@@ -59,7 +59,7 @@ bool JetSelector::isSignal(const Jet* jet)
 //----------------------------------------------------------
 bool JetSelector::isB(const Jet* jet)
 {
-    return (isBaseline(jet)
+    return (isBaseline(jet) &&
             (jet->Pt()        > 20.0   ) &&
             (fabs(jet->Eta()) <  2.5   ) &&
             (jet->mv2c10      > mv2c10_85efficiency()));
@@ -92,13 +92,8 @@ bool JetSelector::isLight(const Jet* jet)
 */
 bool JetSelector::passJvt(const Jet* jet)
 {
-    bool pass = false;
-    if(jet) {
-        pass = ((jet->jvt         >  0.59) ||
-                (fabs(jet->Eta()) >  2.4)  ||
-                (jet->Pt()         > 60.0) );
-    }
-    return pass;
+    bool check_JVT = fabs(jet->Eta()) < 2.4 && jet->Pt() < 60.0;
+    return check_JVT ? jet->jvt > 0.59 : true;
 }
 //----------------------------------------------------------
 /*
@@ -209,11 +204,6 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
 //----------------------------------------------------------
 // begin JetSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
-bool JetSelector_HLFV::passJvt(const Jet* jet)
-{
-    bool check_JVT = fabs(jet->Eta()) < 2.4 && jet->Pt() < 60.0;
-    return check_JVT ? jet->jvt > 0.59 : true;
-}
 bool JetSelector_HLFV::isBaseline(const Jet* jet)
 {
     bool pass = false;
