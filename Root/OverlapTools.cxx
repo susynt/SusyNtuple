@@ -628,13 +628,16 @@ void OverlapTools::j_e_overlap(JetVector& jets, ElectronVector& electrons,
         const Jet* j = jets.at(iJ);
 
         // Don't reject user-defined b-tagged jets
-        if(doBJetOR && isBJetOR(j)) continue;
+        if(doBJetOR && isBJetOR(j)) {
+            continue;
+        }
         // flag overlapping jets
         for(int iEl=0; iEl < (int)electrons.size(); iEl++){
             const Electron* el = electrons.at(iEl);
             // Don't reject jets with high relative PT
-            if(applyPtRatio && el->Pt()/j->Pt() < eleJetPtRatio) continue;
-
+            if(applyPtRatio && (el->Pt()/j->Pt() < eleJetPtRatio)) {
+                continue;
+            }
             if(el->DeltaRy(*j) < dR) {
                 if(verbose()) print_rm_msg("j_e_overlap: ", j, el);
                 jets.erase(jets.begin()+iJ);
@@ -680,8 +683,7 @@ void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons,
         const Jet* j = jets.at(iJ);
 
         // Don't reject user-defined b-tagged jets
-        if(doBJetOR)
-            if(isBJetOR(j)) continue;
+        if(doBJetOR && isBJetOR(j)) continue;
 
         for(int iMu = 0; iMu < (int)muons.size(); iMu++){
             const Muon* mu = muons.at(iMu);
@@ -692,7 +694,9 @@ void OverlapTools::j_m_overlap(JetVector& jets, MuonVector& muons,
             float trkRatio = mu->Pt() / j->sumTrkPt * 1.0;
             bool highRelPt = (ptRatio<0.5 || trkRatio<0.7);
             bool highNumTrk = j->nTracks >= 3 ;
-            if(highNumTrk && (!applyRelPt || highRelPt)) continue;
+            if(highNumTrk && (!applyRelPt || highRelPt)) {
+                continue;
+            }
 
             // check dR match regardless
             if(j->DeltaRy(*mu) < dR || (doGhost && muonIsGhostMatched(mu, j))) {
@@ -1038,7 +1042,7 @@ void OverlapTools_HLFV::performOverlap(ElectronVector& electrons, MuonVector& mu
     t_m_overlap(taus, muons, 0.2, 2.0, 50.0);
     m_e_overlap(muons, electrons);
     e_m_overlap(electrons, muons);
-    j_e_overlap(jets, electrons, 0.2, false, 0.8);
+    j_e_overlap(jets, electrons, 0.2, false, false, 0.8);
     e_j_overlap(electrons, jets, 0.4, false, false);
     j_m_overlap(jets, muons, 0.2, false, true, false);
     m_j_overlap(muons, jets, 0.4, false, true);

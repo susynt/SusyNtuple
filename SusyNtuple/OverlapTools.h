@@ -61,7 +61,7 @@ public :
     ///< remove electron from jet
     virtual void e_j_overlap(ElectronVector& electrons, JetVector& jets,
                              double dR = 0.4,
-                             bool doSlidingCone = true,
+                             bool doSlidingCone = false,
                              bool applyJVT = false);
     ///< remove jet from muon
     virtual void j_m_overlap(JetVector& jets, MuonVector& muons,
