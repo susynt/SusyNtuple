@@ -162,6 +162,7 @@ class JetSelector_Stop2L : public JetSelector {
 
 class JetSelector_HLFV : public JetSelector
 {
+    virtual bool isB(const Jet* jet);
     virtual bool isBaseline(const Jet* jet);
     virtual bool isSignal(const Jet* jet);
 };

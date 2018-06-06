@@ -176,7 +176,7 @@ bool TriggerTools::dilepton_trigger_match(Susy::Event* evt, Susy::Lepton* l0,
 
     bool is_ee = (l0_is_ele && l1_is_ele);
     bool is_mm = (!l0_is_ele && !l1_is_ele);
-    bool is_em = (l0_is_ele && !l1_is_ele);
+    bool is_em = (l0_is_ele != l1_is_ele);
 
     if(!(is_ee || is_mm || is_em)) {
         cout << "TriggerTools::dilepton_trigger_match    WARNING Could not determine if "

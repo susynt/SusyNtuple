@@ -87,22 +87,23 @@ bool TauSelector_4Lep::isSignal(const Tau* tau)
 //----------------------------------------------------------
 bool TauSelector_HLFV::isBaseline(const Tau* tau)
 {
-    double eta = std::abs(tau->Eta());
+    double eta = std::fabs(tau->Eta());
     return (tau->Pt() > 20.0 &&
-            eta < 1.37 && 1.52 < eta && eta < 2.5 &&
-            std::abs(tau->q) == 1 &&
+            (eta < 1.37 || 1.52 < eta) && eta < 2.5 &&
+            std::fabs(tau->q) == 1 &&
             (tau->nTrack == 1 || tau->nTrack == 3 ) &&
             tau->medium);
 }
+
 //----------------------------------------------------------
 bool TauSelector_HLFV::isSignal(const Tau* tau)
 {
     return (isBaseline(tau) &&
             tau->medium &&
             tau->Pt() > 20.0 &&
-			std::abs(tau->Eta()) < 2.5	&&
+			std::fabs(tau->Eta()) < 2.5	&&
 			(tau->nTrack == 1 || tau->nTrack ==3 ) &&
-			std::abs(tau->q) == 1
+			std::fabs(tau->q) == 1
             );
 }
 //----------------------------------------------------------

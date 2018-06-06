@@ -270,11 +270,11 @@ bool MuonSelector_HLFV::isSignal(const Muon* mu)
     bool pass = false;
     if(mu) {
         pass = (MuonSelector_HLFV::isBaseline(mu) &&
+                //passIpCut(mu) &&
                 mu->Pt() >= 10.0 &&
                 fabs(mu->Eta()) <= 2.47 &&
                 mu->medium &&
                 mu->isoGradient
-                //passIpCut(mu)
                 );
     }
     return pass;

@@ -157,6 +157,12 @@ public :
     /// check if a jet satisfies the b-jet criteria for OR
     bool isBJetOR(const Jet* jet);
 
+    template<class P1, class P2>
+    void print_rm_msg(const std::string &msg, P1 drop, P2 keep) {
+        std::cout << msg <<" removing "<<str(drop)
+             <<" overlapping (dRy=" << keep->DeltaRy(*drop)
+             <<") with "<<str(keep) << '\n';
+    }
 
     OverlapTools& setVerbose(bool v) { m_verbose = v; return *this; }
     OverlapTools& useOldOverlap(bool v) { m_useOldOverlap = v; return *this; }
@@ -212,6 +218,10 @@ class OverlapTools_HLFV : public OverlapTools
     void t_e_overlap(TauVector& taus, ElectronVector& electrons,
                      double dR = 0.2,
                      const ElectronId& el_ID = ElectronId::LooseLLH);
+    void t_m_overlap(TauVector& taus, MuonVector& muons,
+                     double dR = 0.2,
+                     double minMuonPt = 0,
+                     double maxTauPt = DBL_MAX);
     void j_m_overlap(JetVector& jets, MuonVector& muons,
                      double dR = 0.2,
                      bool doBJetOR = false,
@@ -222,13 +232,15 @@ class OverlapTools_HLFV : public OverlapTools
                      bool doSlidingCone = false,
                      bool applyJVT = false);
     void e_m_overlap(ElectronVector& electrons, MuonVector& muons);
+    void e_m_overlap(ElectronVector& electrons, MuonVector& muons, float dR);
     void m_e_overlap(MuonVector& muons, ElectronVector& electrons);
-    void t_m_overlap(TauVector& taus, MuonVector& muons,
-                     double dR = 0.2,
-                     double minMuonPt = 0,
-                     double maxTauPt = DBL_MAX);
     void p_m_overlap(PhotonVector& photons, MuonVector& muons,
                      double dR);
+    void tighten_baseline_selection(ElectronVector& electrons,
+                                    MuonVector& muons,
+                                    JetVector& jets,
+                                    TauVector& taus,
+                                    PhotonVector& photons);
 };
 
 }

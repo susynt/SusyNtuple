@@ -204,6 +204,15 @@ bool JetSelector_SS3L::isB_for_OR(const Jet* jet)
 //----------------------------------------------------------
 // begin JetSelector_HLFV Ana_HLFV
 //----------------------------------------------------------
+//----------------------------------------------------------
+bool JetSelector_HLFV::isB(const Jet* jet)
+{
+    return (isBaseline(jet) &&
+            (jet->Pt()        > 25.0   ) &&
+            (fabs(jet->Eta()) <  2.5   ) &&
+            (jet->mv2c10      > mv2c10_85efficiency()));
+}
+//----------------------------------------------------------
 bool JetSelector_HLFV::isBaseline(const Jet* jet)
 {
     bool pass = false;

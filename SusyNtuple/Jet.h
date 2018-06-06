@@ -21,6 +21,7 @@ public:
 
     float jvf;                ///< Jet vertex fraction
     float jvt;                ///< Jet vertex tagger
+    //float fjvt;               ///< forward Jet vertex tagger
     float detEta;             ///< Detector eta
     float emfrac;             ///< EM fraction
     int truthLabel;           ///< Flavor truth label

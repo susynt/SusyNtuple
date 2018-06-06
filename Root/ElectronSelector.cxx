@@ -277,6 +277,7 @@ bool ElectronSelector_HLFV::isSignal(const Electron* el)
     bool pass = false;
     if(el) {
         pass = (isBaseline(el) &&
+                //passIpCut(*el) &&
                 std::abs(el->clusEta) < 2.47 &&
                 std::abs(el->clusEtaBE) < 2.47 &&
                 el->mediumLLH &&
