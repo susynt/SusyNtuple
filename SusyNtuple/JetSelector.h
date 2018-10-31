@@ -88,6 +88,9 @@ public:
     /// count forward jets \todo const
     virtual size_t count_F_jets(const JetVector &jets) /*const*/;
 
+    float bjet_sf(const Jet* jet, bool inefficiency_sf = false);
+    float bjet_sf_err(const Jet* jet, const NtSys::SusyNtSys sys, bool inefficiency_sf = false);
+
     //@{
     /**
        b-tag operating points for AntiKt4EMTopoJets with MV2c20

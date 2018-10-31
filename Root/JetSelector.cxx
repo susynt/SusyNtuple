@@ -63,6 +63,22 @@ bool JetSelector::isB(const Jet* jet)
             (passJvt(jet)));
 }
 //----------------------------------------------------------
+float JetSelector::bjet_sf(const Jet* jet, bool ineff)
+{
+    float sf = 1.0;
+    sf = (ineff ? jet->btag_Notsf_mv2c10_77 : jet->btag_sf_mv2c10_77);
+    return sf;
+}
+//----------------------------------------------------------
+float JetSelector::bjet_sf_err(const Jet* jet, const NtSys::SusyNtSys sys, bool ineff)
+{
+    float outSF = 1.0;
+    float delta = (ineff ? jet->getFTSys(sys, true) : jet->getFTSys(sys, false));
+    float sf = bjet_sf(jet, ineff);
+    outSF = (sf+delta);
+    return outSF;
+}
+//----------------------------------------------------------
 bool JetSelector::isCentralLight(const Jet* jet)
 {
     bool pass = false;

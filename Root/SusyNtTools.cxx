@@ -605,24 +605,52 @@ JetVector SusyNtTools::getBJets(const JetVector& jets)
 ////////////////////////////
 float SusyNtTools::bTagSF(const JetVector& jets)
 {
-    float sf = 1.0;
-    for(uint ij = 0; ij < jets.size(); ij++){
-        sf *= jets[ij]->effscalefact;
-    } // ij
-    return sf;
+    float total_sf = 1.0;
+    for(auto & jet : jets) {
+        float sf = 1.0;
+        if(fabs(jet->Eta())>2.5) continue;
+        if(jet->Pt()<20.) continue;
+        if(jetSelector().isB(jet)) {
+            sf = jetSelector().bjet_sf(jet);
+        }
+        else {
+            sf = jetSelector().bjet_sf(jet, true);
+        }
+        total_sf *= sf;
+    }
+    return total_sf;
+    //float sf = 1.0;
+    //for(uint ij = 0; ij < jets.size(); ij++){
+    //    sf *= jets[ij]->effscalefact;
+    //} // ij
+    //return sf;
 }
 
 float SusyNtTools::bTagSFError(const JetVector& jets, const NtSys::SusyNtSys sys)
 {
     float outSF = 1.0;
-    float delta = 0.0;
-    float sf = 1.0;
-    for(uint ij = 0; ij < jets.size(); ij++) {
-        delta = jets[ij]->getFTSys(sys);
-        sf = jets[ij]->effscalefact;
-        outSF *= (sf + delta);
-    } // ij
+    for(auto & jet : jets) {
+        float sf = 1.0;
+        if(fabs(jet->Eta())>2.5) continue;
+        if(jet->Pt()<20.) continue;
+        if(jetSelector().isB(jet)) {
+            sf = jetSelector().bjet_sf_err(jet, sys, false);
+        }
+        else {
+            sf = jetSelector().bjet_sf_err(jet, sys, true);
+        }
+        outSF *= sf;
+    }
     return outSF;
+    //float outSF = 1.0;
+    //float delta = 0.0;
+    //float sf = 1.0;
+    //for(uint ij = 0; ij < jets.size(); ij++) {
+    //    delta = jets[ij]->getFTSys(sys);
+    //    sf = jets[ij]->effscalefact;
+    //    outSF *= (sf + delta);
+    //} // ij
+    //return outSF;
 }
 
 ////////////////////////////

@@ -24,6 +24,10 @@ Jet::Jet(const Jet &rhs):
   sumTrkPt(rhs.sumTrkPt),
   bjet(rhs.bjet),
   effscalefact(rhs.effscalefact),
+  btag_sf_mv2c10_77(rhs.btag_sf_mv2c10_77),
+  btag_sf_mv2c10_85(rhs.btag_sf_mv2c10_85),
+  btag_Notsf_mv2c10_77(rhs.btag_Notsf_mv2c10_77),
+  btag_Notsf_mv2c10_85(rhs.btag_Notsf_mv2c10_85),
   mv1(rhs.mv1),
   mv2c20(rhs.mv2c20),
   mv2c10(rhs.mv2c10),
@@ -43,7 +47,8 @@ Jet::Jet(const Jet &rhs):
   eta_intercal_up(rhs.eta_intercal_up),
   eta_intercal_dn(rhs.eta_intercal_dn),
   groupedNP(rhs.groupedNP),
-  FTSys(rhs.FTSys)
+  FTSys(rhs.FTSys),
+  FTSysNot(rhs.FTSysNot)
   /*
   bjes(rhs.bjes),
   effNp(rhs.effNp),
@@ -72,6 +77,10 @@ Jet& Jet::operator=(const Jet &rhs)
     matchTruth = rhs.matchTruth;
     bjet = rhs.bjet;
     effscalefact = rhs.effscalefact;
+    btag_sf_mv2c10_77 = rhs.btag_sf_mv2c10_77;
+    btag_sf_mv2c10_85 = rhs.btag_sf_mv2c10_85;
+    btag_Notsf_mv2c10_77 = rhs.btag_Notsf_mv2c10_77;
+    btag_Notsf_mv2c10_85 = rhs.btag_Notsf_mv2c10_85;
     nTracks = rhs.nTracks;
     sumTrkPt = rhs.sumTrkPt;
     mv1 = rhs.mv1;
@@ -94,6 +103,7 @@ Jet& Jet::operator=(const Jet &rhs)
     eta_intercal_dn = rhs.eta_intercal_dn;
     groupedNP = rhs.groupedNP;
     FTSys = rhs.FTSys;
+    FTSysNot = rhs.FTSysNot;
     /*
     bjes=rhs.bjes;
     effNp=rhs.effNp;
@@ -171,20 +181,34 @@ void Jet::setState(int sys)
 /*--------------------------------------------------------------------------------*/
 // Flavor systematics
 /*--------------------------------------------------------------------------------*/
-float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
+float Jet::getFTSys(Susy::NtSys::SusyNtSys sys, bool ineff) const
 {
     float s= 1;
 
-    if      ( sys == NtSys::FT_EFF_B_systematics_DN ) s= FTSys[0];
-    else if ( sys == NtSys::FT_EFF_B_systematics_UP ) s= FTSys[1];
-    else if ( sys == NtSys::FT_EFF_C_systematics_DN ) s= FTSys[2];
-    else if ( sys == NtSys::FT_EFF_C_systematics_UP ) s= FTSys[3];
-    else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) s= FTSys[4];
-    else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) s= FTSys[5];
-    else if ( sys == NtSys::FT_EFF_extrapolation_DN ) s= FTSys[6];
-    else if ( sys == NtSys::FT_EFF_extrapolation_UP ) s= FTSys[7];
-    else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) s= FTSys[8];
-    else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) s= FTSys[9];
+    if(!ineff) {
+        if      ( sys == NtSys::FT_EFF_B_systematics_DN ) s= FTSys[0];
+        else if ( sys == NtSys::FT_EFF_B_systematics_UP ) s= FTSys[1];
+        else if ( sys == NtSys::FT_EFF_C_systematics_DN ) s= FTSys[2];
+        else if ( sys == NtSys::FT_EFF_C_systematics_UP ) s= FTSys[3];
+        else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) s= FTSys[4];
+        else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) s= FTSys[5];
+        else if ( sys == NtSys::FT_EFF_extrapolation_DN ) s= FTSys[6];
+        else if ( sys == NtSys::FT_EFF_extrapolation_UP ) s= FTSys[7];
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) s= FTSys[8];
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) s= FTSys[9];
+    }
+    else if(ineff) {
+        if      ( sys == NtSys::FT_EFF_B_systematics_DN ) s= FTSysNot[0];
+        else if ( sys == NtSys::FT_EFF_B_systematics_UP ) s= FTSysNot[1];
+        else if ( sys == NtSys::FT_EFF_C_systematics_DN ) s= FTSysNot[2];
+        else if ( sys == NtSys::FT_EFF_C_systematics_UP ) s= FTSysNot[3];
+        else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) s= FTSysNot[4];
+        else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) s= FTSysNot[5];
+        else if ( sys == NtSys::FT_EFF_extrapolation_DN ) s= FTSysNot[6];
+        else if ( sys == NtSys::FT_EFF_extrapolation_UP ) s= FTSysNot[7];
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) s= FTSysNot[8];
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) s= FTSysNot[9];
+    }
     /*  
     if      ( sys == NtSys::FT_Eigen_B_0_DN) s = FTSys[0];
     else if ( sys == NtSys::FT_Eigen_B_0_UP) s = FTSys[1];
@@ -245,19 +269,32 @@ float Jet::getFTSys(Susy::NtSys::SusyNtSys sys)
 
 }
 
-void Jet::setFTSys(Susy::NtSys::SusyNtSys sys, double scale=0.)
+void Jet::setFTSys(Susy::NtSys::SusyNtSys sys, double scale, bool ineff)
 {
-    if      ( sys == NtSys::FT_EFF_B_systematics_DN ) FTSys[0] =scale;
-    else if ( sys == NtSys::FT_EFF_B_systematics_UP ) FTSys[1] =scale;
-    else if ( sys == NtSys::FT_EFF_C_systematics_DN ) FTSys[2] =scale;
-    else if ( sys == NtSys::FT_EFF_C_systematics_UP ) FTSys[3] =scale;
-    else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) FTSys[4] =scale;
-    else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) FTSys[5] =scale;
-    else if ( sys == NtSys::FT_EFF_extrapolation_DN ) FTSys[6] =scale;
-    else if ( sys == NtSys::FT_EFF_extrapolation_UP ) FTSys[7] =scale;
-    else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) FTSys[8] =scale;
-    else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) FTSys[9] =scale;
-
+    if(!ineff) {
+        if      ( sys == NtSys::FT_EFF_B_systematics_DN ) FTSys[0] =scale;
+        else if ( sys == NtSys::FT_EFF_B_systematics_UP ) FTSys[1] =scale;
+        else if ( sys == NtSys::FT_EFF_C_systematics_DN ) FTSys[2] =scale;
+        else if ( sys == NtSys::FT_EFF_C_systematics_UP ) FTSys[3] =scale;
+        else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) FTSys[4] =scale;
+        else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) FTSys[5] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_DN ) FTSys[6] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_UP ) FTSys[7] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) FTSys[8] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) FTSys[9] =scale;
+    }
+    else if(ineff) {
+        if      ( sys == NtSys::FT_EFF_B_systematics_DN ) FTSysNot[0] =scale;
+        else if ( sys == NtSys::FT_EFF_B_systematics_UP ) FTSysNot[1] =scale;
+        else if ( sys == NtSys::FT_EFF_C_systematics_DN ) FTSysNot[2] =scale;
+        else if ( sys == NtSys::FT_EFF_C_systematics_UP ) FTSysNot[3] =scale;
+        else if ( sys == NtSys::FT_EFF_Light_systematics_DN ) FTSysNot[4] =scale;
+        else if ( sys == NtSys::FT_EFF_Light_systematics_UP ) FTSysNot[5] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_DN ) FTSysNot[6] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_UP ) FTSysNot[7] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_DN ) FTSysNot[8] =scale;
+        else if ( sys == NtSys::FT_EFF_extrapolation_charm_UP ) FTSysNot[9] =scale;
+    }
     /*
     if      ( sys == NtSys::FT_Eigen_B_0_DN) FTSys[0] = scale;
     else if ( sys == NtSys::FT_Eigen_B_0_UP) FTSys[1] = scale;

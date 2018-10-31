@@ -31,6 +31,10 @@ public:
     // btagging
     bool bjet;                ///< Is b-jet a la SUSYTools (70% w.p.)
     float effscalefact;       ///< B-tag SF a la SUSYTools (70% w.p.)  
+    float btag_sf_mv2c10_77;
+    float btag_sf_mv2c10_85;
+    float btag_Notsf_mv2c10_77;
+    float btag_Notsf_mv2c10_85;
     float mv1;                ///< MV1 btag weight
     float mv2c20;             ///< MV2c20 btag discriminant
     float mv2c10;             ///< MV2c10 btag discriminant
@@ -58,6 +62,7 @@ public:
     float eta_intercal_dn; // JET_EtaIntercalibration_NonClosure_DN
     std::vector<float> groupedNP;    ///< Reduced 3*2 JES systematics
     std::vector<float> FTSys; ///< Flavor Tagger syst: B(10*2), C(4*2), light(12*2) jet systematics
+    std::vector<float> FTSysNot; 
 
     //ADD SYS!!! 18x2 + JER
     /*
@@ -75,8 +80,8 @@ public:
     void setState(int sys);
 
     // Return flavor tag systematics
-    float getFTSys(Susy::NtSys::SusyNtSys sys);
-    void  setFTSys(Susy::NtSys::SusyNtSys sys, double scale);
+    float getFTSys(Susy::NtSys::SusyNtSys sys, bool ineff = false) const;
+    void  setFTSys(Susy::NtSys::SusyNtSys sys, double scale, bool ineff = false);
 
     // Print method
     void print() const;
@@ -89,6 +94,10 @@ public:
       matchTruth = false;
       bjet = false;
       effscalefact = 0.;
+      btag_sf_mv2c10_77 = 1;
+      btag_sf_mv2c10_85 = 1;
+      btag_Notsf_mv2c10_77 = 1;
+      btag_Notsf_mv2c10_85 = 1;
       detEta = 0;
       emfrac = 0;
       mv1 = sv1plusip3d = mv2c20 = mv2c10 = 0;
@@ -101,6 +110,7 @@ public:
       jer = 0;
       groupedNP.resize(3*2,0.0);
       FTSys.resize(5*2,0.0);
+      FTSysNot.resize(5*2,0.0);
       eta_intercal_up = 0;
       eta_intercal_dn = 0;
 
@@ -119,7 +129,7 @@ public:
       Particle::clear();
     }
 
-    ClassDef(Jet, 22);
+    ClassDef(Jet, 23);
 };
 } // Susy
 #endif
